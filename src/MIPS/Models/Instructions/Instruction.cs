@@ -51,6 +51,49 @@ public struct Instruction
     }
 
     /// <summary>
+    /// Creates a new i-type instruction.
+    /// </summary>
+    public static Instruction Create(OperationCode opCode, Register rs, Register rt, ushort immediate)
+    {
+        Instruction value = default;
+        value.OpCode = opCode;
+        value.RS = rs;
+        value.RT = rt;
+        value.ImmediateValue = immediate;
+        return value;
+    }
+
+    /// <summary>
+    /// Creates a new j-type instruction.
+    /// </summary>
+    public static Instruction Create(OperationCode opCode, ushort address)
+    {
+        Instruction value = default;
+        value.OpCode = opCode;
+        value.Address = address;
+        return value;
+    }
+
+    /// <summary>
+    /// Gets the instruction type.
+    /// </summary>
+    public InstructionType Type
+    {
+        get
+        {
+            return OpCode switch
+            {
+                OperationCode.RType => InstructionType.R,
+
+                OperationCode.Jump or 
+                OperationCode.JumpAndLink => InstructionType.J,
+
+                _ => InstructionType.I,
+            };
+        }
+    }
+
+    /// <summary>
     /// Gets the instruction's operation code.
     /// </summary>
     public OperationCode OpCode
