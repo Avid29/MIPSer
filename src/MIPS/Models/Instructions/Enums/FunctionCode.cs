@@ -10,17 +10,26 @@ public enum FunctionCode : byte
 #pragma warning disable CS1591
 
     None = 0,
+
+    // Question: What is 0x01?
+
     ShiftLeftLogical = 0x00,
     ShiftRightLogical = 0x02,
     ShiftRightArithmetic = 0x03,
+
+    ShiftLeftLogicalVariable = 0x04,
+    ShiftRightLogicalVariable = 0x06,
+    ShiftRightArithmeticVariable = 0x07,
 
     JumpRegister = 0x08,
     JumpAndLinkRegister = 0x09,
 
     SystemCall = 0x0c,
 
-    MoveFromHi = 0x10,
+    MoveFromHigh = 0x10,
+    MoveToHigh = 0x11,
     MoveFromLow = 0x12,
+    MoveToLow = 0x13,
 
     Multiply = 0x18,
     MultiplyUnsigned = 0x19,
