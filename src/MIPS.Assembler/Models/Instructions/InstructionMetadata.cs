@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2023
 
 using MIPS.Assembler.Models.Instructions.Enums;
+using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions.Enums;
 
 namespace MIPS.Assembler.Models.Instructions;
@@ -50,7 +51,7 @@ public struct InstructionMetadata
     /// <summary>
     /// Gets the function type.
     /// </summary>
-    public InstructionType Type { get; }
+    public InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode);
 
     /// <summary>
     /// Gets the instruction parse type

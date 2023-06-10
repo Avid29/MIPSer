@@ -14,7 +14,7 @@ namespace MIPS.Assembler.Helpers;
 public static class Tables
 {
     // R type patterns
-    private static readonly Argument[] StandardRPattern = {Argument.RD, Argument.RS, Argument.RT};                   // <instr>  $rd, $rs, $rt
+    private static readonly Argument[] StandardRPattern = {Argument.RD, Argument.RS, Argument.RT};                      // <instr>  $rd, $rs, $rt
     private static readonly Argument[] MultiplyRPattern = {Argument.RS, Argument.RT};                                   // <instr>  $rs, $rt
     private static readonly Argument[] ShiftPattern = {Argument.RD, Argument.RT, Argument.Shift};                       // <instr>  $rd, $rt, sa
     private static readonly Argument[] VariableShiftPattern = {Argument.RD, Argument.RT, Argument.RS};                  // <instr>  $rd, $rt, $rs
@@ -24,10 +24,10 @@ public static class Tables
     
     // I type patterns
     private static readonly Argument[] StandardIPattern = {Argument.RT, Argument.RS, Argument.Immediate};               // <instr>  $rt, $rs, imm
-    private static readonly Argument[] BranchComparePattern = {Argument.RS, Argument.RT, Argument.Immediate};           // <instr>  $rs, $rt, imm
-    private static readonly Argument[] BranchPattern = {Argument.RS,  Argument.Immediate};                              // <instr>  $rs, imm
+    private static readonly Argument[] BranchComparePattern = {Argument.RS, Argument.RT, Argument.Immediate};           // <instr>  $rs, $rt, offset
+    private static readonly Argument[] BranchPattern = {Argument.RS,  Argument.Immediate};                              // <instr>  $rs, offset
     private static readonly Argument[] LoadImmediatePattern = {Argument.RT, Argument.Immediate};                        // <instr>  $rt, imm
-    private static readonly Argument[] MemoryPattern = {Argument.RT, Argument.AddressOffset};                           // <instr>  $rt, imm($rs)
+    private static readonly Argument[] MemoryPattern = {Argument.RT, Argument.AddressOffset};                           // <instr>  $rt, offset($rs)
 
     // J type patterns
     private static readonly Argument[] JumpPattern = {Argument.Address};                                                // <instr>  addr
@@ -73,22 +73,22 @@ public static class Tables
         { "j", new InstructionMetadata("j", OperationCode.Jump, JumpPattern) },                                         // j        addr
         { "jal", new InstructionMetadata("jal", OperationCode.JumpAndLink, JumpPattern) },                              // jal      addr
 
-        { "beq", new InstructionMetadata("beq", OperationCode.BranchOnEquals, BranchComparePattern) },
-        { "bne", new InstructionMetadata("bne", OperationCode.BranchOnNotEquals, BranchComparePattern) },
-        { "blez", new InstructionMetadata("blez", OperationCode.BranchOnLessThanOrEqualToZero, BranchPattern) },
-        { "bgtz", new InstructionMetadata("bgtz", OperationCode.BranchGreaterThanZero, BranchPattern) },
+        { "beq", new InstructionMetadata("beq", OperationCode.BranchOnEquals, BranchComparePattern) },                  // beq      $rs, $rt, offset
+        { "bne", new InstructionMetadata("bne", OperationCode.BranchOnNotEquals, BranchComparePattern) },               // beq      $rs, $rt, offset
+        { "blez", new InstructionMetadata("blez", OperationCode.BranchOnLessThanOrEqualToZero, BranchPattern) },        // beq      $rs, offset
+        { "bgtz", new InstructionMetadata("bgtz", OperationCode.BranchGreaterThanZero, BranchPattern) },                // beq      $rs, offset
 
-        { "addi", new InstructionMetadata("addi", OperationCode.AddImmediate, StandardIPattern) },
-        { "addiu", new InstructionMetadata("addiu", OperationCode.AddImmediateUnsigned, StandardIPattern) },
+        { "addi", new InstructionMetadata("addi", OperationCode.AddImmediate, StandardIPattern) },                      // addi     $rt, $rs, imm
+        { "addiu", new InstructionMetadata("addiu", OperationCode.AddImmediateUnsigned, StandardIPattern) },            // addiu    $rt, $rs, imm
 
-        { "slti", new InstructionMetadata("slti", OperationCode.SetLessThanImmediate, StandardIPattern) },
-        { "sltiu", new InstructionMetadata("sltiu", OperationCode.SetLessThanImmediateUnsigned, StandardIPattern) },
+        { "slti", new InstructionMetadata("slti", OperationCode.SetLessThanImmediate, StandardIPattern) },              // slti     $rt, $rs, imm
+        { "sltiu", new InstructionMetadata("sltiu", OperationCode.SetLessThanImmediateUnsigned, StandardIPattern) },    // sltiu    $rt, $rs, imm
 
-        { "andi", new InstructionMetadata("andi", OperationCode.AndImmediate, StandardIPattern) },
-        { "ori", new InstructionMetadata("ori", OperationCode.OrImmediate, StandardIPattern) },
-        { "xori", new InstructionMetadata("xori", OperationCode.ExclusiveOrImmediate, StandardIPattern) },
+        { "andi", new InstructionMetadata("andi", OperationCode.AndImmediate, StandardIPattern) },                      // andi     $rt, $rs, imm
+        { "ori", new InstructionMetadata("ori", OperationCode.OrImmediate, StandardIPattern) },                         // ori      $rt, $rs, imm
+        { "xori", new InstructionMetadata("xori", OperationCode.ExclusiveOrImmediate, StandardIPattern) },              // xori     $rt, $rs, imm
 
-        { "lui", new InstructionMetadata("lui", OperationCode.LoadUpperImmediate, LoadImmediatePattern) },
+        { "lui", new InstructionMetadata("lui", OperationCode.LoadUpperImmediate, LoadImmediatePattern) },              // lui      $rt, imm
 
         // TODO: CoProcessing
         
