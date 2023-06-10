@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIPS.Assembler", "src\MIPS.Assembler\MIPS.Assembler.csproj", "{80B8B1A0-EB47-4E76-B431-694680505197}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7230CB86-D2C4-4A73-9B76-46FB5FF2D920}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{457783DF-E788-44A7-843C-76272460B7BA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIPS.Assembler.Tests", "tests\MIPS.Assembler.Tests\MIPS.Assembler.Tests.csproj", "{2090AE7A-C4DE-4DB9-A36F-215D4608223E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIPS", "src\MIPS\MIPS.csproj", "{86A87890-05A7-44F9-85DE-82408A2E4D47}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIPS.Interpreter", "src\MIPS.Interpreter\MIPS.Interpreter.csproj", "{51C46BFB-323C-45C3-BEAE-40A907E37B2C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{80B8B1A0-EB47-4E76-B431-694680505197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80B8B1A0-EB47-4E76-B431-694680505197}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80B8B1A0-EB47-4E76-B431-694680505197}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80B8B1A0-EB47-4E76-B431-694680505197}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2090AE7A-C4DE-4DB9-A36F-215D4608223E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2090AE7A-C4DE-4DB9-A36F-215D4608223E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2090AE7A-C4DE-4DB9-A36F-215D4608223E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2090AE7A-C4DE-4DB9-A36F-215D4608223E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86A87890-05A7-44F9-85DE-82408A2E4D47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86A87890-05A7-44F9-85DE-82408A2E4D47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86A87890-05A7-44F9-85DE-82408A2E4D47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86A87890-05A7-44F9-85DE-82408A2E4D47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51C46BFB-323C-45C3-BEAE-40A907E37B2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51C46BFB-323C-45C3-BEAE-40A907E37B2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51C46BFB-323C-45C3-BEAE-40A907E37B2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51C46BFB-323C-45C3-BEAE-40A907E37B2C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2090AE7A-C4DE-4DB9-A36F-215D4608223E} = {457783DF-E788-44A7-843C-76272460B7BA}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {57EBE9B8-DF5B-43EA-99A8-085FA2C95C11}
+	EndGlobalSection
+EndGlobal
