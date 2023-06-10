@@ -37,7 +37,7 @@ public enum OperationCode : byte
 
     LoadUpperImmediate = 0x0f,
 
-    // TODO: CoProcessing = 0x10,
+    MoveFromCoprocessor = 0x10,
 
     LoadByte = 0x20,
     LoadHalfWord = 0x21,

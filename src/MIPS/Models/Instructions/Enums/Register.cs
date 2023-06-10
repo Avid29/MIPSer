@@ -39,7 +39,7 @@ public enum Register : byte
     Kernel1 = 27,
     GlobalPointer = 28,
     StackPointer = 29,
-    Saved8 = 30,
+    FramePointer = 30,
     ReturnAddress = 31,
     
 #pragma warning restore CS1591

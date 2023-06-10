@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2023
 
+using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions.Enums;
 
 namespace MIPS.Models.Instructions;
@@ -66,7 +67,7 @@ public struct Instruction
     /// <summary>
     /// Creates a new j-type instruction.
     /// </summary>
-    public static Instruction Create(OperationCode opCode, ushort address)
+    public static Instruction Create(OperationCode opCode, uint address)
     {
         Instruction value = default;
         value.OpCode = opCode;
@@ -77,21 +78,7 @@ public struct Instruction
     /// <summary>
     /// Gets the instruction type.
     /// </summary>
-    public InstructionType Type
-    {
-        get
-        {
-            return OpCode switch
-            {
-                OperationCode.RType => InstructionType.R,
-
-                OperationCode.Jump or 
-                OperationCode.JumpAndLink => InstructionType.J,
-
-                _ => InstructionType.I,
-            };
-        }
-    }
+    public InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode);
 
     /// <summary>
     /// Gets the instruction's operation code.
@@ -168,7 +155,17 @@ public struct Instruction
         private set => SetShiftMask(ADDRESS_SIZE, ADDRESS_OFFSET, value);
     }
 
-    private uint GetShiftMask(int size, int offset)
+    /// <summary>
+    /// Casts a <see cref="uint"/> to a <see cref="Instruction"/>.
+    /// </summary>
+    public static unsafe explicit operator Instruction(uint value) => *(Instruction*)&value;
+
+    /// <summary>
+    /// Casts a <see cref="uint"/> to a <see cref="Instruction"/>.
+    /// </summary>
+    public static unsafe implicit operator uint(Instruction value) => *(uint*)&value;
+
+    private readonly uint GetShiftMask(int size, int offset)
     {
         // Generate the mask by taking 2^(size) and subtracting one
         uint mask = (uint)(1 << size) - 1;
