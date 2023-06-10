@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2023
 
+using MIPS.Assembler.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums;
 
 namespace MIPS.Assembler.Models.Instructions;
@@ -12,21 +13,23 @@ public struct InstructionMetadata
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, OperationCode opCode)
+    public InstructionMetadata(string name, OperationCode opCode, Argument[] argumentPattern)
     {
         Name = name;
         OpCode = opCode;
         FuncCode = FunctionCode.None;
+        ArgumentPattern = argumentPattern;
     }
     
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, FunctionCode funcCode)
+    public InstructionMetadata(string name, FunctionCode funcCode, Argument[] argumentPattern)
     {
         Name = name;
         OpCode = OperationCode.RType;
         FuncCode = funcCode;
+        ArgumentPattern = argumentPattern;
     }
 
     /// <summary>
@@ -44,5 +47,13 @@ public struct InstructionMetadata
     /// </summary>
     public FunctionCode FuncCode { get; }
 
+    /// <summary>
+    /// Gets the function type.
+    /// </summary>
+    public InstructionType Type { get; }
 
+    /// <summary>
+    /// Gets the instruction parse type
+    /// </summary>
+    public Argument[] ArgumentPattern { get; }
 }
