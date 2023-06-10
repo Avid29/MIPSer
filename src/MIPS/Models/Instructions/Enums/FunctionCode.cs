@@ -9,6 +9,7 @@ public enum FunctionCode : byte
 {
 #pragma warning disable CS1591
 
+    None = 0,
     ShiftLeftLogical = 0x00,
     ShiftRightLogical = 0x02,
     ShiftRightArithmetic = 0x03,
@@ -17,6 +18,7 @@ public enum FunctionCode : byte
     JumpAndLinkRegister = 0x09,
 
     SystemCall = 0x0c,
+
     MoveFromHi = 0x10,
     MoveFromLow = 0x12,
 
@@ -32,6 +34,7 @@ public enum FunctionCode : byte
     Or = 0x25,
     ExclusiveOr = 0x26,
     Nor = 0x27,
+
     SetLessThan = 0x2a,
     SetLessThanUnsigned = 0x2b,
 

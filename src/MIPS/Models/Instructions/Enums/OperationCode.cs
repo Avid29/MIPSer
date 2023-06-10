@@ -22,8 +22,8 @@ public enum OperationCode : byte
     
     BranchOnEquals = 0x04,
     BranchOnNotEquals = 0x05,
-    BranchOnLessThanOrEqual = 0x06,
-    BranchGreaterThanOrEqual = 0x07,
+    BranchOnLessThanOrEqualToZero = 0x06,
+    BranchGreaterThanZero = 0x07,
 
     AddImmediate = 0x08,
     AddImmediateUnsigned = 0x09,

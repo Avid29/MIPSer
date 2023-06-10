@@ -1,0 +1,48 @@
+﻿// Adam Dernis 2023
+
+using MIPS.Models.Instructions.Enums;
+
+namespace MIPS.Assembler.Models.Instructions;
+
+/// <summary>
+/// A struct containing metadata on an instruction.
+/// </summary>
+public struct InstructionMetadata
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
+    /// </summary>
+    public InstructionMetadata(string name, OperationCode opCode)
+    {
+        Name = name;
+        OpCode = opCode;
+        FuncCode = FunctionCode.None;
+    }
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
+    /// </summary>
+    public InstructionMetadata(string name, FunctionCode funcCode)
+    {
+        Name = name;
+        OpCode = OperationCode.RType;
+        FuncCode = funcCode;
+    }
+
+    /// <summary>
+    /// Gets the name of the instruction.
+    /// </summary>
+    public string Name { get; }
+
+    /// <summary>
+    /// Gets the instruction operation code.
+    /// </summary>
+    public OperationCode OpCode { get; }
+
+    /// <summary>
+    /// Gets the instruction function code.
+    /// </summary>
+    public FunctionCode FuncCode { get; }
+
+
+}
