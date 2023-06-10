@@ -24,6 +24,8 @@ public enum FunctionCode : byte
 
     Multiply = 0x18,
     MultiplyUnsigned = 0x19,
+    Divide = 0x1a,
+    DivideUnsigned = 0x1b,
 
     Add = 0x20,
     AddUnsigned = 0x21,

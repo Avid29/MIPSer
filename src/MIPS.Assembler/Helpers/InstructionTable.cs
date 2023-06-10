@@ -27,6 +27,8 @@ public static class InstructionTable
 
         { "mult", new InstructionMetadata("mult", FunctionCode.Multiply) },
         { "multu", new InstructionMetadata("multu", FunctionCode.MultiplyUnsigned) },
+        { "div", new InstructionMetadata("div", FunctionCode.Divide) },
+        { "divu", new InstructionMetadata("divu", FunctionCode.DivideUnsigned) },
 
         { "add", new InstructionMetadata("add", FunctionCode.Add) },
         { "addu", new InstructionMetadata("addu", FunctionCode.AddUnsigned) },
