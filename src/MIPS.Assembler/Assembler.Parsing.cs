@@ -28,6 +28,10 @@ public partial class Assembler
             line = line[(labelEnd+1)..];
         }
 
+        // Skip empty lines
+        if (line.Length == 0)
+            return;
+
         // Check for marker
         if (line[0] == '.')
         {
@@ -66,7 +70,7 @@ public partial class Assembler
 
         if (valid)
         {
-            CreateSymbolHere(label);
+            CreateSymbol(label);
         }
         else
         {
@@ -83,7 +87,7 @@ public partial class Assembler
         }
 
         // Labels may not begin with a digit
-        if (!char.IsDigit(label[0]))
+        if (char.IsDigit(label[0]))
         {
             return false;
         }

@@ -51,7 +51,7 @@ public struct InstructionMetadata
     /// <summary>
     /// Gets the function type.
     /// </summary>
-    public InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode);
+    public readonly InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode);
 
     /// <summary>
     /// Gets the instruction parse type

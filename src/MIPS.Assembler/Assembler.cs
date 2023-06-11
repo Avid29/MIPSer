@@ -21,8 +21,6 @@ public partial class Assembler
     private ObjectModuleConstruction _obj;
     private readonly Dictionary<string, SegmentAddress> _symbols; // TODO: Move to object module construction
 
-    private uint _textPos;
-    private uint _dataPos;
     private Segment _activeSegment;
 
     /// <summary>
@@ -33,8 +31,6 @@ public partial class Assembler
         _obj = new ObjectModuleConstruction();
         _symbols = new Dictionary<string, SegmentAddress>();
 
-        _textPos = 0;
-        _dataPos = 0;
         _activeSegment = Segment.Text;
     }
 
@@ -47,8 +43,8 @@ public partial class Assembler
         {
             return _activeSegment switch
             {
-                Segment.Text => new SegmentAddress(_textPos, Segment.Text),
-                Segment.Data => new SegmentAddress(_dataPos, Segment.Data),
+                Segment.Text => new SegmentAddress(_obj.TextPosition, Segment.Text),
+                Segment.Data => new SegmentAddress(_obj.DataPosition, Segment.Data),
                 _ => ThrowHelper.ThrowArgumentException<SegmentAddress>(nameof(_activeSegment)),
             };
         }
@@ -79,7 +75,7 @@ public partial class Assembler
     /// Creates a symbol at the current address.
     /// </summary>
     /// <param name="label">The name of the symbol</param>
-    private void CreateSymbolHere(string label)
+    private void CreateSymbol(string label)
     {
         if (_symbols.ContainsKey(label))
         {
@@ -94,14 +90,6 @@ public partial class Assembler
     {
         // Append data
         _obj.Append(_activeSegment, bytes);
-
-        // Get reference to current position tracker
-        ref uint pos = ref _textPos;
-        if (_activeSegment is Segment.Data)
-            pos = ref _dataPos;
-
-        // Update position
-        pos += (uint)bytes.Length;
     }
 
     private void Append(Instruction instruction)

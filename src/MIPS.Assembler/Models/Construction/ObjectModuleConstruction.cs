@@ -4,6 +4,7 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Models;
 using MIPS.Models.Addressing.Enums;
 using System;
+using System.IO;
 
 namespace MIPS.Assembler.Models.Construction;
 
@@ -12,18 +13,27 @@ namespace MIPS.Assembler.Models.Construction;
 /// </summary>
 public class ObjectModuleConstruction
 {
-    private ByteBuffer _text;
-    private ByteBuffer _data;
+    private readonly Stream _text;
+    private readonly Stream _data;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ObjectModuleConstruction"/> class.
     /// </summary>
     public ObjectModuleConstruction()
     {
-        // TODO: Smart allocate buffers ahead of time
-        _text = new ByteBuffer();
-        _data = new ByteBuffer();
+        _text = new MemoryStream();
+        _data = new MemoryStream();
     }
+    
+    /// <summary>
+    /// Gets the current position in the text stream.
+    /// </summary>
+    public long TextPosition => _text.Position;
+
+    /// <summary>
+    /// Gets the current position in the data stream.
+    /// </summary>
+    public long DataPosition => _data.Position;
 
     /// <summary>
     /// Appends an array of bytes to the end of the specified segment.
@@ -33,28 +43,42 @@ public class ObjectModuleConstruction
     /// <exception cref="ArgumentException"/>
     public void Append(Segment segment, params byte[] bytes)
     {
-        ByteBuffer buffer = GetBuffer(segment);
-        buffer.Append(bytes);
+        Stream buffer = GetBuffer(segment);
+
+        var writer = new BinaryWriter(buffer);
+        writer.Write(bytes);
     }
 
     /// <summary>
     /// Aligns a segment to an n-size boundary.
     /// </summary>
-    /// <param name="segment"></param>
-    /// <param name="boundary"></param>
+    /// <param name="segment">The segment to align.</param>
+    /// <param name="boundary">The alignment boundary.</param>
     public void Align(Segment segment, int boundary)
     {
-        ByteBuffer buffer = GetBuffer(segment);
-        buffer.Align(boundary);
+        // Scale boundary by power of 2.
+        boundary = 1 << boundary;
+
+        // Get alignment offset
+        Stream stream = GetBuffer(segment);
+        int offset = (int)stream.Length % boundary;
+
+        // Already aligned
+        if (offset <= 0)
+            return;
+
+        // Append offset bytes
+        var append =  new byte[offset];
+        Append(segment, append);
     }
 
-    private ByteBuffer GetBuffer(Segment segment)
+    private Stream GetBuffer(Segment segment)
     {
         return segment switch
         {
             Segment.Text => _text,
             Segment.Data => _data,
-            _ => ThrowHelper.ThrowArgumentException<ByteBuffer>(nameof(segment), $"{nameof(segment)} must be either {Segment.Text} or {Segment.Data}.")
+            _ => ThrowHelper.ThrowArgumentException<Stream>(nameof(segment), $"{nameof(segment)} must be either {Segment.Text} or {Segment.Data}.")
         };
     }
 

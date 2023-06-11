@@ -12,7 +12,7 @@ public struct SegmentAddress
     /// <summary>
     /// Initializes a new instance of the <see cref="SegmentAddress"/> struct.
     /// </summary>
-    public SegmentAddress(uint address, Segment segment)
+    public SegmentAddress(long address, Segment segment)
     {
         Address = address;
         Segment = segment;
@@ -21,7 +21,7 @@ public struct SegmentAddress
     /// <summary>
     /// The address within the segment.
     /// </summary>
-    public uint Address { get; set; }
+    public long Address { get; set; }
 
     /// <summary>
     /// The segment the address belongs to.
