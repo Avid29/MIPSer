@@ -1,49 +1,76 @@
 ﻿// Adam Dernis 2023
 
+using MIPS.Models.Instructions;
 using System.Linq;
 
 namespace MIPS.Assembler;
 
 public partial class Assembler
 {
-    private void ParseLine(string line, int lineNum)
+    private InstructionParser _instructionParser;
+
+    private void ParseLine(string line)
     {
         // Trim whitespace
         line = line.Trim();
 
         // Trim comment if present
-        int commentStart = line.IndexOf('#');
-        if (commentStart != -1)
-        {
-            line = line[..commentStart];
-        }
+        line = TrimComment(line);
 
         // Find and parse label if present
         int labelEnd = line.IndexOf(':');
         if (labelEnd != -1)
         {
             var label = line[..labelEnd].Trim();
-            bool valid = ValidateLabel(label);
+            ParseLabel(label);
 
-            if (valid)
-            {
-                CreateSymbolHere(label);
-            }
-            else
-            {
-                // TODO: Log exact error
-            }
+            // Trim label from line
+            line = line[(labelEnd+1)..];
         }
 
         // Check for marker
         if (line[0] == '.')
         {
-            ParseMarker(line, lineNum);
+            ParseMarker(line);
         }
         // Parse as instruction
         else
         {
-            ParseInstruction(line, lineNum);
+            ParseInstruction(line);
+        }
+    }
+
+    private bool ParseInstruction(string line)
+    {
+        // Find instruction name
+        int instrNameEnd = line.IndexOf(' ');
+        if (instrNameEnd == -1)
+        {
+            // TODO: Log error
+            return false;
+        }
+
+        // Parse instruction
+        string name = line[..instrNameEnd];
+        string[] args = line[instrNameEnd..].Trim().Split(',');
+        Instruction instruction = _instructionParser.Parse(name, args);
+
+        // Append instruction to active segment
+        Append(instruction);
+        return true;
+    }
+
+    private void ParseLabel(string label)
+    {
+        bool valid = ValidateLabel(label);
+
+        if (valid)
+        {
+            CreateSymbolHere(label);
+        }
+        else
+        {
+            // TODO: Log exact error
         }
     }
 
@@ -68,5 +95,14 @@ public partial class Assembler
         }
 
         return true;
+    }
+
+    private static string TrimComment(string line)
+    {
+        // Find index of comment start
+        int commentStart = line.IndexOf('#');
+
+        // Trim comment if present
+        return commentStart != -1 ? line[..commentStart] : line;
     }
 }

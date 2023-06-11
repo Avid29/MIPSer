@@ -2,7 +2,7 @@
 
 using MIPS.Models.Instructions.Enums;
 
-namespace MIPS.Emulator.System;
+namespace MIPS.Emulator.System.CPU;
 
 /// <summary>
 /// A class representing a register file.
@@ -49,7 +49,7 @@ public class RegisterFile
         get => _registers[(int)Register.High];
         set => _registers[(int)Register.High] = value;
     }
-    
+
     /// <summary>
     /// Gets or sets the value in the low register.
     /// </summary>

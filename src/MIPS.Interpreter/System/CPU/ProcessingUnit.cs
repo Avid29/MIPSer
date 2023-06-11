@@ -2,15 +2,16 @@
 
 using MIPS.Models.Instructions.Enums;
 
-namespace MIPS.Emulator.System;
+namespace MIPS.Emulator.System.CPU;
 
 /// <summary>
 /// A class representing a processor unit.
 /// </summary>
 public partial class ProcessingUnit
 {
+    private readonly RegisterFile _regFile;
+
     private uint _programCounter;
-    private RegisterFile _regFile;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ProcessingUnit"/> class.
@@ -26,7 +27,7 @@ public partial class ProcessingUnit
     private void JumpPartial(uint address)
     {
         // TODO: Maintain paging
-        Jump(_programCounter * 4);
+        Jump(address * 4);
     }
 
     private void JumpOffset(short offset)
@@ -36,6 +37,7 @@ public partial class ProcessingUnit
 
     private void Link()
     {
+        // Assign return address to instruction after caller location 
         _regFile[Register.ReturnAddress] = _programCounter + 4;
     }
 }

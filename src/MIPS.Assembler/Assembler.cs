@@ -69,7 +69,7 @@ public partial class Assembler
             var line = await reader.ReadLineAsync();
             Guard.IsNotNull(line, nameof(line));
 
-            assembler.ParseLine(line, lineNum);
+            assembler.ParseLine(line);
         }
 
         return assembler.Finish();

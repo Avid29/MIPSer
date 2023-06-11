@@ -1,13 +1,11 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
-using MIPS.Assembler.Models.Instructions.Enums;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using System;
-using System.Threading;
 
-namespace MIPS.Emulator.System;
+namespace MIPS.Emulator.System.CPU;
 
 public partial class ProcessingUnit
 {
@@ -179,8 +177,8 @@ public partial class ProcessingUnit
     }
     private uint JALR(uint rs, uint rt, byte shift)
     {
-        Jump(rs);
         Link();
+        Jump(rs);
         return 0;
     }
 
@@ -244,8 +242,8 @@ public partial class ProcessingUnit
     private void J(uint addr) => JumpPartial(addr);
     private void JAL(uint addr)
     {
-        JumpPartial(addr);
         Link();
+        JumpPartial(addr);
     }
 
     // I Type functions

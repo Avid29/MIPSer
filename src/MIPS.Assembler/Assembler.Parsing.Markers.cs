@@ -7,7 +7,7 @@ namespace MIPS.Assembler;
 
 public partial class Assembler
 {
-    private bool ParseMarker(string line, int lineNum)
+    private bool ParseMarker(string line)
     {
         var markerEnd = line.IndexOf(' ');
         var marker = line[1..markerEnd];
@@ -23,7 +23,7 @@ public partial class Assembler
 
             // Align
             case "align":
-                return ParseAlign(line, lineNum);
+                return ParseAlign(line);
 
             // Data
             case "ascii":
@@ -35,7 +35,7 @@ public partial class Assembler
         return false;
     }
 
-    private bool ParseAlign(string line, int lineNum)
+    private bool ParseAlign(string line)
     {
         // Trim marker and whitespace
         line = line[".align".Length..].Trim();
