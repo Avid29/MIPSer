@@ -252,10 +252,10 @@ public partial class ProcessingUnit
     private uint BLEZ(uint rs, uint rt, short offset) => BranchConditionally(rs <= 0, offset);
     private uint BGTZ(uint rs, uint rt, short offset) => BranchConditionally(rs > 0, offset);
 
-    private uint ADDI(uint rs, uint rt, short immediate) => (uint)((int)rs + (short)immediate);
+    private uint ADDI(uint rs, uint rt, short immediate) => (uint)((int)rs + immediate);
     private uint ADDIU(uint rs, uint rt, short immediate) => (uint)(rs + immediate);
 
-    private uint SLTI(uint rs, uint rt, short immediate) => (uint)((int)rs < (short)immediate ? 1 : 0);
+    private uint SLTI(uint rs, uint rt, short immediate) => (uint)((int)rs < immediate ? 1 : 0);
     private uint SLTIU(uint rs, uint rt, short immediate) => (uint) (rs < immediate ? 1 : 0);
 
     private uint ANDI(uint rs, uint rt, short immediate) => (uint)(rs & immediate);
@@ -266,7 +266,7 @@ public partial class ProcessingUnit
     {
         if (branch)
         {
-            JumpOffset((short)offset);
+            JumpOffset(offset);
         }
 
         return (uint)(branch ? 1 : 0);
