@@ -132,26 +132,33 @@ public struct InstructionParser
 
     private void ParseShiftArg(string arg)
     {
+        // TODO: Macros and symbols
+
         // TODO: Handle exceptions
         _shift = byte.Parse(arg);
     }
 
     private void ParseImmediateArg(string arg)
     {
+        // TODO: Macros and symbols
+
         // TODO: Handle exceptions
         _immediate = short.Parse(arg);
     }
 
     private void ParseAddressArg(string arg)
     {
+        // TODO: Macros and symbols
+
         // TODO: Handle exceptions
         _address = uint.Parse(arg);
     }
 
     private void ParseAddressOffsetArg(string arg)
     {
-        // TODO: Exception handling
+        // TODO: Macros and symbols
 
+        // TODO: Exception handling
         int regStart = arg.IndexOf('(');
         int regEnd = arg.IndexOf(')');
 
@@ -167,6 +174,9 @@ public struct InstructionParser
 
     private static bool TryParseRegister(string name, out Register register)
     {
+        // Trim
+        name = name.Trim();
+
         // Check that argument is register argument
         if (name[0] != '$')
         {
