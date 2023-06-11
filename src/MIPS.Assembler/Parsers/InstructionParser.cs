@@ -41,7 +41,7 @@ public struct InstructionParser
     public Instruction Parse(string name, string[] args)
     {
         // Get instruction metadata from name
-        if (!Tables.TryGetInstruction(name, out _meta))
+        if (!ConstantTables.TryGetInstruction(name, out _meta))
         {
             // TODO: Log error
             ThrowHelper.ThrowInvalidDataException($"Instruction named '{name}' could not be found.");
@@ -187,7 +187,7 @@ public struct InstructionParser
         }
 
         // Get register from table
-        if (!Tables.TryGetRegister(name[1..], out register))
+        if (!ConstantTables.TryGetRegister(name[1..], out register))
         {
             // TODO: Log error
             ThrowHelper.ThrowInvalidDataException($"{name} is not a valid register.");

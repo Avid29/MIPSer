@@ -9,9 +9,9 @@ using System.Collections.Generic;
 namespace MIPS.Assembler.Helpers;
 
 /// <summary>
-/// A class containing a dictionary of instructions to metadata.
+/// A class containing constant tables for parsing lookup.
 /// </summary>
-public static class Tables
+public static class ConstantTables
 {
     // R type patterns
     private static readonly Argument[] StandardRPattern = {Argument.RD, Argument.RS, Argument.RT};                      // <instr>  $rd, $rs, $rt
