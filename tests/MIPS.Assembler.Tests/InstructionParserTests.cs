@@ -1,6 +1,7 @@
 // Adam Dernis 2023
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MIPS.Assembler.Parsers;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 

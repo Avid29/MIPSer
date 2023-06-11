@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2023
 
+using MIPS.Assembler.Parsers;
 using MIPS.Models.Instructions;
 using System.Linq;
 

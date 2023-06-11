@@ -26,9 +26,16 @@ public partial class Assembler
                 return ParseAlign(line);
 
             // Data
+            case "word":
+                break;
+
+            // Ascii
             case "ascii":
+                ParseAscii(line);
+                break;
             case "asciiz":
-                throw new NotImplementedException();
+                ParseAscii(line, true);
+                break;
         }
 
         // Invalid marker
@@ -45,6 +52,17 @@ public partial class Assembler
             return false;
 
         _obj.Align(_activeSegment, boundary);
+        return true;
+    }
+
+    private bool ParseAscii(string line, bool terminate = false)
+    {
+        // Null terminate conditionally
+        if (terminate)
+        {
+            _obj.Append(_activeSegment, (byte)'\0');
+        }
+
         return true;
     }
 }

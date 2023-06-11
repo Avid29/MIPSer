@@ -7,7 +7,7 @@ using MIPS.Assembler.Models.Instructions.Enums;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 
-namespace MIPS.Assembler;
+namespace MIPS.Assembler.Parsers;
 
 /// <summary>
 /// A struct for parsing instructions.
@@ -81,7 +81,7 @@ public struct InstructionParser
     {
         switch (type)
         {
-            case Argument.RS: 
+            case Argument.RS:
             case Argument.RT:
             case Argument.RD:
                 ParseRegisterArg(arg, type);
@@ -132,7 +132,7 @@ public struct InstructionParser
 
     private void ParseShiftArg(string arg)
     {
-        // TODO: Macros and symbols
+        // TODO: Expressions and symbols
 
         // TODO: Handle exceptions
         _shift = byte.Parse(arg);
@@ -140,7 +140,7 @@ public struct InstructionParser
 
     private void ParseImmediateArg(string arg)
     {
-        // TODO: Macros and symbols
+        // TODO: Expressions and symbols
 
         // TODO: Handle exceptions
         _immediate = short.Parse(arg);
@@ -148,7 +148,7 @@ public struct InstructionParser
 
     private void ParseAddressArg(string arg)
     {
-        // TODO: Macros and symbols
+        // TODO: Expressions and symbols
 
         // TODO: Handle exceptions
         _address = uint.Parse(arg);
@@ -156,7 +156,7 @@ public struct InstructionParser
 
     private void ParseAddressOffsetArg(string arg)
     {
-        // TODO: Macros and symbols
+        // TODO: Expressions and symbols
 
         // TODO: Exception handling
         int regStart = arg.IndexOf('(');
@@ -165,9 +165,9 @@ public struct InstructionParser
         // Parse offset component
         string offsetStr = arg[..regStart];
         _ = short.TryParse(offsetStr, out _immediate);
-                    
+
         // Parse register component
-        string regStr = arg[(regStart+1)..regEnd];
+        string regStr = arg[(regStart + 1)..regEnd];
         // AddressOffset register is always $rs
         _ = TryParseRegister(regStr, out _rs);
     }
