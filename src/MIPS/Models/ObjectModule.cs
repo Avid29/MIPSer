@@ -7,13 +7,13 @@ namespace MIPS.Models;
 /// </summary>
 public class ObjectModule
 {
-    private byte[] _data;
+    private Stream _stream;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ObjectModule"/> class.
     /// </summary>
-    public ObjectModule()
+    public ObjectModule(Stream stream)
     {
-        _data = Array.Empty<byte>();
+        _stream = stream;
     }
 }
