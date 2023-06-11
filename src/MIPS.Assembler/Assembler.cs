@@ -18,8 +18,7 @@ namespace MIPS.Assembler;
 /// </summary>
 public partial class Assembler
 {
-    private ObjectModuleConstruction _obj;
-    private readonly Dictionary<string, SegmentAddress> _symbols; // TODO: Move to object module construction
+    private ObjectModuleConstructor _obj;
 
     private Segment _activeSegment;
 
@@ -28,8 +27,7 @@ public partial class Assembler
     /// </summary>
     private Assembler()
     {
-        _obj = new ObjectModuleConstruction();
-        _symbols = new Dictionary<string, SegmentAddress>();
+        _obj = new ObjectModuleConstructor();
 
         _activeSegment = Segment.Text;
     }
@@ -77,13 +75,11 @@ public partial class Assembler
     /// <param name="label">The name of the symbol</param>
     private void CreateSymbol(string label)
     {
-        if (_symbols.ContainsKey(label))
+        var address = CurrentAddress;
+        if (!_obj.TryDefineSymbol(label, address))
         {
             // TODO: Log error
         }
-
-        var address = CurrentAddress;
-        _symbols.Add(label, address);
     }
 
     private void Append(params byte[] bytes)

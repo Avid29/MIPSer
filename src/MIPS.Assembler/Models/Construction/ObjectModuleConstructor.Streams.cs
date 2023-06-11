@@ -8,32 +8,17 @@ using System.IO;
 
 namespace MIPS.Assembler.Models.Construction;
 
-/// <summary>
-/// An object module in construction.
-/// </summary>
-public class ObjectModuleConstruction
+public partial class ObjectModuleConstructor
 {
-    private readonly Stream _text;
-    private readonly Stream _data;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ObjectModuleConstruction"/> class.
-    /// </summary>
-    public ObjectModuleConstruction()
-    {
-        _text = new MemoryStream();
-        _data = new MemoryStream();
-    }
-    
     /// <summary>
     /// Gets the current position in the text stream.
     /// </summary>
-    public long TextPosition => _text.Position;
+    public long TextPosition => _text.BaseStream.Position;
 
     /// <summary>
     /// Gets the current position in the data stream.
     /// </summary>
-    public long DataPosition => _data.Position;
+    public long DataPosition => _data.BaseStream.Position;
 
     /// <summary>
     /// Appends an array of bytes to the end of the specified segment.
@@ -43,10 +28,9 @@ public class ObjectModuleConstruction
     /// <exception cref="ArgumentException"/>
     public void Append(Segment segment, params byte[] bytes)
     {
-        Stream buffer = GetBuffer(segment);
-
-        var writer = new BinaryWriter(buffer);
-        writer.Write(bytes);
+        // Select buffer and write bytes
+        BinaryWriter buffer = GetBuffer(segment);
+        buffer.Write(bytes);
     }
 
     /// <summary>
@@ -59,9 +43,9 @@ public class ObjectModuleConstruction
         // Scale boundary by power of 2.
         boundary = 1 << boundary;
 
-        // Get alignment offset
-        Stream stream = GetBuffer(segment);
-        int offset = (int)stream.Length % boundary;
+        // Select buffer and get alignment offset
+        BinaryWriter stream = GetBuffer(segment);
+        int offset = (int)stream.BaseStream.Length % boundary;
 
         // Already aligned
         if (offset <= 0)
@@ -72,13 +56,13 @@ public class ObjectModuleConstruction
         Append(segment, append);
     }
 
-    private Stream GetBuffer(Segment segment)
+    private BinaryWriter GetBuffer(Segment segment)
     {
         return segment switch
         {
             Segment.Text => _text,
             Segment.Data => _data,
-            _ => ThrowHelper.ThrowArgumentException<Stream>(nameof(segment), $"{nameof(segment)} must be either {Segment.Text} or {Segment.Data}.")
+            _ => ThrowHelper.ThrowArgumentException<BinaryWriter>(nameof(segment), $"{nameof(segment)} must be either {Segment.Text} or {Segment.Data}.")
         };
     }
 
