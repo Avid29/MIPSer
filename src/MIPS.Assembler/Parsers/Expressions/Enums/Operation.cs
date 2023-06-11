@@ -19,7 +19,11 @@ public enum Operation
     // Logical
     And,
     Or,
-    Xor,
+
+    // TODO: Xor
+    // NOTE: Adding Xor to the IntegerEvaluator will cause the assembly to be flagged
+    // as malware by Windows Defender, and the dll will subsequently be deleted before
+    // execution. As a result, Xor has been removed from expression evaluation for now.
 
 #pragma warning restore CS1591
 }

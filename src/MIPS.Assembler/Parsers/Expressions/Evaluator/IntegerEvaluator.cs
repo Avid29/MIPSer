@@ -21,13 +21,10 @@ public class IntegerEvaluator : IEvaluator<long>
     
     /// <inheritdoc/>
     public long Mod(long left, long right) => left % right;
-    
+
     /// <inheritdoc/>
     public long And(long left, long right) => left & right;
     
     /// <inheritdoc/>
     public long Or(long left, long right) => left | right;
-    
-    /// <inheritdoc/>
-    public long Xor(long left, long right) => left ^ right;
 }

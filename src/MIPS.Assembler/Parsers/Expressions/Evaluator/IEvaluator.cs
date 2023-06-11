@@ -63,12 +63,4 @@ public interface IEvaluator<T>
     /// <param name="right">The right-hand child.</param>
     /// <returns>Logical OR of <paramref name="left"/> and <paramref name="right"/>.</returns>
     T Or(T left, T right);
-
-    /// <summary>
-    /// Logical XOR of <paramref name="left"/> and <paramref name="right"/>.
-    /// </summary>
-    /// <param name="left">The left-hand child.</param>
-    /// <param name="right">The right-hand child.</param>
-    /// <returns>Logical XOR of <paramref name="left"/> and <paramref name="right"/>.</returns>
-    T Xor(T left, T right);
 }
