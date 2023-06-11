@@ -27,4 +27,10 @@ public class IntegerEvaluator : IEvaluator<long>
     
     /// <inheritdoc/>
     public long Or(long left, long right) => left | right;
+
+    /// <inheritdoc/>
+    // NOTE: Using Xor properly will cause the assembly to be flagged as malware
+    // by Windows Defender, and the dll will subsequently be deleted before execution.
+    // As a result, logical XOR has been replaced with an equivalent expression for now.
+    public long Xor(long left, long right) => (left | right) & ~(left & right);
 }

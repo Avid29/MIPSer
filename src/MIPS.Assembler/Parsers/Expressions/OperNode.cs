@@ -94,7 +94,7 @@ public class OperNode : ExpNode
             // Logical
             Operation.And => evaluator.And(left, right),
             Operation.Or => evaluator.Or(left, right),
-            //Operation.Xor => evaluator.Xor(left, right),
+            Operation.Xor => evaluator.Xor(left, right),
             _ => default,
         };
 
