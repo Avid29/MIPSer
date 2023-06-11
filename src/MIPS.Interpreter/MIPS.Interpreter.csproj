@@ -4,4 +4,8 @@
 	  <RootNamespace>MIPS.Emulator</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MIPS\MIPS.csproj" />
+  </ItemGroup>
+
 </Project>

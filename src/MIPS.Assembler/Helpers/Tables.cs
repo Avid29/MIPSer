@@ -74,9 +74,9 @@ public static class Tables
         { "jal", new InstructionMetadata("jal", OperationCode.JumpAndLink, JumpPattern) },                              // jal      addr
 
         { "beq", new InstructionMetadata("beq", OperationCode.BranchOnEquals, BranchComparePattern) },                  // beq      $rs, $rt, offset
-        { "bne", new InstructionMetadata("bne", OperationCode.BranchOnNotEquals, BranchComparePattern) },               // beq      $rs, $rt, offset
-        { "blez", new InstructionMetadata("blez", OperationCode.BranchOnLessThanOrEqualToZero, BranchPattern) },        // beq      $rs, offset
-        { "bgtz", new InstructionMetadata("bgtz", OperationCode.BranchGreaterThanZero, BranchPattern) },                // beq      $rs, offset
+        { "bne", new InstructionMetadata("bne", OperationCode.BranchOnNotEquals, BranchComparePattern) },               // bne      $rs, $rt, offset
+        { "blez", new InstructionMetadata("blez", OperationCode.BranchOnLessThanOrEqualToZero, BranchPattern) },        // blez     $rs, offset
+        { "bgtz", new InstructionMetadata("bgtz", OperationCode.BranchGreaterThanZero, BranchPattern) },                // bgtz     $rs, offset
 
         { "addi", new InstructionMetadata("addi", OperationCode.AddImmediate, StandardIPattern) },                      // addi     $rt, $rs, imm
         { "addiu", new InstructionMetadata("addiu", OperationCode.AddImmediateUnsigned, StandardIPattern) },            // addiu    $rt, $rs, imm
@@ -92,15 +92,15 @@ public static class Tables
 
         // TODO: CoProcessing
         
-        { "lb", new InstructionMetadata("lb", OperationCode.LoadByte, MemoryPattern) },
-        { "lh", new InstructionMetadata("lh", OperationCode.LoadHalfWord, MemoryPattern) },
-        { "lw", new InstructionMetadata("lw", OperationCode.LoadWord, MemoryPattern) },
-        { "lbu", new InstructionMetadata("lbu", OperationCode.LoadByteUnsigned, MemoryPattern) },
-        { "lhu", new InstructionMetadata("lhu", OperationCode.LoadHalfWordUnsigned, MemoryPattern) },
-
-        { "sb", new InstructionMetadata("sb", OperationCode.StoreByte, MemoryPattern) },
-        { "sh", new InstructionMetadata("sh", OperationCode.StoreHalfWord, MemoryPattern) },
-        { "sw", new InstructionMetadata("sw", OperationCode.StoreWord, MemoryPattern) },
+        { "lb", new InstructionMetadata("lb", OperationCode.LoadByte, MemoryPattern) },                                 // lb       $rt, offset($rs)
+        { "lh", new InstructionMetadata("lh", OperationCode.LoadHalfWord, MemoryPattern) },                             // lh       $rt, offset($rs)
+        { "lw", new InstructionMetadata("lw", OperationCode.LoadWord, MemoryPattern) },                                 // lw       $rt, offset($rs)
+        { "lbu", new InstructionMetadata("lbu", OperationCode.LoadByteUnsigned, MemoryPattern) },                       // lbu      $rt, offset($rs)
+        { "lhu", new InstructionMetadata("lhu", OperationCode.LoadHalfWordUnsigned, MemoryPattern) },                   // lhu      $rt, offset($rs)
+                                                                                                                       
+        { "sb", new InstructionMetadata("sb", OperationCode.StoreByte, MemoryPattern) },                                // sb       $rt, offset($rs)
+        { "sh", new InstructionMetadata("sh", OperationCode.StoreHalfWord, MemoryPattern) },                            // sh       $rt, offset($rs)
+        { "sw", new InstructionMetadata("sw", OperationCode.StoreWord, MemoryPattern) },                                // sw       $rt, offset($rs)
     };
 
     private static readonly Dictionary<string, Register> _registerTable = new()

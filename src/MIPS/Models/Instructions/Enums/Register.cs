@@ -41,6 +41,12 @@ public enum Register : byte
     StackPointer = 29,
     FramePointer = 30,
     ReturnAddress = 31,
+
+    // Non-indexable registers
+    High,
+    Low,
+
+
     
 #pragma warning restore CS1591
 }
