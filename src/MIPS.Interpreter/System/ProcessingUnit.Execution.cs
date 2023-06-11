@@ -137,7 +137,7 @@ public partial class ProcessingUnit
         var rt = _regFile[instruction.RT];
         var immediate = instruction.ImmediateValue;
 
-        Func<uint, uint, ushort, uint> operation = instruction.OpCode switch
+        Func<uint, uint, short, uint> operation = instruction.OpCode switch
         {
             OperationCode.BranchOnEquals => BEQ,
             OperationCode.BranchOnNotEquals => BNE,
@@ -152,7 +152,7 @@ public partial class ProcessingUnit
             OperationCode.AndImmediate => ANDI,
             OperationCode.OrImmediate => ORI,
             OperationCode.ExclusiveOrImmediate => XORI,
-            _ => ThrowHelper.ThrowInvalidDataException<Func<uint, uint, ushort, uint>>($"Invalid operation code '{instruction.OpCode}'.")
+            _ => ThrowHelper.ThrowInvalidDataException<Func<uint, uint, short, uint>>($"Invalid operation code '{instruction.OpCode}'.")
         };
 
         var output = operation(rs, rt, immediate);
@@ -249,22 +249,22 @@ public partial class ProcessingUnit
     }
 
     // I Type functions
-    private uint BEQ(uint rs, uint rt, ushort offset) => BranchConditionally(rs == rt, offset);
-    private uint BNE(uint rs, uint rt, ushort offset) => BranchConditionally(rs != rt, offset);
-    private uint BLEZ(uint rs, uint rt, ushort offset) => BranchConditionally(rs <= 0, offset);
-    private uint BGTZ(uint rs, uint rt, ushort offset) => BranchConditionally(rs > 0, offset);
+    private uint BEQ(uint rs, uint rt, short offset) => BranchConditionally(rs == rt, offset);
+    private uint BNE(uint rs, uint rt, short offset) => BranchConditionally(rs != rt, offset);
+    private uint BLEZ(uint rs, uint rt, short offset) => BranchConditionally(rs <= 0, offset);
+    private uint BGTZ(uint rs, uint rt, short offset) => BranchConditionally(rs > 0, offset);
 
-    private uint ADDI(uint rs, uint rt, ushort immediate) => (uint)((int)rs + (short)immediate);
-    private uint ADDIU(uint rs, uint rt, ushort immediate) => rs + immediate;
+    private uint ADDI(uint rs, uint rt, short immediate) => (uint)((int)rs + (short)immediate);
+    private uint ADDIU(uint rs, uint rt, short immediate) => (uint)(rs + immediate);
 
-    private uint SLTI(uint rs, uint rt, ushort immediate) => (uint)((int)rs < (short)immediate ? 1 : 0);
-    private uint SLTIU(uint rs, uint rt, ushort immediate) => (uint) (rs < immediate ? 1 : 0);
+    private uint SLTI(uint rs, uint rt, short immediate) => (uint)((int)rs < (short)immediate ? 1 : 0);
+    private uint SLTIU(uint rs, uint rt, short immediate) => (uint) (rs < immediate ? 1 : 0);
 
-    private uint ANDI(uint rs, uint rt, ushort immediate) => rs & immediate;
-    private uint ORI(uint rs, uint rt, ushort immediate) => rs | immediate;
-    private uint XORI(uint rs, uint rt, ushort immediate) => rs ^ immediate;
+    private uint ANDI(uint rs, uint rt, short immediate) => (uint)(rs & immediate);
+    private uint ORI(uint rs, uint rt, short immediate) => (rs | (ushort)immediate);
+    private uint XORI(uint rs, uint rt, short immediate) => (uint)(rs ^ immediate);
 
-    private uint BranchConditionally(bool branch, ushort offset)
+    private uint BranchConditionally(bool branch, short offset)
     {
         if (branch)
         {

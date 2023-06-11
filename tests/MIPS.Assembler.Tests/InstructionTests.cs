@@ -11,7 +11,7 @@ public class InstructionTests
     [TestMethod]
     public void TestMethod1()
     {
-        string code = @"addi $t0, $s0, 100";
+        string code = @"beq $t0, $s0, -100";
 
         using var stream = new MemoryStream();
         using var writer = new StreamWriter(stream);

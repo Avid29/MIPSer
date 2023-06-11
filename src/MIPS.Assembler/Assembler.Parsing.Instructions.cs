@@ -3,7 +3,6 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Models.Instructions.Enums;
-using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 
@@ -29,7 +28,7 @@ public partial class Assembler
         var rt = Register.Zero;
         var rd = Register.Zero;
         byte shift = 0;
-        ushort immediate = 0;
+        short immediate = 0;
         uint address = 0;
 
         // Parse by pattern
@@ -66,7 +65,7 @@ public partial class Assembler
 
                 // Immediate
                 case Argument.Immediate:
-                    _ = ushort.TryParse(args[i], out immediate);
+                    _ = short.TryParse(args[i], out immediate);
                     break;
 
                 // Address

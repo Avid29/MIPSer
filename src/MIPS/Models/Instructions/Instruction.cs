@@ -54,7 +54,7 @@ public struct Instruction
     /// <summary>
     /// Creates a new i-type instruction.
     /// </summary>
-    public static Instruction Create(OperationCode opCode, Register rs, Register rt, ushort immediate)
+    public static Instruction Create(OperationCode opCode, Register rs, Register rt, short immediate)
     {
         Instruction value = default;
         value.OpCode = opCode;
@@ -140,10 +140,10 @@ public struct Instruction
     /// <summary>
     /// Gets the instruction's immediate value.
     /// </summary>
-    public ushort ImmediateValue
+    public short ImmediateValue
     {
-        get => (ushort)GetShiftMask(IMMEDIATE_SIZE, IMMEDIATE_OFFSET);
-        private set => SetShiftMask(IMMEDIATE_SIZE, IMMEDIATE_OFFSET, value);
+        get => (short)GetShiftMask(IMMEDIATE_SIZE, IMMEDIATE_OFFSET);
+        private set => SetShiftMask(IMMEDIATE_SIZE, IMMEDIATE_OFFSET, (ushort)value);
     }
 
     /// <summary>
