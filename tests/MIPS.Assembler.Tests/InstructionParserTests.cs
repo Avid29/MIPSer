@@ -13,6 +13,7 @@ public class InstructionParserTests
     private const string Add = "add $t0, $s0, $s1";
     private const string Addi = "addi $t0, $s0, 100";
     private const string LoadWord = "lw $t0, 100($s0)";
+    private const string StoreByte = "sb $t0, -100($s0)";
     private const string Jump = "j 1000";
 
     [TestMethod(Add)]
@@ -34,6 +35,13 @@ public class InstructionParserTests
     {
         Instruction expected = Instruction.Create(OperationCode.LoadWord, Register.Saved0, Register.Temporary0, 100);
         Test(LoadWord, expected);
+    }
+
+    [TestMethod(StoreByte)]
+    public void StoreByteTest()
+    {
+        Instruction expected = Instruction.Create(OperationCode.StoreByte, Register.Saved0, Register.Temporary0, -100);
+        Test(StoreByte, expected);
     }
 
     [TestMethod(Jump)]
