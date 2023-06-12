@@ -102,16 +102,19 @@ public struct InstructionParser
     {
         switch (type)
         {
+            // Register type argument
             case Argument.RS:
             case Argument.RT:
             case Argument.RD:
                 ParseRegisterArg(arg, type);
                 break;
+            // Immediate type argument
             case Argument.Shift:
             case Argument.Immediate:
             case Argument.Address:
                 ParseExpressionArg(arg, type);
                 break;
+            // Address offset type argument
             case Argument.AddressOffset:
                 ParseAddressOffsetArg(arg);
                 break;
@@ -139,11 +142,18 @@ public struct InstructionParser
             case Argument.RD:
                 reg = ref _rd;
                 break;
+
+            default:
+                ThrowHelper.ThrowArgumentException($"Argument '{arg}' of type '{target}' attempted to parse as an expression.");
+                break;
         }
 
         if (!TryParseRegister(arg, out var register))
         {
             // TODO: Log error
+            // NOTE: This condition is currently not hit because any branch of
+            // TryParseRegister that would return false also throws an exception.
+            // When error messages are added the exceptions will be removed.
         }
 
         // Cache register as appropriate argument type
@@ -157,9 +167,12 @@ public struct InstructionParser
     {
         if (!_expParser.TryParse(arg, out var value))
         {
-            // TODO: Log error
+            // TODO: Log error and remove exception
+
+            ThrowHelper.ThrowArgumentException($"Argument '{arg}' of type '{target}' was not a valid expression.");
         }
 
+        // Assign to appropriate instruction argument
         switch (target)
         {
             case Argument.Shift:
@@ -172,7 +185,7 @@ public struct InstructionParser
                 _address = (uint)value;
                 break;
             default:
-                ThrowHelper.ThrowArgumentOutOfRangeException($"Argument '{arg}' of type '{target}' was misevaluated as an expression.");
+                ThrowHelper.ThrowArgumentOutOfRangeException($"Argument '{arg}' of type '{target}' attempted to parse as an expression.");
                 break;
         }
     }
@@ -182,18 +195,20 @@ public struct InstructionParser
     /// </summary>
     private void ParseAddressOffsetArg(string arg)
     {
-        // TODO: Expressions and symbols
+        // Split the string into an offset and a register 
+        if (!TokenizeAddressOffset(arg, out var offsetStr, out var regStr))
+        {
+            // NOTE: This condition is currently not hit because any branch of
+            // TokenizeAddressOffset that would return false also throws an exception.
+            // When error messages are added the exceptions will be removed.
+            return;
+        }
         
-        // TODO: Exception handling
-        int regStart = arg.IndexOf('(');
-        int regEnd = arg.IndexOf(')');
-        string offsetStr = arg[..regStart];
-        string regStr = arg[(regStart + 1)..regEnd];
-
         // NOTE: Be careful about forwards to other parse functions when implementing 
         // error logging. $rs and immediate errors might be inappropriately logged for
         // address offset arguments.
-        
+
+
         // Parse offset component into immediate
         ParseExpressionArg(offsetStr, Argument.Immediate);
 
@@ -203,13 +218,14 @@ public struct InstructionParser
 
     private static bool TryParseRegister(string name, out Register register)
     {
-        // Trim
+        // Trim whitespace from register string
         name = name.Trim();
 
         // Check that argument is register argument
         if (name[0] != '$')
         {
-            // TODO: Log error
+            // TODO: Log error and remove exception.
+
             ThrowHelper.ThrowArgumentException($"Expected register argument. Found '{name}'");
             register = Register.Zero;
             return false;
@@ -218,10 +234,35 @@ public struct InstructionParser
         // Get register from table
         if (!ConstantTables.TryGetRegister(name[1..], out register))
         {
-            // TODO: Log error
+            // TODO: Log error and remove exception.
+
             ThrowHelper.ThrowInvalidDataException($"{name} is not a valid register.");
             return false;
         }
+
+        return true;
+    }
+
+    private bool TokenizeAddressOffset(string arg, out string offset, out string register)
+    {
+        // Find parenthesis start and end
+        // Parenthesis wrap the register
+        int regStart = arg.IndexOf('(');
+        int regEnd = arg.IndexOf(')');
+
+        // Either end of the parenthesis were not found
+        if (regStart == -1 || regEnd == -1)
+        {
+            offset = string.Empty;
+            register = string.Empty;
+
+            ThrowHelper.ThrowArgumentException($"Argument '{arg}' is not a valid address offset.");
+            return false;
+        }
+
+        // Split argument into offset and register components
+        offset = arg[..regStart];
+        register = arg[(regStart + 1)..regEnd];
 
         return true;
     }
