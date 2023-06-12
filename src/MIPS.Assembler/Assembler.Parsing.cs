@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2023
 
+using System;
 using System.Linq;
 
 namespace MIPS.Assembler;
@@ -8,6 +9,9 @@ public partial class Assembler
 {
     private void TokenizeLine(string line, out string? label, out string? instruction, out string? marker)
     {
+        // Trim zero width no-break space
+        line = line.Trim('\uFEFF');
+
         label = null;
         instruction = null;
         marker = null;
@@ -50,21 +54,30 @@ public partial class Assembler
         }
     }
 
-    private void TokenizeInstruction(string instruction, out string name, out string[] args)
+    private bool TokenizeInstruction(string instruction, out string name, out string[] args)
     {
+        if (string.IsNullOrWhiteSpace(instruction))
+        {
+            name = string.Empty;
+            args = Array.Empty<string>();
+            return false;
+        }
+
         // Find instruction name
-        int nameEnd = instruction.IndexOf(' ');
+        int nameEnd = FindNameEnd(instruction);
         if (nameEnd == -1)
         {
             nameEnd = instruction.Length;
         }
 
+
         // Parse instruction
         name = instruction[..nameEnd];
         args = instruction[nameEnd..].Trim().Split(',');
+        return true;
     }
 
-    private void TokenizeMarker(string marker, out string name, out string[] args) => TokenizeInstruction(marker, out name, out args);
+    private bool TokenizeMarker(string marker, out string name, out string[] args) => TokenizeInstruction(marker, out name, out args);
 
     private bool ValidateLabel(string label)
     {
@@ -96,5 +109,19 @@ public partial class Assembler
 
         // Trim comment if present
         return commentStart != -1 ? line[..commentStart] : line;
+    }
+
+    private static int FindNameEnd(string line)
+    {
+        int firstSpace = line.IndexOf(' ');
+        int firstTab = line.IndexOf("\t", StringComparison.Ordinal);
+
+        return (firstSpace == -1, firstTab == -1) switch
+        {
+            (false, false) => int.Min(firstSpace, firstTab),
+            (false, true) => firstSpace,
+            (true, false) => firstTab,
+            (true, true) => -1,
+        };
     }
 }

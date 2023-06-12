@@ -55,7 +55,9 @@ public unsafe partial class Assembler
             return;
 
         // Get the parts of the instruction and parse
-        TokenizeInstruction(instructionStr, out var name, out var args);
+        if(!TokenizeInstruction(instructionStr, out var name, out var args))
+            return;
+
         var instruction = _instructionParser.Parse(name, args);
 
         // Append instruction to active segment
