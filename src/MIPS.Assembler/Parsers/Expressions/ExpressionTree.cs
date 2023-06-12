@@ -9,13 +9,13 @@ namespace MIPS.Assembler.Parsers.Expressions;
 /// <summary>
 /// A class representing an expression tree.
 /// </summary>
-public class ExpressionTree<T>
+public class ExpressionTree
 {
-    private ExpNode<T>? _root;
-    private OperNode<T>? _activeNode;
+    private ExpNode? _root;
+    private OperNode? _activeNode;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ExpressionTree{T}"/> class.
+    /// Initializes a new instance of the <see cref="ExpressionTree"/> class.
     /// </summary>
     public ExpressionTree()
     {
@@ -29,7 +29,7 @@ public class ExpressionTree<T>
     /// <param name="evaluator">The <see cref="IEvaluator{T}"/> to use in evaluation.</param>
     /// <param name="result">The resulting value of the tree.</param>
     /// <returns><see cref="true"/> if successfully evaluated. <see cref="false"/> otherwise.></returns>
-    public bool TryEvaluate(IEvaluator<T> evaluator, out T? result)
+    public bool TryEvaluate(IEvaluator<long> evaluator, out long result)
     {
         result = default;
         if (_root is null)
@@ -39,9 +39,9 @@ public class ExpressionTree<T>
     }
 
     /// <summary>
-    /// Adds a <see cref="ValueNode{T}"/> to the expression tree.
+    /// Adds a <see cref="ValueNode"/> to the expression tree.
     /// </summary>
-    public void AddNode(ValueNode<T> node)
+    public void AddNode(ValueNode node)
     {
         // Handle first value node
         if (_root is null)
@@ -67,10 +67,10 @@ public class ExpressionTree<T>
     }
 
     /// <summary>
-    /// Adds <see cref="OperNode{T}"/> to the expression tree.
+    /// Adds <see cref="OperNode"/> to the expression tree.
     /// </summary>
     /// <param name="node"></param>
-    public void AddNode(OperNode<T> node)
+    public void AddNode(OperNode node)
     {
         // Handle first operation node
         if (_activeNode is null)

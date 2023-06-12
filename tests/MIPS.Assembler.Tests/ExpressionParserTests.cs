@@ -2,7 +2,6 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Assembler.Parsers;
-using MIPS.Assembler.Parsers.Expressions.Evaluator;
 
 namespace MIPS.Assembler.Tests;
 
@@ -52,7 +51,7 @@ public class ExpressionParserTests
 
     private static void Test(string input, long expected)
     {
-        var parser = new ExpressionParser(new IntegerEvaluator());
+        var parser = new ExpressionParser();
         _ = parser.TryParse(input, out var actual);
         Assert.AreEqual(expected, actual);
     }

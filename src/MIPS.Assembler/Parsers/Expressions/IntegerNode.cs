@@ -9,7 +9,7 @@ namespace MIPS.Assembler.Parsers.Expressions;
 /// <summary>
 /// A class for an integer node on an expression tree.
 /// </summary>
-public class IntegerNode : ValueNode<long>
+public class IntegerNode : ValueNode
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="IntegerNode"/> class.

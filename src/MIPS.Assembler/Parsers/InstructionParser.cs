@@ -33,7 +33,7 @@ public struct InstructionParser
     /// </summary>
     public InstructionParser()
     {
-        _expParser = new ExpressionParser(new IntegerEvaluator());
+        _expParser = new ExpressionParser();
         _meta = default;
         _opCode = default;
         _funcCode = default;

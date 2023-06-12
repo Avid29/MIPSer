@@ -20,16 +20,16 @@ public struct ExpressionParser
     // TODO: Hex and binary support
     
     private IEvaluator<long> _evaluator;
-    private ExpressionTree<long>? _tree;
+    private ExpressionTree? _tree;
     private ExpressionParserState _state;
     private string _cache;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
     /// </summary>
-    public ExpressionParser(IEvaluator<long> evaluator)
+    public ExpressionParser()
     {
-        _evaluator = evaluator;
+        _evaluator = new IntegerEvaluator();
         _tree = null;
         _state = ExpressionParserState.Start;
         _cache = string.Empty;
@@ -47,7 +47,7 @@ public struct ExpressionParser
     {
         result = default;
 
-        _tree = new ExpressionTree<long>();
+        _tree = new ExpressionTree();
         _state = ExpressionParserState.Start;
         
         // Build tree from string expression
@@ -150,7 +150,7 @@ public struct ExpressionParser
         if(!TryFinish())
             return false;
 
-        var node = new OperNode<long>(oper);
+        var node = new OperNode(oper);
         _tree.AddNode(node);
 
         _state = ExpressionParserState.Operator;

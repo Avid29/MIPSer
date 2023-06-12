@@ -10,13 +10,13 @@ namespace MIPS.Assembler.Parsers.Expressions;
 /// <summary>
 /// A class for an operator in an expression tree.
 /// </summary>
-public class OperNode<T> : ExpNode<T>
+public class OperNode : ExpNode
 {
-    private ExpNode<T>? _left;
-    private ExpNode<T>? _right;
+    private ExpNode? _left;
+    private ExpNode? _right;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OperNode{T}"/> class.
+    /// Initializes a new instance of the <see cref="OperNode"/> class.
     /// </summary>
     public OperNode(Operation operation)
     {
@@ -24,7 +24,7 @@ public class OperNode<T> : ExpNode<T>
     }
 
     /// <summary>
-    /// Gets or sets the operation of the <see cref="OperNode{T}"/>.
+    /// Gets or sets the operation of the <see cref="OperNode"/>.
     /// </summary>
     public Operation Operation { get; }
 
@@ -51,17 +51,17 @@ public class OperNode<T> : ExpNode<T>
     }
 
     /// <inheritdoc/>
-    public override bool TryEvaluate(IEvaluator<T> evaluator, out T? result)
+    public override bool TryEvaluate(IEvaluator<long> evaluator, out long result)
     {
         result = default;
 
-        if (!(LeftChild?.TryEvaluate(evaluator, out T? left) ?? false) || left is null)
+        if (!(LeftChild?.TryEvaluate(evaluator, out long left) ?? false))
         {
             // TODO: Log error
             return false;
         }
 
-        if (!(RightChild?.TryEvaluate(evaluator, out T? right) ?? false) || right is null)
+        if (!(RightChild?.TryEvaluate(evaluator, out long right) ?? false))
         {
             // TODO: Log error
             return false;
@@ -87,24 +87,24 @@ public class OperNode<T> : ExpNode<T>
     }
 
     /// <summary>
-    /// Gets or sets the left hand child of the <see cref="OperNode{T}"/>.
+    /// Gets or sets the left hand child of the <see cref="OperNode"/>.
     /// </summary>
-    public ExpNode<T>? LeftChild
+    public ExpNode? LeftChild
     {
         get => _left;
         set => SetChild(ref _left, value);
     }
 
     /// <summary>
-    /// Gets or sets the right hand child of the <see cref="OperNode{T}"/>.
+    /// Gets or sets the right hand child of the <see cref="OperNode"/>.
     /// </summary>
-    public ExpNode<T>? RightChild
+    public ExpNode? RightChild
     {
         get => _right;
         set => SetChild(ref _right, value);
     }
 
-    private void SetChild(ref ExpNode<T>? child, ExpNode<T>? value)
+    private void SetChild(ref ExpNode? child, ExpNode? value)
     {
         // Clear current child's parent
         if (child is not null)

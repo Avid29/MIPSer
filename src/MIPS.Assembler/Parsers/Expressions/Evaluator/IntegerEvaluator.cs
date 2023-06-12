@@ -5,7 +5,7 @@ namespace MIPS.Assembler.Parsers.Expressions.Evaluator;
 /// <summary>
 /// An <see cref="IEvaluator{T}"/> for integer expressions.
 /// </summary>
-public class IntegerEvaluator : IEvaluator<long>
+public struct IntegerEvaluator : IEvaluator<long>
 {
     /// <inheritdoc/>
     public long Add(long left, long right) => left + right;
