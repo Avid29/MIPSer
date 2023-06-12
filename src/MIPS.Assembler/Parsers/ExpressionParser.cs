@@ -79,6 +79,9 @@ public struct ExpressionParser
                 case ExpressionParserState.Integer:
                     success = TryParseFromInteger(c);
                     break;
+                case ExpressionParserState.Macro:
+                    success = TryParseFromMacro(c);
+                    break;
                 case ExpressionParserState.Operator:
                     success = TryParseFromOperator(c);
                     break;
@@ -105,7 +108,7 @@ public struct ExpressionParser
         {
             _state = ExpressionParserState.Macro;
             _cache = $"{c}";
-            return false;
+            return true;
         }
 
         // '-' at the start marks a unary '-', which can be parsed as part of the integer
@@ -124,6 +127,24 @@ public struct ExpressionParser
     private bool TryParseFromInteger(char c)
     {
         if (char.IsDigit(c))
+        {
+            // Append digit to the end of digit progress
+            _cache += c;
+            return true;
+        }
+
+        if (IsOperator(c, out var oper))
+        {
+            TryParseOperator(oper);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool TryParseFromMacro(char c)
+    {
+        if (char.IsLetterOrDigit(c))
         {
             // Append digit to the end of digit progress
             _cache += c;

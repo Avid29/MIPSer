@@ -75,5 +75,7 @@ public class ExpressionParserTests
         }
 
         var parser = new ExpressionParser(obj);
+        _ = parser.TryParse(input, out var actual);
+        Assert.AreEqual(expected, actual);
     }
 }
