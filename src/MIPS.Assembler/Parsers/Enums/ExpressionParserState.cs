@@ -11,6 +11,7 @@ public enum ExpressionParserState
 
     Start,
     Integer,
+    Operator,
 
     /// <remarks>
     /// Marco or symbol.

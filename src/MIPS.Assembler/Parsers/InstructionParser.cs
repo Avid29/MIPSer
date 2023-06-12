@@ -4,6 +4,7 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Models.Instructions.Enums;
+using MIPS.Assembler.Parsers.Expressions.Evaluator;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 
@@ -32,11 +33,12 @@ public struct InstructionParser
     /// </summary>
     public InstructionParser()
     {
-        _expParser = new ExpressionParser();
+        _expParser = new ExpressionParser(new IntegerEvaluator());
         _meta = default;
         _opCode = default;
         _funcCode = default;
         _rs = default;
+        _rt = default;
         _rd = default;
         _shift = default;
         _immediate = default;
@@ -145,7 +147,7 @@ public struct InstructionParser
     /// </summary>
     private void ParseExpressionArg(string arg, Argument target)
     {
-        if (!_expParser.TryParseInteger(arg, out var value))
+        if (!_expParser.TryParse(arg, out var value))
         {
             // TODO: Log error
         }

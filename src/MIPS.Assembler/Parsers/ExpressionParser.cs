@@ -4,7 +4,9 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Enums;
 using MIPS.Assembler.Parsers.Expressions;
 using MIPS.Assembler.Parsers.Expressions.Abstract;
+using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using System.Runtime.Versioning;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -17,25 +19,22 @@ public struct ExpressionParser
     // TODO: Marco support
     // TODO: Parenthesis support
     // TODO: Hex and binary support
-
+    
+    private IEvaluator<long> _evaluator;
+    private ExpressionTree<long>? _tree;
     private ExpressionParserState _state;
     private string _cache;
-
-    private ExpNode? _root;
-    //private OperNode? _activeNode; 
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
     /// </summary>
-    public ExpressionParser()
+    public ExpressionParser(IEvaluator<long> evaluator)
     {
+        _evaluator = evaluator;
+        _tree = null;
         _state = ExpressionParserState.Start;
         _cache = string.Empty;
-
-        _root = null;
-        //_activeNode = null;
     }
-    
     /// <summary>
     /// Parses an expression as an integer.
     /// </summary>
@@ -45,15 +44,11 @@ public struct ExpressionParser
     /// <param name="expression">The string expression to parse.</param>
     /// <param name="result">The expression parsed as a integer.</param>
     /// <returns><see langword="true"/> if the expression was successfully parsed, <see langword="false"/> otherwise.</returns>
-    public bool TryParseInteger(string expression, out long result)
-    {
-        var evaluator = new IntegerEvaluator();
-        return TryParse(expression, evaluator, out result);
-    }
-
-    private bool TryParse<T>(string expression, IEvaluator<T> evaluator, out T? result)
+    public bool TryParse(string expression, out long result)
     {
         result = default;
+
+        _tree = new ExpressionTree<long>();
         _state = ExpressionParserState.Start;
         
         // Build tree from string expression
@@ -69,10 +64,13 @@ public struct ExpressionParser
             switch (_state)
             {
                 case ExpressionParserState.Start:
-                    success = ParseFromStart(c);
+                    success = TryParseFromStart(c);
                     break;
                 case ExpressionParserState.Integer:
-                    success = ParseFromInt(c);
+                    success = TryParseFromInteger(c);
+                    break;
+                case ExpressionParserState.Operator:
+                    success = TryParseFromOperator(c);
                     break;
                 default:
                     ThrowHelper.ThrowArgumentOutOfRangeException($"Expression parser in invalid state '{_state}'");
@@ -84,17 +82,14 @@ public struct ExpressionParser
                 return false;
         }
 
-        if (!Finish())
-            return false;
-
-        if (_root is not ExpNode<T> root)
+        if (!TryFinish())
             return false;
 
         // Evaluate tree and return result
-        return root.TryEvaluate(evaluator, out result);
+        return _tree.TryEvaluate(_evaluator, out result);
     }
 
-    private bool ParseFromStart(char c)
+    private bool TryParseFromStart(char c)
     {
         if (char.IsLetter(c))
         {
@@ -115,7 +110,7 @@ public struct ExpressionParser
         return false;
     }
 
-    private bool ParseFromInt(char c)
+    private bool TryParseFromInteger(char c)
     {
         if (char.IsDigit(c))
         {
@@ -124,15 +119,23 @@ public struct ExpressionParser
             return true;
         }
 
+        if (IsOperator(c, out var oper))
+        {
+            TryParseOperator(oper);
+            return true;
+        }
+
         return false;
     }
 
-    private bool Finish()
+    private bool TryParseFromOperator(char c) => TryParseFromStart(c);
+
+    private bool TryFinish()
     {
         switch (_state)
         {
             case ExpressionParserState.Integer:
-                return CompleteInteger();
+                return TryCompleteInteger();
 
             case ExpressionParserState.Start:
             default:
@@ -140,8 +143,25 @@ public struct ExpressionParser
         }
     }
 
-    private bool CompleteInteger()
+    private bool TryParseOperator(Operation oper)
     {
+        Guard.IsNotNull(_tree);
+
+        // Attempt complete current cache
+        if(!TryFinish())
+            return false;
+
+        var node = new OperNode<long>(oper);
+        _tree.AddNode(node);
+
+        _state = ExpressionParserState.Operator;
+        return true;
+    }
+
+    private bool TryCompleteInteger()
+    {
+        Guard.IsNotNull(_tree);
+
         if (!long.TryParse(_cache, out var result))
         {
             return false;
@@ -149,11 +169,31 @@ public struct ExpressionParser
 
         // Construct node
         var node = new IntegerNode(result);
-
-        // Add node to tree
-        // TODO: Properly add node to tree
-        _root = node;
+        _tree.AddNode(node);
 
         return true;
+    }
+
+    private bool IsOperator(char c, out Operation oper)
+    {
+        oper = c switch
+        {
+            // Arithmetic
+            '+' => Operation.Addition,
+            '-' => Operation.Subtraction,
+            '*' => Operation.Multiplication,
+            '/' => Operation.Division,
+            '%' => Operation.Modulus,
+
+            // Logical
+            '&' => Operation.And,
+            '|' => Operation.Or,
+            '^' => Operation.Xor,
+
+            // Invalid
+            _ => (Operation)(-1),
+        };
+
+        return oper != (Operation)(-1);
     }
 }

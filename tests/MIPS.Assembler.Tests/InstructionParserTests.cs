@@ -15,6 +15,7 @@ public class InstructionParserTests
     private const string LoadWord = "lw $t0, 100($s0)";
     private const string StoreByte = "sb $t0, -100($s0)";
     private const string Jump = "j 1000";
+    private const string JumpExpression = "j 10*10";
 
     [TestMethod(Add)]
     public void AddTest()
@@ -49,6 +50,13 @@ public class InstructionParserTests
     {
         Instruction expected = Instruction.Create(OperationCode.Jump, 1000);
         Test(Jump, expected);
+    }
+
+    [TestMethod(JumpExpression)]
+    public void JumpExpressionTest()
+    {
+        Instruction expected = Instruction.Create(OperationCode.Jump, 100);
+        Test(JumpExpression, expected);
     }
 
     private static void Test(string input, Instruction expected)
