@@ -2,25 +2,27 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace MIPS.Assembler.Tests;
 
 [TestClass]
 public class AssemblerTests
 {
-    [TestMethod]
-    public async Task Test()
+    private const string AssemblyPath = @"..\..\..\ASMs\";
+
+    [TestMethod("test1.asm")]
+    public void Test1() => RunTest("test1.asm");
+
+    private void RunTest(string fileName)
     {
-        Stream stream = new MemoryStream();
-        await using var writer = new StreamWriter(stream);
-        await writer.WriteLineAsync("test:");
-        await writer.WriteLineAsync(".text");
-        await writer.WriteLineAsync("addi $t0, $s0, 10");
-        await writer.FlushAsync();
+        var fullPath = Path.Combine(AssemblyPath, fileName);
+        fullPath = Path.GetFullPath(fullPath);
+        var stream = File.Open(fullPath, FileMode.Open);
+        RunTest(stream);
+    }
 
-        stream.Position = 0;
-
+    private void RunTest(Stream stream)
+    {
         var module = Assembler.AssembleAsync(stream);
     }
 }

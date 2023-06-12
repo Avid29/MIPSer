@@ -21,45 +21,45 @@ public class InstructionParserTests
     public void AddTest()
     {
         Instruction expected = Instruction.Create(FunctionCode.Add, Register.Saved0, Register.Saved1, Register.Temporary0);
-        Test(Add, expected);
+        RunTest(Add, expected);
     }
 
     [TestMethod(Addi)]
     public void AddiTest()
     {
         Instruction expected = Instruction.Create(OperationCode.AddImmediate, Register.Saved0, Register.Temporary0, 100);
-        Test(Addi, expected);
+        RunTest(Addi, expected);
     }
 
     [TestMethod(LoadWord)]
     public void LoadWordTest()
     {
         Instruction expected = Instruction.Create(OperationCode.LoadWord, Register.Saved0, Register.Temporary0, 100);
-        Test(LoadWord, expected);
+        RunTest(LoadWord, expected);
     }
 
     [TestMethod(StoreByte)]
     public void StoreByteTest()
     {
         Instruction expected = Instruction.Create(OperationCode.StoreByte, Register.Saved0, Register.Temporary0, -100);
-        Test(StoreByte, expected);
+        RunTest(StoreByte, expected);
     }
 
     [TestMethod(Jump)]
     public void JumpTest()
     {
         Instruction expected = Instruction.Create(OperationCode.Jump, 1000);
-        Test(Jump, expected);
+        RunTest(Jump, expected);
     }
 
     [TestMethod(JumpExpression)]
     public void JumpExpressionTest()
     {
         Instruction expected = Instruction.Create(OperationCode.Jump, 100);
-        Test(JumpExpression, expected);
+        RunTest(JumpExpression, expected);
     }
 
-    private static void Test(string input, Instruction expected)
+    private static void RunTest(string input, Instruction expected)
     {
         var parser = new InstructionParser();
 

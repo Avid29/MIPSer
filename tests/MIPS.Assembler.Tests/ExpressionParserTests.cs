@@ -25,46 +25,46 @@ public class ExpressionParserTests
     private const string Macro = "macro + 10";
 
     [TestMethod(Self)]
-    public void SelfTest() => Test(Self, 10);
+    public void SelfTest() => RunTest(Self, 10);
 
     [TestMethod(NegativeSelf)]
-    public void NegativeSelfTest() => Test(NegativeSelf, -10);
+    public void NegativeSelfTest() => RunTest(NegativeSelf, -10);
 
     [TestMethod(Add)]
-    public void AddTest() => Test(Add, 10 + 10);
+    public void AddTest() => RunTest(Add, 10 + 10);
 
     [TestMethod(Subtract)]
-    public void SubtractTest() => Test(Subtract, 25 - 10);
+    public void SubtractTest() => RunTest(Subtract, 25 - 10);
 
     [TestMethod(Multiply)]
-    public void MultiplyTest() => Test(Multiply, 4 * 4);
+    public void MultiplyTest() => RunTest(Multiply, 4 * 4);
 
     [TestMethod(Divide)]
-    public void DivideTest() => Test(Divide, 8 / 2);
+    public void DivideTest() => RunTest(Divide, 8 / 2);
 
     [TestMethod(Mod)]
-    public void ModTest() => Test(Mod, 8 % 3);
+    public void ModTest() => RunTest(Mod, 8 % 3);
 
     [TestMethod(And)]
-    public void AndTest() => Test(And, 9 & 3);
+    public void AndTest() => RunTest(And, 9 & 3);
 
     [TestMethod(Or)]
-    public void OrTest() => Test(Or, 9 | 3);
+    public void OrTest() => RunTest(Or, 9 | 3);
 
     [TestMethod(Xor)]
-    public void XorTest() => Test(Xor, 9 ^ 3);
+    public void XorTest() => RunTest(Xor, 9 ^ 3);
 
     [TestMethod(Macro)]
-    public void MarcoTest() => Test(Macro, 10 + 10, ("macro", 10));
+    public void MarcoTest() => RunTest(Macro, 10 + 10, ("macro", 10));
 
-    private static void Test(string input, long expected)
+    private static void RunTest(string input, long expected)
     {
         var parser = new ExpressionParser();
         _ = parser.TryParse(input, out var actual);
         Assert.AreEqual(expected, actual);
     }
 
-    private static void Test(string input, long expected, params (string name, long addr)[] macros)
+    private static void RunTest(string input, long expected, params (string name, long addr)[] macros)
     {
         // NOTE: This assumes symbol realization is not implemented!
         var obj = new ObjectModuleConstructor();
