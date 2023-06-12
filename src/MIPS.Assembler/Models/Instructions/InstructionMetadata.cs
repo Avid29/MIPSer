@@ -1,6 +1,5 @@
 ﻿// Adam Dernis 2023
 
-using MIPS.Assembler.Models.Instructions.Enums;
 using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions.Enums;
 

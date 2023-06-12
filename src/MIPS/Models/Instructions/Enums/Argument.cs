@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2023
 
-namespace MIPS.Assembler.Models.Instructions.Enums;
+namespace MIPS.Models.Instructions.Enums;
 
 /// <summary>
 /// An enum for potential argument types.

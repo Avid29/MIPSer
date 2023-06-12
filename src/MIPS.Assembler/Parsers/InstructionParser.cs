@@ -4,7 +4,6 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Models.Construction;
 using MIPS.Assembler.Models.Instructions;
-using MIPS.Assembler.Models.Instructions.Enums;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 
