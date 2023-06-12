@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Assembler.Models.Construction;
 using MIPS.Assembler.Parsers.Enums;
 using MIPS.Assembler.Parsers.Expressions;
 using MIPS.Assembler.Parsers.Expressions.Enums;
@@ -13,27 +14,36 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public struct ExpressionParser
 {
-    // TODO: Unary operator support
-    // TODO: String support
     // TODO: Marco support
+    // TODO: Unary operator support
     // TODO: Parenthesis support
     // TODO: Hex and binary support
     
-    private IEvaluator<long> _evaluator;
+    private readonly ObjectModuleConstructor? _obj;
+    private readonly IEvaluator<long> _evaluator;
     private ExpressionTree? _tree;
     private ExpressionParserState _state;
     private string _cache;
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
+    /// </summary>
+    public ExpressionParser() : this(null)
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
     /// </summary>
-    public ExpressionParser()
+    public ExpressionParser(ObjectModuleConstructor? obj)
     {
+        _obj = obj;
         _evaluator = new IntegerEvaluator();
         _tree = null;
         _state = ExpressionParserState.Start;
         _cache = string.Empty;
     }
+
     /// <summary>
     /// Parses an expression as an integer.
     /// </summary>
@@ -92,7 +102,8 @@ public struct ExpressionParser
     {
         if (char.IsLetter(c))
         {
-            // TODO: Macros and symbols
+            _state = ExpressionParserState.Macro;
+            _cache = $"{c}";
             return false;
         }
 
@@ -133,12 +144,11 @@ public struct ExpressionParser
     {
         switch (_state)
         {
-            case ExpressionParserState.Integer:
-                return TryCompleteInteger();
+            case ExpressionParserState.Integer: return TryCompleteInteger();
+            case ExpressionParserState.Macro: return TryCompleteMacro();
 
             case ExpressionParserState.Start:
-            default:
-                return false;
+            default: return false;
         }
     }
 
@@ -170,6 +180,19 @@ public struct ExpressionParser
         var node = new IntegerNode(result);
         _tree.AddNode(node);
 
+        return true;
+    }
+
+    private bool TryCompleteMacro()
+    {
+        Guard.IsNotNull(_obj);
+        Guard.IsNotNull(_tree);
+
+        if (!_obj.TryGetRealizedSymbol(_cache, out var value))
+            return false;
+
+        var node = new IntegerNode(value);
+        _tree.AddNode(node);
         return true;
     }
 

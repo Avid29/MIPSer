@@ -2,9 +2,9 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Helpers;
+using MIPS.Assembler.Models.Construction;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Models.Instructions.Enums;
-using MIPS.Assembler.Parsers.Expressions.Evaluator;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 
@@ -15,6 +15,7 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public struct InstructionParser
 {
+    private ObjectModuleConstructor? _module;
     private ExpressionParser _expParser;
 
     private InstructionMetadata _meta;
@@ -27,13 +28,22 @@ public struct InstructionParser
     private byte _shift;
     private short _immediate;
     private uint _address;
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InstructionParser"/> struct.
+    /// </summary>
+    public InstructionParser() : this(null)
+    {
+
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionParser"/> struct.
     /// </summary>
-    public InstructionParser()
+    public InstructionParser(ObjectModuleConstructor? module)
     {
-        _expParser = new ExpressionParser();
+        _module = module;
+        _expParser = new ExpressionParser(module);
         _meta = default;
         _opCode = default;
         _funcCode = default;

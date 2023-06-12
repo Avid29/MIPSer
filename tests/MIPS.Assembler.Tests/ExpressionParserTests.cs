@@ -1,7 +1,10 @@
 ﻿// Adam Dernis 2023
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MIPS.Assembler.Models.Construction;
 using MIPS.Assembler.Parsers;
+using MIPS.Models.Addressing;
+using MIPS.Models.Addressing.Enums;
 
 namespace MIPS.Assembler.Tests;
 
@@ -18,6 +21,8 @@ public class ExpressionParserTests
     private const string And = "9 & 3";
     private const string Or = "9 | 3";
     private const string Xor = "9 ^ 3";
+
+    private const string Macro = "macro + 10";
 
     [TestMethod(Self)]
     public void SelfTest() => Test(Self, 10);
@@ -49,10 +54,26 @@ public class ExpressionParserTests
     [TestMethod(Xor)]
     public void XorTest() => Test(Xor, 9 ^ 3);
 
+    [TestMethod(Macro)]
+    public void MarcoTest() => Test(Macro, 10 + 10, ("macro", 10));
+
     private static void Test(string input, long expected)
     {
         var parser = new ExpressionParser();
         _ = parser.TryParse(input, out var actual);
         Assert.AreEqual(expected, actual);
+    }
+
+    private static void Test(string input, long expected, params (string name, long addr)[] macros)
+    {
+        // NOTE: This assumes symbol realization is not implemented!
+        var obj = new ObjectModuleConstructor();
+        foreach (var macro in macros)
+        {
+            var address = new SegmentAddress(macro.addr, Segment.Text);
+            obj.TryDefineSymbol(macro.name, address);
+        }
+
+        var parser = new ExpressionParser(obj);
     }
 }

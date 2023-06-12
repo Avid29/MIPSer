@@ -2,12 +2,12 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Models.Construction;
+using MIPS.Assembler.Parsers;
 using MIPS.Models;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Instructions;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -18,7 +18,7 @@ namespace MIPS.Assembler;
 /// </summary>
 public partial class Assembler
 {
-    private ObjectModuleConstructor _obj;
+    private readonly ObjectModuleConstructor _obj;
 
     private Segment _activeSegment;
 
@@ -28,8 +28,9 @@ public partial class Assembler
     private Assembler()
     {
         _obj = new ObjectModuleConstructor();
-
         _activeSegment = Segment.Text;
+
+        _instructionParser = new InstructionParser(_obj);
     }
 
     /// <summary>
