@@ -3,10 +3,8 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Enums;
 using MIPS.Assembler.Parsers.Expressions;
-using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
-using System.Runtime.Versioning;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -15,6 +13,7 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public struct ExpressionParser
 {
+    // TODO: Unary operator support
     // TODO: String support
     // TODO: Marco support
     // TODO: Parenthesis support
