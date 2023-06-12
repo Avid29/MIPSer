@@ -2,6 +2,7 @@
 
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
+using MIPS.Assembler.Parsers.Expressions.Evaluator;
 
 namespace MIPS.Assembler.Parsers.Expressions;
 
@@ -19,4 +20,11 @@ public class IntegerNode : ValueNode<long>
 
     /// <inheritdoc/>
     public override ExpressionType Type => ExpressionType.Integer;
+    
+    /// <inheritdoc/>
+    public override bool TryEvaluate(IEvaluator<long> evaluator, out long result)
+    {
+        result = Value;
+        return true;
+    }
 }

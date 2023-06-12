@@ -5,15 +5,10 @@ using MIPS.Assembler.Parsers.Expressions.Enums;
 namespace MIPS.Assembler.Parsers.Expressions.Abstract;
 
 /// <summary>
-/// A class for nodes in an expression tree.
+/// A  class for nodes in an expression tree, type agnostic.
 /// </summary>
 public abstract class ExpNode
 {
-    /// <summary>
-    /// Gets the node's parent in the expression tree.
-    /// </summary>
-    public OperNode? Parent { get; set; }
-
     /// <summary>
     /// Gets the type of the expression node.
     /// </summary>

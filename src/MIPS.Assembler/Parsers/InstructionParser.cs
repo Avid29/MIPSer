@@ -14,22 +14,33 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public struct InstructionParser
 {
-    private InstructionMetadata _meta = default;
+    private ExpressionParser _expParser;
 
-    private OperationCode _opCode = default;
-    private FunctionCode _funcCode = default;
-    private Register _rs = default;
-    private Register _rt = default;
-    private Register _rd = default;
-    private byte _shift = default;
-    private short _immediate = default;
-    private uint _address = default;
+    private InstructionMetadata _meta;
+
+    private OperationCode _opCode;
+    private FunctionCode _funcCode;
+    private Register _rs;
+    private Register _rt;
+    private Register _rd;
+    private byte _shift;
+    private short _immediate;
+    private uint _address;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionParser"/> struct.
     /// </summary>
     public InstructionParser()
     {
+        _expParser = new ExpressionParser();
+        _meta = default;
+        _opCode = default;
+        _funcCode = default;
+        _rs = default;
+        _rd = default;
+        _shift = default;
+        _immediate = default;
+        _address = default;
     }
 
     /// <summary>
@@ -134,10 +145,10 @@ public struct InstructionParser
     /// </summary>
     private void ParseExpressionArg(string arg, Argument target)
     {
-        // TODO: Expressions and symbols
-        
-        // TODO: Handle exceptions
-        _ = long.TryParse(arg, out var value);
+        if (!_expParser.TryParseInteger(arg, out var value))
+        {
+            // TODO: Log error
+        }
 
         switch (target)
         {

@@ -5,7 +5,7 @@ namespace MIPS.Assembler.Parsers.Expressions.Abstract;
 /// <summary>
 /// A class for a value in an expression tree.
 /// </summary>
-public abstract class ValueNode<T> : ExpNode
+public abstract class ValueNode<T> : ExpNode<T>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ValueNode{T}"/> class.

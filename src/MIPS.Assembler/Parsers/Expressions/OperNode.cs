@@ -3,16 +3,17 @@
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MIPS.Assembler.Parsers.Expressions;
 
 /// <summary>
 /// A class for an operator in an expression tree.
 /// </summary>
-public class OperNode : ExpNode
+public class OperNode<T> : ExpNode<T>
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="OperNode"/> class.
+    /// Initializes a new instance of the <see cref="OperNode{T}"/> class.
     /// </summary>
     public OperNode(Operation operation)
     {
@@ -20,7 +21,7 @@ public class OperNode : ExpNode
     }
 
     /// <summary>
-    /// Gets or sets the operation of the <see cref="OperNode"/>.
+    /// Gets or sets the operation of the <see cref="OperNode{T}"/>.
     /// </summary>
     public Operation Operation { get; }
 
@@ -45,42 +46,26 @@ public class OperNode : ExpNode
             return ExpressionType.Invalid;
         }
     }
-    
-    /// <summary>
-    /// Gets or sets the left hand child of the <see cref="OperNode"/>.
-    /// </summary>
-    public ExpNode? LeftChild { get; set; }
-    
-    /// <summary>
-    /// Gets or sets the right hand child of the <see cref="OperNode"/>.
-    /// </summary>
-    public ExpNode? RightChild { get; set; }
 
-    /// <summary>
-    /// Evaluate the expression tree as a type.
-    /// </summary>
-    /// <typeparam name="T">The type of the result.</typeparam>
-    /// <param name="evaluator"></param>
-    /// <param name="result">The evaluated expression tree.</param>
-    /// <returns></returns>
-    public bool TryEvaluate<T>(IEvaluator<T> evaluator, out T? result)
+    /// <inheritdoc/>
+    public override bool TryEvaluate(IEvaluator<T> evaluator, out T? result)
     {
         result = default;
+        
+        T? left = default;
+        T? right = default;
 
-        if (LeftChild is not ValueNode<T> leftValue)
+        if ((LeftChild?.TryEvaluate(evaluator, out left) ?? false) || left is null)
         {
             // TODO: Log error
             return false;
         }
 
-        if (RightChild is not ValueNode<T> rightValue)
+        if ((RightChild?.TryEvaluate(evaluator, out right) ?? false) || right is null)
         {
             // TODO: Log error
             return false;
         }
-
-        T left = leftValue.Value;
-        T right = rightValue.Value;
 
         result =  Operation switch
         {
@@ -100,4 +85,16 @@ public class OperNode : ExpNode
 
         return true;
     }
+
+    /// <summary>
+    /// Gets or sets the left hand child of the <see cref="OperNode{T}"/>.
+    /// </summary>
+    public ExpNode<T>? LeftChild { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the right hand child of the <see cref="OperNode{T}"/>.
+    /// </summary>
+    public ExpNode<T>? RightChild { get; set; }
+
+    
 }

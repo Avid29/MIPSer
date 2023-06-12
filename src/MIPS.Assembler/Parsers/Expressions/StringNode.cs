@@ -2,6 +2,7 @@
 
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
+using MIPS.Assembler.Parsers.Expressions.Evaluator;
 
 namespace MIPS.Assembler.Parsers.Expressions;
 
@@ -20,4 +21,11 @@ public class StringNode : ValueNode<string>
 
     /// <inheritdoc/>
     public override ExpressionType Type => ExpressionType.String;
+    
+    /// <inheritdoc/>
+    public override bool TryEvaluate(IEvaluator<string> evaluator, out string? result)
+    {
+        result = default;
+        return false;
+    }
 }
