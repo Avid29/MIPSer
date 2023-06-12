@@ -218,7 +218,7 @@ public struct ExpressionParser
         return true;
     }
 
-    private bool IsOperator(char c, out Operation oper)
+    private static bool IsOperator(char c, out Operation oper)
     {
         oper = c switch
         {

@@ -11,28 +11,28 @@ namespace MIPS.Models.Instructions;
 public struct Instruction
 {
     // Universal
-    private const int OPCODE_SIZE = 6;
-    private const int REGISTER_ADDRESS_SIZE = 5;
-    private const int OPCODE_OFFSET = ADDRESS_SIZE;
+    private const int OPCODE_BIT_SIZE = 6;
+    private const int REGISTER_ADDRESS_BIT_SIZE = 5;
+    private const int OPCODE_BIT_OFFSET = ADDRESS_BIT_SIZE;
 
     // R Type
-    private const int SHIFT_AMOUNT_SIZE = 5;
-    private const int FUNCTION_SIZE = 6;
+    private const int SHIFT_AMOUNT_BIT_SIZE = 5;
+    private const int FUNCTION_BIT_SIZE = 6;
 
-    private const int RS_OFFSET = REGISTER_ADDRESS_SIZE + RT_OFFSET;
-    private const int RT_OFFSET = (REGISTER_ADDRESS_SIZE + RD_OFFSET);
-    private const int RD_OFFSET = (SHIFT_AMOUNT_SIZE + SHIFT_AMOUNT_OFFSET);
+    private const int RS_BIT_OFFSET = REGISTER_ADDRESS_BIT_SIZE + RT_BIT_OFFSET;
+    private const int RT_BIT_OFFSET = (REGISTER_ADDRESS_BIT_SIZE + RD_BIT_OFFSET);
+    private const int RD_BIT_OFFSET = (SHIFT_AMOUNT_BIT_SIZE + SHIFT_AMOUNT_BIT_OFFSET);
 
-    private const int SHIFT_AMOUNT_OFFSET = (FUNCTION_SIZE + FUNCTION_OFFSET);
-    private const int FUNCTION_OFFSET = 0;
+    private const int SHIFT_AMOUNT_BIT_OFFSET = (FUNCTION_BIT_SIZE + FUNCTION_BIT_OFFSET);
+    private const int FUNCTION_BIT_OFFSET = 0;
 
     // I Type
-    private const int IMMEDIATE_SIZE = 16;
-    private const int IMMEDIATE_OFFSET = 0;
+    private const int IMMEDIATE_BIT_SIZE = 16;
+    private const int IMMEDIATE_BIT_OFFSET = 0;
 
     // J Type
-    private const int ADDRESS_SIZE = 26;
-    private const int ADDRESS_OFFSET = 0;
+    private const int ADDRESS_BIT_SIZE = 26;
+    private const int ADDRESS_BIT_OFFSET = 0;
 
     private uint _inst;
 
@@ -85,8 +85,8 @@ public struct Instruction
     /// </summary>
     public OperationCode OpCode
     {
-        get => (OperationCode)GetShiftMask(OPCODE_SIZE, OPCODE_OFFSET);
-        private set => SetShiftMask(OPCODE_SIZE, OPCODE_OFFSET, (uint)value);
+        get => (OperationCode)GetShiftMask(OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET);
+        private set => SetShiftMask(OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -94,8 +94,8 @@ public struct Instruction
     /// </summary>
     public Register RS
     {
-        get => (Register)GetShiftMask(REGISTER_ADDRESS_SIZE, RS_OFFSET);
-        private set => SetShiftMask(REGISTER_ADDRESS_SIZE, RS_OFFSET, (uint)value);
+        get => (Register)GetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RS_BIT_OFFSET);
+        private set => SetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RS_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -103,8 +103,8 @@ public struct Instruction
     /// </summary>
     public Register RT
     {
-        get => (Register)GetShiftMask(REGISTER_ADDRESS_SIZE, RT_OFFSET);
-        private set => SetShiftMask(REGISTER_ADDRESS_SIZE, RT_OFFSET, (uint)value);
+        get => (Register)GetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RT_BIT_OFFSET);
+        private set => SetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RT_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -112,8 +112,8 @@ public struct Instruction
     /// </summary>
     public Register RD
     {
-        get => (Register)GetShiftMask(REGISTER_ADDRESS_SIZE, RD_OFFSET);
-        private set => SetShiftMask(REGISTER_ADDRESS_SIZE, RD_OFFSET, (uint)value);
+        get => (Register)GetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RD_BIT_OFFSET);
+        private set => SetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RD_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -121,8 +121,8 @@ public struct Instruction
     /// </summary>
     public byte ShiftAmount
     {
-        get => (byte)GetShiftMask(SHIFT_AMOUNT_SIZE, SHIFT_AMOUNT_OFFSET);
-        private set => SetShiftMask(SHIFT_AMOUNT_SIZE, SHIFT_AMOUNT_OFFSET, (uint)value);
+        get => (byte)GetShiftMask(SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET);
+        private set => SetShiftMask(SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET, (uint)value);
     }
     
     /// <summary>
@@ -133,8 +133,8 @@ public struct Instruction
     /// </remarks>
     public FunctionCode FuncCode
     {
-        get => (FunctionCode)GetShiftMask(FUNCTION_SIZE, FUNCTION_OFFSET);
-        private set => SetShiftMask(FUNCTION_SIZE, FUNCTION_OFFSET, (uint)value);
+        get => (FunctionCode)GetShiftMask(FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET);
+        private set => SetShiftMask(FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -142,8 +142,8 @@ public struct Instruction
     /// </summary>
     public short ImmediateValue
     {
-        get => (short)GetShiftMask(IMMEDIATE_SIZE, IMMEDIATE_OFFSET);
-        private set => SetShiftMask(IMMEDIATE_SIZE, IMMEDIATE_OFFSET, (ushort)value);
+        get => (short)GetShiftMask(IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET);
+        private set => SetShiftMask(IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET, (ushort)value);
     }
 
     /// <summary>
@@ -151,8 +151,8 @@ public struct Instruction
     /// </summary>
     public uint Address
     {
-        get => GetShiftMask(ADDRESS_SIZE, ADDRESS_OFFSET);
-        private set => SetShiftMask(ADDRESS_SIZE, ADDRESS_OFFSET, value);
+        get => GetShiftMask(ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET);
+        private set => SetShiftMask(ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET, value);
     }
 
     /// <summary>

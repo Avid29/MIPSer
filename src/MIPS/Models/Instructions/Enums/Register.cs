@@ -46,7 +46,5 @@ public enum Register : byte
     High,
     Low,
 
-
-    
 #pragma warning restore CS1591
 }

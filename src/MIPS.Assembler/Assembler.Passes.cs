@@ -4,7 +4,6 @@ using MIPS.Assembler.Models.Markers;
 using MIPS.Assembler.Models.Markers.Abstract;
 using MIPS.Assembler.Parsers;
 using MIPS.Models.Instructions;
-using System.Reflection.Metadata.Ecma335;
 
 namespace MIPS.Assembler;
 

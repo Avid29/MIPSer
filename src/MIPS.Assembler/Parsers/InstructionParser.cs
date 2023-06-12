@@ -79,14 +79,12 @@ public struct InstructionParser
         _funcCode = _meta.FuncCode;
 
         // Parse argument data according to pattern
-        var pattern = _meta.ArgumentPattern;
+        Argument[] pattern = _meta.ArgumentPattern;
         for (int i = 0; i < args.Length; i++)
-        {
             ParseArg(args[i], pattern[i]);
-        }
 
         // Create an instruction from its components based on the instruction type
-        var instruction = _meta.Type switch
+        Instruction instruction = _meta.Type switch
         {
             InstructionType.R => Instruction.Create(_funcCode, _rs, _rt, _rd, _shift),
             InstructionType.I => Instruction.Create(_opCode, _rs, _rt, _immediate),
@@ -171,6 +169,10 @@ public struct InstructionParser
             ThrowHelper.ThrowArgumentException($"Argument '{arg}' of type '{target}' was not a valid expression.");
         }
 
+        // NOTE: Casting might truncate the value to fit the bit size.
+        // This is the desired behavior, but when logging errors this
+        // should be handled explicitly and drop an assembler warning.
+        
         // Assign to appropriate instruction argument
         switch (target)
         {
@@ -242,24 +244,35 @@ public struct InstructionParser
         return true;
     }
 
-    private bool TokenizeAddressOffset(string arg, out string offset, out string register)
+    /// <remarks>
+    /// Upon return offset and register do not need to be valid offset and register strings.
+    /// The register is just the component in parenthesis. The offset is just the component before the parenthesis.
+    /// Nothing may follow the parenthesis.
+    /// </remarks>
+    private static bool TokenizeAddressOffset(string arg, out string offset, out string register)
     {
+        // Trim whitespace 
+        arg = arg.Trim();
+
+        offset = string.Empty;
+        register = string.Empty;
+
         // Find parenthesis start and end
         // Parenthesis wrap the register
         int regStart = arg.IndexOf('(');
         int regEnd = arg.IndexOf(')');
 
         // Either end of the parenthesis were not found
-        if (regStart == -1 || regEnd == -1)
+        // Or contains both an opening and closing parenthesis, but they are not matched.
+        // Or there was content following the register
+        if (regStart == -1 || regEnd == -1 || regStart > regEnd || regEnd != arg.Length - 1)
         {
-            offset = string.Empty;
-            register = string.Empty;
-
             ThrowHelper.ThrowArgumentException($"Argument '{arg}' is not a valid address offset.");
             return false;
         }
 
         // Split argument into offset and register components
+        // Argument and offset validity will be assessed outside of tokenization
         offset = arg[..regStart];
         register = arg[(regStart + 1)..regEnd];
 
