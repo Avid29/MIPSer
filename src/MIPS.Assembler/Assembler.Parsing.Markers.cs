@@ -1,7 +1,6 @@
 ﻿// Adam Dernis 2023
 
 using MIPS.Models.Addressing.Enums;
-using System;
 
 namespace MIPS.Assembler;
 

@@ -163,7 +163,7 @@ public struct Instruction
     /// <summary>
     /// Casts a <see cref="uint"/> to a <see cref="Instruction"/>.
     /// </summary>
-    public static unsafe implicit operator uint(Instruction value) => *(uint*)&value;
+    public static unsafe explicit operator uint(Instruction value) => *(uint*)&value;
 
     private readonly uint GetShiftMask(int size, int offset)
     {

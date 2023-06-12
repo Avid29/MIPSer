@@ -1,7 +1,6 @@
 ﻿// Adam Dernis 2023
 
 using MIPS.Assembler.Parsers;
-using MIPS.Models.Instructions;
 using System.Linq;
 
 namespace MIPS.Assembler;
@@ -10,8 +9,12 @@ public partial class Assembler
 {
     private InstructionParser _instructionParser;
 
-    private void ParseLine(string line)
+    private void ParseLine(string line, out string? label, out string? instruction, out string? marker)
     {
+        label = null;
+        instruction = null;
+        marker = null;
+
         // Trim whitespace
         line = line.Trim();
 
@@ -22,60 +25,31 @@ public partial class Assembler
         int labelEnd = line.IndexOf(':');
         if (labelEnd != -1)
         {
-            var label = line[..labelEnd].Trim();
-            ParseLabel(label);
+            label = line[..labelEnd].Trim();
+            if (!ValidateLabel(label))
+            {
+                label = null;
+
+                // TODO: Log error
+            }
 
             // Trim label from line
             line = line[(labelEnd+1)..];
         }
 
-        // Skip empty lines
+        // Line is neither a marker nor an instruction
         if (line.Length == 0)
             return;
 
-        // Check for marker
         if (line[0] == '.')
         {
-            ParseMarker(line);
-        }
-        // Parse as instruction
-        else
-        {
-            ParseInstruction(line);
-        }
-    }
-
-    private bool ParseInstruction(string line)
-    {
-        // Find instruction name
-        int instrNameEnd = line.IndexOf(' ');
-        if (instrNameEnd == -1)
-        {
-            // TODO: Log error
-            return false;
-        }
-
-        // Parse instruction
-        string name = line[..instrNameEnd];
-        string[] args = line[instrNameEnd..].Trim().Split(',');
-        Instruction instruction = _instructionParser.Parse(name, args);
-
-        // Append instruction to active segment
-        Append(instruction);
-        return true;
-    }
-
-    private void ParseLabel(string label)
-    {
-        bool valid = ValidateLabel(label);
-
-        if (valid)
-        {
-            CreateSymbol(label);
+            // Line is a marker
+            marker = line[1..];
         }
         else
         {
-            // TODO: Log exact error
+            // Line is an instruction
+            instruction = line;
         }
     }
 

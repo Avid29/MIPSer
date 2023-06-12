@@ -9,16 +9,17 @@ using MIPS.Assembler.Parsers.Expressions.Evaluator;
 
 namespace MIPS.Assembler.Parsers;
 
+
+// TODO: Marco support
+// TODO: Unary operator support
+// TODO: Parenthesis support
+// TODO: Hex and binary support
+
 /// <summary>
 /// A class for parsing expressions.
 /// </summary>
 public struct ExpressionParser
 {
-    // TODO: Marco support
-    // TODO: Unary operator support
-    // TODO: Parenthesis support
-    // TODO: Hex and binary support
-    
     private readonly ObjectModuleConstructor? _obj;
     private readonly IEvaluator<long> _evaluator;
     private ExpressionTree? _tree;
