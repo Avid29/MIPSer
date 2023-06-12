@@ -87,13 +87,9 @@ public struct InstructionParser
                 ParseRegisterArg(arg, type);
                 break;
             case Argument.Shift:
-                ParseShiftArg(arg);
-                break;
             case Argument.Immediate:
-                ParseImmediateArg(arg);
-                break;
             case Argument.Address:
-                ParseAddressArg(arg);
+                ParseExpressionArg(arg, type);
                 break;
             case Argument.AddressOffset:
                 ParseAddressOffsetArg(arg);
@@ -104,11 +100,14 @@ public struct InstructionParser
         }
     }
 
-    private void ParseRegisterArg(string arg, Argument type)
+    /// <summary>
+    /// Parses an argument as a register and assigns it to the target component.
+    /// </summary>
+    private void ParseRegisterArg(string arg, Argument target)
     {
         // Get reference to selected register argument
         ref Register reg = ref _rs;
-        switch (type)
+        switch (target)
         {
             case Argument.RS:
                 reg = ref _rs;
@@ -130,46 +129,55 @@ public struct InstructionParser
         reg = register;
     }
 
-    private void ParseShiftArg(string arg)
+    /// <summary>
+    /// Parses an argument as an expression and assigns it to the target component
+    /// </summary>
+    private void ParseExpressionArg(string arg, Argument target)
     {
         // TODO: Expressions and symbols
-
+        
         // TODO: Handle exceptions
-        _shift = byte.Parse(arg);
+        _ = long.TryParse(arg, out var value);
+
+        switch (target)
+        {
+            case Argument.Shift:
+                _shift = (byte)value;
+                break;
+            case Argument.Immediate:
+                _immediate = (short)value;
+                break;
+            case Argument.Address:
+                _address = (uint)value;
+                break;
+            default:
+                ThrowHelper.ThrowArgumentOutOfRangeException($"Argument '{arg}' of type '{target}' was misevaluated as an expression.");
+                break;
+        }
     }
 
-    private void ParseImmediateArg(string arg)
-    {
-        // TODO: Expressions and symbols
-
-        // TODO: Handle exceptions
-        _immediate = short.Parse(arg);
-    }
-
-    private void ParseAddressArg(string arg)
-    {
-        // TODO: Expressions and symbols
-
-        // TODO: Handle exceptions
-        _address = uint.Parse(arg);
-    }
-
+    /// <summary>
+    /// Parses an argument as an address offset, assigning its components to immediate and $rs.
+    /// </summary>
     private void ParseAddressOffsetArg(string arg)
     {
         // TODO: Expressions and symbols
-
+        
         // TODO: Exception handling
         int regStart = arg.IndexOf('(');
         int regEnd = arg.IndexOf(')');
-
-        // Parse offset component
         string offsetStr = arg[..regStart];
-        _ = short.TryParse(offsetStr, out _immediate);
-
-        // Parse register component
         string regStr = arg[(regStart + 1)..regEnd];
-        // AddressOffset register is always $rs
-        _ = TryParseRegister(regStr, out _rs);
+
+        // NOTE: Be careful about forwards to other parse functions when implementing 
+        // error logging. $rs and immediate errors might be inappropriately logged for
+        // address offset arguments.
+        
+        // Parse offset component into immediate
+        ParseExpressionArg(offsetStr, Argument.Immediate);
+
+        // Parse register component into $rs
+        ParseRegisterArg(regStr, Argument.RS);
     }
 
     private static bool TryParseRegister(string name, out Register register)
