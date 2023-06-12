@@ -40,6 +40,7 @@ public partial class Assembler
         _obj = new ObjectModuleConstructor();
         _activeSegment = Segment.Text;
 
+        _markerParser = new MarkerParser();
         _instructionParser = new InstructionParser(_obj);
     }
 
@@ -118,6 +119,8 @@ public partial class Assembler
 
         Append(new byte[byteCount]);
     }
+
+    private void Align(int boundary) => _obj.Align(_activeSegment, boundary);
 
     private void SetActiveSegment(Segment segment)
     {

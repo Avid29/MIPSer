@@ -1,15 +1,12 @@
 ﻿// Adam Dernis 2023
 
-using MIPS.Assembler.Parsers;
 using System.Linq;
 
 namespace MIPS.Assembler;
 
 public partial class Assembler
 {
-    private InstructionParser _instructionParser;
-
-    private void ParseLine(string line, out string? label, out string? instruction, out string? marker)
+    private void TokenizeLine(string line, out string? label, out string? instruction, out string? marker)
     {
         label = null;
         instruction = null;
@@ -52,6 +49,22 @@ public partial class Assembler
             instruction = line;
         }
     }
+
+    private void TokenizeInstruction(string instruction, out string name, out string[] args)
+    {
+        // Find instruction name
+        int nameEnd = instruction.IndexOf(' ');
+        if (nameEnd == -1)
+        {
+            nameEnd = instruction.Length;
+        }
+
+        // Parse instruction
+        name = instruction[..nameEnd];
+        args = instruction[nameEnd..].Trim().Split(',');
+    }
+
+    private void TokenizeMarker(string marker, out string name, out string[] args) => TokenizeInstruction(marker, out name, out args);
 
     private bool ValidateLabel(string label)
     {

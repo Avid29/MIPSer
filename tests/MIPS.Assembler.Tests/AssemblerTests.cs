@@ -15,6 +15,7 @@ public class AssemblerTests
         Stream stream = new MemoryStream();
         await using var writer = new StreamWriter(stream);
         await writer.WriteLineAsync("test:");
+        await writer.WriteLineAsync(".text");
         await writer.WriteLineAsync("addi $t0, $s0, 10");
         await writer.FlushAsync();
 

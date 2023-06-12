@@ -15,7 +15,6 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public struct InstructionParser
 {
-    private ObjectModuleConstructor? _module;
     private ExpressionParser _expParser;
 
     private InstructionMetadata _meta;
@@ -40,10 +39,9 @@ public struct InstructionParser
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionParser"/> struct.
     /// </summary>
-    public InstructionParser(ObjectModuleConstructor? module)
+    public InstructionParser(ObjectModuleConstructor? obj)
     {
-        _module = module;
-        _expParser = new ExpressionParser(module);
+        _expParser = new ExpressionParser(obj);
         _meta = default;
         _opCode = default;
         _funcCode = default;
@@ -60,7 +58,7 @@ public struct InstructionParser
     /// </summary>
     /// <param name="name">The instruction name.</param>
     /// <param name="args">The instruction arguments.</param>
-    /// <returns>An <see cref="Instruction"/> object.</returns>
+    /// <returns>An <see cref="Instruction"/>.</returns>
     public Instruction Parse(string name, string[] args)
     {
         // Get instruction metadata from name
