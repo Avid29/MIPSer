@@ -4,9 +4,12 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Models.Markers;
 using MIPS.Assembler.Models.Markers.Abstract;
 using MIPS.Models.Addressing.Enums;
+using System.Globalization;
+using System.Numerics;
 
 namespace MIPS.Assembler.Parsers;
 
+// TODO: Use Logger to handle errors
 // TODO: Handle expressions
 
 /// <summary>
@@ -38,12 +41,18 @@ public struct MarkerParser
 
             // Align
             case "align":
-                return ParseAlign(args);
+                return ParseAlignMarker(args);
 
-            // TODO: Parse data
             // Data
             case "space":
+                return ParseSpaceMarker(args);
+
             case "word":
+                return ParseData<int>(args);
+            case "byte":
+                return ParseData<byte>(args);
+
+            // TODO: Parse ascii
             case "ascii":
             case "asciiz":
                 break;
@@ -65,17 +74,64 @@ public struct MarkerParser
         return new SegmentMarker(segment);
     }
 
-    private static Marker? ParseAlign(string[] args)
+    private static Marker? ParseAlignMarker(string[] args)
     {
         // Align only takes one argument
         if (args.Length != 1)
-            return null;
+        {
+            return ThrowHelper.ThrowArgumentException<Marker>($".align only takes one argument.");
+        }
 
         var arg = args[0].Trim();
 
         if(!int.TryParse(arg, out var boundary))
-            return null;
+        {
+            return ThrowHelper.ThrowArgumentException<Marker>($"Invalid argument '{arg}'.");
+        }
 
         return new AlignMarker(boundary);
+    }
+
+    private static Marker? ParseSpaceMarker(string[] args)
+    {
+        // Space only takes one argument
+        if (args.Length != 1)
+        {
+            return ThrowHelper.ThrowArgumentException<Marker>($".space only takes one argument.");
+        }
+        
+        var arg = args[0].Trim();
+
+        if (!int.TryParse(arg, out var size))
+        {
+            return ThrowHelper.ThrowArgumentException<Marker>($"Invalid argument '{arg}'.");
+        }
+
+        return new DataMarker(new byte[size]);
+    }
+
+    private static Marker? ParseData<T>(string[] args)
+        where T : unmanaged, IBinaryInteger<T>
+    {
+        var format = CultureInfo.InvariantCulture.NumberFormat;
+        T value = default;
+        int argSize = value.GetByteCount();
+
+        int pos = 0;
+
+        // Allocate space
+        var bytes = new byte[args.Length * argSize];
+        foreach (var arg in args)
+        {
+            if (!T.TryParse(arg, format, out value))
+            {
+                return ThrowHelper.ThrowArgumentException<Marker>($"Invalid argument '{arg}'.");
+            }
+
+            value.WriteBigEndian(bytes, pos);
+            pos += argSize;
+        }
+
+        return new DataMarker(bytes);
     }
 }

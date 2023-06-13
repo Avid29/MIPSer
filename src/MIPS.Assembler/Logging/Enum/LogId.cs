@@ -19,7 +19,7 @@ public enum LogId
     IntegerTruncated,
 
     // Expression parser errors
-    InvalidImmediate
+    UnparsableExpression,
 
     #pragma warning restore CS1591
 }

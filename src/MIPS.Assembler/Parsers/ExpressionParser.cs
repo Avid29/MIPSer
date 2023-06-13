@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
+using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Construction;
 using MIPS.Assembler.Parsers.Enums;
 using MIPS.Assembler.Parsers.Expressions;
@@ -94,11 +95,17 @@ public struct ExpressionParser
 
             // Parsing failed
             if (!success)
+            {
+                _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Expression '{expression}' could not be parsed.");
                 return false;
+            }
         }
 
         if (!TryFinish())
+        {
+            _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Expression '{expression}' could not be parsed.");
             return false;
+        }
 
         // Evaluate tree and return result
         return _tree.TryEvaluate(_evaluator, out result);
