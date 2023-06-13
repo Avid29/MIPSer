@@ -12,6 +12,7 @@ public class InstructionParserTests
 {
     private const string Add = "add $t0, $s0, $s1";
     private const string Addi = "addi $t0, $s0, 100";
+    private const string Sll = "sll $t0, $s0, 3";
     private const string LoadWord = "lw $t0, 100($s0)";
     private const string StoreByte = "sb $t0, -100($s0)";
     private const string Jump = "j 1000";
@@ -29,6 +30,13 @@ public class InstructionParserTests
     {
         Instruction expected = Instruction.Create(OperationCode.AddImmediate, Register.Saved0, Register.Temporary0, 100);
         RunTest(Addi, expected);
+    }
+
+    [TestMethod(Sll)]
+    public void SllTest()
+    {
+        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 3);
+        RunTest(Sll, expected);
     }
 
     [TestMethod(LoadWord)]

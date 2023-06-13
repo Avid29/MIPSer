@@ -5,6 +5,70 @@ using MIPS.Models.Instructions.Enums;
 
 namespace MIPS.Models.Instructions;
 
+//                               MIPS Instructions
+// ----------------------------------------------------------------------------
+//      All instructions in MIPS are 4-byte, or 32 bits.
+//
+// There are 3 types of instructions.
+// - R type
+// - I type
+// - J type.
+// 
+//                            R Type Instructions Summary
+// ----------------------------------------------------------------------------
+//      R type instructions split the field into an Operation Code (6 bits),
+// RS register (5 bits), RT register (5 bits), RD register (5 bits),
+// Shift Amount (5 bits), and Function Code (6 bits).
+//
+//
+//                           R Type Instruction Components
+// ----------------------------------------------------------------------------
+//
+// Operation Code:
+//      R type instructions have an OP code of 0, and the function code is instead
+//      used to differentiate instructions.
+// 
+// RS Register:
+//      R type instructions *usually* use RS as the first input register argument,
+//      immediate shift instructions being the exception.
+// 
+// RT Register:
+//      R type instructions *usually* use RT as the second input register argument,
+//      immediate shift instruction again being the exception.
+//
+// RD Register:
+//      RD is the write back register of the value calculated by the instruction.
+//
+// Shift Amount:
+//      Shift amount is only used for immediate shift instructions. It specifies the
+//      number of bits (unsigned) to shift in a given direction.
+// 
+// Function Code:
+//      The function code is used to differentiate R type instructions.
+//
+//                       R Type Instruction Assembled Examples
+// ----------------------------------------------------------------------------
+// > add $t0, $s0, $s1
+//         |  Oper  |  $rs  |  $rt  |  $rd  | Shift |  Func  |
+//  ------ + ------ + ----- + ----- + ----- + ----- + ------ |
+// Binary  | 000000 | 10000 | 10001 | 01000 | 00000 | 100000 |
+// Hex     |     00 |    10 |    11 |    08 |    00 |     20 |
+// Decimal |      0 |    16 |    17 |     8 |     0 |     32 |
+// ------- + ------ + ----- + ----- + ----- + ----- + ------ +
+// Meaning | R Type |   $s0 |   $s1 |   $t0 |   N/A |    add |
+// ------- + ------ + ----- + ----- + ----- + ----- + ------ +
+//
+//
+// > sll $t0, $s0, 3
+//         |  Oper  |  $rs  |  $rt  |  $rd  | Shift |  Func  |
+//  ------ + ------ + ----- + ----- + ----- + ----- + ------ |
+// Binary  | 000000 | 00000 | 10000 | 01000 | 00011 | 000000 |
+// Hex     |     00 |    00 |    10 |    08 |    03 |     00 |
+// Decimal |      0 |     0 |    16 |     8 |     3 |      0 |
+// ------- + ------ + ----- + ----- + ----- + ----- + ------ +
+// Meaning | R Type |   N/A |   $s0 |   $t0 |     3 |    sll |
+// ------- + ------ + ----- + ----- + ----- + ----- + ------ +
+
 /// <summary>
 /// A struct representing an instruction.
 /// </summary>
