@@ -47,25 +47,36 @@ public unsafe partial class Assembler
     private void LinePass2(string line)
     {
         // Get the parts of the line
-        TokenizeLine(line, out _, out var instructionStr, out _);
+        TokenizeLine(line, out _, out var instructionStr, out var markerStr);
 
-        // Only need to handle instructions
-        if (instructionStr is null)
-            return;
-
-        // Get the parts of the instruction and parse
-        if(!TokenizeInstruction(instructionStr, out var name, out var args))
-            return;
-
-        // Try to parse instruction from name and arguments
-        if (!_instructionParser.TryParse(name, args, out var instruction))
+        // Handle instructions
+        if (instructionStr is not null)
         {
-            // Explicitly replace invalid instruction with a nop
-            instruction = Instruction.NOP;
+            // Get the parts of the instruction and parse
+            if(!TokenizeInstruction(instructionStr, out var name, out var args))
+                return;
+
+            // Try to parse instruction from name and arguments
+            if (!_instructionParser.TryParse(name, args, out var instruction))
+            {
+                // Explicitly replace invalid instruction with a nop
+                instruction = Instruction.NOP;
+            }
+
+            // Append instruction to active segment
+            Append(instruction);
         }
 
-        // Append instruction to active segment
-        Append(instruction);
+        // Make allocations if marker is present
+        if (markerStr is not null)
+        {
+            TokenizeMarker(markerStr, out var name, out var args);
+            if (!_markerParser.TryParseMarker(name, args, out var marker))
+                return;
+
+            Guard.IsNotNull(marker);
+            ExecuteMarker(marker);
+        }
     }
 
     private void ExecuteMarker(Marker marker)

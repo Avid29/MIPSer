@@ -46,8 +46,12 @@ public class Program
 
     private static async Task Run(string filePath)
     {
-        var stream = File.Open(filePath, FileMode.Open);
-        var assembler = await Assembler.AssembleAsync(stream);
+        var resultFile = Path.ChangeExtension(filePath, ".obj");
+
+        var inFile = File.Open(filePath, FileMode.Open);
+        var outFile = File.Open(resultFile, FileMode.Create);
+        var assembler = await Assembler.AssembleAsync(inFile);
+        assembler.WriteModule(outFile);
 
         // TODO: Failure message
         Console.WriteLine($"Assembled with {assembler.Logs.Count} messages.");

@@ -97,4 +97,21 @@ public unsafe struct Header
 
         return true;
     }
+
+    /// <summary>
+    /// Writes the header to a stream.
+    /// </summary>
+    /// <param name="stream">The stream to write the header on.</param>
+    public void WriteHeader(Stream stream)
+    {
+        stream.Write(_magic);
+        stream.Write(_version);
+        stream.Write(_flags);
+        stream.Write(_entryPoint);
+
+        for (int i = 0; i < 10; i++)
+            stream.Write(_sizes[i]);
+
+        stream.Flush();
+    }
 }

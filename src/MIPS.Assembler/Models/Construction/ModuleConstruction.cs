@@ -14,13 +14,13 @@ namespace MIPS.Assembler.Models.Construction;
 public partial class ModuleConstruction
 {
     private const ushort MAGIC = 0xFA_CE;
-    private const ushort VERSION = 0x2C_CE;
+    private const ushort VERSION = 0x2C_C6;
 
     private readonly Dictionary<string, SegmentAddress> _symbols;
 
-    private readonly BinaryWriter _text;
-    private readonly BinaryWriter _data;
-    //private readonly BinaryWriter _rodata;
+    private readonly Stream _text;
+    private readonly Stream _data;
+    //private readonly Stream _rodata;
 
     private uint _flags = 0;
     private uint _entryPoint = 0;
@@ -46,8 +46,8 @@ public partial class ModuleConstruction
         // NOTE: Is this safe? Can I just write to the back of a stream that may not be empty?
         // I think it's not only safe, but good design for linking. Investigate more though.
 
-        _text = new BinaryWriter(text);
-        _data = new BinaryWriter(data);
+        _text = text;
+        _data = data;
 
         _symbols = new Dictionary<string, SegmentAddress>();
     }
@@ -55,11 +55,19 @@ public partial class ModuleConstruction
     /// <summary>
     /// Gets the fully assembled object module.
     /// </summary>
-    public Module Finish()
+    public Module Finish(Stream stream)
     {
         // TODO: Flags and entry point properly
 
-        var header = new Header(MAGIC, VERSION, _flags, _entryPoint, (uint)TextPosition, _rdataSize, (uint)DataPosition, _sdataSize, _sbssSize, _bssSize, 0, 0, 0, 0);
-        throw new NotImplementedException();
+        var header = new Header(MAGIC, VERSION, _flags, _entryPoint, (uint)_text.Length, _rdataSize, (uint)_data.Length, _sdataSize, _sbssSize, _bssSize, 0, 0, 0, 0);
+        header.WriteHeader(stream);
+
+        // Append segments to stream
+        _text.CopyTo(stream);
+        _data.CopyTo(stream);
+
+        stream.Flush();
+
+        return new Module(stream);
     }
 }

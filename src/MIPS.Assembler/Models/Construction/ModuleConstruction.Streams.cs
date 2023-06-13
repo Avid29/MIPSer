@@ -12,12 +12,12 @@ public partial class ModuleConstruction
     /// <summary>
     /// Gets the current position in the text stream.
     /// </summary>
-    public long TextPosition => _text.BaseStream.Position;
+    public long TextPosition => _text.Position;
 
     /// <summary>
     /// Gets the current position in the data stream.
     /// </summary>
-    public long DataPosition => _data.BaseStream.Position;
+    public long DataPosition => _data.Position;
 
     /// <summary>
     /// Appends an array of bytes to the end of the specified segment.
@@ -28,7 +28,7 @@ public partial class ModuleConstruction
     public void Append(Segment segment, params byte[] bytes)
     {
         // Select buffer and write bytes
-        BinaryWriter buffer = GetBuffer(segment);
+        Stream buffer = GetSegmentStream(segment);
         buffer.Write(bytes);
     }
 
@@ -43,8 +43,8 @@ public partial class ModuleConstruction
         boundary = 1 << boundary;
 
         // Select buffer and get alignment offset
-        BinaryWriter stream = GetBuffer(segment);
-        int offset = (int)stream.BaseStream.Length % boundary;
+        Stream stream = GetSegmentStream(segment);
+        int offset = (int)stream.Length % boundary;
 
         // Already aligned
         if (offset <= 0)
@@ -55,13 +55,22 @@ public partial class ModuleConstruction
         Append(segment, append);
     }
 
-    private BinaryWriter GetBuffer(Segment segment)
+    /// <summary>
+    /// Seeks to the start of all segments.
+    /// </summary>
+    public void ResetStreamPositions()
+    {
+        _text.Position = 0;
+        _data.Position = 0;
+    }
+
+    private Stream GetSegmentStream(Segment segment)
     {
         return segment switch
         {
             Segment.Text => _text,
             Segment.Data => _data,
-            _ => ThrowHelper.ThrowArgumentException<BinaryWriter>(nameof(segment), $"{nameof(segment)} must be either {Segment.Text} or {Segment.Data}.")
+            _ => ThrowHelper.ThrowArgumentException<Stream>(nameof(segment), $"{nameof(segment)} must be either {Segment.Text} or {Segment.Data}.")
         };
     }
 }

@@ -77,9 +77,6 @@ public partial class Assembler
         // Create stream reader and run first pass
         using var reader = new StreamReader(stream);
         await assembler.MakePass(reader, assembler.LinePass1);
-
-        // Seek to start and run second pass
-        reader.BaseStream.Position = 0;
         await assembler.MakePass(reader, assembler.LinePass2);
 
         return assembler;
@@ -88,8 +85,9 @@ public partial class Assembler
     /// <summary>
     /// Builds the object module from an assembler.
     /// </summary>
+    /// <param name="stream">The stream to write the module to.</param>
     /// <returns>The assembled object module.</returns>
-    public Module GetObjectModule() => _obj.Finish();
+    public Module WriteModule(Stream stream) => _obj.Finish(stream);
 
     private async Task MakePass(StreamReader reader, Action<string> pass)
     {
@@ -104,6 +102,10 @@ public partial class Assembler
             Guard.IsNotNull(line, nameof(line));
             pass(line);
         }
+
+        // Reset stream position
+        reader.BaseStream.Position = 0;
+        _obj.ResetStreamPositions();
     }
 
     /// <summary>
@@ -141,6 +143,4 @@ public partial class Assembler
     {
         _activeSegment = segment;
     }
-
-
 }

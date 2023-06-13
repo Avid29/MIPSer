@@ -28,6 +28,8 @@ public class AssemblerTests
     private async Task RunTest(Stream stream)
     {
         var module = await Assembler.AssembleAsync(stream);
-        module.GetObjectModule();
+
+        var result = new MemoryStream();
+        module.WriteModule(result);
     }
 }

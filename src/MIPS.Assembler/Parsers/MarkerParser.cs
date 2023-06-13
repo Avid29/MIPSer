@@ -164,6 +164,6 @@ public readonly struct MarkerParser
         }
 
         marker = new DataMarker(bytes);
-        return false;
+        return true;
     }
 }
