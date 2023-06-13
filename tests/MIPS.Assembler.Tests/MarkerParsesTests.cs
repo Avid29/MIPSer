@@ -28,12 +28,12 @@ public class MarkerParsesTests
         var parser = new MarkerParser();
 
         TokenizeMarker(input, out var name, out var args);
-        var result = parser.ParseMarker(name, args);
+        parser.TryParseMarker(name, args, out var marker);
 
-        if (result is not DataMarker dataMarker)
+        if (marker is not DataMarker dataMarker)
             Assert.Fail();
 
-        var actual = (result as DataMarker)?.Data;
+        var actual = (marker as DataMarker)?.Data;
         Guard.IsNotNull(actual);
 
         Assert.AreEqual(expected.Length, actual.Length);

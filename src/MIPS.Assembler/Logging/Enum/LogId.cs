@@ -21,5 +21,10 @@ public enum LogId
     // Expression parser errors
     UnparsableExpression,
 
+    // Marker parser errors
+    InvalidMarkerDataArg,
+    InvalidMarkerArg,
+    InvalidMarkerArgCount,
+
     #pragma warning restore CS1591
 }

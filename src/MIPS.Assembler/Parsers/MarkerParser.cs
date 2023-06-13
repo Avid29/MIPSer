@@ -1,6 +1,8 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Assembler.Logging;
+using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Markers;
 using MIPS.Assembler.Models.Markers.Abstract;
 using MIPS.Models.Addressing.Enums;
@@ -15,13 +17,23 @@ namespace MIPS.Assembler.Parsers;
 /// <summary>
 /// A struct for parsing markers.
 /// </summary>
-public struct MarkerParser
+public readonly struct MarkerParser
 {
+    private readonly ILogger? _logger;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="MarkerParser"/> struct.
     /// </summary>
-    public MarkerParser()
+    public MarkerParser() : this(null)
     {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MarkerParser"/> struct.
+    /// </summary>
+    public MarkerParser(ILogger? logger)
+    {
+        _logger = logger;
     }
 
     /// <summary>
@@ -29,28 +41,31 @@ public struct MarkerParser
     /// </summary>
     /// <param name="name">The marker name.</param>
     /// <param name="args">The marker arguments.</param>
-    /// <returns>A <see cref="Marker"/>.</returns>
-    public Marker? ParseMarker(string name, params string[] args)
+    /// <param name="marker">The <see cref="Marker"/>.</param>
+    /// <returns>Whether or not an marker was parsed.</returns>
+    public bool TryParseMarker(string name, string[] args, out Marker? marker)
     {
+        marker = null;
+
         switch (name)
         {
             // Segment marker
             case "text":
             case "data":
-                return ParseSegmentMarker(name);
+                return TryParseSegmentMarker(name, out marker);
 
             // Align
             case "align":
-                return ParseAlignMarker(args);
+                return TryParseAlignMarker(args, out marker);
 
             // Data
             case "space":
-                return ParseSpaceMarker(args);
+                return TryParseSpaceMarker(args, out marker);
 
             case "word":
-                return ParseData<int>(args);
+                return TryParseData<int>(name, args, out marker);
             case "byte":
-                return ParseData<byte>(args);
+                return TryParseData<byte>(name, args, out marker);
 
             // TODO: Parse ascii
             case "ascii":
@@ -59,60 +74,73 @@ public struct MarkerParser
         }
 
         // Invalid marker
-        return null;
+        return false;
     }
 
-    private static Marker ParseSegmentMarker(string marker)
+    private static bool TryParseSegmentMarker(string name, out Marker marker)
     {
-        Segment segment = marker switch
+        Segment segment = name switch
         {
             "text" => Segment.Text,
             "data" => Segment.Data,
-            _ => ThrowHelper.ThrowArgumentException<Segment>($"'{marker}' cannot be parsed as a segment marker."),
+            _ => ThrowHelper.ThrowArgumentException<Segment>($"'{name}' cannot be parsed as a segment marker."),
         };
 
-        return new SegmentMarker(segment);
+        marker = new SegmentMarker(segment);
+        return true;
     }
 
-    private static Marker? ParseAlignMarker(string[] args)
+    private bool TryParseAlignMarker(string[] args, out Marker? marker)
     {
+        marker = null;
+
         // Align only takes one argument
         if (args.Length != 1)
         {
-            return ThrowHelper.ThrowArgumentException<Marker>($".align only takes one argument.");
+            _logger?.Log(Severity.Error, LogId.InvalidMarkerArgCount, $".align only takes one argument. Cannot parse {args.Length} arguments.");
+            return false;
         }
 
         var arg = args[0].Trim();
 
         if(!int.TryParse(arg, out var boundary))
         {
-            return ThrowHelper.ThrowArgumentException<Marker>($"Invalid argument '{arg}'.");
+            _logger?.Log(Severity.Error, LogId.InvalidMarkerArg, $"'{arg}' is not a valid .align argument.");
+            return false;
         }
 
-        return new AlignMarker(boundary);
+        marker = new AlignMarker(boundary);
+        return true;
     }
 
-    private static Marker? ParseSpaceMarker(string[] args)
+    private bool TryParseSpaceMarker(string[] args, out Marker? marker)
     {
+        marker = null;
+
         // Space only takes one argument
         if (args.Length != 1)
         {
-            return ThrowHelper.ThrowArgumentException<Marker>($".space only takes one argument.");
+            _logger?.Log(Severity.Error, LogId.InvalidMarkerArgCount, $".space only takes one argument. Cannot parse {args.Length} arguments.");
+            return false;
         }
         
         var arg = args[0].Trim();
 
         if (!int.TryParse(arg, out var size))
         {
-            return ThrowHelper.ThrowArgumentException<Marker>($"Invalid argument '{arg}'.");
+            _logger?.Log(Severity.Error, LogId.InvalidMarkerArg, $"'{arg}' is not a valid .space argument.");
+            return false;
         }
 
-        return new DataMarker(new byte[size]);
+        marker = new DataMarker(new byte[size]);
+        return true;
     }
 
-    private static Marker? ParseData<T>(string[] args)
+    private bool TryParseData<T>(string name, string[] args, out Marker? marker)
         where T : unmanaged, IBinaryInteger<T>
     {
+        marker = null;
+
         var format = CultureInfo.InvariantCulture.NumberFormat;
         T value = default;
         int argSize = value.GetByteCount();
@@ -125,13 +153,15 @@ public struct MarkerParser
         {
             if (!T.TryParse(arg, format, out value))
             {
-                return ThrowHelper.ThrowArgumentException<Marker>($"Invalid argument '{arg}'.");
+                _logger?.Log(Severity.Error, LogId.InvalidMarkerDataArg, $"{arg} could not be parsed as a {name}");
+                return false;
             }
 
             value.WriteBigEndian(bytes, pos);
             pos += argSize;
         }
 
-        return new DataMarker(bytes);
+        marker = new DataMarker(bytes);
+        return false;
     }
 }

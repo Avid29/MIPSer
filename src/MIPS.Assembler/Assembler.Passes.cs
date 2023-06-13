@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2023
 
+using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Models.Markers;
 using MIPS.Assembler.Models.Markers.Abstract;
 using MIPS.Assembler.Parsers;
@@ -9,7 +10,7 @@ namespace MIPS.Assembler;
 
 public unsafe partial class Assembler
 {
-    private MarkerParser _markerParser;
+    private readonly MarkerParser _markerParser;
     private InstructionParser _instructionParser;
 
     private void LinePass1(string line)
@@ -35,11 +36,10 @@ public unsafe partial class Assembler
         if (markerStr is not null)
         {
             TokenizeMarker(markerStr, out var name, out var args);
-            var marker = _markerParser.ParseMarker(name, args);
-
-            if (marker is null)
+            if (!_markerParser.TryParseMarker(name, args, out var marker))
                 return;
 
+            Guard.IsNotNull(marker);
             ExecuteMarker(marker);
         }
     }
