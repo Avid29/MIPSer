@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models.Construction;
 using MIPS.Assembler.Parsers.Enums;
 using MIPS.Assembler.Parsers.Expressions;
@@ -8,7 +9,6 @@ using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
 
 namespace MIPS.Assembler.Parsers;
-
 
 // TODO: Marco support
 // TODO: Unary operator support
@@ -21,6 +21,7 @@ namespace MIPS.Assembler.Parsers;
 public struct ExpressionParser
 {
     private readonly ObjectModuleConstructor? _obj;
+    private readonly ILogger? _logger;
     private readonly IEvaluator<long> _evaluator;
     private ExpressionTree? _tree;
     private ExpressionParserState _state;
@@ -29,16 +30,17 @@ public struct ExpressionParser
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
     /// </summary>
-    public ExpressionParser() : this(null)
+    public ExpressionParser() : this(null, null)
     {
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
     /// </summary>
-    public ExpressionParser(ObjectModuleConstructor? obj)
+    public ExpressionParser(ObjectModuleConstructor? obj, ILogger? logger = null)
     {
         _obj = obj;
+        _logger = logger;
         _evaluator = new IntegerEvaluator();
         _tree = null;
         _state = ExpressionParserState.Start;

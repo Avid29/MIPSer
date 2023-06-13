@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models.Construction;
 using MIPS.Assembler.Parsers;
 using MIPS.Models;
@@ -29,8 +30,8 @@ namespace MIPS.Assembler;
 public partial class Assembler
 {
     private readonly ObjectModuleConstructor _obj;
+    private readonly AssemblerLogger _logger;
     private Segment _activeSegment;
-    private int _currentLine;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Assembler"/> class.
@@ -38,10 +39,11 @@ public partial class Assembler
     private Assembler()
     {
         _obj = new ObjectModuleConstructor();
+        _logger = new AssemblerLogger();
         _activeSegment = Segment.Text;
 
         _markerParser = new MarkerParser();
-        _instructionParser = new InstructionParser(_obj);
+        _instructionParser = new InstructionParser(_obj, _logger);
     }
 
     /// <summary>
@@ -83,10 +85,12 @@ public partial class Assembler
         // Iterate until end of stream, tracking line number
         for (int lineNum = 0; !reader.EndOfStream; lineNum++)
         {
+            // Track the line in the logger
+            _logger.CurrentLine = lineNum;
+
+            // Load line from stream and make pass
             var line = await reader.ReadLineAsync();
             Guard.IsNotNull(line, nameof(line));
-            
-            _currentLine = lineNum;
             pass(line);
         }
     }
