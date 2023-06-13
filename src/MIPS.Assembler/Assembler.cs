@@ -9,6 +9,7 @@ using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Instructions;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ public partial class Assembler
     /// <summary>
     /// Gets the current segment address.
     /// </summary>
-    public SegmentAddress CurrentAddress
+    internal SegmentAddress CurrentAddress
     {
         get
         {
@@ -63,9 +64,14 @@ public partial class Assembler
     }
     
     /// <summary>
+    /// Gets the assembler's logs.
+    /// </summary>
+    public IReadOnlyList<Log> Logs => _logger.Logs;
+
+    /// <summary>
     /// Assembles an object module from a stream of assembly
     /// </summary>
-    public static async Task<ObjectModule?> AssembleAsync(Stream stream)
+    public static async Task<Assembler> AssembleAsync(Stream stream)
     {
         var assembler = new Assembler();
 
@@ -77,13 +83,19 @@ public partial class Assembler
         reader.BaseStream.Position = 0;
         await assembler.MakePass(reader, assembler.LinePass2);
 
-        return assembler.Finish();
+        return assembler;
     }
+
+    /// <summary>
+    /// Builds the object module from an assembler.
+    /// </summary>
+    /// <returns>The assembled object module.</returns>
+    public ObjectModule GetObjectModule() => _obj.Finish();
 
     private async Task MakePass(StreamReader reader, Action<string> pass)
     {
         // Iterate until end of stream, tracking line number
-        for (int lineNum = 0; !reader.EndOfStream; lineNum++)
+        for (int lineNum = 1; !reader.EndOfStream; lineNum++)
         {
             // Track the line in the logger
             _logger.CurrentLine = lineNum;
@@ -131,8 +143,5 @@ public partial class Assembler
         _activeSegment = segment;
     }
 
-    private ObjectModule Finish()
-    {
-        return _obj.Finish();
-    }
+
 }

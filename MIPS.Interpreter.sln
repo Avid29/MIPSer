@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIPS", "src\MIPS\MIPS.cspro
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIPS.Interpreter", "src\MIPS.Interpreter\MIPS.Interpreter.csproj", "{51C46BFB-323C-45C3-BEAE-40A907E37B2C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{F60E28CC-9A4A-480F-BF1A-00698E572165}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mipser", "src\Apps\Mipser\Mipser.csproj", "{CB515D95-D316-4961-B121-8101E8FB92A0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,12 +45,17 @@ Global
 		{51C46BFB-323C-45C3-BEAE-40A907E37B2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51C46BFB-323C-45C3-BEAE-40A907E37B2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51C46BFB-323C-45C3-BEAE-40A907E37B2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB515D95-D316-4961-B121-8101E8FB92A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB515D95-D316-4961-B121-8101E8FB92A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB515D95-D316-4961-B121-8101E8FB92A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB515D95-D316-4961-B121-8101E8FB92A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2090AE7A-C4DE-4DB9-A36F-215D4608223E} = {457783DF-E788-44A7-843C-76272460B7BA}
+		{CB515D95-D316-4961-B121-8101E8FB92A0} = {F60E28CC-9A4A-480F-BF1A-00698E572165}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {57EBE9B8-DF5B-43EA-99A8-085FA2C95C11}
