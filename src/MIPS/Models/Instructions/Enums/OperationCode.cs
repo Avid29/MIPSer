@@ -14,6 +14,11 @@ public enum OperationCode : byte
     /// r-type instructions are distinguished with <see cref="FunctionCode"/>.
     /// </remarks>
     RType = 0x00,
+    
+    /// <summary>
+    /// Marks a conditional branch instruction. See <see cref="BranchConditionalCodes"/>.
+    /// </summary>
+    BranchConditional = 0x01,
 
     #pragma warning disable CS1591
 
@@ -37,17 +42,34 @@ public enum OperationCode : byte
 
     LoadUpperImmediate = 0x0f,
 
-    MoveFromCoprocessor = 0x10,
+    MoveFromCoprocessor0 = 0x10,
+    MoveFromCoprocessor1 = 0x11,
+    MoveFromCoprocessor2 = 0x12,
+    MoveFromCoprocessor3 = 0x13,
 
     LoadByte = 0x20,
     LoadHalfWord = 0x21,
+    LoadWordLeft = 0x22,
     LoadWord = 0x23,
     LoadByteUnsigned = 0x24,
     LoadHalfWordUnsigned = 0x25,
+    LoadWordRight = 0x26,
 
     StoreByte = 0x28,
     StoreHalfWord = 0x29,
+    StoreWordLeft = 0x2a,
     StoreWord = 0x2b,
+    StoreWordRight = 0x2e,
+
+    LoadWordCoprocessor0 = 0x30,
+    LoadWordCoprocessor1 = 0x31,
+    LoadWordCoprocessor2 = 0x32,
+    LoadWordCoprocessor3 = 0x33,
+
+    StoreWordCoprocessor0 = 0x38,
+    StoreWordCoprocessor1 = 0x39,
+    StoreWordCoprocessor2 = 0x3a,
+    StoreWordCoprocessor3 = 0x3b,
 
 #pragma warning restore CS1591
 }

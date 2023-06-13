@@ -28,20 +28,14 @@ public unsafe partial class Assembler
         if (instructionStr is not null)
         {
             // TODO: Pseudo instructions
-
             Append(sizeof(Instruction));
         }
 
+        // NOTE: Marker allocations are made in both passes
+
         // Make allocations if marker is present
         if (markerStr is not null)
-        {
-            TokenizeMarker(markerStr, out var name, out var args);
-            if (!_markerParser.TryParseMarker(name, args, out var marker))
-                return;
-
-            Guard.IsNotNull(marker);
-            ExecuteMarker(marker);
-        }
+            HandleMarker(markerStr);
     }
 
     private void LinePass2(string line)
@@ -66,17 +60,21 @@ public unsafe partial class Assembler
             // Append instruction to active segment
             Append(instruction);
         }
-
+        
+        // NOTE: Marker allocations are made in both passes
         // Make allocations if marker is present
         if (markerStr is not null)
-        {
-            TokenizeMarker(markerStr, out var name, out var args);
-            if (!_markerParser.TryParseMarker(name, args, out var marker))
-                return;
+            HandleMarker(markerStr);
+    }
 
-            Guard.IsNotNull(marker);
-            ExecuteMarker(marker);
-        }
+    private void HandleMarker(string markerStr)
+    {
+        TokenizeMarker(markerStr, out var name, out var args);
+        if (!_markerParser.TryParseMarker(name, args, out var marker))
+            return;
+
+        Guard.IsNotNull(marker);
+        ExecuteMarker(marker);
     }
 
     private void ExecuteMarker(Marker marker)

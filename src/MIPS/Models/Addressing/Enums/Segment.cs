@@ -9,12 +9,12 @@ public enum Segment
 {
 #pragma warning disable CS1591
 
-    Text,
-    ReadOnlyData,
-    Data,
-    SmallInitializedData,
-    SmallUninitializedData,
-    UninitializedData,
+    Text,                   // text
+    ReadOnlyData,           // rdata
+    Data,                   // data
+    SmallInitializedData,   // sdata
+    SmallUninitializedData, // sbss
+    UninitializedData,      // bss
 
 #pragma warning restore CS1591
 }

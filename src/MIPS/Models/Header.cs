@@ -75,6 +75,41 @@ public unsafe struct Header
     public uint DataSize => _sizes[2];
 
     /// <summary>
+    /// Gets the size of the module's small initialized data section.
+    /// </summary>
+    public uint SmallDataSize => _sizes[3];
+
+    /// <summary>
+    /// Gets the size of the module's small initialized data section.
+    /// </summary>
+    public uint SmallUninitializedDataSize => _sizes[4];
+
+    /// <summary>
+    /// Gets the size of the module's small initialized data section.
+    /// </summary>
+    public uint UninitializedDataSize => _sizes[5];
+
+    /// <summary>
+    /// Gets the size of the module's tables.
+    /// </summary>
+    public uint TablesSize => _sizes[6];
+
+    /// <summary>
+    /// Gets the number of entries in the module's relative table.
+    /// </summary>
+    public uint RelativeTableCount => _sizes[7];
+
+    /// <summary>
+    /// Gets the number of entries the module's reference table.
+    /// </summary>
+    public uint ReferenceTableCount => _sizes[8];
+
+    /// <summary>
+    /// Gets the number of entries the module's symbol table.
+    /// </summary>
+    public uint SymbolTableCount => _sizes[9];
+
+    /// <summary>
     /// Attempts to load a header from a <see cref="Stream"/>.
     /// </summary>
     /// <param name="stream">The stream of the module.</param>
@@ -82,17 +117,15 @@ public unsafe struct Header
     /// <returns><see cref="true"/> if header was successfully read. <see cref="false"/> otherwise.</returns>
     public static bool TryLoadHeader(Stream stream, out Header header)
     {
-        var reader = new BinaryReader(stream);
-
-        header._magic = reader.ReadUInt16();
-        header._version = reader.ReadUInt16();
-        header._flags = reader.ReadUInt16();
-        header._entryPoint = reader.ReadUInt32();
+        header._magic = stream.Read<ushort>();
+        header._version = stream.Read<ushort>();
+        header._flags = stream.Read<uint>();
+        header._entryPoint = stream.Read<uint>();
 
         for (int i = 0; i < 10; i++)
         {
             // Read sizes
-            header._sizes[i] = reader.ReadUInt32();
+            header._sizes[i] = stream.Read<uint>();
         }
 
         return true;
