@@ -25,6 +25,7 @@ public enum FunctionCode : byte
     JumpAndLinkRegister = 0x09,
 
     SystemCall = 0x0c,
+    Break = 0x0d,
 
     MoveFromHigh = 0x10,
     MoveToHigh = 0x11,

@@ -74,6 +74,7 @@ namespace MIPS.Models.Instructions;
 /// </summary>
 public struct Instruction
 {
+
     // Universal
     private const int OPCODE_BIT_SIZE = 6;
     private const int REGISTER_ADDRESS_BIT_SIZE = 5;
@@ -138,6 +139,11 @@ public struct Instruction
         value.Address = address;
         return value;
     }
+    
+    /// <summary>
+    /// Gets a no operation instruction.
+    /// </summary>
+    public static Instruction NOP => (Instruction)0;
 
     /// <summary>
     /// Gets the instruction type.

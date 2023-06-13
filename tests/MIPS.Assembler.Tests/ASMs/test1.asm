@@ -10,6 +10,7 @@
 # Jumps:		No
 # Branches:		No
 # Memory:		No
+# Syscalls:		No
 #
 
 main:

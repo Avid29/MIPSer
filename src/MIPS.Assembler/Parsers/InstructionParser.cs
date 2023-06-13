@@ -40,7 +40,7 @@ public struct InstructionParser
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionParser"/> struct.
     /// </summary>
-    public InstructionParser(ObjectModuleConstructor? obj, ILogger? logger)
+    public InstructionParser(ModuleConstruction? obj, ILogger? logger)
     {
         _logger = logger;
         _expParser = new ExpressionParser(obj, logger);
@@ -69,7 +69,7 @@ public struct InstructionParser
         // Get instruction metadata from name
         if (!ConstantTables.TryGetInstruction(name, out _meta))
         {
-            _logger?.Log(Severity.Error, LogId.InvalidInstructionName, $"Instruction named '{name}' could not be found.");
+            _logger?.Log(Severity.Error, LogId.InvalidInstructionName, $"No instruction named '{name}'.");
             return false;
         }
 
@@ -261,7 +261,7 @@ public struct InstructionParser
         // Check that argument is register argument
         if (arg[0] != '$')
         {
-            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"Expected register argument. Found '{arg}'");
+            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"'{arg}' is not a valid register argument.");
             return false;
         }
 
@@ -269,7 +269,7 @@ public struct InstructionParser
         if (!ConstantTables.TryGetRegister(arg[1..], out register))
         {
             // Register does not exist in table
-            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"{arg} is not a valid register.");
+            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"No register '{arg}' exists.");
             return false;
         }
 

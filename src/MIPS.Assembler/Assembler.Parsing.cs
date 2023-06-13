@@ -74,6 +74,13 @@ public partial class Assembler
         // Parse instruction
         name = instruction[..nameEnd];
         args = instruction[nameEnd..].Trim().Split(',');
+
+        // Clear args to 0 if there are none
+        if (args.Length == 1 && string.IsNullOrWhiteSpace(args[0]))
+        {
+            args = Array.Empty<string>();
+        }
+
         return true;
     }
 

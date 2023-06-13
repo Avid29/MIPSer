@@ -1,14 +1,13 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
-using MIPS.Models;
 using MIPS.Models.Addressing.Enums;
 using System;
 using System.IO;
 
 namespace MIPS.Assembler.Models.Construction;
 
-public partial class ObjectModuleConstructor
+public partial class ModuleConstruction
 {
     /// <summary>
     /// Gets the current position in the text stream.
@@ -64,13 +63,5 @@ public partial class ObjectModuleConstructor
             Segment.Data => _data,
             _ => ThrowHelper.ThrowArgumentException<BinaryWriter>(nameof(segment), $"{nameof(segment)} must be either {Segment.Text} or {Segment.Data}.")
         };
-    }
-
-    /// <summary>
-    /// Gets the fully assembled object module.
-    /// </summary>
-    public ObjectModule Finish()
-    {
-        throw new NotImplementedException();
     }
 }

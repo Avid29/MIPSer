@@ -64,6 +64,8 @@ public readonly struct MarkerParser
 
             case "word":
                 return TryParseData<int>(name, args, out marker);
+            case "half":
+                return TryParseData<short>(name, args, out marker);
             case "byte":
                 return TryParseData<byte>(name, args, out marker);
 

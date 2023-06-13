@@ -59,7 +59,10 @@ public unsafe partial class Assembler
 
         // Try to parse instruction from name and arguments
         if (!_instructionParser.TryParse(name, args, out var instruction))
-            return;
+        {
+            // Explicitly replace invalid instruction with a nop
+            instruction = Instruction.NOP;
+        }
 
         // Append instruction to active segment
         Append(instruction);

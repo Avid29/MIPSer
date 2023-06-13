@@ -4,7 +4,7 @@ using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Models.Construction;
 
-public partial class ObjectModuleConstructor
+public partial class ModuleConstruction
 {
     /// <summary>
     /// Adds a symbol to the symbol table.

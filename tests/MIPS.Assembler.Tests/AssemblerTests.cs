@@ -2,6 +2,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace MIPS.Assembler.Tests;
 
@@ -11,18 +12,22 @@ public class AssemblerTests
     private const string AssemblyPath = @"..\..\..\ASMs\";
 
     [TestMethod("test1.asm")]
-    public void Test1() => RunTest("test1.asm");
+    public async Task Test1() => await RunTest("test1.asm");
 
-    private void RunTest(string fileName)
+    [TestMethod("failed1.asm")]
+    public async Task Fail1() => await RunTest("fail1.asm");
+
+    private async Task RunTest(string fileName)
     {
         var fullPath = Path.Combine(AssemblyPath, fileName);
         fullPath = Path.GetFullPath(fullPath);
         var stream = File.Open(fullPath, FileMode.Open);
-        RunTest(stream);
+        await RunTest(stream);
     }
 
-    private void RunTest(Stream stream)
+    private async Task RunTest(Stream stream)
     {
-        var module = Assembler.AssembleAsync(stream);
+        var module = await Assembler.AssembleAsync(stream);
+        module.GetObjectModule();
     }
 }

@@ -4,15 +4,14 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models.Construction;
 using MIPS.Assembler.Parsers;
-using MIPS.Models;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Instructions;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
+using Module = MIPS.Models.Module;
 
 namespace MIPS.Assembler;
 
@@ -30,7 +29,7 @@ namespace MIPS.Assembler;
 /// </summary>
 public partial class Assembler
 {
-    private readonly ObjectModuleConstructor _obj;
+    private readonly ModuleConstruction _obj;
     private readonly AssemblerLogger _logger;
     private Segment _activeSegment;
 
@@ -39,7 +38,7 @@ public partial class Assembler
     /// </summary>
     private Assembler()
     {
-        _obj = new ObjectModuleConstructor();
+        _obj = new ModuleConstruction();
         _logger = new AssemblerLogger();
         _activeSegment = Segment.Text;
 
@@ -90,7 +89,7 @@ public partial class Assembler
     /// Builds the object module from an assembler.
     /// </summary>
     /// <returns>The assembled object module.</returns>
-    public ObjectModule GetObjectModule() => _obj.Finish();
+    public Module GetObjectModule() => _obj.Finish();
 
     private async Task MakePass(StreamReader reader, Action<string> pass)
     {

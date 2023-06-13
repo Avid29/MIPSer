@@ -67,7 +67,7 @@ public class ExpressionParserTests
     private static void RunTest(string input, long expected, params (string name, long addr)[] macros)
     {
         // NOTE: This assumes symbol realization is not implemented!
-        var obj = new ObjectModuleConstructor();
+        var obj = new ModuleConstruction();
         foreach (var macro in macros)
         {
             var address = new SegmentAddress(macro.addr, Segment.Text);

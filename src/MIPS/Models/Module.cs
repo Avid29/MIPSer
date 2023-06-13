@@ -5,14 +5,14 @@ namespace MIPS.Models;
 /// <summary>
 /// A fully assembled object module.
 /// </summary>
-public class ObjectModule
+public class Module
 {
     private Stream _stream;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ObjectModule"/> class.
+    /// Initializes a new instance of the <see cref="Module"/> class.
     /// </summary>
-    public ObjectModule(Stream stream)
+    public Module(Stream stream)
     {
         _stream = stream;
     }

@@ -21,7 +21,7 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public struct ExpressionParser
 {
-    private readonly ObjectModuleConstructor? _obj;
+    private readonly ModuleConstruction? _obj;
     private readonly ILogger? _logger;
     private readonly IEvaluator<long> _evaluator;
     private ExpressionTree? _tree;
@@ -38,7 +38,7 @@ public struct ExpressionParser
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
     /// </summary>
-    public ExpressionParser(ObjectModuleConstructor? obj, ILogger? logger = null)
+    public ExpressionParser(ModuleConstruction? obj, ILogger? logger = null)
     {
         _obj = obj;
         _logger = logger;
@@ -96,14 +96,14 @@ public struct ExpressionParser
             // Parsing failed
             if (!success)
             {
-                _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Expression '{expression}' could not be parsed.");
+                _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Could not parse '{expression}' as an expression.");
                 return false;
             }
         }
 
         if (!TryFinish())
         {
-            _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Expression '{expression}' could not be parsed.");
+            _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Could not parse '{expression}' as an expression.");
             return false;
         }
 

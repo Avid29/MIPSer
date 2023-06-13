@@ -8,7 +8,13 @@ namespace MIPS.Models.Addressing.Enums;
 public enum Segment
 {
 #pragma warning disable CS1591
+
     Text,
+    ReadOnlyData,
     Data,
+    SmallInitializedData,
+    SmallUninitializedData,
+    UninitializedData,
+
 #pragma warning restore CS1591
 }
