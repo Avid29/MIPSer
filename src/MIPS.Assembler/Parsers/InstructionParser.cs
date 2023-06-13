@@ -35,7 +35,6 @@ public struct InstructionParser
     /// </summary>
     public InstructionParser() : this(null, null)
     {
-
     }
 
     /// <summary>
@@ -96,7 +95,7 @@ public struct InstructionParser
             InstructionType.R => Instruction.Create(_funcCode, _rs, _rt, _rd, _shift),
             InstructionType.I => Instruction.Create(_opCode, _rs, _rt, _immediate),
             InstructionType.J => Instruction.Create(_opCode, _address),
-            _ => ThrowHelper.ThrowInvalidDataException<Instruction>(""),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction>($"Invalid instruction type '{_meta.Type}'."),
         };
 
         return true;
@@ -104,6 +103,9 @@ public struct InstructionParser
 
     private bool TryParseArg(string arg, Argument type)
     {
+        // Trim whitespace from argument
+        arg = arg.Trim();
+
         switch (type)
         {
             // Register type argument
@@ -122,8 +124,7 @@ public struct InstructionParser
 
             // Invalid type
             default:
-                _logger?.Log(Severity.Error, LogId.InstructionIncorrectParsingMethod, $"Argument '{arg}' of type '{type}' is not within parsable type range.");
-                return false;
+                return ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument '{arg}' of type '{type}' is not within parsable type range.");
         }
     }
 
@@ -148,8 +149,7 @@ public struct InstructionParser
 
             // Invalid target type
             default:
-                _logger?.Log(Severity.Error, LogId.InstructionIncorrectParsingMethod, $"Argument '{arg}' of type '{target}' attempted to parse as a register.");
-                return false;
+                return ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument '{arg}' of type '{target}' attempted to parse as a register.");
         }
 
         if (!TryParseRegister(arg, out var register))
@@ -171,17 +171,46 @@ public struct InstructionParser
     /// </summary>
     private bool TryParseExpressionArg(string arg, Argument target)
     {
+        // Attempt to parse expression
         if (!_expParser.TryParse(arg, out var value))
-        {
-            // TODO: Log error and remove exception
-
-            ThrowHelper.ThrowArgumentException($"Argument '{arg}' of type '{target}' was not a valid expression.");
-        }
+            return false;
 
         // NOTE: Casting might truncate the value to fit the bit size.
         // This is the desired behavior, but when logging errors this
         // should be handled explicitly and drop an assembler warning.
         
+        // Determine the bits allowed by the 
+        int bitCount = target switch
+        {
+            Argument.Shift => 5,
+            Argument.Immediate => 16,
+            Argument.Address => 26,
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"Argument '{arg}' of type '{target}' attempted to parse as an expression."),
+        };
+
+        // Shift and Address are unsigned. Immediate is the only signed argument
+        bool signed = target is Argument.Immediate;
+
+        // Clean integer to fit within argument bit size and match signs.
+        switch (CleanInteger(ref value, bitCount, signed, out var original))
+        {
+            case 0:
+                // Integer was already clean
+                break;
+
+            case 1:
+                // Integer was negative, but needs to be unsigned.
+                // Also may have been truncated.
+                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"Expression '{arg}' evaluated to signed value {original}," +
+                                                                       $" but was cast to unsigned value and truncated to {bitCount}-bits, resulting in {value}.");
+                break;
+            case 2:
+                // Integer was truncated.
+                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"Expression '{arg}' evaluated to {original}," +
+                                                                       $" but was truncated to {bitCount}-bits, resulting in {value}.");
+                break;
+        }
+
         // Assign to appropriate instruction argument
         switch (target)
         {
@@ -194,9 +223,10 @@ public struct InstructionParser
             case Argument.Address:
                 _address = (uint)value;
                 return true;
+                
+            // Invalid target type
             default:
-                _logger?.Log(Severity.Error, LogId.InstructionIncorrectParsingMethod, $"Argument '{arg}' of type '{target}' attempted to parse as an expression.");
-                return false;
+                return ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument '{arg}' of type '{target}' attempted to parse as an expression.");
         }
     }
 
@@ -224,25 +254,22 @@ public struct InstructionParser
         return true;
     }
 
-    private bool TryParseRegister(string name, out Register register)
+    private bool TryParseRegister(string arg, out Register register)
     {
         register = Register.Zero;
 
-        // Trim whitespace from register string
-        name = name.Trim();
-
         // Check that argument is register argument
-        if (name[0] != '$')
+        if (arg[0] != '$')
         {
-            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"Expected register argument. Found '{name}'");
+            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"Expected register argument. Found '{arg}'");
             return false;
         }
 
         // Get register from table
-        if (!ConstantTables.TryGetRegister(name[1..], out register))
+        if (!ConstantTables.TryGetRegister(arg[1..], out register))
         {
             // Register does not exist in table
-            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"{name} is not a valid register.");
+            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"{arg} is not a valid register.");
             return false;
         }
 
@@ -256,9 +283,6 @@ public struct InstructionParser
     /// </remarks>
     private bool TokenizeAddressOffset(string arg, out string offset, out string register)
     {
-        // Trim whitespace 
-        arg = arg.Trim();
-
         offset = string.Empty;
         register = string.Empty;
 
@@ -267,12 +291,12 @@ public struct InstructionParser
         int regStart = arg.IndexOf('(');
         int regEnd = arg.IndexOf(')');
 
-        // Either end of the parenthesis were not found
+        // Parenthesis pair was not found
         // Or contains both an opening and closing parenthesis, but they are not matched.
-        // Or there was content following the register
+        // Or there was content following the parenthesis 
         if (regStart == -1 || regEnd == -1 || regStart > regEnd || regEnd != arg.Length - 1)
         {
-            ThrowHelper.ThrowArgumentException($"Argument '{arg}' is not a valid address offset.");
+            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '{arg}' is not a valid address offset.");
             return false;
         }
 
@@ -282,5 +306,33 @@ public struct InstructionParser
         register = arg[(regStart + 1)..regEnd];
 
         return true;
+    }
+    
+    /// <returns>
+    /// 0 if unchanged, 1 if signChanged (maybe also have been truncated), and 2 if truncated.
+    /// </returns>
+    private static int CleanInteger(ref long integer, int bitCount, bool signed, out long original)
+    {
+        original = integer;
+
+        // Truncate integer to bit count
+        long mask = (1 << bitCount) - 1;
+        integer &= mask;
+
+        // Check for sign change
+        if (!signed && original < 0)
+        {
+            // Remove sign from truncated integer
+            // NOTE: This assumes bitCount is less than 32
+
+            integer = (uint)integer;
+            return 1;
+        }
+
+        // Check if truncated
+        if (integer != original)
+            return 2;
+
+        return 0;
     }
 }

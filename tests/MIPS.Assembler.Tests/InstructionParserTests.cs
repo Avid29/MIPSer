@@ -20,6 +20,9 @@ public class InstructionParserTests
     private const string Jump = "j 1000";
     private const string JumpExpression = "j 10*10";
 
+    private const string SllWarnTruncate = "sll $t0, $s0, 33";
+    private const string SllWarnSigned = "sll $t0, $s0, -1";
+
     private const string XkcdFail = "xkcd $t0, $s0, $s1";
 
     [TestMethod(Add)]
@@ -70,34 +73,47 @@ public class InstructionParserTests
         Instruction expected = Instruction.Create(OperationCode.Jump, 100);
         RunTest(JumpExpression, expected);
     }
+
+    [TestMethod(SllWarnTruncate)]
+    public void SllWarnTruncateTest()
+    {
+        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 1);
+        RunTest(SllWarnTruncate, expected, LogId.IntegerTruncated);
+    }
+
+    [TestMethod(SllWarnSigned)]
+    public void SllWarnSignedTest()
+    {
+        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 31);
+        RunTest(SllWarnSigned, expected, LogId.IntegerTruncated);
+    }
     
     [TestMethod(XkcdFail)]
     public void XkdFailTest()
     {
-        RunFailTest(XkcdFail, LogId.InvalidInstructionName);
+        RunTest(XkcdFail, logId: LogId.InvalidInstructionName);
     }
 
-    private static void RunTest(string input, Instruction expected)
+    private static void RunTest(string input, Instruction? expected = null, LogId? logId = null)
     {
-        var parser = new InstructionParser();
+        bool succeeds = expected.HasValue;
 
-        TokenizeInstruction(input, out var name, out var args);
-        var success = parser.TryParse(name, args, out var actual);
-
-        Assert.IsTrue(success);
-        Assert.AreEqual(expected, actual);
-    }
-
-    private static void RunFailTest(string input, LogId logId)
-    {
         var logger = new AssemblerLogger();
         var parser = new InstructionParser(null, logger);
 
         TokenizeInstruction(input, out var name, out var args);
-        var success = parser.TryParse(name, args, out _);
+        var succeeded = parser.TryParse(name, args, out var actual);
 
-        Assert.IsFalse(success);
-        Assert.IsTrue(logger.Logs[0].Id == logId);
+        Assert.AreEqual(succeeds, succeeded);
+        if (expected.HasValue)
+        {
+            Assert.AreEqual(expected, actual);
+        }
+
+        if (logId.HasValue)
+        {
+            Assert.IsTrue(logger.Logs[0].Id == logId.Value);
+        }
     }
 
     private static void TokenizeInstruction(string line, out string name, out string[] args)

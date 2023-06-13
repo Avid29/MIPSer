@@ -9,13 +9,16 @@ public enum LogId
 {
     #pragma warning disable CS1591
 
-    // Instruction parser
+    // Instruction parser errors
     InvalidInstructionName,
     InvalidInstructionArgCount,
-    InstructionIncorrectParsingMethod,
     InvalidRegisterArgument,
+    InvalidAddressOffsetArgument,
 
-    // Expression parser
+    // Instruction parser warnings
+    IntegerTruncated,
+
+    // Expression parser errors
     InvalidImmediate
 
     #pragma warning restore CS1591
