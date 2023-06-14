@@ -23,7 +23,7 @@ public class WindowViewModel : ObservableRecipient
     {
         _messenger = messenger;
 
-        OpenFiles = new ObservableCollection<File>();
+        OpenFiles = new ObservableCollection<BindableFile>();
 
         CreateAnonymousFileCommand = new RelayCommand(CreateAnonymousFile);
     }
@@ -31,7 +31,7 @@ public class WindowViewModel : ObservableRecipient
     /// <summary>
     /// Gets an <see cref="ObservableCollection{T}"/> of open files.
     /// </summary>
-    public ObservableCollection<File> OpenFiles { get; }
+    public ObservableCollection<BindableFile> OpenFiles { get; }
 
     /// <summary>
     /// Gets a command that creates and opens an anonymous file.
@@ -40,6 +40,6 @@ public class WindowViewModel : ObservableRecipient
 
     private void CreateAnonymousFile()
     {
-        OpenFiles.Add(new File());
+        OpenFiles.Add(new BindableFile());
     }
 }

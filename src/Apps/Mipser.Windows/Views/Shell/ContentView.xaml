@@ -5,9 +5,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:Mipser.Bindables"
     mc:Ignorable="d">
 
-    <TabView TabItemsSource="{x:Bind ViewModel.OpenFiles, Mode=OneWay}" AddTabButtonCommand="{x:Bind ViewModel.CreateAnonymousFileCommand, Mode=OneWay}">
-
+    <TabView TabItemsSource="{x:Bind ViewModel.OpenFiles, Mode=OneWay}" IsAddTabButtonVisible="False">
+        <TabView.TabItemTemplate>
+            <DataTemplate x:DataType="data:BindableFile">
+                <!--* for unsaved and italics for anonymous-->
+                <TabViewItem Header="{x:Bind Name, Mode=OneWay}"/>
+            </DataTemplate>
+        </TabView.TabItemTemplate>
     </TabView>
 </UserControl>

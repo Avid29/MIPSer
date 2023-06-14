@@ -16,7 +16,7 @@
             </Grid.ColumnDefinitions>
             <MenuBar Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <MenuBarItem Title="File">
-                    <MenuFlyoutItem Text="New">
+                    <MenuFlyoutItem Text="New" Command="{x:Bind ViewModel.CreateAnonymousFileCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="N"/>
                         </MenuFlyoutItem.KeyboardAccelerators>

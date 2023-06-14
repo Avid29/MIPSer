@@ -1,6 +1,8 @@
 // Adam Dernis 2023
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
+using Mipser.ViewModels;
 
 namespace Mipser.Windows.Views.Shell;
 
@@ -15,5 +17,8 @@ public sealed partial class TitleBar : UserControl
     public TitleBar()
     {
         this.InitializeComponent();
+        DataContext = App.Current.Services.GetRequiredService<WindowViewModel>();
     }
+
+    private WindowViewModel ViewModel => (WindowViewModel)DataContext;
 }

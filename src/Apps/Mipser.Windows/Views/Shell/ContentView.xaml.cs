@@ -21,14 +21,4 @@ public sealed partial class ContentView : UserControl
     }
 
     private WindowViewModel ViewModel => (WindowViewModel)DataContext;
-
-    private void TabView_AddTabButtonClick(TabView sender, object args)
-    {
-        sender.TabItems.Add(new TabViewItem());
-    }
-
-    private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
-    {
-        sender.TabItems.Remove(args.Tab);
-    }
 }
