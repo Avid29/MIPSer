@@ -11,12 +11,10 @@ namespace MIPS.Assembler;
 
 public unsafe partial class Assembler
 {
-    private readonly MarkerParser _markerParser;
-    private ExpressionParser _expressionParser;
-    private InstructionParser _instructionParser;
-
     private void LinePass1(string line)
     {
+        var parser = new ExpressionParser(_obj, _logger);
+
         // Parse as macro
         if (TokenizeMacro(line, out var macro, out var expression))
         {
@@ -30,7 +28,7 @@ public unsafe partial class Assembler
                 return;
             }
 
-            if (!_expressionParser.TryParse(expression, out var address))
+            if (!parser.TryParse(expression, out var address))
                 return;
 
             if (address.IsRelocatable)
@@ -67,6 +65,8 @@ public unsafe partial class Assembler
 
     private void LinePass2(string line)
     {
+        var parser = new InstructionParser(_obj, _logger);
+
         // This line is a macro. Skip on pass2
         if (TokenizeMacro(line, out _, out _))
             return;
@@ -83,7 +83,7 @@ public unsafe partial class Assembler
                 return;
 
             // Try to parse instruction from name and arguments
-            if (!_instructionParser.TryParse(name, args, out var instruction))
+            if (!parser.TryParse(name, args, out var instruction))
             {
                 // Explicitly replace invalid instruction with a nop
                 instruction = Instruction.NOP;
@@ -101,8 +101,10 @@ public unsafe partial class Assembler
 
     private void HandleMarker(string markerStr)
     {
+        var parser = new MarkerParser();
+
         TokenizeMarker(markerStr, out var name, out var args);
-        if (!_markerParser.TryParseMarker(name, args, out var marker))
+        if (!parser.TryParseMarker(name, args, out var marker))
             return;
 
         Guard.IsNotNull(marker);

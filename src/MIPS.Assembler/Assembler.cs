@@ -41,10 +41,6 @@ public partial class Assembler
         _obj = new ModuleConstruction();
         _logger = new AssemblerLogger();
         _activeSection = Section.Text;
-
-        _markerParser = new MarkerParser();
-        _expressionParser = new ExpressionParser(_obj, _logger);
-        _instructionParser = new InstructionParser(_obj, _logger);
     }
 
     /// <summary>

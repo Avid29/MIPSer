@@ -17,8 +17,8 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public struct InstructionParser
 {
+    private ModuleConstruction? _obj;
     private ILogger? _logger;
-    private ExpressionParser _expParser;
 
     private InstructionMetadata _meta;
 
@@ -43,8 +43,8 @@ public struct InstructionParser
     /// </summary>
     public InstructionParser(ModuleConstruction? obj, ILogger? logger)
     {
+        _obj = obj;
         _logger = logger;
-        _expParser = new ExpressionParser(obj, logger);
         _meta = default;
         _opCode = default;
         _funcCode = default;
@@ -178,8 +178,10 @@ public struct InstructionParser
     /// </summary>
     private bool TryParseExpressionArg(string arg, Argument target)
     {
+        var parser = new ExpressionParser(_obj, _logger);
+
         // Attempt to parse expression
-        if (!_expParser.TryParse(arg, out var address))
+        if (!parser.TryParse(arg, out var address))
             return false;
 
         // NOTE: Casting might truncate the value to fit the bit size.
