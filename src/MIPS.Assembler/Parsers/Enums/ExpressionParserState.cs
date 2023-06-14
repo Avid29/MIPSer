@@ -17,7 +17,8 @@ public enum ExpressionParserState
     /// Marco or symbol.
     /// </remarks>
     Macro,
-    String,
+    Char,
+    CharClose,
     
     #pragma warning restore CS1591
 }

@@ -86,6 +86,12 @@ public struct ExpressionParser
                 case ExpressionParserState.Operator:
                     success = TryParseFromOperator(c);
                     break;
+                case ExpressionParserState.Char:
+                    success = TryParseFromChar(c);
+                    break;
+                case ExpressionParserState.CharClose:
+                    success = TryParseFromCharClose(c);
+                    break;
                 default:
                     ThrowHelper.ThrowArgumentOutOfRangeException($"Expression parser in invalid state '{_state}'");
                     return false;
@@ -128,6 +134,12 @@ public struct ExpressionParser
             return true;
         }
 
+        if (c is '\'')
+        {
+            _state = ExpressionParserState.Char;
+            return true;
+        }
+
         return false;
     }
 
@@ -164,10 +176,35 @@ public struct ExpressionParser
             return true;
         }
 
+
+
         return false;
     }
 
     private bool TryParseFromOperator(char c) => TryParseFromStart(c);
+
+    private bool TryParseFromChar(char c)
+    {
+        if (c is '\'')
+        {
+            _state = ExpressionParserState.CharClose;
+            return true;
+        }
+
+        _cache += c;
+        return true;
+    }
+
+    private bool TryParseFromCharClose(char c)
+    {
+        if (IsOperator(c, out var oper))
+        {
+            TryParseOperator(oper);
+            return true;
+        }
+
+        return false;
+    }
 
     private bool TryFinish()
     {
@@ -175,6 +212,7 @@ public struct ExpressionParser
         {
             case ExpressionParserState.Integer: return TryCompleteInteger();
             case ExpressionParserState.Macro: return TryCompleteMacro();
+            case ExpressionParserState.CharClose: return TryCompleteChar();
 
             case ExpressionParserState.Start:
             default: return false;
@@ -201,9 +239,7 @@ public struct ExpressionParser
         Guard.IsNotNull(_tree);
 
         if (!long.TryParse(_cache, out var result))
-        {
             return false;
-        }
 
         // Construct node
         var node = new AddressNode(result);
@@ -226,6 +262,21 @@ public struct ExpressionParser
 
         var node = new AddressNode(value);
         _tree.AddNode(node);
+        return true;
+    }
+
+    private bool TryCompleteChar()
+    {
+        Guard.IsNotNull(_tree);
+
+        // TODO: Handle char substitutes
+        if (!char.TryParse(_cache, out var result))
+            return false;
+
+        // Construct node
+        var node = new AddressNode(result);
+        _tree.AddNode(node);
+
         return true;
     }
 
