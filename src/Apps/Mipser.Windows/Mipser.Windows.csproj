@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows10.0.19041.0</TargetFramework>
@@ -14,7 +14,9 @@
   <ItemGroup>
     <None Remove="Controls\Editors\HexEditor.xaml" />
     <None Remove="Controls\Editors\TextEditor.xaml" />
-    <None Remove="MainWindow.xaml" />
+    <None Remove="Resources\Brushes.xaml" />
+    <None Remove="Views\Shell\ContentView.xaml" />
+    <None Remove="Views\Shell\TitleBar.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +31,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.3.230602002" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.22621.756" />
@@ -47,6 +50,11 @@
     <ProjectReference Include="..\Mipser.ViewModels\Mipser.ViewModels.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Views\Shell\ContentView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
     <Page Update="Controls\Editors\HexEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -58,6 +66,16 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Controls\Editors\TextEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Resources\Brushes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Shell\TitleBar.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

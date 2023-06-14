@@ -1,11 +1,17 @@
 ﻿// Adam Dernis 2023
 
+using Microsoft.UI.Xaml;
 using System;
 
 namespace Mipser.Windows;
 
 public partial class App
 {
+    /// <summary>
+    /// Gets the current <see cref="App"/> instance in use.
+    /// </summary>
+    public static new App Current => (App)Application.Current;
+
     /// <summary>
     /// Gets the <see cref="IServiceProvider"/> instance to resolve application services
     /// </summary>

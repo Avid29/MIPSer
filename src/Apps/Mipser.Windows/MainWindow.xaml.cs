@@ -15,5 +15,12 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         this.InitializeComponent();
+        ExtendTitleBar();
+    }
+
+    private void ExtendTitleBar()
+    {
+        //this.ExtendsContentIntoTitleBar = true;
+        //this.SetTitleBar(AppTitleBar);
     }
 }
