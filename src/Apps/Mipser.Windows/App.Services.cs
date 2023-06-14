@@ -9,6 +9,7 @@ using Mipser.ViewModels.Views;
 using Mipser.Windows.Services.Files;
 using Mipser.Windows.Services.Localization;
 using System;
+using WinRT;
 
 namespace Mipser.Windows;
 
@@ -24,6 +25,7 @@ public partial class App
 
             // ViewModels
             .AddSingleton<WindowViewModel>()
+            .AddSingleton<ExplorerViewModel>()
             .AddSingleton<OpenFilesViewModel>()
             .BuildServiceProvider();
     }

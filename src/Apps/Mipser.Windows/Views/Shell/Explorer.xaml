@@ -5,9 +5,40 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:selector="using:Mipser.Windows.Selectors"
+    xmlns:filedata="using:Mipser.Bindables.Files"
     mc:Ignorable="d">
 
+    <UserControl.Resources>
+
+        <DataTemplate x:Key="FileTemplate" x:DataType="filedata:BindableFile">
+            <TreeViewItem>
+                <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FolderTemplate" x:DataType="filedata:BindableFolder">
+            <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneWay}" HasUnrealizedChildren="{x:Bind ChildrenNotCalculated, Mode=OneWay}">
+                <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+            </TreeViewItem>
+        </DataTemplate>
+
+        <selector:FileItemTemplateSelector
+            x:Key="FileItemSelector"
+            BindableFileTemplate="{StaticResource FileTemplate}"
+            BindableFolderTemplate="{StaticResource FolderTemplate}"/>
+    </UserControl.Resources>
+
     <Grid>
-        <TextBlock Text="Explorer"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="{x:Bind ViewModel.RootFolder.Name, Mode=OneWay}"/>
+
+        <TreeView ItemsSource="{x:Bind ViewModel.RootNodes, Mode=OneWay}" ItemTemplateSelector="{StaticResource FileItemSelector}"
+                  Grid.Row="1">
+        </TreeView>
     </Grid>
 </UserControl>

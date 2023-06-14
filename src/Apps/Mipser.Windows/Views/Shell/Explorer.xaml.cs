@@ -1,6 +1,8 @@
 // Adam Dernis 2023
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
+using Mipser.ViewModels.Views;
 
 namespace Mipser.Windows.Views.Shell;
 
@@ -15,5 +17,8 @@ public sealed partial class Explorer : UserControl
     public Explorer()
     {
         this.InitializeComponent();
+        DataContext = App.Current.Services.GetRequiredService<ExplorerViewModel>();
     }
+
+    private ExplorerViewModel ViewModel => (ExplorerViewModel)DataContext;
 }

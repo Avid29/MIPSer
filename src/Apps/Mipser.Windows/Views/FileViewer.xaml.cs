@@ -1,7 +1,7 @@
 // Adam Dernis 2023
 
 using Microsoft.UI.Xaml.Controls;
-using Mipser.Bindables;
+using Mipser.Bindables.Files;
 
 namespace Mipser.Windows.Views;
 

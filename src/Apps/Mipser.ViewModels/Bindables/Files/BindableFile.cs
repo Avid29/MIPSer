@@ -1,16 +1,16 @@
 ﻿// Adam Dernis 2023
 
-using CommunityToolkit.Mvvm.ComponentModel;
+using Mipser.Bindables.Files.Abstract;
 using Mipser.Services.Files.Models;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Mipser.Bindables;
+namespace Mipser.Bindables.Files;
 
 /// <summary>
-/// An file in the content view.
+/// A file in the content view or explorer.
 /// </summary>
-public class BindableFile : ObservableObject
+public class BindableFile : BindableFilesItemBase
 {
     private readonly IFile? _file;
     private string? _contents;
@@ -32,14 +32,9 @@ public class BindableFile : ObservableObject
     }
 
     /// <summary>
-    /// Gets the name of the file.
-    /// </summary>
-    public string Name => _file?.Name ?? "NewFile"; // TODO: Localize
-
-    /// <summary>
     /// Gets if the file exists in storage, or just in memory.
     /// </summary>
-    public bool IsAnonymous => _file is null;
+    public bool IsAnonymous => Item is null;
 
     /// <summary>
     /// Gets file contents.
@@ -49,6 +44,9 @@ public class BindableFile : ObservableObject
         get => _contents;
         set => SetProperty(ref _contents, value);
     }
+
+    /// <inheritdoc/>
+    protected override IFilesItem? Item => _file;
 
     private async Task LoadContent()
     {

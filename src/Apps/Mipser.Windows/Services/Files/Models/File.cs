@@ -9,7 +9,7 @@ using Windows.Storage;
 namespace Mipser.Windows.Services.Files.Models;
 
 /// <summary>
-/// A <see cref="IFile"/> implementation wrapping <see cref="StorageFile"/>.
+/// An <see cref="IFile"/> implementation wrapping <see cref="StorageFile"/>.
 /// </summary>
 public sealed class File : IFile
 {

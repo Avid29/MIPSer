@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
-using Mipser.Bindables;
+using Mipser.Bindables.Files;
 using Mipser.Messages.Files;
 using Mipser.ViewModels.Views;
 

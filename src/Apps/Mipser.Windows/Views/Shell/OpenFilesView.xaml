@@ -5,13 +5,13 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:data="using:Mipser.Bindables"
+    xmlns:filesdata="using:Mipser.Bindables.Files"
     xmlns:views="using:Mipser.Windows.Views"
     mc:Ignorable="d">
 
     <TabView SelectedItem="{x:Bind ViewModel.CurrentFile, Mode=TwoWay}" TabItemsSource="{x:Bind ViewModel.OpenFiles, Mode=OneWay}" TabCloseRequested="TabView_TabCloseRequested" IsAddTabButtonVisible="False">
         <TabView.TabItemTemplate>
-            <DataTemplate x:DataType="data:BindableFile">
+            <DataTemplate x:DataType="filesdata:BindableFile">
                 <!--* for unsaved and italics for anonymous-->
                 <TabViewItem Header="{x:Bind Name, Mode=OneWay}">
                     <views:FileViewer/>

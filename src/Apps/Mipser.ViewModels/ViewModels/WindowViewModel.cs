@@ -26,6 +26,7 @@ public class WindowViewModel : ObservableRecipient
 
         CreateNewFileCommand = new RelayCommand(CreateNewFile);
         PickAndOpenFileCommand = new RelayCommand(PickAndOpenFile);
+        PickAndOpenFolderCommand = new RelayCommand(PickAndOpenFolder);
         CloseFileCommand = new RelayCommand(CloseFile);
     }
 
@@ -40,6 +41,11 @@ public class WindowViewModel : ObservableRecipient
     public RelayCommand PickAndOpenFileCommand { get; }
 
     /// <summary>
+    /// Gets a command that picks and opens a folder.
+    /// </summary>
+    public RelayCommand PickAndOpenFolderCommand { get; }
+
+    /// <summary>
     /// Gets a command that closes the currently open file.
     /// </summary>
     public RelayCommand CloseFileCommand { get; }
@@ -47,6 +53,8 @@ public class WindowViewModel : ObservableRecipient
     private void CreateNewFile() => _messenger.Send(new FileCreateNewRequestMessage());
 
     private void PickAndOpenFile() => _messenger.Send(new FilePickAndOpenRequestMessage());
+
+    private void PickAndOpenFolder() => _messenger.Send(new FolderPickAndOpenRequestMessage());
 
     private void CloseFile() => _messenger.Send(new FileCloseRequestMessage());
 }

@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2023
 
-using Mipser.Bindables;
+using Mipser.Bindables.Files;
 
 namespace Mipser.Messages.Files;
 

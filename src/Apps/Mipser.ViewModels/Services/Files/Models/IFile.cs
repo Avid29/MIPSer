@@ -8,18 +8,8 @@ namespace Mipser.Services.Files.Models;
 /// <summary>
 /// An interface for a file.
 /// </summary>
-public interface IFile
+public interface IFile : IFilesItem
 {
-    /// <summary>
-    /// Gets the name of the file.
-    /// </summary>
-    string Name { get; }
-
-    /// <summary>
-    /// Gets the path of the file.
-    /// </summary>
-    string Path { get; }
-
     /// <summary>
     /// Opens a <see cref="Stream"/> for reading from the file.
     /// </summary>

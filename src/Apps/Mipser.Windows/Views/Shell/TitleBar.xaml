@@ -27,7 +27,7 @@
                                 <KeyboardAccelerator Modifiers="Control" Key="O"/>
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
-                        <MenuFlyoutItem Text="Open Folder">
+                        <MenuFlyoutItem Text="Open Folder" Command="{x:Bind ViewModel.PickAndOpenFolderCommand, Mode=OneWay}">
                             <MenuFlyoutItem.KeyboardAccelerators>
                                 <KeyboardAccelerator Modifiers="Control,Shift" Key="O"/>
                             </MenuFlyoutItem.KeyboardAccelerators>

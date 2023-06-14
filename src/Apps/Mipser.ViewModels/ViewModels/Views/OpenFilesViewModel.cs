@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using Mipser.Bindables;
+using Mipser.Bindables.Files;
 using Mipser.Messages.Files;
 using Mipser.Services.Files;
 using System.Collections.ObjectModel;
@@ -32,14 +32,6 @@ public class OpenFilesViewModel : ObservableRecipient
         IsActive = true;
     }
 
-    /// <inheritdoc/>
-    protected override void OnActivated()
-    {
-        _messenger.Register<OpenFilesViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.CreateNewFile());
-        _messenger.Register<OpenFilesViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFileAsync());
-        _messenger.Register<OpenFilesViewModel, FileCloseRequestMessage>(this, (r, m) => r.CloseFile(m.File));
-    }
-
     /// <summary>
     /// Gets or sets the currently selected file.
     /// </summary>
@@ -53,6 +45,14 @@ public class OpenFilesViewModel : ObservableRecipient
     /// Gets an <see cref="ObservableCollection{T}"/> of open files.
     /// </summary>
     public ObservableCollection<BindableFile> OpenFiles { get; }
+
+    /// <inheritdoc/>
+    protected override void OnActivated()
+    {
+        _messenger.Register<OpenFilesViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.CreateNewFile());
+        _messenger.Register<OpenFilesViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFileAsync());
+        _messenger.Register<OpenFilesViewModel, FileCloseRequestMessage>(this, (r, m) => r.CloseFile(m.File));
+    }
      
     /// <summary>
     /// Creates and opens a new anonymous file.
@@ -60,7 +60,7 @@ public class OpenFilesViewModel : ObservableRecipient
     private void CreateNewFile() => OpenFiles.Add(new BindableFile());
 
     /// <summary>
-    /// 
+    /// Picks and opens a file.
     /// </summary>
     private async Task PickAndOpenFileAsync()
     {

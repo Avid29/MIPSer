@@ -38,6 +38,24 @@ public class FilesService : IFilesService
     }
     
     /// <inheritdoc/>
+    public async Task<IFolder?> TryPickAndOpenFolderAsync()
+    {
+        var picker = new FolderPicker
+        {
+            ViewMode = PickerViewMode.List,
+            FileTypeFilter = { "*" },
+        };
+
+        InitWindow(picker);
+        var storageFolder = await picker.PickSingleFolderAsync();
+
+        if (storageFolder is null)
+            return null;
+
+        return new Folder(storageFolder);
+    }
+
+    /// <inheritdoc/>
     public async Task<IFile?> TryPickAndSaveFileAsync(string filename)
     {
         var picker = new FileSavePicker
@@ -58,7 +76,6 @@ public class FilesService : IFilesService
 
     private void InitWindow(object picker)
     {
-
         nint windowHandle = WindowNative.GetWindowHandle(App.Current.Window);
         InitializeWithWindow.Initialize(picker, windowHandle);
     }
