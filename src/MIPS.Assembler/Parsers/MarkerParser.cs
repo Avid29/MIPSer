@@ -54,6 +54,10 @@ public readonly struct MarkerParser
             case "data":
                 return TryParseSegmentMarker(name, out marker);
 
+            // Global References
+            case "globl":
+                return TryParseGlobal(args, out marker);
+
             // Align
             case "align":
                 return TryParseAlignMarker(args, out marker);
@@ -89,6 +93,27 @@ public readonly struct MarkerParser
         };
 
         marker = new SectionMarker(section);
+        return true;
+    }
+
+    private bool TryParseGlobal(string[] args, out Marker? marker)
+    {
+        marker = null;
+
+        // Global only takes one argument
+        if (args.Length != 1)
+        {
+            _logger?.Log(Severity.Error, LogId.InvalidMarkerArgCount, $".globl only takes one argument. Cannot parse {args.Length} arguments.");
+            return false;
+        }
+
+        var arg = args[0].Trim();
+
+        var parser = new SymbolParser(_logger);
+        if (!parser.ValidateSymbolName(arg))
+            return false;
+
+        marker = new GlobalMarker(arg);
         return true;
     }
 
