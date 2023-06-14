@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Mvvm.ComponentModel;
+using Mipser.Services.Files.Models;
 using System.IO;
 
 namespace Mipser.Bindables;
@@ -10,30 +11,30 @@ namespace Mipser.Bindables;
 /// </summary>
 public class BindableFile : ObservableObject
 {
+    private readonly IFile? _file;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFile"/> class.
     /// </summary>
     public BindableFile()
     {
-        Name = "NewFile";
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFile"/> class.
     /// </summary>
-    public BindableFile(FileStream fileStream)
+    public BindableFile(IFile file)
     {
-        Name = Path.GetFileName(fileStream.Name);
+        _file = file;
     }
-
 
     /// <summary>
     /// Gets the name of the file.
     /// </summary>
-    public string Name { get; }
+    public string Name => _file?.Name ?? "NewFile"; // TODO: Localize
 
     /// <summary>
     /// Gets if the file exists in storage, or just in memory.
     /// </summary>
-    public bool IsAnonymous => true;
+    public bool IsAnonymous => _file is null;
 }

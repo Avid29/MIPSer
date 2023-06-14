@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Bindables;
+using Mipser.Messages.Files;
 using System.Collections.ObjectModel;
 
 namespace Mipser.ViewModels;
@@ -23,32 +24,21 @@ public class WindowViewModel : ObservableRecipient
     {
         _messenger = messenger;
 
-        OpenFiles = new ObservableCollection<BindableFile>();
-
-        CreateAnonymousFileCommand = new RelayCommand(CreateAnonymousFile);
+        CreateNewFileCommand = new RelayCommand(CreateNewFile);
+        PickAndOpenFileCommand = new RelayCommand(PickAndOpenFile);
     }
-
-    /// <summary>
-    /// Gets an <see cref="ObservableCollection{T}"/> of open files.
-    /// </summary>
-    public ObservableCollection<BindableFile> OpenFiles { get; }
 
     /// <summary>
     /// Gets a command that creates and opens an anonymous file.
     /// </summary>
-    public RelayCommand CreateAnonymousFileCommand { get; }
+    public RelayCommand CreateNewFileCommand { get; }
 
     /// <summary>
-    /// Creates and opens a new anonymous file.
+    /// Gets a command that creates and opens an anonymous file.
     /// </summary>
-    public void CreateAnonymousFile() => OpenFiles.Add(new BindableFile());
+    public RelayCommand PickAndOpenFileCommand { get; }
 
-    /// <summary>
-    /// Closes a file.
-    /// </summary>
-    /// <remarks>
-    /// Does not save the file.
-    /// </remarks>
-    /// <param name="file"></param>
-    public void CloseFile(BindableFile file) => OpenFiles.Remove(file);
+    private void CreateNewFile() => _messenger.Send(new FileCreateNewRequestMessage());
+
+    private void PickAndOpenFile() => _messenger.Send(new FilePickAndOpenRequestMessage());
 }

@@ -13,6 +13,11 @@ public partial class App
     public static new App Current => (App)Application.Current;
 
     /// <summary>
+    /// Gets the app current window.
+    /// </summary>
+    public Window? Window { get; private set; }
+
+    /// <summary>
     /// Gets the <see cref="IServiceProvider"/> instance to resolve application services
     /// </summary>
     public IServiceProvider Services { get; }

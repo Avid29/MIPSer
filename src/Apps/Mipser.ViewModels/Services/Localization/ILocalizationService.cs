@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Mipser.Services.Localization;
 
 /// <summary>
-/// An interface for a localization service used in the app.
+/// An interface for a localization service
 /// </summary>
 public interface ILocalizationService
 {

@@ -27,7 +27,7 @@
             </Grid.ColumnDefinitions>
 
             <!--Content View-->
-            <shell:ContentView/>
+            <shell:OpenFilesView/>
 
             <shell:Explorer Grid.Column="1"/>
         </Grid>

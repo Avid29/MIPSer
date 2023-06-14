@@ -23,9 +23,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{F60E28CC-9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mipser", "src\Apps\Mipser\Mipser.csproj", "{CB515D95-D316-4961-B121-8101E8FB92A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mipser.Windows", "src\Apps\Mipser.Windows\Mipser.Windows.csproj", "{997942E8-88F0-4BCB-BF3C-679382700815}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mipser.Windows", "src\Apps\Mipser.Windows\Mipser.Windows.csproj", "{997942E8-88F0-4BCB-BF3C-679382700815}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mipser.ViewModels", "src\Apps\Mipser.ViewModels\Mipser.ViewModels.csproj", "{C7927310-2349-4CDD-822C-E2BA44CD5975}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mipser.ViewModels", "src\Apps\Mipser.ViewModels\Mipser.ViewModels.csproj", "{C7927310-2349-4CDD-822C-E2BA44CD5975}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

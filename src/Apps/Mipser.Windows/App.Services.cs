@@ -2,8 +2,11 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using Mipser.Services.Files;
 using Mipser.Services.Localization;
 using Mipser.ViewModels;
+using Mipser.ViewModels.Views;
+using Mipser.Windows.Services.Files;
 using Mipser.Windows.Services.Localization;
 using System;
 
@@ -17,9 +20,11 @@ public partial class App
         return new ServiceCollection()
             .AddSingleton<IMessenger, WeakReferenceMessenger>()
             .AddSingleton<ILocalizationService, LocalizationService>()
+            .AddSingleton<IFilesService, FilesService>()
 
             // ViewModels
             .AddSingleton<WindowViewModel>()
+            .AddSingleton<OpenFilesViewModel>()
             .BuildServiceProvider();
     }
 }

@@ -16,13 +16,13 @@
             </Grid.ColumnDefinitions>
             <MenuBar Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <MenuBarItem Title="File">
-                    <MenuFlyoutItem Text="New File" Command="{x:Bind ViewModel.CreateAnonymousFileCommand, Mode=OneWay}">
+                    <MenuFlyoutItem Text="New File" Command="{x:Bind ViewModel.CreateNewFileCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="N"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                     <MenuFlyoutSubItem Text="Open">
-                        <MenuFlyoutItem Text="Open File">
+                        <MenuFlyoutItem Text="Open File" Command="{x:Bind ViewModel.PickAndOpenFileCommand, Mode=OneWay}">
                             <MenuFlyoutItem.KeyboardAccelerators>
                                 <KeyboardAccelerator Modifiers="Control" Key="O"/>
                             </MenuFlyoutItem.KeyboardAccelerators>
