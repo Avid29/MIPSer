@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<RootNamespace>Mipser</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MIPS.Assembler\MIPS.Assembler.csproj" />
+    <ProjectReference Include="..\..\MIPS.Interpreter\MIPS.Interpreter.csproj" />
+  </ItemGroup>
+
+</Project>

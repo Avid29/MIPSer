@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Mipser.Windows (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Mipser.Windows (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
