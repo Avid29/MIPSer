@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2023
 
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.UI.Xaml;
 
 namespace Mipser.Windows;
@@ -17,6 +18,9 @@ public partial class App : Application
     /// </summary>
     public App()
     {
+        Services = ConfigureServices();
+        Ioc.Default.ConfigureServices(Services);
+
         this.InitializeComponent();
     }
 

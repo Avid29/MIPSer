@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\MIPS.Assembler\MIPS.Assembler.csproj" />
     <ProjectReference Include="..\..\MIPS.Interpreter\MIPS.Interpreter.csproj" />
   </ItemGroup>
