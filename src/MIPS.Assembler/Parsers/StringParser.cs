@@ -35,11 +35,17 @@ public struct StringParser
         // Trim whitespace
         input = input.Trim();
 
-        // Ensure string begins and ends with quotes
-        if (input[0] != '"')
+        if (string.IsNullOrWhiteSpace(input))
             return false;
 
-        foreach (char c in input[..^1])
+        // Ensure string begins and ends with quotes
+        if (input[0] != '"' || input[^1] != '"')
+        {
+            _logger?.Log(Severity.Error, LogId.NotAString, $"'{input}' is not a string.");
+            return false;
+        }
+
+        foreach (char c in input[1..^1])
         {
             if (_escapeState)
             {
@@ -90,11 +96,13 @@ public struct StringParser
             _ => (char)0,
         };
 
-        if (c == (char)0)
+        if (e == (char)0)
         {
             _logger?.Log(Severity.Error, LogId.UnrecognizedEscapeSequence, $"'\\{c}' was not a recognized escape sequence.");
             return false;
         }
+
+        literal += e;
 
         _escapeState = false;
         return true;

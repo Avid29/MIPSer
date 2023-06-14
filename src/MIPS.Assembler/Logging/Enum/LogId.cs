@@ -38,6 +38,7 @@ public enum LogId
     InvalidDirectiveArgCount,
 
     // String parsing errors
+    NotAString,
     UnrecognizedEscapeSequence,
     UnescapedQuoteInString,
 
