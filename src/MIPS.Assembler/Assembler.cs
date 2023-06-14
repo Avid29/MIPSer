@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
-using MIPS.Assembler.Models.Construction;
+using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Parsers;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Module = MIPS.Models.Module;
+using Module = MIPS.Models.Modules.Module;
 
 namespace MIPS.Assembler;
 
@@ -31,7 +31,7 @@ public partial class Assembler
 {
     private readonly ModuleConstruction _obj;
     private readonly AssemblerLogger _logger;
-    private Segment _activeSegment;
+    private Section _activeSection;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Assembler"/> class.
@@ -40,7 +40,7 @@ public partial class Assembler
     {
         _obj = new ModuleConstruction();
         _logger = new AssemblerLogger();
-        _activeSegment = Segment.Text;
+        _activeSection = Section.Text;
 
         _markerParser = new MarkerParser();
         _instructionParser = new InstructionParser(_obj, _logger);
@@ -49,15 +49,15 @@ public partial class Assembler
     /// <summary>
     /// Gets the current segment address.
     /// </summary>
-    internal SegmentAddress CurrentAddress
+    internal Address CurrentAddress
     {
         get
         {
-            return _activeSegment switch
+            return _activeSection switch
             {
-                Segment.Text => new SegmentAddress(_obj.TextPosition, Segment.Text),
-                Segment.Data => new SegmentAddress(_obj.DataPosition, Segment.Data),
-                _ => ThrowHelper.ThrowArgumentException<SegmentAddress>(nameof(_activeSegment)),
+                Section.Text => new Address(_obj.TextPosition, Section.Text),
+                Section.Data => new Address(_obj.DataPosition, Section.Data),
+                _ => ThrowHelper.ThrowArgumentException<Address>(nameof(_activeSection)),
             };
         }
     }
@@ -124,7 +124,7 @@ public partial class Assembler
     private void Append(params byte[] bytes)
     {
         // Append data
-        _obj.Append(_activeSegment, bytes);
+        _obj.Append(_activeSection, bytes);
     }
 
     private void Append(Instruction instruction)
@@ -137,10 +137,10 @@ public partial class Assembler
         Append(new byte[byteCount]);
     }
 
-    private void Align(int boundary) => _obj.Align(_activeSegment, boundary);
+    private void Align(int boundary) => _obj.Align(_activeSection, boundary);
 
-    private void SetActiveSegment(Segment segment)
+    private void SetActiveSegment(Section section)
     {
-        _activeSegment = segment;
+        _activeSection = section;
     }
 }

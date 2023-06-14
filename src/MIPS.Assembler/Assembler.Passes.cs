@@ -81,8 +81,8 @@ public unsafe partial class Assembler
     {
         switch (marker)
         {
-            case SegmentMarker segment:
-                SetActiveSegment(segment.ActiveSegment);
+            case SectionMarker segment:
+                SetActiveSegment(segment.ActiveSection);
                 break;
 
             case AlignMarker align:

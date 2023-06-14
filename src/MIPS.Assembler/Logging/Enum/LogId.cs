@@ -18,6 +18,9 @@ public enum LogId
     // Instruction parser warnings
     IntegerTruncated,
 
+    // Instruction parser messages
+    ZeroRegWriteBack,
+
     // Expression parser errors
     UnparsableExpression,
 

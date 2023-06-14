@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2023
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MIPS.Assembler.Models.Construction;
+using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Parsers;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
@@ -61,7 +61,7 @@ public class ExpressionParserTests
     {
         var parser = new ExpressionParser();
         _ = parser.TryParse(input, out var actual);
-        Assert.AreEqual(expected, actual);
+        Assert.AreEqual(expected, actual.Value);
     }
 
     private static void RunTest(string input, long expected, params (string name, long addr)[] macros)
@@ -70,12 +70,12 @@ public class ExpressionParserTests
         var obj = new ModuleConstruction();
         foreach (var macro in macros)
         {
-            var address = new SegmentAddress(macro.addr, Segment.Text);
+            var address = new Address(macro.addr, Section.Text);
             obj.TryDefineSymbol(macro.name, address);
         }
 
         var parser = new ExpressionParser(obj);
         _ = parser.TryParse(input, out var actual);
-        Assert.AreEqual(expected, actual);
+        Assert.AreEqual(expected, actual.Value);
     }
 }

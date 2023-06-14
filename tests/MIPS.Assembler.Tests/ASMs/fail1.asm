@@ -1,8 +1,5 @@
 ﻿# Adam Dernis 2023
 
-#
-# This program is meant to test some basic failures.
-#
 # Features:
 # ------------------
 # Label usage:	Entry only
@@ -29,7 +26,8 @@ main:
 
 	jal    1048576
 	
-	sll    $zero, $hero, 0		# Not a valid register
+	sll    $zero, $zero, 0		# Warning: No operation
+	sll    $t0, $s0, 32			# Warning: Truncation
 	add    $a0, $v0, $zero
-	ori    $v0, $zero, 17
+	ori    $v0, $hero, 17		# Not a valid register
 	syscall

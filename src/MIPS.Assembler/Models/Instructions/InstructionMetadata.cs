@@ -8,7 +8,7 @@ namespace MIPS.Assembler.Models.Instructions;
 /// <summary>
 /// A struct containing metadata on an instruction.
 /// </summary>
-public struct InstructionMetadata
+public readonly struct InstructionMetadata
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.

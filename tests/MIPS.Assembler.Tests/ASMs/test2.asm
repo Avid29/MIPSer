@@ -2,7 +2,7 @@
 
 # Features:
 # ------------------
-# Label usage:	Entry only
+# Label usage:	Yes
 # Macros:		No
 # Jumps:		No
 # Branches:		No
@@ -12,5 +12,5 @@
 
 main:
 	ori		$s0,	$zero,	10
-	ori		$s1,	$zero,	10
+	ori		$s1,	$zero,	main
 	add		$t0,	$s0,	$s1

@@ -2,7 +2,7 @@
 
 using MIPS.Models.Addressing;
 
-namespace MIPS.Assembler.Models.Construction;
+namespace MIPS.Assembler.Models.Modules;
 
 public partial class ModuleConstruction
 {
@@ -12,15 +12,15 @@ public partial class ModuleConstruction
     /// <param name="name">The name of the symbol.</param>
     /// <param name="value">The value of the symbol.</param>
     /// <returns><see langword="false"/>if the symbol already exists. <see langword="true"/> otherwise.</returns>
-    public bool TryDefineSymbol(string name, SegmentAddress value)
+    public bool TryDefineSymbol(string name, Address value)
     {
         // Check if table already contains symbol
-        if (_symbols.ContainsKey(name))
+        if (_definitions.ContainsKey(name))
         {
             return false;
         }
 
-        _symbols.Add(name, value);
+        _definitions.Add(name, value);
         return true;
     }
 
@@ -30,19 +30,29 @@ public partial class ModuleConstruction
     /// <param name="name">The name of the symbol.</param>
     /// <param name="value">The realized value of the symbol.</param>
     /// <returns><see cref="true"/> if the symbol exists, <see cref="false"/> otherwise.</returns>
-    public bool TryGetRealizedSymbol(string name, out long value)
+    public bool TryGetSymbol(string name, out Address value)
     {
-        if (!_symbols.ContainsKey(name))
+        if (!_definitions.ContainsKey(name))
         {
-            value = -1;
+            value = default;
             return false;
         }
 
-        var segmentAddress = _symbols[name];
+        var address = _definitions[name];
 
-        // TODO: Apply symbol offset by segment
-        value = segmentAddress.Address;
-
+        value = address;
         return true;
+    }
+
+    /// <summary>
+    /// Attempts to make a reference to a symbol.
+    /// </summary>
+    /// <param name="location">The location the symbol is referenced.</param>
+    /// <param name="symbol">The symbol referenced.</param>
+    /// <returns>Whether or not a symbol reference was made.</returns>
+    public bool TryMakeReference(Address location, string symbol)
+    {
+        // TODO:
+        return false;
     }
 }

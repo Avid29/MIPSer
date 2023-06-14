@@ -5,7 +5,7 @@ using MIPS.Models.Addressing.Enums;
 using System;
 using System.IO;
 
-namespace MIPS.Assembler.Models.Construction;
+namespace MIPS.Assembler.Models.Modules;
 
 public partial class ModuleConstruction
 {
@@ -22,28 +22,28 @@ public partial class ModuleConstruction
     /// <summary>
     /// Appends an array of bytes to the end of the specified segment.
     /// </summary>
-    /// <param name="segment">The segment to append to</param>
+    /// <param name="section">The segment to append to</param>
     /// <param name="bytes">The bytes to append to the end of the buffer.</param>
     /// <exception cref="ArgumentException"/>
-    public void Append(Segment segment, params byte[] bytes)
+    public void Append(Section section, params byte[] bytes)
     {
         // Select buffer and write bytes
-        Stream buffer = GetSegmentStream(segment);
+        Stream buffer = GetSegmentStream(section);
         buffer.Write(bytes);
     }
 
     /// <summary>
     /// Aligns a segment to an n-size boundary.
     /// </summary>
-    /// <param name="segment">The segment to align.</param>
+    /// <param name="section">The segment to align.</param>
     /// <param name="boundary">The alignment boundary.</param>
-    public void Align(Segment segment, int boundary)
+    public void Align(Section section, int boundary)
     {
         // Scale boundary by power of 2.
         boundary = 1 << boundary;
 
         // Select buffer and get alignment offset
-        Stream stream = GetSegmentStream(segment);
+        Stream stream = GetSegmentStream(section);
         int offset = (int)stream.Length % boundary;
 
         // Already aligned
@@ -52,7 +52,7 @@ public partial class ModuleConstruction
 
         // Append offset bytes
         var append =  new byte[offset];
-        Append(segment, append);
+        Append(section, append);
     }
 
     /// <summary>
@@ -64,13 +64,13 @@ public partial class ModuleConstruction
         _data.Position = 0;
     }
 
-    private Stream GetSegmentStream(Segment segment)
+    private Stream GetSegmentStream(Section section)
     {
-        return segment switch
+        return section switch
         {
-            Segment.Text => _text,
-            Segment.Data => _data,
-            _ => ThrowHelper.ThrowArgumentException<Stream>(nameof(segment), $"{nameof(segment)} must be either {Segment.Text} or {Segment.Data}.")
+            Section.Text => _text,
+            Section.Data => _data,
+            _ => ThrowHelper.ThrowArgumentException<Stream>(nameof(section), $"{nameof(section)} must be either {Section.Text} or {Section.Data}.")
         };
     }
 }

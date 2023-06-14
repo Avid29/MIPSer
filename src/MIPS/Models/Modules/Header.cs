@@ -1,9 +1,10 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Extensions.System.IO;
 using System.Diagnostics.CodeAnalysis;
 
-namespace MIPS.Models;
+namespace MIPS.Models.Modules;
 
 /// <summary>
 /// A struct containing the module header info.
@@ -14,7 +15,7 @@ public unsafe struct Header
     private ushort _version;
     private uint _flags;
     private uint _entryPoint;
-    
+
     [SuppressMessage("Usage", "CS0649", Justification = "Written to unsafely with  indexing.")]
     private fixed uint _sizes[10];
 

@@ -2,11 +2,11 @@
 
 using MIPS.Models;
 using MIPS.Models.Addressing;
-using System;
+using MIPS.Models.Modules;
 using System.Collections.Generic;
 using System.IO;
 
-namespace MIPS.Assembler.Models.Construction;
+namespace MIPS.Assembler.Models.Modules;
 
 /// <summary>
 /// An object module in construction.
@@ -16,7 +16,8 @@ public partial class ModuleConstruction
     private const ushort MAGIC = 0xFA_CE;
     private const ushort VERSION = 0x2C_C6;
 
-    private readonly Dictionary<string, SegmentAddress> _symbols;
+    private readonly Dictionary<string, Address> _definitions;
+    private readonly Dictionary<Address, string> _references;
 
     private readonly Stream _text;
     private readonly Stream _data;
@@ -49,7 +50,8 @@ public partial class ModuleConstruction
         _text = text;
         _data = data;
 
-        _symbols = new Dictionary<string, SegmentAddress>();
+        _definitions = new Dictionary<string, Address>();
+        _references = new Dictionary<Address, string>();
     }
 
     /// <summary>

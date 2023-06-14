@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2023
 
-namespace MIPS.Models;
+namespace MIPS.Models.Modules;
 
 /// <summary>
 /// A fully assembled object module.
