@@ -30,16 +30,11 @@ public partial class Assembler
         label = null;
         instruction = null;
         marker = null;
-
         // Find and parse label if present
         int labelEnd = line.IndexOf(':');
         if (labelEnd != -1)
         {
             label = line[..labelEnd].Trim();
-
-            // Ensure label is legal
-            if (!ValidateSymbolName(label))
-                label = null;
 
             // Trim label from line
             line = line[(labelEnd+1)..];
@@ -92,34 +87,6 @@ public partial class Assembler
     }
 
     private bool TokenizeMarker(string marker, out string name, out string[] args) => TokenizeInstruction(marker, out name, out args);
-
-    private bool ValidateSymbolName(string symbol)
-    {
-        symbol = symbol.Trim();
-
-        // No characters may be whitespace
-        if (symbol.Any(char.IsWhiteSpace))
-        {
-            _logger.Log(Severity.Error, LogId.IllegalSymbolName, $"'{symbol}' is not a legal symbol name. Symbols may not contain whitespace.");
-            return false;
-        }
-
-        // Labels may not begin with a digit
-        if (char.IsDigit(symbol[0]))
-        {
-            _logger.Log(Severity.Error, LogId.IllegalSymbolName, $"'{symbol}' is not a legal symbol name. Symbols may not begin with a digit.");
-            return false;
-        }
-
-        // All characters must be a letter or a digit
-        if (!symbol.All(char.IsLetterOrDigit))
-        {
-            _logger.Log(Severity.Error, LogId.IllegalSymbolName, $"'{symbol}' is not a legal symbol name.");
-            return false;
-        }
-
-        return true;
-    }
 
     private static void CleanLine(ref string line)
     {

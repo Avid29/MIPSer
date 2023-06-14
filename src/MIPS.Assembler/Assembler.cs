@@ -3,7 +3,6 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models.Modules;
-using MIPS.Assembler.Parsers;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Instructions;

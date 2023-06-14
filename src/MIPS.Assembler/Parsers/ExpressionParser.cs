@@ -18,7 +18,7 @@ namespace MIPS.Assembler.Parsers;
 // TODO: Hex and binary support
 
 /// <summary>
-/// A class for parsing expressions.
+/// A struct for parsing expressions.
 /// </summary>
 public struct ExpressionParser
 {
@@ -216,6 +216,10 @@ public struct ExpressionParser
     {
         Guard.IsNotNull(_obj);
         Guard.IsNotNull(_tree);
+
+        var parser = new SymbolParser(_logger);
+        if (!parser.ValidateSymbolName(_cache))
+            return false;
 
         if (!_obj.TryGetSymbol(_cache, out var value))
             return false;

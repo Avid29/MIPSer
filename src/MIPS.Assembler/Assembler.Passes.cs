@@ -13,13 +13,14 @@ public unsafe partial class Assembler
 {
     private void LinePass1(string line)
     {
-        var parser = new ExpressionParser(_obj, _logger);
+        var expressionParser = new ExpressionParser(_obj, _logger);
+        var symbolParser = new SymbolParser(_logger);
 
         // Parse as macro
         if (TokenizeMacro(line, out var macro, out var expression))
         {
             Guard.IsNotNull(macro);
-            if (!ValidateSymbolName(macro))
+            if (!symbolParser.ValidateSymbolName(macro))
                 return;
 
             if (string.IsNullOrEmpty(expression))
@@ -28,7 +29,7 @@ public unsafe partial class Assembler
                 return;
             }
 
-            if (!parser.TryParse(expression, out var address))
+            if (!expressionParser.TryParse(expression, out var address))
                 return;
 
             if (address.IsRelocatable)
@@ -47,7 +48,9 @@ public unsafe partial class Assembler
         // Create symbol if line is labeled
         if (labelStr is not null)
         {
-            CreateSymbol(labelStr);
+
+            if (symbolParser.ValidateSymbolName(labelStr))
+                CreateSymbol(labelStr);
         }
         
         // Pad instruction sized allocation if instruction is present
