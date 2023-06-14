@@ -29,9 +29,9 @@ public struct Address
     public Section Section { get; set; }
 
     /// <summary>
-    /// Gets whether or not the address is relative to a section.
+    /// Gets whether or not the address is relocating.
     /// </summary>
-    public bool IsRelative => Section is not Section.None;
+    public bool IsRelocatable => Section is not Section.None;
 
     /// <inheritdoc/>
     public override string ToString() => $"{Value}";

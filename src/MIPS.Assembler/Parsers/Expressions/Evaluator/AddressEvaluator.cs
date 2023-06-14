@@ -27,8 +27,8 @@ public struct AddressEvaluator : IEvaluator<Address>
     {
         result = default;
 
-        // If both address have a section they cannot be added
-        if (left.IsRelative && right.IsRelative)
+        // If both address are relocatable
+        if (left.IsRelocatable && right.IsRelocatable)
         {
             _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot sum two relative symbols.");
             return false;
@@ -48,8 +48,8 @@ public struct AddressEvaluator : IEvaluator<Address>
     {
         result = default;
         
-        // TODO: Handle subtraction relativity
-        if (left.IsRelative || right.IsRelative)
+        // TODO: Handle subtraction relocation
+        if (left.IsRelocatable || right.IsRelocatable)
         {
             _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot subtract with relative symbols.");
             return false;
@@ -64,8 +64,8 @@ public struct AddressEvaluator : IEvaluator<Address>
     {
         result = default;
 
-        // Cannot multiply relative addressing 
-        if (left.IsRelative || right.IsRelative)
+        // Cannot multiply relocatable addressing 
+        if (left.IsRelocatable || right.IsRelocatable)
         {
             _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot multiply with relative symbols.");
             return false;
@@ -80,8 +80,8 @@ public struct AddressEvaluator : IEvaluator<Address>
     {
         result = default;
 
-        // Cannot divide relative addressing
-        if (left.IsRelative || right.IsRelative)
+        // Cannot divide relocatable addressing
+        if (left.IsRelocatable || right.IsRelocatable)
         {
             _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot divide with relative symbols.");
             return false;
@@ -96,8 +96,8 @@ public struct AddressEvaluator : IEvaluator<Address>
     {
         result = default;
 
-        // Cannot mod relative addressing
-        if (left.IsRelative || right.IsRelative)
+        // Cannot mod relocatable addressing
+        if (left.IsRelocatable || right.IsRelocatable)
         {
             _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot take modulus with relative symbols.");
             return false;
@@ -112,8 +112,8 @@ public struct AddressEvaluator : IEvaluator<Address>
     {
         result = default;
 
-        // Cannot AND relative addressing
-        if (left.IsRelative || right.IsRelative)
+        // Cannot AND relocatable addressing
+        if (left.IsRelocatable || right.IsRelocatable)
         {
             _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical AND with relative symbols.");
             return false;
@@ -128,8 +128,8 @@ public struct AddressEvaluator : IEvaluator<Address>
     {
         result = default;
 
-        // Cannot OR relative addressing
-        if (left.IsRelative || right.IsRelative)
+        // Cannot OR relocatable addressing
+        if (left.IsRelocatable || right.IsRelocatable)
         {
             _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical OR with relative symbols.");
             return false;
@@ -144,8 +144,8 @@ public struct AddressEvaluator : IEvaluator<Address>
     {
         result = default;
 
-        // Cannot XOR relative addressing
-        if (left.IsRelative || right.IsRelative)
+        // Cannot XOR relocatable addressing
+        if (left.IsRelocatable || right.IsRelocatable)
         {
             _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical XOR with relative symbols.");
             return false;

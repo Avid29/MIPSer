@@ -3,12 +3,14 @@
 # Features:
 # ------------------
 # Label usage:	Yes
-# Macros:		No
+# Macros:		Yes
 # Jumps:		No
 # Branches:		No
 # Memory:		No
 # Syscalls:		No
 #
+
+TEST = 1
 
 main:
 	ori		$s0,	$zero,	10

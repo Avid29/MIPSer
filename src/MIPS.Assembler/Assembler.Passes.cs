@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Markers;
 using MIPS.Assembler.Models.Markers.Abstract;
 using MIPS.Assembler.Parsers;
@@ -11,10 +12,37 @@ namespace MIPS.Assembler;
 public unsafe partial class Assembler
 {
     private readonly MarkerParser _markerParser;
+    private ExpressionParser _expressionParser;
     private InstructionParser _instructionParser;
 
     private void LinePass1(string line)
     {
+        // Parse as macro
+        if (TokenizeMacro(line, out var macro, out var expression))
+        {
+            Guard.IsNotNull(macro);
+            if (!ValidateSymbolName(macro))
+                return;
+
+            if (string.IsNullOrEmpty(expression))
+            {
+                _logger.Log(Severity.Error, LogId.MacroMissingValue, $"Symbol '{macro}' missing value.");
+                return;
+            }
+
+            if (!_expressionParser.TryParse(expression, out var address))
+                return;
+
+            if (address.IsRelocatable)
+            {
+                _logger.Log(Severity.Error, LogId.MacroCannotBeRelocatable, $"Macros may not be a relocatable expression.");
+                return;
+            }
+
+            CreateSymbol(macro, address);
+            return;
+        }
+
         // Get the parts of the line
         TokenizeLine(line, out var labelStr, out var instructionStr, out var markerStr);
 
@@ -31,16 +59,20 @@ public unsafe partial class Assembler
             Append(sizeof(Instruction));
         }
 
-        // NOTE: Marker allocations are made in both passes
-
         // Make allocations if marker is present
+        // NOTE: Marker allocations are made in both passes
         if (markerStr is not null)
             HandleMarker(markerStr);
     }
 
     private void LinePass2(string line)
     {
+        // This line is a macro. Skip on pass2
+        if (TokenizeMacro(line, out _, out _))
+            return;
+
         // Get the parts of the line
+        // Discard labels. They are already parsed
         TokenizeLine(line, out _, out var instructionStr, out var markerStr);
 
         // Handle instructions
@@ -61,8 +93,8 @@ public unsafe partial class Assembler
             Append(instruction);
         }
         
-        // NOTE: Marker allocations are made in both passes
         // Make allocations if marker is present
+        // NOTE: Marker allocations are made in both passes
         if (markerStr is not null)
             HandleMarker(markerStr);
     }

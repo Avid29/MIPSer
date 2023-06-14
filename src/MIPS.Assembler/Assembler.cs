@@ -43,6 +43,7 @@ public partial class Assembler
         _activeSection = Section.Text;
 
         _markerParser = new MarkerParser();
+        _expressionParser = new ExpressionParser(_obj, _logger);
         _instructionParser = new InstructionParser(_obj, _logger);
     }
 
@@ -100,6 +101,8 @@ public partial class Assembler
             // Load line from stream and make pass
             var line = await reader.ReadLineAsync();
             Guard.IsNotNull(line, nameof(line));
+
+            CleanLine(ref line);
             pass(line);
         }
 
@@ -111,10 +114,16 @@ public partial class Assembler
     /// <summary>
     /// Creates a symbol at the current address.
     /// </summary>
-    /// <param name="label">The name of the symbol</param>
-    private void CreateSymbol(string label)
+    /// <param name="label">The name of the symbol.</param>
+    private void CreateSymbol(string label) => CreateSymbol(label, CurrentAddress);
+
+    /// <summary>
+    /// Creates a symbol.
+    /// </summary>
+    /// <param name="label">The name of the symbol.</param>
+    /// <param name="address">The value of the symbol.</param>
+    private void CreateSymbol(string label, Address address)
     {
-        var address = CurrentAddress;
         if (!_obj.TryDefineSymbol(label, address))
         {
             // TODO: Log error

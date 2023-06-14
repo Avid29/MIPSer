@@ -1,6 +1,5 @@
 ﻿// Adam Dernis 2023
 
-using MIPS.Models;
 using MIPS.Models.Addressing;
 using MIPS.Models.Modules;
 using System.Collections.Generic;
@@ -17,6 +16,7 @@ public partial class ModuleConstruction
     private const ushort VERSION = 0x2C_C6;
 
     private readonly Dictionary<string, Address> _definitions;
+    private readonly Dictionary<Address, string> _relocations;
     private readonly Dictionary<Address, string> _references;
 
     private readonly Stream _text;
@@ -51,6 +51,7 @@ public partial class ModuleConstruction
         _data = data;
 
         _definitions = new Dictionary<string, Address>();
+        _relocations = new Dictionary<Address, string>();
         _references = new Dictionary<Address, string>();
     }
 

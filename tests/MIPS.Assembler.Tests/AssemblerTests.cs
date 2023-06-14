@@ -14,6 +14,9 @@ public class AssemblerTests
     [TestMethod("test1.asm")]
     public async Task Test1() => await RunTest("test1.asm");
 
+    [TestMethod("test2.asm")]
+    public async Task Test2() => await RunTest("test2.asm");
+
     [TestMethod("failed1.asm")]
     public async Task Fail1() => await RunTest("fail1.asm");
 

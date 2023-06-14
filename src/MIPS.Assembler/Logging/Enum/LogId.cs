@@ -9,6 +9,13 @@ public enum LogId
 {
     #pragma warning disable CS1591
 
+    // General errors
+    IllegalSymbolName,
+
+    // Macro errors
+    MacroMissingValue,
+    MacroCannotBeRelocatable,
+
     // Instruction parser errors
     InvalidInstructionName,
     InvalidInstructionArgCount,

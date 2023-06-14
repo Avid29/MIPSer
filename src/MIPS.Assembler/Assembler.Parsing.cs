@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2023
 
+using MIPS.Assembler.Logging.Enum;
 using System;
 using System.Linq;
 
@@ -7,32 +8,38 @@ namespace MIPS.Assembler;
 
 public partial class Assembler
 {
+    private bool TokenizeMacro(string line, out string? macro, out string? expression)
+    {
+        macro = null;
+        expression = null;
+
+        int macroEnd = line.IndexOf('=');
+        
+        // Line does not contain a macro
+        if (macroEnd == -1)
+            return false;
+
+        macro = line[..macroEnd];
+        expression = line[(macroEnd+1)..];
+
+        return true;
+    }
+
     private void TokenizeLine(string line, out string? label, out string? instruction, out string? marker)
     {
-        // Trim zero width no-break space
-        line = line.Trim('\uFEFF');
-
         label = null;
         instruction = null;
         marker = null;
-
-        // Trim whitespace
-        line = line.Trim();
-
-        // Trim comment if present
-        line = TrimComment(line);
 
         // Find and parse label if present
         int labelEnd = line.IndexOf(':');
         if (labelEnd != -1)
         {
             label = line[..labelEnd].Trim();
-            if (!ValidateLabel(label))
-            {
-                label = null;
 
-                // TODO: Log error
-            }
+            // Ensure label is legal
+            if (!ValidateSymbolName(label))
+                label = null;
 
             // Trim label from line
             line = line[(labelEnd+1)..];
@@ -86,40 +93,62 @@ public partial class Assembler
 
     private bool TokenizeMarker(string marker, out string name, out string[] args) => TokenizeInstruction(marker, out name, out args);
 
-    private bool ValidateLabel(string label)
+    private bool ValidateSymbolName(string symbol)
     {
+        symbol = symbol.Trim();
+
         // No characters may be whitespace
-        if (label.Any(char.IsWhiteSpace))
+        if (symbol.Any(char.IsWhiteSpace))
         {
+            _logger.Log(Severity.Error, LogId.IllegalSymbolName, $"'{symbol}' is not a legal symbol name. Symbols may not contain whitespace.");
             return false;
         }
 
         // Labels may not begin with a digit
-        if (char.IsDigit(label[0]))
+        if (char.IsDigit(symbol[0]))
         {
+            _logger.Log(Severity.Error, LogId.IllegalSymbolName, $"'{symbol}' is not a legal symbol name. Symbols may not begin with a digit.");
             return false;
         }
 
         // All characters must be a letter or a digit
-        if (!label.All(char.IsLetterOrDigit))
+        if (!symbol.All(char.IsLetterOrDigit))
         {
+            _logger.Log(Severity.Error, LogId.IllegalSymbolName, $"'{symbol}' is not a legal symbol name.");
             return false;
         }
 
         return true;
     }
 
-    private static string TrimComment(string line)
+    private static void CleanLine(ref string line)
+    {
+        // Trim zero width no-break space
+        line = line.Trim('\uFEFF');
+        
+        // Trim whitespace
+        line = line.Trim();
+
+        TrimComment(ref line);
+    }
+
+    private static void TrimComment(ref string line)
     {
         // Find index of comment start
         int commentStart = line.IndexOf('#');
-
-        // Trim comment if present
-        return commentStart != -1 ? line[..commentStart] : line;
+        
+        // No comment found
+        if (commentStart == -1)
+            return;
+        
+        // Trim comment
+        line = line[..commentStart];
     }
 
     private static int FindNameEnd(string line)
     {
+        // TODO: This is dirty. Clean it up.
+
         int firstSpace = line.IndexOf(' ');
         int firstTab = line.IndexOf("\t", StringComparison.Ordinal);
 
