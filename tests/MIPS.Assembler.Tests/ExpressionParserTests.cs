@@ -83,7 +83,7 @@ public class ExpressionParserTests
 
     private static void RunTest(ExpressionParser parser, string input, long? expected = null)
     {
-        bool success = parser.TryParse(input, out var actual);
+        bool success = parser.TryParse(input, out var actual, out _);
         Assert.AreEqual(success, expected.HasValue);
         if (expected.HasValue)
         {

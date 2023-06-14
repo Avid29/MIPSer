@@ -94,7 +94,7 @@ public class InstructionParserTests
         RunTest(XkcdFail, logId: LogId.InvalidInstructionName);
     }
 
-    private static void RunTest(string input, Instruction? expected = null, LogId? logId = null)
+    private static void RunTest(string input, Instruction? expected = null, LogId? logId = null, string? expectedSymbol = null)
     {
         bool succeeds = expected.HasValue;
 
@@ -102,7 +102,7 @@ public class InstructionParserTests
         var parser = new InstructionParser(null, logger);
 
         TokenizeInstruction(input, out var name, out var args);
-        var succeeded = parser.TryParse(name, args, out var actual);
+        var succeeded = parser.TryParse(name, args, out var actual, out var symbol);
 
         Assert.AreEqual(succeeds, succeeded);
         if (expected.HasValue)
