@@ -15,9 +15,9 @@ public partial class ModuleConstruction
     private const ushort MAGIC = 0xFA_CE;
     private const ushort VERSION = 0x2C_C6;
 
-    private readonly Dictionary<string, Address> _definitions;
     private readonly Dictionary<Address, string> _relocations;
     private readonly Dictionary<Address, string> _references;
+    private readonly Dictionary<string, Address> _definitions;
 
     private readonly Stream _text;
     private readonly Stream _data;
@@ -31,6 +31,7 @@ public partial class ModuleConstruction
     private uint _sdataSize = 0;
     private uint _sbssSize = 0;
     private uint _bssSize = 0;
+    private uint _strsSize = 0;
     
     /// <summary>
     /// Initializes a new instance of the <see cref="ModuleConstruction"/> class.
@@ -50,9 +51,9 @@ public partial class ModuleConstruction
         _text = text;
         _data = data;
 
-        _definitions = new Dictionary<string, Address>();
         _relocations = new Dictionary<Address, string>();
         _references = new Dictionary<Address, string>();
+        _definitions = new Dictionary<string, Address>();
     }
 
     /// <summary>
@@ -62,7 +63,14 @@ public partial class ModuleConstruction
     {
         // TODO: Flags and entry point properly
 
-        var header = new Header(MAGIC, VERSION, _flags, _entryPoint, (uint)_text.Length, _rdataSize, (uint)_data.Length, _sdataSize, _sbssSize, _bssSize, 0, 0, 0, 0);
+        var header = new Header(
+            MAGIC, VERSION,
+            _flags, _entryPoint,
+            (uint)_text.Length, _rdataSize, (uint)_data.Length,
+            _sdataSize,  _sbssSize, _bssSize, _strsSize,
+            (uint)_relocations.Count,
+            (uint)_references.Count,
+            (uint)_definitions.Count);
         header.WriteHeader(stream);
 
         // Append segments to stream

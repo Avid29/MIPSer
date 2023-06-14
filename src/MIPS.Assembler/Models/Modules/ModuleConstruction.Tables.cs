@@ -16,9 +16,7 @@ public partial class ModuleConstruction
     {
         // Check if table already contains symbol
         if (_definitions.ContainsKey(name))
-        {
             return false;
-        }
 
         _definitions.Add(name, value);
         return true;
@@ -38,9 +36,7 @@ public partial class ModuleConstruction
             return false;
         }
 
-        var address = _definitions[name];
-
-        value = address;
+        value = _definitions[name];
         return true;
     }
 
