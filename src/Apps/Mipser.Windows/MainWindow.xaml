@@ -19,7 +19,17 @@
         <!--Title Bar-->
         <shell:TitleBar/>
 
-        <!--Content View-->
-        <shell:ContentView Grid.Row="1"/>
+        <Grid Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="280"/>
+            </Grid.ColumnDefinitions>
+
+            <!--Content View-->
+            <shell:ContentView/>
+
+            <shell:Explorer Grid.Column="1"/>
+        </Grid>
     </Grid>
 </Window>
