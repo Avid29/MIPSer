@@ -38,8 +38,17 @@ public class WindowViewModel : ObservableRecipient
     /// </summary>
     public RelayCommand CreateAnonymousFileCommand { get; }
 
-    private void CreateAnonymousFile()
-    {
-        OpenFiles.Add(new BindableFile());
-    }
+    /// <summary>
+    /// Creates and opens a new anonymous file.
+    /// </summary>
+    public void CreateAnonymousFile() => OpenFiles.Add(new BindableFile());
+
+    /// <summary>
+    /// Closes a file.
+    /// </summary>
+    /// <remarks>
+    /// Does not save the file.
+    /// </remarks>
+    /// <param name="file"></param>
+    public void CloseFile(BindableFile file) => OpenFiles.Remove(file);
 }
