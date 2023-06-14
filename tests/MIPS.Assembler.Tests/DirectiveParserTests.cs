@@ -2,13 +2,13 @@
 
 using CommunityToolkit.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MIPS.Assembler.Models.Markers;
+using MIPS.Assembler.Models.Directives;
 using MIPS.Assembler.Parsers;
 
 namespace MIPS.Assembler.Tests;
 
 [TestClass]
-public class MarkerParsesTests
+public class DirectiveParserTests
 {
     private const string Global = ".globl main"; 
 
@@ -30,15 +30,15 @@ public class MarkerParsesTests
 
     public static void RunGlobalTest(string input, string expected)
     {
-        var parser = new MarkerParser();
+        var parser = new DirectiveParser();
 
-        TokenizeMarker(input, out var name, out var args);
-        parser.TryParseMarker(name, args, out var marker);
+        TokenizeDirective(input, out var name, out var args);
+        parser.TryParseDirective(name, args, out var directive);
 
-        if (marker is not GlobalMarker)
+        if (directive is not GlobalDirective)
             Assert.Fail();
 
-        var actual = ((GlobalMarker)marker).Symbol;
+        var actual = ((GlobalDirective)directive).Symbol;
         Guard.IsNotNull(actual);
 
         Assert.AreEqual(expected, actual);
@@ -46,15 +46,15 @@ public class MarkerParsesTests
 
     public static void RunDataTest(string input, params byte[] expected)
     {
-        var parser = new MarkerParser();
+        var parser = new DirectiveParser();
 
-        TokenizeMarker(input, out var name, out var args);
-        parser.TryParseMarker(name, args, out var marker);
+        TokenizeDirective(input, out var name, out var args);
+        parser.TryParseDirective(name, args, out var directive);
 
-        if (marker is not DataMarker)
+        if (directive is not DataDirective)
             Assert.Fail();
 
-        var actual = ((DataMarker)marker).Data;
+        var actual = ((DataDirective)directive).Data;
         Guard.IsNotNull(actual);
 
         Assert.AreEqual(expected.Length, actual.Length);
@@ -64,7 +64,7 @@ public class MarkerParsesTests
         }
     }
 
-    private static void TokenizeMarker(string line, out string name, out string[] args)
+    private static void TokenizeDirective(string line, out string name, out string[] args)
     {
         var nameEnd = line.IndexOf(' ');
         name = line[1..nameEnd];

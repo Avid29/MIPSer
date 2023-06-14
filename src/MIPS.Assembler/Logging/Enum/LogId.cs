@@ -32,10 +32,10 @@ public enum LogId
     UnparsableExpression,
     InvalidExpressionOperation,
 
-    // Marker parser errors
-    InvalidMarkerDataArg,
-    InvalidMarkerArg,
-    InvalidMarkerArgCount,
+    // Directive parser errors
+    InvalidDirectiveDataArg,
+    InvalidDirectiveArg,
+    InvalidDirectiveArgCount,
 
     #pragma warning restore CS1591
 }

@@ -2,8 +2,8 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Models.Markers;
-using MIPS.Assembler.Models.Markers.Abstract;
+using MIPS.Assembler.Models.Directives;
+using MIPS.Assembler.Models.Directives.Abstract;
 using MIPS.Assembler.Parsers;
 using MIPS.Models.Instructions;
 
@@ -43,7 +43,7 @@ public unsafe partial class Assembler
         }
 
         // Get the parts of the line
-        TokenizeLine(line, out var labelStr, out var instructionStr, out var markerStr);
+        TokenizeLine(line, out var labelStr, out var instructionStr, out var directiveStr);
 
         // Create symbol if line is labeled
         if (labelStr is not null)
@@ -60,10 +60,10 @@ public unsafe partial class Assembler
             Append(sizeof(Instruction));
         }
 
-        // Make allocations if marker is present
-        // NOTE: Marker allocations are made in both passes
-        if (markerStr is not null)
-            HandleMarker(markerStr);
+        // Make allocations if directive is present
+        // NOTE: Directive allocations are made in both passes
+        if (directiveStr is not null)
+            HandleDirective(directiveStr);
     }
 
     private void LinePass2(string line)
@@ -76,7 +76,7 @@ public unsafe partial class Assembler
 
         // Get the parts of the line
         // Discard labels. They are already parsed
-        TokenizeLine(line, out _, out var instructionStr, out var markerStr);
+        TokenizeLine(line, out _, out var instructionStr, out var directiveStr);
 
         // Handle instructions
         if (instructionStr is not null)
@@ -96,37 +96,37 @@ public unsafe partial class Assembler
             Append(instruction);
         }
         
-        // Make allocations if marker is present
-        // NOTE: Marker allocations are made in both passes
-        if (markerStr is not null)
-            HandleMarker(markerStr);
+        // Make allocations if directive is present
+        // NOTE: Directive allocations are made in both passes
+        if (directiveStr is not null)
+            HandleDirective(directiveStr);
     }
 
-    private void HandleMarker(string markerStr)
+    private void HandleDirective(string directiveStr)
     {
-        var parser = new MarkerParser();
+        var parser = new DirectiveParser();
 
-        TokenizeMarker(markerStr, out var name, out var args);
-        if (!parser.TryParseMarker(name, args, out var marker))
+        TokenizeDirective(directiveStr, out var name, out var args);
+        if (!parser.TryParseDirective(name, args, out var directive))
             return;
 
-        Guard.IsNotNull(marker);
-        ExecuteMarker(marker);
+        Guard.IsNotNull(directive);
+        ExecuteDirective(directive);
     }
 
-    private void ExecuteMarker(Marker marker)
+    private void ExecuteDirective(Directive directive)
     {
-        switch (marker)
+        switch (directive)
         {
-            case SectionMarker segment:
-                SetActiveSegment(segment.ActiveSection);
+            case SectionDirective segment:
+                SetActiveSection(segment.ActiveSection);
                 break;
 
-            case AlignMarker align:
+            case AlignDirective align:
                 Align(align.Boundary);
                 break;
 
-            case DataMarker data:
+            case DataDirective data:
                 Append(data.Data);
                 break;
         }

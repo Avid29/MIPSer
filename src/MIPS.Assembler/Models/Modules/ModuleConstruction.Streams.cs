@@ -20,7 +20,7 @@ public partial class ModuleConstruction
     public long DataPosition => _data.Position;
 
     /// <summary>
-    /// Appends an array of bytes to the end of the specified segment.
+    /// Appends an array of bytes to the end of the specified section.
     /// </summary>
     /// <param name="section">The segment to append to</param>
     /// <param name="bytes">The bytes to append to the end of the buffer.</param>
@@ -28,14 +28,14 @@ public partial class ModuleConstruction
     public void Append(Section section, params byte[] bytes)
     {
         // Select buffer and write bytes
-        Stream buffer = GetSegmentStream(section);
+        Stream buffer = GetSectionStream(section);
         buffer.Write(bytes);
     }
 
     /// <summary>
-    /// Aligns a segment to an n-size boundary.
+    /// Aligns a section to an n-size boundary.
     /// </summary>
-    /// <param name="section">The segment to align.</param>
+    /// <param name="section">The section to align.</param>
     /// <param name="boundary">The alignment boundary.</param>
     public void Align(Section section, int boundary)
     {
@@ -43,7 +43,7 @@ public partial class ModuleConstruction
         boundary = 1 << boundary;
 
         // Select buffer and get alignment offset
-        Stream stream = GetSegmentStream(section);
+        Stream stream = GetSectionStream(section);
         int offset = (int)stream.Length % boundary;
 
         // Already aligned
@@ -56,7 +56,7 @@ public partial class ModuleConstruction
     }
 
     /// <summary>
-    /// Seeks to the start of all segments.
+    /// Seeks to the start of all sections.
     /// </summary>
     public void ResetStreamPositions()
     {
@@ -64,7 +64,7 @@ public partial class ModuleConstruction
         _data.Position = 0;
     }
 
-    private Stream GetSegmentStream(Section section)
+    private Stream GetSectionStream(Section section)
     {
         return section switch
         {

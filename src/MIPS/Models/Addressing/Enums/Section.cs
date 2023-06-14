@@ -3,7 +3,7 @@
 namespace MIPS.Models.Addressing.Enums;
 
 /// <summary>
-/// An enum marking the segment an address belongs to.
+/// An enum marking the section an address belongs to.
 /// </summary>
 public enum Section
 {

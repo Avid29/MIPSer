@@ -23,7 +23,7 @@ public partial class ModuleConstruction
     }
 
     /// <summary>
-    /// Attempts to get a symbol's realized value, including segment offset.
+    /// Attempts to get a symbol's value.
     /// </summary>
     /// <param name="name">The name of the symbol.</param>
     /// <param name="value">The realized value of the symbol.</param>

@@ -43,7 +43,7 @@ public partial class Assembler
     }
 
     /// <summary>
-    /// Gets the current segment address.
+    /// Gets the current address.
     /// </summary>
     internal Address CurrentAddress
     {
@@ -143,7 +143,7 @@ public partial class Assembler
 
     private void Align(int boundary) => _obj.Align(_activeSection, boundary);
 
-    private void SetActiveSegment(Section section)
+    private void SetActiveSection(Section section)
     {
         _activeSection = section;
     }

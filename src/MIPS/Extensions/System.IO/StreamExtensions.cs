@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2023
 
+using System.Buffers;
 using System.Numerics;
 
 namespace MIPS.Extensions.System.IO;
@@ -35,8 +36,11 @@ public static class StreamExtensions
     public static void Write<T>(this Stream stream, T value)
         where T : unmanaged, IBinaryInteger<T>
     {
+        // TODO: Someday I feel more ambitious 
+        // https://discord.com/channels/@me/985320338713886720/1118495512157503519
+
         var byteCount = value.GetByteCount();
-        Span<byte> bytes = stackalloc byte[byteCount];
+        Span<byte> bytes = byteCount < 8 ? stackalloc byte[byteCount] : new byte[byteCount];
         value.TryWriteBigEndian(bytes, out _);
         stream.Write(bytes);
     }

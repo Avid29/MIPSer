@@ -5,7 +5,7 @@ using MIPS.Models.Addressing.Enums;
 namespace MIPS.Models.Addressing;
 
 /// <summary>
-/// A struct containing an address and the segment it belongs to.
+/// A struct containing an address and the section it belongs to.
 /// </summary>
 public struct Address
 {

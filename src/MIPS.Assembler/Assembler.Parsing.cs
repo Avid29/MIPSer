@@ -25,11 +25,11 @@ public partial class Assembler
         return true;
     }
 
-    private void TokenizeLine(string line, out string? label, out string? instruction, out string? marker)
+    private void TokenizeLine(string line, out string? label, out string? instruction, out string? directive)
     {
         label = null;
         instruction = null;
-        marker = null;
+        directive = null;
         // Find and parse label if present
         int labelEnd = line.IndexOf(':');
         if (labelEnd != -1)
@@ -40,14 +40,14 @@ public partial class Assembler
             line = line[(labelEnd+1)..];
         }
 
-        // Line is neither a marker nor an instruction
+        // Line is neither a directive nor an instruction
         if (line.Length == 0)
             return;
 
         if (line[0] == '.')
         {
-            // Line is a marker
-            marker = line[1..];
+            // Line is a directive
+            directive = line[1..];
         }
         else
         {
@@ -86,7 +86,7 @@ public partial class Assembler
         return true;
     }
 
-    private bool TokenizeMarker(string marker, out string name, out string[] args) => TokenizeInstruction(marker, out name, out args);
+    private bool TokenizeDirective(string directive, out string name, out string[] args) => TokenizeInstruction(directive, out name, out args);
 
     private static void CleanLine(ref string line)
     {
