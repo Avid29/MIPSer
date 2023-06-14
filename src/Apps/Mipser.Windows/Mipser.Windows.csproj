@@ -16,6 +16,7 @@
     <None Remove="Controls\Editors\TextEditor.xaml" />
     <None Remove="Resources\Brushes.xaml" />
     <None Remove="Views\Shell\ContentView.xaml" />
+    <None Remove="Views\Shell\Explorer.xaml" />
     <None Remove="Views\Shell\TitleBar.xaml" />
   </ItemGroup>
 
@@ -48,6 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mipser.ViewModels\Mipser.ViewModels.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\Shell\Explorer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Shell\ContentView.xaml">
