@@ -23,6 +23,7 @@ public enum LogId
 
     // Expression parser errors
     UnparsableExpression,
+    InvalidExpressionOperation,
 
     // Marker parser errors
     InvalidMarkerDataArg,

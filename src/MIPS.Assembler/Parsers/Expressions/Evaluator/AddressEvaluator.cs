@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2023
 
 using MIPS.Assembler.Logging;
+using MIPS.Assembler.Logging.Enum;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 
@@ -11,10 +12,15 @@ namespace MIPS.Assembler.Parsers.Expressions.Evaluator;
 /// </summary>
 public struct AddressEvaluator : IEvaluator<Address>
 {
+    private ILogger? _logger;
+
     /// <summary>
-    /// Gets or sets the address evaluator.
+    /// Initializes a new instance of the <see cref="AddressEvaluator"/> struct.
     /// </summary>
-    public ILogger Logger { get; set; }
+    public AddressEvaluator(ILogger? logger)
+    {
+        _logger = logger;
+    }
 
     /// <inheritdoc/>
     public bool TryAdd(Address left, Address right, out Address result)
@@ -23,7 +29,10 @@ public struct AddressEvaluator : IEvaluator<Address>
 
         // If both address have a section they cannot be added
         if (left.IsRelative && right.IsRelative)
+        {
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot sum two relative symbols.");
             return false;
+        }
 
         // Determine the resulting section
         var section = left.Section;
@@ -41,7 +50,10 @@ public struct AddressEvaluator : IEvaluator<Address>
         
         // TODO: Handle subtraction relativity
         if (left.IsRelative || right.IsRelative)
+        {
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot subtract with relative symbols.");
             return false;
+        }
         
         result = new Address(left.Value - right.Value, Section.None);
         return true;
@@ -54,7 +66,10 @@ public struct AddressEvaluator : IEvaluator<Address>
 
         // Cannot multiply relative addressing 
         if (left.IsRelative || right.IsRelative)
+        {
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot multiply with relative symbols.");
             return false;
+        }
 
         result = new Address(left.Value * right.Value, Section.None);
         return true;
@@ -63,10 +78,12 @@ public struct AddressEvaluator : IEvaluator<Address>
     /// <inheritdoc/>
     public bool TryDivide(Address left, Address right, out Address result)
     {
+        result = default;
+
         // Cannot divide relative addressing
         if (left.IsRelative || right.IsRelative)
         {
-            result = default;
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot divide with relative symbols.");
             return false;
         }
 
@@ -77,10 +94,12 @@ public struct AddressEvaluator : IEvaluator<Address>
     /// <inheritdoc/>
     public bool TryMod(Address left, Address right, out Address result)
     {
+        result = default;
+
         // Cannot mod relative addressing
         if (left.IsRelative || right.IsRelative)
         {
-            result = default;
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot take modulus with relative symbols.");
             return false;
         }
 
@@ -91,10 +110,12 @@ public struct AddressEvaluator : IEvaluator<Address>
     /// <inheritdoc/>
     public bool TryAnd(Address left, Address right, out Address result)
     {
+        result = default;
+
         // Cannot AND relative addressing
         if (left.IsRelative || right.IsRelative)
         {
-            result = default;
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical AND with relative symbols.");
             return false;
         }
 
@@ -105,10 +126,12 @@ public struct AddressEvaluator : IEvaluator<Address>
     /// <inheritdoc/>
     public bool TryOr(Address left, Address right, out Address result)
     {
+        result = default;
+
         // Cannot OR relative addressing
         if (left.IsRelative || right.IsRelative)
         {
-            result = default;
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical OR with relative symbols.");
             return false;
         }
 
@@ -119,10 +142,12 @@ public struct AddressEvaluator : IEvaluator<Address>
     /// <inheritdoc/>
     public bool TryXor(Address left, Address right, out Address result)
     {
+        result = default;
+
         // Cannot XOR relative addressing
         if (left.IsRelative || right.IsRelative)
         {
-            result = default;
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical XOR with relative symbols.");
             return false;
         }
 

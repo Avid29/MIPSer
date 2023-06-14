@@ -24,6 +24,8 @@ public class ExpressionParserTests
 
     private const string Macro = "macro + 10";
 
+    private const string MacroFail = "macro + macro";
+
     [TestMethod(Self)]
     public void SelfTest() => RunTest(Self, 10);
 
@@ -55,27 +57,33 @@ public class ExpressionParserTests
     public void XorTest() => RunTest(Xor, 9 ^ 3);
 
     [TestMethod(Macro)]
-    public void MarcoTest() => RunTest(Macro, 10 + 10, ("macro", 10));
+    public void MarcoTest() => RunTest(Macro, 10 + 10, ("macro", new Address(10, Section.Text)));
 
-    private static void RunTest(string input, long expected)
-    {
-        var parser = new ExpressionParser();
-        _ = parser.TryParse(input, out var actual);
-        Assert.AreEqual(expected, actual.Value);
-    }
+    [TestMethod(MacroFail)]
+    public void MarcoFailTest() => RunTest(MacroFail, null, ("macro", new Address(10, Section.Text)));
 
-    private static void RunTest(string input, long expected, params (string name, long addr)[] macros)
+    private static void RunTest(string input, long? expected = null) => RunTest(new ExpressionParser(), input, expected);
+
+    private static void RunTest(string input, long? expected = null, params (string name, Address addr)[] macros)
     {
         // NOTE: This assumes symbol realization is not implemented!
         var obj = new ModuleConstruction();
         foreach (var macro in macros)
         {
-            var address = new Address(macro.addr, Section.Text);
-            obj.TryDefineSymbol(macro.name, address);
+            obj.TryDefineSymbol(macro.name, macro.addr);
         }
 
         var parser = new ExpressionParser(obj);
-        _ = parser.TryParse(input, out var actual);
-        Assert.AreEqual(expected, actual.Value);
+        RunTest(parser, input, expected);
+    }
+
+    private static void RunTest(ExpressionParser parser, string input, long? expected = null)
+    {
+        bool success = parser.TryParse(input, out var actual);
+        Assert.AreEqual(success, expected.HasValue);
+        if (expected.HasValue)
+        {
+            Assert.AreEqual(expected.Value, actual.Value);
+        }
     }
 }

@@ -43,7 +43,7 @@ public struct ExpressionParser
     {
         _obj = obj;
         _logger = logger;
-        _evaluator = new AddressEvaluator();
+        _evaluator = new AddressEvaluator(logger);
         _tree = null;
         _state = ExpressionParserState.Start;
         _cache = string.Empty;
