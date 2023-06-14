@@ -18,6 +18,7 @@
     <None Remove="Controls\Editors\HexEditor.xaml" />
     <None Remove="Controls\Editors\TextEditor.xaml" />
     <None Remove="Resources\Brushes.xaml" />
+    <None Remove="Views\FileViewer.xaml" />
     <None Remove="Views\Shell\Explorer.xaml" />
     <None Remove="Views\Shell\OpenFilesView.xaml" />
     <None Remove="Views\Shell\TitleBar.xaml" />
@@ -52,6 +53,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mipser.ViewModels\Mipser.ViewModels.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\FileViewer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Shell\Explorer.xaml">
