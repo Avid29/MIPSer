@@ -58,6 +58,8 @@ public class Program
             ? $"Assembled with {assembler.Logs.Count} messages."
             : $"Failed to assemble with {assembler.Logs.Count} messages.");
 
+        Console.WriteLine();
+
         if (assembler.Logs.Count > 0)
         {
             foreach (var log in assembler.Logs)
