@@ -83,7 +83,14 @@ public partial class Assembler
     /// </summary>
     /// <param name="stream">The stream to write the module to.</param>
     /// <returns>The assembled object module.</returns>
-    public Module WriteModule(Stream stream) => _obj.Finish(stream);
+    public Module? WriteModule(Stream stream)
+    {
+        // Don't write a failed module
+        if (_logger.Failed)
+            return null;
+
+        return _obj.Finish(stream);
+    }
 
     private async Task MakePass(StreamReader reader, Action<string> pass)
     {

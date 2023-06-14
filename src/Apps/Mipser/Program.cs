@@ -51,10 +51,13 @@ public class Program
         var inFile = File.Open(filePath, FileMode.Open);
         var outFile = File.Open(resultFile, FileMode.Create);
         var assembler = await Assembler.AssembleAsync(inFile);
-        assembler.WriteModule(outFile);
+        var module = assembler.WriteModule(outFile);
 
-        // TODO: Failure message
-        Console.WriteLine($"Assembled with {assembler.Logs.Count} messages.");
+
+        Console.WriteLine(module is not null
+            ? $"Assembled with {assembler.Logs.Count} messages."
+            : $"Failed to assemble with {assembler.Logs.Count} messages.");
+
         if (assembler.Logs.Count > 0)
         {
             foreach (var log in assembler.Logs)

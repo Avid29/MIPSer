@@ -21,6 +21,11 @@ public class AssemblerLogger : ILogger
     }
 
     /// <summary>
+    /// Gets a value indicating whether or not assembly failed.
+    /// </summary>
+    public bool Failed { get; private set; }
+
+    /// <summary>
     /// Gets or sets the current line being assembled.
     /// </summary>
     public int CurrentLine { get; set; }
@@ -30,6 +35,9 @@ public class AssemblerLogger : ILogger
     {
         var log = new Log(id, message, severity, CurrentLine);
         _logs.Add(log);
+
+        if (severity is Severity.Error)
+            Failed = true;
     }
 
     /// <summary>
