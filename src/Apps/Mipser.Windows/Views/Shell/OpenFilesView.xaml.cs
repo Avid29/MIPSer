@@ -1,9 +1,12 @@
 // Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.Bindables;
+using Mipser.Messages.Files;
 using Mipser.ViewModels.Views;
 
 namespace Mipser.Windows.Views.Shell;
@@ -29,6 +32,8 @@ public sealed partial class OpenFilesView : UserControl
         if (args.Item is not BindableFile)
             ThrowHelper.ThrowInvalidDataException();
 
+        // TODO: This is bad design. Fix.
 
+        Ioc.Default.GetRequiredService<IMessenger>().Send(new FileCloseRequestMessage((BindableFile)args.Item));
     }
 }

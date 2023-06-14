@@ -12,7 +12,7 @@ public sealed class FileCloseRequestMessage
     /// <summary>
     /// Initializes a new instance of the <see cref="FileCloseRequestMessage"/> class.
     /// </summary>
-    public FileCloseRequestMessage(BindableFile file)
+    public FileCloseRequestMessage(BindableFile? file = null)
     {
         File = file;
     }
@@ -20,5 +20,10 @@ public sealed class FileCloseRequestMessage
     /// <summary>
     /// Gets the file to close.
     /// </summary>
-    public BindableFile File { get; }
+    public BindableFile? File { get; }
+
+    /// <summary>
+    /// Closes the current file.
+    /// </summary>
+    public bool Current => File is null;
 }

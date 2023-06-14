@@ -18,6 +18,8 @@ public class OpenFilesViewModel : ObservableRecipient
     private readonly IMessenger _messenger;
     private readonly IFilesService _fileService;
 
+    private BindableFile? _currentFile;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenFilesViewModel"/> class.
     /// </summary>
@@ -27,7 +29,6 @@ public class OpenFilesViewModel : ObservableRecipient
         _fileService = filesService;
 
         OpenFiles = new ObservableCollection<BindableFile>();
-
         IsActive = true;
     }
 
@@ -37,6 +38,15 @@ public class OpenFilesViewModel : ObservableRecipient
         _messenger.Register<OpenFilesViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.CreateNewFile());
         _messenger.Register<OpenFilesViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFileAsync());
         _messenger.Register<OpenFilesViewModel, FileCloseRequestMessage>(this, (r, m) => r.CloseFile(m.File));
+    }
+
+    /// <summary>
+    /// Gets or sets the currently selected file.
+    /// </summary>
+    public BindableFile? CurrentFile
+    {
+        get => _currentFile;
+        set => SetProperty(ref _currentFile, value);
     }
 
     /// <summary>
@@ -69,5 +79,12 @@ public class OpenFilesViewModel : ObservableRecipient
     /// Does not save the file.
     /// </remarks>
     /// <param name="file"></param>
-    private void CloseFile(BindableFile file) => OpenFiles.Remove(file);
+    private void CloseFile(BindableFile? file)
+    {
+        file ??= CurrentFile;
+        if (file is null)
+            return;
+
+        OpenFiles.Remove(file);
+    }
 }

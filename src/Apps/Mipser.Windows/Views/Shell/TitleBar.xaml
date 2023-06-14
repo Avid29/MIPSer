@@ -44,6 +44,12 @@
                             <KeyboardAccelerator Modifiers="Control,Shift" Key="S"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
+                    <MenuFlyoutSeparator/>
+                    <MenuFlyoutItem Text="Close" Command="{x:Bind ViewModel.CloseFileCommand, Mode=OneWay}">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Modifiers="Control" Key="W"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
                 </MenuBarItem>
                 <MenuBarItem Title="Edit">
                     <MenuFlyoutItem Text="Undo">
