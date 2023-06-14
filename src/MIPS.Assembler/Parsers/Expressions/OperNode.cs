@@ -4,6 +4,7 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Parsers.Expressions;
 
@@ -51,39 +52,37 @@ public class OperNode : ExpNode
     }
 
     /// <inheritdoc/>
-    public override bool TryEvaluate(IEvaluator<long> evaluator, out long result)
+    public override bool TryEvaluate(IEvaluator<Address> evaluator, out Address result)
     {
         result = default;
 
-        if (!(LeftChild?.TryEvaluate(evaluator, out long left) ?? false))
+        if (!(LeftChild?.TryEvaluate(evaluator, out Address left) ?? false))
         {
             // TODO: Log error
             return false;
         }
 
-        if (!(RightChild?.TryEvaluate(evaluator, out long right) ?? false))
+        if (!(RightChild?.TryEvaluate(evaluator, out Address right) ?? false))
         {
             // TODO: Log error
             return false;
         }
 
-        result =  Operation switch
+        return Operation switch
         {
             // Arithmetic
-            Operation.Addition => evaluator.Add(left, right),
-            Operation.Subtraction => evaluator.Subtract(left, right),
-            Operation.Multiplication => evaluator.Multiply(left, right),
-            Operation.Division => evaluator.Divide(left, right),
-            Operation.Modulus => evaluator.Mod(left, right),
+            Operation.Addition => evaluator.TryAdd(left, right, out result),
+            Operation.Subtraction => evaluator.TrySubtract(left, right, out result),
+            Operation.Multiplication => evaluator.TryMultiply(left, right, out result),
+            Operation.Division => evaluator.TryDivide(left, right, out result),
+            Operation.Modulus => evaluator.TryMod(left, right, out result),
 
             // Logical
-            Operation.And => evaluator.And(left, right),
-            Operation.Or => evaluator.Or(left, right),
-            Operation.Xor => evaluator.Xor(left, right),
-            _ => default,
+            Operation.And => evaluator.TryAnd(left, right, out result),
+            Operation.Or => evaluator.TryOr(left, right, out result),
+            Operation.Xor => evaluator.TryXor(left, right, out result),
+            _ => ThrowHelper.ThrowArgumentException<bool>(),
         };
-
-        return true;
     }
 
     /// <summary>

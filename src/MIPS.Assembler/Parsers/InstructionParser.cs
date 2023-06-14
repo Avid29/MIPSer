@@ -4,8 +4,9 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Models.Construction;
 using MIPS.Assembler.Models.Instructions;
+using MIPS.Assembler.Models.Modules;
+using MIPS.Extensions.MIPS.Models.Instructions;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 
@@ -98,6 +99,12 @@ public struct InstructionParser
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction>($"Invalid instruction type '{_meta.Type}'."),
         };
 
+        // Check for write back to zero register
+        if (instruction.WritesBackToZero())
+        {
+            _logger?.Log(Severity.Message, LogId.ZeroRegWriteBack, "This instruction writes to $zero.");
+        }
+
         return true;
     }
 
@@ -172,7 +179,7 @@ public struct InstructionParser
     private bool TryParseExpressionArg(string arg, Argument target)
     {
         // Attempt to parse expression
-        if (!_expParser.TryParse(arg, out var value))
+        if (!_expParser.TryParse(arg, out var address))
             return false;
 
         // NOTE: Casting might truncate the value to fit the bit size.
@@ -187,6 +194,9 @@ public struct InstructionParser
             Argument.Address => 26,
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"Argument '{arg}' of type '{target}' attempted to parse as an expression."),
         };
+
+        // TODO: Handle rel table
+        long value = address.Value;
 
         // Shift and Address are unsigned. Immediate is the only signed argument
         bool signed = target is Argument.Immediate;
@@ -307,7 +317,7 @@ public struct InstructionParser
 
         return true;
     }
-    
+
     /// <returns>
     /// 0 if unchanged, 1 if signChanged (maybe also have been truncated), and 2 if truncated.
     /// </returns>

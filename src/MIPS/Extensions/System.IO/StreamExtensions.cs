@@ -2,7 +2,7 @@
 
 using System.Numerics;
 
-namespace System.IO;
+namespace MIPS.Extensions.System.IO;
 
 /// <summary>
 /// A class containing extensions for <see cref="Stream"/>.

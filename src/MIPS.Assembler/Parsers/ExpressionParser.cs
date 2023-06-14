@@ -3,11 +3,12 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Models.Construction;
+using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Parsers.Enums;
 using MIPS.Assembler.Parsers.Expressions;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -23,7 +24,7 @@ public struct ExpressionParser
 {
     private readonly ModuleConstruction? _obj;
     private readonly ILogger? _logger;
-    private readonly IEvaluator<long> _evaluator;
+    private readonly IEvaluator<Address> _evaluator;
     private ExpressionTree? _tree;
     private ExpressionParserState _state;
     private string _cache;
@@ -42,22 +43,19 @@ public struct ExpressionParser
     {
         _obj = obj;
         _logger = logger;
-        _evaluator = new IntegerEvaluator();
+        _evaluator = new AddressEvaluator();
         _tree = null;
         _state = ExpressionParserState.Start;
         _cache = string.Empty;
     }
 
     /// <summary>
-    /// Parses an expression as an integer.
+    /// Parses an expression as an <see cref="Address"/>.
     /// </summary>
-    /// <remarks>
-    /// Parsed as long integer.
-    /// </remarks>
     /// <param name="expression">The string expression to parse.</param>
     /// <param name="result">The expression parsed as a integer.</param>
     /// <returns><see langword="true"/> if the expression was successfully parsed, <see langword="false"/> otherwise.</returns>
-    public bool TryParse(string expression, out long result)
+    public bool TryParse(string expression, out Address result)
     {
         result = default;
 
@@ -208,7 +206,7 @@ public struct ExpressionParser
         }
 
         // Construct node
-        var node = new IntegerNode(result);
+        var node = new AddressNode(result);
         _tree.AddNode(node);
 
         return true;
@@ -219,10 +217,10 @@ public struct ExpressionParser
         Guard.IsNotNull(_obj);
         Guard.IsNotNull(_tree);
 
-        if (!_obj.TryGetRealizedSymbol(_cache, out var value))
+        if (!_obj.TryGetSymbol(_cache, out var value))
             return false;
 
-        var node = new IntegerNode(value);
+        var node = new AddressNode(value);
         _tree.AddNode(node);
         return true;
     }

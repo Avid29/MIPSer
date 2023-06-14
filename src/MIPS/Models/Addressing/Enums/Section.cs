@@ -5,10 +5,11 @@ namespace MIPS.Models.Addressing.Enums;
 /// <summary>
 /// An enum marking the segment an address belongs to.
 /// </summary>
-public enum Segment
+public enum Section
 {
 #pragma warning disable CS1591
-
+    
+    None,
     Text,                   // text
     ReadOnlyData,           // rdata
     Data,                   // data

@@ -2,6 +2,7 @@
 
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Parsers.Expressions.Abstract;
 
@@ -26,5 +27,5 @@ public abstract class ExpNode
     /// <param name="evaluator">The <see cref="IEvaluator{T}"/> to use in evaluating the tree.</param>
     /// <param name="result">The evaluated expression tree.</param>
     /// <returns><see langword="true"/> when tree was successfully evaluated. <see langword="false"/> otherwise.</returns>
-    public abstract bool TryEvaluate(IEvaluator<long> evaluator, out long result);
+    public abstract bool TryEvaluate(IEvaluator<Address> evaluator, out Address result);
 }

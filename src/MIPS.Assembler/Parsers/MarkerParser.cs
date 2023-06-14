@@ -81,14 +81,14 @@ public readonly struct MarkerParser
 
     private static bool TryParseSegmentMarker(string name, out Marker marker)
     {
-        Segment segment = name switch
+        Section section = name switch
         {
-            "text" => Segment.Text,
-            "data" => Segment.Data,
-            _ => ThrowHelper.ThrowArgumentException<Segment>($"'{name}' cannot be parsed as a segment marker."),
+            "text" => Section.Text,
+            "data" => Section.Data,
+            _ => ThrowHelper.ThrowArgumentException<Section>($"'{name}' cannot be parsed as a segment marker."),
         };
 
-        marker = new SegmentMarker(segment);
+        marker = new SectionMarker(section);
         return true;
     }
 

@@ -8,29 +8,58 @@ namespace MIPS.Assembler.Parsers.Expressions.Evaluator;
 public struct IntegerEvaluator : IEvaluator<long>
 {
     /// <inheritdoc/>
-    public long Add(long left, long right) => left + right;
+    public bool TryAdd(long left, long right, out long result)
+    {
+        result = left + right;
+        return true;
+    }
     
     /// <inheritdoc/>
-    public long Subtract(long left, long right) => left - right;
+    public bool TrySubtract(long left, long right, out long result)
+    {
+        result = left - right;
+        return true;
+    }
     
     /// <inheritdoc/>
-    public long Multiply(long left, long right) => left * right;
+    public bool TryMultiply(long left, long right, out long result)
+    {
+        result = left * right;
+        return true;
+    }
     
     /// <inheritdoc/>
-    public long Divide(long left, long right) => left / right;
+    public bool TryDivide(long left, long right, out long result)
+    {
+        result = left / right;
+        return true;
+    }
     
     /// <inheritdoc/>
-    public long Mod(long left, long right) => left % right;
-
-    /// <inheritdoc/>
-    public long And(long left, long right) => left & right;
+    public bool TryMod(long left, long right, out long result)
+    {
+        result = left % right;
+        return true;
+    }
     
     /// <inheritdoc/>
-    public long Or(long left, long right) => left | right;
-
+    public bool TryAnd(long left, long right, out long result)
+    {
+        result = left & right;
+        return true;
+    }
+    
     /// <inheritdoc/>
-    // NOTE: Using Xor properly will cause the assembly to be flagged as malware
-    // by Windows Defender, and the dll will subsequently be deleted before execution.
-    // As a result, logical XOR has been replaced with an equivalent expression for now.
-    public long Xor(long left, long right) => (left | right) & ~(left & right);
+    public bool TryOr(long left, long right, out long result)
+    {
+        result = left | right;
+        return true;
+    }
+    
+    /// <inheritdoc/>
+    public bool TryXor(long left, long right, out long result)
+    {
+        result = left ^ right;
+        return true;
+    }
 }

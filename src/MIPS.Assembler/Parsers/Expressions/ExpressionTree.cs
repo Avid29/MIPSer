@@ -3,6 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Parsers.Expressions;
 
@@ -29,7 +30,7 @@ public class ExpressionTree
     /// <param name="evaluator">The <see cref="IEvaluator{T}"/> to use in evaluation.</param>
     /// <param name="result">The resulting value of the tree.</param>
     /// <returns><see cref="true"/> if successfully evaluated. <see cref="false"/> otherwise.></returns>
-    public bool TryEvaluate(IEvaluator<long> evaluator, out long result)
+    public bool TryEvaluate(IEvaluator<Address> evaluator, out Address result)
     {
         result = default;
         if (_root is null)
@@ -39,9 +40,9 @@ public class ExpressionTree
     }
 
     /// <summary>
-    /// Adds a <see cref="ValueNode"/> to the expression tree.
+    /// Adds a <see cref="AddressNode"/> to the expression tree.
     /// </summary>
-    public void AddNode(ValueNode node)
+    public void AddNode(AddressNode node)
     {
         // Handle first value node
         if (_root is null)
