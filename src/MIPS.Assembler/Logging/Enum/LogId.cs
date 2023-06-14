@@ -37,5 +37,9 @@ public enum LogId
     InvalidDirectiveArg,
     InvalidDirectiveArgCount,
 
+    // String parsing errors
+    UnrecognizedEscapeSequence,
+    UnescapedQuoteInString,
+
     #pragma warning restore CS1591
 }

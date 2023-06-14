@@ -6,13 +6,16 @@ using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Directives;
 using MIPS.Assembler.Models.Directives.Abstract;
 using MIPS.Models.Addressing.Enums;
+using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace MIPS.Assembler.Parsers;
 
-// TODO: Use Logger to handle errors
+// TODO: Allow repeat with <express> [: <count>] format
 // TODO: Handle expressions
 
 /// <summary>
@@ -52,32 +55,23 @@ public readonly struct DirectiveParser
         {
             // Section directives
             case "text":
-            case "data":
-                return TryParseSection(name, args, out directive);
+            case "data": return TryParseSection(name, args, out directive);
 
             // Global References
-            case "globl":
-                return TryParseGlobal(args, out directive);
+            case "globl": return TryParseGlobal(args, out directive);
 
             // Align
-            case "align":
-                return TryParseAlign(args, out directive);
+            case "align": return TryParseAlign(args, out directive);
 
             // Data
-            case "space":
-                return TryParseSpace(args, out directive);
+            case "space": return TryParseSpace(args, out directive);
 
-            case "word":
-                return TryParseData<int>(name, args, out directive);
-            case "half":
-                return TryParseData<short>(name, args, out directive);
-            case "byte":
-                return TryParseData<byte>(name, args, out directive);
+            case "word": return TryParseData<int>(name, args, out directive);
+            case "half": return TryParseData<short>(name, args, out directive);
+            case "byte": return TryParseData<byte>(name, args, out directive);
 
-            // TODO: Parse ascii
-            case "ascii":
-            case "asciiz":
-                break;
+            case "ascii": return TryParseAscii(args, false, out directive);
+            case "asciiz": return TryParseAscii(args, true, out directive);
         }
 
         // Invalid directive
@@ -198,6 +192,32 @@ public readonly struct DirectiveParser
         }
 
         directive = new DataDirective(bytes);
+        return true;
+    }
+
+    private bool TryParseAscii(string[] args, bool terminate, out Directive? directive)
+    {
+        directive = null;
+
+        var parser = new StringParser(_logger);
+
+        var bytes = new List<byte>();
+        foreach (var arg in args)
+        {
+            // Parse string statement to string literal
+            if (!parser.TryParseString(arg, out var value))
+                return false;
+
+            // Copy to byte list
+            bytes.Capacity += value.Length;
+            bytes.AddRange(value.Select(x => (byte)x));
+
+            // Null terminate string conditionally
+            if (terminate)
+                bytes.Add(0);
+        }
+
+        directive = new DataDirective(bytes.ToArray());
         return true;
     }
 }
