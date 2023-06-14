@@ -5,9 +5,10 @@ namespace MIPS.Models.Instructions.Enums;
 /// <summary>
 /// These values go in the <see cref="Argument.RT"/> field of instructions with <see cref="OperationCode.BranchConditional"/>.
 /// </summary>
-public enum BranchConditionalCodes
+public enum BranchCode : byte
 {
     #pragma warning disable CS1591
+    None = 0,
 
     BranchOnLessThanZero = 0x00,
     BranchOnGreaterOrEqualToThanZero = 0x01,

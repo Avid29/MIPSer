@@ -11,8 +11,6 @@ public enum FunctionCode : byte
 
     None = 0,
 
-    // Question: What is 0x01?
-
     ShiftLeftLogical = 0x00,
     ShiftRightLogical = 0x02,
     ShiftRightArithmetic = 0x03,

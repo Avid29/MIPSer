@@ -16,7 +16,7 @@ public enum OperationCode : byte
     RType = 0x00,
     
     /// <summary>
-    /// Marks a conditional branch instruction. See <see cref="BranchConditionalCodes"/>.
+    /// Marks a conditional branch instruction. See <see cref="BranchCode"/>.
     /// </summary>
     BranchConditional = 0x01,
 
@@ -42,10 +42,10 @@ public enum OperationCode : byte
 
     LoadUpperImmediate = 0x0f,
 
-    MoveFromCoprocessor0 = 0x10,
-    MoveFromCoprocessor1 = 0x11,
-    MoveFromCoprocessor2 = 0x12,
-    MoveFromCoprocessor3 = 0x13,
+    Coprocessor0 = 0x10,
+    Coprocessor1 = 0x11,
+    Coprocessor2 = 0x12,
+    Coprocessor3 = 0x13,
 
     LoadByte = 0x20,
     LoadHalfWord = 0x21,

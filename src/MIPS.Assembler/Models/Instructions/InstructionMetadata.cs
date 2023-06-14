@@ -18,6 +18,7 @@ public struct InstructionMetadata
         Name = name;
         OpCode = opCode;
         FuncCode = FunctionCode.None;
+        BranchCode = BranchCode.None;
         ArgumentPattern = argumentPattern;
     }
     
@@ -29,6 +30,19 @@ public struct InstructionMetadata
         Name = name;
         OpCode = OperationCode.RType;
         FuncCode = funcCode;
+        BranchCode = BranchCode.None;
+        ArgumentPattern = argumentPattern;
+    }
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
+    /// </summary>
+    public InstructionMetadata(string name, BranchCode branchCode, Argument[] argumentPattern)
+    {
+        Name = name;
+        OpCode = OperationCode.BranchConditional;
+        FuncCode = FunctionCode.None;
+        BranchCode = branchCode;
         ArgumentPattern = argumentPattern;
     }
 
@@ -46,6 +60,11 @@ public struct InstructionMetadata
     /// Gets the instruction function code.
     /// </summary>
     public FunctionCode FuncCode { get; }
+
+    /// <summary>
+    /// Gets the instruction branch code.
+    /// </summary>
+    public BranchCode BranchCode { get; }
 
     /// <summary>
     /// Gets the function type.

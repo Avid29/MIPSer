@@ -18,12 +18,9 @@ public static class InstructionTypeHelper
     {
         return opCode switch
         {
-            OperationCode.RType or
-                OperationCode.MoveFromCoprocessor => InstructionType.R,
-
-            OperationCode.Jump or 
-                OperationCode.JumpAndLink => InstructionType.J,
-
+            OperationCode.RType => InstructionType.R,
+            OperationCode.Jump or
+            OperationCode.JumpAndLink => InstructionType.J,
             _ => InstructionType.I,
         };
     }

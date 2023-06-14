@@ -13,93 +13,116 @@ namespace MIPS.Assembler.Helpers;
 public static class ConstantTables
 {
     // R type patterns
-    private static readonly Argument[] StandardRPattern = {Argument.RD, Argument.RS, Argument.RT};                      // <instr>  $rd, $rs, $rt
-    private static readonly Argument[] MultiplyRPattern = {Argument.RS, Argument.RT};                                   // <instr>  $rs, $rt
-    private static readonly Argument[] ShiftPattern = {Argument.RD, Argument.RT, Argument.Shift};                       // <instr>  $rd, $rt, sa
-    private static readonly Argument[] VariableShiftPattern = {Argument.RD, Argument.RT, Argument.RS};                  // <instr>  $rd, $rt, $rs
-    private static readonly Argument[] JumpRegisterPattern = {Argument.RS};                                             // <instr>  $rs
-    private static readonly Argument[] MoveFromPattern = {Argument.RD};                                                 // <instr>  $rd
-    private static readonly Argument[] MoveToPattern = {Argument.RS};                                                   // <instr>  $rs
+    private static readonly Argument[] StandardRPattern = {Argument.RD, Argument.RS, Argument.RT};                          // <instr>  $rd, $rs, $rt
+    private static readonly Argument[] MultiplyRPattern = {Argument.RS, Argument.RT};                                       // <instr>  $rs, $rt
+    private static readonly Argument[] ShiftPattern = {Argument.RD, Argument.RT, Argument.Shift};                           // <instr>  $rd, $rt, sa
+    private static readonly Argument[] VariableShiftPattern = {Argument.RD, Argument.RT, Argument.RS};                      // <instr>  $rd, $rt, $rs
+    private static readonly Argument[] JumpRegisterPattern = {Argument.RS};                                                 // <instr>  $rs
+    private static readonly Argument[] MoveFromPattern = {Argument.RD};                                                     // <instr>  $rd
+    private static readonly Argument[] MoveToPattern = {Argument.RS};                                                       // <instr>  $rs
     
     // I type patterns
-    private static readonly Argument[] StandardIPattern = {Argument.RT, Argument.RS, Argument.Immediate};               // <instr>  $rt, $rs, imm
-    private static readonly Argument[] BranchComparePattern = {Argument.RS, Argument.RT, Argument.Immediate};           // <instr>  $rs, $rt, offset
-    private static readonly Argument[] BranchPattern = {Argument.RS,  Argument.Immediate};                              // <instr>  $rs, offset
-    private static readonly Argument[] LoadImmediatePattern = {Argument.RT, Argument.Immediate};                        // <instr>  $rt, imm
-    private static readonly Argument[] MemoryPattern = {Argument.RT, Argument.AddressOffset};                           // <instr>  $rt, offset($rs)
+    private static readonly Argument[] StandardIPattern = {Argument.RT, Argument.RS, Argument.Immediate};                   // <instr>  $rt, $rs, imm
+    private static readonly Argument[] BranchComparePattern = {Argument.RS, Argument.RT, Argument.Immediate};               // <instr>  $rs, $rt, offset
+    private static readonly Argument[] BranchPattern = {Argument.RS,  Argument.Immediate};                                  // <instr>  $rs, offset
+    private static readonly Argument[] LoadImmediatePattern = {Argument.RT, Argument.Immediate};                            // <instr>  $rt, imm
+    private static readonly Argument[] MemoryPattern = {Argument.RT, Argument.AddressOffset};                               // <instr>  $rt, offset($rs)
 
     // J type patterns
-    private static readonly Argument[] JumpPattern = {Argument.Address};                                                // <instr>  addr
+    private static readonly Argument[] JumpPattern = {Argument.Address};                                                    // <instr>  addr
 
     private static readonly Dictionary<string, InstructionMetadata> _instructionTable = new()
     {
-        { "sll", new InstructionMetadata("sll", FunctionCode.ShiftLeftLogical, ShiftPattern) },                         // sll      $rd, $rt, sa
-        { "srl", new InstructionMetadata("srl", FunctionCode.ShiftRightLogical, ShiftPattern) },                        // ssl      $rd, $rt, sa
-        { "sra", new InstructionMetadata("sra", FunctionCode.ShiftRightArithmetic, ShiftPattern) },                     // sra      $rd, $rt, sa
+        { "sll", new InstructionMetadata("sll", FunctionCode.ShiftLeftLogical, ShiftPattern) },                             // sll      $rd, $rt, sa
+        { "srl", new InstructionMetadata("srl", FunctionCode.ShiftRightLogical, ShiftPattern) },                            // ssl      $rd, $rt, sa
+        { "sra", new InstructionMetadata("sra", FunctionCode.ShiftRightArithmetic, ShiftPattern) },                         // sra      $rd, $rt, sa
 
-        { "sllv", new InstructionMetadata("sllv", FunctionCode.ShiftLeftLogicalVariable, VariableShiftPattern) },       // sllv     $rd, $rt, $rs
-        { "srlv", new InstructionMetadata("srlv", FunctionCode.ShiftRightLogicalVariable, VariableShiftPattern) },      // srlv     $rd, $rt, $rs
-        { "srav", new InstructionMetadata("srav", FunctionCode.ShiftRightArithmeticVariable, VariableShiftPattern) },   // srav     $rd, $rt, $rs
+        { "sllv", new InstructionMetadata("sllv", FunctionCode.ShiftLeftLogicalVariable, VariableShiftPattern) },           // sllv     $rd, $rt, $rs
+        { "srlv", new InstructionMetadata("srlv", FunctionCode.ShiftRightLogicalVariable, VariableShiftPattern) },          // srlv     $rd, $rt, $rs
+        { "srav", new InstructionMetadata("srav", FunctionCode.ShiftRightArithmeticVariable, VariableShiftPattern) },       // srav     $rd, $rt, $rs
 
-        { "jr", new InstructionMetadata("jr", FunctionCode.JumpRegister, JumpRegisterPattern) },                        // jr       $rs
-        { "jalr", new InstructionMetadata("jalr", FunctionCode.JumpAndLinkRegister, JumpRegisterPattern) },             // jalr     $rs
+        { "jr", new InstructionMetadata("jr", FunctionCode.JumpRegister, JumpRegisterPattern) },                            // jr       $rs
+        { "jalr", new InstructionMetadata("jalr", FunctionCode.JumpAndLinkRegister, JumpRegisterPattern) },                 // jalr     $rs
 
-        { "syscall", new InstructionMetadata("syscall", FunctionCode.SystemCall, Array.Empty<Argument>()) },            // syscall
+        { "syscall", new InstructionMetadata("syscall", FunctionCode.SystemCall, Array.Empty<Argument>()) },                // syscall
 
-        { "mfhi", new InstructionMetadata("mfhi", FunctionCode.MoveFromHigh, MoveFromPattern) },                        // mfhi     $rd
-        { "mthi", new InstructionMetadata("mthi", FunctionCode.MoveToHigh, MoveToPattern) },                            // mthi     $rs
-        { "mflo", new InstructionMetadata("mflo", FunctionCode.MoveFromLow, MoveFromPattern) },                         // mflo     $rd
-        { "mtlo", new InstructionMetadata("mtlo", FunctionCode.MoveToLow, MoveToPattern) },                             // mtlo     $rs
+        { "mfhi", new InstructionMetadata("mfhi", FunctionCode.MoveFromHigh, MoveFromPattern) },                            // mfhi     $rd
+        { "mthi", new InstructionMetadata("mthi", FunctionCode.MoveToHigh, MoveToPattern) },                                // mthi     $rs
+        { "mflo", new InstructionMetadata("mflo", FunctionCode.MoveFromLow, MoveFromPattern) },                             // mflo     $rd
+        { "mtlo", new InstructionMetadata("mtlo", FunctionCode.MoveToLow, MoveToPattern) },                                 // mtlo     $rs
 
-        { "mult", new InstructionMetadata("mult", FunctionCode.Multiply, MultiplyRPattern) },                           // mult     $rs, $rt
-        { "multu", new InstructionMetadata("multu", FunctionCode.MultiplyUnsigned, MultiplyRPattern) },                 // multu    $rs, $rt
-        { "div", new InstructionMetadata("div", FunctionCode.Divide, MultiplyRPattern) },                               // div      $rs, $rt
-        { "divu", new InstructionMetadata("divu", FunctionCode.DivideUnsigned, MultiplyRPattern) },                     // divu     $rs, $rt
+        { "mult", new InstructionMetadata("mult", FunctionCode.Multiply, MultiplyRPattern) },                               // mult     $rs, $rt
+        { "multu", new InstructionMetadata("multu", FunctionCode.MultiplyUnsigned, MultiplyRPattern) },                     // multu    $rs, $rt
+        { "div", new InstructionMetadata("div", FunctionCode.Divide, MultiplyRPattern) },                                   // div      $rs, $rt
+        { "divu", new InstructionMetadata("divu", FunctionCode.DivideUnsigned, MultiplyRPattern) },                         // divu     $rs, $rt
 
-        { "add", new InstructionMetadata("add", FunctionCode.Add, StandardRPattern) },                                  // add      $rd, $rs, $rt
-        { "addu", new InstructionMetadata("addu", FunctionCode.AddUnsigned, StandardRPattern) },                        // addu     $rd, $rs, $rt
-        { "sub", new InstructionMetadata("sub", FunctionCode.Subtract, StandardRPattern) },                             // sub      $rd, $rs, $rt
-        { "subu", new InstructionMetadata("subu", FunctionCode.SubtractUnsigned, StandardRPattern) },                   // subu     $rd, $rs, $rt
+        { "add", new InstructionMetadata("add", FunctionCode.Add, StandardRPattern) },                                      // add      $rd, $rs, $rt
+        { "addu", new InstructionMetadata("addu", FunctionCode.AddUnsigned, StandardRPattern) },                            // addu     $rd, $rs, $rt
+        { "sub", new InstructionMetadata("sub", FunctionCode.Subtract, StandardRPattern) },                                 // sub      $rd, $rs, $rt
+        { "subu", new InstructionMetadata("subu", FunctionCode.SubtractUnsigned, StandardRPattern) },                       // subu     $rd, $rs, $rt
 
-        { "and", new InstructionMetadata("and", FunctionCode.And, StandardRPattern) },                                  // and      $rd, $rs, $rt
-        { "or", new InstructionMetadata("or", FunctionCode.Or, StandardRPattern) },                                     // or       $rd, $rs, $rt
-        { "xor", new InstructionMetadata("xor", FunctionCode.ExclusiveOr, StandardRPattern) },                          // xor      $rd, $rs, $rt
-        { "nor", new InstructionMetadata("nor", FunctionCode.Nor, StandardRPattern) },                                  // nor      $rd, $rs, $rt
+        { "and", new InstructionMetadata("and", FunctionCode.And, StandardRPattern) },                                      // and      $rd, $rs, $rt
+        { "or", new InstructionMetadata("or", FunctionCode.Or, StandardRPattern) },                                         // or       $rd, $rs, $rt
+        { "xor", new InstructionMetadata("xor", FunctionCode.ExclusiveOr, StandardRPattern) },                              // xor      $rd, $rs, $rt
+        { "nor", new InstructionMetadata("nor", FunctionCode.Nor, StandardRPattern) },                                      // nor      $rd, $rs, $rt
 
-        { "slt", new InstructionMetadata("slt", FunctionCode.SetLessThan, StandardRPattern) },                          // slt      $rd, $rs, $rt
-        { "sltu", new InstructionMetadata("sltu", FunctionCode.SetLessThanUnsigned, StandardRPattern) },                // sltu     $rd, $rs, $rt
+        { "slt", new InstructionMetadata("slt", FunctionCode.SetLessThan, StandardRPattern) },                              // slt      $rd, $rs, $rt
+        { "sltu", new InstructionMetadata("sltu", FunctionCode.SetLessThanUnsigned, StandardRPattern) },                    // sltu     $rd, $rs, $rt
         
-        { "j", new InstructionMetadata("j", OperationCode.Jump, JumpPattern) },                                         // j        addr
-        { "jal", new InstructionMetadata("jal", OperationCode.JumpAndLink, JumpPattern) },                              // jal      addr
+        { "bltz", new InstructionMetadata("bltz", BranchCode.BranchOnLessThanZero, BranchPattern)},                         // bltz     $rs, offset
+        { "bgez", new InstructionMetadata("bgez", BranchCode.BranchOnGreaterOrEqualToThanZero, BranchPattern)},             // bgez     $rs, offset
+        { "bltzal", new InstructionMetadata("bltzal", BranchCode.BranchOnLessThanZeroAndLink, BranchPattern)},              // bltzal   $rs, offset
+        { "bgezal", new InstructionMetadata("bgezal", BranchCode.BranchOnGreaterThanOrEqualToZeroAndLink, BranchPattern)},  // bgezal   $rs, offset
 
-        { "beq", new InstructionMetadata("beq", OperationCode.BranchOnEquals, BranchComparePattern) },                  // beq      $rs, $rt, offset
-        { "bne", new InstructionMetadata("bne", OperationCode.BranchOnNotEquals, BranchComparePattern) },               // bne      $rs, $rt, offset
-        { "blez", new InstructionMetadata("blez", OperationCode.BranchOnLessThanOrEqualToZero, BranchPattern) },        // blez     $rs, offset
-        { "bgtz", new InstructionMetadata("bgtz", OperationCode.BranchGreaterThanZero, BranchPattern) },                // bgtz     $rs, offset
+        { "j", new InstructionMetadata("j", OperationCode.Jump, JumpPattern) },                                             // j        addr
+        { "jal", new InstructionMetadata("jal", OperationCode.JumpAndLink, JumpPattern) },                                  // jal      addr
 
-        { "addi", new InstructionMetadata("addi", OperationCode.AddImmediate, StandardIPattern) },                      // addi     $rt, $rs, imm
-        { "addiu", new InstructionMetadata("addiu", OperationCode.AddImmediateUnsigned, StandardIPattern) },            // addiu    $rt, $rs, imm
+        { "beq", new InstructionMetadata("beq", OperationCode.BranchOnEquals, BranchComparePattern) },                      // beq      $rs, $rt, offset
+        { "bne", new InstructionMetadata("bne", OperationCode.BranchOnNotEquals, BranchComparePattern) },                   // bne      $rs, $rt, offset
+        { "blez", new InstructionMetadata("blez", OperationCode.BranchOnLessThanOrEqualToZero, BranchPattern) },            // blez     $rs, offset
+        { "bgtz", new InstructionMetadata("bgtz", OperationCode.BranchGreaterThanZero, BranchPattern) },                    // bgtz     $rs, offset
 
-        { "slti", new InstructionMetadata("slti", OperationCode.SetLessThanImmediate, StandardIPattern) },              // slti     $rt, $rs, imm
-        { "sltiu", new InstructionMetadata("sltiu", OperationCode.SetLessThanImmediateUnsigned, StandardIPattern) },    // sltiu    $rt, $rs, imm
+        { "addi", new InstructionMetadata("addi", OperationCode.AddImmediate, StandardIPattern) },                          // addi     $rt, $rs, imm
+        { "addiu", new InstructionMetadata("addiu", OperationCode.AddImmediateUnsigned, StandardIPattern) },                // addiu    $rt, $rs, imm
 
-        { "andi", new InstructionMetadata("andi", OperationCode.AndImmediate, StandardIPattern) },                      // andi     $rt, $rs, imm
-        { "ori", new InstructionMetadata("ori", OperationCode.OrImmediate, StandardIPattern) },                         // ori      $rt, $rs, imm
-        { "xori", new InstructionMetadata("xori", OperationCode.ExclusiveOrImmediate, StandardIPattern) },              // xori     $rt, $rs, imm
+        { "slti", new InstructionMetadata("slti", OperationCode.SetLessThanImmediate, StandardIPattern) },                  // slti     $rt, $rs, imm
+        { "sltiu", new InstructionMetadata("sltiu", OperationCode.SetLessThanImmediateUnsigned, StandardIPattern) },        // sltiu    $rt, $rs, imm
 
-        { "lui", new InstructionMetadata("lui", OperationCode.LoadUpperImmediate, LoadImmediatePattern) },              // lui      $rt, imm
+        { "andi", new InstructionMetadata("andi", OperationCode.AndImmediate, StandardIPattern) },                          // andi     $rt, $rs, imm
+        { "ori", new InstructionMetadata("ori", OperationCode.OrImmediate, StandardIPattern) },                             // ori      $rt, $rs, imm
+        { "xori", new InstructionMetadata("xori", OperationCode.ExclusiveOrImmediate, StandardIPattern) },                  // xori     $rt, $rs, imm
 
-        // TODO: CoProcessing
+        { "lui", new InstructionMetadata("lui", OperationCode.LoadUpperImmediate, LoadImmediatePattern) },                  // lui      $rt, imm
+
+        // TODO: Coprocessors
+        //{ "cop0", },
+        //{ "cop1", },
+        //{ "cop2", },
+        //{ "cop3", },
         
-        { "lb", new InstructionMetadata("lb", OperationCode.LoadByte, MemoryPattern) },                                 // lb       $rt, offset($rs)
-        { "lh", new InstructionMetadata("lh", OperationCode.LoadHalfWord, MemoryPattern) },                             // lh       $rt, offset($rs)
-        { "lw", new InstructionMetadata("lw", OperationCode.LoadWord, MemoryPattern) },                                 // lw       $rt, offset($rs)
-        { "lbu", new InstructionMetadata("lbu", OperationCode.LoadByteUnsigned, MemoryPattern) },                       // lbu      $rt, offset($rs)
-        { "lhu", new InstructionMetadata("lhu", OperationCode.LoadHalfWordUnsigned, MemoryPattern) },                   // lhu      $rt, offset($rs)
+        { "lb", new InstructionMetadata("lb", OperationCode.LoadByte, MemoryPattern) },                                     // lb       $rt, offset($rs)
+        { "lh", new InstructionMetadata("lh", OperationCode.LoadHalfWord, MemoryPattern) },                                 // lh       $rt, offset($rs)
+        { "lwl", new InstructionMetadata("lwl", OperationCode.LoadWordLeft, MemoryPattern) },                               // lwl      $rt, offset($rs)
+        { "lw", new InstructionMetadata("lw", OperationCode.LoadWord, MemoryPattern) },                                     // lw       $rt, offset($rs)
+        { "lbu", new InstructionMetadata("lbu", OperationCode.LoadByteUnsigned, MemoryPattern) },                           // lbu      $rt, offset($rs)
+        { "lhu", new InstructionMetadata("lhu", OperationCode.LoadHalfWordUnsigned, MemoryPattern) },                       // lhu      $rt, offset($rs)
+        { "lwr", new InstructionMetadata("lwr", OperationCode.LoadWordRight, MemoryPattern) },                              // lwr      $rt, offset($rs)
                                                                                                                        
-        { "sb", new InstructionMetadata("sb", OperationCode.StoreByte, MemoryPattern) },                                // sb       $rt, offset($rs)
-        { "sh", new InstructionMetadata("sh", OperationCode.StoreHalfWord, MemoryPattern) },                            // sh       $rt, offset($rs)
-        { "sw", new InstructionMetadata("sw", OperationCode.StoreWord, MemoryPattern) },                                // sw       $rt, offset($rs)
+        { "sb", new InstructionMetadata("sb", OperationCode.StoreByte, MemoryPattern) },                                    // sb       $rt, offset($rs)
+        { "sh", new InstructionMetadata("sh", OperationCode.StoreHalfWord, MemoryPattern) },                                // sh       $rt, offset($rs)
+        { "swl", new InstructionMetadata("swl", OperationCode.StoreWordLeft, MemoryPattern) },                              // swl      $rt, offset($rs)
+        { "sw", new InstructionMetadata("sw", OperationCode.StoreWord, MemoryPattern) },                                    // sw       $rt, offset($rs)
+        { "swr", new InstructionMetadata("swr", OperationCode.StoreWordRight, MemoryPattern) },                             // swr      $rt, offset($rs)
+
+        // TODO: Coprocessors
+        //{ "lwc0", },
+        //{ "lwc1", },
+        //{ "lwc2", },
+        //{ "lwc3", },
+        //{ "swc0", },
+        //{ "swc1", },
+        //{ "swc2", },
+        //{ "swc3", },
     };
 
     private static readonly Dictionary<string, Register> _registerTable = new()
