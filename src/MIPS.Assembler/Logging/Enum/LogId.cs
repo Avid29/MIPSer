@@ -24,6 +24,7 @@ public enum LogId
 
     // Instruction parser warnings
     IntegerTruncated,
+    RelocatableReferenceInShift,
 
     // Instruction parser messages
     ZeroRegWriteBack,

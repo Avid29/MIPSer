@@ -12,7 +12,7 @@ namespace MIPS.Assembler.Parsers.Expressions.Evaluator;
 /// </summary>
 public struct AddressEvaluator : IEvaluator<Address>
 {
-    private ILogger? _logger;
+    private readonly ILogger? _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AddressEvaluator"/> struct.
@@ -30,7 +30,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         // If both address are relocatable
         if (left.IsRelocatable && right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot sum two relative symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot sum two relocatable symbols.");
             return false;
         }
 
@@ -48,14 +48,13 @@ public struct AddressEvaluator : IEvaluator<Address>
     {
         result = default;
         
-        // TODO: Handle subtraction relocation
-        if (left.IsRelocatable || right.IsRelocatable)
+        if (right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot subtract with relative symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot subtract a relocatable symbol.");
             return false;
         }
         
-        result = new Address(left.Value - right.Value, Section.None);
+        result = new Address(left.Value - right.Value, left.Section);
         return true;
     }
     
@@ -67,7 +66,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         // Cannot multiply relocatable addressing 
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot multiply with relative symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot multiply with relocatable symbols.");
             return false;
         }
 
@@ -83,7 +82,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         // Cannot divide relocatable addressing
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot divide with relative symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot divide with relocatable symbols.");
             return false;
         }
 
@@ -99,7 +98,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         // Cannot mod relocatable addressing
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot take modulus with relative symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot take modulus with relocatable symbols.");
             return false;
         }
 
@@ -115,7 +114,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         // Cannot AND relocatable addressing
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical AND with relative symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical AND with relocatable symbols.");
             return false;
         }
 
@@ -131,7 +130,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         // Cannot OR relocatable addressing
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical OR with relative symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical OR with relocatable symbols.");
             return false;
         }
 
@@ -147,7 +146,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         // Cannot XOR relocatable addressing
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical XOR with relative symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical XOR with relocatable symbols.");
             return false;
         }
 

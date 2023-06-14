@@ -57,7 +57,7 @@ public partial class Assembler
             };
         }
     }
-    
+
     /// <summary>
     /// Gets the assembler's logs.
     /// </summary>

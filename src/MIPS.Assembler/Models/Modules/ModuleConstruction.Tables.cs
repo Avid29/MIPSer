@@ -48,7 +48,20 @@ public partial class ModuleConstruction
     /// <returns>Whether or not a symbol reference was made.</returns>
     public bool TryMakeReference(Address location, string symbol)
     {
-        // TODO:
-        return false;
+        // TODO: Track upper/lower
+        _references.Add(location, symbol);
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to track a relocation entry.
+    /// </summary>
+    /// <param name="location">The address of the relocation.</param>
+    /// <param name="symbol">The relocatable symbol.</param>
+    /// <returns>Whether or not a relocation entry was made.</returns>
+    public bool TryTrackRelocation(Address location, string symbol)
+    {
+        _relocations.Add(location, symbol);
+        return true;
     }
 }

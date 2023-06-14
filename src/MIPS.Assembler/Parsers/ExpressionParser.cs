@@ -28,6 +28,7 @@ public struct ExpressionParser
     private ExpressionTree? _tree;
     private ExpressionParserState _state;
     private string _cache;
+    private string? _relocatableSymbol;
     
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
@@ -47,6 +48,7 @@ public struct ExpressionParser
         _tree = null;
         _state = ExpressionParserState.Start;
         _cache = string.Empty;
+        _relocatableSymbol = null;
     }
 
     /// <summary>
@@ -54,10 +56,12 @@ public struct ExpressionParser
     /// </summary>
     /// <param name="expression">The string expression to parse.</param>
     /// <param name="result">The expression parsed as a integer.</param>
+    /// <param name="symbol">The symbol referenced if address expression is relocatable. Null otherwise.</param>
     /// <returns><see langword="true"/> if the expression was successfully parsed, <see langword="false"/> otherwise.</returns>
-    public bool TryParse(string expression, out Address result)
+    public bool TryParse(string expression, out Address result, out string? symbol)
     {
         result = default;
+        symbol = null;
 
         _tree = new ExpressionTree();
         _state = ExpressionParserState.Start;
@@ -111,8 +115,21 @@ public struct ExpressionParser
             return false;
         }
 
-        // Evaluate tree and return result
-        return _tree.TryEvaluate(_evaluator, out result);
+
+        // Evaluate tree
+        if (!_tree.TryEvaluate(_evaluator, out result))
+            return false;
+
+        // Output symbol if result is relocatable.
+        if (result.IsRelocatable)
+        {
+            // NOTE: Relocatable values can only in terms of one relocatable symbol
+            // If they depend on more than one relocatable symbol, they will have
+            // failed in evaluation.
+            symbol = _relocatableSymbol;
+        }
+
+        return true;
     }
 
     private bool TryParseFromStart(char c)
@@ -208,15 +225,14 @@ public struct ExpressionParser
 
     private bool TryFinish()
     {
-        switch (_state)
+        return _state switch
         {
-            case ExpressionParserState.Integer: return TryCompleteInteger();
-            case ExpressionParserState.Macro: return TryCompleteMacro();
-            case ExpressionParserState.CharClose: return TryCompleteChar();
-
-            case ExpressionParserState.Start:
-            default: return false;
-        }
+            ExpressionParserState.Integer => TryCompleteInteger(),
+            ExpressionParserState.Macro => TryCompleteMacro(),
+            ExpressionParserState.CharClose => TryCompleteChar(),
+            ExpressionParserState.Start => false,
+            _ => false
+        };
     }
 
     private bool TryParseOperator(Operation oper)
@@ -259,6 +275,12 @@ public struct ExpressionParser
 
         if (!_obj.TryGetSymbol(_cache, out var value))
             return false;
+        
+        // Cache relocatable symbol
+        if (value.IsRelocatable)
+        {
+            _relocatableSymbol = _cache;
+        }
 
         var node = new AddressNode(value);
         _tree.AddNode(node);

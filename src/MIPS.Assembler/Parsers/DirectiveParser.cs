@@ -51,31 +51,26 @@ public readonly struct DirectiveParser
     {
         directive = null;
 
-        switch (name)
+        return name switch
         {
             // Section directives
-            case "text":
-            case "data": return TryParseSection(name, args, out directive);
-
+            "text" => TryParseSection(name, args, out directive),
+            "data" => TryParseSection(name, args, out directive),
             // Global References
-            case "globl": return TryParseGlobal(args, out directive);
-
+            "globl" => TryParseGlobal(args, out directive),
             // Align
-            case "align": return TryParseAlign(args, out directive);
-
+            "align" => TryParseAlign(args, out directive),
             // Data
-            case "space": return TryParseSpace(args, out directive);
+            "space" => TryParseSpace(args, out directive),
+            "word" => TryParseData<int>(name, args, out directive),
+            "half" => TryParseData<short>(name, args, out directive),
+            "byte" => TryParseData<byte>(name, args, out directive),
+            "ascii" => TryParseAscii(args, false, out directive),
+            "asciiz" => TryParseAscii(args, true, out directive),
 
-            case "word": return TryParseData<int>(name, args, out directive);
-            case "half": return TryParseData<short>(name, args, out directive);
-            case "byte": return TryParseData<byte>(name, args, out directive);
-
-            case "ascii": return TryParseAscii(args, false, out directive);
-            case "asciiz": return TryParseAscii(args, true, out directive);
-        }
-
-        // Invalid directive
-        return false;
+            // Invalid directive
+            _ => false
+        };
     }
 
     private bool TryParseSection(string name, string[] args, out Directive? directive)

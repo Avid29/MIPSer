@@ -29,7 +29,7 @@ public unsafe partial class Assembler
                 return;
             }
 
-            if (!expressionParser.TryParse(expression, out var address))
+            if (!expressionParser.TryParse(expression, out var address, out var _))
                 return;
 
             if (address.IsRelocatable)
@@ -86,10 +86,16 @@ public unsafe partial class Assembler
                 return;
 
             // Try to parse instruction from name and arguments
-            if (!parser.TryParse(name, args, out var instruction))
+            if (!parser.TryParse(name, args, out var instruction, out var symbol))
             {
                 // Explicitly replace invalid instruction with a nop
                 instruction = Instruction.NOP;
+            }
+
+            // Track relocatable reference
+            if (symbol is not null)
+            {
+                _obj.TryTrackRelocation(CurrentAddress, symbol);
             }
 
             // Append instruction to active segment

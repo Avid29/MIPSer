@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
+using Microsoft.VisualBasic;
 using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
@@ -17,8 +18,8 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public struct InstructionParser
 {
-    private ModuleConstruction? _obj;
-    private ILogger? _logger;
+    private readonly ModuleConstruction? _obj;
+    private readonly ILogger? _logger;
 
     private InstructionMetadata _meta;
 
@@ -62,9 +63,11 @@ public struct InstructionParser
     /// <param name="name">The instruction name.</param>
     /// <param name="args">The instruction arguments.</param>
     /// <param name="instruction">The <see cref="Instruction"/>.</param>
+    /// <param name="symbol">The relocatable symbol referenced on this line. Or null if none.</param>
     /// <returns>Whether or not an instruction was parsed.</returns>
-    public bool TryParse(string name, string[] args, out Instruction instruction)
+    public bool TryParse(string name, string[] args, out Instruction instruction, out string? symbol)
     {
+        symbol = null;
         instruction = default;
 
         // Get instruction metadata from name
@@ -88,7 +91,7 @@ public struct InstructionParser
         // Parse argument data according to pattern
         Argument[] pattern = _meta.ArgumentPattern;
         for (int i = 0; i < args.Length; i++)
-            TryParseArg(args[i], pattern[i]);
+            TryParseArg(args[i], pattern[i], out symbol);
 
         // Create the instruction from its components based on the instruction type
         instruction = _meta.Type switch
@@ -108,8 +111,10 @@ public struct InstructionParser
         return true;
     }
 
-    private bool TryParseArg(string arg, Argument type)
+    private bool TryParseArg(string arg, Argument type, out string? symbol)
     {
+        symbol = null;
+
         // Trim whitespace from argument
         arg = arg.Trim();
 
@@ -124,10 +129,10 @@ public struct InstructionParser
             case Argument.Shift:
             case Argument.Immediate:
             case Argument.Address:
-                return TryParseExpressionArg(arg, type);
+                return TryParseExpressionArg(arg, type, out symbol);
             // Address offset type argument
             case Argument.AddressOffset:
-                return TryParseAddressOffsetArg(arg);
+                return TryParseAddressOffsetArg(arg, out symbol);
 
             // Invalid type
             default:
@@ -176,12 +181,12 @@ public struct InstructionParser
     /// <summary>
     /// Parses an argument as an expression and assigns it to the target component
     /// </summary>
-    private bool TryParseExpressionArg(string arg, Argument target)
+    private bool TryParseExpressionArg(string arg, Argument target, out string? symbol)
     {
         var parser = new ExpressionParser(_obj, _logger);
 
         // Attempt to parse expression
-        if (!parser.TryParse(arg, out var address))
+        if (!parser.TryParse(arg, out var address, out symbol))
             return false;
 
         // NOTE: Casting might truncate the value to fit the bit size.
@@ -197,7 +202,15 @@ public struct InstructionParser
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"Argument '{arg}' of type '{target}' attempted to parse as an expression."),
         };
 
-        // TODO: Handle rel table
+        if (address.IsRelocatable)
+        {
+            if (target is Argument.Shift)
+            {
+                _logger?.Log(Severity.Error, LogId.RelocatableReferenceInShift, "Shift amount argument cannot reference relocatable symbols.");
+                return false;
+            }
+        }
+
         long value = address.Value;
 
         // Shift and Address are unsigned. Immediate is the only signed argument
@@ -245,8 +258,10 @@ public struct InstructionParser
     /// <summary>
     /// Parses an argument as an address offset, assigning its components to immediate and $rs.
     /// </summary>
-    private bool TryParseAddressOffsetArg(string arg)
+    private bool TryParseAddressOffsetArg(string arg, out string? symbol)
     {
+        symbol = null;
+
         // NOTE: Be careful about forwards to other parse functions with regards to 
         // error logging. Address offset argument errors might be inappropriately logged.
 
@@ -256,7 +271,7 @@ public struct InstructionParser
             return false;
         
         // Try parse offset component into immediate, return false if failed
-        if (!TryParseExpressionArg(offsetStr, Argument.Immediate))
+        if (!TryParseExpressionArg(offsetStr, Argument.Immediate, out symbol))
             return false;
 
         // Parse register component into $rs, return false if failed
