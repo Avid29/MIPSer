@@ -22,6 +22,8 @@ public enum Section : byte
     SymbolTable,
     SymbolNameTable,
 
+    None,
+
 
 #pragma warning restore CS1591
 }
