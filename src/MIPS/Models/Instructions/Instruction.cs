@@ -169,7 +169,7 @@ public struct Instruction
     }
 
     /// <summary>
-    /// Gets the instruction's RS Register 
+    /// Gets the instruction's RT Register 
     /// </summary>
     public Register RT
     {
@@ -178,7 +178,7 @@ public struct Instruction
     }
 
     /// <summary>
-    /// Gets the instruction's RS Register 
+    /// Gets the instruction's RD Register 
     /// </summary>
     public Register RD
     {
@@ -187,7 +187,7 @@ public struct Instruction
     }
 
     /// <summary>
-    /// Gets the instruction's RS Register 
+    /// Gets the instruction's shift amount 
     /// </summary>
     public byte ShiftAmount
     {
