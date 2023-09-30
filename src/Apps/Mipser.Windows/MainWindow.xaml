@@ -8,7 +8,7 @@
     xmlns:shell="using:Mipser.Windows.Views.Shell"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource PrimaryBackground}" FlowDirection="LeftToRight">
+    <Grid Background="{StaticResource PrimaryBackground}">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

@@ -1,11 +1,6 @@
 // Adam Dernis 2023
 
 using Microsoft.UI.Xaml;
-using Windows.Storage.Pickers;
-using Windows.Storage;
-using WinRT.Interop;
-using System;
-using System.Threading.Tasks;
 
 namespace Mipser.Windows;
 
@@ -20,14 +15,5 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         this.InitializeComponent();
-        ExtendTitleBar();
-        
-    }
-
-    private void ExtendTitleBar()
-    {
-        //this.ExtendsContentIntoTitleBar = true;
-        //this.SetTitleBar(AppTitleBar);
-
     }
 }
