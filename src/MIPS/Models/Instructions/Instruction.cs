@@ -68,6 +68,108 @@ namespace MIPS.Models.Instructions;
 // ------- + ------ + ----- + ----- + ----- + ----- + ------ +
 // Meaning | R Type |   N/A |   $s0 |   $t0 |     3 |    sll |
 // ------- + ------ + ----- + ----- + ----- + ----- + ------ +
+//
+// 
+//                            I Type Instructions Summary
+// ----------------------------------------------------------------------------
+//      I type instructions split the field into an Operation Code (6 bits),
+// RS register (5 bits), RT register (5 bits), and an immediate value (16 bits).
+//
+//
+//                           I Type Instruction Components
+// ----------------------------------------------------------------------------
+//
+// Operation Code:
+//      The OP code is used to identify the instruction to run.
+// 
+// RS Register:
+//      I type instructions use RS as the first input register argument if required.
+// 
+// RT Register:
+//      I type instructions use RT as the write back register, except in memory saving
+//      and in branch comparing where two argument registers are required.
+
+// Immediate Value:
+//      The function code is used to differentiate R type instructions.
+//
+//                       I Type Instruction Assembled Examples
+// ----------------------------------------------------------------------------
+// > addi $t0, $s0, 20
+//         |  Oper  |  $rs  |  $rt  | Immediate Value  |
+//  ------ + ------ + ----- + ----- + ---------------- |
+// Binary  | 001000 | 10000 | 01000 | 0000000000010100 |
+// Hex     |     08 |    10 |    08 |               14 |
+// Decimal |      8 |    16 |     8 |               20 |
+// ------- + ------ + ----- + ----- + ---------------- +
+// Meaning |   addi |   $s0 |   $t0 |               20 |
+// ------- + ------ + ----- + ----- + ---------------- +
+//
+//
+// > bltz $a0, $t0, (label of +64)
+//         |  Oper  |  $rs  |  $rt  | Immediate Value  |
+//  ------ + ------ + ----- + ----- + ---------------- |
+// Binary  | 000110 | 00100 | 01000 | 0000000000010000 |
+// Hex     |     06 |    04 |    08 |               10 |
+// Decimal |      6 |    04 |     8 |               16 |
+// ------- + ------ + ----- + ----- + ---------------- +
+// Meaning |   bltz |   $a0 |   $t0 |               64 |
+// ------- + ------ + ----- + ----- + ---------------- +
+//
+// Note: The meaning of the immediate value is 4x the actual value because the instructions are aligned
+// to the 4 byte boundary. As a result, the last 4 bits can be dropped and can be utilized in the front
+// to represent an effectively 20 bit offset.
+//
+//
+// > sw $s0, 24($sp)
+//         |  Oper  |  $rs  |  $rt  | Immediate Value  |
+//  ------ + ------ + ----- + ----- + ---------------- |
+// Binary  | 000110 | 11101 | 10000 | 0000000000011000 |
+// Hex     |     06 |    1D |    10 |               18 |
+// Decimal |      6 |    29 |    16 |               24 |
+// ------- + ------ + ----- + ----- + ---------------- +
+// Meaning |     sw |   $sp |   $s0 |               24 |
+// ------- + ------ + ----- + ----- + ---------------- +
+//
+//
+// 
+//                            J Type Instructions Summary
+// ----------------------------------------------------------------------------
+//      I type instructions split the field into an Operation Code (6 bits),
+//  and an address value (26 bits).
+//
+//                           J Type Instruction Components
+// ----------------------------------------------------------------------------
+//
+// Operation Code:
+//      The OP code is used to identify the instruction to run.
+
+// Address:
+//      The jump address. This address must be word aligned, so the last 4 bits are dropped, making
+//      it effectively a 30 bit address. The remaining 2 bits are assumed to be equivalent to that
+//      of the current program counter.
+//
+//                       J Type Instruction Assembled Examples
+// ----------------------------------------------------------------------------
+// > j (label at 9,912)
+//         |  Oper  |           Address          |
+//  ------ + ------ + -------------------------- |
+// Binary  | 000010 | 00000000000000100110101110 |
+// Hex     |     02 |                       09AE |
+// Decimal |      2 |                       2478 |
+// ------- + ------ + -------------------------- +
+// Meaning |      j |                       9912 |
+// ------- + ------ + -------------------------- +
+//
+//
+// > jal (label at 6,808)
+//         |  Oper  |           Address          |
+//  ------ + ------ + -------------------------- |
+// Binary  | 000011 | 00000000000000011010100110 |
+// Hex     |     03 |                       06A6 |
+// Decimal |      3 |                       1702 |
+// ------- + ------ + -------------------------- +
+// Meaning |    jal |                       6808 |
+// ------- + ------ + -------------------------- +
 
 /// <summary>
 /// A struct representing an instruction.

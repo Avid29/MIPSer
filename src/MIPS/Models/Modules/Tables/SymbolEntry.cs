@@ -13,7 +13,7 @@ public struct SymbolEntry
     /// <summary>
     /// Fills the struct to 16 bytes.
     /// </summary>
-    [FieldOffset(14)]
+    [field: FieldOffset(14)]
     private readonly ushort _filler;
 
     /// <summary>

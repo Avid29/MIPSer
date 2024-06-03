@@ -14,7 +14,8 @@ public struct RelocationEntry
     /// <summary>
     /// Fills the struct to 8 bytes.
     /// </summary>
-    [field: FieldOffset(6)] private readonly ushort _filler;
+    [field: FieldOffset(6)]
+    private readonly ushort _filler;
 
     /// <summary>
     /// Gets the address to be relocated.
