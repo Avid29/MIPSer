@@ -48,7 +48,6 @@ public unsafe partial class Assembler
         // Create symbol if line is labeled
         if (labelStr is not null)
         {
-
             if (symbolParser.ValidateSymbolName(labelStr))
                 CreateSymbol(labelStr);
         }

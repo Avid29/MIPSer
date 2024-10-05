@@ -2,7 +2,7 @@
 
 # Features:
 # ------------------
-# Label usage:	Yes
+# Label usage:	Entry only
 # Macros:		Yes
 # Jumps:		No
 # Branches:		No
@@ -10,9 +10,11 @@
 # Syscalls:		No
 #
 
-TEST = 1
+.globl main
+
+TEST = 10
 
 main:
-	ori		$s0,	$zero,	10
+	ori		$s0,	$zero,	TEST
 	ori		$s1,	$zero,	main
 	add		$t0,	$s0,	$s1

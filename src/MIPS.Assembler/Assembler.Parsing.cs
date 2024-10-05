@@ -1,8 +1,6 @@
 ﻿// Adam Dernis 2023
 
-using MIPS.Assembler.Logging.Enum;
 using System;
-using System.Linq;
 
 namespace MIPS.Assembler;
 
