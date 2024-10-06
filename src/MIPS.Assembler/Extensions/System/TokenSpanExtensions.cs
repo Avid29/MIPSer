@@ -29,7 +29,7 @@ public static class TokenSpanExtensions
             trimmed = line[0];
             line = line[1..];
         }
-        
+
         return line;
     }
 

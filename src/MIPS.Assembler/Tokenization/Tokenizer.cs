@@ -283,7 +283,7 @@ public class Tokenizer
                 _logger?.Log(Severity.Error, LogId.MultiLineString, $"Empty character literal.", _line);
                 return false;
             }
-            
+
             // TODO: Allow escaped characters.
             if (_cache.Length is >= 2 && c is not '\'')
                 return false;

@@ -38,36 +38,36 @@ public enum ReferenceType : byte
     Immediate3 = 0x06,
 
 #pragma warning disable CS1591
-    
+
     // Method flags
     Add = 0x00,
     Replace = 0x10,
     Subtract = 0x20,
 
     // Explicit Combinations
-    AddSimpleImmediate =            Add | SimpleImmediate,
-    ReplaceSimpleImmediate =    Replace | SimpleImmediate,
-    SubtractSimpleImmediate =  Subtract | SimpleImmediate,
+    AddSimpleImmediate = Add | SimpleImmediate,
+    ReplaceSimpleImmediate = Replace | SimpleImmediate,
+    SubtractSimpleImmediate = Subtract | SimpleImmediate,
 
-    AddHalfWord =                   Add | HalfWord,
-    ReplaceHalfWord =           Replace | HalfWord,
-    SubtractHalfWord =         Subtract | HalfWord,
+    AddHalfWord = Add | HalfWord,
+    ReplaceHalfWord = Replace | HalfWord,
+    SubtractHalfWord = Subtract | HalfWord,
 
-    AddSplitImmediate =             Add | SplitImmediate,
-    ReplaceSplitImmediate =     Replace | SplitImmediate,
-    SubtractSplitImmediate =   Subtract | SplitImmediate,
+    AddSplitImmediate = Add | SplitImmediate,
+    ReplaceSplitImmediate = Replace | SplitImmediate,
+    SubtractSplitImmediate = Subtract | SplitImmediate,
 
-    AddFullWord =                   Add | FullWord,
-    ReplaceFullWord =           Replace | FullWord,
-    SubtractFullWord =         Subtract | FullWord,
+    AddFullWord = Add | FullWord,
+    ReplaceFullWord = Replace | FullWord,
+    SubtractFullWord = Subtract | FullWord,
 
-    AddAddress =                    Add | Address,
-    ReplaceAddress =            Replace | Address,
-    SubtractAddress =          Subtract | Address,
+    AddAddress = Add | Address,
+    ReplaceAddress = Replace | Address,
+    SubtractAddress = Subtract | Address,
 
-    AddImmediate3 =                 Add | Immediate3,
-    ReplaceImmediate3 =         Replace | Immediate3,
-    SubtractImmediate3 =       Subtract | Immediate3,
+    AddImmediate3 = Add | Immediate3,
+    ReplaceImmediate3 = Replace | Immediate3,
+    SubtractImmediate3 = Subtract | Immediate3,
 
 #pragma warning restore CS1591
 }

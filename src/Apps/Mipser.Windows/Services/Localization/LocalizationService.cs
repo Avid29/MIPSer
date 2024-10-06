@@ -1,7 +1,6 @@
 ﻿// Adam Dernis 2023
 
 using Mipser.Services.Localization;
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Windows.ApplicationModel.Resources;

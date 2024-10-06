@@ -9,7 +9,6 @@ using Mipser.ViewModels.Views;
 using Mipser.Windows.Services.Files;
 using Mipser.Windows.Services.Localization;
 using System;
-using WinRT;
 
 namespace Mipser.Windows;
 

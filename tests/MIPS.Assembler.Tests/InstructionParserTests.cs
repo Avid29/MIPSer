@@ -4,8 +4,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Parsers;
-using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using System;
@@ -122,7 +122,7 @@ public class InstructionParserTests
 
         var logger = new AssemblerLogger();
         var parser = new InstructionParser(null, logger);
-        
+
         var tokens = Tokenizer.TokenizeLine(input, nameof(RunTest));
         var args = tokens.TrimType(TokenType.Instruction, out var name);
         var succeeded = parser.TryParse(name!, args, out var actual, out var symbol);

@@ -99,7 +99,7 @@ public readonly struct DirectiveParser
     private bool TryParseGlobal(Span<Token> args, out Directive? directive)
     {
         directive = null;
-        
+
         // Global only takes one argument
         if (args.Length is not 1)
         {
@@ -127,7 +127,7 @@ public readonly struct DirectiveParser
             _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, $".align only takes one argument. Cannot parse {args.Length} arguments.");
             return false;
         }
-        
+
         // Align only takes immediates as an argument
         // TODO: Macro support
         if (args[0].Type is not TokenType.Immediate)
@@ -155,7 +155,7 @@ public readonly struct DirectiveParser
             _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, $".space only takes one argument. Cannot parse {args.Length} arguments.");
             return false;
         }
-        
+
         // Align only takes immediates as an argument
         // TODO: Macro support
         if (args[0].Type is not TokenType.Immediate)
@@ -217,14 +217,14 @@ public readonly struct DirectiveParser
         var parser = new StringParser(_logger);
 
         var bytes = new List<byte>();
-        
+
         Span<Token> arg;
         do
         {
             args = args.SplitAtNext(TokenType.Comma, out arg, out _);
 
             // TODO: Evaluate expressions
-            
+
             // Parse string statement to string literal
             if (!parser.TryParseString(arg[0].Source, out var value))
                 return false;

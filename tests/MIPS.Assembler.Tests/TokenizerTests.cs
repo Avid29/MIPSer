@@ -2,7 +2,6 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Assembler.Tokenization;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -15,7 +14,7 @@ public class TokenizerTests
 
     [TestMethod("test1.asm")]
     public async Task Test1() => await RunTest("test1.asm",
-        ".globl", "main", 
+        ".globl", "main",
         "main:",
         "ori", "$s0", ",", "$zero", ",", "10",
         "ori", "$s1", ",", "$zero", ",", "10",

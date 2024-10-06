@@ -3,9 +3,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Mipser.Bindables;
 using Mipser.Messages.Files;
-using System.Collections.ObjectModel;
 
 namespace Mipser.ViewModels;
 

@@ -8,7 +8,6 @@ using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using System;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace MIPS.Assembler.Tests;
 
@@ -61,7 +60,7 @@ public class DirectiveParserTests
     public static void RunDataTest(string input, params byte[] expected)
     {
         var parser = new DirectiveParser();
-        
+
         var tokens = Tokenizer.TokenizeLine(input, nameof(RunDataTest));
         var args = tokens.TrimType(TokenType.Directive, out var name);
         parser.TryParseDirective(name!, args, out var directive);

@@ -33,7 +33,7 @@ public partial class Assembler
     {
         instruction = null;
         directive = null;
-        
+
         // Find and parse label if present
         line = line.TrimType(TokenType.LabelDeclaration, out label);
 
@@ -51,21 +51,5 @@ public partial class Assembler
                 instruction = line;
                 break;
         }
-    }
-
-    private static int FindNameEnd(string line)
-    {
-        // TODO: This is dirty. Clean it up.
-
-        int firstSpace = line.IndexOf(' ');
-        int firstTab = line.IndexOf("\t", StringComparison.Ordinal);
-
-        return (firstSpace == -1, firstTab == -1) switch
-        {
-            (false, false) => int.Min(firstSpace, firstTab),
-            (false, true) => firstSpace,
-            (true, false) => firstTab,
-            (true, true) => -1,
-        };
     }
 }

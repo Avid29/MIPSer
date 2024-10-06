@@ -32,7 +32,7 @@ public class Token(string source, string? filename, int lineNum, int column, Tok
     /// <summary>
     /// Gets the token's start column.
     /// </summary>
-    public int Column {get; } = column;
+    public int Column { get; } = column;
 
     /// <summary>
     /// Gets the token's type.

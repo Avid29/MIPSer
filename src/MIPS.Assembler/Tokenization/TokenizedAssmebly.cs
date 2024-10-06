@@ -26,7 +26,7 @@ public class TokenizedAssmebly
     /// <returns>The line's token list as a span.</returns>
     public Span<Token> this[int line]
     {
-        get => CollectionsMarshal.AsSpan(_tokenLines[line-1]);
+        get => CollectionsMarshal.AsSpan(_tokenLines[line - 1]);
     }
 
     /// <summary>

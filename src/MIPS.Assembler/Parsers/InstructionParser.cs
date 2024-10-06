@@ -1,7 +1,6 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
-using CommunityToolkit.HighPerformance;
 using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
@@ -10,7 +9,6 @@ using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Extensions.MIPS.Models.Instructions;
-using MIPS.Models.Addressing;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using System;
