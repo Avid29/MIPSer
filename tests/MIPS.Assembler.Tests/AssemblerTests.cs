@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2023
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -32,7 +33,14 @@ public class AssemblerTests
     {
         var module = await Assembler.AssembleAsync(stream, filename);
 
-        var result = new MemoryStream();
+        Stream result = new MemoryStream();
+        if (filename is not null)
+        {
+            var output = Path.Combine(AssemblyPath, Path.GetFileNameWithoutExtension(filename) + ".obj");
+            result = File.Open(output, FileMode.OpenOrCreate);
+        }
+
         module.WriteModule(result);
+        result.Flush();
     }
 }

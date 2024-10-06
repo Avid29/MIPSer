@@ -11,6 +11,7 @@ public enum LogId
 
     // General errors
     IllegalSymbolName,
+    DuplicateSymbolDefinition,
     TokenizerError,
 
     // Macro errors

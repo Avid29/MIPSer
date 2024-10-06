@@ -10,7 +10,7 @@ namespace MIPS.Assembler.Parsers.Expressions.Evaluator;
 /// <summary>
 /// An <see cref="IEvaluator{T}"/> for address expressions.
 /// </summary>
-public struct AddressEvaluator : IEvaluator<Address>
+public readonly struct AddressEvaluator : IEvaluator<Address>
 {
     private readonly ILogger? _logger;
 
@@ -23,7 +23,7 @@ public struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryAdd(Address left, Address right, out Address result)
+    public readonly bool TryAdd(Address left, Address right, out Address result)
     {
         result = default;
 
@@ -44,7 +44,7 @@ public struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TrySubtract(Address left, Address right, out Address result)
+    public readonly bool TrySubtract(Address left, Address right, out Address result)
     {
         result = default;
 
@@ -59,7 +59,7 @@ public struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryMultiply(Address left, Address right, out Address result)
+    public readonly bool TryMultiply(Address left, Address right, out Address result)
     {
         result = default;
 
@@ -75,7 +75,7 @@ public struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryDivide(Address left, Address right, out Address result)
+    public readonly bool TryDivide(Address left, Address right, out Address result)
     {
         result = default;
 
@@ -91,7 +91,7 @@ public struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryMod(Address left, Address right, out Address result)
+    public readonly bool TryMod(Address left, Address right, out Address result)
     {
         result = default;
 
@@ -107,7 +107,7 @@ public struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryAnd(Address left, Address right, out Address result)
+    public readonly bool TryAnd(Address left, Address right, out Address result)
     {
         result = default;
 
@@ -123,7 +123,7 @@ public struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryOr(Address left, Address right, out Address result)
+    public readonly bool TryOr(Address left, Address right, out Address result)
     {
         result = default;
 
@@ -139,7 +139,7 @@ public struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryXor(Address left, Address right, out Address result)
+    public readonly bool TryXor(Address left, Address right, out Address result)
     {
         result = default;
 

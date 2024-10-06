@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
+using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
@@ -78,6 +79,8 @@ public partial class Assembler
             assembler.LinePass1(tokens[i]);
         }
 
+        assembler._obj.ResetStreamPositions();
+
         for (int i = 1; i <= tokens.LineCount; i++)
         {
             assembler._logger.CurrentLine = i;
@@ -105,19 +108,23 @@ public partial class Assembler
     /// Creates a symbol at the current address.
     /// </summary>
     /// <param name="label">The name of the symbol.</param>
-    private void CreateSymbol(string label) => CreateSymbol(label, CurrentAddress);
+    private bool CreateSymbol(string label) => CreateSymbol(label, CurrentAddress);
 
     /// <summary>
     /// Creates a symbol.
     /// </summary>
     /// <param name="label">The name of the symbol.</param>
     /// <param name="address">The value of the symbol.</param>
-    private void CreateSymbol(string label, Address address)
+    /// <returns>True if successful, false on failure.</returns>
+    private bool CreateSymbol(string label, Address address)
     {
         if (!_obj.TryDefineSymbol(label, address))
         {
-            // TODO: Log error
+            _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, $"Symbol \"{label}\" already exists.");
+            return false;
         }
+
+        return true;
     }
 
     private void Append(params byte[] bytes)

@@ -77,9 +77,9 @@ public class ExpressionParserTests
     {
         // NOTE: This assumes symbol realization is not implemented!
         var obj = new ModuleConstruction();
-        foreach (var macro in macros)
+        foreach (var (name, addr) in macros)
         {
-            obj.TryDefineSymbol(macro.name, macro.addr);
+            obj.TryDefineSymbol(name, addr);
         }
 
         var parser = new ExpressionParser(obj);

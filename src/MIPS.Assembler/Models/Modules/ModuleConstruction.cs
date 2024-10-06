@@ -74,6 +74,7 @@ public partial class ModuleConstruction
         header.WriteHeader(stream);
 
         // Append segments to stream
+        ResetStreamPositions();
         _text.CopyTo(stream);
         _data.CopyTo(stream);
 

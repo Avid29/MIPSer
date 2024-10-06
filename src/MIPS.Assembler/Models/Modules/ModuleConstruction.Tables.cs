@@ -28,17 +28,7 @@ public partial class ModuleConstruction
     /// <param name="name">The name of the symbol.</param>
     /// <param name="value">The realized value of the symbol.</param>
     /// <returns><see cref="true"/> if the symbol exists, <see cref="false"/> otherwise.</returns>
-    public bool TryGetSymbol(string name, out Address value)
-    {
-        if (!_definitions.ContainsKey(name))
-        {
-            value = default;
-            return false;
-        }
-
-        value = _definitions[name];
-        return true;
-    }
+    public bool TryGetSymbol(string name, out Address value) => _definitions.TryGetValue(name, out value);
 
     /// <summary>
     /// Attempts to make a reference to a symbol.
