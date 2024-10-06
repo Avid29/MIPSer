@@ -25,12 +25,12 @@ public class AssemblerTests
         var fullPath = Path.Combine(AssemblyPath, fileName);
         fullPath = Path.GetFullPath(fullPath);
         var stream = File.Open(fullPath, FileMode.Open);
-        await RunTest(stream);
+        await RunTest(stream, fileName);
     }
 
-    private async Task RunTest(Stream stream)
+    private async Task RunTest(Stream stream, string? filename = null)
     {
-        var module = await Assembler.AssembleAsync(stream);
+        var module = await Assembler.AssembleAsync(stream, filename);
 
         var result = new MemoryStream();
         module.WriteModule(result);

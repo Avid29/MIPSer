@@ -32,7 +32,7 @@ public partial class ModuleConstruction
     private uint _sbssSize = 0;
     private uint _bssSize = 0;
     private uint _strsSize = 0;
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ModuleConstruction"/> class.
     /// </summary>
@@ -67,7 +67,7 @@ public partial class ModuleConstruction
             MAGIC, VERSION,
             _flags, _entryPoint,
             (uint)_text.Length, _rdataSize, (uint)_data.Length,
-            _sdataSize,  _sbssSize, _bssSize, _strsSize,
+            _sdataSize, _sbssSize, _bssSize, _strsSize,
             (uint)_relocations.Count,
             (uint)_references.Count,
             (uint)_definitions.Count);

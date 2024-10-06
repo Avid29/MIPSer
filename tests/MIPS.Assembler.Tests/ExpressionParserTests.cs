@@ -3,6 +3,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Parsers;
+using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 
@@ -23,6 +24,7 @@ public class ExpressionParserTests
     private const string Xor = "9 ^ 3";
 
     private const string Char = "'a'";
+    private const string AddChar = "'a' + 10";
 
     private const string Macro = "macro + 10";
     private const string MacroFail = "macro + macro";
@@ -60,6 +62,9 @@ public class ExpressionParserTests
     [TestMethod(Char)]
     public void CharTest() => RunTest(Char, 'a');
 
+    [TestMethod(AddChar)]
+    public void AddCharTest() => RunTest(AddChar, 'a' + 10);
+
     [TestMethod(Macro)]
     public void MarcoTest() => RunTest(Macro, 10 + 10, ("macro", new Address(10, Section.Text)));
 
@@ -83,7 +88,8 @@ public class ExpressionParserTests
 
     private static void RunTest(ExpressionParser parser, string input, long? expected = null)
     {
-        bool success = parser.TryParse(input, out var actual, out _);
+        var tokens = Tokenizer.TokenizeLine(input, nameof(RunTest), true);
+        bool success = parser.TryParse(tokens, out var actual, out _);
         Assert.AreEqual(success, expected.HasValue);
         if (expected.HasValue)
         {

@@ -15,5 +15,6 @@ public interface ILogger
     /// <param name="severity">The severity of the consequences of the log.</param>
     /// <param name="id">The id of the log.</param>
     /// <param name="message">The log message.</param>
-    void Log(Severity severity, LogId id, string message);
+    /// <param name="line">The line of the event.</param>
+    void Log(Severity severity, LogId id, string message, int? line = null);
 }

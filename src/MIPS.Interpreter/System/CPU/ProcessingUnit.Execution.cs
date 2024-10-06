@@ -154,7 +154,7 @@ public partial class ProcessingUnit
         };
 
         var output = operation(rs, rt, immediate);
-        
+
         // TODO: Overload write back for branch 
         // TODO: Set PCHandled for branch
         bool pcHandled = false;
@@ -256,7 +256,7 @@ public partial class ProcessingUnit
     private uint ADDIU(uint rs, uint rt, short immediate) => (uint)(rs + immediate);
 
     private uint SLTI(uint rs, uint rt, short immediate) => (uint)((int)rs < immediate ? 1 : 0);
-    private uint SLTIU(uint rs, uint rt, short immediate) => (uint) (rs < immediate ? 1 : 0);
+    private uint SLTIU(uint rs, uint rt, short immediate) => (uint)(rs < immediate ? 1 : 0);
 
     private uint ANDI(uint rs, uint rt, short immediate) => (uint)(rs & immediate);
     private uint ORI(uint rs, uint rt, short immediate) => (rs | (ushort)immediate);

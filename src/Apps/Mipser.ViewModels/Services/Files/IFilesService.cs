@@ -21,7 +21,7 @@ public interface IFilesService
     /// </summary>
     /// <returns>An <see cref="IFile"/> to open, if successful.</returns>
     Task<IFile?> TryPickAndOpenFileAsync();
-    
+
 
     /// <summary>
     /// Attempts to pick a folder to open.

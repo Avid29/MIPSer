@@ -27,10 +27,10 @@ public class Folder : IFolder
 
     /// <inheritdoc/>
     public string Name => _storageFolder.Name;
-    
+
     /// <inheritdoc/>
     public string Path => _storageFolder.Path;
-    
+
     /// <inheritdoc/>
     public async Task<IFilesItem[]> GetItemsAsync()
     {
@@ -50,14 +50,14 @@ public class Folder : IFolder
 
         //return folders.Select(x => (IFilesItem)x).Concat(files.Select(x => (IFilesItem)x)).ToArray();
     }
-    
+
     /// <inheritdoc/>
     public async Task<IFolder[]> GetFoldersAsync()
     {
         var folders = await _storageFolder.GetFoldersAsync();
         return folders.Select(x => (IFolder)new Folder(x)).ToArray();
     }
-    
+
     /// <inheritdoc/>
     public async Task<IFile[]> GetFilesAsync()
     {

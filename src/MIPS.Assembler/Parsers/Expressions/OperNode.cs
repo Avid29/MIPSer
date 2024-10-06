@@ -110,7 +110,7 @@ public class OperNode : ExpNode
         {
             child.Parent = null;
         }
-        
+
         // Assign new child's parent
         if (value is not null)
         {

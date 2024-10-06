@@ -18,7 +18,7 @@ public class FilesService : IFilesService
 {
     /// <inheritdoc/>
     public async Task<IFile?> TryGetFileAsync(string path) => new File(await StorageFile.GetFileFromPathAsync(path));
-    
+
     /// <inheritdoc/>
     public async Task<IFile?> TryPickAndOpenFileAsync()
     {
@@ -36,7 +36,7 @@ public class FilesService : IFilesService
 
         return new File(file);
     }
-    
+
     /// <inheritdoc/>
     public async Task<IFolder?> TryPickAndOpenFolderAsync()
     {

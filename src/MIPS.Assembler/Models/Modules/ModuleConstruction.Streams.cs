@@ -51,7 +51,7 @@ public partial class ModuleConstruction
             return;
 
         // Append offset bytes
-        var append =  new byte[offset];
+        var append = new byte[offset];
         Append(section, append);
     }
 

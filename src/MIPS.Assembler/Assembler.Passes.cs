@@ -5,25 +5,23 @@ using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Directives;
 using MIPS.Assembler.Models.Directives.Abstract;
 using MIPS.Assembler.Parsers;
+using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Instructions;
+using System;
 
 namespace MIPS.Assembler;
 
 public unsafe partial class Assembler
 {
-    private void LinePass1(string line)
+    private void LinePass1(Span<Token> line)
     {
         var expressionParser = new ExpressionParser(_obj, _logger);
-        var symbolParser = new SymbolParser(_logger);
 
         // Parse as macro
         if (TokenizeMacro(line, out var macro, out var expression))
         {
-            Guard.IsNotNull(macro);
-            if (!symbolParser.ValidateSymbolName(macro))
-                return;
-
-            if (string.IsNullOrEmpty(expression))
+            if (expression.IsEmpty)
             {
                 _logger.Log(Severity.Error, LogId.MacroMissingValue, $"Symbol '{macro}' missing value.");
                 return;
@@ -38,23 +36,19 @@ public unsafe partial class Assembler
                 return;
             }
 
-            CreateSymbol(macro, address);
+            CreateSymbol(macro.Source, address);
             return;
         }
 
         // Get the parts of the line
-        TokenizeLine(line, out var labelStr, out var instructionStr, out var directiveStr);
+        TokenizeLine(line, out var label, out var instruction, out var directiveStr);
 
         // Create symbol if line is labeled
-        if (labelStr is not null)
-        {
+        if (label is not null)
+            CreateSymbol(label.Source);
 
-            if (symbolParser.ValidateSymbolName(labelStr))
-                CreateSymbol(labelStr);
-        }
-        
         // Pad instruction sized allocation if instruction is present
-        if (instructionStr is not null)
+        if (!instruction.IsEmpty)
         {
             // TODO: Pseudo instructions
             Append(sizeof(Instruction));
@@ -62,11 +56,11 @@ public unsafe partial class Assembler
 
         // Make allocations if directive is present
         // NOTE: Directive allocations are made in both passes
-        if (directiveStr is not null)
+        if (!directiveStr.IsEmpty)
             HandleDirective(directiveStr);
     }
 
-    private void LinePass2(string line)
+    private void LinePass2(Span<Token> line)
     {
         var parser = new InstructionParser(_obj, _logger);
 
@@ -76,13 +70,14 @@ public unsafe partial class Assembler
 
         // Get the parts of the line
         // Discard labels. They are already parsed
-        TokenizeLine(line, out _, out var instructionStr, out var directiveStr);
+        TokenizeLine(line, out _, out var instructionTokens, out var directiveStr);
 
         // Handle instructions
-        if (instructionStr is not null)
+        if (!instructionTokens.IsEmpty)
         {
             // Get the parts of the instruction and parse
-            if(!TokenizeInstruction(instructionStr, out var name, out var args))
+            var args = instructionTokens.TrimType(TokenType.Instruction, out var name);
+            if (name is null)
                 return;
 
             // Try to parse instruction from name and arguments
@@ -101,19 +96,20 @@ public unsafe partial class Assembler
             // Append instruction to active segment
             Append(instruction);
         }
-        
+
         // Make allocations if directive is present
         // NOTE: Directive allocations are made in both passes
-        if (directiveStr is not null)
+        if (!directiveStr.IsEmpty)
             HandleDirective(directiveStr);
     }
 
-    private void HandleDirective(string directiveStr)
+    private void HandleDirective(Span<Token> directiveTokens)
     {
         var parser = new DirectiveParser();
 
-        TokenizeDirective(directiveStr, out var name, out var args);
-        if (!parser.TryParseDirective(name, args, out var directive))
+        var args = directiveTokens.TrimType(TokenType.Directive, out var name);
+
+        if (name is null || !parser.TryParseDirective(name, args, out var directive))
             return;
 
         Guard.IsNotNull(directive);
@@ -127,11 +123,9 @@ public unsafe partial class Assembler
             case SectionDirective segment:
                 SetActiveSection(segment.ActiveSection);
                 break;
-
             case AlignDirective align:
                 Align(align.Boundary);
                 break;
-
             case DataDirective data:
                 Append(data.Data);
                 break;

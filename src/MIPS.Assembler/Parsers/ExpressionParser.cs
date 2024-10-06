@@ -8,7 +8,10 @@ using MIPS.Assembler.Parsers.Enums;
 using MIPS.Assembler.Parsers.Expressions;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Addressing;
+using System;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -29,7 +32,7 @@ public struct ExpressionParser
     private ExpressionParserState _state;
     private string _cache;
     private string? _relocatableSymbol;
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
     /// </summary>
@@ -58,61 +61,34 @@ public struct ExpressionParser
     /// <param name="result">The expression parsed as a integer.</param>
     /// <param name="symbol">The symbol referenced if address expression is relocatable. Null otherwise.</param>
     /// <returns><see langword="true"/> if the expression was successfully parsed, <see langword="false"/> otherwise.</returns>
-    public bool TryParse(string expression, out Address result, out string? symbol)
+    public bool TryParse(Span<Token> expression, out Address result, out string? symbol)
     {
         result = default;
         symbol = null;
 
         _tree = new ExpressionTree();
         _state = ExpressionParserState.Start;
-        
-        // Build tree from string expression
-        foreach (var c in expression)
-        {
-            // Ignore whitespace
-            // Continue with no side effects
-            if (char.IsWhiteSpace(c))
-                continue;
 
+        // Build tree from string expression
+        foreach (var token in expression)
+        {
             // Switch on the state, call the appropriate function, and track success
-            bool success;
-            switch (_state)
+            bool success = _state switch
             {
-                case ExpressionParserState.Start:
-                    success = TryParseFromStart(c);
-                    break;
-                case ExpressionParserState.Integer:
-                    success = TryParseFromInteger(c);
-                    break;
-                case ExpressionParserState.Macro:
-                    success = TryParseFromMacro(c);
-                    break;
-                case ExpressionParserState.Operator:
-                    success = TryParseFromOperator(c);
-                    break;
-                case ExpressionParserState.Char:
-                    success = TryParseFromChar(c);
-                    break;
-                case ExpressionParserState.CharClose:
-                    success = TryParseFromCharClose(c);
-                    break;
-                default:
-                    ThrowHelper.ThrowArgumentOutOfRangeException($"Expression parser in invalid state '{_state}'");
-                    return false;
-            }
+                ExpressionParserState.Start => TryParseFromStart(token),
+                ExpressionParserState.Immediate => TryParseFromImmediate(token),
+                ExpressionParserState.Reference => TryParseFromReference(token),
+                ExpressionParserState.Operator => TryParseFromOperator(token),
+                _ => false,
+            };
 
             // Parsing failed
             if (!success)
             {
-                _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Could not parse '{expression}' as an expression.");
+                // TODO: Convert token lines to string
+                _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Could not parse '' as an expression.");
                 return false;
             }
-        }
-
-        if (!TryFinish())
-        {
-            _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Could not parse '{expression}' as an expression.");
-            return false;
         }
 
 
@@ -132,44 +108,43 @@ public struct ExpressionParser
         return true;
     }
 
-    private bool TryParseFromStart(char c)
+    private bool TryParseFromStart(Token t)
     {
-        if (char.IsLetter(c))
+        if (t.Type is TokenType.Reference)
         {
-            _state = ExpressionParserState.Macro;
-            _cache = $"{c}";
-            return true;
+            _state = ExpressionParserState.Reference;
+            return AppendReference(t);
         }
 
-        // '-' at the start marks a unary '-', which can be parsed as part of the integer
-        if (char.IsDigit(c) || c is '-')
+        if (t.Type is TokenType.Immediate)
         {
             // Begin parsing as integer and 
-            _state = ExpressionParserState.Integer;
-            _cache = $"{c}";
-
-            return true;
+            _state = ExpressionParserState.Immediate;
+            return AppendImmediate(t);
         }
 
-        if (c is '\'')
+        // '-' at the start marks a unary '-', which we'll just handle by adding a 0 in front
+        if (t.Type is TokenType.Operator &&
+            t.Source is "+" or "-")
         {
-            _state = ExpressionParserState.Char;
-            return true;
+            AppendImmediate(0);
+            return TryParseFromImmediate(t);
         }
+
+        // TODO: Char handling
+        //if (t.Type is '\'')
+        //{
+        //    _state = ExpressionParserState.Char;
+        //    return true;
+        //}
 
         return false;
     }
 
-    private bool TryParseFromInteger(char c)
+    private bool TryParseFromImmediate(Token t)
     {
-        if (char.IsDigit(c))
-        {
-            // Append digit to the end of digit progress
-            _cache += c;
-            return true;
-        }
-
-        if (IsOperator(c, out var oper))
+        if (t.Type is TokenType.Operator &&
+            IsOperator(t, out var oper))
         {
             TryParseOperator(oper);
             return true;
@@ -178,43 +153,10 @@ public struct ExpressionParser
         return false;
     }
 
-    private bool TryParseFromMacro(char c)
+    private bool TryParseFromReference(Token t)
     {
-        if (char.IsLetterOrDigit(c))
-        {
-            // Append digit to the end of digit progress
-            _cache += c;
-            return true;
-        }
-
-        if (IsOperator(c, out var oper))
-        {
-            TryParseOperator(oper);
-            return true;
-        }
-
-
-
-        return false;
-    }
-
-    private bool TryParseFromOperator(char c) => TryParseFromStart(c);
-
-    private bool TryParseFromChar(char c)
-    {
-        if (c is '\'')
-        {
-            _state = ExpressionParserState.CharClose;
-            return true;
-        }
-
-        _cache += c;
-        return true;
-    }
-
-    private bool TryParseFromCharClose(char c)
-    {
-        if (IsOperator(c, out var oper))
+        if (t.Type is TokenType.Operator &&
+            IsOperator(t, out var oper))
         {
             TryParseOperator(oper);
             return true;
@@ -223,25 +165,11 @@ public struct ExpressionParser
         return false;
     }
 
-    private bool TryFinish()
-    {
-        return _state switch
-        {
-            ExpressionParserState.Integer => TryCompleteInteger(),
-            ExpressionParserState.Macro => TryCompleteMacro(),
-            ExpressionParserState.CharClose => TryCompleteChar(),
-            ExpressionParserState.Start => false,
-            _ => false
-        };
-    }
+    private bool TryParseFromOperator(Token t) => TryParseFromStart(t);
 
     private bool TryParseOperator(Operation oper)
     {
         Guard.IsNotNull(_tree);
-
-        // Attempt complete current cache
-        if(!TryFinish())
-            return false;
 
         var node = new OperNode(oper);
         _tree.AddNode(node);
@@ -250,36 +178,44 @@ public struct ExpressionParser
         return true;
     }
 
-    private bool TryCompleteInteger()
+    private bool AppendImmediate(Token t)
+    {
+        long value;
+        if (t.Source[0] is '\'')
+        {
+            value = t.Source[1];
+        }
+        else if (!long.TryParse(t.Source, out value))
+        {
+            return false;
+        }
+
+        return AppendImmediate(value);
+    }
+
+    private bool AppendImmediate(long value)
     {
         Guard.IsNotNull(_tree);
 
-        if (!long.TryParse(_cache, out var result))
-            return false;
-
         // Construct node
-        var node = new AddressNode(result);
+        var node = new AddressNode(value);
         _tree.AddNode(node);
 
         return true;
     }
 
-    private bool TryCompleteMacro()
+    private bool AppendReference(Token t)
     {
         Guard.IsNotNull(_obj);
         Guard.IsNotNull(_tree);
 
-        var parser = new SymbolParser(_logger);
-        if (!parser.ValidateSymbolName(_cache))
+        if (!_obj.TryGetSymbol(t.Source, out var value))
             return false;
 
-        if (!_obj.TryGetSymbol(_cache, out var value))
-            return false;
-        
         // Cache relocatable symbol
         if (value.IsRelocatable)
         {
-            _relocatableSymbol = _cache;
+            _relocatableSymbol = t.Source;
         }
 
         var node = new AddressNode(value);
@@ -287,36 +223,21 @@ public struct ExpressionParser
         return true;
     }
 
-    private bool TryCompleteChar()
+    private static bool IsOperator(Token t, out Operation oper)
     {
-        Guard.IsNotNull(_tree);
-
-        // TODO: Handle char substitutes
-        if (!char.TryParse(_cache, out var result))
-            return false;
-
-        // Construct node
-        var node = new AddressNode(result);
-        _tree.AddNode(node);
-
-        return true;
-    }
-
-    private static bool IsOperator(char c, out Operation oper)
-    {
-        oper = c switch
+        oper = t.Source switch
         {
             // Arithmetic
-            '+' => Operation.Addition,
-            '-' => Operation.Subtraction,
-            '*' => Operation.Multiplication,
-            '/' => Operation.Division,
-            '%' => Operation.Modulus,
+            "+" => Operation.Addition,
+            "-" => Operation.Subtraction,
+            "*" => Operation.Multiplication,
+            "/" => Operation.Division,
+            "%" => Operation.Modulus,
 
             // Logical
-            '&' => Operation.And,
-            '|' => Operation.Or,
-            '^' => Operation.Xor,
+            "&" => Operation.And,
+            "|" => Operation.Or,
+            "^" => Operation.Xor,
 
             // Invalid
             _ => (Operation)(-1),

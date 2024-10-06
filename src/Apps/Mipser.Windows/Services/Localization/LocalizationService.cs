@@ -31,7 +31,7 @@ public class LocalizationService : ILocalizationService
             return flowDirectionSetting == "RTL";
         }
     }
-        
+
     /// <inheritdoc/>
     public string LanguageOverride
     {

@@ -102,7 +102,7 @@ public class ExpressionTree
             node.LeftChild = _activeNode.RightChild;
             _activeNode.RightChild = node;
         }
-        
+
         _activeNode = node;
     }
 

@@ -2,7 +2,6 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Extensions.System.IO;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MIPS.Models.Modules;
 
@@ -16,7 +15,6 @@ public unsafe struct Header
     private uint _flags;
     private uint _entryPoint;
 
-    [SuppressMessage("Usage", "CS0649", Justification = "Written to unsafely with  indexing.")]
     private fixed uint _sizes[10];
 
     /// <summary>
@@ -43,72 +41,128 @@ public unsafe struct Header
     /// <summary>
     /// Gets the module magic identifier.
     /// </summary>
-    public ushort Magic => _magic;
+    public ushort Magic
+    {
+        readonly get => _magic;
+        internal set => _magic = value;
+    }
 
     /// <summary>
     /// Gets the module format version number.
     /// </summary>
-    public ushort Version => _version;
+    public ushort Version
+    {
+        readonly get => _version;
+        internal set => _version = value;
+    }
 
     /// <summary>
     /// Gets the module flags.
     /// </summary>
-    public uint Flags => _flags;
+    public uint Flags
+    {
+        readonly get => _flags;
+        internal set => _flags = value;
+    }
 
     /// <summary>
     /// Gets the module entry point.
     /// </summary>
-    public uint EntryPoint => _entryPoint;
+    public uint EntryPoint
+    {
+        readonly get => _entryPoint;
+        internal set => _entryPoint = value;
+    }
 
     /// <summary>
     /// Gets the size of the module's text section.
     /// </summary>
-    public uint TextSize => _sizes[0];
+    public uint TextSize
+    {
+        readonly get => _sizes[0];
+        internal set => _sizes[0] = value;
+    }
 
     /// <summary>
     /// Gets the size of the module's rdata section.
     /// </summary>
-    public uint ReadOnlyDataSize => _sizes[1];
+    public uint ReadOnlyDataSize
+    {
+        readonly get => _sizes[1];
+        internal set => _sizes[1] = value;
+    }
 
     /// <summary>
     /// Gets the size of the module's data section.
     /// </summary>
-    public uint DataSize => _sizes[2];
+    public uint DataSize
+    {
+        readonly get => _sizes[2];
+        internal set => _sizes[2] = value;
+    }
 
     /// <summary>
     /// Gets the size of the module's small initialized data section.
     /// </summary>
-    public uint SmallDataSize => _sizes[3];
+    public uint SmallDataSize
+    {
+        readonly get => _sizes[3];
+        internal set => _sizes[3] = value;
+    }
 
     /// <summary>
     /// Gets the size of the module's small initialized data section.
     /// </summary>
-    public uint SmallUninitializedDataSize => _sizes[4];
+    public uint SmallUninitializedDataSize
+    {
+        readonly get => _sizes[4];
+        internal set => _sizes[4] = value;
+    }
 
     /// <summary>
     /// Gets the size of the module's small initialized data section.
     /// </summary>
-    public uint UninitializedDataSize => _sizes[5];
+    public uint UninitializedDataSize
+    {
+        readonly get => _sizes[5];
+        internal set => _sizes[5] = value;
+    }
 
     /// <summary>
     /// Gets the size of the module's tables.
     /// </summary>
-    public uint TablesSize => _sizes[6];
+    public uint TablesSize
+    {
+        readonly get => _sizes[6];
+        internal set => _sizes[6] = value;
+    }
 
     /// <summary>
     /// Gets the number of entries in the module's relative table.
     /// </summary>
-    public uint RelativeTableCount => _sizes[7];
+    public uint RelativeTableCount
+    {
+        readonly get => _sizes[7];
+        internal set => _sizes[7] = value;
+    }
 
     /// <summary>
     /// Gets the number of entries the module's reference table.
     /// </summary>
-    public uint ReferenceTableCount => _sizes[8];
+    public uint ReferenceTableCount
+    {
+        readonly get => _sizes[8];
+        internal set => _sizes[8] = value;
+    }
 
     /// <summary>
     /// Gets the number of entries the module's symbol table.
     /// </summary>
-    public uint SymbolTableCount => _sizes[9];
+    public uint SymbolTableCount
+    {
+        readonly get => _sizes[9];
+        internal set => _sizes[9] = value;
+    }
 
     /// <summary>
     /// Attempts to load a header from a <see cref="Stream"/>.
@@ -118,10 +172,11 @@ public unsafe struct Header
     /// <returns><see cref="true"/> if header was successfully read. <see cref="false"/> otherwise.</returns>
     public static bool TryLoadHeader(Stream stream, out Header header)
     {
-        header._magic = stream.Read<ushort>();
-        header._version = stream.Read<ushort>();
-        header._flags = stream.Read<uint>();
-        header._entryPoint = stream.Read<uint>();
+        header = default;
+        header.Magic = stream.Read<ushort>();
+        header.Version = stream.Read<ushort>();
+        header.Flags = stream.Read<uint>();
+        header.EntryPoint = stream.Read<uint>();
 
         for (int i = 0; i < 10; i++)
         {
@@ -138,10 +193,10 @@ public unsafe struct Header
     /// <param name="stream">The stream to write the header on.</param>
     public void WriteHeader(Stream stream)
     {
-        stream.Write(_magic);
-        stream.Write(_version);
-        stream.Write(_flags);
-        stream.Write(_entryPoint);
+        stream.Write(Magic);
+        stream.Write(Version);
+        stream.Write(Flags);
+        stream.Write(EntryPoint);
 
         for (int i = 0; i < 10; i++)
             stream.Write(_sizes[i]);

@@ -21,7 +21,7 @@ public readonly struct InstructionMetadata
         BranchCode = BranchCode.None;
         ArgumentPattern = argumentPattern;
     }
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
@@ -33,7 +33,7 @@ public readonly struct InstructionMetadata
         BranchCode = BranchCode.None;
         ArgumentPattern = argumentPattern;
     }
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>

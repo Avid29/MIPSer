@@ -7,18 +7,12 @@ namespace MIPS.Assembler.Parsers.Enums;
 /// </summary>
 public enum ExpressionParserState
 {
-    #pragma warning disable CS1591
+#pragma warning disable CS1591
 
     Start,
-    Integer,
+    Immediate,
     Operator,
+    Reference,
 
-    /// <remarks>
-    /// Marco or symbol.
-    /// </remarks>
-    Macro,
-    Char,
-    CharClose,
-    
-    #pragma warning restore CS1591
+#pragma warning restore CS1591
 }

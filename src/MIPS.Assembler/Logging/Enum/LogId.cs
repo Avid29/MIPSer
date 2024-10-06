@@ -7,10 +7,11 @@ namespace MIPS.Assembler.Logging.Enum;
 /// </summary>
 public enum LogId
 {
-    #pragma warning disable CS1591
+#pragma warning disable CS1591
 
     // General errors
     IllegalSymbolName,
+    TokenizerError,
 
     // Macro errors
     MacroMissingValue,
@@ -40,8 +41,9 @@ public enum LogId
 
     // String parsing errors
     NotAString,
+    MultiLineString,
     UnrecognizedEscapeSequence,
     UnescapedQuoteInString,
 
-    #pragma warning restore CS1591
+#pragma warning restore CS1591
 }

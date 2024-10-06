@@ -14,17 +14,17 @@ public enum OperationCode : byte
     /// r-type instructions are distinguished with <see cref="FunctionCode"/>.
     /// </remarks>
     RType = 0x00,
-    
+
     /// <summary>
     /// Marks a conditional branch instruction. See <see cref="BranchCode"/>.
     /// </summary>
     BranchConditional = 0x01,
 
-    #pragma warning disable CS1591
+#pragma warning disable CS1591
 
     Jump = 0x02,
     JumpAndLink = 0x03,
-    
+
     BranchOnEquals = 0x04,
     BranchOnNotEquals = 0x05,
     BranchOnLessThanOrEqualToZero = 0x06,

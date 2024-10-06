@@ -7,7 +7,7 @@ namespace MIPS.Models.Instructions.Enums;
 /// </summary>
 public enum Argument
 {
-    #pragma warning disable CS1591
+#pragma warning disable CS1591
 
     // Registers
     RS,
@@ -19,5 +19,5 @@ public enum Argument
     Address,
     AddressOffset,
 
-    #pragma warning restore CS1591
+#pragma warning restore CS1591
 }

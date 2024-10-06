@@ -31,9 +31,9 @@ public class AssemblerLogger : ILogger
     public int CurrentLine { get; set; }
 
     /// <inheritdoc/>
-    public void Log(Severity severity, LogId id, string message)
+    public void Log(Severity severity, LogId id, string message, int? line = null)
     {
-        var log = new Log(id, message, severity, CurrentLine);
+        var log = new Log(id, message, severity, line ?? CurrentLine);
         _logs.Add(log);
 
         if (severity is Severity.Error)

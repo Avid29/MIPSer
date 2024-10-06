@@ -7,7 +7,7 @@ namespace MIPS.Models.Instructions.Enums;
 /// </summary>
 public enum BranchCode : byte
 {
-    #pragma warning disable CS1591
+#pragma warning disable CS1591
     None = 0,
 
     BranchOnLessThanZero = 0x00,
@@ -16,5 +16,5 @@ public enum BranchCode : byte
     BranchOnLessThanZeroAndLink = 0x10,
     BranchOnGreaterThanOrEqualToZeroAndLink = 0x11,
 
-    #pragma warning restore CS1591
+#pragma warning restore CS1591
 }
