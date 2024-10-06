@@ -24,6 +24,7 @@ public class ExpressionParserTests
     private const string Xor = "9 ^ 3";
 
     private const string Char = "'a'";
+    private const string AddChar = "'a' + 10";
 
     private const string Macro = "macro + 10";
     private const string MacroFail = "macro + macro";
@@ -60,6 +61,9 @@ public class ExpressionParserTests
 
     [TestMethod(Char)]
     public void CharTest() => RunTest(Char, 'a');
+
+    [TestMethod(AddChar)]
+    public void AddCharTest() => RunTest(AddChar, 'a' + 10);
 
     [TestMethod(Macro)]
     public void MarcoTest() => RunTest(Macro, 10 + 10, ("macro", new Address(10, Section.Text)));

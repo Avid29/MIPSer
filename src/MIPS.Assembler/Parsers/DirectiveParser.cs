@@ -13,7 +13,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
-using System.Runtime.InteropServices;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -237,7 +236,7 @@ public readonly struct DirectiveParser
             // Null terminate string conditionally
             if (terminate)
                 bytes.Add(0);
-        } while (!arg.IsEmpty);
+        } while (!args.IsEmpty);
 
         directive = new DataDirective(bytes.ToArray());
         return true;

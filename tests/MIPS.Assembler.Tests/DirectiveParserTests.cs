@@ -7,6 +7,7 @@ using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MIPS.Assembler.Tests;
@@ -19,6 +20,8 @@ public class DirectiveParserTests
     private const string Byte = ".byte 10";
     private const string Word = ".word 10";
     private const string Bytes = ".byte 10, 10";
+    private const string Ascii = ".ascii \"Test String\"";
+    private const string Asciiz = ".asciiz \"Test String\"";
 
     [TestMethod(Global)]
     public void GlobalTest() => RunGlobalTest(Global, "main");
@@ -31,6 +34,12 @@ public class DirectiveParserTests
 
     [TestMethod(Bytes)]
     public void BytesTest() => RunDataTest(Bytes, 10, 10);
+
+    [TestMethod(Ascii)]
+    public void AsciiTest() => RunDataTest(Ascii, Encoding.ASCII.GetBytes("Test String"));
+
+    [TestMethod(Asciiz)]
+    public void AsciizTest() => RunDataTest(Asciiz, Encoding.ASCII.GetBytes("Test String\0"));
 
     public static void RunGlobalTest(string input, string expected)
     {
