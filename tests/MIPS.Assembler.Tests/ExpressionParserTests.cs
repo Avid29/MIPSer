@@ -3,6 +3,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Parsers;
+using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 
@@ -83,7 +84,8 @@ public class ExpressionParserTests
 
     private static void RunTest(ExpressionParser parser, string input, long? expected = null)
     {
-        bool success = parser.TryParse(input, out var actual, out _);
+        var tokens = Tokenizer.TokenizeLine(input, nameof(RunTest), true);
+        bool success = parser.TryParse(tokens, out var actual, out _);
         Assert.AreEqual(success, expected.HasValue);
         if (expected.HasValue)
         {

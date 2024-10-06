@@ -18,7 +18,6 @@ public unsafe partial class Assembler
     private void LinePass1(Span<Token> line)
     {
         var expressionParser = new ExpressionParser(_obj, _logger);
-        var symbolParser = new SymbolParser(_logger);
 
         // Parse as macro
         if (TokenizeMacro(line, out var macro, out var expression))
@@ -41,7 +40,7 @@ public unsafe partial class Assembler
                 return;
             }
 
-            CreateSymbol(macro.Value, address);
+            CreateSymbol(macro.Source, address);
             return;
         }
 
@@ -50,7 +49,7 @@ public unsafe partial class Assembler
 
         // Create symbol if line is labeled
         if (label is not null)
-            CreateSymbol(label.Value);
+            CreateSymbol(label.Source);
 
         // Pad instruction sized allocation if instruction is present
         if (!instruction.IsEmpty)

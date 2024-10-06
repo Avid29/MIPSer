@@ -66,12 +66,20 @@ public class Tokenizer
         return new TokenizedAssmebly(tokenizer.TokenLines);
     }
 
-    internal static Span<Token> TokenizeLine(string line, string? filename = null)
+    internal static Span<Token> TokenizeLine(string line, string? filename = null, bool expression = false)
     {
         Tokenizer tokenizer = new(filename);
 
         if (line.Contains('\n'))
             ThrowHelper.ThrowArgumentException("Single line tokenizer cannot contain a new line");
+
+        // This is a debug tool.
+        // We just want to tokenize an expression,
+        // so we don't want directives, instructions, or labels
+        if (expression)
+        {
+            tokenizer._state = TokenizerState.Begin;
+        }
 
         tokenizer.ParseLine(line);
         return CollectionsMarshal.AsSpan(tokenizer.TokenLines[0]);
@@ -108,6 +116,8 @@ public class Tokenizer
             TokenizerState.Register => ParseFromRegister(c, line),
             TokenizerState.Immediate => ParseFromImmediate(c, line, false),
             TokenizerState.SpecialImmediate => ParseFromImmediate(c, line, true),
+            TokenizerState.Character => ParseFromString(c, line, true),
+            TokenizerState.String => ParseFromString(c, line, false),
             TokenizerState.Directive => ParseFromDirective(c, line),
             TokenizerState.Reference => ParseFromReference(c, line),
             TokenizerState.Comment => ParseFromComment(c, line),
@@ -157,6 +167,8 @@ public class Tokenizer
 
             '.' => newLine ? HandleCharacter(c, newState: TokenizerState.Directive) : false,
             '$' => HandleCharacter(c, newState: TokenizerState.Register),
+            '\'' => HandleCharacter(c, newState: TokenizerState.Character),
+            '"' => HandleCharacter(c, newState: TokenizerState.String),
 
             '(' => HandleCharacter(c, TokenType.OpenParenthesis),
             ')' => HandleCharacter(c, TokenType.CloseParenthesis),
@@ -234,6 +246,30 @@ public class Tokenizer
         }
 
         return CompleteAndContinue(c, line);
+    }
+
+    private bool ParseFromString(char c, string line, bool isChar)
+    {
+        if (isChar)
+        {
+            if (_cache.Length is 1 && c is '\'')
+                return false;
+
+            if (_cache.Length is >= 2 && c is not '\'')
+                return false;
+
+            if (_cache.Length is 2 && c is '\'')
+            {
+                return HandleCharacter(c, TokenType.Immediate);
+            }
+        }
+
+        if (!isChar && c is '"')
+        {
+            return HandleCharacter(c, TokenType.String);
+        }
+
+        return HandleCharacter(c, newState: isChar ? TokenizerState.Character : TokenizerState.String);
     }
 
     private bool ParseFromDirective(char c, string line)

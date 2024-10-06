@@ -13,6 +13,7 @@ public enum TokenType
     Immediate,
     Directive,
     Operator,
+    String,
 
     LabelDeclaration,
     Reference,          // This could be either a label or a macro

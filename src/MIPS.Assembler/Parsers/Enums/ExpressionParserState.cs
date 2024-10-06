@@ -10,15 +10,9 @@ public enum ExpressionParserState
 #pragma warning disable CS1591
 
     Start,
-    Integer,
+    Immediate,
     Operator,
-
-    /// <remarks>
-    /// Marco or symbol.
-    /// </remarks>
-    Macro,
-    Char,
-    CharClose,
+    Reference,
 
 #pragma warning restore CS1591
 }

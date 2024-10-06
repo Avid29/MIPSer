@@ -75,7 +75,7 @@ public struct InstructionParser
         instruction = default;
 
         // Get instruction metadata from name
-        if (!ConstantTables.TryGetInstruction(name.Value, out _meta))
+        if (!ConstantTables.TryGetInstruction(name.Source, out _meta))
         {
             _logger?.Log(Severity.Error, LogId.InvalidInstructionName, $"No instruction named '{name}'.");
             return false;
@@ -196,12 +196,8 @@ public struct InstructionParser
         var parser = new ExpressionParser(_obj, _logger);
 
         // Attempt to parse expression
-        //if (!parser.TryParse(arg, out var address, out symbol))
-        //    return false;
-
-        // TODO: Proper address handling
-        symbol = null;
-        var address = new Address();
+        if (!parser.TryParse(arg, out var address, out symbol))
+            return false;
 
         // NOTE: Casting might truncate the value to fit the bit size.
         // This is the desired behavior, but when logging errors this
@@ -300,7 +296,7 @@ public struct InstructionParser
         register = Register.Zero;
 
         // Check that argument is register argument
-        var regStr = arg.Value;
+        var regStr = arg.Source;
         if (regStr[0] != '$')
         {
             _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"'{arg}' is not a valid register argument.");

@@ -53,7 +53,7 @@ public readonly struct DirectiveParser
     {
         directive = null;
 
-        return name.Value switch
+        return name.Source switch
         {
             // Section directives
             ".text" => TryParseSection(name, args, out directive),
@@ -85,7 +85,7 @@ public readonly struct DirectiveParser
             return false;
         }
 
-        string sectionName = name.Value;
+        string sectionName = name.Source;
         Section section = sectionName switch
         {
             ".text" => Section.Text,
@@ -111,11 +111,10 @@ public readonly struct DirectiveParser
         // Global only takes references as an argument
         if (args[0].Type is not TokenType.Reference)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $".globl only takes a symbol for an argument. Cannot parse {args[0].Value}.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $".globl only takes a symbol for an argument. Cannot parse {args[0].Source}.");
         }
 
-        var parser = new SymbolParser(_logger);
-        directive = new GlobalDirective(args[0].Value);
+        directive = new GlobalDirective(args[0].Source);
         return true;
     }
 
@@ -134,12 +133,12 @@ public readonly struct DirectiveParser
         // TODO: Macro support
         if (args[0].Type is not TokenType.Immediate)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $".align only takes an immediate value for an argument. Cannot parse {args[0].Value}.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $".align only takes an immediate value for an argument. Cannot parse {args[0].Source}.");
         }
 
-        if (!int.TryParse(args[0].Value, out var boundary))
+        if (!int.TryParse(args[0].Source, out var boundary))
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'{args[0].Value}' is not a valid .align argument.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'{args[0].Source}' is not a valid .align argument.");
             return false;
         }
 
@@ -162,12 +161,12 @@ public readonly struct DirectiveParser
         // TODO: Macro support
         if (args[0].Type is not TokenType.Immediate)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $".align only takes an immediate value for an argument. Cannot parse {args[0].Value}.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $".align only takes an immediate value for an argument. Cannot parse {args[0].Source}.");
         }
 
-        if (!int.TryParse(args[0].Value, out var size))
+        if (!int.TryParse(args[0].Source, out var size))
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'{args[0].Value}' is not a valid .space argument.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'{args[0].Source}' is not a valid .space argument.");
             return false;
         }
 
@@ -197,9 +196,9 @@ public readonly struct DirectiveParser
 
             // TODO: Evaluate expressions
 
-            if (!T.TryParse(arg[0].Value, format, out value))
+            if (!T.TryParse(arg[0].Source, format, out value))
             {
-                _logger?.Log(Severity.Error, LogId.InvalidDirectiveDataArg, $"{arg[0].Value} could not be parsed as a {name}");
+                _logger?.Log(Severity.Error, LogId.InvalidDirectiveDataArg, $"{arg[0].Source} could not be parsed as a {name}");
                 return false;
             }
 
@@ -228,7 +227,7 @@ public readonly struct DirectiveParser
             // TODO: Evaluate expressions
             
             // Parse string statement to string literal
-            if (!parser.TryParseString(arg[0].Value, out var value))
+            if (!parser.TryParseString(arg[0].Source, out var value))
                 return false;
 
             // Copy to byte list
