@@ -29,7 +29,7 @@ public class AddressNode : ValueNode<Address>
 
     /// <inheritdoc/>
     public override ExpressionType Type => ExpressionType.Integer;
-    
+
     /// <inheritdoc/>
     public override bool TryEvaluate(IEvaluator<Address> evaluator, out Address result)
     {

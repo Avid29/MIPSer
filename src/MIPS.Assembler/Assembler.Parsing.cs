@@ -1,113 +1,53 @@
 ﻿// Adam Dernis 2023
 
+using CommunityToolkit.Diagnostics;
+using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Enums;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MIPS.Assembler;
 
 public partial class Assembler
 {
-    private bool TokenizeMacro(string line, out string? macro, out string? expression)
+    private bool TokenizeMacro(Span<Token> line, [NotNullWhen(true)] out Token? macro, out Span<Token> expression)
     {
         macro = null;
-        expression = null;
+        expression = [];
 
-        int macroEnd = line.IndexOf('=');
-        
-        // Line does not contain a macro
-        if (macroEnd == -1)
+        if (line[0].Type is not TokenType.MacroDefinition)
             return false;
 
-        macro = line[..macroEnd];
-        expression = line[(macroEnd+1)..];
+        if (line[1].Type is not TokenType.Assign)
+            ThrowHelper.ThrowArgumentException("Marco definition must be followed by assignment token '='");
 
+        macro = line[0];
+        expression = line[2..];
         return true;
     }
 
-    private void TokenizeLine(string line, out string? label, out string? instruction, out string? directive)
+    private void TokenizeLine(Span<Token> line, out Token? label, out Span<Token> instruction, out Span<Token> directive)
     {
-        label = null;
         instruction = null;
         directive = null;
+        
         // Find and parse label if present
-        int labelEnd = line.IndexOf(':');
-        if (labelEnd != -1)
-        {
-            label = line[..labelEnd].Trim();
+        line = line.TrimType(TokenType.LabelDeclaration, out label);
 
-            // Trim label from line
-            line = line[(labelEnd+1)..];
-        }
-
-        // Line is neither a directive nor an instruction
+        // Line contains neither a directive nor an instruction
         if (line.Length == 0)
             return;
 
-        if (line[0] == '.')
+        // Assign directive or instruction as appropriate
+        switch (line[0].Type)
         {
-            // Line is a directive
-            directive = line[1..];
+            case TokenType.Directive:
+                directive = line;
+                break;
+            case TokenType.Instruction:
+                instruction = line;
+                break;
         }
-        else
-        {
-            // Line is an instruction
-            instruction = line;
-        }
-    }
-
-    private bool TokenizeInstruction(string instruction, out string name, out string[] args)
-    {
-        if (string.IsNullOrWhiteSpace(instruction))
-        {
-            name = string.Empty;
-            args = Array.Empty<string>();
-            return false;
-        }
-
-        // Find instruction name
-        int nameEnd = FindNameEnd(instruction);
-        if (nameEnd == -1)
-        {
-            nameEnd = instruction.Length;
-        }
-
-
-        // Parse instruction
-        name = instruction[..nameEnd];
-        args = instruction[nameEnd..].Trim().Split(',');
-
-        // Clear args to 0 if there are none
-        if (args.Length == 1 && string.IsNullOrWhiteSpace(args[0]))
-        {
-            args = Array.Empty<string>();
-        }
-
-        return true;
-    }
-
-    private bool TokenizeDirective(string directive, out string name, out string[] args) => TokenizeInstruction(directive, out name, out args);
-
-    private static void CleanLine(ref string line)
-    {
-        // Trim zero width no-break space
-        line = line.Trim('\uFEFF');
-        
-        // Trim whitespace
-        line = line.Trim();
-
-        TrimComment(ref line);
-    }
-
-    private static void TrimComment(ref string line)
-    {
-        // Find index of comment start
-        int commentStart = line.IndexOf('#');
-        
-        // No comment found
-        if (commentStart == -1)
-            return;
-        
-        // Trim comment
-        line = line[..commentStart];
     }
 
     private static int FindNameEnd(string line)

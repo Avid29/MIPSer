@@ -42,22 +42,22 @@ public struct AddressEvaluator : IEvaluator<Address>
         result = new Address(left.Value + right.Value, section);
         return true;
     }
-    
+
     /// <inheritdoc/>
     public bool TrySubtract(Address left, Address right, out Address result)
     {
         result = default;
-        
+
         if (right.IsRelocatable)
         {
             _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot subtract a relocatable symbol.");
             return false;
         }
-        
+
         result = new Address(left.Value - right.Value, left.Section);
         return true;
     }
-    
+
     /// <inheritdoc/>
     public bool TryMultiply(Address left, Address right, out Address result)
     {
@@ -73,7 +73,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         result = new Address(left.Value * right.Value, Section.None);
         return true;
     }
-    
+
     /// <inheritdoc/>
     public bool TryDivide(Address left, Address right, out Address result)
     {
@@ -89,7 +89,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         result = new Address(left.Value / right.Value, Section.None);
         return true;
     }
-    
+
     /// <inheritdoc/>
     public bool TryMod(Address left, Address right, out Address result)
     {
@@ -105,7 +105,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         result = new Address(left.Value % right.Value, Section.None);
         return true;
     }
-    
+
     /// <inheritdoc/>
     public bool TryAnd(Address left, Address right, out Address result)
     {
@@ -121,7 +121,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         result = new Address(left.Value & right.Value, Section.None);
         return true;
     }
-    
+
     /// <inheritdoc/>
     public bool TryOr(Address left, Address right, out Address result)
     {
@@ -137,7 +137,7 @@ public struct AddressEvaluator : IEvaluator<Address>
         result = new Address(left.Value | right.Value, Section.None);
         return true;
     }
-    
+
     /// <inheritdoc/>
     public bool TryXor(Address left, Address right, out Address result)
     {

@@ -29,13 +29,13 @@ public struct ReferenceEntry
     /// </summary>
     [field: FieldOffset(8)]
     public Section Section { get; set; }
-    
+
     /// <summary>
     /// Gets a <see cref="ReferenceType"/> describing how to preform the reference.
     /// </summary>
     [field: FieldOffset(9)]
     public ReferenceType Type { get; set; }
-    
+
     /// <summary>
     /// Gets the index of the module containing the reference.
     /// </summary>

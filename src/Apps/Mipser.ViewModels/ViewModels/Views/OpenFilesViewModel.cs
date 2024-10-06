@@ -53,7 +53,7 @@ public class OpenFilesViewModel : ObservableRecipient
         _messenger.Register<OpenFilesViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFileAsync());
         _messenger.Register<OpenFilesViewModel, FileCloseRequestMessage>(this, (r, m) => r.CloseFile(m.File));
     }
-     
+
     /// <summary>
     /// Creates and opens a new anonymous file.
     /// </summary>

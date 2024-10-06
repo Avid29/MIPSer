@@ -29,7 +29,7 @@ public struct ExpressionParser
     private ExpressionParserState _state;
     private string _cache;
     private string? _relocatableSymbol;
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
     /// </summary>
@@ -65,7 +65,7 @@ public struct ExpressionParser
 
         _tree = new ExpressionTree();
         _state = ExpressionParserState.Start;
-        
+
         // Build tree from string expression
         foreach (var c in expression)
         {
@@ -240,7 +240,7 @@ public struct ExpressionParser
         Guard.IsNotNull(_tree);
 
         // Attempt complete current cache
-        if(!TryFinish())
+        if (!TryFinish())
             return false;
 
         var node = new OperNode(oper);
@@ -275,7 +275,7 @@ public struct ExpressionParser
 
         if (!_obj.TryGetSymbol(_cache, out var value))
             return false;
-        
+
         // Cache relocatable symbol
         if (value.IsRelocatable)
         {

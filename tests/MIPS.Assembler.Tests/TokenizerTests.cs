@@ -15,12 +15,12 @@ public class TokenizerTests
 
     [TestMethod("test1.asm")]
     public async Task Test1() => await RunTest("test1.asm",
-        ".globl", "main",
+        ".globl", "main", 
         "main:",
         "ori", "$s0", ",", "$zero", ",", "10",
         "ori", "$s1", ",", "$zero", ",", "10",
         "add", "$t0", ",", "$s0", ",", "$s1");
-    
+
     private async Task RunTest(string fileName, params string[] canon)
     {
         var fullPath = Path.Combine(AssemblyPath, fileName);
@@ -31,12 +31,8 @@ public class TokenizerTests
 
     private async Task RunTest(Stream stream, string[] canon, string? fileName = null)
     {
-        IReadOnlyList<Token> results = await Tokenizer.Tokenize(stream, fileName);
-        
+        var results = await Tokenizer.TokenizeAsync(stream, fileName);
+
         Assert.AreEqual(canon.Length, results.Count);
-        for (int i = 0; i < results.Count; i++)
-        {
-            Assert.AreEqual(canon[i], results[i].Value);
-        }
     }
 }

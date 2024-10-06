@@ -31,8 +31,8 @@ public struct Address
     /// <summary>
     /// Gets whether or not the address is relocating.
     /// </summary>
-    public bool IsRelocatable => Section is not Section.None;
+    public readonly bool IsRelocatable => Section is not Section.None;
 
     /// <inheritdoc/>
-    public override string ToString() => $"{Value}";
+    public override readonly string ToString() => $"{Value}";
 }

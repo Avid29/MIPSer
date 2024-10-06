@@ -20,7 +20,7 @@ public class ExplorerViewModel : ObservableRecipient
     private readonly IFilesService _fileService;
 
     private BindableFolder? _rootFolder;
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ExplorerViewModel"/> class.
     /// </summary>
@@ -28,7 +28,7 @@ public class ExplorerViewModel : ObservableRecipient
     {
         _messenger = messenger;
         _fileService = filesService;
-        
+
         IsActive = true;
     }
 

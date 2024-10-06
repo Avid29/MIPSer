@@ -7,7 +7,7 @@ namespace MIPS.Assembler.Parsers.Expressions.Enums;
 /// </summary>
 public enum ExpressionType
 {
-    #pragma warning disable CS1591
+#pragma warning disable CS1591
 
     /// <remarks>
     /// Any binary integer type. Such as <see langword="char"/>, <see langword="int"/>, etc
@@ -20,5 +20,5 @@ public enum ExpressionType
     /// </summary>
     Invalid,
 
-    #pragma warning restore CS1591
+#pragma warning restore CS1591
 }

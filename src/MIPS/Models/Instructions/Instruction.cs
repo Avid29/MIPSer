@@ -241,7 +241,7 @@ public struct Instruction
         value.Address = address;
         return value;
     }
-    
+
     /// <summary>
     /// Gets a no operation instruction.
     /// </summary>
@@ -296,7 +296,7 @@ public struct Instruction
         get => (byte)GetShiftMask(SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET);
         private set => SetShiftMask(SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET, (uint)value);
     }
-    
+
     /// <summary>
     /// Gets the instruction's function code.
     /// </summary>

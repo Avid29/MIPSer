@@ -22,10 +22,10 @@ public sealed class File : IFile
     {
         _storageFile = storageFile;
     }
-    
+
     /// <inheritdoc/>
     public string Name => _storageFile.Name;
-    
+
     /// <inheritdoc/>
     public string Path => _storageFile.Path;
 
@@ -34,7 +34,7 @@ public sealed class File : IFile
 
     /// <inheritdoc/>
     public Task<Stream> OpenStreamForWriteAsync() => _storageFile.OpenStreamForWriteAsync();
-    
+
     /// <inheritdoc/>
     public async Task DeleteAsync() => await _storageFile.DeleteAsync();
 }

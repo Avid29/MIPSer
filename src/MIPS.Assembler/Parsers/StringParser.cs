@@ -49,12 +49,12 @@ public struct StringParser
         {
             if (_escapeState)
             {
-                if(!TryParseCharFromEscape(c, ref literal))
+                if (!TryParseCharFromEscape(c, ref literal))
                     return false;
             }
             else
             {
-                if(!TryParseChar(c, ref literal))
+                if (!TryParseChar(c, ref literal))
                     return false;
             }
         }

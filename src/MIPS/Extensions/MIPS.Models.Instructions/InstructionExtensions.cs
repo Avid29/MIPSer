@@ -11,38 +11,53 @@ namespace MIPS.Extensions.MIPS.Models.Instructions;
 public static class InstructionExtensions
 {
     /// <summary>
-    /// Checks if an instructions writes back to the $zero register.
+    /// Gets the register an instruction writes back to.
     /// </summary>
-    /// <param name="instruction">The instruction to check.</param>
-    /// <returns>Whether or not the instruction writes back to the $zero register.</returns>
-    public static bool WritesBackToZero(this Instruction instruction)
+    /// <param name="instruction">The instruction.</param>
+    /// <returns>Which register the instruction writes back to.</returns>
+    public static Register? GetWritebackRegister(this Instruction instruction)
     {
-        return instruction.Type switch
-        {
-            // Check for R type instructions writing back to $zero
-            InstructionType.R when instruction.RD is Register.Zero => instruction.FuncCode switch
-            {
-                // All these functions write back to $rd.
-                FunctionCode.ShiftLeftLogical or FunctionCode.ShiftRightLogical or FunctionCode.ShiftRightArithmetic or                         // Shifts
-                FunctionCode.ShiftLeftLogicalVariable or FunctionCode.ShiftRightLogicalVariable or FunctionCode.ShiftRightArithmeticVariable or // Variable Shifts
-                FunctionCode.MoveFromHigh or FunctionCode.MoveFromLow or                                                                        // Move From
-                FunctionCode.Add or FunctionCode.AddUnsigned or FunctionCode.Subtract or FunctionCode.SubtractUnsigned or                       // Arithmetic
-                FunctionCode.And or FunctionCode.Or or FunctionCode.ExclusiveOr or FunctionCode.Nor or                                          // Logical
-                FunctionCode.SetLessThan or FunctionCode.SetLessThanUnsigned => true,                                                           // Sets
-                _ => false,
-            },
+        var arg = GetWritebackArgument(instruction);
 
-            // Check for I type instructions writing back to $zero
-            InstructionType.I when instruction.RT is Register.Zero => instruction.OpCode switch
+        return arg switch
+        {
+            Argument.RD => instruction.RD,
+            Argument.RT => instruction.RT,
+            _ => null,
+        };
+    }
+
+    /// <summary>
+    /// Gets the argument register an instruction writes back to.
+    /// </summary>
+    /// <param name="instruction">The instruction.</param>
+    /// <returns>Which argument register the instruction writes back to.</returns>
+    public static Argument? GetWritebackArgument(this Instruction instruction)
+    {
+        if (instruction.Type is InstructionType.R)
+        {
+            return instruction.FuncCode switch
             {
-                OperationCode.AddImmediate or OperationCode.AddImmediateUnsigned or                                                             // Arithmetic
-                OperationCode.SetLessThanImmediate or OperationCode.SetLessThanImmediateUnsigned or                                             // Sets
-                OperationCode.AndImmediate or OperationCode.OrImmediate or OperationCode.ExclusiveOrImmediate or                                // Logical
-                OperationCode.LoadByte or OperationCode.LoadHalfWord or OperationCode.LoadWordLeft or OperationCode.LoadWord or                 // Loads
-                OperationCode.LoadByteUnsigned or OperationCode.LoadHalfWordUnsigned or OperationCode.LoadWordRight => true,                    // Loads (continued)
-                    _ => false
-            },
-            _ => false
+                // All these instructions write back to $rd.
+                FunctionCode.ShiftLeftLogical or FunctionCode.ShiftRightLogical or FunctionCode.ShiftRightArithmetic or                         // Shif
+                FunctionCode.ShiftLeftLogicalVariable or FunctionCode.ShiftRightLogicalVariable or FunctionCode.ShiftRightArithmeticVariable or // Vari
+                FunctionCode.MoveFromHigh or FunctionCode.MoveFromLow or                                                                        // Move
+                FunctionCode.Add or FunctionCode.AddUnsigned or FunctionCode.Subtract or FunctionCode.SubtractUnsigned or                       // Arit
+                FunctionCode.And or FunctionCode.Or or FunctionCode.ExclusiveOr or FunctionCode.Nor or                                          // Logi
+                FunctionCode.SetLessThan or FunctionCode.SetLessThanUnsigned => Argument.RD,                                                    // Sets
+                _ => null,
+            };
+        }
+
+        return instruction.OpCode switch
+        {
+            // All these instructions write back to $rt.
+            OperationCode.AddImmediate or OperationCode.AddImmediateUnsigned or                                                             // Arithmetic
+            OperationCode.SetLessThanImmediate or OperationCode.SetLessThanImmediateUnsigned or                                             // Sets
+            OperationCode.AndImmediate or OperationCode.OrImmediate or OperationCode.ExclusiveOrImmediate or                                // Logical
+            OperationCode.LoadByte or OperationCode.LoadHalfWord or OperationCode.LoadWordLeft or OperationCode.LoadWord or                 // Loads
+            OperationCode.LoadByteUnsigned or OperationCode.LoadHalfWordUnsigned or OperationCode.LoadWordRight => Argument.RT,             // Loads (continued)
+            _ => null,
         };
     }
 }

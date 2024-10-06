@@ -10,8 +10,9 @@ namespace MIPS.Assembler.Tokenization;
 /// <param name="value">The token as a string.</param>
 /// <param name="filename">The name of the file the token appears in.</param>
 /// <param name="lineNum">The line the token appears on.</param>
+/// <param name="column">The column of the token on the line.</param>
 /// <param name="type">The token type.</param>
-public class Token(string value, string? filename, int lineNum, TokenType type)
+public class Token(string value, string? filename, int lineNum, int column, TokenType type)
 {
     /// <summary>
     /// Gets the value of the token as a string.
@@ -29,7 +30,15 @@ public class Token(string value, string? filename, int lineNum, TokenType type)
     public int LineNum { get; } = lineNum;
 
     /// <summary>
+    /// Gets the token's start column.
+    /// </summary>
+    public int Column {get; } = column;
+
+    /// <summary>
     /// Gets the token's type.
     /// </summary>
     public TokenType Type { get; } = type;
+
+    /// <inheritdoc/>
+    public override string ToString() => Value;
 }

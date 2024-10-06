@@ -11,9 +11,9 @@ public enum ReferenceType : byte
     /// Use lower 16 bits to update 16 bit immediate field.
     /// </remarks>
     SimpleImmediate = 0x01,
-    
+
     /// <remarks>
-    /// How is this different from 
+    /// How is this different from simple immediate?
     /// </remarks>
     HalfWord = 0x02,
 
@@ -37,19 +37,37 @@ public enum ReferenceType : byte
     /// </remarks>
     Immediate3 = 0x06,
 
+#pragma warning disable CS1591
+    
     // Method flags
-
-    #pragma warning disable CS1591
-
     Add = 0x00,
     Replace = 0x10,
     Subtract = 0x20,
-    
+
     // Explicit Combinations
+    AddSimpleImmediate =            Add | SimpleImmediate,
+    ReplaceSimpleImmediate =    Replace | SimpleImmediate,
+    SubtractSimpleImmediate =  Subtract | SimpleImmediate,
 
-    AddSimpleImmediate = ReferenceType.Add | ReferenceType.SimpleImmediate,
-    ReplaceSimpleImmediate = ReferenceType.Replace | ReferenceType.SimpleImmediate,
-    SubtractSimpleImmediate = ReferenceType.Subtract | ReferenceType.SimpleImmediate,
+    AddHalfWord =                   Add | HalfWord,
+    ReplaceHalfWord =           Replace | HalfWord,
+    SubtractHalfWord =         Subtract | HalfWord,
 
-    #pragma warning restore CS1591
+    AddSplitImmediate =             Add | SplitImmediate,
+    ReplaceSplitImmediate =     Replace | SplitImmediate,
+    SubtractSplitImmediate =   Subtract | SplitImmediate,
+
+    AddFullWord =                   Add | FullWord,
+    ReplaceFullWord =           Replace | FullWord,
+    SubtractFullWord =         Subtract | FullWord,
+
+    AddAddress =                    Add | Address,
+    ReplaceAddress =            Replace | Address,
+    SubtractAddress =          Subtract | Address,
+
+    AddImmediate3 =                 Add | Immediate3,
+    ReplaceImmediate3 =         Replace | Immediate3,
+    SubtractImmediate3 =       Subtract | Immediate3,
+
+#pragma warning restore CS1591
 }

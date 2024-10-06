@@ -18,6 +18,6 @@ public enum TokenizerState
     Directive,
     Reference,
     Comment,
-    
+
 #pragma warning restore CS1591
 }

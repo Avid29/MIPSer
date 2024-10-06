@@ -3,6 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models.Modules;
+using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Instructions;
@@ -66,14 +67,11 @@ public partial class Assembler
     /// <summary>
     /// Assembles an object module from a stream of assembly
     /// </summary>
-    public static async Task<Assembler> AssembleAsync(Stream stream)
+    public static async Task<Assembler> AssembleAsync(Stream stream, string? filename)
     {
         var assembler = new Assembler();
+        var tokens = await Tokenizer.TokenizeAsync(stream);
 
-        // Create stream reader and run first pass
-        using var reader = new StreamReader(stream);
-        await assembler.MakePass(reader, assembler.LinePass1);
-        await assembler.MakePass(reader, assembler.LinePass2);
 
         return assembler;
     }
@@ -92,7 +90,7 @@ public partial class Assembler
         return _obj.Finish(stream);
     }
 
-    private async Task MakePass(StreamReader reader, Action<string> pass)
+    private async Task MakePassAsync(StreamReader reader, Action<string> pass)
     {
         // Iterate until end of stream, tracking line number
         for (int lineNum = 1; !reader.EndOfStream; lineNum++)
@@ -104,7 +102,6 @@ public partial class Assembler
             var line = await reader.ReadLineAsync();
             Guard.IsNotNull(line, nameof(line));
 
-            CleanLine(ref line);
             pass(line);
         }
 

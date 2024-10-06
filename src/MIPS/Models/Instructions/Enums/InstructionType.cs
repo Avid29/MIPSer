@@ -7,9 +7,9 @@ namespace MIPS.Models.Instructions.Enums;
 /// </summary>
 public enum InstructionType
 {
-    #pragma warning disable CS1591
+#pragma warning disable CS1591
     R,
     I,
     J,
-    #pragma warning restore CS1591
+#pragma warning restore CS1591
 }

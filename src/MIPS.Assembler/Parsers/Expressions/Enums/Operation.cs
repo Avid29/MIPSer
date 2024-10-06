@@ -7,7 +7,7 @@ namespace MIPS.Assembler.Parsers.Expressions.Enums;
 /// </summary>
 public enum Operation
 {
-    #pragma warning disable CS1591
+#pragma warning disable CS1591
 
     // Arithmetic 
     Addition,

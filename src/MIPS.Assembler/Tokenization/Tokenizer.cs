@@ -2,8 +2,10 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Tokenization.Enums;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace MIPS.Assembler.Tokenization;
@@ -26,6 +28,7 @@ public class Tokenizer
     /// </summary>
     private Tokenizer(string? filename)
     {
+        TokenLines = [];
         Tokens = [];
         _state = TokenizerState.LineBegin;
         _cache = string.Empty;
@@ -36,7 +39,9 @@ public class Tokenizer
         _column = 0;
     }
 
-    private List<Token> Tokens { get; }
+    private List<List<Token>> TokenLines { get; }
+
+    private List<Token> Tokens { get; set; }
 
     /// <summary>
     /// Tokenizes a stream of assembly code.
@@ -44,9 +49,9 @@ public class Tokenizer
     /// <param name="stream">The stream of code.</param>
     /// <param name="filename">The filename of the stream.</param>
     /// <returns>A list of tokens.</returns>
-    public static async Task<IReadOnlyList<Token>> Tokenize(Stream stream, string? filename = null)
+    public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null)
     {
-        Tokenizer tokenizer = new (filename);
+        Tokenizer tokenizer = new(filename);
 
         using var reader = new StreamReader(stream);
         while (!reader.EndOfStream)
@@ -55,14 +60,28 @@ public class Tokenizer
             if (line is null)
                 ThrowHelper.ThrowArgumentNullException(nameof(line));
 
-            tokenizer.ParseLine(line + '\n');
+            tokenizer.ParseLine(line);
         }
 
-        return tokenizer.Tokens;
+        return new TokenizedAssmebly(tokenizer.TokenLines);
+    }
+
+    internal static Span<Token> TokenizeLine(string line, string? filename = null)
+    {
+        Tokenizer tokenizer = new(filename);
+
+        if (line.Contains('\n'))
+            ThrowHelper.ThrowArgumentException("Single line tokenizer cannot contain a new line");
+
+        tokenizer.ParseLine(line);
+        return CollectionsMarshal.AsSpan(tokenizer.TokenLines[0]);
     }
 
     private bool ParseLine(string line)
     {
+        Tokens = [];
+
+        line += '\n';
         foreach (char c in line)
         {
             bool status = ParseNextChar(c, line);
@@ -74,6 +93,7 @@ public class Tokenizer
 
         _line++;
         _column = 0;
+        TokenLines.Add(Tokens);
         return true;
     }
 
@@ -135,8 +155,8 @@ public class Tokenizer
             '+' or '-' or '*' or '/' or '%' or
             '|' or '&' or '^' => HandleCharacter(c, TokenType.Operator),
 
-            '.' => newLine ? HandleCharacter(c, newState:TokenizerState.Directive) : false,
-            '$' => HandleCharacter(c, newState:TokenizerState.Register),
+            '.' => newLine ? HandleCharacter(c, newState: TokenizerState.Directive) : false,
+            '$' => HandleCharacter(c, newState: TokenizerState.Register),
 
             '(' => HandleCharacter(c, TokenType.OpenParenthesis),
             ')' => HandleCharacter(c, TokenType.CloseParenthesis),
@@ -171,7 +191,7 @@ public class Tokenizer
 
         // We're in waiting mode, we can't keep adding to the token.
         // It must be an instruction.
-        if (wait)
+        if (wait || c is '\n')
         {
             _tokenType = TokenType.Instruction;
             return CompleteAndContinue(c, line);
@@ -280,9 +300,9 @@ public class Tokenizer
             // Token must be created if cache is completed and not a comment
             if (_tokenType is null)
                 return false;
-            
+
             // Create the token and add to list
-            Token token = new(_cache, _filename, _line, _tokenType.Value);
+            Token token = new(_cache, _filename, _line, _column, _tokenType.Value);
             Tokens?.Add(token);
         }
 

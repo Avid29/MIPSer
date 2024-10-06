@@ -40,7 +40,7 @@ public class Program
             Console.Write("Please enter asm file path: ");
             path = Console.ReadLine();
         }
-        
+
         await Main(path);
     }
 
@@ -50,7 +50,7 @@ public class Program
 
         var inFile = File.Open(filePath, FileMode.Open);
         var outFile = File.Open(resultFile, FileMode.Create);
-        var assembler = await Assembler.AssembleAsync(inFile);
+        var assembler = await Assembler.AssembleAsync(inFile, filePath);
         var module = assembler.WriteModule(outFile);
 
 
