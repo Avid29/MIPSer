@@ -7,7 +7,6 @@ using MIPS.Assembler.Models.Directives.Abstract;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
-using MIPS.Models.Addressing;
 using MIPS.Models.Instructions;
 using System;
 
@@ -28,11 +27,8 @@ public unsafe partial class Assembler
                 return;
             }
 
-            //if (!expressionParser.TryParse(expression, out var address, out var _))
-            //    return;
-
-            // TODO: Real macro implementations
-            var address = new Address();
+            if (!expressionParser.TryParse(expression, out var address, out var _))
+                return;
 
             if (address.IsRelocatable)
             {

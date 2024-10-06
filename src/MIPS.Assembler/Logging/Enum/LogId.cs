@@ -11,6 +11,7 @@ public enum LogId
 
     // General errors
     IllegalSymbolName,
+    TokenizerError,
 
     // Macro errors
     MacroMissingValue,
@@ -40,6 +41,7 @@ public enum LogId
 
     // String parsing errors
     NotAString,
+    MultiLineString,
     UnrecognizedEscapeSequence,
     UnescapedQuoteInString,
 

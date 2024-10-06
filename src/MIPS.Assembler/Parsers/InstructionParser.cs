@@ -88,19 +88,27 @@ public struct InstructionParser
         // Parse argument data according to pattern
         Argument[] pattern = _meta.ArgumentPattern;
 
-        for (int i = 0; !args.IsEmpty; i++)
+        int argC;
+        for (argC = 0; !args.IsEmpty; argC++)
         {
             // Assert proper argument count for instruction
-            if (i >= pattern.Length)
+            if (argC >= pattern.Length)
             {
-                _logger?.Log(Severity.Error, LogId.InvalidInstructionArgCount, $"Instruction '{name}' had {i} arguments instead of {_meta.ArgumentPattern.Length}.");
+                _logger?.Log(Severity.Error, LogId.InvalidInstructionArgCount, $"Instruction '{name}' has too many arguments! Found {argC + 1} arguments when expecting {_meta.ArgumentPattern.Length}.");
                 return false;
             }
 
             // Split out next arg
             args = args.SplitAtNext(TokenType.Comma, out var arg, out _);
-            TryParseArg(arg, pattern[i], out symbol);
-        }  
+            TryParseArg(arg, pattern[argC], out symbol);
+        }
+
+        // Assert proper argument count for instruction
+        if (argC < pattern.Length)
+        {
+            _logger?.Log(Severity.Error, LogId.InvalidInstructionArgCount, $"Instruction '{name}' doesn't have enough arguments. Found {argC} arguments when expecting {_meta.ArgumentPattern.Length}.");
+            return false;
+        }
 
         // Create the instruction from its components based on the instruction type
         instruction = _meta.Type switch

@@ -70,8 +70,19 @@ public partial class Assembler
     public static async Task<Assembler> AssembleAsync(Stream stream, string? filename)
     {
         var assembler = new Assembler();
-        var tokens = await Tokenizer.TokenizeAsync(stream);
+        var tokens = await Tokenizer.TokenizeAsync(stream, filename, assembler._logger);
 
+        for (int i = 1; i <= tokens.LineCount; i++)
+        {
+            assembler._logger.CurrentLine = i;
+            assembler.LinePass1(tokens[i]);
+        }
+
+        for (int i = 1; i <= tokens.LineCount; i++)
+        {
+            assembler._logger.CurrentLine = i;
+            assembler.LinePass2(tokens[i]);
+        }
 
         return assembler;
     }
@@ -88,26 +99,6 @@ public partial class Assembler
             return null;
 
         return _obj.Finish(stream);
-    }
-
-    private async Task MakePassAsync(StreamReader reader, Action<string> pass)
-    {
-        // Iterate until end of stream, tracking line number
-        for (int lineNum = 1; !reader.EndOfStream; lineNum++)
-        {
-            // Track the line in the logger
-            _logger.CurrentLine = lineNum;
-
-            // Load line from stream and make pass
-            var line = await reader.ReadLineAsync();
-            Guard.IsNotNull(line, nameof(line));
-
-            pass(line);
-        }
-
-        // Reset stream position
-        reader.BaseStream.Position = 0;
-        _obj.ResetStreamPositions();
     }
 
     /// <summary>

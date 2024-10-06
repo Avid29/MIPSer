@@ -28,6 +28,8 @@ public class InstructionParserTests
     private const string SllWarnSigned = "sll $t0, $s0, -1";
 
     private const string XkcdFail = "xkcd $t0, $s0, $s1";
+    private const string TooFewArgs = "add $t0, $s0";
+    private const string TooManyArgs = "add $t0, $s0, $s1, $s1";
 
     [TestMethod(NOP)]
     public void NopTest() => RunTest(NOP, Instruction.NOP);
@@ -100,6 +102,19 @@ public class InstructionParserTests
     {
         RunTest(XkcdFail, logId: LogId.InvalidInstructionName);
     }
+
+    [TestMethod(TooFewArgs)]
+    public void TooFewArgsTest()
+    {
+        RunTest(TooFewArgs, logId: LogId.InvalidInstructionArgCount);
+    }
+
+    [TestMethod(TooManyArgs)]
+    public void TooManyArgsTest()
+    {
+        RunTest(TooManyArgs, logId: LogId.InvalidInstructionArgCount);
+    }
+
 
     private static void RunTest(string input, Instruction? expected = null, LogId? logId = null, string? expectedSymbol = null)
     {

@@ -33,6 +33,6 @@ public class TokenizerTests
     {
         var results = await Tokenizer.TokenizeAsync(stream, fileName);
 
-        Assert.AreEqual(canon.Length, results.Count);
+        Assert.AreEqual(canon.Length, results.TokenCount);
     }
 }

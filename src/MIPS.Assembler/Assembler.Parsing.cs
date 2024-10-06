@@ -15,6 +15,9 @@ public partial class Assembler
         macro = null;
         expression = [];
 
+        if (line.IsEmpty)
+            return false;
+
         if (line[0].Type is not TokenType.MacroDefinition)
             return false;
 

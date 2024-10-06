@@ -12,12 +12,12 @@ namespace MIPS.Assembler.Tokenization;
 /// </summary>
 public class TokenizedAssmebly
 {
-    private readonly List<List<Token>> _tokens;
+    private readonly List<List<Token>> _tokenLines;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TokenizedAssmebly"/> class.
     /// </summary>
-    public TokenizedAssmebly(List<List<Token>> tokens) => _tokens = tokens;
+    public TokenizedAssmebly(List<List<Token>> tokens) => _tokenLines = tokens;
 
     /// <summary>
     /// Gets a line's token list as a span.
@@ -26,11 +26,16 @@ public class TokenizedAssmebly
     /// <returns>The line's token list as a span.</returns>
     public Span<Token> this[int line]
     {
-        get => CollectionsMarshal.AsSpan(_tokens[line-1]);
+        get => CollectionsMarshal.AsSpan(_tokenLines[line-1]);
     }
 
     /// <summary>
-    /// Gets the total number of tokens
+    /// Gets the total number of lines.
     /// </summary>
-    public int Count => _tokens.Sum(x => x.Count);
+    public int LineCount => _tokenLines.Count;
+
+    /// <summary>
+    /// Gets the total number of tokens.
+    /// </summary>
+    public int TokenCount => _tokenLines.Sum(x => x.Count);
 }

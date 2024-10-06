@@ -1,6 +1,8 @@
 ﻿// Adam Dernis 2023
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Assembler.Logging;
+using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Tokenization.Enums;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,8 @@ namespace MIPS.Assembler.Tokenization;
 /// </summary>
 public class Tokenizer
 {
+    private readonly ILogger? _logger;
+
     private TokenizerState _state;
     private string _cache;
     private TokenType? _tokenType;
@@ -26,8 +30,10 @@ public class Tokenizer
     /// <summary>
     /// Initializes a new instance of the <see cref="Tokenizer"/> class.
     /// </summary>
-    private Tokenizer(string? filename)
+    private Tokenizer(string? filename, ILogger? logger = null)
     {
+        _logger = logger;
+
         TokenLines = [];
         Tokens = [];
         _state = TokenizerState.LineBegin;
@@ -48,10 +54,11 @@ public class Tokenizer
     /// </summary>
     /// <param name="stream">The stream of code.</param>
     /// <param name="filename">The filename of the stream.</param>
+    /// <param name="logger">The logger to use when tracking errors.</param>
     /// <returns>A list of tokens.</returns>
-    public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null)
+    public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null, ILogger? logger = null)
     {
-        Tokenizer tokenizer = new(filename);
+        Tokenizer tokenizer = new(filename, logger);
 
         using var reader = new StreamReader(stream);
         while (!reader.EndOfStream)
@@ -71,7 +78,7 @@ public class Tokenizer
         Tokenizer tokenizer = new(filename);
 
         if (line.Contains('\n'))
-            ThrowHelper.ThrowArgumentException("Single line tokenizer cannot contain a new line");
+            ThrowHelper.ThrowArgumentException("Single line tokenizer cannot contain a new line.");
 
         // This is a debug tool.
         // We just want to tokenize an expression,
@@ -93,8 +100,13 @@ public class Tokenizer
         foreach (char c in line)
         {
             bool status = ParseNextChar(c, line);
+
+            // This line is trashed, but we'll add it and keep going to find any further errors
             if (!status)
+            {
+                TokenLines.Add(Tokens);
                 return false;
+            }
 
             _column++;
         }
@@ -121,7 +133,7 @@ public class Tokenizer
             TokenizerState.Directive => ParseFromDirective(c, line),
             TokenizerState.Reference => ParseFromReference(c, line),
             TokenizerState.Comment => ParseFromComment(c, line),
-            _ => false,
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>(nameof(_state)),
         };
     }
 
@@ -191,12 +203,24 @@ public class Tokenizer
         // Text is a label declaration.
         if (c is ':')
         {
+            if (char.IsDigit(_cache[0]))
+            {
+                _logger?.Log(Severity.Error, LogId.IllegalSymbolName, $"{_cache} is not a valid label name. Labels names cannot begin with a digit.", _line);
+                return false;
+            }
+
             return HandleCharacter(c, TokenType.LabelDeclaration, TokenizerState.LineBegin);
         }
 
         // Text is a marco declaration.
         if (c == '=')
         {
+            if (char.IsDigit(_cache[0]))
+            {
+                _logger?.Log(Severity.Error, LogId.IllegalSymbolName, $"{_cache} is not a valid macro name. Macro names cannot begin with a digit.", _line);
+                return false;
+            }
+
             _tokenType = TokenType.MacroDefinition;
             return CompleteAndContinue(c, line);
         }
@@ -208,10 +232,6 @@ public class Tokenizer
             _tokenType = TokenType.Instruction;
             return CompleteAndContinue(c, line);
         }
-
-        // A label cannot begin with a number.
-        if (char.IsDigit(c) && _cache.Length == 0)
-            return false;
 
         if (char.IsLetterOrDigit(c))
         {
@@ -250,11 +270,21 @@ public class Tokenizer
 
     private bool ParseFromString(char c, string line, bool isChar)
     {
+        if (c is '\n')
+        {
+            _logger?.Log(Severity.Error, LogId.MultiLineString, $"Strings may not wrap between lines.", _line);
+            return false;
+        }
+
         if (isChar)
         {
             if (_cache.Length is 1 && c is '\'')
+            {
+                _logger?.Log(Severity.Error, LogId.MultiLineString, $"Empty character literal.", _line);
                 return false;
-
+            }
+            
+            // TODO: Allow escaped characters.
             if (_cache.Length is >= 2 && c is not '\'')
                 return false;
 
@@ -335,7 +365,18 @@ public class Tokenizer
         {
             // Token must be created if cache is completed and not a comment
             if (_tokenType is null)
+            {
+                string message = _state switch
+                {
+                    TokenizerState.Reference => $"Incomplete symbol reference \"{_cache}\".",
+                    TokenizerState.Immediate => $"Incomplete immediate value \"{_cache}\".",
+                    TokenizerState.Register => $"Incomplete register name \"{_cache}\".",
+                    _ => $"Incomplete token \"{_cache}\"",
+                };
+
+                _logger?.Log(Severity.Error, LogId.TokenizerError, message, _line);
                 return false;
+            }
 
             // Create the token and add to list
             Token token = new(_cache, _filename, _line, _column, _tokenType.Value);
