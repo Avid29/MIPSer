@@ -302,7 +302,7 @@ public struct InstructionParser
         return true;
     }
 
-    private bool TryParseRegister(Token arg, out Register register)
+    private readonly bool TryParseRegister(Token arg, out Register register)
     {
         register = Register.Zero;
 

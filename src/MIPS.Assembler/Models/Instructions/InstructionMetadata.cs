@@ -20,6 +20,7 @@ public readonly struct InstructionMetadata
         FuncCode = FunctionCode.None;
         BranchCode = BranchCode.None;
         ArgumentPattern = argumentPattern;
+        IsPseudoInstruction = false;
     }
 
     /// <summary>
@@ -32,6 +33,7 @@ public readonly struct InstructionMetadata
         FuncCode = funcCode;
         BranchCode = BranchCode.None;
         ArgumentPattern = argumentPattern;
+        IsPseudoInstruction = false;
     }
 
     /// <summary>
@@ -44,6 +46,23 @@ public readonly struct InstructionMetadata
         FuncCode = FunctionCode.None;
         BranchCode = branchCode;
         ArgumentPattern = argumentPattern;
+        IsPseudoInstruction = false;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
+    /// </summary>
+    /// <remarks>
+    /// This is constructor is only for pseudo-instructions.
+    /// </remarks>
+    public InstructionMetadata(string name, Argument[] argumentPattern)
+    {
+        Name = name;
+        OpCode = OperationCode.PseudoInstruction;
+        FuncCode = FunctionCode.None;
+        BranchCode = BranchCode.None;
+        ArgumentPattern = argumentPattern;
+        IsPseudoInstruction = true;
     }
 
     /// <summary>
@@ -75,4 +94,9 @@ public readonly struct InstructionMetadata
     /// Gets the instruction parse type
     /// </summary>
     public Argument[] ArgumentPattern { get; }
+
+    /// <summary>
+    /// Gets whether or not the instruction is a pseudo instruction.
+    /// </summary>
+    public bool IsPseudoInstruction { get; }
 }

@@ -127,7 +127,29 @@ public static class ConstantTables
         //{ "swc3", },
 
         // Pseudoinstructions
-        { "blt", new InstructionMetadata() }
+        { "blt", new InstructionMetadata("blt", [Argument.RS, Argument.RT, Argument.Offset]) },                             // blt      $rs, $rt, offset
+                                                                                                                            //    slt   $at, $rs, $rt     
+                                                                                                                            //    bne   $at, $zero, offset
+
+        { "li", new InstructionMetadata("li", [Argument.RT, Argument.Immediate]) },                                         // li       $rt, immediate
+                                                                                                                            //    lui   $at, upper
+                                                                                                                            //    ori   $rt, $at, lower
+
+        { "abs", new InstructionMetadata("abs", [Argument.RT, Argument.RS]) },                                              // abs      $rt, $rs
+                                                                                                                            //    addu  $rt, $rs, $zero
+                                                                                                                            //    bgez  $rs, 8
+                                                                                                                            //    sub   $rt, $zero, $rs
+
+        { "move", new InstructionMetadata("move", [Argument.RT, Argument.RS]) },                                            // move     $rt, $rs
+                                                                                                                            //  add     $rt, $rs, $zero
+
+        { "la", new InstructionMetadata("la", [Argument.RT, Argument.Address]) },                                           // la       $rt, address
+                                                                                                                            //    lui   $at, upper
+                                                                                                                            //    ori   $rt, $at, lower
+
+        { "sge", new InstructionMetadata("sge", [Argument.RD, Argument.RS, Argument.RT]) },                                 // sge      $rd, $rs, $rt
+                                                                                                                            //    addiu $rt, $rt, -1
+                                                                                                                            //    slt   $rd, $rt, $rs
     };
 
     private static readonly Dictionary<string, Register> _registerTable = new()
