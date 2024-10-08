@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2023
+﻿// Adam Dernis 2024
 
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
@@ -34,11 +34,8 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
             return false;
         }
 
-        // Determine the resulting section
-        var section = left.Section;
-        if (section is Section.None)
-            section = right.Section;
-
+        // Determine the resulting section, and create new address
+        var section = left.Section | right.Section;
         result = new Address(left.Value + right.Value, section);
         return true;
     }

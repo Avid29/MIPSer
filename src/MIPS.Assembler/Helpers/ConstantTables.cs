@@ -13,24 +13,24 @@ namespace MIPS.Assembler.Helpers;
 public static class ConstantTables
 {
     // R type patterns
-    private static readonly Argument[] NoArgPattern = { };                                                                  // <instr>
-    private static readonly Argument[] StandardRPattern = { Argument.RD, Argument.RS, Argument.RT };                        // <instr>  $rd, $rs, $rt
-    private static readonly Argument[] MultiplyRPattern = { Argument.RS, Argument.RT };                                     // <instr>  $rs, $rt
-    private static readonly Argument[] ShiftPattern = { Argument.RD, Argument.RT, Argument.Shift };                         // <instr>  $rd, $rt, sa
-    private static readonly Argument[] VariableShiftPattern = { Argument.RD, Argument.RT, Argument.RS };                    // <instr>  $rd, $rt, $rs
-    private static readonly Argument[] JumpRegisterPattern = { Argument.RS };                                               // <instr>  $rs
-    private static readonly Argument[] MoveFromPattern = { Argument.RD };                                                   // <instr>  $rd
-    private static readonly Argument[] MoveToPattern = { Argument.RS };                                                     // <instr>  $rs
+    private static readonly Argument[] NoArgPattern = [];                                                                  // <instr>
+    private static readonly Argument[] StandardRPattern = [Argument.RD, Argument.RS, Argument.RT];                        // <instr>  $rd, $rs, $rt
+    private static readonly Argument[] MultiplyRPattern = [Argument.RS, Argument.RT];                                     // <instr>  $rs, $rt
+    private static readonly Argument[] ShiftPattern = [Argument.RD, Argument.RT, Argument.Shift];                         // <instr>  $rd, $rt, sa
+    private static readonly Argument[] VariableShiftPattern = [Argument.RD, Argument.RT, Argument.RS];                    // <instr>  $rd, $rt, $rs
+    private static readonly Argument[] JumpRegisterPattern = [Argument.RS];                                               // <instr>  $rs
+    private static readonly Argument[] MoveFromPattern = [Argument.RD];                                                   // <instr>  $rd
+    private static readonly Argument[] MoveToPattern = [Argument.RS];                                                     // <instr>  $rs
 
     // I type patterns
-    private static readonly Argument[] StandardIPattern = { Argument.RT, Argument.RS, Argument.Immediate };                 // <instr>  $rt, $rs, imm
-    private static readonly Argument[] BranchComparePattern = { Argument.RS, Argument.RT, Argument.Offset };                // <instr>  $rs, $rt, offset
-    private static readonly Argument[] BranchPattern = { Argument.RS, Argument.Offset };                                    // <instr>  $rs, offset
-    private static readonly Argument[] LoadImmediatePattern = { Argument.RT, Argument.Immediate };                          // <instr>  $rt, imm
-    private static readonly Argument[] MemoryPattern = { Argument.RT, Argument.AddressOffset };                             // <instr>  $rt, offset($rs)
+    private static readonly Argument[] StandardIPattern = [Argument.RT, Argument.RS, Argument.Immediate];                 // <instr>  $rt, $rs, imm
+    private static readonly Argument[] BranchComparePattern = [Argument.RS, Argument.RT, Argument.Offset];                // <instr>  $rs, $rt, offset
+    private static readonly Argument[] BranchPattern = [Argument.RS, Argument.Offset];                                    // <instr>  $rs, offset
+    private static readonly Argument[] LoadImmediatePattern = [Argument.RT, Argument.Immediate];                          // <instr>  $rt, imm
+    private static readonly Argument[] MemoryPattern = [Argument.RT, Argument.AddressOffset];                             // <instr>  $rt, offset($rs)
 
     // J type patterns
-    private static readonly Argument[] JumpPattern = { Argument.Address };                                                  // <instr>  addr
+    private static readonly Argument[] JumpPattern = [Argument.Address];                                                  // <instr>  addr
 
     private static readonly Dictionary<string, InstructionMetadata> _instructionTable = new()
     {

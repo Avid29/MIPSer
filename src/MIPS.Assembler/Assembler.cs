@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2023
+﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
@@ -53,12 +53,10 @@ public partial class Assembler
     {
         get
         {
-            return _activeSection switch
-            {
-                Section.Text => new Address(_obj.TextPosition, Section.Text),
-                Section.Data => new Address(_obj.DataPosition, Section.Data),
-                _ => ThrowHelper.ThrowArgumentException<Address>(nameof(_activeSection)),
-            };
+            if (_activeSection is < Section.Text or > Section.UninitializedData)
+                ThrowHelper.ThrowArgumentException(nameof(_activeSection));
+
+            return new Address(_obj.GetStreamPosition(_activeSection), _activeSection);
         }
     }
 
@@ -127,36 +125,5 @@ public partial class Assembler
         }
 
         return true;
-    }
-
-    /// <summary>
-    /// Bytes should be passed in as big endian.
-    /// </summary>
-    private void Append(params byte[] bytes)
-    {
-        // Append data
-        _obj.Append(_activeSection, bytes);
-    }
-
-    private void Append<T>(T data)
-        where T : IBinaryInteger<T>
-    {
-        var bytes = new byte[data.GetByteCount()];
-        data.WriteBigEndian(bytes);
-        Append(bytes);
-    }
-
-    private void Append(int byteCount)
-    {
-        Guard.IsGreaterThanOrEqualTo(byteCount, 0);
-
-        Append(new byte[byteCount]);
-    }
-
-    private void Align(int boundary) => _obj.Align(_activeSection, boundary);
-
-    private void SetActiveSection(Section section)
-    {
-        _activeSection = section;
     }
 }

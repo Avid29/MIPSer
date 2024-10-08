@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2023
 
+using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables.Enums;
 using System.Runtime.InteropServices;
 
@@ -12,10 +13,14 @@ namespace MIPS.Models.Modules.Tables;
 public struct RelocationEntry
 {
     /// <summary>
-    /// Fills the struct to 8 bytes.
+    /// Initializes a new instance of the <see cref="RelocationEntry"/> struct.
     /// </summary>
-    [field: FieldOffset(6)]
-    private readonly ushort _filler;
+    public RelocationEntry(uint address, Section section, RelocationType type)
+    {
+        Address = address;
+        Section = section;
+        Type = type;
+    }
 
     /// <summary>
     /// Gets the address to be relocated.
@@ -27,11 +32,18 @@ public struct RelocationEntry
     /// Gets the section number.
     /// </summary>
     [field: FieldOffset(4)]
-    public byte Section { get; set; }
+    public Section Section { get; set; }
 
     /// <summary>
     /// Gets a <see cref="RelocationType"/> describing how to preform the relocation.
     /// </summary>
     [field: FieldOffset(5)]
     public RelocationType Type { get; set; }
+
+    /// <summary>
+    /// Fills the struct to 8 bytes.
+    /// </summary>
+    [field: FieldOffset(6)]
+    private readonly ushort _filler;
+
 }

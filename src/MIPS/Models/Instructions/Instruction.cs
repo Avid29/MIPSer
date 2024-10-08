@@ -377,12 +377,12 @@ public struct Instruction
         uint vMask = (uint)(1 << size) - 1;
         vMask <<= offset;
 
-        // Then make the instruction mask and inverting
-        // the value mask
-        uint iMask = ~(vMask << offset);
+        // Then make the value mask and inverting
+        // the instruction mask
+        uint iMask = ~(vMask);
 
         // Mask the instruction and the value
-        uint vMasked = value & vMask;
+        uint vMasked = (value << offset) & vMask;
         uint iMasked = _inst & iMask;
 
         // Combine the instruction and the value

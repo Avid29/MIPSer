@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2023
+﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Expressions.Abstract;
@@ -107,15 +107,11 @@ public class OperNode : ExpNode
     {
         // Clear current child's parent
         if (child is not null)
-        {
             child.Parent = null;
-        }
 
         // Assign new child's parent
         if (value is not null)
-        {
             value.Parent = this;
-        }
 
         // Assign new child
         child = value;

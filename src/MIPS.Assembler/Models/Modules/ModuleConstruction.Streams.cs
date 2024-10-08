@@ -12,12 +12,12 @@ public partial class ModuleConstruction
     /// <summary>
     /// Gets the current position in the text stream.
     /// </summary>
-    public long TextPosition => _text.Position;
+    public long TextPosition => Text.Position;
 
     /// <summary>
     /// Gets the current position in the data stream.
     /// </summary>
-    public long DataPosition => _data.Position;
+    public long DataPosition => Data.Position;
 
     /// <summary>
     /// Appends an array of bytes to the end of the specified section.
@@ -59,21 +59,32 @@ public partial class ModuleConstruction
     }
 
     /// <summary>
+    /// Gets the position of a section stream.
+    /// </summary>
+    /// <param name="section">The section position to retrieve .</param>
+    /// <returns>The position of the given section's stream position.</returns>
+    public long GetStreamPosition(Section section)
+    {
+        if (section is < Section.Text or > Section.UninitializedData)
+            ThrowHelper.ThrowArgumentOutOfRangeException($"Section must be between {Section.Text} and {Section.UninitializedData}.");
+
+        return _sections[(int)section].Position;
+    }
+
+    /// <summary>
     /// Seeks to the start of all sections.
     /// </summary>
     public void ResetStreamPositions()
     {
-        _text.Position = 0;
-        _data.Position = 0;
+        foreach (var section in _sections)
+            section.Position = 0;
     }
 
     private Stream GetSectionStream(Section section)
     {
-        return section switch
-        {
-            Section.Text => _text,
-            Section.Data => _data,
-            _ => ThrowHelper.ThrowArgumentException<Stream>(nameof(section), $"{nameof(section)} must be either {Section.Text} or {Section.Data}.")
-        };
+        if (section is < Section.Text or > Section.UninitializedData)
+            ThrowHelper.ThrowArgumentOutOfRangeException($"Section must be between {Section.Text} and {Section.UninitializedData}.");
+
+        return _sections[(int)section];
     }
 }

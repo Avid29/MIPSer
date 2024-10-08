@@ -5,7 +5,7 @@ namespace MIPS.Models.Modules.Tables.Enums;
 /// <summary>
 /// Gets how to preform the relocation.
 /// </summary>
-public enum RelocationType
+public enum RelocationType : byte
 {
     /// <remarks>
     /// Use lower 16 bits to update 16 bit immediate field.

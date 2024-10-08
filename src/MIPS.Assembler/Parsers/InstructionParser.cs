@@ -20,7 +20,7 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public struct InstructionParser
 {
-    private readonly ModuleConstruction? _obj;
+    private readonly ModuleConstruction? _context;
     private readonly ILogger? _logger;
 
     private InstructionMetadata _meta;
@@ -44,9 +44,9 @@ public struct InstructionParser
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionParser"/> struct.
     /// </summary>
-    public InstructionParser(ModuleConstruction? obj, ILogger? logger)
+    public InstructionParser(ModuleConstruction? content, ILogger? logger)
     {
-        _obj = obj;
+        _context = content;
         _logger = logger;
         _meta = default;
         _opCode = default;
@@ -65,11 +65,11 @@ public struct InstructionParser
     /// <param name="name">The instruction name.</param>
     /// <param name="args">The instruction arguments.</param>
     /// <param name="instruction">The <see cref="Instruction"/>.</param>
-    /// <param name="symbol">The relocatable symbol referenced on this line. Or null if none.</param>
+    /// <param name="relSymbol">The relocatable symbol referenced on this line. Or null if none.</param>
     /// <returns>Whether or not an instruction was parsed.</returns>
-    public bool TryParse(Token name, Span<Token> args, out Instruction instruction, out string? symbol)
+    public bool TryParse(Token name, Span<Token> args, out Instruction instruction, out string? relSymbol)
     {
-        symbol = null;
+        relSymbol = null;
         instruction = default;
 
         // Get instruction metadata from name
@@ -98,7 +98,7 @@ public struct InstructionParser
 
             // Split out next arg
             args = args.SplitAtNext(TokenType.Comma, out var arg, out _);
-            TryParseArg(arg, pattern[argC], out symbol);
+            TryParseArg(arg, pattern[argC], out relSymbol);
         }
 
         // Assert proper argument count for instruction
@@ -127,39 +127,23 @@ public struct InstructionParser
         return true;
     }
 
-    private bool TryParseArg(Span<Token> arg, Argument type, out string? symbol)
+    private bool TryParseArg(Span<Token> arg, Argument type, out string? relSymbol)
     {
-        symbol = null;
+        relSymbol = null;
 
-        // Trim whitespace from argument
-
-        switch (type)
+        return type switch
         {
-            // Register type argument
-            case Argument.RS:
-            case Argument.RT:
-            case Argument.RD:
-                return TryParseRegisterArg(arg[0], type);
-            // Immediate type argument
-            case Argument.Shift:
-            case Argument.Immediate:
-            case Argument.Offset:
-            case Argument.Address:
-                return TryParseExpressionArg(arg, type, out symbol);
-            // Address offset type argument
-            case Argument.AddressOffset:
-                return TryParseAddressOffsetArg(arg, out symbol);
-
-            // Invalid type
-            default:
-                return ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument of type '{type}' is not within parsable type range.");
-        }
+            Argument.RS or Argument.RT or Argument.RD =>TryParseRegisterArg(arg[0], type),
+            Argument.Shift or Argument.Immediate or Argument.Offset or Argument.Address => TryParseExpressionArg(arg, type, out relSymbol),
+            Argument.AddressOffset => TryParseAddressOffsetArg(arg, out relSymbol),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument of type '{type}' is not within parsable type range."),
+        };
     }
 
     /// <summary>
     /// Parses an argument as a register and assigns it to the target component.
     /// </summary>
-    private bool TryParseRegisterArg(Token arg, Argument target)
+    private unsafe bool TryParseRegisterArg(Token arg, Argument target)
     {
         // Get reference to selected register argument
         ref Register reg = ref _rs;
@@ -198,12 +182,12 @@ public struct InstructionParser
     /// <summary>
     /// Parses an argument as an expression and assigns it to the target component
     /// </summary>
-    private bool TryParseExpressionArg(Span<Token> arg, Argument target, out string? symbol)
+    private bool TryParseExpressionArg(Span<Token> arg, Argument target, out string? relSymbol)
     {
-        var parser = new ExpressionParser(_obj, _logger);
+        var parser = new ExpressionParser(_context, _logger);
 
         // Attempt to parse expression
-        if (!parser.TryParse(arg, out var address, out symbol))
+        if (!parser.TryParse(arg, out var address, out relSymbol))
             return false;
 
         // NOTE: Casting might truncate the value to fit the bit size.
@@ -279,9 +263,9 @@ public struct InstructionParser
     /// <summary>
     /// Parses an argument as an address offset, assigning its components to immediate and $rs.
     /// </summary>
-    private bool TryParseAddressOffsetArg(Span<Token> arg, out string? symbol)
+    private bool TryParseAddressOffsetArg(Span<Token> arg, out string? relSymbol)
     {
-        symbol = null;
+        relSymbol = null;
 
         // NOTE: Be careful about forwards to other parse functions with regards to 
         // error logging. Address offset argument errors might be inappropriately logged.
@@ -292,7 +276,7 @@ public struct InstructionParser
             return false;
 
         // Try parse offset component into immediate, return false if failed
-        if (!TryParseExpressionArg(offsetStr, Argument.Immediate, out symbol))
+        if (!TryParseExpressionArg(offsetStr, Argument.Immediate, out relSymbol))
             return false;
 
         // Parse register component into $rs, return false if failed

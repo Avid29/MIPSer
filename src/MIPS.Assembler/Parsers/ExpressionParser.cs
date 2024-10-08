@@ -17,16 +17,14 @@ using System.Globalization;
 namespace MIPS.Assembler.Parsers;
 
 // TODO: Marco support
-// TODO: Unary operator support
 // TODO: Parenthesis support
-// TODO: Hex and binary support
 
 /// <summary>
 /// A struct for parsing expressions.
 /// </summary>
 public struct ExpressionParser
 {
-    private readonly ModuleConstruction? _obj;
+    private readonly ModuleConstruction? _context;
     private readonly ILogger? _logger;
     private readonly IEvaluator<Address> _evaluator;
     private ExpressionTree? _tree;
@@ -46,7 +44,7 @@ public struct ExpressionParser
     /// </summary>
     public ExpressionParser(ModuleConstruction? obj, ILogger? logger = null)
     {
-        _obj = obj;
+        _context = obj;
         _logger = logger;
         _evaluator = new AddressEvaluator(logger);
         _tree = null;
@@ -60,12 +58,12 @@ public struct ExpressionParser
     /// </summary>
     /// <param name="expression">The string expression to parse.</param>
     /// <param name="result">The expression parsed as a integer.</param>
-    /// <param name="symbol">The symbol referenced if address expression is relocatable. Null otherwise.</param>
+    /// <param name="relSymbol">The symbol referenced if address expression is relocatable. Null otherwise.</param>
     /// <returns><see langword="true"/> if the expression was successfully parsed, <see langword="false"/> otherwise.</returns>
-    public bool TryParse(Span<Token> expression, out Address result, out string? symbol)
+    public bool TryParse(Span<Token> expression, out Address result, out string? relSymbol)
     {
         result = default;
-        symbol = null;
+        relSymbol = null;
 
         _tree = new ExpressionTree();
         _state = ExpressionParserState.Start;
@@ -103,7 +101,7 @@ public struct ExpressionParser
             // NOTE: Relocatable values can only in terms of one relocatable symbol
             // If they depend on more than one relocatable symbol, they will have
             // failed in evaluation.
-            symbol = _relocatableSymbol;
+            relSymbol = _relocatableSymbol;
         }
 
         return true;
@@ -223,10 +221,10 @@ public struct ExpressionParser
 
     private bool AppendReference(Token t)
     {
-        Guard.IsNotNull(_obj);
+        Guard.IsNotNull(_context);
         Guard.IsNotNull(_tree);
 
-        if (!_obj.TryGetSymbol(t.Source, out var value))
+        if (!_context.TryGetSymbol(t.Source, out var value))
             return false;
 
         // Cache relocatable symbol
