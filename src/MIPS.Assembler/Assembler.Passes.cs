@@ -94,7 +94,7 @@ public unsafe partial class Assembler
             }
 
             // Append instruction to active segment
-            Append(instruction);
+            Append((uint)instruction);
         }
 
         // Make allocations if directive is present

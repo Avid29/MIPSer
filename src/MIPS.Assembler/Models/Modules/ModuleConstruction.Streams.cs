@@ -22,6 +22,9 @@ public partial class ModuleConstruction
     /// <summary>
     /// Appends an array of bytes to the end of the specified section.
     /// </summary>
+    /// <remarks>
+    /// Bytes must be in big endian, this is mips.
+    /// </remarks>
     /// <param name="section">The segment to append to</param>
     /// <param name="bytes">The bytes to append to the end of the buffer.</param>
     /// <exception cref="ArgumentException"/>

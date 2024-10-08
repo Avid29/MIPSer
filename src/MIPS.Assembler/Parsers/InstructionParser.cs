@@ -111,6 +111,7 @@ public struct InstructionParser
         // Create the instruction from its components based on the instruction type
         instruction = _meta.Type switch
         {
+            InstructionType.R when _opCode is OperationCode.BranchConditional => Instruction.Create(_meta.BranchCode, _rs, _immediate),
             InstructionType.R => Instruction.Create(_funcCode, _rs, _rt, _rd, _shift),
             InstructionType.I => Instruction.Create(_opCode, _rs, _rt, _immediate),
             InstructionType.J => Instruction.Create(_opCode, _address),
@@ -118,7 +119,7 @@ public struct InstructionParser
         };
 
         // Check for write back to zero register
-        if (instruction.GetWritebackRegister() == Register.Zero)
+        if (instruction.GetWritebackRegister() is Register.Zero)
         {
             _logger?.Log(Severity.Message, LogId.ZeroRegWriteBack, "This instruction writes to $zero.");
         }
@@ -142,6 +143,7 @@ public struct InstructionParser
             // Immediate type argument
             case Argument.Shift:
             case Argument.Immediate:
+            case Argument.Offset:
             case Argument.Address:
                 return TryParseExpressionArg(arg, type, out symbol);
             // Address offset type argument
@@ -192,7 +194,6 @@ public struct InstructionParser
 
         return true;
     }
-
 
     /// <summary>
     /// Parses an argument as an expression and assigns it to the target component
@@ -258,6 +259,10 @@ public struct InstructionParser
                 _shift = (byte)value;
                 return true;
             case Argument.Immediate:
+                _immediate = (short)value;
+                return true;
+            case Argument.Offset:
+                // TODO: Make relative to current position.
                 _immediate = (short)value;
                 return true;
             case Argument.Address:

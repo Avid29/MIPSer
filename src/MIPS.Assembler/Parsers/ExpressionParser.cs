@@ -12,6 +12,7 @@ using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Addressing;
 using System;
+using System.Globalization;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -183,7 +184,23 @@ public struct ExpressionParser
         long value;
         if (t.Source[0] is '\'')
         {
+            // Character literal
             value = t.Source[1];
+        }
+        else if (t.Source.Length > 2 && !char.IsDigit(t.Source[1]))
+        {
+            // Binary, Oct, or Hex
+            int @base = t.Source[1] switch
+            {
+                'b' => 2,
+                'o' => 8,
+                'x' => 16,
+                _ => ThrowHelper.ThrowArgumentException<int>($"{t.Source[1]} is not a valid special immediate mode."),
+            };
+            
+            // TODO: The tokenizer will currently allow base 10 digits in binary and oct immediates
+            // This should be prevented or handled somewhere. For now it's "handled" here as an exception.
+            value = Convert.ToInt64(t.Source[2..], @base);
         }
         else if (!long.TryParse(t.Source, out value))
         {

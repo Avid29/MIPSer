@@ -7,18 +7,10 @@ namespace MIPS.Assembler.Models.Directives;
 /// <summary>
 /// A <see cref="Directive"/> for memory alignments.
 /// </summary>
-public class AlignDirective : Directive
+public class AlignDirective(int boundary) : Directive
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="AlignDirective"/> class.
-    /// </summary>
-    public AlignDirective(int boundary)
-    {
-        Boundary = boundary;
-    }
-
     /// <summary>
     /// Gets the alignment boundary.
     /// </summary>
-    public int Boundary { get; }
+    public int Boundary { get; } = boundary;
 }

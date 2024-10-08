@@ -1,7 +1,6 @@
 ﻿// Adam Dernis 2023
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 

@@ -138,9 +138,9 @@ public unsafe struct Header
     }
 
     /// <summary>
-    /// Gets the number of entries in the module's relative table.
+    /// Gets the number of entries in the module's relocation table.
     /// </summary>
-    public uint RelativeTableCount
+    public uint RelocationTableCount
     {
         readonly get => _sizes[7];
         internal set => _sizes[7] = value;

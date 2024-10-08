@@ -5,12 +5,14 @@ using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Tokenization;
+using MIPS.Extensions.MIPS.Models.Instructions;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Instructions;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Numerics;
 using System.Threading.Tasks;
 using Module = MIPS.Models.Modules.Module;
 
@@ -127,14 +129,22 @@ public partial class Assembler
         return true;
     }
 
+    /// <summary>
+    /// Bytes should be passed in as big endian.
+    /// </summary>
     private void Append(params byte[] bytes)
     {
         // Append data
         _obj.Append(_activeSection, bytes);
     }
 
-    private void Append(Instruction instruction)
-        => Append(BitConverter.GetBytes((uint)instruction));
+    private void Append<T>(T data)
+        where T : IBinaryInteger<T>
+    {
+        var bytes = new byte[data.GetByteCount()];
+        data.WriteBigEndian(bytes);
+        Append(bytes);
+    }
 
     private void Append(int byteCount)
     {

@@ -23,6 +23,10 @@ public class ExpressionParserTests
     private const string Or = "9 | 3";
     private const string Xor = "9 ^ 3";
 
+    private const string Binary = "0b1010";
+    private const string Oct = "0o12";
+    private const string Hex = "0xa";
+
     private const string Char = "'a'";
     private const string AddChar = "'a' + 10";
 
@@ -58,6 +62,15 @@ public class ExpressionParserTests
 
     [TestMethod(Xor)]
     public void XorTest() => RunTest(Xor, 9 ^ 3);
+
+    [TestMethod(Binary)]
+    public void BinaryTest() => RunTest(Binary, 0b1010);
+
+    [TestMethod(Oct)]
+    public void OctTest() => RunTest(Oct, 10); // C# doesn't support oct...
+
+    [TestMethod(Hex)]
+    public void HexTest() => RunTest(Hex, 0xa);
 
     [TestMethod(Char)]
     public void CharTest() => RunTest(Char, 'a');

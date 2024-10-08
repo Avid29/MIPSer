@@ -126,8 +126,9 @@ public class Tokenizer
             TokenizerState.NewLineText => ParseNewLineText(c, line, false),
             TokenizerState.NewLineTextWait => ParseNewLineText(c, line, true),
             TokenizerState.Register => ParseFromRegister(c, line),
-            TokenizerState.Immediate => ParseFromImmediate(c, line, false),
+            TokenizerState.Immediate => ParseFromImmediate(c, line),
             TokenizerState.SpecialImmediate => ParseFromImmediate(c, line, true),
+            TokenizerState.HexImmediate => ParseFromImmediate(c, line, hex:true),
             TokenizerState.Character => ParseFromString(c, line, true),
             TokenizerState.String => ParseFromString(c, line, false),
             TokenizerState.Directive => ParseFromDirective(c, line),
@@ -251,18 +252,25 @@ public class Tokenizer
         return CompleteAndContinue(c, line);
     }
 
-    private bool ParseFromImmediate(char c, string line, bool special)
+    private bool ParseFromImmediate(char c, string line, bool special = false, bool hex = false)
     {
         // We're in special state so the last value was a '0'.
         // Now if we see one of these characters we're handling a non-base 10 immediate.
         if (special && c is 'b' or 'o' or 'x')
         {
-            return HandleCharacter(c, null, TokenizerState.Immediate);
+            return HandleCharacter(c, null, c is 'x' ? TokenizerState.HexImmediate : TokenizerState.Immediate);
         }
+
+        var state = hex ? TokenizerState.HexImmediate : TokenizerState.Immediate;
 
         if (char.IsDigit(c))
         {
-            return HandleCharacter(c, TokenType.Immediate, TokenizerState.Immediate);
+            return HandleCharacter(c, TokenType.Immediate, state);
+        }
+
+        if (hex && (char.IsBetween(c, 'a', 'f') || char.IsBetween(c, 'A', 'F')))
+        {
+            return HandleCharacter(c, TokenType.Immediate, state);
         }
 
         return CompleteAndContinue(c, line);

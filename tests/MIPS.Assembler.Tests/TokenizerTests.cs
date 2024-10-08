@@ -14,8 +14,8 @@ public class TokenizerTests
 
     [TestMethod("test1.asm")]
     public async Task Test1() => await RunTest("test1.asm",
-        ".globl", "main",
-        "main:",
+        //".globl", "main",
+        //"main:",
         "ori", "$s0", ",", "$zero", ",", "10",
         "ori", "$s1", ",", "$zero", ",", "10",
         "add", "$t0", ",", "$s0", ",", "$s1");

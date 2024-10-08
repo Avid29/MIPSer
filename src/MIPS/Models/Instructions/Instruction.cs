@@ -176,7 +176,6 @@ namespace MIPS.Models.Instructions;
 /// </summary>
 public struct Instruction
 {
-
     // Universal
     private const int OPCODE_BIT_SIZE = 6;
     private const int REGISTER_ADDRESS_BIT_SIZE = 5;
@@ -241,6 +240,18 @@ public struct Instruction
         value.Address = address;
         return value;
     }
+    
+    /// <summary>
+    /// Creates a new branch instruction.
+    /// </summary>
+    public static Instruction Create(BranchCode code, Register rs, short immediate)
+    {
+        Instruction value = default;
+        value.OpCode = OperationCode.BranchConditional;
+        value.BranchCode = code;
+        value.ImmediateValue = immediate;
+        return value;
+    }
 
     /// <summary>
     /// Gets a no operation instruction.
@@ -277,6 +288,19 @@ public struct Instruction
     {
         get => (Register)GetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RT_BIT_OFFSET);
         private set => SetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RT_BIT_OFFSET, (uint)value);
+    }
+
+    /// <summary>
+    /// Gets the instruction's branch code.
+    /// </summary>
+    /// <remarks>
+    /// This is stored in the RT register space for an instruction where
+    /// the <see cref="OpCode"/> is <see cref="OperationCode.BranchConditional"/>.
+    /// </remarks>
+    public BranchCode BranchCode
+    {
+        get => (BranchCode)RT;
+        set => RT = (Register)value;
     }
 
     /// <summary>

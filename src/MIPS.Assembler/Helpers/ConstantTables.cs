@@ -24,8 +24,8 @@ public static class ConstantTables
 
     // I type patterns
     private static readonly Argument[] StandardIPattern = { Argument.RT, Argument.RS, Argument.Immediate };                 // <instr>  $rt, $rs, imm
-    private static readonly Argument[] BranchComparePattern = { Argument.RS, Argument.RT, Argument.Immediate };             // <instr>  $rs, $rt, offset
-    private static readonly Argument[] BranchPattern = { Argument.RS, Argument.Immediate };                                 // <instr>  $rs, offset
+    private static readonly Argument[] BranchComparePattern = { Argument.RS, Argument.RT, Argument.Offset };                // <instr>  $rs, $rt, offset
+    private static readonly Argument[] BranchPattern = { Argument.RS, Argument.Offset };                                    // <instr>  $rs, offset
     private static readonly Argument[] LoadImmediatePattern = { Argument.RT, Argument.Immediate };                          // <instr>  $rt, imm
     private static readonly Argument[] MemoryPattern = { Argument.RT, Argument.AddressOffset };                             // <instr>  $rt, offset($rs)
 
@@ -125,6 +125,9 @@ public static class ConstantTables
         //{ "swc1", },
         //{ "swc2", },
         //{ "swc3", },
+
+        // Pseudoinstructions
+        { "blt", new InstructionMetadata() }
     };
 
     private static readonly Dictionary<string, Register> _registerTable = new()

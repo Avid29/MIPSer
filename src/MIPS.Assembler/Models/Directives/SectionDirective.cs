@@ -8,18 +8,10 @@ namespace MIPS.Assembler.Models.Directives;
 /// <summary>
 /// A <see cref="Directive"/> for section changes.
 /// </summary>
-public class SectionDirective : Directive
+public class SectionDirective(Section activeSection) : Directive
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="SectionDirective"/> class.
-    /// </summary>
-    public SectionDirective(Section activeSection)
-    {
-        ActiveSection = activeSection;
-    }
-
     /// <summary>
     /// Gets the new active section.
     /// </summary>
-    public Section ActiveSection { get; }
+    public Section ActiveSection { get; } = activeSection;
 }
