@@ -15,7 +15,7 @@ public enum FunctionCode : byte
     /// this were encoded into an <see cref="Instruction"/> struct, it would become 
     /// <see cref="ShiftLeftLogical"/> upon unencoding.
     /// </remarks>
-    None = 0x30,
+    None = 0x40,
 
 #pragma warning disable CS1591
 

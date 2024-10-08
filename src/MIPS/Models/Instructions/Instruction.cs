@@ -372,15 +372,21 @@ public struct Instruction
 
     private void SetShiftMask(int size, int offset, uint value)
     {
-        // Generate the mask by taking 2^(size) and subtracting one
-        // Then shifting and inverting
-        uint mask = (uint)(1 << size) - 1;
-        mask = ~(mask << offset);
+        // Generate the value mask by taking 2^(size),
+        // subtracting one, and shifting.
+        uint vMask = (uint)(1 << size) - 1;
+        vMask <<= offset;
 
-        // Clear masked section
-        uint masked = _inst & mask;
+        // Then make the instruction mask and inverting
+        // the value mask
+        uint iMask = ~(vMask << offset);
 
-        // Shift value and assign to masked section
-        _inst = masked | (value << offset);
+        // Mask the instruction and the value
+        uint vMasked = value & vMask;
+        uint iMasked = _inst & iMask;
+
+        // Combine the instruction and the value
+        // post masking
+        _inst = iMasked | vMasked;
     }
 }
