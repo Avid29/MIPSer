@@ -7,8 +7,17 @@ namespace MIPS.Models.Instructions.Enums;
 /// </summary>
 public enum BranchCode : byte
 {
+    /// <summary>
+    /// Marks that there is no function code.
+    /// </summary>
+    /// <remarks>
+    /// This value is too large to encode in a real instruction. If by accident
+    /// this were encoded into an <see cref="Instruction"/> struct, it would become 
+    /// <see cref="BranchOnLessThanZero"/> (or <see cref="Register.Zero"/>) upon unencoding.
+    /// </remarks>
+    None = 0x20,
+
 #pragma warning disable CS1591
-    None = 0,
 
     BranchOnLessThanZero = 0x00,
     BranchOnGreaterOrEqualToThanZero = 0x01,

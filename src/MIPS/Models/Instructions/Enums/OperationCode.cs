@@ -20,6 +20,16 @@ public enum OperationCode : byte
     /// </summary>
     BranchConditional = 0x01,
 
+    /// <summary>
+    /// Marks a pseudo-instruction
+    /// </summary>
+    /// <remarks>
+    /// This value is too large to encode in a real instruction. If by accident
+    /// this were encoded into an <see cref="Instruction"/> struct, it would become 
+    /// <see cref="RType"/> upon unencoding.
+    /// </remarks>
+    PseudoInstruction = 0x40,
+
 #pragma warning disable CS1591
 
     Jump = 0x02,
