@@ -89,4 +89,17 @@ public readonly struct PseudoInstruction
           _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction[]>(),
         };
     }
+
+    /// <summary>
+    /// Gets the number of real instructions required to implement the peudo instruction.
+    /// </summary>
+    public readonly int RealInstructionCount =>
+        PseudoOp switch
+        {
+            PseudoOp.Move => 1,
+            PseudoOp.BranchOnLessThan or PseudoOp.LoadImmediate or
+            PseudoOp.LoadAddress or PseudoOp.SetGreaterThanOrEqual => 2,
+            PseudoOp.AbsoluteValue => 3,
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>(),
+        };
 }

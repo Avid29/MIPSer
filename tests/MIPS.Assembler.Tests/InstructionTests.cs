@@ -54,7 +54,7 @@ public class InstructionTests
     /// </remarks>
     private static short RandomImmediate(bool safe = true) => (short)Random.Shared.Next(safe ? ushort.MaxValue : int.MaxValue);
 
-    private static uint RandomAddress(bool safe = true) => (uint)Random.Shared.Next(safe ? (1 << 26)-1 : int.MaxValue);
+    private static uint RandomAddress(bool safe = true) => (uint)Random.Shared.Next(safe ? (1 << 26)-1 : int.MaxValue) & ~(uint)(0b11);
 
     private static Register RandomRegister(bool safe) => (Register)Random.Shared.Next(safe ? (int)Register.ReturnAddress : int.MaxValue);
 

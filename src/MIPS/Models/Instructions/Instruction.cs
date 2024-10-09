@@ -362,8 +362,8 @@ public struct Instruction
     /// </summary>
     public uint Address
     {
-        get => GetShiftMask(ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET);
-        private set => SetShiftMask(ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET, value);
+        get => GetShiftMask(ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET) << 2;
+        private set => SetShiftMask(ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET, value >> 2);
     }
 
     /// <summary>
