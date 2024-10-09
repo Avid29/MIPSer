@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Bindables.Files;
 using Mipser.Bindables.Files.Abstract;
 using Mipser.Messages.Files;
+using Mipser.Services.Dispatcher;
 using Mipser.Services.Files;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -58,9 +59,6 @@ public class ExplorerViewModel : ObservableRecipient
         _messenger.Register<ExplorerViewModel, FolderPickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFolderAsync());
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     private async Task PickAndOpenFolderAsync()
     {
         var folder = await _fileService.TryPickAndOpenFolderAsync();
@@ -69,7 +67,7 @@ public class ExplorerViewModel : ObservableRecipient
 
         RootFolder = new BindableFolder(folder);
         await RootFolder.LoadChildren();
-
-        OnPropertyChanged(nameof(RootNodes));
+        
+        OnPropertyChanged(nameof(RootFolder));
     }
 }

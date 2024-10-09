@@ -123,4 +123,40 @@
   <data name="FileMBI.Title" xml:space="preserve">
     <value>קבוץ</value>
   </data>
+  <data name="CutMFI.Text" xml:space="preserve">
+    <value>גזור</value>
+  </data>
+  <data name="CopyMFI.Text" xml:space="preserve">
+    <value>העתק</value>
+  </data>
+  <data name="PasteMFI.Text" xml:space="preserve">
+    <value>הדבק</value>
+  </data>
+  <data name="RedoMFI.Text" xml:space="preserve">
+    <value>בצע שוב</value>
+  </data>
+  <data name="UndoMFI.Text" xml:space="preserve">
+    <value>בטל פעולה</value>
+  </data>
+  <data name="CloseFileMFI.Text" xml:space="preserve">
+    <value>סגור קובץ</value>
+  </data>
+  <data name="SaveAllMFI.Text" xml:space="preserve">
+    <value>שמור הכל</value>
+  </data>
+  <data name="SaveMFI.Text" xml:space="preserve">
+    <value>שמור</value>
+  </data>
+  <data name="NewFileMFI.Text" xml:space="preserve">
+    <value>קובץ חדש</value>
+  </data>
+  <data name="OpenFolderMFI.Text" xml:space="preserve">
+    <value>פתח תיקייה</value>
+  </data>
+  <data name="OpenMFI.Text" xml:space="preserve">
+    <value>פתח</value>
+  </data>
+  <data name="OpenFileMFI.Text" xml:space="preserve">
+    <value>פתח קובץ</value>
+  </data>
 </root>

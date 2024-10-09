@@ -12,7 +12,7 @@
     <UserControl.Resources>
 
         <DataTemplate x:Key="FileTemplate" x:DataType="filedata:BindableFile">
-            <TreeViewItem>
+            <TreeViewItem AutomationProperties.Name="{x:Bind Name, Mode=OneWay}">
                 <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
             </TreeViewItem>
         </DataTemplate>
@@ -37,8 +37,8 @@
 
         <TextBlock Text="{x:Bind ViewModel.RootFolder.Name, Mode=OneWay}"/>
 
-        <TreeView ItemsSource="{x:Bind ViewModel.RootNodes, Mode=OneWay}" ItemTemplateSelector="{StaticResource FileItemSelector}"
-                  Grid.Row="1">
-        </TreeView>
+        <TreeView ItemsSource="{x:Bind ViewModel.RootFolder.Children, Mode=OneWay}" ItemTemplateSelector="{StaticResource FileItemSelector}"
+                  Grid.Row="1" CanDragItems="False" AllowDrop="False" Expanding="TreeView_Expanding"/>
+
     </Grid>
 </UserControl>

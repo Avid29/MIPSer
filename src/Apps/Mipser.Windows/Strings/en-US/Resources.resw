@@ -123,4 +123,40 @@
   <data name="FileMBI.Title" xml:space="preserve">
     <value>File</value>
   </data>
+  <data name="OpenMFI.Text" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="OpenFolderMFI.Text" xml:space="preserve">
+    <value>Open Folder</value>
+  </data>
+  <data name="NewFileMFI.Text" xml:space="preserve">
+    <value>New File</value>
+  </data>
+  <data name="SaveMFI.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SaveAllMFI.Text" xml:space="preserve">
+    <value>Save All</value>
+  </data>
+  <data name="CloseFileMFI.Text" xml:space="preserve">
+    <value>Close File</value>
+  </data>
+  <data name="UndoMFI.Text" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="RedoMFI.Text" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="CutMFI.Text" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="CopyMFI.Text" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="PasteMFI.Text" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="OpenFileMFI.Text" xml:space="preserve">
+    <value>Open File</value>
+  </data>
 </root>

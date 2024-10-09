@@ -2,6 +2,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
+using Mipser.Bindables.Files;
 using Mipser.ViewModels.Views;
 
 namespace Mipser.Windows.Views.Shell;
@@ -21,4 +22,12 @@ public sealed partial class Explorer : UserControl
     }
 
     private ExplorerViewModel ViewModel => (ExplorerViewModel)DataContext;
+
+    private async void TreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
+    {
+        if (args.Node.HasUnrealizedChildren && args.Item is BindableFolder folder)
+        {
+            await folder.LoadChildren();
+        }
+    }
 }

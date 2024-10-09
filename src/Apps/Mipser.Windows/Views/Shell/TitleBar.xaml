@@ -16,64 +16,70 @@
             </Grid.ColumnDefinitions>
             <MenuBar Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left">
                 <MenuBarItem x:Uid="FileMBI" Title="File">
-                    <MenuFlyoutItem Text="New File" Command="{x:Bind ViewModel.CreateNewFileCommand, Mode=OneWay}">
+                    <MenuFlyoutItem x:Uid="NewFileMFI" Text="New File" Command="{x:Bind ViewModel.CreateNewFileCommand, Mode=OneWay}">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE130;" />
+                        </MenuFlyoutItem.Icon>
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="N"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
-                    <MenuFlyoutSubItem Text="Open">
-                        <MenuFlyoutItem Text="Open File" Command="{x:Bind ViewModel.PickAndOpenFileCommand, Mode=OneWay}">
+                    <MenuFlyoutSubItem x:Uid="OpenMFI" Text="Open">
+                        <MenuFlyoutItem x:Uid="OpenFileMFI" Icon="OpenFile" Text="Open File" Command="{x:Bind ViewModel.PickAndOpenFileCommand, Mode=OneWay}">
                             <MenuFlyoutItem.KeyboardAccelerators>
                                 <KeyboardAccelerator Modifiers="Control" Key="O"/>
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
-                        <MenuFlyoutItem Text="Open Folder" Command="{x:Bind ViewModel.PickAndOpenFolderCommand, Mode=OneWay}">
+                        <MenuFlyoutItem x:Uid="OpenFolderMFI" Icon="OpenLocal" Text="Open Folder" Command="{x:Bind ViewModel.PickAndOpenFolderCommand, Mode=OneWay}">
                             <MenuFlyoutItem.KeyboardAccelerators>
                                 <KeyboardAccelerator Modifiers="Control,Shift" Key="O"/>
                             </MenuFlyoutItem.KeyboardAccelerators>
                         </MenuFlyoutItem>
                     </MenuFlyoutSubItem>
                     <MenuFlyoutSeparator/>
-                    <MenuFlyoutItem Text="Save">
+                    <MenuFlyoutItem x:Uid="SaveMFI" Icon="Save" Text="Save">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="S"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
-                    <MenuFlyoutItem Text="Save All">
+                    <MenuFlyoutItem x:Uid="SaveAllMFI" Text="Save All">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEA35;" />
+                        </MenuFlyoutItem.Icon>
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control,Shift" Key="S"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                     <MenuFlyoutSeparator/>
-                    <MenuFlyoutItem Text="Close" Command="{x:Bind ViewModel.CloseFileCommand, Mode=OneWay}">
+                    <MenuFlyoutItem x:Uid="CloseFileMFI" Text="Close File" Command="{x:Bind ViewModel.CloseFileCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="W"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                 </MenuBarItem>
                 <MenuBarItem x:Uid="EditMBI" Title="Edit">
-                    <MenuFlyoutItem Text="Undo">
+                    <MenuFlyoutItem x:Uid="UndoMFI" Icon="Undo" Text="Undo" IsEnabled="False">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="Z"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
-                    <MenuFlyoutItem Text="Redo">
+                    <MenuFlyoutItem x:Uid="RedoMFI" Icon="Redo" Text="Redo" IsEnabled="False">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="Y"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                     <MenuFlyoutSeparator/>
-                    <MenuFlyoutItem Text="Cut">
+                    <MenuFlyoutItem x:Uid="CutMFI" Icon="Cut" Text="Cut">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="X"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
-                    <MenuFlyoutItem Text="Copy">
+                    <MenuFlyoutItem x:Uid="CopyMFI" Icon="Copy" Text="Copy">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="C"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
-                    <MenuFlyoutItem Text="Paste">
+                    <MenuFlyoutItem x:Uid="PasteMFI" Icon="Paste" Text="Paste">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="P"/>
                         </MenuFlyoutItem.KeyboardAccelerators>

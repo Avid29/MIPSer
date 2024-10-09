@@ -35,7 +35,7 @@ public class Folder : IFolder
     public async Task<IFilesItem[]> GetItemsAsync()
     {
         var items = await _storageFolder.GetItemsAsync();
-        return (IFilesItem[])items.Select(x =>
+        return items.Select(x =>
         {
             return x switch
             {
@@ -43,12 +43,7 @@ public class Folder : IFolder
                 StorageFolder folder => new Folder(folder),
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<IFilesItem>(),
             };
-        });
-
-        //var folders = await GetFoldersAsync();
-        //var files = await GetFilesAsync();
-
-        //return folders.Select(x => (IFilesItem)x).Concat(files.Select(x => (IFilesItem)x)).ToArray();
+        }).ToArray();
     }
 
     /// <inheritdoc/>

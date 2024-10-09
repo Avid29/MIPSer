@@ -16,7 +16,7 @@ public class BindableFolder : BindableFilesItemBase
 {
     private readonly IFolder _folder;
     private ObservableCollection<BindableFilesItemBase> _items;
-    private bool _childrenCalculated;
+    private bool _childrenNotCalculated;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFolder"/> class.
@@ -25,7 +25,7 @@ public class BindableFolder : BindableFilesItemBase
     {
         _folder = folder;
 
-        _items = new ObservableCollection<BindableFilesItemBase>();
+        _items = [];
         ChildrenNotCalculated = true;
     }
 
@@ -43,8 +43,8 @@ public class BindableFolder : BindableFilesItemBase
     /// </summary>
     public bool ChildrenNotCalculated
     {
-        get => !_childrenCalculated;
-        set => SetProperty(ref _childrenCalculated, !value);
+        get => _childrenNotCalculated;
+        set => SetProperty(ref _childrenNotCalculated, value);
     }
 
     /// <inheritdoc/>
