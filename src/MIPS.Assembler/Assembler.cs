@@ -5,14 +5,10 @@ using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Tokenization;
-using MIPS.Extensions.MIPS.Models.Instructions;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
-using MIPS.Models.Instructions;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Numerics;
 using System.Threading.Tasks;
 using Module = MIPS.Models.Modules.Module;
 
@@ -128,6 +124,9 @@ public partial class Assembler
     private bool CreateSymbol(string label, Address address)
     {
         label = label.TrimEnd(':');
+        if (!ValidateSymbolName(label))
+            return false;
+
         if (!_obj.TryDefineSymbol(label, address))
         {
             _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, $"Symbol \"{label}\" already exists.");

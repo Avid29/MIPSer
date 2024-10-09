@@ -12,7 +12,6 @@ using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Addressing;
 using System;
-using System.Globalization;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -87,7 +86,6 @@ public struct ExpressionParser
                 return false;
             }
         }
-
 
         // Evaluate tree
         if (!_tree.TryEvaluate(_evaluator, out result))

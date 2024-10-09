@@ -151,23 +151,25 @@ public class Tokenizer
         if (char.IsWhiteSpace(c))
             return true;
 
-        if (c is '0')
+        if (newLine && char.IsLetterOrDigit(c))
         {
-            return HandleCharacter(c, TokenType.Immediate, TokenizerState.SpecialImmediate);
+            // Digits aren't actually valid here, but we're gonna defer that error for now
+            // to get a better error message down the line.
+            return HandleCharacter(c, TokenType.Reference, TokenizerState.NewLineText);
         }
-
-        if (char.IsDigit(c))
+        else
         {
-            return HandleCharacter(c, TokenType.Immediate, TokenizerState.Immediate);
-        }
-
-        if (char.IsLetter(c))
-        {
-            if (newLine)
+            if (c is '0')
             {
-                return HandleCharacter(c, null, TokenizerState.NewLineText);
+                return HandleCharacter(c, TokenType.Immediate, TokenizerState.SpecialImmediate);
             }
-            else
+
+            if (char.IsDigit(c))
+            {
+                return HandleCharacter(c, TokenType.Immediate, TokenizerState.Immediate);
+            }
+
+            if (char.IsLetter(c))
             {
                 return HandleCharacter(c, TokenType.Reference, TokenizerState.Reference);
             }
@@ -204,24 +206,12 @@ public class Tokenizer
         // Text is a label declaration.
         if (c is ':')
         {
-            if (char.IsDigit(_cache[0]))
-            {
-                _logger?.Log(Severity.Error, LogId.IllegalSymbolName, $"{_cache} is not a valid label name. Labels names cannot begin with a digit.", _line);
-                return false;
-            }
-
             return HandleCharacter(c, TokenType.LabelDeclaration, TokenizerState.LineBegin);
         }
 
         // Text is a marco declaration.
         if (c == '=')
         {
-            if (char.IsDigit(_cache[0]))
-            {
-                _logger?.Log(Severity.Error, LogId.IllegalSymbolName, $"{_cache} is not a valid macro name. Macro names cannot begin with a digit.", _line);
-                return false;
-            }
-
             _tokenType = TokenType.MacroDefinition;
             return CompleteAndContinue(c, line);
         }
@@ -234,12 +224,10 @@ public class Tokenizer
             return CompleteAndContinue(c, line);
         }
 
-        if (char.IsLetterOrDigit(c))
-        {
-            return HandleCharacter(c, null, TokenizerState.NewLineText);
-        }
-
-        return false; // Nothing can come before a line's label
+        // There's a lot of characters that aren't valid here,
+        // but we're gonna let them be part of the token and just drop 
+        // more understandable error later.
+        return HandleCharacter(c, null, TokenizerState.NewLineText);
     }
 
     private bool ParseFromRegister(char c, string line)

@@ -141,6 +141,26 @@ public unsafe partial class Assembler
         }
     }
     
+    private bool ValidateSymbolName(string symbol)
+    {
+        if (char.IsDigit(symbol[0]))
+        {
+            _logger?.Log(Severity.Error, LogId.IllegalSymbolName, $"{symbol} is not a valid symbol name. Symbol names cannot begin with a digit.");
+            return false;
+        }
+
+        foreach (char c in symbol)
+        {
+            if (!char.IsLetterOrDigit(c))
+            {
+                _logger?.Log(Severity.Error, LogId.IllegalSymbolName, $"{symbol} is not a valid symbol name. Symbol names cannot contain the character {c}.");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private static bool TokenizeMacro(Span<Token> line, [NotNullWhen(true)] out Token? macro, out Span<Token> expression)
     {
         macro = null;

@@ -14,11 +14,19 @@ namespace MIPS.Assembler.Tests;
 public class AssemblerTests
 {
     private const string InvalidInstruction = "xkcd $t0, $t1, 0";
+    private const string InvalidLabelNum = "2point: nop";
+    private const string InvalidLabelSpecial = "te$t: nop";
     private const string ExtraArgError = "add $s0, $t0, $t2, 2";
     private const string MissingArgError = "add $s0, $t0";
 
     [TestMethod(nameof(InvalidInstruction))]
     public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, LogId.InvalidInstructionName);
+
+    [TestMethod(nameof(InvalidLabelNum))]
+    public async Task InvalidLabelNumTest() => await RunStringTest(InvalidLabelNum, LogId.IllegalSymbolName);
+
+    [TestMethod(nameof(InvalidLabelSpecial))]
+    public async Task InvalidLabelSpecialTest() => await RunStringTest(InvalidLabelSpecial, LogId.IllegalSymbolName);
 
     [TestMethod(nameof(ExtraArgError))]
     public async Task ExtraArgErrorTest() => await RunStringTest(ExtraArgError, LogId.InvalidInstructionArgCount);
@@ -35,10 +43,6 @@ public class AssemblerTests
     [TestMethod(TestFilePathing.PlaygroundTestFile1)]
     public async Task PlaygroundTest() => await RunFileTest(TestFilePathing.PlaygroundTestFile1);
 
-    [TestMethod(TestFilePathing.SubtractAddressFile)]
-    public async Task SubtractAddressTest () => await RunFileTest(TestFilePathing.SubtractAddressFile,
-        (LogId.InvalidOperationOnRelocatable, 14));
-
     [TestMethod(TestFilePathing.CompositeFailTestFile)]
     public async Task CompositeFailTest() => await RunFileTest(TestFilePathing.CompositeFailTestFile,
         (LogId.InvalidInstructionArgCount, 14),
@@ -50,6 +54,14 @@ public class AssemblerTests
         (LogId.InvalidRegisterArgument, 32),
         (LogId.InvalidCharLiteral, 35),
         (LogId.InvalidInstructionArgCount, 35));
+
+    [TestMethod(TestFilePathing.DuplicateSymbolFile)]
+    public async Task DuplicateSymbolTest () => await RunFileTest(TestFilePathing.DuplicateSymbolFile,
+        (LogId.DuplicateSymbolDefinition, 15));
+
+    [TestMethod(TestFilePathing.SubtractAddressFile)]
+    public async Task SubtractAddressTest () => await RunFileTest(TestFilePathing.SubtractAddressFile,
+        (LogId.InvalidOperationOnRelocatable, 14));
 
     private static async Task RunFileTest(string fileName, params (LogId, long)[] expected)
     {
