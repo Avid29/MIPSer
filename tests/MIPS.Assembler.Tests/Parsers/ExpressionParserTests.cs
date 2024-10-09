@@ -7,7 +7,7 @@ using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 
-namespace MIPS.Assembler.Tests;
+namespace MIPS.Assembler.Tests.Parsers;
 
 [TestClass]
 public class ExpressionParserTests

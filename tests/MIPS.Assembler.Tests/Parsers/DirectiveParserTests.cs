@@ -9,7 +9,7 @@ using MIPS.Assembler.Tokenization.Enums;
 using System;
 using System.Text;
 
-namespace MIPS.Assembler.Tests;
+namespace MIPS.Assembler.Tests.Parsers;
 
 [TestClass]
 public class DirectiveParserTests

@@ -10,7 +10,7 @@ using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using System;
 
-namespace MIPS.Assembler.Tests;
+namespace MIPS.Assembler.Tests.Parsers;
 
 [TestClass]
 public class InstructionParserTests
@@ -114,7 +114,6 @@ public class InstructionParserTests
     {
         RunTest(TooManyArgs, logId: LogId.InvalidInstructionArgCount);
     }
-
 
     private static void RunTest(string input, Instruction? expected = null, LogId? logId = null, string? expectedSymbol = null)
     {

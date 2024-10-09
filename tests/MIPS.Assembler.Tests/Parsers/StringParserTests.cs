@@ -3,7 +3,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Assembler.Parsers;
 
-namespace MIPS.Assembler.Tests;
+namespace MIPS.Assembler.Tests.Parsers;
 
 [TestClass]
 public class StringParserTests
