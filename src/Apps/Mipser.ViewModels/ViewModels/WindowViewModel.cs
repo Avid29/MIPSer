@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2023
+﻿// Adam Dernis 2024
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
