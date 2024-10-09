@@ -11,11 +11,7 @@ public partial class Assembler
     /// <summary>
     /// Bytes should be passed in as big endian.
     /// </summary>
-    private void Append(params byte[] bytes)
-    {
-        // Append data
-        _obj.Append(_activeSection, bytes);
-    }
+    private void Append(params byte[] bytes) => _obj.Append(_activeSection, bytes);
 
     private void Append<T>(T data)
         where T : IBinaryInteger<T>
@@ -28,7 +24,6 @@ public partial class Assembler
     private void Append(int byteCount)
     {
         Guard.IsGreaterThanOrEqualTo(byteCount, 0);
-
         Append(new byte[byteCount]);
     }
 

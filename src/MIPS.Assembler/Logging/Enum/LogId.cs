@@ -34,15 +34,17 @@ public enum LogId
     // Expression parser errors
     UnparsableExpression,
     InvalidExpressionOperation,
+    InvalidOperationOnRelocatable,
 
     // Directive parser errors
     InvalidDirectiveDataArg,
     InvalidDirectiveArg,
     InvalidDirectiveArgCount,
 
-    // String parsing errors
+    // Char/String parsing errors
     NotAString,
     MultiLineString,
+    InvalidCharLiteral,
     UnrecognizedEscapeSequence,
     UnescapedQuoteInString,
 

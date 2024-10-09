@@ -29,7 +29,6 @@ public struct ExpressionParser
     private readonly IEvaluator<Address> _evaluator;
     private ExpressionTree? _tree;
     private ExpressionParserState _state;
-    private string _cache;
     private string? _relocatableSymbol;
 
     /// <summary>
@@ -49,7 +48,6 @@ public struct ExpressionParser
         _evaluator = new AddressEvaluator(logger);
         _tree = null;
         _state = ExpressionParserState.Start;
-        _cache = string.Empty;
         _relocatableSymbol = null;
     }
 

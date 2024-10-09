@@ -112,6 +112,10 @@ public partial class Assembler
     /// <summary>
     /// Creates a symbol at the current address.
     /// </summary>
+    /// <remarks>
+    /// At this stage, the label is expected to be passed in with a tailing ':' that will be trimmed.
+    /// The method will still work if the semicolon is pre-trimmed.
+    /// </remarks>
     /// <param name="label">The name of the symbol.</param>
     private bool CreateSymbol(string label) => CreateSymbol(label, CurrentAddress);
 
@@ -123,6 +127,7 @@ public partial class Assembler
     /// <returns>True if successful, false on failure.</returns>
     private bool CreateSymbol(string label, Address address)
     {
+        label = label.TrimEnd(':');
         if (!_obj.TryDefineSymbol(label, address))
         {
             _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, $"Symbol \"{label}\" already exists.");

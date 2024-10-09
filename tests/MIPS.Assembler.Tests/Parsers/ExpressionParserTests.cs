@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2023
+﻿// Adam Dernis 2024
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Assembler.Models.Modules;
@@ -91,9 +91,7 @@ public class ExpressionParserTests
         // NOTE: This assumes symbol realization is not implemented!
         var obj = new ModuleConstruction();
         foreach (var (name, addr) in macros)
-        {
             obj.TryDefineSymbol(name, addr);
-        }
 
         var parser = new ExpressionParser(obj);
         RunTest(parser, input, expected);

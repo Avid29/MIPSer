@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2023
+﻿// Adam Dernis 2024
 
 namespace MIPS.Models.Instructions.Enums;
 
@@ -46,5 +46,4 @@ public enum Argument
     /// An memory address from a register, and a 16-bit offset.
     /// </summary>
     AddressOffset,
-
 }

@@ -288,7 +288,7 @@ public class Tokenizer
         {
             if (_cache.Length is 1 && c is '\'')
             {
-                _logger?.Log(Severity.Error, LogId.MultiLineString, $"Empty character literal.", _line);
+                _logger?.Log(Severity.Error, LogId.InvalidCharLiteral, $"Empty character literal.", _line);
                 return false;
             }
 

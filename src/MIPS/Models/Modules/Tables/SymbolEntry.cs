@@ -11,12 +11,6 @@ namespace MIPS.Models.Modules.Tables;
 public struct SymbolEntry
 {
     /// <summary>
-    /// Fills the struct to 16 bytes.
-    /// </summary>
-    [field: FieldOffset(14)]
-    private readonly ushort _filler;
-
-    /// <summary>
     /// Gets flags on the symbol entry.
     /// </summary>
     [field: FieldOffset(0)]
@@ -39,4 +33,11 @@ public struct SymbolEntry
     /// </summary>
     [field: FieldOffset(12)]
     public ushort ObjectFileIndex { get; set; }
+
+    /// <summary>
+    /// Fills the struct to 16 bytes.
+    /// </summary>
+    [field: FieldOffset(14)]
+    private readonly ushort _filler;
+
 }

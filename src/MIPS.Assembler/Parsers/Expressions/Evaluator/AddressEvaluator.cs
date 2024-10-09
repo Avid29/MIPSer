@@ -47,7 +47,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
 
         if (right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot subtract a relocatable symbol.");
+            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot subtract a relocatable symbol.");
             return false;
         }
 
@@ -63,7 +63,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         // Cannot multiply relocatable addressing 
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot multiply with relocatable symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot multiply with relocatable symbols.");
             return false;
         }
 
@@ -79,7 +79,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         // Cannot divide relocatable addressing
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot divide with relocatable symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot divide with relocatable symbols.");
             return false;
         }
 
@@ -95,7 +95,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         // Cannot mod relocatable addressing
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot take modulus with relocatable symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot take modulus with relocatable symbols.");
             return false;
         }
 
@@ -111,7 +111,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         // Cannot AND relocatable addressing
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical AND with relocatable symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot perform logical AND with relocatable symbols.");
             return false;
         }
 
@@ -127,7 +127,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         // Cannot OR relocatable addressing
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical OR with relocatable symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot perform logical OR with relocatable symbols.");
             return false;
         }
 
@@ -143,7 +143,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         // Cannot XOR relocatable addressing
         if (left.IsRelocatable || right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot perform logical XOR with relocatable symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot perform logical XOR with relocatable symbols.");
             return false;
         }
 

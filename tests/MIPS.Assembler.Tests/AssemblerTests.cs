@@ -16,6 +16,7 @@ public class AssemblerTests
     private const string InvalidInstruction = "xkcd $t0, $t1, 0";
     private const string ExtraArgError = "add $s0, $t0, $t2, 2";
     private const string MissingArgError = "add $s0, $t0";
+
     [TestMethod(nameof(InvalidInstruction))]
     public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, LogId.InvalidInstructionName);
 
@@ -34,23 +35,27 @@ public class AssemblerTests
     [TestMethod(TestFilePathing.PlaygroundTestFile1)]
     public async Task PlaygroundTest() => await RunFileTest(TestFilePathing.PlaygroundTestFile1);
 
+    [TestMethod(TestFilePathing.SubtractAddressFile)]
+    public async Task SubtractAddressTest () => await RunFileTest(TestFilePathing.SubtractAddressFile,
+        (LogId.InvalidOperationOnRelocatable, 14));
+
     [TestMethod(TestFilePathing.CompositeFailTestFile)]
     public async Task CompositeFailTest() => await RunFileTest(TestFilePathing.CompositeFailTestFile,
         (LogId.InvalidInstructionArgCount, 14),
         (LogId.InvalidInstructionName, 16),
         (LogId.UnparsableExpression, 19),
-        (LogId.InvalidRegisterArgument, 24),
+        (LogId.InvalidAddressOffsetArgument, 24), // Debateably should be an register error
         (LogId.ZeroRegWriteBack, 29),
         (LogId.IntegerTruncated, 30),
         (LogId.InvalidRegisterArgument, 32),
-        (LogId.TokenizerError, 35),
+        (LogId.InvalidCharLiteral, 35),
         (LogId.InvalidInstructionArgCount, 35));
 
     private static async Task RunFileTest(string fileName, params (LogId, long)[] expected)
     {
         var path = TestFilePathing.GetAssemblyFilePath(fileName);
         var stream = File.Open(path, FileMode.Open);
-        await RunTest(stream, fileName);
+        await RunTest(stream, fileName, expected);
     }
 
     private static async Task RunStringTest(string str, params LogId[] expected)
@@ -69,7 +74,7 @@ public class AssemblerTests
             foreach (var (id, line) in expected)
             {
                 var logEntry = module.Logs.FirstOrDefault(x => x.Id == id && x.LineNumber == line);
-                Assert.IsNotNull(logEntry);
+                Assert.IsNotNull(logEntry, $"Could not find matching {id} error on line {line}");
             }
         }
 

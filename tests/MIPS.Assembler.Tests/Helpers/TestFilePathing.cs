@@ -12,6 +12,7 @@ public static class TestFilePathing
     public const string EmptyTestFile = "component_tests/empty.asm";
     public const string InstructionsTestFile = "component_tests/instructions.asm";
 
+    public const string SubtractAddressFile = "error_tests/subtract_address.asm";
     public const string CompositeFailTestFile = "error_tests/composite_fail.asm";
 
     public const string PlaygroundTestFile1 = "playground1.asm";
