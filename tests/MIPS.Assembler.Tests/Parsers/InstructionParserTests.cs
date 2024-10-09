@@ -24,6 +24,8 @@ public class InstructionParserTests
     private const string Jump = "j 1000";
     private const string JumpExpression = "j 10*10";
 
+    private const string LoadImmediate = "li $t0, 0x10001";
+
     private const string SllWarnTruncate = "sll $t0, $s0, 33";
     private const string SllWarnSigned = "sll $t0, $s0, -1";
 
@@ -82,19 +84,26 @@ public class InstructionParserTests
         Instruction expected = Instruction.Create(OperationCode.Jump, 100);
         RunTest(JumpExpression, expected);
     }
+    
+    [TestMethod(LoadImmediate)]
+    public void LoadImmediateTest()
+    {
+        PseudoInstruction expected = new PseudoInstruction(PseudoOp.LoadImmediate){ RT = Register.Temporary0, Immediate = 0x10001 };
+        RunTest(LoadImmediate, pseudoExpected:expected);
+    }
 
     [TestMethod(SllWarnTruncate)]
     public void SllWarnTruncateTest()
     {
         Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 1);
-        RunTest(SllWarnTruncate, expected, LogId.IntegerTruncated);
+        RunTest(SllWarnTruncate, expected, logId:LogId.IntegerTruncated);
     }
 
     [TestMethod(SllWarnSigned)]
     public void SllWarnSignedTest()
     {
         Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 31);
-        RunTest(SllWarnSigned, expected, LogId.IntegerTruncated);
+        RunTest(SllWarnSigned, expected, logId:LogId.IntegerTruncated);
     }
 
     [TestMethod(XkcdFail)]
@@ -115,21 +124,26 @@ public class InstructionParserTests
         RunTest(TooManyArgs, logId: LogId.InvalidInstructionArgCount);
     }
 
-    private static void RunTest(string input, Instruction? expected = null, LogId? logId = null, string? expectedSymbol = null)
+    private static void RunTest(string input, Instruction? expected = null, PseudoInstruction? pseudoExpected = null, LogId? logId = null, string? expectedSymbol = null)
     {
-        bool succeeds = expected.HasValue;
+        bool succeeds = expected.HasValue || pseudoExpected.HasValue;
 
         var logger = new AssemblerLogger();
         var parser = new InstructionParser(null, logger);
 
         var tokens = Tokenizer.TokenizeLine(input, nameof(RunTest));
         var args = tokens.TrimType(TokenType.Instruction, out var name);
-        var succeeded = parser.TryParse(name!, args, out var actual, out var symbol);
+        var succeeded = parser.TryParse(name!, args, out var actual, out var pseudoActual, out var symbol);
 
         Assert.AreEqual(succeeds, succeeded);
         if (expected.HasValue)
         {
             Assert.AreEqual(expected, actual);
+        }
+
+        if (pseudoExpected.HasValue)
+        {
+            Assert.AreEqual(pseudoExpected, pseudoActual);
         }
 
         if (logId.HasValue)

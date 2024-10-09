@@ -231,6 +231,21 @@ public struct Instruction
     }
 
     /// <summary>
+    /// Creates a new i-type instruction.
+    /// </summary>
+    /// <remarks>
+    /// This is just for load upper immediate.
+    /// </remarks>
+    public static Instruction Create(OperationCode opCode, Register rt, short immediate)
+    {
+        Instruction value = default;
+        value.OpCode = opCode;
+        value.RT = rt;
+        value.ImmediateValue = immediate;
+        return value;
+    }
+
+    /// <summary>
     /// Creates a new j-type instruction.
     /// </summary>
     public static Instruction Create(OperationCode opCode, uint address)

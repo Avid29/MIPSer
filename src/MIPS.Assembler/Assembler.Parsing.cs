@@ -96,7 +96,7 @@ public unsafe partial class Assembler
             return;
 
         // Try to parse instruction from name and arguments
-        if (!parser.TryParse(name, args, out var instruction, out var symbol))
+        if (!parser.TryParse(name, args, out var instruction, out var pseudo, out var symbol))
         {
             // Explicitly replace invalid instruction with a nop
             instruction = Instruction.NOP;

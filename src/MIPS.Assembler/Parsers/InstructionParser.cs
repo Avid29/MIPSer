@@ -31,7 +31,7 @@ public struct InstructionParser
     private Register _rt;
     private Register _rd;
     private byte _shift;
-    private short _immediate;
+    private int _immediate;
     private uint _address;
 
     /// <summary>
@@ -65,12 +65,14 @@ public struct InstructionParser
     /// <param name="name">The instruction name.</param>
     /// <param name="args">The instruction arguments.</param>
     /// <param name="instruction">The <see cref="Instruction"/>.</param>
+    /// <param name="pseudo">The <see cref="PseudoInstruction"/>.</param>
     /// <param name="relSymbol">The relocatable symbol referenced on this line. Or null if none.</param>
     /// <returns>Whether or not an instruction was parsed.</returns>
-    public bool TryParse(Token name, Span<Token> args, out Instruction instruction, out string? relSymbol)
+    public bool TryParse(Token name, Span<Token> args, out Instruction instruction, out PseudoInstruction pseudo, out string? relSymbol)
     {
         relSymbol = null;
         instruction = default;
+        pseudo = default;
 
         // Get instruction metadata from name
         if (!ConstantTables.TryGetInstruction(name.Source, out _meta))
@@ -108,18 +110,36 @@ public struct InstructionParser
             return false;
         }
 
+        // Handle the pseudo-instruction condition
+        if (_meta.IsPseudoInstruction)
+        {
+            var pseudoOp = _meta.PseudoOp;
+            pseudo = pseudoOp switch
+            {
+                PseudoOp.BranchOnLessThan => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt, Immediate = _immediate },
+                PseudoOp.LoadImmediate => new PseudoInstruction(pseudoOp) { RT = _rt, Immediate = _immediate },
+                PseudoOp.AbsoluteValue => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt },
+                PseudoOp.Move => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt },
+                PseudoOp.LoadAddress => new PseudoInstruction(pseudoOp) { RT = _rt, Address = _address },
+                PseudoOp.SetGreaterThanOrEqual => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt, RD = _rd },
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<PseudoInstruction>(),
+            };
+            return true;
+        }
+
         // Create the instruction from its components based on the instruction type
         instruction = _meta.Type switch
         {
-            InstructionType.R when _opCode is OperationCode.BranchConditional => Instruction.Create(_meta.BranchCode, _rs, _immediate),
+            InstructionType.R when _opCode is OperationCode.BranchConditional => Instruction.Create(_meta.BranchCode, _rs, (short)_immediate),
             InstructionType.R => Instruction.Create(_funcCode, _rs, _rt, _rd, _shift),
-            InstructionType.I => Instruction.Create(_opCode, _rs, _rt, _immediate),
+            InstructionType.I => Instruction.Create(_opCode, _rs, _rt, (short)_immediate),
             InstructionType.J => Instruction.Create(_opCode, _address),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction>($"Invalid instruction type '{_meta.Type}'."),
         };
 
         // Check for write back to zero register
         // Give a warning if not an explicit nop operation
+        // TODO: Check on pseudo-instructions
         if (instruction.GetWritebackRegister() is Register.Zero && name.Source != "nop")
         {
             _logger?.Log(Severity.Message, LogId.ZeroRegWriteBack, "This instruction writes to $zero.");
@@ -135,7 +155,7 @@ public struct InstructionParser
         return type switch
         {
             Argument.RS or Argument.RT or Argument.RD =>TryParseRegisterArg(arg[0], type),
-            Argument.Shift or Argument.Immediate or Argument.Offset or Argument.Address => TryParseExpressionArg(arg, type, out relSymbol),
+            Argument.Shift or Argument.Immediate or Argument.FullImmediate or Argument.Offset or Argument.Address => TryParseExpressionArg(arg, type, out relSymbol),
             Argument.AddressOffset => TryParseAddressOffsetArg(arg, out relSymbol),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument of type '{type}' is not within parsable type range."),
         };
@@ -201,6 +221,7 @@ public struct InstructionParser
             Argument.Shift => 5,
             Argument.Immediate => 16,
             Argument.Address => 26,
+            Argument.FullImmediate => 32,
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"Argument of type '{target}' attempted to parse as an expression."),
         };
 
@@ -245,6 +266,9 @@ public struct InstructionParser
                 return true;
             case Argument.Immediate:
                 _immediate = (short)value;
+                return true;
+            case Argument.FullImmediate:
+                _immediate = (int)value;
                 return true;
             case Argument.Offset:
                 // TODO: Make relative to current position.
@@ -350,15 +374,14 @@ public struct InstructionParser
         original = integer;
 
         // Truncate integer to bit count
-        long mask = (1 << bitCount) - 1;
+        long mask = (1L << bitCount) - 1;
         integer &= mask;
 
         // Check for sign change
-        if (!signed && original < 0)
+        // TODO: Handle bitCount >= 32
+        if (!signed && original < 0 && bitCount < 32)
         {
             // Remove sign from truncated integer
-            // NOTE: This assumes bitCount is less than 32
-
             integer = (uint)integer;
             return 1;
         }

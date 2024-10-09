@@ -46,4 +46,9 @@ public enum Argument
     /// An memory address from a register, and a 16-bit offset.
     /// </summary>
     AddressOffset,
+
+    /// <summary>
+    /// A 32 bit immediate value
+    /// </summary>
+    FullImmediate, 
 }

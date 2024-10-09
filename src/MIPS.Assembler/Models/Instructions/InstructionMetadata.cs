@@ -20,7 +20,6 @@ public readonly struct InstructionMetadata
         FuncCode = FunctionCode.None;
         BranchCode = BranchCode.None;
         ArgumentPattern = argumentPattern;
-        IsPseudoInstruction = false;
     }
 
     /// <summary>
@@ -33,7 +32,6 @@ public readonly struct InstructionMetadata
         FuncCode = funcCode;
         BranchCode = BranchCode.None;
         ArgumentPattern = argumentPattern;
-        IsPseudoInstruction = false;
     }
 
     /// <summary>
@@ -46,7 +44,6 @@ public readonly struct InstructionMetadata
         FuncCode = FunctionCode.None;
         BranchCode = branchCode;
         ArgumentPattern = argumentPattern;
-        IsPseudoInstruction = false;
     }
 
     /// <summary>
@@ -55,14 +52,14 @@ public readonly struct InstructionMetadata
     /// <remarks>
     /// This is constructor is only for pseudo-instructions.
     /// </remarks>
-    public InstructionMetadata(string name, Argument[] argumentPattern)
+    public InstructionMetadata(string name, PseudoOp pseudoOp, Argument[] argumentPattern)
     {
         Name = name;
+        PseudoOp = pseudoOp;
         OpCode = OperationCode.PseudoInstruction;
         FuncCode = FunctionCode.None;
         BranchCode = BranchCode.None;
         ArgumentPattern = argumentPattern;
-        IsPseudoInstruction = true;
     }
 
     /// <summary>
@@ -86,6 +83,11 @@ public readonly struct InstructionMetadata
     public BranchCode BranchCode { get; }
 
     /// <summary>
+    /// Gets the pseudo op for a pseudo-instruction.
+    /// </summary>
+    public PseudoOp PseudoOp { get; }
+
+    /// <summary>
     /// Gets the function type.
     /// </summary>
     public readonly InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode);
@@ -98,5 +100,5 @@ public readonly struct InstructionMetadata
     /// <summary>
     /// Gets whether or not the instruction is a pseudo instruction.
     /// </summary>
-    public bool IsPseudoInstruction { get; }
+    public bool IsPseudoInstruction => OpCode is OperationCode.PseudoInstruction;
 }
