@@ -52,13 +52,13 @@ public class InstructionTests
     /// Safe constrains the value to within the 16 bit range.
     /// For good testing purposes, this shouldn't always be used as the masking should fix overflowing immediates.
     /// </remarks>
-    private short RandomImmediate(bool safe = true) => (short)Random.Shared.Next(safe ? ushort.MaxValue : int.MaxValue);
+    private static short RandomImmediate(bool safe = true) => (short)Random.Shared.Next(safe ? ushort.MaxValue : int.MaxValue);
 
-    private uint RandomAddress(bool safe = true) => (uint)Random.Shared.Next(safe ? (1 << 26)-1 : int.MaxValue);
+    private static uint RandomAddress(bool safe = true) => (uint)Random.Shared.Next(safe ? (1 << 26)-1 : int.MaxValue);
 
-    private Register RandomRegister(bool safe) => (Register)Random.Shared.Next(safe ? (int)Register.ReturnAddress : int.MaxValue);
+    private static Register RandomRegister(bool safe) => (Register)Random.Shared.Next(safe ? (int)Register.ReturnAddress : int.MaxValue);
 
-    private OperationCode RandomOpCode(bool safe) => (OperationCode)Random.Shared.Next(safe ? (int)OperationCode.StoreWordCoprocessor3 : int.MaxValue);
+    private static OperationCode RandomOpCode(bool safe) => (OperationCode)Random.Shared.Next(safe ? (int)OperationCode.StoreWordCoprocessor3 : int.MaxValue);
 
-    private FunctionCode RandomFuncCode(bool safe) => (FunctionCode)Random.Shared.Next(safe ? (int)FunctionCode.SetLessThanUnsigned : int.MaxValue);
+    private static FunctionCode RandomFuncCode(bool safe) => (FunctionCode)Random.Shared.Next(safe ? (int)FunctionCode.SetLessThanUnsigned : int.MaxValue);
 }

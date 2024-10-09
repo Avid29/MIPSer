@@ -1,4 +1,4 @@
-﻿# Adam Dernis 2023
+﻿# Adam Dernis 2024
 
 # Features:
 # ------------------
@@ -11,7 +11,7 @@
 #
 
 main:
-	lui		$v0,	0,	0		# Extra argument
+	lui		$v0,	0,			0		# Extra argument
 	ori		$a0,	$zero,		0
 	xkcd	$t0,	$a0,		0		# No such instruction
 	syscall

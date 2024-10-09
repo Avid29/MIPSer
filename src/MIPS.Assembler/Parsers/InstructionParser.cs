@@ -119,7 +119,8 @@ public struct InstructionParser
         };
 
         // Check for write back to zero register
-        if (instruction.GetWritebackRegister() is Register.Zero)
+        // Give a warning if not an explicit nop operation
+        if (instruction.GetWritebackRegister() is Register.Zero && name.Source != "nop")
         {
             _logger?.Log(Severity.Message, LogId.ZeroRegWriteBack, "This instruction writes to $zero.");
         }

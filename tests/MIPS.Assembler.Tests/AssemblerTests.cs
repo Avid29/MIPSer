@@ -1,7 +1,11 @@
 ﻿// Adam Dernis 2023
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Tests.Helpers;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MIPS.Assembler.Tests;
@@ -9,35 +13,75 @@ namespace MIPS.Assembler.Tests;
 [TestClass]
 public class AssemblerTests
 {
-    private const string AssemblyPath = @"..\..\..\ASMs\";
+    private const string InvalidInstruction = "xkcd $t0, $t1, 0";
+    private const string ExtraArgError = "add $s0, $t0, $t2, 2";
+    private const string MissingArgError = "add $s0, $t0";
+    [TestMethod(nameof(InvalidInstruction))]
+    public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, LogId.InvalidInstructionName);
 
-    [TestMethod("test1.asm")]
-    public async Task Test1() => await RunTest("test1.asm");
+    [TestMethod(nameof(ExtraArgError))]
+    public async Task ExtraArgErrorTest() => await RunStringTest(ExtraArgError, LogId.InvalidInstructionArgCount);
 
-    [TestMethod("test2.asm")]
-    public async Task Test2() => await RunTest("test2.asm");
+    [TestMethod(nameof(MissingArgError))]
+    public async Task MissingArgErrorTest() => await RunStringTest(MissingArgError, LogId.InvalidInstructionArgCount);
 
-    [TestMethod("failed1.asm")]
-    public async Task Fail1() => await RunTest("fail1.asm");
+    [TestMethod(TestFilePathing.EmptyTestFile)]
+    public async Task EmptyFileTest() => await RunFileTest(TestFilePathing.EmptyTestFile);
 
-    private async Task RunTest(string fileName)
+    [TestMethod(TestFilePathing.InstructionsTestFile)]
+    public async Task InstructionsFileTest() => await RunFileTest(TestFilePathing.InstructionsTestFile);
+
+    [TestMethod(TestFilePathing.PlaygroundTestFile1)]
+    public async Task PlaygroundTest() => await RunFileTest(TestFilePathing.PlaygroundTestFile1);
+
+    [TestMethod(TestFilePathing.CompositeFailTestFile)]
+    public async Task CompositeFailTest() => await RunFileTest(TestFilePathing.CompositeFailTestFile,
+        (LogId.InvalidInstructionArgCount, 14),
+        (LogId.InvalidInstructionName, 16),
+        (LogId.UnparsableExpression, 19),
+        (LogId.InvalidRegisterArgument, 24),
+        (LogId.ZeroRegWriteBack, 29),
+        (LogId.IntegerTruncated, 30),
+        (LogId.InvalidRegisterArgument, 32),
+        (LogId.TokenizerError, 35),
+        (LogId.InvalidInstructionArgCount, 35));
+
+    private static async Task RunFileTest(string fileName, params (LogId, long)[] expected)
     {
-        var fullPath = Path.Combine(AssemblyPath, fileName);
-        fullPath = Path.GetFullPath(fullPath);
-        var stream = File.Open(fullPath, FileMode.Open);
+        var path = TestFilePathing.GetAssemblyFilePath(fileName);
+        var stream = File.Open(path, FileMode.Open);
         await RunTest(stream, fileName);
     }
 
-    private async Task RunTest(Stream stream, string? filename = null)
+    private static async Task RunStringTest(string str, params LogId[] expected)
+    {
+        var stream = new MemoryStream(Encoding.Default.GetBytes(str));
+        await RunTest(stream, null, expected.Select((x) => (x, 1L)).ToArray());
+    }
+
+    private static async Task RunTest(Stream stream, string? filename = null, params (LogId, long)[] expected)
     {
         var module = await Assembler.AssembleAsync(stream, filename);
 
-        Stream result = new MemoryStream();
-        if (filename is not null)
+        // Find expected errors, warnings, and messages
+        if (expected.Length != 0)
         {
-            var output = Path.Combine(AssemblyPath, Path.GetFileNameWithoutExtension(filename) + ".obj");
-            result = File.Open(output, FileMode.OpenOrCreate);
+            foreach (var (id, line) in expected)
+            {
+                var logEntry = module.Logs.FirstOrDefault(x => x.Id == id && x.LineNumber == line);
+                Assert.IsNotNull(logEntry);
+            }
         }
+
+        Stream result = new MemoryStream();
+        if (filename is null)
+            return;
+
+        if (module.Failed)
+            return;
+
+        var output = TestFilePathing.GetMatchingObjectFilePath(filename);
+        result = File.Open(output, FileMode.OpenOrCreate);
 
         module.WriteModule(result);
         result.Flush();

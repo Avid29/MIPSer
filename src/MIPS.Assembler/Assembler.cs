@@ -66,6 +66,11 @@ public partial class Assembler
     public IReadOnlyList<Log> Logs => _logger.Logs;
 
     /// <summary>
+    /// Gets whether or not the assembler failed to assemble a valid module.
+    /// </summary>
+    public bool Failed => _logger.Failed;
+
+    /// <summary>
     /// Assembles an object module from a stream of assembly
     /// </summary>
     public static async Task<Assembler> AssembleAsync(Stream stream, string? filename)
