@@ -13,6 +13,7 @@ using MIPS.Extensions.MIPS.Models.Instructions;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -65,15 +66,13 @@ public struct InstructionParser
     /// </summary>
     /// <param name="name">The instruction name.</param>
     /// <param name="args">The instruction arguments.</param>
-    /// <param name="instruction">The <see cref="Instruction"/>.</param>
-    /// <param name="pseudo">The <see cref="PseudoInstruction"/>.</param>
+    /// <param name="parsedInstruction">The resulting <see cref="ParsedInstruction"/>.</param>
     /// <param name="relSymbol">The relocatable symbol referenced on this line. Or null if none.</param>
     /// <returns>Whether or not an instruction was parsed.</returns>
-    public bool TryParse(Token name, Span<Token> args, out Instruction instruction, out PseudoInstruction pseudo, out string? relSymbol)
+    public bool TryParse(Token name, Span<Token> args, [NotNullWhen(true)] out ParsedInstruction? parsedInstruction, out string? relSymbol)
     {
         relSymbol = null;
-        instruction = default;
-        pseudo = default;
+        parsedInstruction = null;
 
         // Get instruction metadata from name
         if (!ConstantTables.TryGetInstruction(name.Source, out _meta))
@@ -115,7 +114,7 @@ public struct InstructionParser
         if (_meta.IsPseudoInstruction)
         {
             var pseudoOp = _meta.PseudoOp;
-            pseudo = pseudoOp switch
+            var pseudo = pseudoOp switch
             {
                 PseudoOp.BranchOnLessThan => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt, Immediate = _immediate },
                 PseudoOp.LoadImmediate => new PseudoInstruction(pseudoOp) { RT = _rt, Immediate = _immediate },
@@ -125,11 +124,13 @@ public struct InstructionParser
                 PseudoOp.SetGreaterThanOrEqual => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt, RD = _rd },
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<PseudoInstruction>(),
             };
+
+            parsedInstruction = new ParsedInstruction(pseudo);
             return true;
         }
 
         // Create the instruction from its components based on the instruction type
-        instruction = _meta.Type switch
+        var instruction = _meta.Type switch
         {
             InstructionType.R when _opCode is OperationCode.BranchConditional => Instruction.Create(_meta.BranchCode, _rs, (short)_immediate),
             InstructionType.R => Instruction.Create(_funcCode, _rs, _rt, _rd, _shift),
@@ -146,6 +147,7 @@ public struct InstructionParser
             _logger?.Log(Severity.Message, LogId.ZeroRegWriteBack, "This instruction writes to $zero.");
         }
 
+        parsedInstruction = new ParsedInstruction(instruction);
         return true;
     }
 

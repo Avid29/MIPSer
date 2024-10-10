@@ -46,6 +46,9 @@ public class AssemblerTests
     [TestMethod(TestFilePathing.InstructionsTestFile)]
     public async Task InstructionsFileTest() => await RunFileTest(TestFilePathing.InstructionsTestFile);
 
+    [TestMethod(TestFilePathing.PseudoInstructionsTestFile)]
+    public async Task PseudoInstructionsFileTest() => await RunFileTest(TestFilePathing.PseudoInstructionsTestFile);
+
     [TestMethod(TestFilePathing.PlaygroundTestFile1)]
     public async Task PlaygroundTest() => await RunFileTest(TestFilePathing.PlaygroundTestFile1);
 

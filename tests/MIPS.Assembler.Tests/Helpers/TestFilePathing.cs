@@ -13,6 +13,7 @@ public static class TestFilePathing
     public const string BranchRelativeFile = "component_tests/branch_relative.asm";
     public const string EmptyTestFile = "component_tests/empty.asm";
     public const string InstructionsTestFile = "component_tests/instructions.asm";
+    public const string PseudoInstructionsTestFile = "component_tests/pseudo_instructions.asm";
 
     public const string CompositeFailTestFile = "error_tests/composite_fail.asm";
     public const string DuplicateSymbolFile = "error_tests/duplicate_symbol.asm";

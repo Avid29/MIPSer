@@ -3,6 +3,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
@@ -34,76 +35,76 @@ public class InstructionParserTests
     private const string TooManyArgs = "add $t0, $s0, $s1, $s1";
 
     [TestMethod(NOP)]
-    public void NopTest() => RunTest(NOP, Instruction.NOP);
+    public void NopTest() => RunTest(NOP, new ParsedInstruction(Instruction.NOP));
 
     [TestMethod(Add)]
     public void AddTest()
     {
         Instruction expected = Instruction.Create(FunctionCode.Add, Register.Saved0, Register.Saved1, Register.Temporary0);
-        RunTest(Add, expected);
+        RunTest(Add, new ParsedInstruction(expected));
     }
 
     [TestMethod(Addi)]
     public void AddiTest()
     {
         Instruction expected = Instruction.Create(OperationCode.AddImmediate, Register.Saved0, Register.Temporary0, 100);
-        RunTest(Addi, expected);
+        RunTest(Addi, new ParsedInstruction(expected));
     }
 
     [TestMethod(Sll)]
     public void SllTest()
     {
         Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 3);
-        RunTest(Sll, expected);
+        RunTest(Sll, new ParsedInstruction(expected));
     }
 
     [TestMethod(LoadWord)]
     public void LoadWordTest()
     {
         Instruction expected = Instruction.Create(OperationCode.LoadWord, Register.Saved0, Register.Temporary0, 100);
-        RunTest(LoadWord, expected);
+        RunTest(LoadWord, new ParsedInstruction(expected));
     }
 
     [TestMethod(StoreByte)]
     public void StoreByteTest()
     {
         Instruction expected = Instruction.Create(OperationCode.StoreByte, Register.Saved0, Register.Temporary0, -100);
-        RunTest(StoreByte, expected);
+        RunTest(StoreByte, new ParsedInstruction(expected));
     }
 
     [TestMethod(Jump)]
     public void JumpTest()
     {
         Instruction expected = Instruction.Create(OperationCode.Jump, 1000);
-        RunTest(Jump, expected);
+        RunTest(Jump, new ParsedInstruction(expected));
     }
 
     [TestMethod(JumpExpression)]
     public void JumpExpressionTest()
     {
         Instruction expected = Instruction.Create(OperationCode.Jump, 100);
-        RunTest(JumpExpression, expected);
+        RunTest(JumpExpression, new ParsedInstruction(expected));
     }
     
     [TestMethod(LoadImmediate)]
     public void LoadImmediateTest()
     {
         PseudoInstruction expected = new PseudoInstruction(PseudoOp.LoadImmediate){ RT = Register.Temporary0, Immediate = 0x10001 };
-        RunTest(LoadImmediate, pseudoExpected:expected);
+        RunTest(LoadImmediate, new ParsedInstruction(expected));
     }
 
     [TestMethod(SllWarnTruncate)]
     public void SllWarnTruncateTest()
     {
         Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 1);
-        RunTest(SllWarnTruncate, expected, logId:LogId.IntegerTruncated);
+        RunTest(SllWarnTruncate, new ParsedInstruction(expected), logId:LogId.IntegerTruncated);
     }
 
     [TestMethod(SllWarnSigned)]
     public void SllWarnSignedTest()
     {
         Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 31);
-        RunTest(SllWarnSigned, expected, logId:LogId.IntegerTruncated);
+        RunTest(SllWarnSigned, new ParsedInstruction(expected), logId:LogId.IntegerTruncated);
     }
 
     [TestMethod(XkcdFail)]
@@ -124,26 +125,27 @@ public class InstructionParserTests
         RunTest(TooManyArgs, logId: LogId.InvalidInstructionArgCount);
     }
 
-    private static void RunTest(string input, Instruction? expected = null, PseudoInstruction? pseudoExpected = null, LogId? logId = null, string? expectedSymbol = null)
+    private static void RunTest(string input, ParsedInstruction? expected = null, LogId? logId = null, string? expectedSymbol = null)
     {
-        bool succeeds = expected.HasValue || pseudoExpected.HasValue;
+        bool succeeds = expected is not null;
 
         var logger = new AssemblerLogger();
         var parser = new InstructionParser(null, logger);
 
         var tokens = Tokenizer.TokenizeLine(input, nameof(RunTest));
         var args = tokens.TrimType(TokenType.Instruction, out var name);
-        var succeeded = parser.TryParse(name!, args, out var actual, out var pseudoActual, out var symbol);
+        var succeeded = parser.TryParse(name!, args, out var actual, out var symbol);
 
         Assert.AreEqual(succeeds, succeeded);
-        if (expected.HasValue)
+        if (succeeds)
         {
-            Assert.AreEqual(expected, actual);
-        }
+            var expectedReal = expected!.Realize();
+            var actualReal = actual!.Realize();
 
-        if (pseudoExpected.HasValue)
-        {
-            Assert.AreEqual(pseudoExpected, pseudoActual);
+            for (int i = 0 ; i < expectedReal.Length; i++)
+            {
+                Assert.AreEqual(expectedReal[i], actualReal[i]);
+            }
         }
 
         if (logId.HasValue)

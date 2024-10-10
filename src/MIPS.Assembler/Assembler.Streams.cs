@@ -13,12 +13,15 @@ public partial class Assembler
     /// </summary>
     private void Append(params byte[] bytes) => _module.Append(_activeSection, bytes);
 
-    private void Append<T>(T data)
+    private void Append<T>(params T[] values)
         where T : IBinaryInteger<T>
     {
-        var bytes = new byte[data.GetByteCount()];
-        data.WriteBigEndian(bytes);
-        Append(bytes);
+        foreach (var value in values)
+        {
+            var bytes = new byte[value.GetByteCount()];
+            value.WriteBigEndian(bytes);
+            Append(bytes);
+        }
     }
 
     private void Append(int byteCount)

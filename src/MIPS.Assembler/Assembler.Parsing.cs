@@ -1,15 +1,18 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Directives;
 using MIPS.Assembler.Models.Directives.Abstract;
+using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Instructions;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 
 namespace MIPS.Assembler;
 
@@ -32,10 +35,10 @@ public unsafe partial class Assembler
             CreateSymbol(label.Source);
 
         // Pad instruction sized allocation if instruction is present
-        if (!instruction.IsEmpty)
+        if (PeekInstruction(instruction, out var meta))
         {
-            // TODO: Pseudo instructions
-            Append(sizeof(Instruction));
+            // Multiply by realized instruction count to handle pseudo instructions
+            Append(sizeof(Instruction) * meta.RealizedInstructionCount);
         }
 
         // Make allocations if directive is present
@@ -96,11 +99,8 @@ public unsafe partial class Assembler
             return;
 
         // Try to parse instruction from name and arguments
-        if (!parser.TryParse(name, args, out var instruction, out var pseudo, out var symbol))
-        {
-            // Explicitly replace invalid instruction with a nop
-            instruction = Instruction.NOP;
-        }
+        if (!parser.TryParse(name, args, out var instruction, out var symbol))
+            return;
 
         // Track relocatable reference
         if (symbol is not null)
@@ -109,7 +109,7 @@ public unsafe partial class Assembler
         }
 
         // Append instruction to active segment
-        Append((uint)instruction);
+        Append(Unsafe.As<uint[]>(instruction.Realize()));
     }
 
     private void HandleDirective(Span<Token> directiveTokens)
@@ -177,6 +177,20 @@ public unsafe partial class Assembler
 
         macro = line[0];
         expression = line[2..];
+        return true;
+    }
+
+    private static bool PeekInstruction(Span<Token> instruction, out InstructionMetadata meta)
+    {
+        meta = default;
+
+        if (instruction.IsEmpty)
+            return false;
+
+        var name = instruction[0];
+        if(!ConstantTables.TryGetInstruction(name.Source, out meta))
+            return false;
+
         return true;
     }
 

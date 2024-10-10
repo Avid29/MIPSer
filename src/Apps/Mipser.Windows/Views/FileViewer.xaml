@@ -8,6 +8,6 @@
     xmlns:editor="using:WinUIEditor"
     mc:Ignorable="d">
 
-    <editor:CodeEditorControl Loaded="CodeEditorControl_Loaded"/>
+    <editor:CodeEditorControl Loaded="CodeEditorControl_Loaded" Margin="0,8,0,0"/>
 
 </UserControl>

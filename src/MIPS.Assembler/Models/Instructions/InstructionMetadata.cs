@@ -20,6 +20,7 @@ public readonly struct InstructionMetadata
         FuncCode = FunctionCode.None;
         BranchCode = BranchCode.None;
         ArgumentPattern = argumentPattern;
+        RealizedInstructionCount = 1;
     }
 
     /// <summary>
@@ -32,6 +33,7 @@ public readonly struct InstructionMetadata
         FuncCode = funcCode;
         BranchCode = BranchCode.None;
         ArgumentPattern = argumentPattern;
+        RealizedInstructionCount = 1;
     }
 
     /// <summary>
@@ -44,6 +46,7 @@ public readonly struct InstructionMetadata
         FuncCode = FunctionCode.None;
         BranchCode = branchCode;
         ArgumentPattern = argumentPattern;
+        RealizedInstructionCount = 1;
     }
 
     /// <summary>
@@ -52,7 +55,7 @@ public readonly struct InstructionMetadata
     /// <remarks>
     /// This is constructor is only for pseudo-instructions.
     /// </remarks>
-    public InstructionMetadata(string name, PseudoOp pseudoOp, Argument[] argumentPattern)
+    public InstructionMetadata(string name, PseudoOp pseudoOp, Argument[] argumentPattern, int realizedCount)
     {
         Name = name;
         PseudoOp = pseudoOp;
@@ -60,6 +63,7 @@ public readonly struct InstructionMetadata
         FuncCode = FunctionCode.None;
         BranchCode = BranchCode.None;
         ArgumentPattern = argumentPattern;
+        RealizedInstructionCount = realizedCount;
     }
 
     /// <summary>
@@ -96,6 +100,14 @@ public readonly struct InstructionMetadata
     /// Gets the instruction parse type
     /// </summary>
     public Argument[] ArgumentPattern { get; }
+
+    /// <summary>
+    /// Gets the number of real instructions required to execute the instruction.
+    /// </summary>
+    /// <remarks>
+    /// This exists for pseudo instructions.
+    /// </remarks>
+    public int RealizedInstructionCount { get; }
 
     /// <summary>
     /// Gets whether or not the instruction is a pseudo instruction.

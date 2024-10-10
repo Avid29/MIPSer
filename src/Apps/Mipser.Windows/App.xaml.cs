@@ -1,10 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Mvvm.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
-using Mipser.Services.Dispatcher;
-using Mipser.Windows.Services.Dispatcher;
 
 namespace Mipser.Windows;
 
