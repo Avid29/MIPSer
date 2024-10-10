@@ -58,7 +58,7 @@ public partial class ProcessingUnit
         // Increment program counter if not handled by execution
         if (!execution.PCHandled)
         {
-            _programCounter += 4;
+            _regFile.ProgramCounter += 4;
         }
     }
 
@@ -84,6 +84,7 @@ public partial class ProcessingUnit
             FunctionCode.JumpAndLinkRegister => JALR,
 
             FunctionCode.SystemCall => SYSCALL,
+            FunctionCode.Break => BREAK,
 
             FunctionCode.MoveFromHigh => MFHI,
             FunctionCode.MoveToHigh => MTHI,
@@ -183,6 +184,10 @@ public partial class ProcessingUnit
     }
 
     private uint SYSCALL(uint rs, uint rt, byte shift)
+    {
+        throw new NotImplementedException();
+    }
+    private uint BREAK(uint rs, uint rt, byte shift)
     {
         throw new NotImplementedException();
     }

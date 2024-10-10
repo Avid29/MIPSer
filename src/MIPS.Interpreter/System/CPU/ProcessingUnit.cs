@@ -11,8 +11,6 @@ public partial class ProcessingUnit
 {
     private readonly RegisterFile _regFile;
 
-    private uint _programCounter;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ProcessingUnit"/> class.
     /// </summary>
@@ -22,7 +20,7 @@ public partial class ProcessingUnit
     }
 
     private void Jump(uint address)
-        => _programCounter = address;
+        => _regFile.ProgramCounter = address;
 
     private void JumpPartial(uint address)
     {
@@ -32,12 +30,12 @@ public partial class ProcessingUnit
 
     private void JumpOffset(short offset)
     {
-        _programCounter = (uint)((int)_programCounter + offset);
+        _regFile.ProgramCounter = (uint)((int)_regFile.ProgramCounter + offset);
     }
 
     private void Link()
     {
         // Assign return address to instruction after caller location 
-        _regFile[Register.ReturnAddress] = _programCounter + 4;
+        _regFile[Register.ReturnAddress] = _regFile.ProgramCounter + 4;
     }
 }

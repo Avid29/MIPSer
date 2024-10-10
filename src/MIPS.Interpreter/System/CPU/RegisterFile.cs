@@ -16,7 +16,7 @@ public class RegisterFile
     /// </summary>
     public RegisterFile()
     {
-        _registers = new uint[32 + 2];
+        _registers = new uint[32 + 3];
     }
 
     /// <summary>
@@ -57,5 +57,14 @@ public class RegisterFile
     {
         get => _registers[(int)Register.Low];
         set => _registers[(int)Register.Low] = value;
+    }
+
+    /// <summary>
+    /// Gets or sets the value in the program counter register.
+    /// </summary>
+    public uint ProgramCounter
+    {
+        get => _registers[(int)Register.ProgramCounter];
+        set => _registers[(int)Register.ProgramCounter] = value;
     }
 }

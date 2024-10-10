@@ -4,12 +4,14 @@
 	  <RootNamespace>MIPS.Emulator</RootNamespace>
   </PropertyGroup>
 
-	<ItemGroup>
-    <ProjectReference Include="..\MIPS\MIPS.csproj" />
+  <ItemGroup>
+    <Compile Remove="System\Memory\**" />
+    <EmbeddedResource Remove="System\Memory\**" />
+    <None Remove="System\Memory\**" />
   </ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="System\Memory\" />
-	</ItemGroup>
+    <ProjectReference Include="..\MIPS\MIPS.csproj" />
+  </ItemGroup>
 
 </Project>

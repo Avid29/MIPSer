@@ -45,6 +45,7 @@ public enum Register : byte
     // Non-indexable registers
     High,
     Low,
+    ProgramCounter,
 
 #pragma warning restore CS1591
 }
