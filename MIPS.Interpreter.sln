@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mipser.ViewModels", "src\Ap
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{2E0C1AB2-023D-4A9A-B760-058F5FAC67A2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinUIEditor", "src\WinUIEdit\WinUIEditor\WinUIEditor.vcxproj", "{290647E3-D8CB-46B5-87CE-409F721E441A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinUIEditor", "submodules\WinUIEdit\WinUIEditor\WinUIEditor.vcxproj", "{290647E3-D8CB-46B5-87CE-409F721E441A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

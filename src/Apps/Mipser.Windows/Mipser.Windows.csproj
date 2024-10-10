@@ -60,7 +60,7 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <ProjectReference Include="..\..\WinUIEdit\WinUIEditor\WinUIEditor.vcxproj" />
+    <ProjectReference Include="..\..\..\submodules\WinUIEdit\WinUIEditor\WinUIEditor.vcxproj" />
     <ProjectReference Include="..\Mipser.ViewModels\Mipser.ViewModels.csproj" />
   </ItemGroup>
   <ItemGroup>
