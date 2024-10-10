@@ -67,11 +67,10 @@ public struct InstructionParser
     /// <param name="name">The instruction name.</param>
     /// <param name="args">The instruction arguments.</param>
     /// <param name="parsedInstruction">The resulting <see cref="ParsedInstruction"/>.</param>
-    /// <param name="relSymbol">The relocatable symbol referenced on this line. Or null if none.</param>
     /// <returns>Whether or not an instruction was parsed.</returns>
-    public bool TryParse(Token name, Span<Token> args, [NotNullWhen(true)] out ParsedInstruction? parsedInstruction, out string? relSymbol)
+    public bool TryParse(Token name, Span<Token> args, [NotNullWhen(true)] out ParsedInstruction? parsedInstruction)
     {
-        relSymbol = null;
+        string? relSymbol = null;
         parsedInstruction = null;
 
         // Get instruction metadata from name
@@ -125,7 +124,7 @@ public struct InstructionParser
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<PseudoInstruction>(),
             };
 
-            parsedInstruction = new ParsedInstruction(pseudo);
+            parsedInstruction = new ParsedInstruction(pseudo, relSymbol);
             return true;
         }
 
@@ -147,7 +146,7 @@ public struct InstructionParser
             _logger?.Log(Severity.Message, LogId.ZeroRegWriteBack, "This instruction writes to $zero.");
         }
 
-        parsedInstruction = new ParsedInstruction(instruction);
+        parsedInstruction = new ParsedInstruction(instruction, relSymbol);
         return true;
     }
 

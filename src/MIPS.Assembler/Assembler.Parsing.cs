@@ -21,21 +21,21 @@ public unsafe partial class Assembler
     private void AlignmentPass(Span<Token> line)
     {
         // Parse as macro
-        if (TokenizeMacro(line, out var macro, out var expression))
+        if (TokenizeMacro(line, out var macroName, out var expTokens))
         {
-            HandleMacro(macro, expression);
+            HandleMacro(macroName, expTokens);
             return;
         }
 
         // Get the parts of the line
-        TokenizeLine(line, out var label, out var instruction, out var directiveStr);
+        TokenizeLine(line, out var label, out var instTokens, out var dirTokens);
 
         // Create symbol if line is labeled
         if (label is not null)
             CreateSymbol(label.Source);
 
         // Pad instruction sized allocation if instruction is present
-        if (PeekInstruction(instruction, out var meta))
+        if (PeekInstruction(instTokens, out var meta))
         {
             // Multiply by realized instruction count to handle pseudo instructions
             Append(sizeof(Instruction) * meta.RealizedInstructionCount);
@@ -43,8 +43,8 @@ public unsafe partial class Assembler
 
         // Make allocations if directive is present
         // NOTE: Directive allocations are made in both passes
-        if (!directiveStr.IsEmpty)
-            HandleDirective(directiveStr);
+        if (!dirTokens.IsEmpty)
+            HandleDirective(dirTokens);
     }
 
     private void RealizationPass(Span<Token> line)
@@ -55,16 +55,16 @@ public unsafe partial class Assembler
 
         // Get the parts of the line
         // Discard labels. They are already parsed
-        TokenizeLine(line, out _, out var instructionTokens, out var directiveTokens);
+        TokenizeLine(line, out _, out var instTokens, out var dirTokens);
 
         // Handle instructions
-        if (!instructionTokens.IsEmpty)
-            HandleInstruction(instructionTokens);
+        if (!instTokens.IsEmpty)
+            HandleInstruction(instTokens);
 
         // Make allocations if directive is present
         // NOTE: Directive allocations are made in both passes
-        if (!directiveTokens.IsEmpty)
-            HandleDirective(directiveTokens);
+        if (!dirTokens.IsEmpty)
+            HandleDirective(dirTokens);
     }
 
     private void HandleMacro(Token name, Span<Token> expression)
@@ -99,13 +99,13 @@ public unsafe partial class Assembler
             return;
 
         // Try to parse instruction from name and arguments
-        if (!parser.TryParse(name, args, out var instruction, out var symbol))
+        if (!parser.TryParse(name, args, out var instruction))
             return;
 
         // Track relocatable reference
-        if (symbol is not null)
+        if (instruction.SymbolReferenced is not null)
         {
-            _module.TryTrackRelocation(CurrentAddress, symbol);
+            _module.TryTrackRelocation(CurrentAddress, instruction.SymbolReferenced);
         }
 
         // Append instruction to active segment

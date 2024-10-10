@@ -17,18 +17,26 @@ public class ParsedInstruction
     /// <summary>
     /// Initializes a new instance of the <see cref="ParsedInstruction"/> class.
     /// </summary>
-    public ParsedInstruction(Instruction instruction)
+    public ParsedInstruction(Instruction instruction, string? symbol = null)
     {
         _real = instruction;
+        SymbolReferenced = symbol;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParsedInstruction"/> class.
     /// </summary>
-    public ParsedInstruction(PseudoInstruction instruction)
+    public ParsedInstruction(PseudoInstruction instruction, string? symbol = null)
     {
         _pseudo = instruction;
+        SymbolReferenced = symbol;
     }
+
+    // TODO: Replace with ref or rel table entry.
+    /// <summary>
+    /// Gets the symbol referenced, or null if none.
+    /// </summary>
+    public string? SymbolReferenced { get; }
 
     /// <summary>
     /// Gets whether or not the parsed instruction was a pseudo instruction.

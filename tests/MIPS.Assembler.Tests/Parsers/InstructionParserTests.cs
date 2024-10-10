@@ -134,7 +134,7 @@ public class InstructionParserTests
 
         var tokens = Tokenizer.TokenizeLine(input, nameof(RunTest));
         var args = tokens.TrimType(TokenType.Instruction, out var name);
-        var succeeded = parser.TryParse(name!, args, out var actual, out var symbol);
+        var succeeded = parser.TryParse(name!, args, out var actual);
 
         Assert.AreEqual(succeeds, succeeded);
         if (succeeds)
