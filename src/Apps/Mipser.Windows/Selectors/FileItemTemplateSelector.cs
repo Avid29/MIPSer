@@ -9,7 +9,7 @@ namespace Mipser.Windows.Selectors;
 /// <summary>
 /// A <see cref="DataTemplateSelector"/> for 
 /// </summary>
-public class FileItemTemplateSelector : DataTemplateSelector
+public partial class FileItemTemplateSelector : DataTemplateSelector
 {
     /// <summary>
     /// Gets the <see cref="DataTemplate"/> for a <see cref="BindableFile"/>.

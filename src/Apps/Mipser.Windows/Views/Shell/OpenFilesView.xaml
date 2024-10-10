@@ -9,12 +9,13 @@
     xmlns:views="using:Mipser.Windows.Views"
     mc:Ignorable="d">
 
-    <TabView SelectedItem="{x:Bind ViewModel.CurrentFile, Mode=TwoWay}" TabItemsSource="{x:Bind ViewModel.OpenFiles, Mode=OneWay}" TabCloseRequested="TabView_TabCloseRequested" IsAddTabButtonVisible="False">
+    <TabView SelectedItem="{x:Bind ViewModel.CurrentFile, Mode=TwoWay}" TabItemsSource="{x:Bind ViewModel.OpenFiles, Mode=OneWay}"
+             TabCloseRequested="TabView_TabCloseRequested" IsAddTabButtonVisible="False" VerticalAlignment="Stretch">
         <TabView.TabItemTemplate>
             <DataTemplate x:DataType="filesdata:BindableFile">
                 <!--* for unsaved and italics for anonymous-->
                 <TabViewItem Header="{x:Bind Name, Mode=OneWay}">
-                    <views:FileViewer/>
+                        <views:FileViewer/>
                 </TabViewItem>
             </DataTemplate>
         </TabView.TabItemTemplate>

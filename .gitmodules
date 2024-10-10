@@ -1,0 +1,3 @@
+[submodule "src/WinUIEdit"]
+	path = src/WinUIEdit
+	url = https://github.com/Avid29/WinUIEdit.git
