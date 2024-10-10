@@ -34,6 +34,12 @@ public class AssemblerTests
     [TestMethod(nameof(MissingArgError))]
     public async Task MissingArgErrorTest() => await RunStringTest(MissingArgError, LogId.InvalidInstructionArgCount);
 
+    [TestMethod(TestFilePathing.BranchLiteralFile)]
+    public async Task BranchLiteralFileTest() => await RunFileTest(TestFilePathing.BranchLiteralFile);
+
+    [TestMethod(TestFilePathing.BranchRelativeFile)]
+    public async Task BranchRelativeFileTest() => await RunFileTest(TestFilePathing.BranchRelativeFile);
+
     [TestMethod(TestFilePathing.EmptyTestFile)]
     public async Task EmptyFileTest() => await RunFileTest(TestFilePathing.EmptyTestFile);
 

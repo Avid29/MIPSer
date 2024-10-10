@@ -41,7 +41,7 @@ public struct StringParser
         // Ensure string begins and ends with quotes
         if (input[0] != '"' || input[^1] != '"')
         {
-            _logger?.Log(Severity.Error, LogId.NotAString, $"Expected a string, got '{input}' is not a string.");
+            _logger?.Log(Severity.Error, LogId.NotAString, $"Expected a string. '{input}' is not a string.");
             return false;
         }
 

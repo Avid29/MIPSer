@@ -3,6 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Parsers.Enums;
 using MIPS.Assembler.Parsers.Expressions;
@@ -23,7 +24,7 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public struct ExpressionParser
 {
-    private readonly ModuleConstruction? _context;
+    private readonly AssemblerContext? _context;
     private readonly ILogger? _logger;
     private readonly IEvaluator<Address> _evaluator;
     private ExpressionTree? _tree;
@@ -40,9 +41,9 @@ public struct ExpressionParser
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
     /// </summary>
-    public ExpressionParser(ModuleConstruction? obj, ILogger? logger = null)
+    public ExpressionParser(AssemblerContext? context, ILogger? logger = null)
     {
-        _context = obj;
+        _context = context;
         _logger = logger;
         _evaluator = new AddressEvaluator(logger);
         _tree = null;

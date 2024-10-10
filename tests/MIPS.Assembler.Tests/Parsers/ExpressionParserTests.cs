@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
@@ -93,7 +94,9 @@ public class ExpressionParserTests
         foreach (var (name, addr) in macros)
             obj.TryDefineSymbol(name, addr);
 
-        var parser = new ExpressionParser(obj);
+        // This could break in the future. We're suppressing a null.
+        var context = new AssemblerContext(null!, obj);
+        var parser = new ExpressionParser(context);
         RunTest(parser, input, expected);
     }
 

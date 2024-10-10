@@ -3,6 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
@@ -28,8 +29,8 @@ namespace MIPS.Assembler;
 /// </summary>
 public partial class Assembler
 {
-    private readonly ModuleConstruction _obj;
     private readonly AssemblerLogger _logger;
+    private readonly ModuleConstruction _module;
     private Section _activeSection;
 
     /// <summary>
@@ -37,10 +38,17 @@ public partial class Assembler
     /// </summary>
     private Assembler()
     {
-        _obj = new ModuleConstruction();
         _logger = new AssemblerLogger();
+        _module = new ModuleConstruction();
         _activeSection = Section.Text;
+
+        Context = new(this, _module);
     }
+
+    /// <summary>
+    /// Gets the assembler context for this assembler instance.
+    /// </summary>
+    public AssemblerContext Context { get; }
 
     /// <summary>
     /// Gets the current address.
@@ -52,7 +60,7 @@ public partial class Assembler
             if (_activeSection is < Section.Text or > Section.UninitializedData)
                 ThrowHelper.ThrowArgumentException(nameof(_activeSection));
 
-            return new Address(_obj.GetStreamPosition(_activeSection), _activeSection);
+            return new Address(_module.GetStreamPosition(_activeSection), _activeSection);
         }
     }
 
@@ -77,15 +85,15 @@ public partial class Assembler
         for (int i = 1; i <= tokens.LineCount; i++)
         {
             assembler._logger.CurrentLine = i;
-            assembler.LinePass1(tokens[i]);
+            assembler.AlignmentPass(tokens[i]);
         }
 
-        assembler._obj.ResetStreamPositions();
+        assembler._module.ResetStreamPositions();
 
         for (int i = 1; i <= tokens.LineCount; i++)
         {
             assembler._logger.CurrentLine = i;
-            assembler.LinePass2(tokens[i]);
+            assembler.RealizationPass(tokens[i]);
         }
 
         return assembler;
@@ -102,7 +110,7 @@ public partial class Assembler
         if (_logger.Failed)
             return null;
 
-        return _obj.Finish(stream);
+        return _module.Finish(stream);
     }
 
     /// <summary>
@@ -127,7 +135,7 @@ public partial class Assembler
         if (!ValidateSymbolName(label))
             return false;
 
-        if (!_obj.TryDefineSymbol(label, address))
+        if (!_module.TryDefineSymbol(label, address))
         {
             _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, $"Symbol \"{label}\" already exists.");
             return false;

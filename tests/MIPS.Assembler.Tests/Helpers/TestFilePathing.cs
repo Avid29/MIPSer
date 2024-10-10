@@ -9,6 +9,8 @@ public static class TestFilePathing
     private const string AssemblyFilesPathBase = @"../../../ASMs/";
     private const string ObjectFolder = "obj/";
 
+    public const string BranchLiteralFile = "component_tests/branch_literal.asm";
+    public const string BranchRelativeFile = "component_tests/branch_relative.asm";
     public const string EmptyTestFile = "component_tests/empty.asm";
     public const string InstructionsTestFile = "component_tests/instructions.asm";
 

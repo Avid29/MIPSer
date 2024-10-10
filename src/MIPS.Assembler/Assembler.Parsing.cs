@@ -15,7 +15,7 @@ namespace MIPS.Assembler;
 
 public unsafe partial class Assembler
 {
-    private void LinePass1(Span<Token> line)
+    private void AlignmentPass(Span<Token> line)
     {
         // Parse as macro
         if (TokenizeMacro(line, out var macro, out var expression))
@@ -44,9 +44,9 @@ public unsafe partial class Assembler
             HandleDirective(directiveStr);
     }
 
-    private void LinePass2(Span<Token> line)
+    private void RealizationPass(Span<Token> line)
     {
-        // This line is a macro. Skip on pass2
+        // This line is a macro. Skip on realization
         if (TokenizeMacro(line, out _, out _))
             return;
 
@@ -66,7 +66,7 @@ public unsafe partial class Assembler
 
     private void HandleMacro(Token name, Span<Token> expression)
     {
-        var expressionParser = new ExpressionParser(_obj, _logger);
+        var expressionParser = new ExpressionParser(Context, _logger);
 
         if (expression.IsEmpty)
         {
@@ -88,7 +88,7 @@ public unsafe partial class Assembler
 
     private void HandleInstruction(Span<Token> instructionTokens)
     {
-        var parser = new InstructionParser(_obj, _logger);
+        var parser = new InstructionParser(Context, _logger);
         
         // Get the parts of the instruction and parse
         var args = instructionTokens.TrimType(TokenType.Instruction, out var name);
@@ -105,7 +105,7 @@ public unsafe partial class Assembler
         // Track relocatable reference
         if (symbol is not null)
         {
-            _obj.TryTrackRelocation(CurrentAddress, symbol);
+            _module.TryTrackRelocation(CurrentAddress, symbol);
         }
 
         // Append instruction to active segment

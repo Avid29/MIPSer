@@ -144,8 +144,8 @@ namespace MIPS.Models.Instructions;
 //      The OP code is used to identify the instruction to run.
 
 // Address:
-//      The jump address. This address must be word aligned, so the last 4 bits are dropped, making
-//      it effectively a 30 bit address. The remaining 2 bits are assumed to be equivalent to that
+//      The jump address. This address must be word aligned, so the last 2 bits are dropped, making
+//      it effectively a 28 bit address. The remaining 4 bits are assumed to be equivalent to that
 //      of the current program counter.
 //
 //                       J Type Instruction Assembled Examples
@@ -264,6 +264,7 @@ public struct Instruction
         Instruction value = default;
         value.OpCode = OperationCode.BranchConditional;
         value.BranchCode = code;
+        value.RS = rs;
         value.ImmediateValue = immediate;
         return value;
     }

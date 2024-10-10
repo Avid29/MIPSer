@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using System;
-using System.Net;
 
 namespace MIPS.Assembler.Tests;
 

@@ -4,6 +4,7 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Tokenization;
@@ -20,7 +21,7 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public struct InstructionParser
 {
-    private readonly ModuleConstruction? _context;
+    private readonly AssemblerContext? _context;
     private readonly ILogger? _logger;
 
     private InstructionMetadata _meta;
@@ -44,7 +45,7 @@ public struct InstructionParser
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionParser"/> struct.
     /// </summary>
-    public InstructionParser(ModuleConstruction? content, ILogger? logger)
+    public InstructionParser(AssemblerContext? content, ILogger? logger)
     {
         _context = content;
         _logger = logger;
@@ -219,6 +220,7 @@ public struct InstructionParser
         int bitCount = target switch
         {
             Argument.Shift => 5,
+            Argument.Offset or
             Argument.Immediate => 16,
             Argument.Address => 26,
             Argument.FullImmediate => 32,
@@ -234,7 +236,7 @@ public struct InstructionParser
         long value = address.Value;
 
         // Shift and Address are unsigned. Immediate is the only signed argument
-        bool signed = target is Argument.Immediate;
+        bool signed = target is Argument.Immediate or Argument.Offset;
 
         // Clean integer to fit within argument bit size and match signs.
         switch (CleanInteger(ref value, bitCount, signed, out var original))
@@ -270,12 +272,26 @@ public struct InstructionParser
             case Argument.FullImmediate:
                 _immediate = (int)value;
                 return true;
-            case Argument.Offset:
-                // TODO: Make relative to current position.
-                _immediate = (short)value;
-                return true;
             case Argument.Address:
                 _address = (uint)value;
+                return true;
+            case Argument.Offset:
+                if (address.IsRelocatable)
+                {
+                    Guard.IsNotNull(_context);
+
+                    var @base = _context.CurrentAddress;
+                    if (@base.Section != address.Section)
+                    {
+                        _logger?.Log(Severity.Error, LogId.BranchBetweenSections, $"Cannot branch between section.");
+                        return false;
+                    }
+
+                    // Adjust realtive to current position
+                    value -= @base.Value;
+                }
+
+                _immediate = (short)value;
                 return true;
 
             // Invalid target type

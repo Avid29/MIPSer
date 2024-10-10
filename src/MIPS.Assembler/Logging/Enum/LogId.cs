@@ -23,6 +23,7 @@ public enum LogId
     InvalidInstructionArgCount,
     InvalidRegisterArgument,
     InvalidAddressOffsetArgument,
+    BranchBetweenSections,
 
     // Instruction parser warnings
     IntegerTruncated,
