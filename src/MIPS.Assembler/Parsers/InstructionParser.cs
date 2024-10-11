@@ -152,7 +152,7 @@ public struct InstructionParser
         return true;
     }
 
-    private bool TryParseArg(Span<Token> arg, Argument type, out string? relSymbol)
+    private bool TryParseArg(ReadOnlySpan<Token> arg, Argument type, out string? relSymbol)
     {
         relSymbol = null;
 
@@ -207,7 +207,7 @@ public struct InstructionParser
     /// <summary>
     /// Parses an argument as an expression and assigns it to the target component
     /// </summary>
-    private bool TryParseExpressionArg(Span<Token> arg, Argument target, out string? relSymbol)
+    private bool TryParseExpressionArg(ReadOnlySpan<Token> arg, Argument target, out string? relSymbol)
     {
         var parser = new ExpressionParser(_context, _logger);
 
@@ -307,7 +307,7 @@ public struct InstructionParser
     /// <summary>
     /// Parses an argument as an address offset, assigning its components to immediate and $rs.
     /// </summary>
-    private bool TryParseAddressOffsetArg(Span<Token> arg, out string? relSymbol)
+    private bool TryParseAddressOffsetArg(ReadOnlySpan<Token> arg, out string? relSymbol)
     {
         relSymbol = null;
 
@@ -358,7 +358,7 @@ public struct InstructionParser
     /// The register is just the component in parenthesis. The offset is just the component before the parenthesis.
     /// Nothing may follow the parenthesis.
     /// </remarks>
-    private bool TokenizeAddressOffset(Span<Token> arg, out Span<Token> offset, out Token register)
+    private bool TokenizeAddressOffset(ReadOnlySpan<Token> arg, out ReadOnlySpan<Token> offset, out Token register)
     {
         // Find parenthesis start and end
         // Parenthesis wrap the register

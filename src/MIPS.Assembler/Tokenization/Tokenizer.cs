@@ -23,7 +23,7 @@ public class Tokenizer
     private string _cache;
     private TokenType? _tokenType;
 
-    private string? _filename;
+    private readonly string? _filename;
     private int _line;
     private int _column;
 
@@ -73,7 +73,7 @@ public class Tokenizer
         return new TokenizedAssmebly(tokenizer.TokenLines);
     }
 
-    internal static Span<Token> TokenizeLine(string line, string? filename = null, bool expression = false)
+    internal static ReadOnlySpan<Token> TokenizeLine(string line, string? filename = null, bool expression = false)
     {
         Tokenizer tokenizer = new(filename);
 

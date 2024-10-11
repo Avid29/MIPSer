@@ -58,7 +58,7 @@ public struct ExpressionParser
     /// <param name="result">The expression parsed as a integer.</param>
     /// <param name="relSymbol">The symbol referenced if address expression is relocatable. Null otherwise.</param>
     /// <returns><see langword="true"/> if the expression was successfully parsed, <see langword="false"/> otherwise.</returns>
-    public bool TryParse(Span<Token> expression, out Address result, out string? relSymbol)
+    public bool TryParse(ReadOnlySpan<Token> expression, out Address result, out string? relSymbol)
     {
         result = default;
         relSymbol = null;

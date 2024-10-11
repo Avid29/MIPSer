@@ -16,7 +16,7 @@ public static class TokenSpanExtensions
     /// <param name="line">The line to trim.</param>
     /// <param name="type">The type of the </param>
     /// <param name="trimmed">The label on the line, if any.</param>
-    public static Span<Token> TrimType(this Span<Token> line, TokenType type, out Token? trimmed)
+    public static ReadOnlySpan<Token> TrimType(this ReadOnlySpan<Token> line, TokenType type, out Token? trimmed)
     {
         trimmed = null;
 
@@ -41,7 +41,7 @@ public static class TokenSpanExtensions
     /// <param name="before">The line before the split.</param>
     /// <param name="split">The token that causes the split.</param>
     /// <returns>The token after the split.</returns>
-    public static Span<Token> SplitAtNext(this Span<Token> line, TokenType type, out Span<Token> before, out Token? split)
+    public static ReadOnlySpan<Token> SplitAtNext(this ReadOnlySpan<Token> line, TokenType type, out ReadOnlySpan<Token> before, out Token? split)
     {
         for (var i = 0; i < line.Length; i++)
         {

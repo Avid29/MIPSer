@@ -14,9 +14,9 @@ using System.Runtime.CompilerServices;
 
 namespace MIPS.Assembler;
 
-public unsafe partial class Assembler
+public partial class Assembler
 {
-    private void AlignmentPass(AssemblyLine line)
+    private unsafe void AlignmentPass(AssemblyLine line)
     {
         // Parse as macro
         if (line.Type is LineType.Macro)

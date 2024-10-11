@@ -22,8 +22,6 @@ namespace MIPS.Assembler;
 // The second pass will then assemble all instructions and overwrite the blank allocations.
 //
 
-// TODO: Handle pseudo instructions
-
 /// <summary>
 /// A MIPS assembler.
 /// </summary>

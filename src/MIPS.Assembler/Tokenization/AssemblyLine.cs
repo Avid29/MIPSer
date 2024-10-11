@@ -2,8 +2,6 @@
 
 using MIPS.Assembler.Tokenization.Enums;
 using System;
-using System.Reflection.Emit;
-using System.Reflection.PortableExecutable;
 
 namespace MIPS.Assembler.Tokenization;
 
@@ -12,14 +10,14 @@ namespace MIPS.Assembler.Tokenization;
 /// </summary>
 public ref struct AssemblyLine
 {
-    private Span<Token> _tokens;
-    private Span<Token> _argPosition;
+    private ReadOnlySpan<Token> _tokens;
+    private ReadOnlySpan<Token> _argPosition;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblyLine"/> struct.
     /// </summary>
     /// <param name="tokens"></param>
-    public AssemblyLine(Span<Token> tokens)
+    public AssemblyLine(ReadOnlySpan<Token> tokens)
     {
         _tokens = tokens;
         SubTokenize();
@@ -60,7 +58,7 @@ public ref struct AssemblyLine
     /// <summary>
     /// Gets the args for either the instruction or directive.
     /// </summary>
-    public Span<Token> Args { get; private set; }
+    public ReadOnlySpan<Token> Args { get; private set; }
 
     /// <summary>
     /// Gets the macro declared on the line, if any.
@@ -70,7 +68,7 @@ public ref struct AssemblyLine
     /// <summary>
     /// Gets whether or not all args have been read.
     /// </summary>
-    public bool ArgsEnd => _argPosition.IsEmpty;
+    public readonly bool ArgsEnd => _argPosition.IsEmpty;
 
     /// <summary>
     /// Gets the expression assigned to the macro.
@@ -78,13 +76,13 @@ public ref struct AssemblyLine
     /// <remarks>
     /// This includes the assignment token.
     /// </remarks>
-    public readonly Span<Token> MacroExpression => Args;
+    public readonly ReadOnlySpan<Token> MacroExpression => Args;
 
     /// <summary>
     /// Gets the next arg from the arg span.
     /// </summary>
     /// <returns>A span of tokens making an arg.</returns>
-    public Span<Token> GetNextArg()
+    public ReadOnlySpan<Token> GetNextArg()
     {
         _argPosition = _argPosition.SplitAtNext(TokenType.Comma, out var before, out _);
         return before;
@@ -103,7 +101,7 @@ public ref struct AssemblyLine
         Type = LineType.None;
 
         // Grab the label
-        Span<Token> line = _tokens.TrimType(TokenType.LabelDeclaration, out var label);
+        ReadOnlySpan<Token> line = _tokens.TrimType(TokenType.LabelDeclaration, out var label);
         Label = label;
 
         if (line.Length == 0)

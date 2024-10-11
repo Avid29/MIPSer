@@ -48,7 +48,7 @@ public readonly struct DirectiveParser
     /// <param name="args">The directive arguments.</param>
     /// <param name="directive">The <see cref="Directive"/>.</param>
     /// <returns>Whether or not an directive was parsed.</returns>
-    public bool TryParseDirective(Token name, Span<Token> args, out Directive? directive)
+    public bool TryParseDirective(Token name, ReadOnlySpan<Token> args, out Directive? directive)
     {
         directive = null;
 
@@ -74,7 +74,7 @@ public readonly struct DirectiveParser
         };
     }
 
-    private bool TryParseSection(Token name, Span<Token> args, out Directive? directive)
+    private bool TryParseSection(Token name, ReadOnlySpan<Token> args, out Directive? directive)
     {
         directive = null;
 
@@ -96,7 +96,7 @@ public readonly struct DirectiveParser
         return true;
     }
 
-    private bool TryParseGlobal(Span<Token> args, out Directive? directive)
+    private bool TryParseGlobal(ReadOnlySpan<Token> args, out Directive? directive)
     {
         directive = null;
 
@@ -117,7 +117,7 @@ public readonly struct DirectiveParser
         return true;
     }
 
-    private bool TryParseAlign(Span<Token> args, out Directive? directive)
+    private bool TryParseAlign(ReadOnlySpan<Token> args, out Directive? directive)
     {
         directive = null;
 
@@ -145,7 +145,7 @@ public readonly struct DirectiveParser
         return true;
     }
 
-    private bool TryParseSpace(Span<Token> args, out Directive? directive)
+    private bool TryParseSpace(ReadOnlySpan<Token> args, out Directive? directive)
     {
         directive = null;
 
@@ -173,7 +173,7 @@ public readonly struct DirectiveParser
         return true;
     }
 
-    private bool TryParseData<T>(Token name, Span<Token> args, out Directive? directive)
+    private bool TryParseData<T>(Token name, ReadOnlySpan<Token> args, out Directive? directive)
         where T : unmanaged, IBinaryInteger<T>
     {
         directive = null;
@@ -187,7 +187,7 @@ public readonly struct DirectiveParser
         // Allocate space
         var bytes = new byte[args.Length * argSize];
 
-        Span<Token> arg;
+        ReadOnlySpan<Token> arg;
         do
         {
             // Split the argument out of the span.
@@ -210,7 +210,7 @@ public readonly struct DirectiveParser
         return true;
     }
 
-    private bool TryParseAscii(Span<Token> args, bool terminate, out Directive? directive)
+    private bool TryParseAscii(ReadOnlySpan<Token> args, bool terminate, out Directive? directive)
     {
         directive = null;
 
@@ -218,7 +218,7 @@ public readonly struct DirectiveParser
 
         var bytes = new List<byte>();
 
-        Span<Token> arg;
+        ReadOnlySpan<Token> arg;
         do
         {
             args = args.SplitAtNext(TokenType.Comma, out arg, out _);
