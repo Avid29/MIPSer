@@ -74,19 +74,24 @@ public class AssemblerTests
 
     private static async Task RunFileTest(string fileName, params (LogId, long)[] expected)
     {
+        // Load the file
         var path = TestFilePathing.GetAssemblyFilePath(fileName);
         var stream = File.Open(path, FileMode.Open);
+
+        // Run the test
         await RunTest(stream, fileName, expected);
     }
 
     private static async Task RunStringTest(string str, params LogId[] expected)
     {
+        // Wrap the test in a stream and run the test
         var stream = new MemoryStream(Encoding.Default.GetBytes(str));
         await RunTest(stream, null, expected.Select((x) => (x, 1L)).ToArray());
     }
 
     private static async Task RunTest(Stream stream, string? filename = null, params (LogId, long)[] expected)
     {
+        // Run assembler
         var assembler = await Assembler.AssembleAsync(stream, filename);
 
         // Find expected errors, warnings, and messages
@@ -99,19 +104,20 @@ public class AssemblerTests
             }
         }
 
-        Stream result = new MemoryStream();
+        // Don't run output validation for fileless tests
         if (filename is null)
             return;
 
+        // Assembly failed. No expected output
         if (assembler.Failed)
             return;
 
+        // Load output file
         var output = TestFilePathing.GetMatchingObjectFilePath(filename);
-        result = File.Open(output, FileMode.OpenOrCreate);
+        Stream result = File.Open(output, FileMode.OpenOrCreate);
 
+        // Write the module and assert validity
         var module = assembler.WriteModule(result);
-        result.Flush();
-
         Assert.IsNotNull(module);
     }
 }

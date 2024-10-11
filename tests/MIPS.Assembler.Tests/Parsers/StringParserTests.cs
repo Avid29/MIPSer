@@ -17,12 +17,14 @@ public class StringParserTests
     [TestMethod("Hello\nWorld")]
     public void HelloWorld2LineTest() => RunTest("\"Hello\\nWorld\"", "Hello\nWorld");
 
-    private static void RunTest(string input, string expected)
+    private static void RunTest(string input, string? expected = null)
     {
+        // Declare parser and attempt parsing
         var parser = new StringParser();
+        if(!parser.TryParseString(input, out var actual))
+            Assert.IsNull(expected);
 
-        bool result = parser.TryParseString(input, out var actual);
-
+        // Assert the result matches the expected
         Assert.AreEqual(expected, actual);
     }
 }

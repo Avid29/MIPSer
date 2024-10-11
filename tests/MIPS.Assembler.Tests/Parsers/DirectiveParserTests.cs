@@ -3,6 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Assembler.Models.Directives;
+using MIPS.Assembler.Models.Directives.Abstract;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
@@ -40,14 +41,29 @@ public class DirectiveParserTests
     [TestMethod(Asciiz)]
     public void AsciizTest() => RunDataTest(Asciiz, Encoding.ASCII.GetBytes("Test String\0"));
 
-    public static void RunGlobalTest(string input, string expected)
+    private static Directive ParseDirective(string input)
     {
         var parser = new DirectiveParser();
 
+        // Tokenize directive
         var tokens = Tokenizer.TokenizeLine(input, nameof(RunGlobalTest));
         var args = tokens.TrimType(TokenType.Directive, out var name);
-        parser.TryParseDirective(name!, args, out var directive);
+        if (name is null)
+            Assert.Fail();
 
+        if(!parser.TryParseDirective(name, args, out var directive))
+            Assert.Fail();
+
+        if (directive is null)
+            Assert.Fail();
+
+        return directive;
+    }
+
+    private static void RunGlobalTest(string input, string expected)
+    {
+        // Get directive and validate type
+        var directive = ParseDirective(input);
         if (directive is not GlobalDirective)
             Assert.Fail();
 
@@ -57,14 +73,10 @@ public class DirectiveParserTests
         Assert.AreEqual(expected, actual);
     }
 
-    public static void RunDataTest(string input, params byte[] expected)
+    private static void RunDataTest(string input, params byte[] expected)
     {
-        var parser = new DirectiveParser();
-
-        var tokens = Tokenizer.TokenizeLine(input, nameof(RunDataTest));
-        var args = tokens.TrimType(TokenType.Directive, out var name);
-        parser.TryParseDirective(name!, args, out var directive);
-
+        // Get directive and validate type
+        var directive = ParseDirective(input);
         if (directive is not DataDirective)
             Assert.Fail();
 

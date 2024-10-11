@@ -13,6 +13,8 @@ public class InstructionTests
     [TestMethod("Set OpCode")]
     public void SetOpCodeTest()
     {
+        // This test sets the opcode to each potential operation code with a random address.
+        // It then asserts the readback is equivilient.
         for (var i = OperationCode.RType; i <= OperationCode.StoreWordCoprocessor3; i++)
         {
             var instruction = Instruction.Create(i, RandomAddress(false));
@@ -23,6 +25,8 @@ public class InstructionTests
     [TestMethod("Set Registers")]
     public void SetRegistersTest()
     {
+        // This test sets each register argument to each potential register with an otherwise random instruction.
+        // It then asserts the readback is equivilient.
         for (var i = Register.Zero; i <= Register.ReturnAddress; i++)
         {
             var instruction = Instruction.Create(RandomOpCode(false), i, RandomRegister(false), RandomImmediate(false));
@@ -39,6 +43,8 @@ public class InstructionTests
     [TestMethod("Set Address")]
     public void SetAddressTest()
     {
+        // This test sets the address to a random value 20 times.
+        // It asserts the readback is equivilient each time.
         for (var i = 0; i < 20; i++)
         {
             var addr = RandomAddress(true);

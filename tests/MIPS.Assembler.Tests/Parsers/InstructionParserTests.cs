@@ -129,13 +129,16 @@ public class InstructionParserTests
     {
         bool succeeds = expected is not null;
 
+        // Initialize parser
         var logger = new AssemblerLogger();
         var parser = new InstructionParser(null, logger);
 
+        // Parse instruction
         var tokens = Tokenizer.TokenizeLine(input, nameof(RunTest));
         var args = tokens.TrimType(TokenType.Instruction, out var name);
         var succeeded = parser.TryParse(name!, args, out var actual);
 
+        // Validate results
         Assert.AreEqual(succeeds, succeeded);
         if (succeeds)
         {

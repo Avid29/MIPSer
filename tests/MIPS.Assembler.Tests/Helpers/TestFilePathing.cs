@@ -37,6 +37,12 @@ public static class TestFilePathing
         return path;
     }
 
+    /// <summary>
+    /// Gets the path of an object file to match the <paramref name="assemblyFile"/>.
+    /// </summary>
+    /// <param name="assemblyFile">The assembly file to match.</param>
+    /// <param name="objFolder">Whether or not to use an obj sub-folder.</param>
+    /// <returns>The path of the object file.</returns>
     public static string GetMatchingObjectFilePath(string assemblyFile, bool objFolder = true)
     {
         var original = GetAssemblyFilePath(assemblyFile, true);

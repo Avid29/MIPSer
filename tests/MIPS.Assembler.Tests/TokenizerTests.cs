@@ -22,6 +22,7 @@ public class TokenizerTests
 
     private static async Task RunFileTest(string testFile, params string[] canon)
     {
+        // Open the file and run the test
         var path = TestFilePathing.GetAssemblyFilePath(testFile);
         var stream = File.Open(path, FileMode.Open);
         await RunTest(stream, canon, testFile);
@@ -29,7 +30,10 @@ public class TokenizerTests
 
     private static async Task RunTest(Stream stream, string[] canon, string? fileName = null)
     {
+        // Run the test and assert the expected number of tokens came back
         var results = await Tokenizer.TokenizeAsync(stream, fileName);
         Assert.AreEqual(canon.Length, results.TokenCount);
+
+        // TODO: Assert token strings match
     }
 }
