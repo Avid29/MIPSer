@@ -159,4 +159,7 @@
   <data name="OpenFileMFI.Text" xml:space="preserve">
     <value>Open File</value>
   </data>
+  <data name="NewFile" xml:space="preserve">
+    <value>New File</value>
+  </data>
 </root>

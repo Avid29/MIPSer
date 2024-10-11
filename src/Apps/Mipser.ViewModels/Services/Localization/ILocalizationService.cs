@@ -19,7 +19,7 @@ public interface ILocalizationService
     /// <summary>
     /// Gets or sets the app's language override.
     /// </summary>
-    public string LanguageOverride { get; set; }
+    string LanguageOverride { get; set; }
 
     /// <summary>
     /// Gets a value indicating whether or not the current language is written right to left.
@@ -34,5 +34,5 @@ public interface ILocalizationService
     /// <summary>
     /// Gets the list of available languages.
     /// </summary>
-    public IReadOnlyList<string> AvailableLanguages { get; }
+    IReadOnlyList<string> AvailableLanguages { get; }
 }

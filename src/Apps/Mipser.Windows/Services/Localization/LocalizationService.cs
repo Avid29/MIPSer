@@ -43,5 +43,4 @@ public class LocalizationService : ILocalizationService
 
     /// <inheritdoc/>
     public IReadOnlyList<string> AvailableLanguages => ApplicationLanguages.ManifestLanguages;
-
 }

@@ -1,7 +1,9 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Mipser.Services.Files.Models;
+using Mipser.Services.Localization;
 
 namespace Mipser.Bindables.Files.Abstract;
 
@@ -18,5 +20,5 @@ public abstract class BindableFilesItemBase : ObservableObject
     /// <summary>
     /// Gets the name of the file.
     /// </summary>
-    public string Name => Item?.Name ?? "NewFile"; // TODO: Localize
+    public string Name => Item?.Name ?? Ioc.Default.GetRequiredService<ILocalizationService>()["NewFile"];
 }
