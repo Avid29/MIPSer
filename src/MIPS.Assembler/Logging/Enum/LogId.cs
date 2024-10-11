@@ -9,40 +9,38 @@ public enum LogId
 {
 #pragma warning disable CS1591
 
-    // General errors
+    // General
     IllegalSymbolName,
     DuplicateSymbolDefinition,
     TokenizerError,
 
-    // Macro errors
+    // Macros
     MacroMissingValue,
     MacroCannotBeRelocatable,
 
-    // Instruction parser errors
+    // Instruction parser 
     InvalidInstructionName,
     InvalidInstructionArgCount,
     InvalidRegisterArgument,
     InvalidAddressOffsetArgument,
     BranchBetweenSections,
-
-    // Instruction parser warnings
     IntegerTruncated,
     RelocatableReferenceInShift,
-
-    // Instruction parser messages
     ZeroRegWriteBack,
 
-    // Expression parser errors
+    // Expression parser
     UnparsableExpression,
     InvalidExpressionOperation,
     InvalidOperationOnRelocatable,
 
-    // Directive parser errors
+    // Directive parser
     InvalidDirectiveDataArg,
     InvalidDirectiveArg,
     InvalidDirectiveArgCount,
+    LargeAlignment,
+    LargeSpacing,
 
-    // Char/String parsing errors
+    // Char/String parsing
     NotAString,
     MultiLineString,
     InvalidCharLiteral,

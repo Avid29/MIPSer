@@ -126,7 +126,7 @@ public partial class Assembler
 
     private void HandleDirective(AssemblyLine line)
     {
-        var parser = new DirectiveParser();
+        var parser = new DirectiveParser(Context, _logger);
 
         var name = line.Directive;
         if (name is null || !parser.TryParseDirective(line, out var directive))

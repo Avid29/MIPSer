@@ -3,10 +3,12 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Directives;
 using MIPS.Assembler.Models.Directives.Abstract;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
+using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using System;
 using System.Collections.Generic;
@@ -24,20 +26,15 @@ namespace MIPS.Assembler.Parsers;
 /// </summary>
 public readonly struct DirectiveParser
 {
+    private readonly AssemblerContext? _context;
     private readonly ILogger? _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DirectiveParser"/> struct.
     /// </summary>
-    public DirectiveParser() : this(null)
+    public DirectiveParser(AssemblerContext context, ILogger? logger = null)
     {
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DirectiveParser"/> struct.
-    /// </summary>
-    public DirectiveParser(ILogger? logger)
-    {
+        _context = context;
         _logger = logger;
     }
 
@@ -82,7 +79,7 @@ public readonly struct DirectiveParser
 
         if (args.Count is not 0)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, "Section directives can not be parsed any arguments.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, "Section directives can not be parsed with any arguments.");
             return false;
         }
 
@@ -100,6 +97,8 @@ public readonly struct DirectiveParser
 
     private bool TryParseGlobal(AssemblyLineArgs args, out Directive? directive)
     {
+        // TODO: Can you declare multiple globals on one line?
+
         directive = null;
 
         // Global only takes one argument
@@ -133,26 +132,45 @@ public readonly struct DirectiveParser
             return false;
         }
 
-        // Align only takes immediates as an argument
-        // TODO: Macro support
-        var arg = args[0][0];
-        if (arg.Type is not TokenType.Immediate)
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"{directiveName} only takes an immediate value for an argument. Cannot parse {arg.Source}.");
-        }
+        var parser = new ExpressionParser(_context, _logger);
+        if (!parser.TryParse(args[0], out Address result, out _))
+            return false;
 
-        if (!int.TryParse(arg.Source, out var value))
+        if (result.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'{arg.Source}' is not a valid {directiveName} argument.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'' is not a valid {directiveName} argument.");
             return false;
         }
 
+        var value = result.Value;
+
         if (align)
         {
-            directive = new AlignDirective(value);
+            // TODO: Move magic numbers into assembler config
+            const int AlignMessage = 6;
+            const int AlignError = 16;
+
+            if (value > AlignMessage)
+            {
+                _logger?.Log(Severity.Message, LogId.LargeAlignment, $".align will align to the byte, using the argument as an exponent of 2. It is not advised to use a value greater than {AlignMessage}.");
+            }
+
+            if (value > AlignError)
+            {
+                _logger?.Log(Severity.Error, LogId.LargeAlignment, $".align may not be used with a value greater than {AlignError}.");
+            }
+
+            directive = new AlignDirective((int)result.Value);
         }
         else
         {
+            const int SpaceMessage = 4096;
+
+            if (value > SpaceMessage)
+            {
+                _logger?.Log(Severity.Message, LogId.LargeSpacing, $"This .space directive will consume {value} bytes in the binary. ");
+            }
+
             directive = new DataDirective(new byte[value]);
         }
         return true;
@@ -163,7 +181,6 @@ public readonly struct DirectiveParser
     {
         directive = null;
 
-        var format = CultureInfo.InvariantCulture.NumberFormat;
         T value = default;
         int argSize = value.GetByteCount();
 
@@ -174,13 +191,23 @@ public readonly struct DirectiveParser
 
         for (int i = 0; i < args.Count; i++)
         {
-            ReadOnlySpan<Token> arg = args[i];
+            var arg = args[i];
 
-            // TODO: Evaluate expressions
-            if (!T.TryParse(arg[0].Source, format, out value))
+            var parser = new ExpressionParser(_context, _logger);
+            parser.TryParse(arg, out var result, out _);
+
+            if (result.IsRelocatable)
             {
-                _logger?.Log(Severity.Error, LogId.InvalidDirectiveDataArg, $"{arg[0].Source} could not be parsed as a {name}");
+                // TODO: Can data be a reference to a relocatable address?
+                _logger?.Log(Severity.Error, LogId.InvalidDirectiveDataArg, $"{name} allocations cannot be relocatable.");
                 return false;
+            }
+
+            value = T.CreateTruncating(result.Value);
+            if (value != T.CreateSaturating(result.Value))
+            {
+                // TODO: Double check the logic here. Does this always detect the error?
+                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"'' was evaluated to {result.Value} and subsequently truncated to {value}.");
             }
 
             value.WriteBigEndian(bytes, pos);

@@ -217,8 +217,10 @@ public struct ExpressionParser
 
     private bool AppendReference(Token t)
     {
-        Guard.IsNotNull(_context);
         Guard.IsNotNull(_tree);
+
+        if (_context is null)
+            return false;
 
         if (!_context.TryGetSymbol(t.Source, out var value))
             return false;

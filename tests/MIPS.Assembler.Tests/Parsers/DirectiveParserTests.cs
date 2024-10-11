@@ -12,6 +12,8 @@ using System.Text;
 
 namespace MIPS.Assembler.Tests.Parsers;
 
+// TODO: Test expressions in directive args
+
 [TestClass]
 public class DirectiveParserTests
 {
