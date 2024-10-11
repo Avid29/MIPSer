@@ -64,14 +64,16 @@ public struct InstructionParser
     /// <summary>
     /// Attempts to parse an instruction from a name and a list of arguments.
     /// </summary>
-    /// <param name="name">The instruction name.</param>
-    /// <param name="args">The instruction arguments.</param>
+    /// <param name="line">The assembly line to parse.</param>
     /// <param name="parsedInstruction">The resulting <see cref="ParsedInstruction"/>.</param>
     /// <returns>Whether or not an instruction was parsed.</returns>
-    public bool TryParse(Token name, Span<Token> args, [NotNullWhen(true)] out ParsedInstruction? parsedInstruction)
+    public bool TryParse(AssemblyLine line, [NotNullWhen(true)] out ParsedInstruction? parsedInstruction)
     {
         string? relSymbol = null;
         parsedInstruction = null;
+
+        var name = line.Instruction;
+        Guard.IsNotNull(name);
 
         // Get instruction metadata from name
         if (!ConstantTables.TryGetInstruction(name.Source, out _meta))
@@ -88,7 +90,7 @@ public struct InstructionParser
         Argument[] pattern = _meta.ArgumentPattern;
 
         int argC;
-        for (argC = 0; !args.IsEmpty; argC++)
+        for (argC = 0; !line.ArgsEnd; argC++)
         {
             // Assert proper argument count for instruction
             if (argC >= pattern.Length)
@@ -98,7 +100,7 @@ public struct InstructionParser
             }
 
             // Split out next arg
-            args = args.SplitAtNext(TokenType.Comma, out var arg, out _);
+            var arg = line.GetNextArg();
             TryParseArg(arg, pattern[argC], out relSymbol);
         }
 

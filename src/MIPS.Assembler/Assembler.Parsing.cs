@@ -5,71 +5,85 @@ using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Directives;
 using MIPS.Assembler.Models.Directives.Abstract;
-using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Instructions;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
 namespace MIPS.Assembler;
 
 public unsafe partial class Assembler
 {
-    private void AlignmentPass(Span<Token> line)
+    private void AlignmentPass(AssemblyLine line)
     {
         // Parse as macro
-        if (TokenizeMacro(line, out var macroName, out var expTokens))
+        if (line.Type is LineType.Macro)
         {
-            HandleMacro(macroName, expTokens);
+            HandleMacro(line);
             return;
         }
-
-        // Get the parts of the line
-        TokenizeLine(line, out var label, out var instTokens, out var dirTokens);
 
         // Create symbol if line is labeled
-        if (label is not null)
-            CreateSymbol(label.Source);
+        if (line.Label is not null)
+            CreateSymbol(line.Label.Source);
 
         // Pad instruction sized allocation if instruction is present
-        if (PeekInstruction(instTokens, out var meta))
+        if (line.Type is LineType.Instruction)
         {
+            Guard.IsNotNull(line.Instruction);
+
+            // Get the number of real instructions to perform the instruction on this line.
+            // We'll default to 1, because if the instruction fails to parse we'll replace it
+            // with a NOP on the second pass.
+            int realizedCount = 1;
+            if(ConstantTables.TryGetInstruction(line.Instruction.Source, out var meta))
+               realizedCount = meta.RealizedInstructionCount;
+
             // Multiply by realized instruction count to handle pseudo instructions
-            Append(sizeof(Instruction) * meta.RealizedInstructionCount);
+            Append(sizeof(Instruction) * realizedCount);
         }
-
+        
         // Make allocations if directive is present
         // NOTE: Directive allocations are made in both passes
-        if (!dirTokens.IsEmpty)
-            HandleDirective(dirTokens);
+        if (line.Type is LineType.Directive)
+            HandleDirective(line);
     }
 
-    private void RealizationPass(Span<Token> line)
+    private void RealizationPass(AssemblyLine line)
     {
-        // This line is a macro. Skip on realization
-        if (TokenizeMacro(line, out _, out _))
-            return;
+        switch (line.Type)
+        {
+            case LineType.Instruction:
+                HandleInstruction(line);
+                return;
+                
+            // Make allocations if directive is present
+            // NOTE: Directive allocations are made in both passes
+            case LineType.Directive:
+                HandleDirective(line);
+                return;
 
-        // Get the parts of the line
-        // Discard labels. They are already parsed
-        TokenizeLine(line, out _, out var instTokens, out var dirTokens);
-
-        // Handle instructions
-        if (!instTokens.IsEmpty)
-            HandleInstruction(instTokens);
-
-        // Make allocations if directive is present
-        // NOTE: Directive allocations are made in both passes
-        if (!dirTokens.IsEmpty)
-            HandleDirective(dirTokens);
+            // Macros can be skipped on realization pass
+            case LineType.Macro:
+                return;
+        }
     }
 
-    private void HandleMacro(Token name, Span<Token> expression)
+    private void HandleMacro(AssemblyLine line)
     {
         var expressionParser = new ExpressionParser(Context, _logger);
+
+        // Grab name and expression
+        var name = line.Macro;
+        var expression = line.MacroExpression;
+        expression = expression.TrimType(TokenType.Assign, out var trimmed);
+
+        // Ensure the name is not null, and that an assignment
+        // token was trimmed from the expression.
+        Guard.IsNotNull(name);
+        Guard.IsNotNull(trimmed);
 
         if (expression.IsEmpty)
         {
@@ -89,18 +103,16 @@ public unsafe partial class Assembler
         CreateSymbol(name.Source, address);
     }
 
-    private void HandleInstruction(Span<Token> instructionTokens)
+    private void HandleInstruction(AssemblyLine line)
     {
+        // Try to parse the line
         var parser = new InstructionParser(Context, _logger);
-        
-        // Get the parts of the instruction and parse
-        var args = instructionTokens.TrimType(TokenType.Instruction, out var name);
-        if (name is null)
+        if (!parser.TryParse(line, out var instruction))
+        {
+            // Append a NOP in place of the unparsable instruction
+            Append((uint)Instruction.NOP);
             return;
-
-        // Try to parse instruction from name and arguments
-        if (!parser.TryParse(name, args, out var instruction))
-            return;
+        }
 
         // Track relocatable reference
         if (instruction.SymbolReferenced is not null)
@@ -112,11 +124,12 @@ public unsafe partial class Assembler
         Append(Unsafe.As<uint[]>(instruction.Realize()));
     }
 
-    private void HandleDirective(Span<Token> directiveTokens)
+    private void HandleDirective(AssemblyLine line)
     {
         var parser = new DirectiveParser();
 
-        var args = directiveTokens.TrimType(TokenType.Directive, out var name);
+        var name = line.Directive;
+        var args = line.Args;
 
         if (name is null || !parser.TryParseDirective(name, args, out var directive))
             return;
@@ -159,62 +172,5 @@ public unsafe partial class Assembler
         }
 
         return true;
-    }
-
-    private static bool TokenizeMacro(Span<Token> line, [NotNullWhen(true)] out Token? macro, out Span<Token> expression)
-    {
-        macro = null;
-        expression = [];
-
-        if (line.IsEmpty)
-            return false;
-
-        if (line[0].Type is not TokenType.MacroDefinition)
-            return false;
-
-        if (line[1].Type is not TokenType.Assign)
-            ThrowHelper.ThrowArgumentException("Marco definition must be followed by assignment token '='");
-
-        macro = line[0];
-        expression = line[2..];
-        return true;
-    }
-
-    private static bool PeekInstruction(Span<Token> instruction, out InstructionMetadata meta)
-    {
-        meta = default;
-
-        if (instruction.IsEmpty)
-            return false;
-
-        var name = instruction[0];
-        if(!ConstantTables.TryGetInstruction(name.Source, out meta))
-            return false;
-
-        return true;
-    }
-
-    private static void TokenizeLine(Span<Token> line, out Token? label, out Span<Token> instruction, out Span<Token> directive)
-    {
-        instruction = null;
-        directive = null;
-
-        // Find and parse label if present
-        line = line.TrimType(TokenType.LabelDeclaration, out label);
-
-        // Line contains neither a directive nor an instruction
-        if (line.Length == 0)
-            return;
-
-        // Assign directive or instruction as appropriate
-        switch (line[0].Type)
-        {
-            case TokenType.Directive:
-                directive = line;
-                break;
-            case TokenType.Instruction:
-                instruction = line;
-                break;
-        }
     }
 }
