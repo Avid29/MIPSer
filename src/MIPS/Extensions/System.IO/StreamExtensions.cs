@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using System.Buffers;
 using System.Numerics;
 
 namespace MIPS.Extensions.System.IO;
@@ -10,37 +11,82 @@ namespace MIPS.Extensions.System.IO;
 public static class StreamExtensions
 {
     /// <summary>
-    /// Writes a <see cref="IBinaryInteger{TSelf}"/> to a stream.
+    /// Reads a <see cref="IBinaryInteger{TSelf}"/> from a stream.
     /// </summary>
+    /// <remarks>
+    /// MIPS is big endian, so this method uses big endian.
+    /// </remarks>
     /// <typeparam name="T">The <see cref="IBinaryInteger{TSelf}"/> type.</typeparam>
     /// <param name="stream">The stream to write to.</param>
-    /// <returns>The next <typeparamref name="T"/> from the stream.</returns>
-    public static T Read<T>(this Stream stream)
+    /// <param name="value">The next <typeparamref name="T"/> from the stream.</param>
+    /// <returns><see cref="true"/> if value was successfully read. <see cref="false"/> otherwise.</returns>
+    public static bool TryRead<T>(this Stream stream, out T value)
         where T : unmanaged, IBinaryInteger<T>
     {
-        T value = default;
+        // Initialize results
+        bool success = false;
+        value = default;
+
+        // Create temporary array
+        byte[]? pooledArray = null;
         var byteCount = value.GetByteCount();
-        var bytes = new byte[byteCount];
-        stream.ReadExactly(bytes, 0, byteCount);
-        T.TryReadBigEndian(bytes, false, out value);
-        return value;
+        var bytes = byteCount <= 8 ?
+            stackalloc byte[byteCount] :
+            (pooledArray = ArrayPool<byte>.Shared.Rent(byteCount));
+
+        // Read bytes and parse
+        int realCount = stream.Read(bytes);
+        if (realCount == byteCount)
+        {
+            success = T.TryReadBigEndian(bytes, false, out value);
+        }
+
+        // Free temporary array
+        if (pooledArray is not null)
+        {
+            ArrayPool<byte>.Shared.Return(pooledArray);
+        }
+
+        return success;
     }
 
     /// <summary>
     /// Writes a <see cref="IBinaryInteger{TSelf}"/> to a stream.
     /// </summary>
+    /// <remarks>
+    /// MIPS is big endian, so this method uses big endian.
+    /// </remarks>
     /// <typeparam name="T">The <see cref="IBinaryInteger{TSelf}"/> type.</typeparam>
     /// <param name="stream">The stream to write to.</param>
     /// <param name="value">The value to write to the stream.</param>
-    public static void Write<T>(this Stream stream, T value)
+    /// <returns><see cref="true"/> if value was successfully written. <see cref="false"/> otherwise.</returns>
+    public static bool TryWrite<T>(this Stream stream, T value)
         where T : unmanaged, IBinaryInteger<T>
     {
-        // TODO: Someday I feel more ambitious 
-        // https://discord.com/channels/@me/985320338713886720/1118495512157503519
+        // Initialize results
+        bool success = false;
+        value = default;
 
+        // Create temporary array
+        byte[]? pooledArray = null;
         var byteCount = value.GetByteCount();
-        Span<byte> bytes = byteCount < 8 ? stackalloc byte[byteCount] : new byte[byteCount];
-        value.TryWriteBigEndian(bytes, out _);
-        stream.Write(bytes);
+        var bytes = byteCount <= 8 ?
+            stackalloc byte[byteCount] :
+            (pooledArray = ArrayPool<byte>.Shared.Rent(byteCount));
+
+        // Write bytes
+        success = value.TryWriteBigEndian(bytes, out var bytesWritten);
+        if (success && bytesWritten == byteCount)
+        {
+            stream.Write(bytes);
+        }
+
+        // Free temporary array
+        if (pooledArray is not null)
+        {
+            ArrayPool<byte>.Shared.Return(pooledArray);
+        }
+
+        return success;
     }
 }

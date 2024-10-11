@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Extensions.System.IO;
+using System.Runtime.CompilerServices;
 
 namespace MIPS.Models.Modules;
 
@@ -165,23 +166,44 @@ public unsafe struct Header
     }
 
     /// <summary>
-    /// Attempts to load a header from a <see cref="Stream"/>.
+    /// Attempts to read a header from a <see cref="Stream"/>.
     /// </summary>
     /// <param name="stream">The stream of the module.</param>
     /// <param name="header">The header of the module.</param>
     /// <returns><see cref="true"/> if header was successfully read. <see cref="false"/> otherwise.</returns>
-    public static bool TryLoadHeader(Stream stream, out Header header)
+    public static bool TryReadHeader(Stream stream, out Header header)
     {
         header = default;
-        header.Magic = stream.Read<ushort>();
-        header.Version = stream.Read<ushort>();
-        header.Flags = stream.Read<uint>();
-        header.EntryPoint = stream.Read<uint>();
 
+        // Pre-declare explicit header components
+        Unsafe.SkipInit<ushort>(out var magic);
+        Unsafe.SkipInit<ushort>(out var version);
+        Unsafe.SkipInit<uint>(out var flags);
+        Unsafe.SkipInit<uint>(out var entryPoint);
+
+        // Try reading explict header components
+        bool success = stream.TryRead(out magic) && 
+                       stream.TryRead(out version) &&
+                       stream.TryRead(out flags) &&
+                       stream.TryRead(out entryPoint);
+        
+        // Return if component reading failed
+        if (!success)
+            return false;
+
+        // Assign explicit header components
+        header.Magic = magic;
+        header.Version = version;
+        header.Flags = flags;
+        header.EntryPoint = entryPoint;
+        
+        // Try loading size components
         for (int i = 0; i < 10; i++)
         {
-            // Read sizes
-            header._sizes[i] = stream.Read<uint>();
+            if(!stream.TryRead<uint>(out var x))
+                return false;
+
+            header._sizes[i] = x;
         }
 
         return true;
@@ -191,16 +213,26 @@ public unsafe struct Header
     /// Writes the header to a stream.
     /// </summary>
     /// <param name="stream">The stream to write the header on.</param>
-    public void WriteHeader(Stream stream)
+    /// <returns><see cref="true"/> if header was successfully written. <see cref="false"/> otherwise.</returns>
+    public bool TryWriteHeader(Stream stream)
     {
-        stream.Write(Magic);
-        stream.Write(Version);
-        stream.Write(Flags);
-        stream.Write(EntryPoint);
+        // Try write explicit header components
+        bool success = stream.TryWrite(Magic) &&
+                       stream.TryWrite(Version) &&
+                       stream.TryWrite(Flags) && 
+                       stream.TryWrite(EntryPoint);
+
+        // Return if component writing failed
+        if (!success)
+            return false;
 
         for (int i = 0; i < 10; i++)
-            stream.Write(_sizes[i]);
+        {
+            if(!stream.TryWrite(_sizes[i]))
+                return false;
+        }
 
         stream.Flush();
+        return true;
     }
 }

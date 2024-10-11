@@ -68,7 +68,7 @@ public partial class ModuleConstruction
     /// <summary>
     /// Gets the fully assembled object module.
     /// </summary>
-    public Module Finish(Stream stream)
+    public Module? Finish(Stream stream)
     {
         // TODO: Flags and entry point properly
 
@@ -86,14 +86,17 @@ public partial class ModuleConstruction
             (uint)_references.Count,
             (uint)_definitions.Count);
 
-        header.WriteHeader(stream);
+        // Try to write the header
+        if(!header.TryWriteHeader(stream))
+            return null;
 
         // Append segments to stream
         ResetStreamPositions();
         foreach(var section in _sections)
             section.CopyTo(stream);
-
         stream.Flush();
-        return new Module(stream);
+
+        stream.Position = 0;
+        return Module.Load(stream);
     }
 }

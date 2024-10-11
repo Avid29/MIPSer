@@ -87,14 +87,14 @@ public class AssemblerTests
 
     private static async Task RunTest(Stream stream, string? filename = null, params (LogId, long)[] expected)
     {
-        var module = await Assembler.AssembleAsync(stream, filename);
+        var assembler = await Assembler.AssembleAsync(stream, filename);
 
         // Find expected errors, warnings, and messages
         if (expected.Length != 0)
         {
             foreach (var (id, line) in expected)
             {
-                var logEntry = module.Logs.FirstOrDefault(x => x.Id == id && x.LineNumber == line);
+                var logEntry = assembler.Logs.FirstOrDefault(x => x.Id == id && x.LineNumber == line);
                 Assert.IsNotNull(logEntry, $"Could not find matching {id} error on line {line}");
             }
         }
@@ -103,13 +103,15 @@ public class AssemblerTests
         if (filename is null)
             return;
 
-        if (module.Failed)
+        if (assembler.Failed)
             return;
 
         var output = TestFilePathing.GetMatchingObjectFilePath(filename);
         result = File.Open(output, FileMode.OpenOrCreate);
 
-        module.WriteModule(result);
+        var module = assembler.WriteModule(result);
         result.Flush();
+
+        Assert.IsNotNull(module);
     }
 }
