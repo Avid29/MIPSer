@@ -34,27 +34,19 @@ public static class TokenSpanExtensions
     }
 
     /// <summary>
-    /// Splits a token line at a token type.
+    /// Gets the index of the first instance of a token type in a span of tokens.
     /// </summary>
-    /// <param name="line">The line to split.</param>
-    /// <param name="type">The type to split on.</param>
-    /// <param name="before">The line before the split.</param>
-    /// <param name="split">The token that causes the split.</param>
-    /// <returns>The token after the split.</returns>
-    public static ReadOnlySpan<Token> SplitAtNext(this ReadOnlySpan<Token> line, TokenType type, out ReadOnlySpan<Token> before, out Token? split)
+    /// <param name="line">The line to scan.</param>
+    /// <param name="type">The type of the token to find.</param>
+    /// <returns>The index of the first token of the <paramref name="type"/>, or -1 if none is found.</returns>
+    public static int FindNext(this ReadOnlySpan<Token> line, TokenType type)
     {
-        for (var i = 0; i < line.Length; i++)
+        for (int i = 0; i < line.Length; i++)
         {
             if (line[i].Type == type)
-            {
-                split = line[i];
-                before = line[..i];
-                return line[(i + 1)..];
-            }
+                return i;
         }
 
-        split = null;
-        before = line;
-        return [];
+        return -1;
     }
 }

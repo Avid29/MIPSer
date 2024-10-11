@@ -44,41 +44,43 @@ public readonly struct DirectiveParser
     /// <summary>
     /// Parses a directive from a name and a list of arguments.
     /// </summary>
-    /// <param name="name">The directive name.</param>
-    /// <param name="args">The directive arguments.</param>
+    /// <param name="line">The assembly line.</param>
     /// <param name="directive">The <see cref="Directive"/>.</param>
     /// <returns>Whether or not an directive was parsed.</returns>
-    public bool TryParseDirective(Token name, ReadOnlySpan<Token> args, out Directive? directive)
+    public bool TryParseDirective(AssemblyLine line, out Directive? directive)
     {
         directive = null;
+
+        Guard.IsNotNull(line.Directive);
+        var name = line.Directive;
 
         return name.Source switch
         {
             // Section directives
-            ".text" => TryParseSection(name, args, out directive),
-            ".data" => TryParseSection(name, args, out directive),
+            ".text" => TryParseSection(name, line.Args, out directive),
+            ".data" => TryParseSection(name, line.Args, out directive),
             // Global References
-            ".globl" => TryParseGlobal(args, out directive),
-            // Align
-            ".align" => TryParseAlign(args, out directive),
+            ".globl" => TryParseGlobal(line.Args, out directive),
+            // Align or Space
+            ".align" => TryParseAlignOrSpace(line.Args, out directive, true),
+            ".space" => TryParseAlignOrSpace(line.Args, out directive, false),
             // Data
-            ".space" => TryParseSpace(args, out directive),
-            ".word" => TryParseData<int>(name, args, out directive),
-            ".half" => TryParseData<short>(name, args, out directive),
-            ".byte" => TryParseData<byte>(name, args, out directive),
-            ".ascii" => TryParseAscii(args, false, out directive),
-            ".asciiz" => TryParseAscii(args, true, out directive),
+            ".word" => TryParseData<int>(name, line.Args, out directive),
+            ".half" => TryParseData<short>(name, line.Args, out directive),
+            ".byte" => TryParseData<byte>(name, line.Args, out directive),
+            ".ascii" => TryParseAscii(line.Args, false, out directive),
+            ".asciiz" => TryParseAscii(line.Args, true, out directive),
 
             // Invalid directive
             _ => false
         };
     }
 
-    private bool TryParseSection(Token name, ReadOnlySpan<Token> args, out Directive? directive)
+    private bool TryParseSection(Token name, AssemblyLineArgs args, out Directive? directive)
     {
         directive = null;
 
-        if (args.Length != 0)
+        if (args.Count is not 0)
         {
             _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, "Section directives can not be parsed any arguments.");
             return false;
@@ -96,84 +98,67 @@ public readonly struct DirectiveParser
         return true;
     }
 
-    private bool TryParseGlobal(ReadOnlySpan<Token> args, out Directive? directive)
+    private bool TryParseGlobal(AssemblyLineArgs args, out Directive? directive)
     {
         directive = null;
 
         // Global only takes one argument
-        if (args.Length is not 1)
+        if (args.Count is not 1 && args[0].Length is not 1)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, $".globl only takes one argument. Cannot parse {args.Length} arguments.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, $".globl only takes one argument. Cannot parse {args.Count} arguments.");
             return false;
         }
+
+        var arg = args[0][0];
 
         // Global only takes references as an argument
-        if (args[0].Type is not TokenType.Reference)
+        if (arg.Type is not TokenType.Reference)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $".globl only takes a symbol for an argument. Cannot parse {args[0].Source}.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $".globl only takes a symbol for an argument. Cannot parse {arg.Source}.");
         }
 
-        directive = new GlobalDirective(args[0].Source);
+        directive = new GlobalDirective(arg.Source);
         return true;
     }
 
-    private bool TryParseAlign(ReadOnlySpan<Token> args, out Directive? directive)
+    private bool TryParseAlignOrSpace(AssemblyLineArgs args, out Directive? directive, bool align)
     {
         directive = null;
-
-        // Align only takes one argument
-        if (args.Length != 1)
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, $".align only takes one argument. Cannot parse {args.Length} arguments.");
-            return false;
-        }
-
-        // Align only takes immediates as an argument
-        // TODO: Macro support
-        if (args[0].Type is not TokenType.Immediate)
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $".align only takes an immediate value for an argument. Cannot parse {args[0].Source}.");
-        }
-
-        if (!int.TryParse(args[0].Source, out var boundary))
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'{args[0].Source}' is not a valid .align argument.");
-            return false;
-        }
-
-        directive = new AlignDirective(boundary);
-        return true;
-    }
-
-    private bool TryParseSpace(ReadOnlySpan<Token> args, out Directive? directive)
-    {
-        directive = null;
+        string directiveName = align ? ".align" : ".space";
 
         // Space only takes one argument
-        if (args.Length != 1)
+        if (args.Count is not 1 && args[0].Length is not 1)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, $".space only takes one argument. Cannot parse {args.Length} arguments.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, $"{directiveName} only takes one argument. Cannot parse {args.Count} arguments.");
             return false;
         }
 
         // Align only takes immediates as an argument
         // TODO: Macro support
-        if (args[0].Type is not TokenType.Immediate)
+        var arg = args[0][0];
+        if (arg.Type is not TokenType.Immediate)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $".align only takes an immediate value for an argument. Cannot parse {args[0].Source}.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"{directiveName} only takes an immediate value for an argument. Cannot parse {arg.Source}.");
         }
 
-        if (!int.TryParse(args[0].Source, out var size))
+        if (!int.TryParse(arg.Source, out var value))
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'{args[0].Source}' is not a valid .space argument.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'{arg.Source}' is not a valid {directiveName} argument.");
             return false;
         }
 
-        directive = new DataDirective(new byte[size]);
+        if (align)
+        {
+            directive = new AlignDirective(value);
+        }
+        else
+        {
+            directive = new DataDirective(new byte[value]);
+        }
         return true;
     }
 
-    private bool TryParseData<T>(Token name, ReadOnlySpan<Token> args, out Directive? directive)
+    private bool TryParseData<T>(Token name, AssemblyLineArgs args, out Directive? directive)
         where T : unmanaged, IBinaryInteger<T>
     {
         directive = null;
@@ -185,16 +170,13 @@ public readonly struct DirectiveParser
         int pos = 0;
 
         // Allocate space
-        var bytes = new byte[args.Length * argSize];
+        var bytes = new byte[args.Count * argSize];
 
-        ReadOnlySpan<Token> arg;
-        do
+        for (int i = 0; i < args.Count; i++)
         {
-            // Split the argument out of the span.
-            args = args.SplitAtNext(TokenType.Comma, out arg, out _);
+            ReadOnlySpan<Token> arg = args[i];
 
             // TODO: Evaluate expressions
-
             if (!T.TryParse(arg[0].Source, format, out value))
             {
                 _logger?.Log(Severity.Error, LogId.InvalidDirectiveDataArg, $"{arg[0].Source} could not be parsed as a {name}");
@@ -203,14 +185,13 @@ public readonly struct DirectiveParser
 
             value.WriteBigEndian(bytes, pos);
             pos += argSize;
-        } while (!args.IsEmpty);
+        }
 
-        Array.Resize(ref bytes, pos);
         directive = new DataDirective(bytes);
         return true;
     }
 
-    private bool TryParseAscii(ReadOnlySpan<Token> args, bool terminate, out Directive? directive)
+    private bool TryParseAscii(AssemblyLineArgs args, bool terminate, out Directive? directive)
     {
         directive = null;
 
@@ -218,13 +199,11 @@ public readonly struct DirectiveParser
 
         var bytes = new List<byte>();
 
-        ReadOnlySpan<Token> arg;
-        do
+        for (int i =  0; i < args.Count; i++)
         {
-            args = args.SplitAtNext(TokenType.Comma, out arg, out _);
+            ReadOnlySpan<Token> arg = args[i];
 
             // TODO: Evaluate expressions
-
             // Parse string statement to string literal
             if (!parser.TryParseString(arg[0].Source, out var value))
                 return false;
@@ -236,7 +215,7 @@ public readonly struct DirectiveParser
             // Null terminate string conditionally
             if (terminate)
                 bytes.Add(0);
-        } while (!args.IsEmpty);
+        }
 
         directive = new DataDirective(bytes.ToArray());
         return true;

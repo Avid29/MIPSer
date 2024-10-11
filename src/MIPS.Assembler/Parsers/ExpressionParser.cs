@@ -4,7 +4,6 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
-using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Parsers.Enums;
 using MIPS.Assembler.Parsers.Expressions;
 using MIPS.Assembler.Parsers.Expressions.Enums;

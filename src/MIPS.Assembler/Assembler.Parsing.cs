@@ -77,7 +77,7 @@ public partial class Assembler
 
         // Grab name and expression
         var name = line.Macro;
-        var expression = line.MacroExpression;
+        var expression = line.Args[0];
         expression = expression.TrimType(TokenType.Assign, out var trimmed);
 
         // Ensure the name is not null, and that an assignment
@@ -129,9 +129,7 @@ public partial class Assembler
         var parser = new DirectiveParser();
 
         var name = line.Directive;
-        var args = line.Args;
-
-        if (name is null || !parser.TryParseDirective(name, args, out var directive))
+        if (name is null || !parser.TryParseDirective(line, out var directive))
             return;
 
         Guard.IsNotNull(directive);

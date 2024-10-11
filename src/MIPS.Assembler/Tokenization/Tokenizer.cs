@@ -45,7 +45,7 @@ public class Tokenizer
         _column = 0;
     }
 
-    private List<List<Token>> TokenLines { get; }
+    private List<AssemblyLine> TokenLines { get; }
 
     private List<Token> Tokens { get; set; }
 
@@ -73,7 +73,7 @@ public class Tokenizer
         return new TokenizedAssmebly(tokenizer.TokenLines);
     }
 
-    internal static ReadOnlySpan<Token> TokenizeLine(string line, string? filename = null, bool expression = false)
+    internal static AssemblyLine TokenizeLine(string line, string? filename = null, bool expression = false)
     {
         Tokenizer tokenizer = new(filename);
 
@@ -89,7 +89,7 @@ public class Tokenizer
         }
 
         tokenizer.ParseLine(line);
-        return CollectionsMarshal.AsSpan(tokenizer.TokenLines[0]);
+        return tokenizer.TokenLines[0];
     }
 
     private bool ParseLine(string line)
@@ -104,7 +104,7 @@ public class Tokenizer
             // This line is trashed, but we'll add it and keep going to find any further errors
             if (!status)
             {
-                TokenLines.Add(Tokens);
+                TokenLines.Add(new([..Tokens]));
                 return false;
             }
 
@@ -113,7 +113,7 @@ public class Tokenizer
 
         _line++;
         _column = 0;
-        TokenLines.Add(Tokens);
+        TokenLines.Add(new([..Tokens]));
         return true;
     }
 

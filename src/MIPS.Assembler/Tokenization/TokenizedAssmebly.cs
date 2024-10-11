@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace MIPS.Assembler.Tokenization;
 
@@ -11,12 +10,12 @@ namespace MIPS.Assembler.Tokenization;
 /// </summary>
 public class TokenizedAssmebly
 {
-    private readonly List<List<Token>> _tokenLines;
+    private readonly List<AssemblyLine> _tokenLines;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TokenizedAssmebly"/> class.
     /// </summary>
-    public TokenizedAssmebly(List<List<Token>> tokens) => _tokenLines = tokens;
+    public TokenizedAssmebly(List<AssemblyLine> tokens) => _tokenLines = tokens;
 
     /// <summary>
     /// Gets a line's token list as a span.
@@ -25,7 +24,7 @@ public class TokenizedAssmebly
     /// <returns>The line's token list as a span.</returns>
     public AssemblyLine this[int line]
     {
-        get => new(CollectionsMarshal.AsSpan(_tokenLines[line - 1]));
+        get => _tokenLines[line - 1];
     }
 
     /// <summary>

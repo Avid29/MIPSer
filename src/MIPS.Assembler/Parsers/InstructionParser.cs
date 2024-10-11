@@ -88,27 +88,23 @@ public struct InstructionParser
 
         // Parse argument data according to pattern
         Argument[] pattern = _meta.ArgumentPattern;
-
-        int argC;
-        for (argC = 0; !line.ArgsEnd; argC++)
+        
+        // Assert proper argument count for instruction
+        if (line.Args.Count != pattern.Length)
         {
-            // Assert proper argument count for instruction
-            if (argC >= pattern.Length)
-            {
-                _logger?.Log(Severity.Error, LogId.InvalidInstructionArgCount, $"Instruction '{name}' has too many arguments! Found {argC + 1} arguments when expecting {_meta.ArgumentPattern.Length}.");
-                return false;
-            }
+            var message = line.Args.Count < pattern.Length
+                ? $"Instruction '{name}' doesn't have enough arguments. Found {line.Args.Count} arguments when expecting {_meta.ArgumentPattern.Length}."
+                : $"Instruction '{name}' has too many arguments! Found {line.Args.Count} arguments when expecting {_meta.ArgumentPattern.Length}.";
 
-            // Split out next arg
-            var arg = line.GetNextArg();
-            TryParseArg(arg, pattern[argC], out relSymbol);
+            _logger?.Log(Severity.Error, LogId.InvalidInstructionArgCount, message);
+            return false;
         }
 
-        // Assert proper argument count for instruction
-        if (argC < pattern.Length)
+        for (int i = 0; i < line.Args.Count; i++)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidInstructionArgCount, $"Instruction '{name}' doesn't have enough arguments. Found {argC} arguments when expecting {_meta.ArgumentPattern.Length}.");
-            return false;
+            // Split out next arg
+            var arg = line.Args[i];
+            TryParseArg(arg, pattern[i], out relSymbol);
         }
 
         // Handle the pseudo-instruction condition
@@ -358,11 +354,24 @@ public struct InstructionParser
     /// The register is just the component in parenthesis. The offset is just the component before the parenthesis.
     /// Nothing may follow the parenthesis.
     /// </remarks>
-    private bool TokenizeAddressOffset(ReadOnlySpan<Token> arg, out ReadOnlySpan<Token> offset, out Token register)
+    private readonly bool TokenizeAddressOffset(ReadOnlySpan<Token> arg, out ReadOnlySpan<Token> offset, [NotNullWhen(true)] out Token? register)
     {
+        register = null;
+        offset = arg;
+
         // Find parenthesis start and end
         // Parenthesis wrap the register
-        arg = arg.SplitAtNext(TokenType.OpenParenthesis, out offset, out _);
+        var parIndex = arg.FindNext(TokenType.OpenParenthesis);
+        if (parIndex is -1)
+        {
+            // TODO: Argument printing
+            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '' is not a valid address offset.");
+            return false;
+        }
+
+        offset = arg[..parIndex];
+        arg = arg[(parIndex+1)..];
+
         register = arg[0];
 
         // Parenthesis pair was not found

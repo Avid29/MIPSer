@@ -46,12 +46,11 @@ public class DirectiveParserTests
         var parser = new DirectiveParser();
 
         // Tokenize directive
-        var tokens = Tokenizer.TokenizeLine(input, nameof(RunGlobalTest));
-        var args = tokens.TrimType(TokenType.Directive, out var name);
-        if (name is null)
+        var line = Tokenizer.TokenizeLine(input, nameof(RunGlobalTest));
+        if (line.Directive is null)
             Assert.Fail();
 
-        if(!parser.TryParseDirective(name, args, out var directive))
+        if(!parser.TryParseDirective(line, out var directive))
             Assert.Fail();
 
         if (directive is null)

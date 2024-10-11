@@ -8,16 +8,15 @@ namespace MIPS.Assembler.Tokenization;
 /// <summary>
 /// A line of tokenized line assembly of assembly.
 /// </summary>
-public ref struct AssemblyLine
+public class AssemblyLine
 {
-    private ReadOnlySpan<Token> _tokens;
-    private ReadOnlySpan<Token> _argPosition;
+    private readonly Token[] _tokens;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblyLine"/> struct.
     /// </summary>
     /// <param name="tokens"></param>
-    public AssemblyLine(ReadOnlySpan<Token> tokens)
+    public AssemblyLine(Token[] tokens)
     {
         _tokens = tokens;
         SubTokenize();
@@ -28,17 +27,22 @@ public ref struct AssemblyLine
     /// </summary>
     /// <param name="index">The index of the token to retrieve.</param>
     /// <returns>The token at <paramref name="index"/> in the line.</returns>
-    public readonly Token this[int index] => _tokens[index];
+    public Token this[int index] => _tokens[index];
 
     /// <summary>
     /// Gets the number of tokens in the line.
     /// </summary>
-    public readonly int Count => _tokens.Length;
+    public int Count => _tokens.Length;
 
     /// <summary>
     /// Gets what type of declaration occurs on the line, 
     /// </summary>
     public LineType Type {get; private set; }
+    
+    /// <summary>
+    /// Gets the tokens on the line of assembly.
+    /// </summary>
+    public ReadOnlySpan<Token> Tokens => _tokens;
 
     /// <summary>
     /// Gets the label declared on the line, if any.
@@ -56,64 +60,45 @@ public ref struct AssemblyLine
     public Token? Directive { get; private set; }
 
     /// <summary>
-    /// Gets the args for either the instruction or directive.
-    /// </summary>
-    public ReadOnlySpan<Token> Args { get; private set; }
-
-    /// <summary>
     /// Gets the macro declared on the line, if any.
     /// </summary>
     public Token? Macro { get; private set; }
 
     /// <summary>
-    /// Gets whether or not all args have been read.
+    /// Gets the args declared on the line.
     /// </summary>
-    public readonly bool ArgsEnd => _argPosition.IsEmpty;
-
-    /// <summary>
-    /// Gets the expression assigned to the macro.
-    /// </summary>
-    /// <remarks>
-    /// This includes the assignment token.
-    /// </remarks>
-    public readonly ReadOnlySpan<Token> MacroExpression => Args;
-
-    /// <summary>
-    /// Gets the next arg from the arg span.
-    /// </summary>
-    /// <returns>A span of tokens making an arg.</returns>
-    public ReadOnlySpan<Token> GetNextArg()
-    {
-        _argPosition = _argPosition.SplitAtNext(TokenType.Comma, out var before, out _);
-        return before;
-    }
-
-    /// <summary>
-    /// Resets the args iterator.
-    /// </summary>
-    public void ResetArgs()
-    {
-        _argPosition = Args;
-    }
+    public AssemblyLineArgs Args { get; private set; }
 
     private void SubTokenize()
     {
         Type = LineType.None;
 
-        // Grab the label
-        ReadOnlySpan<Token> line = _tokens.TrimType(TokenType.LabelDeclaration, out var label);
-        Label = label;
+        // If line is empty, do nothing
+        if (_tokens.Length is 0)
+            return;
+        
+        // Convert the line to a segment
+        ArraySegment<Token> segment = _tokens;
 
-        if (line.Length == 0)
+        // Grab the label
+        if (segment[0].Type is TokenType.LabelDeclaration)
+        {
+            Label = segment[0];
+            segment = segment[1..];
+        }
+
+        // The line only contains a label
+        if (segment.Count == 0)
             return;
 
-        var next = line[0];
+        // Handle line type
+        var next = segment[0];
         switch(next.Type)
         {   
             case TokenType.MacroDefinition:
                 Macro = next;
                 Type = LineType.Macro;
-                break;
+                return;
             case TokenType.Instruction:
                 Instruction = next;
                 Type = LineType.Instruction;
@@ -128,7 +113,6 @@ public ref struct AssemblyLine
         // The assembler will need to verify it is present, and log if it is not.
         // However, unless proceeded by an assignment token this never should have
         // been tokenized as a macro.
-        Args = line[1..];
-        _argPosition = Args;
+        Args = new AssemblyLineArgs(segment[1..]);
     }
 }
