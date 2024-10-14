@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tests.Live.Enums;
@@ -12,16 +13,16 @@ public class Program()
 {
     private TestMode _mode = TestMode.Line;
 
-    static void Main()
+    static async Task Main()
     {
         var program = new Program();
         while (true)
         {
-            program.Loop();
+            await program.Loop();
         }
     }
 
-    private void Loop()
+    private async Task Loop()
     {
         var message = _mode switch
         {
@@ -44,10 +45,34 @@ public class Program()
 
         _ = _mode switch
         {
-            TestMode.Line => TestLine(line),
+            TestMode.Line => await TestLine(line),
             TestMode.Expression => TestExpression(line),
             _ => false,
         };
+    }
+
+    private async Task<bool> TestLine(string line)
+    {
+        var stream = new MemoryStream(Encoding.Default.GetBytes(line));
+        var assembler = await Assembler.AssembleAsync(stream, null);
+
+        stream = new MemoryStream();
+        assembler.WriteModule(stream);
+        
+        Console.WriteLine("Binary:");;
+        for (int i = 0; stream.Position != stream.Length; i++)
+        {
+            int x = stream.ReadByte();
+
+            Console.Write($"{x:X2} ");
+            if (i % 4 is 3)
+                Console.Write("  ");
+            if (i % 8 is 7)
+                Console.WriteLine();
+        }
+
+        Console.WriteLine();
+        return !assembler.Failed;
     }
 
     private bool TestExpression(string line)
