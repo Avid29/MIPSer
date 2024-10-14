@@ -18,7 +18,8 @@ public static class InstructionTypeHelper
     {
         return opCode switch
         {
-            OperationCode.RType => InstructionType.R,
+            OperationCode.Special or
+            OperationCode.Special2 => InstructionType.R,
             OperationCode.Jump or
             OperationCode.JumpAndLink => InstructionType.J,
             _ => InstructionType.I,

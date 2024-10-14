@@ -3,7 +3,7 @@
 namespace MIPS.Models.Instructions.Enums;
 
 /// <summary>
-/// An enum for r-type instruction function codes.
+/// An enum for <see cref="OperationCode.Special"/> instruction function codes.
 /// </summary>
 public enum FunctionCode : byte
 {

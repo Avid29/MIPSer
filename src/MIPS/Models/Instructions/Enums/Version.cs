@@ -3,8 +3,9 @@
 namespace MIPS.Models.Instructions.Enums;
 
 /// <summary>
-/// 
+/// An enum for which version(s) a MIPS feature is supported.
 /// </summary>
+[Flags]
 public enum Version
 {
 #pragma warning disable CS1591

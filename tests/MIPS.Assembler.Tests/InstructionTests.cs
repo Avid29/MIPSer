@@ -15,7 +15,7 @@ public class InstructionTests
     {
         // This test sets the opcode to each potential operation code with a random address.
         // It then asserts the readback is equivilient.
-        for (var i = OperationCode.RType; i <= OperationCode.StoreWordCoprocessor3; i++)
+        for (var i = OperationCode.Special; i <= OperationCode.StoreWordCoprocessor3; i++)
         {
             var instruction = Instruction.Create(i, RandomAddress(false));
             Assert.AreEqual(i, instruction.OpCode, $"Error setting operation code to {i}");

@@ -18,7 +18,8 @@ public readonly struct InstructionMetadata
         Name = name;
         OpCode = opCode;
         FuncCode = FunctionCode.None;
-        BranchCode = RegImmCode.None;
+        Func2Code = Func2Code.None;
+        RegisterImmediateCode = RegImmCode.None;
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = 1;
         MIPSVersion = version;
@@ -30,9 +31,25 @@ public readonly struct InstructionMetadata
     public InstructionMetadata(string name, FunctionCode funcCode, Argument[] argumentPattern, Version version = Version.All)
     {
         Name = name;
-        OpCode = OperationCode.RType;
+        OpCode = OperationCode.Special;
         FuncCode = funcCode;
-        BranchCode = RegImmCode.None;
+        Func2Code = Func2Code.None;
+        RegisterImmediateCode = RegImmCode.None;
+        ArgumentPattern = argumentPattern;
+        RealizedInstructionCount = 1;
+        MIPSVersion = version;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
+    /// </summary>
+    public InstructionMetadata(string name, Func2Code funcCode, Argument[] argumentPattern, Version version = Version.All)
+    {
+        Name = name;
+        OpCode = OperationCode.Special;
+        FuncCode = FunctionCode.None;
+        Func2Code = funcCode;
+        RegisterImmediateCode = RegImmCode.None;
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = 1;
         MIPSVersion = version;
@@ -46,7 +63,8 @@ public readonly struct InstructionMetadata
         Name = name;
         OpCode = OperationCode.RegisterImmediate;
         FuncCode = FunctionCode.None;
-        BranchCode = branchCode;
+        Func2Code = Func2Code.None;
+        RegisterImmediateCode = branchCode;
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = 1;
         MIPSVersion = version;
@@ -64,7 +82,7 @@ public readonly struct InstructionMetadata
         PseudoOp = pseudoOp;
         OpCode = OperationCode.PseudoInstruction;
         FuncCode = FunctionCode.None;
-        BranchCode = RegImmCode.None;
+        RegisterImmediateCode = RegImmCode.None;
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = realizedCount;
         MIPSVersion = version;
@@ -86,9 +104,14 @@ public readonly struct InstructionMetadata
     public FunctionCode FuncCode { get; }
 
     /// <summary>
-    /// Gets the instruction branch code.
+    /// Gets the instruction function code.
     /// </summary>
-    public RegImmCode BranchCode { get; }
+    public Func2Code Func2Code { get; }
+
+    /// <summary>
+    /// Gets the instruction register immediate code.
+    /// </summary>
+    public RegImmCode RegisterImmediateCode { get; }
 
     /// <summary>
     /// Gets the pseudo op for a pseudo-instruction.

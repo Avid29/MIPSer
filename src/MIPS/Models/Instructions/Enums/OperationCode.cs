@@ -13,7 +13,7 @@ public enum OperationCode : byte
     /// <remarks>
     /// r-type instructions are distinguished with <see cref="FunctionCode"/>.
     /// </remarks>
-    RType = 0x00,
+    Special = 0x00,
 
     /// <summary>
     /// Marks a register immediate instruction. See <see cref="RegImmCode"/>.
@@ -26,7 +26,7 @@ public enum OperationCode : byte
     /// <remarks>
     /// This value is too large to encode in a real instruction. If by accident
     /// this were encoded into an <see cref="Instruction"/> struct, it would become 
-    /// <see cref="RType"/> upon unencoding.
+    /// <see cref="Special"/> upon unencoding.
     /// </remarks>
     PseudoInstruction = 0x40,
 
@@ -63,6 +63,8 @@ public enum OperationCode : byte
     BranchOnGreaterThanZeroLikely = 0x17,
 
     Trap = 0x1a,
+
+    Special2 = 0x1c,
 
     LoadByte = 0x20,
     LoadHalfWord = 0x21,

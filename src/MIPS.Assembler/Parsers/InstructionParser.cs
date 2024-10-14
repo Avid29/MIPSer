@@ -132,7 +132,8 @@ public struct InstructionParser
         // Create the instruction from its components based on the instruction type
         var instruction = _meta.Type switch
         {
-            InstructionType.R when _opCode is OperationCode.RegisterImmediate => Instruction.Create(_meta.BranchCode, _rs, (short)_immediate),
+            InstructionType.R when _opCode is OperationCode.RegisterImmediate => Instruction.Create(_meta.RegisterImmediateCode, _rs, (short)_immediate),
+            InstructionType.R when _opCode is OperationCode.Special2 => Instruction.Create(_meta.Func2Code, _rs, _rt, _rd, _shift),
             InstructionType.R => Instruction.Create(_funcCode, _rs, _rt, _rd, _shift),
             InstructionType.I => Instruction.Create(_opCode, _rs, _rt, (short)_immediate),
             InstructionType.J => Instruction.Create(_opCode, _address),

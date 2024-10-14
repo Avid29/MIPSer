@@ -210,12 +210,27 @@ public struct Instruction
     public static Instruction Create(FunctionCode funcCode, Register rs, Register rt, Register rd, byte shiftAmount = 0)
     {
         Instruction value = default;
-        value.OpCode = OperationCode.RType;
+        value.OpCode = OperationCode.Special;
         value.RS = rs;
         value.RT = rt;
         value.RD = rd;
         value.ShiftAmount = shiftAmount;
         value.FuncCode = funcCode;
+        return value;
+    }
+    
+    /// <summary>
+    /// Creates a new special2 instruction.
+    /// </summary>
+    public static Instruction Create(Func2Code func2Code, Register rs, Register rt, Register rd, byte shiftAmount = 0)
+    {
+        Instruction value = default;
+        value.OpCode = OperationCode.Special2;
+        value.RS = rs;
+        value.RT = rt;
+        value.RD = rd;
+        value.ShiftAmount = shiftAmount;
+        value.Func2Code = func2Code;
         return value;
     }
 
@@ -349,6 +364,18 @@ public struct Instruction
     {
         get => (FunctionCode)UintMasking.GetShiftMask(_inst, FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET);
         private set => UintMasking.SetShiftMask(ref _inst, FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET, (uint)value);
+    }
+
+    /// <summary>
+    /// Gets the instruction's function2 code.
+    /// </summary>
+    /// <remarks>
+    /// Instruction may or may not have function code.
+    /// </remarks>
+    public Func2Code Func2Code
+    {
+        get => (Func2Code)FuncCode;
+        private set => FuncCode = (FunctionCode)value;
     }
 
     /// <summary>
