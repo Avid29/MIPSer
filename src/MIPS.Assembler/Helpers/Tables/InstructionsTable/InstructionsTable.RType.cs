@@ -57,6 +57,11 @@ public static partial class InstructionsTable
         { "slt",    new("slt",      FunctionCode.SetLessThan,                   StandardRPattern) },                            // slt      $rd, $rs, $rt
         { "sltu",   new("sltu",     FunctionCode.SetLessThanUnsigned,           StandardRPattern) },                            // sltu     $rd, $rs, $rt
 
-        { "tge",    new("tge",      FunctionCode.TrapOnGreaterOrEqual,          TrapComparePattern,     Version.MipsIIUp) },
+        { "tge",    new("tge",      FunctionCode.TrapOnGreaterOrEqual,          TrapComparePattern,     Version.MipsIIUp) },    // tge      $rs, $rt
+        { "tgeu",   new("tgeu",     FunctionCode.TrapOnGreaterOrEqualUnsigned,  TrapComparePattern,     Version.MipsIIUp) },    // tgeu     $rs, $rt
+        { "tlt",    new("tlt",      FunctionCode.TrapOnLessThan,                TrapComparePattern,     Version.MipsIIUp) },    // tlt      $rs, $rt
+        { "tltu",   new("tltu",     FunctionCode.TrapOnLessThanUnsigned,        TrapComparePattern,     Version.MipsIIUp) },    // tltu     $rs, $rt
+        { "teq",    new("teq",      FunctionCode.TrapOnEquals,                  TrapComparePattern,     Version.MipsIIUp) },    // teq      $rs, $rt
+        { "tne",    new("tne",      FunctionCode.TrapOnNotEquals,               TrapComparePattern,     Version.MipsIIUp) },    // tne      $rs, $rt
     };
 }

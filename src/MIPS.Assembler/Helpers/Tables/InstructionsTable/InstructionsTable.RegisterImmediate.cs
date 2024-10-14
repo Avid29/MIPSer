@@ -14,8 +14,8 @@ public static partial class InstructionsTable
     {
         { "bltz",       new("bltz",     RegImmCode.BranchOnLessThanZero,                           BranchPattern) },                               // bltz     $rs, offset
         { "bgez",       new("bgez",     RegImmCode.BranchOnGreaterOrEqualToThanZero,               BranchPattern) },                               // bgez     $rs, offset
-        { "bltzl",      new("bltzl",    RegImmCode.BranchOnLessThanZeroLikely,                     BranchPattern,          Version.MipsIIUp) },    
-        { "bgezl",      new("bgezl",    RegImmCode.BranchOnGreaterThanZeroLikely,                  BranchPattern,          Version.MipsIIUp) },    
+        { "bltzl",      new("bltzl",    RegImmCode.BranchOnLessThanZeroLikely,                     BranchPattern,          Version.MipsIIUp) },    // bltzl    $rs, offset
+        { "bgezl",      new("bgezl",    RegImmCode.BranchOnGreaterThanZeroLikely,                  BranchPattern,          Version.MipsIIUp) },    // bgezl    $rs, offset
                                                                                                                                              
         { "tegi",       new("tegi",     RegImmCode.TrapOnGreaterOrEqualImmediate,                  TrapImmediatePattern,   Version.MipsIIUp) },    // tge      $rs, imm
         { "tegiu",      new("tegiu",    RegImmCode.TrapOnGreaterOrEqualImmediateUnisigned,         TrapImmediatePattern,   Version.MipsIIUp) },    // tegiu    $rs, imm
@@ -24,9 +24,9 @@ public static partial class InstructionsTable
         { "teqi",       new("teqi",     RegImmCode.TrapOnEqualsImmediate,                          TrapImmediatePattern,   Version.MipsIIUp) },    // teqi     $rs, imm
         { "tnei",       new("tnei",     RegImmCode.TrapOnNotEqualsImmediate,                       TrapImmediatePattern,   Version.MipsIIUp) },    // tnei     $rs, imm
 
-        { "bltzal",     new("bltzal",  RegImmCode.BranchOnLessThanZeroAndLink,                     BranchPattern)},                                 // bltzal   $rs, offset
-        { "bgezal",     new("bgezal",  RegImmCode.BranchOnGreaterThanOrEqualToZeroAndLink,         BranchPattern)},                                 // bgezal   $rs, offset
-        { "blezall",    new("blezall", RegImmCode.BranchOnLessThanZeroLikelyAndLink,               BranchPattern)},                                 // bltzall  $rs, offset
-        { "bgezall",    new("bgezal",  RegImmCode.BranchOnGreaterThanOrEqualToZeroLikelyAndLink,   BranchPattern,           Version.MipsIIUp) },    // bgezall  $rs, offset
+        { "bltzal",     new("bltzal",  RegImmCode.BranchOnLessThanZeroAndLink,                     BranchPattern)},                                // bltzal   $rs, offset
+        { "bgezal",     new("bgezal",  RegImmCode.BranchOnGreaterThanOrEqualToZeroAndLink,         BranchPattern)},                                // bgezal   $rs, offset
+        { "blezall",    new("blezall", RegImmCode.BranchOnLessThanZeroLikelyAndLink,               BranchPattern)},                                // bltzall  $rs, offset
+        { "bgezall",    new("bgezal",  RegImmCode.BranchOnGreaterThanOrEqualToZeroLikelyAndLink,   BranchPattern,           Version.MipsIIUp) },   // bgezall  $rs, offset
     };
 }
