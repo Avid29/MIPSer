@@ -18,6 +18,8 @@ public class AssemblerTests
     private const string InvalidLabelSpecial = "te$t: nop";
     private const string ExtraArgError = "add $s0, $t0, $t2, 2";
     private const string MissingArgError = "add $s0, $t0";
+    private const string NumericalRegister = "addi $s0, $16, 16";
+    private const string NumericalRegisterError = "addi $s0, $56, 16";
 
     [TestMethod(nameof(InvalidInstruction))]
     public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, LogId.InvalidInstructionName);
@@ -33,6 +35,12 @@ public class AssemblerTests
 
     [TestMethod(nameof(MissingArgError))]
     public async Task MissingArgErrorTest() => await RunStringTest(MissingArgError, LogId.InvalidInstructionArgCount);
+
+    [TestMethod(nameof(NumericalRegister))]
+    public async Task NumericalRegisterTest() => await RunStringTest(NumericalRegister);
+
+    [TestMethod(nameof(NumericalRegisterError))]
+    public async Task NumericalRegisterErrorTest() => await RunStringTest(NumericalRegisterError, LogId.InvalidRegisterArgument);
 
     [TestMethod(TestFilePathing.BranchLiteralFile)]
     public async Task BranchLiteralFileTest() => await RunFileTest(TestFilePathing.BranchLiteralFile);

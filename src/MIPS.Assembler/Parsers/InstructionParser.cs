@@ -342,7 +342,22 @@ public struct InstructionParser
             return false;
         }
 
-        // Get register from table
+        // Check for numberical register
+        if (byte.TryParse(regStr[1..], out var num))
+        {
+            // TODO: Consider removing magic numbers
+            if (num is < 0 or > 31)
+            {
+                _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"No register of number {num} exists");
+                return false;
+            }
+
+            // Cast num to register
+            register = (Register)num;
+            return true;
+        }
+
+        // Get named register from table
         if (!RegistersTable.TryGetRegister(regStr[1..], out register))
         {
             // Register does not exist in table

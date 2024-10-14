@@ -11,14 +11,13 @@ namespace MIPS.Assembler.Helpers.Tables;
 public static class RegistersTable
 {
     /// <summary>
-    /// Attempts to get an register by name.
+    /// Attempts to get a register by name.
     /// </summary>
     /// <param name="name">The name of the register.</param>
     /// <param name="register">The register enum value.</param>
     /// <returns>Whether or not an register exists by that name</returns>
     public static bool TryGetRegister(string name, out Register register)
         => _registerTable.TryGetValue(name, out register);
-
     private static readonly Dictionary<string, Register> _registerTable = new()
     {
         { "zero", Register.Zero },
@@ -63,5 +62,4 @@ public static class RegistersTable
 
         { "ra", Register.ReturnAddress },
     };
-
 }
