@@ -16,4 +16,4 @@
 
 ori		$s0,	$zero,	5
 addi	$s0,	$s0,	-1
-bgez	$s0,	-4
+bgez	$s0,	-8

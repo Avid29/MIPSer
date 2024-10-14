@@ -274,15 +274,28 @@ public struct Instruction
     }
     
     /// <summary>
-    /// Creates a new branch instruction.
+    /// Creates a new <see cref="OperationCode.RegisterImmediate"/> instruction.
     /// </summary>
-    public static Instruction Create(RegImmCode code, Register rs, short immediate)
+    public static Instruction Create(RTFuncCode code, Register rs, short immediate)
     {
         Instruction value = default;
         value.OpCode = OperationCode.RegisterImmediate;
-        value.BranchCode = code;
+        value.RTFuncCode = code;
         value.RS = rs;
         value.ImmediateValue = immediate;
+        return value;
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="OperationCode.RegisterImmediate"/> branch instruction.
+    /// </summary>
+    public static Instruction Create(RTFuncCode code, Register rs, int offset)
+    {
+        Instruction value = default;
+        value.OpCode = OperationCode.RegisterImmediate;
+        value.RTFuncCode = code;
+        value.RS = rs;
+        value.Offset = offset;
         return value;
     }
 
@@ -294,7 +307,7 @@ public struct Instruction
     /// <summary>
     /// Gets the instruction type.
     /// </summary>
-    public InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode);
+    public InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RTFuncCode);
 
     /// <summary>
     /// Gets the instruction's operation code.
@@ -324,15 +337,15 @@ public struct Instruction
     }
 
     /// <summary>
-    /// Gets the instruction's branch code.
+    /// Gets the instruction's RT Func code.
     /// </summary>
     /// <remarks>
     /// This is stored in the RT register space for an instruction where
     /// the <see cref="OpCode"/> is <see cref="OperationCode.RegisterImmediate"/>.
     /// </remarks>
-    public RegImmCode BranchCode
+    public RTFuncCode RTFuncCode
     {
-        get => (RegImmCode)RT;
+        get => (RTFuncCode)RT;
         set => RT = (Register)value;
     }
 
@@ -385,6 +398,15 @@ public struct Instruction
     {
         get => (short)UintMasking.GetShiftMask(_inst, IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET);
         private set => UintMasking.SetShiftMask(ref _inst, IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET, (ushort)value);
+    }
+
+    /// <summary>
+    /// Gets the instructions offset value.
+    /// </summary>
+    public int Offset
+    {
+        get => ImmediateValue << 2;
+        private set => ImmediateValue = (short)(value >> 2);
     }
 
     /// <summary>

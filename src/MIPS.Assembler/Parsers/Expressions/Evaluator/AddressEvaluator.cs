@@ -34,9 +34,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
             return false;
         }
 
-        // Determine the resulting section, and create new address
-        var section = left.Section | right.Section;
-        result = new Address(left.Value + right.Value, section);
+        result = left + right.Value;
         return true;
     }
 
@@ -51,7 +49,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
             return false;
         }
 
-        result = new Address(left.Value - right.Value, left.Section);
+        result = left - right.Value;
         return true;
     }
 

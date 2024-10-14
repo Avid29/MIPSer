@@ -24,6 +24,8 @@ public static partial class InstructionsTable
         
         { "ssnop",  new("ssnop",    PseudoOp.SuperScalarNoOperation,    [],                             1) },       // ssnop
 
+        { "bal",    new("bal",      PseudoOp.BranchAndLink,             [],                             1)},        // bal      $rs, offset
+
         { "blt",    new("blt",      PseudoOp.BranchOnLessThan,          BranchOnLessThanPattern,        2) },       // blt      $rs, $rt, offset
                                                                                                                     //    slt   $at, $rs, $rt     
                                                                                                                     //    bne   $at, $zero, offset

@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 
 namespace MIPS.Helpers.Instructions;
@@ -10,19 +11,23 @@ namespace MIPS.Helpers.Instructions;
 public static class InstructionTypeHelper
 {
     /// <summary>
-    /// Gets the <see cref="InstructionType"/> of an <see cref="OperationCode"/>.
+    /// Gets the <see cref="InstructionType"/> of an <see cref="Instruction"/>.
     /// </summary>
-    /// <param name="opCode">The instruction op-code</param>
-    /// <returns>The <see cref="InstructionType"/> associated to an <see cref="OperationCode"/>.</returns>
-    public static InstructionType GetInstructionType(OperationCode opCode)
+    /// <param name="opCode">The instruction to get the type of.</param>
+    /// <param name="rtFuncCode">The rtFunction of the instruction.</param>
+    /// <returns>The <see cref="InstructionType"/> associated to an <see cref="Instruction"/>.</returns>
+    public static InstructionType GetInstructionType(OperationCode opCode, RTFuncCode rtFuncCode)
     {
         return opCode switch
         {
-            OperationCode.Special or
-            OperationCode.Special2 => InstructionType.R,
+            OperationCode.Special => InstructionType.BasicR,
+            OperationCode.RegisterImmediate when rtFuncCode is <= RTFuncCode.BranchOnGreaterThanZeroLikely
+            or >= RTFuncCode.BranchOnLessThanZeroAndLink => InstructionType.RegisterImmediateBranch,
+            OperationCode.RegisterImmediate => InstructionType.RegisterImmediateBranch,
+            OperationCode.Special2 => InstructionType.Special2R,
             OperationCode.Jump or
-            OperationCode.JumpAndLink => InstructionType.J,
-            _ => InstructionType.I,
+            OperationCode.JumpAndLink => InstructionType.BasicJ,
+            _ => InstructionType.BasicI,
         };
     }
 }

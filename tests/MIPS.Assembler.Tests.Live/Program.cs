@@ -1,11 +1,9 @@
 ﻿// Adam Dernis 2024
 
-using System;
-using System.Text;
-using System.Threading.Tasks;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tests.Live.Enums;
 using MIPS.Assembler.Tokenization;
+using System.Text;
 
 namespace MIPS.Assembler.Tests.Live;
 

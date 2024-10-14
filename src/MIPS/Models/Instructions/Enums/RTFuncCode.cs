@@ -5,7 +5,7 @@ namespace MIPS.Models.Instructions.Enums;
 /// <summary>
 /// These values go in the <see cref="Argument.RT"/> field of instructions with <see cref="OperationCode.RegisterImmediate"/>.
 /// </summary>
-public enum RegImmCode : byte
+public enum RTFuncCode : byte
 {
     /// <summary>
     /// Marks that there is no function code.

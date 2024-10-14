@@ -8,8 +8,11 @@ namespace MIPS.Models.Instructions.Enums;
 public enum InstructionType
 {
 #pragma warning disable CS1591
-    R,
-    I,
-    J,
+    BasicR,
+    RegisterImmediate,
+    RegisterImmediateBranch,
+    Special2R,
+    BasicI,
+    BasicJ,
 #pragma warning restore CS1591
 }

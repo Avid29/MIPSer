@@ -11,6 +11,7 @@ public enum PseudoOp
 
     NoOperation,
     SuperScalarNoOperation,
+    BranchAndLink,
     BranchOnLessThan,
     LoadImmediate,
     AbsoluteValue,

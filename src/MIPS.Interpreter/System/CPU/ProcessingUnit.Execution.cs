@@ -46,9 +46,9 @@ public partial class ProcessingUnit
         // Run operation
         Execution execution = instruction.Type switch
         {
-            InstructionType.R => ExecuteR(instruction),
-            InstructionType.J => ExecuteJ(instruction),
-            InstructionType.I => ExecuteI(instruction),
+            InstructionType.BasicR => ExecuteR(instruction),
+            InstructionType.BasicJ => ExecuteJ(instruction),
+            InstructionType.BasicI => ExecuteI(instruction),
             _ => ThrowHelper.ThrowInvalidDataException<Execution>($"Invalid instruction type '{instruction.Type}'."),
         };
 

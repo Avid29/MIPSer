@@ -34,16 +34,16 @@ public static class InstructionExtensions
     /// <returns>Which argument register the instruction writes back to.</returns>
     public static Argument? GetWritebackArgument(this Instruction instruction)
     {
-        if (instruction.Type is InstructionType.R)
+        if (instruction.Type is InstructionType.BasicR)
         {
             return instruction.FuncCode switch
             {
                 // All these instructions write back to $rd.
-                FunctionCode.ShiftLeftLogical or FunctionCode.ShiftRightLogical or FunctionCode.ShiftRightArithmetic or                         // Shif
-                FunctionCode.ShiftLeftLogicalVariable or FunctionCode.ShiftRightLogicalVariable or FunctionCode.ShiftRightArithmeticVariable or // Vari
+                FunctionCode.ShiftLeftLogical or FunctionCode.ShiftRightLogical or FunctionCode.ShiftRightArithmetic or                         // Shift
+                FunctionCode.ShiftLeftLogicalVariable or FunctionCode.ShiftRightLogicalVariable or FunctionCode.ShiftRightArithmeticVariable or // Shift Variable
                 FunctionCode.MoveFromHigh or FunctionCode.MoveFromLow or                                                                        // Move
-                FunctionCode.Add or FunctionCode.AddUnsigned or FunctionCode.Subtract or FunctionCode.SubtractUnsigned or                       // Arit
-                FunctionCode.And or FunctionCode.Or or FunctionCode.ExclusiveOr or FunctionCode.Nor or                                          // Logi
+                FunctionCode.Add or FunctionCode.AddUnsigned or FunctionCode.Subtract or FunctionCode.SubtractUnsigned or                       // Arithmetic
+                FunctionCode.And or FunctionCode.Or or FunctionCode.ExclusiveOr or FunctionCode.Nor or                                          // Logical
                 FunctionCode.SetLessThan or FunctionCode.SetLessThanUnsigned => Argument.RD,                                                    // Sets
                 _ => null,
             };

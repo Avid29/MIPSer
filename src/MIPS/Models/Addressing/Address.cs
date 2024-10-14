@@ -35,4 +35,10 @@ public struct Address
 
     /// <inheritdoc/>
     public override readonly string ToString() => $"{Value}";
+    
+    /// <inheritdoc/>
+    public static Address operator +(Address address, long offset) => new(address.Value + offset, address.Section);
+    
+    /// <inheritdoc/>
+    public static Address operator -(Address address, long offset) => new(address.Value - offset, address.Section);
 }

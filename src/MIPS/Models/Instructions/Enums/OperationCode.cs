@@ -16,7 +16,7 @@ public enum OperationCode : byte
     Special = 0x00,
 
     /// <summary>
-    /// Marks a register immediate instruction. See <see cref="RegImmCode"/>.
+    /// Marks a register immediate instruction. See <see cref="RTFuncCode"/>.
     /// </summary>
     RegisterImmediate = 0x01,
 

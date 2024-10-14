@@ -15,6 +15,7 @@ using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -132,11 +133,12 @@ public struct InstructionParser
         // Create the instruction from its components based on the instruction type
         var instruction = _meta.Type switch
         {
-            InstructionType.R when _opCode is OperationCode.RegisterImmediate => Instruction.Create(_meta.RegisterImmediateCode, _rs, (short)_immediate),
-            InstructionType.R when _opCode is OperationCode.Special2 => Instruction.Create(_meta.Func2Code, _rs, _rt, _rd, _shift),
-            InstructionType.R => Instruction.Create(_funcCode, _rs, _rt, _rd, _shift),
-            InstructionType.I => Instruction.Create(_opCode, _rs, _rt, (short)_immediate),
-            InstructionType.J => Instruction.Create(_opCode, _address),
+            InstructionType.BasicR => Instruction.Create(_funcCode, _rs, _rt, _rd, _shift),
+            InstructionType.BasicI => Instruction.Create(_opCode, _rs, _rt, (short)_immediate),
+            InstructionType.BasicJ => Instruction.Create(_opCode, _address),
+            InstructionType.RegisterImmediate => Instruction.Create(_meta.RTFuncCode, _rs, (short)_immediate),
+            InstructionType.RegisterImmediateBranch => Instruction.Create(_meta.RTFuncCode, _rs, _immediate),
+            InstructionType.Special2R => Instruction.Create(_meta.Func2Code, _rs, _rt, _rd, _shift),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction>($"Invalid instruction type '{_meta.Type}'."),
         };
 
@@ -223,9 +225,9 @@ public struct InstructionParser
         int bitCount = target switch
         {
             Argument.Shift => 5,
-            Argument.Offset or
             Argument.Immediate => 16,
-            Argument.Address => 26,
+            Argument.Offset => 18,  // Offset and address are only 16/26 bits in storage. However, the last
+            Argument.Address => 28, // two bits are dropped so the 18th and 28th bits must be cleaned too
             Argument.FullImmediate => 32,
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"Argument of type '{target}' attempted to parse as an expression."),
         };
@@ -238,7 +240,7 @@ public struct InstructionParser
 
         long value = address.Value;
 
-        // Shift and Address are unsigned. Immediate is the only signed argument
+        // Shift and Address are unsigned. Immediate and offset are the only signed arguments
         bool signed = target is Argument.Immediate or Argument.Offset;
 
         // Clean integer to fit within argument bit size and match signs.
@@ -283,7 +285,7 @@ public struct InstructionParser
                 {
                     Guard.IsNotNull(_context);
 
-                    var @base = _context.CurrentAddress;
+                    var @base = _context.CurrentAddress + 4;
                     if (@base.Section != address.Section)
                     {
                         _logger?.Log(Severity.Error, LogId.BranchBetweenSections, $"Cannot branch between section.");
@@ -294,7 +296,7 @@ public struct InstructionParser
                     value -= @base.Value;
                 }
 
-                _immediate = (short)value;
+                _immediate = (int)value;
                 return true;
 
             // Invalid target type
@@ -419,6 +421,8 @@ public struct InstructionParser
     /// </returns>
     private static int CleanInteger(ref long integer, int bitCount, bool signed, out long original)
     {
+        // TODO: Support signed truncation
+
         original = integer;
 
         // Truncate integer to bit count
@@ -435,7 +439,7 @@ public struct InstructionParser
         }
 
         // Check if truncated
-        if (integer != original)
+        if ((ulong)integer != (ulong)original)
             return 2;
 
         return 0;
