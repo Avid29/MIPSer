@@ -6,10 +6,8 @@ using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
-using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
-using System;
 
 namespace MIPS.Assembler.Tests.Parsers;
 

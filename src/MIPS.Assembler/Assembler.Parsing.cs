@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Helpers;
+using MIPS.Assembler.Helpers.Tables;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Directives;
 using MIPS.Assembler.Models.Directives.Abstract;
@@ -38,7 +39,7 @@ public partial class Assembler
             // We'll default to 1, because if the instruction fails to parse we'll replace it
             // with a NOP on the second pass.
             int realizedCount = 1;
-            if(ConstantTables.TryGetInstruction(line.Instruction.Source, out var meta))
+            if(InstructionsTable.TryGetInstruction(line.Instruction.Source, out var meta))
                realizedCount = meta.RealizedInstructionCount;
 
             // Multiply by realized instruction count to handle pseudo instructions

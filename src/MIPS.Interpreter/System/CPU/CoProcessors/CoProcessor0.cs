@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Emulator.System.CPU.Models.Registers;
+
 namespace MIPS.Emulator.System.CPU.CoProcessors;
 
 /// <summary>
@@ -7,4 +9,8 @@ namespace MIPS.Emulator.System.CPU.CoProcessors;
 /// </summary>
 public class CoProcessor0
 {
+    /// <summary>
+    /// Gets or sets the status register.
+    /// </summary>
+    public StatusRegister StatusReg { get; set; }
 }

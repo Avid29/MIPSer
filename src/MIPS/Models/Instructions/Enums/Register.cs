@@ -3,7 +3,7 @@
 namespace MIPS.Models.Instructions.Enums;
 
 /// <summary>
-/// An enum for addressable registers
+/// An enum for CPU registers.
 /// </summary>
 public enum Register : byte
 {

@@ -261,10 +261,10 @@ public struct Instruction
     /// <summary>
     /// Creates a new branch instruction.
     /// </summary>
-    public static Instruction Create(BranchCode code, Register rs, short immediate)
+    public static Instruction Create(RegImmCode code, Register rs, short immediate)
     {
         Instruction value = default;
-        value.OpCode = OperationCode.BranchConditional;
+        value.OpCode = OperationCode.RegisterImmediate;
         value.BranchCode = code;
         value.RS = rs;
         value.ImmediateValue = immediate;
@@ -313,11 +313,11 @@ public struct Instruction
     /// </summary>
     /// <remarks>
     /// This is stored in the RT register space for an instruction where
-    /// the <see cref="OpCode"/> is <see cref="OperationCode.BranchConditional"/>.
+    /// the <see cref="OpCode"/> is <see cref="OperationCode.RegisterImmediate"/>.
     /// </remarks>
-    public BranchCode BranchCode
+    public RegImmCode BranchCode
     {
-        get => (BranchCode)RT;
+        get => (RegImmCode)RT;
         set => RT = (Register)value;
     }
 

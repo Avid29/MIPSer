@@ -56,37 +56,45 @@ public readonly struct PseudoInstruction
     {
         return PseudoOp switch
         {
-          PseudoOp.BranchOnLessThan =>
-          [
-              Instruction.Create(FunctionCode.SetLessThan, RS, RT, Register.AssemblerTemporary),
-              Instruction.Create(OperationCode.BranchOnNotEquals, Register.AssemblerTemporary, Register.Zero, (short)Immediate)
-          ],
-          PseudoOp.LoadImmediate =>
-          [
-              Instruction.Create(OperationCode.LoadUpperImmediate, Register.AssemblerTemporary, (short)(Immediate >> 16)),
-              Instruction.Create(OperationCode.OrImmediate, RT, Register.AssemblerTemporary, (short)Immediate)
-          ],
-          PseudoOp.AbsoluteValue =>
-          [
-              Instruction.Create(FunctionCode.AddUnsigned, RS, Register.Zero, RT),
-              Instruction.Create(BranchCode.BranchOnGreaterOrEqualToThanZero, RS, 8),
-              Instruction.Create(FunctionCode.Subtract, Register.Zero, RS, RT),
-          ],
-          PseudoOp.Move =>
-          [
-              Instruction.Create(FunctionCode.Add, RS, Register.Zero, RT),
-          ],
-          PseudoOp.LoadAddress =>
-          [
-              Instruction.Create(OperationCode.LoadUpperImmediate, Register.AssemblerTemporary, (short)(Address >> 16)),
-              Instruction.Create(OperationCode.OrImmediate, RT, Register.AssemblerTemporary, (short)Address)
-          ],
-          PseudoOp.SetGreaterThanOrEqual =>
-          [
-              Instruction.Create(OperationCode.AddImmediateUnsigned, RT, RT, -1),
-              Instruction.Create(FunctionCode.SetLessThan, RS, RT, RD),
-          ],
-          _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction[]>(),
+            PseudoOp.NoOperation =>
+            [
+                Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Zero, Register.Zero, 0),
+            ],
+            PseudoOp.SuperScalarNoOperation =>
+            [
+                Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Zero, Register.Zero, 1),
+            ],
+            PseudoOp.BranchOnLessThan =>
+            [
+                Instruction.Create(FunctionCode.SetLessThan, RS, RT, Register.AssemblerTemporary),
+                Instruction.Create(OperationCode.BranchOnNotEquals, Register.AssemblerTemporary, Register.Zero, (short)Immediate)
+            ],
+            PseudoOp.LoadImmediate =>
+            [
+                Instruction.Create(OperationCode.LoadUpperImmediate, Register.AssemblerTemporary, (short)(Immediate >> 16)),
+                Instruction.Create(OperationCode.OrImmediate, RT, Register.AssemblerTemporary, (short)Immediate)
+            ],
+            PseudoOp.AbsoluteValue =>
+            [
+                Instruction.Create(FunctionCode.AddUnsigned, RS, Register.Zero, RT),
+                Instruction.Create(RegImmCode.BranchOnGreaterOrEqualToThanZero, RS, 8),
+                Instruction.Create(FunctionCode.Subtract, Register.Zero, RS, RT),
+            ],
+            PseudoOp.Move =>
+            [
+                Instruction.Create(FunctionCode.Add, RS, Register.Zero, RT),
+            ],
+            PseudoOp.LoadAddress =>
+            [
+                Instruction.Create(OperationCode.LoadUpperImmediate, Register.AssemblerTemporary, (short)(Address >> 16)),
+                Instruction.Create(OperationCode.OrImmediate, RT, Register.AssemblerTemporary, (short)Address)
+            ],
+            PseudoOp.SetGreaterThanOrEqual =>
+            [
+                Instruction.Create(OperationCode.AddImmediateUnsigned, RT, RT, -1),
+                Instruction.Create(FunctionCode.SetLessThan, RS, RT, RD),
+            ],
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction[]>(),
         };
     }
 

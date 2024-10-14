@@ -13,40 +13,43 @@ public readonly struct InstructionMetadata
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, OperationCode opCode, Argument[] argumentPattern)
+    public InstructionMetadata(string name, OperationCode opCode, Argument[] argumentPattern, Version version = Version.All)
     {
         Name = name;
         OpCode = opCode;
         FuncCode = FunctionCode.None;
-        BranchCode = BranchCode.None;
+        BranchCode = RegImmCode.None;
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = 1;
+        MIPSVersion = version;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, FunctionCode funcCode, Argument[] argumentPattern)
+    public InstructionMetadata(string name, FunctionCode funcCode, Argument[] argumentPattern, Version version = Version.All)
     {
         Name = name;
         OpCode = OperationCode.RType;
         FuncCode = funcCode;
-        BranchCode = BranchCode.None;
+        BranchCode = RegImmCode.None;
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = 1;
+        MIPSVersion = version;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, BranchCode branchCode, Argument[] argumentPattern)
+    public InstructionMetadata(string name, RegImmCode branchCode, Argument[] argumentPattern, Version version = Version.All)
     {
         Name = name;
-        OpCode = OperationCode.BranchConditional;
+        OpCode = OperationCode.RegisterImmediate;
         FuncCode = FunctionCode.None;
         BranchCode = branchCode;
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = 1;
+        MIPSVersion = version;
     }
 
     /// <summary>
@@ -55,15 +58,16 @@ public readonly struct InstructionMetadata
     /// <remarks>
     /// This is constructor is only for pseudo-instructions.
     /// </remarks>
-    public InstructionMetadata(string name, PseudoOp pseudoOp, Argument[] argumentPattern, int realizedCount)
+    public InstructionMetadata(string name, PseudoOp pseudoOp, Argument[] argumentPattern, int realizedCount, Version version = Version.All)
     {
         Name = name;
         PseudoOp = pseudoOp;
         OpCode = OperationCode.PseudoInstruction;
         FuncCode = FunctionCode.None;
-        BranchCode = BranchCode.None;
+        BranchCode = RegImmCode.None;
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = realizedCount;
+        MIPSVersion = version;
     }
 
     /// <summary>
@@ -84,7 +88,7 @@ public readonly struct InstructionMetadata
     /// <summary>
     /// Gets the instruction branch code.
     /// </summary>
-    public BranchCode BranchCode { get; }
+    public RegImmCode BranchCode { get; }
 
     /// <summary>
     /// Gets the pseudo op for a pseudo-instruction.
@@ -113,4 +117,9 @@ public readonly struct InstructionMetadata
     /// Gets whether or not the instruction is a pseudo instruction.
     /// </summary>
     public bool IsPseudoInstruction => OpCode is OperationCode.PseudoInstruction;
+
+    /// <summary>
+    /// Gets the version of MIPS required for the instruction.
+    /// </summary>
+    public Version MIPSVersion { get; }
 }

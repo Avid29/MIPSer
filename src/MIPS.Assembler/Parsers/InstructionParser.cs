@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Helpers;
+using MIPS.Assembler.Helpers.Tables;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
@@ -76,7 +77,7 @@ public struct InstructionParser
         Guard.IsNotNull(name);
 
         // Get instruction metadata from name
-        if (!ConstantTables.TryGetInstruction(name.Source, out _meta))
+        if (!InstructionsTable.TryGetInstruction(name.Source, out _meta))
         {
             _logger?.Log(Severity.Error, LogId.InvalidInstructionName, $"No instruction named '{name}'.");
             return false;
@@ -113,6 +114,8 @@ public struct InstructionParser
             var pseudoOp = _meta.PseudoOp;
             var pseudo = pseudoOp switch
             {
+                PseudoOp.NoOperation => new PseudoInstruction(pseudoOp),
+                PseudoOp.SuperScalarNoOperation => new PseudoInstruction(pseudoOp),
                 PseudoOp.BranchOnLessThan => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt, Immediate = _immediate },
                 PseudoOp.LoadImmediate => new PseudoInstruction(pseudoOp) { RT = _rt, Immediate = _immediate },
                 PseudoOp.AbsoluteValue => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt },
@@ -129,7 +132,7 @@ public struct InstructionParser
         // Create the instruction from its components based on the instruction type
         var instruction = _meta.Type switch
         {
-            InstructionType.R when _opCode is OperationCode.BranchConditional => Instruction.Create(_meta.BranchCode, _rs, (short)_immediate),
+            InstructionType.R when _opCode is OperationCode.RegisterImmediate => Instruction.Create(_meta.BranchCode, _rs, (short)_immediate),
             InstructionType.R => Instruction.Create(_funcCode, _rs, _rt, _rd, _shift),
             InstructionType.I => Instruction.Create(_opCode, _rs, _rt, (short)_immediate),
             InstructionType.J => Instruction.Create(_opCode, _address),
@@ -339,7 +342,7 @@ public struct InstructionParser
         }
 
         // Get register from table
-        if (!ConstantTables.TryGetRegister(regStr[1..], out register))
+        if (!RegistersTable.TryGetRegister(regStr[1..], out register))
         {
             // Register does not exist in table
             _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"No register '{arg}' exists.");

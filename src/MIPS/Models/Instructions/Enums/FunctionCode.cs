@@ -32,6 +32,8 @@ public enum FunctionCode : byte
     SystemCall = 0x0c,
     Break = 0x0d,
 
+    Sync = 0x0f,
+
     MoveFromHigh = 0x10,
     MoveToHigh = 0x11,
     MoveFromLow = 0x12,
@@ -54,6 +56,13 @@ public enum FunctionCode : byte
 
     SetLessThan = 0x2a,
     SetLessThanUnsigned = 0x2b,
+
+    TrapOnGreaterOrEqual = 0x30,
+    TrapOnGreaterOrEqualUnsigned = 0x31,
+    TrapOnLessThan = 0x32,
+    TrapOnLessThanUnsigned = 0x33,
+    TrapOnEquals = 0x34,
+    TrapOnNotEquals = 0x36,
 
 #pragma warning restore CS1591
 }

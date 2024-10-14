@@ -9,6 +9,8 @@ public enum PseudoOp
 {
     #pragma warning disable CS1591
 
+    NoOperation,
+    SuperScalarNoOperation,
     BranchOnLessThan,
     LoadImmediate,
     AbsoluteValue,

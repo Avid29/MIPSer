@@ -3,9 +3,9 @@
 namespace MIPS.Models.Instructions.Enums;
 
 /// <summary>
-/// These values go in the <see cref="Argument.RT"/> field of instructions with <see cref="OperationCode.BranchConditional"/>.
+/// These values go in the <see cref="Argument.RT"/> field of instructions with <see cref="OperationCode.RegisterImmediate"/>.
 /// </summary>
-public enum BranchCode : byte
+public enum RegImmCode : byte
 {
     /// <summary>
     /// Marks that there is no function code.
@@ -21,9 +21,20 @@ public enum BranchCode : byte
 
     BranchOnLessThanZero = 0x00,
     BranchOnGreaterOrEqualToThanZero = 0x01,
+    BranchOnLessThanZeroLikely = 0x02,
+    BranchOnGreaterThanZeroLikely = 0x03,
+
+    TrapOnGreaterOrEqualImmediate = 0x08,
+    TrapOnGreaterOrEqualImmediateUnisigned = 0x09,
+    TrapOnLessThanImmediate = 0x0a,
+    TrapOnLessThanImmediateUnisigned = 0x0b,
+    TrapOnEqualsImmediate = 0x0c,
+    TrapOnNotEqualsImmediate = 0x0e,
 
     BranchOnLessThanZeroAndLink = 0x10,
     BranchOnGreaterThanOrEqualToZeroAndLink = 0x11,
+    BranchOnLessThanZeroLikelyAndLink = 0x12,
+    BranchOnGreaterThanOrEqualToZeroLikelyAndLink = 0x13,
 
 #pragma warning restore CS1591
 }

@@ -16,9 +16,9 @@ public enum OperationCode : byte
     RType = 0x00,
 
     /// <summary>
-    /// Marks a conditional branch instruction. See <see cref="BranchCode"/>.
+    /// Marks a register immediate instruction. See <see cref="RegImmCode"/>.
     /// </summary>
-    BranchConditional = 0x01,
+    RegisterImmediate = 0x01,
 
     /// <summary>
     /// Marks a pseudo-instruction
@@ -57,6 +57,13 @@ public enum OperationCode : byte
     Coprocessor2 = 0x12,
     Coprocessor3 = 0x13,
 
+    BranchOnEqualLikely = 0x14,
+    BranchOnNotEqualLikely = 0x15,
+    BranchOnLessThanOrEqualToZeroLikely = 0x16,
+    BranchOnGreaterThanZeroLikely = 0x17,
+
+    Trap = 0x1a,
+
     LoadByte = 0x20,
     LoadHalfWord = 0x21,
     LoadWordLeft = 0x22,
@@ -71,12 +78,15 @@ public enum OperationCode : byte
     StoreWord = 0x2b,
     StoreWordRight = 0x2e,
 
-    LoadWordCoprocessor0 = 0x30,
+    LoadLinkedWord = 0x30,
     LoadWordCoprocessor1 = 0x31,
     LoadWordCoprocessor2 = 0x32,
     LoadWordCoprocessor3 = 0x33,
+    LoadDoubleWordCoprocessor1 = 0x35,
+    LoadDoubleWordCoprocessor2 = 0x36,
+    LoadDoubleWordCoprocessor3 = 0x37,
 
-    StoreWordCoprocessor0 = 0x38,
+    StoreConditionalWord = 0x38,
     StoreWordCoprocessor1 = 0x39,
     StoreWordCoprocessor2 = 0x3a,
     StoreWordCoprocessor3 = 0x3b,
