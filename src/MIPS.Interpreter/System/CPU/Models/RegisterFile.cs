@@ -2,7 +2,7 @@
 
 using MIPS.Models.Instructions.Enums;
 
-namespace MIPS.Emulator.System.CPU;
+namespace MIPS.Emulator.System.CPU.Models;
 
 /// <summary>
 /// A class representing a register file.

@@ -362,7 +362,8 @@ public struct InstructionParser
         // Find parenthesis start and end
         // Parenthesis wrap the register
         var parIndex = arg.FindNext(TokenType.OpenParenthesis);
-        if (parIndex is -1)
+        var closeIndex = arg.FindNext(TokenType.CloseParenthesis);
+        if (parIndex is -1 || closeIndex is -1)
         {
             // TODO: Argument printing
             _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '' is not a valid address offset.");

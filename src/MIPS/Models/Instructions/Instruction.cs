@@ -1,7 +1,9 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Helpers;
 using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions.Enums;
+using System.Runtime.CompilerServices;
 
 namespace MIPS.Models.Instructions;
 
@@ -284,8 +286,8 @@ public struct Instruction
     /// </summary>
     public OperationCode OpCode
     {
-        get => (OperationCode)GetShiftMask(OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET);
-        private set => SetShiftMask(OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET, (uint)value);
+        get => (OperationCode)UintMasking.GetShiftMask(_inst, OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET);
+        private set => UintMasking.SetShiftMask(ref _inst, OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -293,8 +295,8 @@ public struct Instruction
     /// </summary>
     public Register RS
     {
-        get => (Register)GetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RS_BIT_OFFSET);
-        private set => SetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RS_BIT_OFFSET, (uint)value);
+        get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_ADDRESS_BIT_SIZE, RS_BIT_OFFSET);
+        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_ADDRESS_BIT_SIZE, RS_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -302,8 +304,8 @@ public struct Instruction
     /// </summary>
     public Register RT
     {
-        get => (Register)GetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RT_BIT_OFFSET);
-        private set => SetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RT_BIT_OFFSET, (uint)value);
+        get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_ADDRESS_BIT_SIZE, RT_BIT_OFFSET);
+        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_ADDRESS_BIT_SIZE, RT_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -324,8 +326,8 @@ public struct Instruction
     /// </summary>
     public Register RD
     {
-        get => (Register)GetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RD_BIT_OFFSET);
-        private set => SetShiftMask(REGISTER_ADDRESS_BIT_SIZE, RD_BIT_OFFSET, (uint)value);
+        get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_ADDRESS_BIT_SIZE, RD_BIT_OFFSET);
+        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_ADDRESS_BIT_SIZE, RD_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -333,8 +335,8 @@ public struct Instruction
     /// </summary>
     public byte ShiftAmount
     {
-        get => (byte)GetShiftMask(SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET);
-        private set => SetShiftMask(SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET, (uint)value);
+        get => (byte)UintMasking.GetShiftMask(_inst, SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET);
+        private set => UintMasking.SetShiftMask(ref _inst, SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -345,8 +347,8 @@ public struct Instruction
     /// </remarks>
     public FunctionCode FuncCode
     {
-        get => (FunctionCode)GetShiftMask(FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET);
-        private set => SetShiftMask(FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET, (uint)value);
+        get => (FunctionCode)UintMasking.GetShiftMask(_inst, FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET);
+        private set => UintMasking.SetShiftMask(ref _inst, FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -354,8 +356,8 @@ public struct Instruction
     /// </summary>
     public short ImmediateValue
     {
-        get => (short)GetShiftMask(IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET);
-        private set => SetShiftMask(IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET, (ushort)value);
+        get => (short)UintMasking.GetShiftMask(_inst, IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET);
+        private set => UintMasking.SetShiftMask(ref _inst, IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET, (ushort)value);
     }
 
     /// <summary>
@@ -363,46 +365,17 @@ public struct Instruction
     /// </summary>
     public uint Address
     {
-        get => GetShiftMask(ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET) << 2;
-        private set => SetShiftMask(ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET, value >> 2);
+        get => UintMasking.GetShiftMask(_inst, ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET) << 2;
+        private set => UintMasking.SetShiftMask(ref _inst, ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET, value >> 2);
     }
 
     /// <summary>
     /// Casts a <see cref="uint"/> to a <see cref="Instruction"/>.
     /// </summary>
-    public static unsafe explicit operator Instruction(uint value) => *(Instruction*)&value;
+    public static unsafe explicit operator Instruction(uint value) => Unsafe.As<uint, Instruction>(ref value);
 
     /// <summary>
     /// Casts a <see cref="uint"/> to a <see cref="Instruction"/>.
     /// </summary>
-    public static unsafe explicit operator uint(Instruction value) => *(uint*)&value;
-
-    private readonly uint GetShiftMask(int size, int offset)
-    {
-        // Generate the mask by taking 2^(size) and subtracting one
-        uint mask = (uint)(1 << size) - 1;
-
-        // Shift right by the offset then mask off the size
-        return mask & (_inst >> offset);
-    }
-
-    private void SetShiftMask(int size, int offset, uint value)
-    {
-        // Generate the value mask by taking 2^(size),
-        // subtracting one, and shifting.
-        uint vMask = (uint)(1 << size) - 1;
-        vMask <<= offset;
-
-        // Then make the value mask and inverting
-        // the instruction mask
-        uint iMask = ~(vMask);
-
-        // Mask the instruction and the value
-        uint vMasked = (value << offset) & vMask;
-        uint iMasked = _inst & iMask;
-
-        // Combine the instruction and the value
-        // post masking
-        _inst = iMasked | vMasked;
-    }
+    public static unsafe explicit operator uint(Instruction value) => Unsafe.As<Instruction, uint>(ref value);
 }

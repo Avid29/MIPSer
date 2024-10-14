@@ -8,6 +8,7 @@ namespace MIPS.Assembler.Tokenization.Enums;
 public enum TokenizerState
 {
 #pragma warning disable CS1591
+
     LineBegin,
     Begin,
     NewLineText,

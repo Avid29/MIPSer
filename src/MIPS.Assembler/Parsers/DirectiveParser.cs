@@ -194,7 +194,8 @@ public readonly struct DirectiveParser
             var arg = args[i];
 
             var parser = new ExpressionParser(_context, _logger);
-            parser.TryParse(arg, out var result, out _);
+            if (!parser.TryParse(arg, out var result, out _))
+                return false;
 
             if (result.IsRelocatable)
             {
