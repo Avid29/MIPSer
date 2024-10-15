@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Emulator.System.CPU.Models;
-using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Registers;
 
 namespace MIPS.Emulator.System.CPU;
 

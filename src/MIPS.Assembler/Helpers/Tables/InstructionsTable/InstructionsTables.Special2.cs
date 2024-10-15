@@ -2,6 +2,7 @@
 
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System.Collections.Generic;
 
 namespace MIPS.Assembler.Helpers.Tables;

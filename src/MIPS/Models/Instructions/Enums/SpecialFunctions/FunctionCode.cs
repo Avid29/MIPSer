@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-namespace MIPS.Models.Instructions.Enums;
+namespace MIPS.Models.Instructions.Enums.SpecialFunctions;
 
 /// <summary>
 /// An enum for <see cref="OperationCode.Special"/> instruction function codes.

@@ -13,6 +13,8 @@ using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Extensions.MIPS.Models.Instructions;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Registers;
+using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;

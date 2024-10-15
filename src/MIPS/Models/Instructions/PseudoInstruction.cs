@@ -2,6 +2,8 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Registers;
+using MIPS.Models.Instructions.Enums.SpecialFunctions;
 
 namespace MIPS.Models.Instructions;
 

@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-namespace MIPS.Models.Instructions.Enums;
+namespace MIPS.Models.Instructions.Enums.SpecialFunctions;
 
 /// <summary>
 /// An enum for <see cref="OperationCode.Special2"/> instruction function codes.
@@ -22,7 +22,7 @@ public enum Func2Code
     MultiplyAndAddHiLowUnsigned = 0x1,
 
     MultiplyToGPR = 0x2,
-    
+
     MultiplyAndSubtractHiLow = 0x4,
     MultiplyAndSubtractHiLowUnsigned = 0x5,
 

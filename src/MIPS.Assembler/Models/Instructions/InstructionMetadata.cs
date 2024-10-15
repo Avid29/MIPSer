@@ -2,6 +2,7 @@
 
 using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.SpecialFunctions;
 
 namespace MIPS.Assembler.Models.Instructions;
 

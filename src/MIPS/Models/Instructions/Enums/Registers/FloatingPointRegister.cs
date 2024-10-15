@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-namespace MIPS.Models.Instructions.Enums;
+namespace MIPS.Models.Instructions.Enums.Registers;
 
 /// <summary>
 /// An enum for floating-point co-processor registers.
@@ -41,6 +41,6 @@ public enum FloatRegister : byte
     F29 = 29,
     F30 = 30,
     F31 = 31,
-    
+
 #pragma warning restore CS1591
 }

@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Registers;
 using System.Collections.Generic;
 
 namespace MIPS.Assembler.Helpers.Tables;

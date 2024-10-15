@@ -2,6 +2,8 @@
 
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Registers;
+using MIPS.Models.Instructions.Enums.SpecialFunctions;
 
 namespace MIPS.Extensions.MIPS.Models.Instructions;
 

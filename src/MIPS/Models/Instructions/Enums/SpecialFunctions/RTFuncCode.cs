@@ -1,6 +1,8 @@
 ﻿// Adam Dernis 2024
 
-namespace MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Registers;
+
+namespace MIPS.Models.Instructions.Enums.SpecialFunctions;
 
 /// <summary>
 /// These values go in the <see cref="Argument.RT"/> field of instructions with <see cref="OperationCode.RegisterImmediate"/>.
