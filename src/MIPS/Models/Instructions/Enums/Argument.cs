@@ -50,5 +50,5 @@ public enum Argument
     /// <summary>
     /// A 32 bit immediate value
     /// </summary>
-    FullImmediate, 
+    FullImmediate,
 }

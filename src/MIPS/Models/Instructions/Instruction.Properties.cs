@@ -12,15 +12,15 @@ public partial struct Instruction
 {
     // Universal
     private const int OPCODE_BIT_SIZE = 6;
-    private const int REGISTER_ADDRESS_BIT_SIZE = 5;
+    private const int REGISTER_BIT_SIZE = 5;
     private const int OPCODE_BIT_OFFSET = ADDRESS_BIT_SIZE;
 
     // R Type
     private const int SHIFT_AMOUNT_BIT_SIZE = 5;
     private const int FUNCTION_BIT_SIZE = 6;
 
-    private const int RS_BIT_OFFSET = REGISTER_ADDRESS_BIT_SIZE + RT_BIT_OFFSET;
-    private const int RT_BIT_OFFSET = (REGISTER_ADDRESS_BIT_SIZE + RD_BIT_OFFSET);
+    private const int RS_BIT_OFFSET = REGISTER_BIT_SIZE + RT_BIT_OFFSET;
+    private const int RT_BIT_OFFSET = (REGISTER_BIT_SIZE + RD_BIT_OFFSET);
     private const int RD_BIT_OFFSET = (SHIFT_AMOUNT_BIT_SIZE + SHIFT_AMOUNT_BIT_OFFSET);
 
     private const int SHIFT_AMOUNT_BIT_OFFSET = (FUNCTION_BIT_SIZE + FUNCTION_BIT_OFFSET);
@@ -42,14 +42,14 @@ public partial struct Instruction
     /// <summary>
     /// Gets the instruction type.
     /// </summary>
-    public InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RTFuncCode);
+    public readonly InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RTFuncCode);
 
     /// <summary>
     /// Gets the instruction's operation code.
     /// </summary>
     public OperationCode OpCode
-    {
-        get => (OperationCode)UintMasking.GetShiftMask(_inst, OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET);
+    { 
+        readonly get => (OperationCode)UintMasking.GetShiftMask(_inst, OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET);
         private set => UintMasking.SetShiftMask(ref _inst, OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET, (uint)value);
     }
 
@@ -57,18 +57,18 @@ public partial struct Instruction
     /// Gets the instruction's RS Register 
     /// </summary>
     public Register RS
-    {
-        get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_ADDRESS_BIT_SIZE, RS_BIT_OFFSET);
-        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_ADDRESS_BIT_SIZE, RS_BIT_OFFSET, (uint)value);
+    { 
+        readonly get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RS_BIT_OFFSET);
+        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RS_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
     /// Gets the instruction's RT Register 
     /// </summary>
     public Register RT
-    {
-        get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_ADDRESS_BIT_SIZE, RT_BIT_OFFSET);
-        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_ADDRESS_BIT_SIZE, RT_BIT_OFFSET, (uint)value);
+    { 
+        readonly get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RT_BIT_OFFSET);
+        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RT_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -80,7 +80,7 @@ public partial struct Instruction
     /// </remarks>
     public RTFuncCode RTFuncCode
     {
-        get => (RTFuncCode)RT;
+        readonly get => (RTFuncCode)RT;
         set => RT = (Register)value;
     }
 
@@ -88,17 +88,17 @@ public partial struct Instruction
     /// Gets the instruction's RD Register 
     /// </summary>
     public Register RD
-    {
-        get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_ADDRESS_BIT_SIZE, RD_BIT_OFFSET);
-        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_ADDRESS_BIT_SIZE, RD_BIT_OFFSET, (uint)value);
+    { 
+        readonly get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RD_BIT_OFFSET);
+        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RD_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
     /// Gets the instruction's shift amount 
     /// </summary>
     public byte ShiftAmount
-    {
-        get => (byte)UintMasking.GetShiftMask(_inst, SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET);
+    { 
+        readonly get => (byte)UintMasking.GetShiftMask(_inst, SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET);
         private set => UintMasking.SetShiftMask(ref _inst, SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET, (uint)value);
     }
 
@@ -109,8 +109,8 @@ public partial struct Instruction
     /// Instruction may or may not have function code.
     /// </remarks>
     public FunctionCode FuncCode
-    {
-        get => (FunctionCode)UintMasking.GetShiftMask(_inst, FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET);
+    { 
+        readonly get => (FunctionCode)UintMasking.GetShiftMask(_inst, FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET);
         private set => UintMasking.SetShiftMask(ref _inst, FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET, (uint)value);
     }
 
@@ -122,7 +122,7 @@ public partial struct Instruction
     /// </remarks>
     public Func2Code Func2Code
     {
-        get => (Func2Code)FuncCode;
+        readonly get => (Func2Code)FuncCode;
         private set => FuncCode = (FunctionCode)value;
     }
 
@@ -130,8 +130,8 @@ public partial struct Instruction
     /// Gets the instruction's immediate value.
     /// </summary>
     public short ImmediateValue
-    {
-        get => (short)UintMasking.GetShiftMask(_inst, IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET);
+    { 
+        readonly get => (short)UintMasking.GetShiftMask(_inst, IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET);
         private set => UintMasking.SetShiftMask(ref _inst, IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET, (ushort)value);
     }
 
@@ -140,7 +140,7 @@ public partial struct Instruction
     /// </summary>
     public int Offset
     {
-        get => ImmediateValue << 2;
+        readonly get => ImmediateValue << 2;
         private set => ImmediateValue = (short)(value >> 2);
     }
 
@@ -148,8 +148,8 @@ public partial struct Instruction
     /// Gets the instruction's immediate value.
     /// </summary>
     public uint Address
-    {
-        get => UintMasking.GetShiftMask(_inst, ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET) << 2;
+    { 
+        readonly get => UintMasking.GetShiftMask(_inst, ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET) << 2;
         private set => UintMasking.SetShiftMask(ref _inst, ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET, value >> 2);
     }
 }
