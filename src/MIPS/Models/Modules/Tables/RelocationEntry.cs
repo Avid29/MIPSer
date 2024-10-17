@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Helpers;
+using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables.Enums;
 using System.Runtime.InteropServices;
@@ -10,8 +12,15 @@ namespace MIPS.Models.Modules.Tables;
 /// An entry in the load module's relocation table.
 /// </summary>
 [StructLayout(LayoutKind.Explicit)]
-public struct RelocationEntry
+public struct RelocationEntry : IBigEndianReadWritable<RelocationEntry>
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RelocationEntry"/> struct.
+    /// </summary>
+    public RelocationEntry(Address address, RelocationType type) : this((uint)address.Value, address.Section, type)
+    {
+    }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="RelocationEntry"/> struct.
     /// </summary>
@@ -46,4 +55,23 @@ public struct RelocationEntry
     [field: FieldOffset(6)]
     private readonly ushort _filler;
 
+    /// <inheritdoc/>
+    public readonly RelocationEntry Read(Stream stream)
+    {
+        stream.TryRead<uint>(out var address);
+        stream.TryRead<byte>(out var section);
+        stream.TryRead<byte>(out var type);
+        stream.TryRead<ushort>(out _);
+
+        return new(address, (Section)section, (RelocationType)type);
+    }
+    
+    /// <inheritdoc/>
+    public readonly void Write(Stream stream)
+    {
+        stream.TryWrite(Address);
+        stream.TryWrite((byte)Section);
+        stream.TryWrite((byte)Type);
+        stream.TryWrite(_filler);
+    }
 }

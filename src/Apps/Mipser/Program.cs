@@ -52,12 +52,16 @@ public class Program
         var inFile = File.Open(filePath, FileMode.Open);
         var outFile = File.Open(resultFile, FileMode.Create);
         var assembler = await Assembler.AssembleAsync(inFile, filePath);
-        var module = assembler.WriteModule(outFile);
 
-
-        Console.WriteLine(module is not null
+        Console.WriteLine(!assembler.Failed
             ? $"Assembled with {assembler.Logs.Count} messages."
             : $"Failed to assemble with {assembler.Logs.Count} messages.");
+
+        if (!assembler.Failed)
+        {
+            
+        var module = assembler.WriteModule(outFile);
+        }
 
         Console.WriteLine();
 
@@ -77,6 +81,7 @@ public class Program
             }
 
             Console.ResetColor();
+
         }
     }
 }

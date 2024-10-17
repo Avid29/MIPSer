@@ -11,6 +11,7 @@ using MIPS.Assembler.Parsers.Expressions.Evaluator;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Addressing;
+using MIPS.Models.Instructions.Enums;
 using System;
 
 namespace MIPS.Assembler.Parsers;

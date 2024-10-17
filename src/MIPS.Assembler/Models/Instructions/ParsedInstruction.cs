@@ -3,6 +3,7 @@
 using MIPS.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using System.Diagnostics.CodeAnalysis;
+using MIPS.Models.Modules.Tables;
 
 namespace MIPS.Assembler.Models.Instructions;
 
@@ -17,26 +18,25 @@ public class ParsedInstruction
     /// <summary>
     /// Initializes a new instance of the <see cref="ParsedInstruction"/> class.
     /// </summary>
-    public ParsedInstruction(Instruction instruction, string? symbol = null)
+    public ParsedInstruction(Instruction instruction, RelocationEntry? symbol = null)
     {
         _real = instruction;
-        SymbolReferenced = symbol;
+        Relocation = symbol;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParsedInstruction"/> class.
     /// </summary>
-    public ParsedInstruction(PseudoInstruction instruction, string? symbol = null)
+    public ParsedInstruction(PseudoInstruction instruction, RelocationEntry? symbol = null)
     {
         _pseudo = instruction;
-        SymbolReferenced = symbol;
+        Relocation = symbol;
     }
 
-    // TODO: Replace with ref or rel table entry.
     /// <summary>
     /// Gets the symbol referenced, or null if none.
     /// </summary>
-    public string? SymbolReferenced { get; }
+    public RelocationEntry? Relocation { get; }
 
     /// <summary>
     /// Gets whether or not the parsed instruction was a pseudo instruction.

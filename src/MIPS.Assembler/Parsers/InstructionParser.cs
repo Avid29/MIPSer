@@ -13,6 +13,8 @@ using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
+using MIPS.Models.Modules.Tables;
+using MIPS.Models.Modules.Tables.Enums;
 using System;
 using System.Diagnostics.CodeAnalysis;
 
@@ -76,7 +78,7 @@ public struct InstructionParser
     /// <returns>Whether or not an instruction was parsed.</returns>
     public bool TryParse(AssemblyLine line, [NotNullWhen(true)] out ParsedInstruction? parsedInstruction)
     {
-        string? relSymbol = null;
+        RelocationEntry? relocation = null;
         parsedInstruction = null;
 
         var name = line.Instruction;
@@ -114,7 +116,7 @@ public struct InstructionParser
         {
             // Split out next arg
             var arg = line.Args[i];
-            TryParseArg(arg, pattern[i], out relSymbol);
+            TryParseArg(arg, pattern[i], out relocation);
         }
 
         // Handle the pseudo-instruction condition
@@ -136,7 +138,7 @@ public struct InstructionParser
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<PseudoInstruction>(),
             };
 
-            parsedInstruction = new ParsedInstruction(pseudo, relSymbol);
+            parsedInstruction = new ParsedInstruction(pseudo, relocation);
             return true;
         }
 
@@ -167,19 +169,19 @@ public struct InstructionParser
             _logger?.Log(Severity.Message, LogId.ZeroRegWriteBack, "This instruction writes to $zero.");
         }
 
-        parsedInstruction = new ParsedInstruction(instruction, relSymbol);
+        parsedInstruction = new ParsedInstruction(instruction, relocation);
         return true;
     }
 
-    private bool TryParseArg(ReadOnlySpan<Token> arg, Argument type, out string? relSymbol)
+    private bool TryParseArg(ReadOnlySpan<Token> arg, Argument type, out RelocationEntry? relocation)
     {
-        relSymbol = null;
+        relocation = null;
 
         return type switch
         {
             Argument.RS or Argument.RT or Argument.RD =>TryParseRegisterArg(arg[0], type),
-            Argument.Shift or Argument.Immediate or Argument.FullImmediate or Argument.Offset or Argument.Address => TryParseExpressionArg(arg, type, out relSymbol),
-            Argument.AddressOffset => TryParseAddressOffsetArg(arg, out relSymbol),
+            Argument.Shift or Argument.Immediate or Argument.FullImmediate or Argument.Offset or Argument.Address => TryParseExpressionArg(arg, type, out relocation),
+            Argument.AddressOffset => TryParseAddressOffsetArg(arg, out relocation),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument of type '{type}' is not within parsable type range."),
         };
     }
@@ -226,12 +228,13 @@ public struct InstructionParser
     /// <summary>
     /// Parses an argument as an expression and assigns it to the target component
     /// </summary>
-    private bool TryParseExpressionArg(ReadOnlySpan<Token> arg, Argument target, out string? relSymbol)
+    private bool TryParseExpressionArg(ReadOnlySpan<Token> arg, Argument target, out RelocationEntry? relocation)
     {
+        relocation = null;
         var parser = new ExpressionParser(_context, _logger);
 
         // Attempt to parse expression
-        if (!parser.TryParse(arg, out var address, out relSymbol))
+        if (!parser.TryParse(arg, out var address, out string? relSymbol))
             return false;
 
         // NOTE: Casting might truncate the value to fit the bit size.
@@ -253,6 +256,18 @@ public struct InstructionParser
         {
             _logger?.Log(Severity.Error, LogId.RelocatableReferenceInShift, "Shift amount argument cannot reference relocatable symbols.");
             return false;
+        }
+
+        if (address.IsRelocatable && _context is not null)
+        {
+            var type = target switch
+            {
+                Argument.Address => RelocationType.Address,
+                Argument.Immediate => RelocationType.SimpleImmediate,
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<RelocationType>($"Argument of type '{target}' cannot be relocateable."),
+            };
+
+            relocation = new RelocationEntry(_context.CurrentAddress, type);
         }
 
         long value = address.Value;
@@ -323,7 +338,7 @@ public struct InstructionParser
     /// <summary>
     /// Parses an argument as an address offset, assigning its components to immediate and $rs.
     /// </summary>
-    private bool TryParseAddressOffsetArg(ReadOnlySpan<Token> arg, out string? relSymbol)
+    private bool TryParseAddressOffsetArg(ReadOnlySpan<Token> arg, out RelocationEntry? relSymbol)
     {
         relSymbol = null;
 

@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Models.Addressing.Enums;
+using System.Runtime.InteropServices;
 
 namespace MIPS.Models.Addressing;
 

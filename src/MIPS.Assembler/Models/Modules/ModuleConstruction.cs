@@ -4,6 +4,7 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules;
+using MIPS.Models.Modules.Tables;
 using System.Collections.Generic;
 using System.IO;
 
@@ -18,7 +19,7 @@ public partial class ModuleConstruction
     private const ushort VERSION = 0x2C_C6;
     private const int SECTION_COUNT = 6;
 
-    private readonly Dictionary<Address, string> _relocations;
+    private readonly List<RelocationEntry> _relocations;
     private readonly Dictionary<Address, string> _references;
     private readonly Dictionary<string, Address> _definitions;
 
@@ -94,6 +95,12 @@ public partial class ModuleConstruction
         ResetStreamPositions();
         foreach(var section in _sections)
             section.CopyTo(stream);
+
+        // Write tables to the stream
+        foreach(var rel in _relocations)
+        {
+            rel.Write(stream);
+        }
 
         // Mark the end and flush
         stream.SetLength(stream.Position);

@@ -124,9 +124,9 @@ public partial class Assembler
         }
 
         // Track relocatable reference
-        if (instruction.SymbolReferenced is not null)
+        if (instruction.Relocation is not null)
         {
-            _module.TryTrackRelocation(CurrentAddress, instruction.SymbolReferenced);
+            _module.TryTrackRelocation(instruction.Relocation.Value);
         }
 
         // Append instruction to active segment

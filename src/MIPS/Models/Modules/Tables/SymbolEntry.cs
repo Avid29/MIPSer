@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Models.Modules.Tables.Enums;
 using System.Runtime.InteropServices;
 
 namespace MIPS.Models.Modules.Tables;
@@ -14,7 +15,7 @@ public struct SymbolEntry
     /// Gets flags on the symbol entry.
     /// </summary>
     [field: FieldOffset(0)]
-    public uint Flags { get; set; }
+    public SymbolFlags Flags { get; set; }
 
     /// <summary>
     /// Gets the symbol's value.

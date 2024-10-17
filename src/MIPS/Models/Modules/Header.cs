@@ -1,7 +1,6 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using MIPS.Extensions.System.IO;
 using System.Runtime.CompilerServices;
 
 namespace MIPS.Models.Modules;

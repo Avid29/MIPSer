@@ -3,7 +3,7 @@
 using System.Buffers;
 using System.Numerics;
 
-namespace MIPS.Extensions.System.IO;
+namespace System.IO;
 
 /// <summary>
 /// A class containing extensions for <see cref="Stream"/>.
@@ -65,7 +65,6 @@ public static class StreamExtensions
     {
         // Initialize results
         bool success = false;
-        value = default;
 
         // Create temporary array
         byte[]? pooledArray = null;

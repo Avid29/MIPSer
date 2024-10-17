@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Models.Addressing;
+using MIPS.Models.Modules.Tables;
 
 namespace MIPS.Assembler.Models.Modules;
 
@@ -46,12 +47,11 @@ public partial class ModuleConstruction
     /// <summary>
     /// Attempts to track a relocation entry.
     /// </summary>
-    /// <param name="location">The address of the relocation.</param>
-    /// <param name="symbol">The relocatable symbol.</param>
+    /// <param name="entry">The relocation information.</param>
     /// <returns>Whether or not a relocation entry was made.</returns>
-    public bool TryTrackRelocation(Address location, string symbol)
+    public bool TryTrackRelocation(RelocationEntry entry)
     {
-        _relocations.Add(location, symbol);
+        _relocations.Add(entry);
         return true;
     }
 }
