@@ -98,6 +98,7 @@ public partial class Assembler
             assembler.AlignmentPass(tokens[i]);
         }
 
+        assembler._activeSection = Section.Text;
         assembler._module.ResetStreamPositions();
 
         for (int i = 1; i <= tokens.LineCount; i++)

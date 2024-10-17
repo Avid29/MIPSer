@@ -6,5 +6,5 @@ main:
 	add		$t0,	$s0,	$s1
 	j		main+8
 
-# .data
-# .byte 0x1000
+.data
+.byte 0x1000
