@@ -1,0 +1,100 @@
+﻿[
+  {
+    "name": "bltz",
+    "op_code": 1,
+    "rt_func_code": 0,
+    "args": [ 0, 5 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "bgez",
+    "op_code": 1,
+    "rt_func_code": 1,
+    "args": [ 0, 5 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "bltzl",
+    "op_code": 1,
+    "rt_func_code": 2,
+    "args": [ 0, 5 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "bgezl",
+    "op_code": 1,
+    "rt_func_code": 3,
+    "args": [ 0, 5 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "tegi",
+    "op_code": 1,
+    "rt_func_code": 8,
+    "args": [ 0, 4 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "tegiu",
+    "op_code": 1,
+    "rt_func_code": 9,
+    "args": [ 0, 4 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "tlti",
+    "op_code": 1,
+    "rt_func_code": 10,
+    "args": [ 0, 4 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "tltiu",
+    "op_code": 1,
+    "rt_func_code": 11,
+    "args": [ 0, 4 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "teqi",
+    "op_code": 1,
+    "rt_func_code": 12,
+    "args": [ 0, 4 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "tnei",
+    "op_code": 1,
+    "rt_func_code": 14,
+    "args": [ 0, 4 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "bltzal",
+    "op_code": 1,
+    "rt_func_code": 16,
+    "args": [ 0, 5 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "bgezal",
+    "op_code": 1,
+    "rt_func_code": 17,
+    "args": [ 0, 5 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "blezall",
+    "op_code": 1,
+    "rt_func_code": 18,
+    "args": [ 0, 5 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "bgezall",
+    "op_code": 1,
+    "rt_func_code": 19,
+    "args": [ 0, 5 ],
+    "versions": [ 2, 3, 4, 5 ]
+  }
+]

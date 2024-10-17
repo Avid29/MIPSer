@@ -252,7 +252,7 @@ public partial struct Instruction
     /// <summary>
     /// Creates a new <see cref="OperationCode.RegisterImmediate"/> instruction.
     /// </summary>
-    public static Instruction Create(RTFuncCode code, Register rs, short immediate)
+    public static Instruction Create(RegImmFuncCode code, Register rs, short immediate)
     {
         Instruction value = default;
         value.OpCode = OperationCode.RegisterImmediate;
@@ -265,7 +265,7 @@ public partial struct Instruction
     /// <summary>
     /// Creates a new <see cref="OperationCode.RegisterImmediate"/> branch instruction.
     /// </summary>
-    public static Instruction Create(RTFuncCode code, Register rs, int offset)
+    public static Instruction Create(RegImmFuncCode code, Register rs, int offset)
     {
         Instruction value = default;
         value.OpCode = OperationCode.RegisterImmediate;

@@ -1,13 +1,11 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Helpers.Tables;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Instructions;
-using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Extensions.MIPS.Models.Instructions;
@@ -17,7 +15,6 @@ using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Numerics;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -32,7 +29,7 @@ public struct InstructionParser
     private InstructionMetadata _meta;
 
     private OperationCode _opCode;
-    private FunctionCode _funcCode;
+    private FunctionCode? _funcCode;
     private Register _rs;
     private Register _rt;
     private Register _rd;
@@ -86,10 +83,6 @@ public struct InstructionParser
             return false;
         }
 
-        // Assign op code and function code
-        _opCode = _meta.OpCode;
-        _funcCode = _meta.FuncCode;
-
         // Parse argument data according to pattern
         Argument[] pattern = _meta.ArgumentPattern;
         
@@ -114,7 +107,9 @@ public struct InstructionParser
         // Handle the pseudo-instruction condition
         if (_meta.IsPseudoInstruction)
         {
-            var pseudoOp = _meta.PseudoOp;
+            Guard.IsTrue(_meta.PseudoOp.HasValue);
+
+            var pseudoOp = _meta.PseudoOp.Value;
             var pseudo = pseudoOp switch
             {
                 PseudoOp.NoOperation => new PseudoInstruction(pseudoOp),
@@ -132,16 +127,23 @@ public struct InstructionParser
             return true;
         }
 
+        // If it's not a pseudo instruction, there should be an OpCode
+        Guard.IsNotNull(_meta.OpCode);
+
+        // Assign op code and function code
+        _opCode = _meta.OpCode.Value;
+        _funcCode = _meta.FuncCode;
+
         // Create the instruction from its components based on the instruction type
         var instruction = _meta.Type switch
         {
-            InstructionType.BasicR => Instruction.Create(_funcCode, _rs, _rt, _rd, _shift),
+            InstructionType.BasicR when _funcCode.HasValue => Instruction.Create(_funcCode.Value, _rs, _rt, _rd, _shift),
             InstructionType.BasicI => Instruction.Create(_opCode, _rs, _rt, (short)_immediate),
             InstructionType.BasicJ => Instruction.Create(_opCode, _address),
-            InstructionType.RegisterImmediate => Instruction.Create(_meta.RTFuncCode, _rs, (short)_immediate),
-            InstructionType.RegisterImmediateBranch => Instruction.Create(_meta.RTFuncCode, _rs, _immediate),
-            InstructionType.Special2R => Instruction.Create(_meta.Func2Code, _rs, _rt, _rd, _shift),
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction>($"Invalid instruction type '{_meta.Type}'."),
+            InstructionType.RegisterImmediate when _meta.RegisterImmediateFuncCode.HasValue => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, (short)_immediate),
+            InstructionType.RegisterImmediateBranch when _meta.RegisterImmediateFuncCode.HasValue => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, _immediate),
+            InstructionType.Special2R when _meta.Function2Code.HasValue => Instruction.Create(_meta.Function2Code.Value, _rs, _rt, _rd, _shift),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction>($"Invalid instruction meta '{_meta}'."),
         };
 
         // Check for write back to zero register

@@ -40,7 +40,7 @@ public partial class Assembler
             // with a NOP on the second pass.
             int realizedCount = 1;
             if(InstructionsTable.TryGetInstruction(line.Instruction.Source, out var meta))
-               realizedCount = meta.RealizedInstructionCount;
+               realizedCount = meta.RealizedInstructionCount ?? 1;
 
             // Multiply by realized instruction count to handle pseudo instructions
             Append(sizeof(Instruction) * realizedCount);

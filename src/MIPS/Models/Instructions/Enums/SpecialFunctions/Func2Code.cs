@@ -26,7 +26,7 @@ public enum Func2Code
     MultiplyAndSubtractHiLow = 0x4,
     MultiplyAndSubtractHiLowUnsigned = 0x5,
 
-    CountLeadingZeros = 0x21,
+    CountLeadingZeros = 0x20,
     CountLeadingOnes = 0x21,
 
     SoftwareDebugBreakpoint = 0x3f,

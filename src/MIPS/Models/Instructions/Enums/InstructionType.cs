@@ -14,5 +14,6 @@ public enum InstructionType
     Special2R,
     BasicI,
     BasicJ,
+    Pseudo,
 #pragma warning restore CS1591
 }

@@ -78,9 +78,9 @@ public partial struct Instruction
     /// This is stored in the RT register space for an instruction where
     /// the <see cref="OpCode"/> is <see cref="OperationCode.RegisterImmediate"/>.
     /// </remarks>
-    public RTFuncCode RTFuncCode
+    public RegImmFuncCode RTFuncCode
     {
-        readonly get => (RTFuncCode)RT;
+        readonly get => (RegImmFuncCode)RT;
         set => RT = (Register)value;
     }
 

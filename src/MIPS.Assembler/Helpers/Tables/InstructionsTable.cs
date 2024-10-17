@@ -1,8 +1,11 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Assembler.Models.Instructions;
-using MIPS.Models.Instructions.Enums;
 using System.Collections.Generic;
+using System.Reflection;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 
 namespace MIPS.Assembler.Helpers.Tables;
 
@@ -24,25 +27,39 @@ public static partial class InstructionsTable
 
     private static Dictionary<string, InstructionMetadata> InstructionTable => _instructionTable ?? InitFullTable();
 
-    // This is terrible design, but it's relatively readable.
-    // Fix later
     private static Dictionary<string, InstructionMetadata> InitFullTable()
     {
+        var assembly = Assembly.GetExecutingAssembly();
+        var resources = assembly.GetManifestResourceNames();
+        resources = resources.Where(x => x.EndsWith("Instructions.json")).ToArray();
+
         _instructionTable = [];
-        MergeDictionary(_rTypeInstructionTable);
-        MergeDictionary(_iTypeInstructionTable);
-        MergeDictionary(_jTypeInstructionTable);
-        MergeDictionary(_regImmInstructionTable);
-        MergeDictionary(_coProcInstructionTable);
-        MergeDictionary(_pseudoInstructionTable);
+
+        foreach (var resource in resources)
+        {
+            var instructions = LoadInstructionSet(assembly, resource);
+
+            foreach(var instruction in instructions)
+            {
+                _instructionTable.Add(instruction.Name, instruction);
+            }
+        }
+
         return _instructionTable;
     }
 
-    private static void MergeDictionary(Dictionary<string, InstructionMetadata> dict)
+    private static InstructionMetadata[] LoadInstructionSet(Assembly assembly, string resourceName)
     {
-        foreach ((var key, var value) in dict)
+        using (Stream? stream = assembly.GetManifestResourceStream(resourceName))
         {
-            _instructionTable?.Add(key, value);
+            if (stream is null)
+                return [];
+
+            var instructions = JsonSerializer.Deserialize<InstructionMetadata[]>(stream);
+            if (instructions is null)
+                return [];
+
+            return instructions;
         }
     }
 }

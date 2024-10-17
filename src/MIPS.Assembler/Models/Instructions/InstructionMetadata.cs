@@ -3,6 +3,7 @@
 using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
+using System.Text.Json.Serialization;
 
 namespace MIPS.Assembler.Models.Instructions;
 
@@ -11,64 +12,69 @@ namespace MIPS.Assembler.Models.Instructions;
 /// </summary>
 public readonly struct InstructionMetadata
 {
+    private static readonly Version[] AllVersions = [Version.MipsI, Version.MipsII, Version.MipsIII, Version.MipsIV, Version.MipsV, Version.MipsVI];
+
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, OperationCode opCode, Argument[] argumentPattern, Version version = Version.All)
+    public InstructionMetadata(string name, OperationCode opCode, Argument[] argumentPattern, params Version[] versions)
     {
         Name = name;
         OpCode = opCode;
-        FuncCode = FunctionCode.None;
-        Func2Code = Func2Code.None;
-        RTFuncCode = RTFuncCode.None;
         ArgumentPattern = argumentPattern;
-        RealizedInstructionCount = 1;
-        MIPSVersion = version;
+
+        if (versions.Length is 0)
+            versions = AllVersions;
+
+        MIPSVersions = versions;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, FunctionCode funcCode, Argument[] argumentPattern, Version version = Version.All)
+    public InstructionMetadata(string name, FunctionCode funcCode, Argument[] argumentPattern, params Version[] versions)
     {
         Name = name;
         OpCode = OperationCode.Special;
         FuncCode = funcCode;
-        Func2Code = Func2Code.None;
-        RTFuncCode = RTFuncCode.None;
         ArgumentPattern = argumentPattern;
-        RealizedInstructionCount = 1;
-        MIPSVersion = version;
+
+        if (versions.Length is 0)
+            versions = AllVersions;
+
+        MIPSVersions = versions;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, Func2Code funcCode, Argument[] argumentPattern, Version version = Version.All)
+    public InstructionMetadata(string name, Func2Code funcCode, Argument[] argumentPattern, params Version[] versions)
     {
         Name = name;
-        OpCode = OperationCode.Special;
-        FuncCode = FunctionCode.None;
-        Func2Code = funcCode;
-        RTFuncCode = RTFuncCode.None;
+        OpCode = OperationCode.Special2;
+        Function2Code = funcCode;
         ArgumentPattern = argumentPattern;
-        RealizedInstructionCount = 1;
-        MIPSVersion = version;
+
+        if (versions.Length is 0)
+            versions = AllVersions;
+
+        MIPSVersions = versions;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, RTFuncCode branchCode, Argument[] argumentPattern, Version version = Version.All)
+    public InstructionMetadata(string name, RegImmFuncCode branchCode, Argument[] argumentPattern, params Version[] versions)
     {
         Name = name;
         OpCode = OperationCode.RegisterImmediate;
-        FuncCode = FunctionCode.None;
-        Func2Code = Func2Code.None;
-        RTFuncCode = branchCode;
+        RegisterImmediateFuncCode = branchCode;
         ArgumentPattern = argumentPattern;
-        RealizedInstructionCount = 1;
-        MIPSVersion = version;
+
+        if (versions.Length is 0)
+            versions = AllVersions;
+
+        MIPSVersions = versions;
     }
 
     /// <summary>
@@ -77,56 +83,89 @@ public readonly struct InstructionMetadata
     /// <remarks>
     /// This is constructor is only for pseudo-instructions.
     /// </remarks>
-    public InstructionMetadata(string name, PseudoOp pseudoOp, Argument[] argumentPattern, int realizedCount, Version version = Version.All)
+    public InstructionMetadata(string name, PseudoOp pseudoOp, Argument[] argumentPattern, int realizedCount, params Version[] versions)
     {
         Name = name;
         PseudoOp = pseudoOp;
-        OpCode = OperationCode.PseudoInstruction;
-        FuncCode = FunctionCode.None;
-        RTFuncCode = RTFuncCode.None;
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = realizedCount;
-        MIPSVersion = version;
+
+        if (versions.Length is 0)
+            versions = AllVersions;
+
+        MIPSVersions = versions;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
+    /// </summary>
+    [JsonConstructor]
+    internal InstructionMetadata(string name, OperationCode? opCode, FunctionCode? funcCode, Func2Code? function2Code, RegImmFuncCode? registerImmediateFuncCode, PseudoOp? pseudoOp, Argument[] argumentPattern, int? realizedInstructionCount, Version[] mIPSVersions)
+    {
+        Name = name;
+        OpCode = opCode;
+        FuncCode = funcCode;
+        Function2Code = function2Code;
+        RegisterImmediateFuncCode = registerImmediateFuncCode;
+        PseudoOp = pseudoOp;
+        ArgumentPattern = argumentPattern;
+        RealizedInstructionCount = realizedInstructionCount;
+        MIPSVersions = mIPSVersions;
     }
 
     /// <summary>
     /// Gets the name of the instruction.
     /// </summary>
+    [JsonPropertyName("name")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public string Name { get; }
 
     /// <summary>
     /// Gets the instruction operation code.
     /// </summary>
-    public OperationCode OpCode { get; }
+    [JsonPropertyName("op_code")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public OperationCode? OpCode { get; }
 
     /// <summary>
     /// Gets the instruction function code.
     /// </summary>
-    public FunctionCode FuncCode { get; }
+    [JsonPropertyName("func_code")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public FunctionCode? FuncCode { get; }
 
     /// <summary>
     /// Gets the instruction function code.
     /// </summary>
-    public Func2Code Func2Code { get; }
+    [JsonPropertyName("func2_code")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Func2Code? Function2Code { get; }
 
     /// <summary>
     /// Gets the instruction register immediate code.
     /// </summary>
-    public RTFuncCode RTFuncCode { get; }
+    [JsonPropertyName("rt_func_code")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public RegImmFuncCode? RegisterImmediateFuncCode { get; }
 
     /// <summary>
     /// Gets the pseudo op for a pseudo-instruction.
     /// </summary>
-    public PseudoOp PseudoOp { get; }
+    [JsonPropertyName("pseudo_op")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public PseudoOp? PseudoOp { get; }
 
     /// <summary>
     /// Gets the function type.
     /// </summary>
-    public readonly InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RTFuncCode);
+    [JsonIgnore]
+    public readonly InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RegisterImmediateFuncCode);
 
     /// <summary>
     /// Gets the instruction parse type
     /// </summary>
+    [JsonPropertyName("args")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public Argument[] ArgumentPattern { get; }
 
     /// <summary>
@@ -135,15 +174,20 @@ public readonly struct InstructionMetadata
     /// <remarks>
     /// This exists for pseudo instructions.
     /// </remarks>
-    public int RealizedInstructionCount { get; }
+    [JsonPropertyName("real_instruction_count")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? RealizedInstructionCount { get; }
 
     /// <summary>
     /// Gets whether or not the instruction is a pseudo instruction.
     /// </summary>
-    public bool IsPseudoInstruction => OpCode is OperationCode.PseudoInstruction;
+    [JsonIgnore]
+    public bool IsPseudoInstruction => !OpCode.HasValue;
 
     /// <summary>
     /// Gets the version of MIPS required for the instruction.
     /// </summary>
-    public Version MIPSVersion { get; }
+    [JsonPropertyName("versions")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public Version[] MIPSVersions { get; }
 }

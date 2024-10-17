@@ -18,19 +18,9 @@ public enum OperationCode : byte
     Special = 0x00,
 
     /// <summary>
-    /// Marks a register immediate instruction. See <see cref="RTFuncCode"/>.
+    /// Marks a register immediate instruction. See <see cref="RegImmFuncCode"/>.
     /// </summary>
     RegisterImmediate = 0x01,
-
-    /// <summary>
-    /// Marks a pseudo-instruction
-    /// </summary>
-    /// <remarks>
-    /// This value is too large to encode in a real instruction. If by accident
-    /// this were encoded into an <see cref="Instruction"/> struct, it would become 
-    /// <see cref="Special"/> upon unencoding.
-    /// </remarks>
-    PseudoInstruction = 0x40,
 
 #pragma warning disable CS1591
 

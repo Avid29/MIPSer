@@ -9,34 +9,13 @@ namespace MIPS.Models.Instructions.Enums;
 public enum Version : byte
 {
 #pragma warning disable CS1591
-    All = byte.MaxValue,
 
-    MipsI = 0x1,
-    MipsII = 0x2,
-    MipsIII = 0x4,
-    MipsIV = 0x8,
-    MipsV = 0x10,
-    MipsVI = 0x20,
-
-    /// <summary>
-    /// MIPS I and II.
-    /// </summary>
-    MipsItoII = MipsI | MipsII,
-    
-    /// <summary>
-    /// MIPS I through V.
-    /// </summary>
-    MipsItoV = MipsI | MipsII | MipsIII | MipsIV | MipsV,
-    
-    /// <summary>
-    /// MIPS II through V.
-    /// </summary>
-    MipsIItoV = MipsII | MipsIII | MipsIV | MipsV,
-    
-    /// <summary>
-    /// MIPS II through VI.
-    /// </summary>
-    MipsIItoVI = MipsII | MipsIII | MipsIV | MipsV | MipsVI,
+    MipsI = 1,
+    MipsII = 2, 
+    MipsIII = 3,
+    MipsIV = 4,
+    MipsV = 5,
+    MipsVI = 6, 
 
 #pragma warning restore CS1591
 }

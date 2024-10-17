@@ -7,15 +7,6 @@ namespace MIPS.Models.Instructions.Enums.SpecialFunctions;
 /// </summary>
 public enum FunctionCode : byte
 {
-    /// <summary>
-    /// Marks that there is no function code.
-    /// </summary>
-    /// <remarks>
-    /// This value is too large to encode in a real instruction. If by accident this were encoded into
-    /// an <see cref="Instruction"/> struct, it would become <see cref="ShiftLeftLogical"/>.
-    /// </remarks>
-    None = 0x40,
-
 #pragma warning disable CS1591
 
     ShiftLeftLogical = 0x00,

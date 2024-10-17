@@ -17,13 +17,16 @@ public static class InstructionTypeHelper
     /// <param name="opCode">The instruction to get the type of.</param>
     /// <param name="rtFuncCode">The rtFunction of the instruction.</param>
     /// <returns>The <see cref="InstructionType"/> associated to an <see cref="Instruction"/>.</returns>
-    public static InstructionType GetInstructionType(OperationCode opCode, RTFuncCode rtFuncCode)
+    public static InstructionType GetInstructionType(OperationCode? opCode, RegImmFuncCode? rtFuncCode)
     {
+        if (!opCode.HasValue)
+            return InstructionType.Pseudo;
+
         return opCode switch
         {
             OperationCode.Special => InstructionType.BasicR,
-            OperationCode.RegisterImmediate when rtFuncCode is <= RTFuncCode.BranchOnGreaterThanZeroLikely
-            or >= RTFuncCode.BranchOnLessThanZeroAndLink => InstructionType.RegisterImmediateBranch,
+            OperationCode.RegisterImmediate when rtFuncCode is <= RegImmFuncCode.BranchOnGreaterThanZeroLikely
+            or >= RegImmFuncCode.BranchOnLessThanZeroAndLink => InstructionType.RegisterImmediateBranch,
             OperationCode.RegisterImmediate => InstructionType.RegisterImmediateBranch,
             OperationCode.Special2 => InstructionType.Special2R,
             OperationCode.Jump or

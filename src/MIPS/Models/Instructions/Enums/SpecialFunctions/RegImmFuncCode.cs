@@ -7,7 +7,7 @@ namespace MIPS.Models.Instructions.Enums.SpecialFunctions;
 /// <summary>
 /// These values go in the <see cref="Argument.RT"/> field of instructions with <see cref="OperationCode.RegisterImmediate"/>.
 /// </summary>
-public enum RTFuncCode : byte
+public enum RegImmFuncCode : byte
 {
     /// <summary>
     /// Marks that there is no function code.

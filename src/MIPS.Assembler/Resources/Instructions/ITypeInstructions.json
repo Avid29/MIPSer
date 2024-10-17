@@ -1,0 +1,170 @@
+﻿[
+  {
+    "name": "beq",
+    "op_code": 4,
+    "args": [ 0, 1, 5 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "bne",
+    "op_code": 5,
+    "args": [ 0, 1, 5 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "blez",
+    "op_code": 6,
+    "args": [ 0, 5 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "bgtz",
+    "op_code": 7,
+    "args": [ 0, 5 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "addi",
+    "op_code": 8,
+    "args": [ 1, 0, 4 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "addiu",
+    "op_code": 9,
+    "args": [ 1, 0, 4 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "slti",
+    "op_code": 10,
+    "args": [ 1, 0, 4 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "sltiu",
+    "op_code": 11,
+    "args": [ 1, 0, 4 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "andi",
+    "op_code": 12,
+    "args": [ 1, 0, 4 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "ori",
+    "op_code": 13,
+    "args": [ 1, 0, 4 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "xori",
+    "op_code": 14,
+    "args": [ 1, 0, 4 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "lui",
+    "op_code": 15,
+    "args": [ 1, 4 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "beql",
+    "op_code": 20,
+    "args": [ 0, 5 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "bnel",
+    "op_code": 21,
+    "args": [ 0, 5 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "blezl",
+    "op_code": 22,
+    "args": [ 0, 5 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "bgtzl",
+    "op_code": 23,
+    "args": [ 0, 5 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "lb",
+    "op_code": 32,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "lh",
+    "op_code": 33,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "lwl",
+    "op_code": 34,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "lw",
+    "op_code": 35,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "lbu",
+    "op_code": 36,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "lhu",
+    "op_code": 37,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "lwr",
+    "op_code": 38,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "sb",
+    "op_code": 40,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "sh",
+    "op_code": 41,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "swl",
+    "op_code": 42,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "sw",
+    "op_code": 43,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "swr",
+    "op_code": 46,
+    "args": [ 1, 7 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  }
+]
