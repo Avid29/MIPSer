@@ -75,7 +75,7 @@ public class AssemblerTests
         (LogId.InvalidInstructionArgCount, 14),
         (LogId.InvalidInstructionName, 16),
         (LogId.UnparsableExpression, 19),
-        (LogId.InvalidAddressOffsetArgument, 24), // Debateably should be an register error
+        (LogId.InvalidAddressOffsetArgument, 24), // Debateably should be a register error
         (LogId.ZeroRegWriteBack, 29),
         (LogId.IntegerTruncated, 30),
         (LogId.InvalidRegisterArgument, 32),
@@ -113,7 +113,7 @@ public class AssemblerTests
         var assembler = await Assembler.AssembleAsync(stream, filename, config);
 
         // Find expected errors, warnings, and messages
-        if (expected.Length != 0)
+        if (expected.Length == assembler.Logs.Count)
         {
             foreach (var (id, line) in expected)
             {

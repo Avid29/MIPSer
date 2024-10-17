@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Mipser": {
+      "commandName": "Project",
+      "commandLineArgs": "error_tests/composite_fail.asm",
+      "workingDirectory": "C:\\Users\\avid2\\source\\repos\\Personal\\MIPSer\\tests\\MIPS.Assembler.Tests\\ASMs"
+    }
+  }
+}

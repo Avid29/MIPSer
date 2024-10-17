@@ -138,7 +138,7 @@ public readonly struct DirectiveParser
 
         if (result.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'' is not a valid {directiveName} argument.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'{args[0].Print()}' is not a valid {directiveName} argument.");
             return false;
         }
 
@@ -208,7 +208,7 @@ public readonly struct DirectiveParser
             if (value != T.CreateSaturating(result.Value))
             {
                 // TODO: Double check the logic here. Does this always detect the error?
-                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"'' was evaluated to {result.Value} and subsequently truncated to {value}.");
+                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"'{arg.Print()}' was evaluated to {result.Value} and subsequently truncated to {value}.");
             }
 
             value.WriteBigEndian(bytes, pos);

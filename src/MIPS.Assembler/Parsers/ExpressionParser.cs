@@ -82,7 +82,7 @@ public struct ExpressionParser
             if (!success)
             {
                 // TODO: Convert token lines to string
-                _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Could not parse '' as an expression.");
+                _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Could not parse '{expression.Print()}' as an expression.");
                 return false;
             }
         }

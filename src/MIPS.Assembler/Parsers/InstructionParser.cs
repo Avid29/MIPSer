@@ -270,14 +270,12 @@ public struct InstructionParser
             case 1:
                 // Integer was negative, but needs to be unsigned.
                 // Also may have been truncated.
-                // TODO: Argument printing
-                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"Expression '' evaluated to signed value {original}," +
+                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"Expression '{arg.Print()}' evaluated to signed value {original}," +
                                                                        $" but was cast to unsigned value and truncated to {bitCount}-bits, resulting in {value}.");
                 break;
             case 2:
                 // Integer was truncated.
-                // TODO: Argument printing
-                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"Expression '' evaluated to {original}," +
+                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"Expression '{arg.Print()}' evaluated to {original}," +
                                                   $" but was truncated to {bitCount}-bits, resulting in {value}.");
                 break;
         }
@@ -318,8 +316,7 @@ public struct InstructionParser
 
             // Invalid target type
             default:
-                // TODO: Argument printing
-                return ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument '' of type '{target}' attempted to parse as an expression.");
+                return ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument '{arg.Print()}' of type '{target}' attempted to parse as an expression.");
         }
     }
 
@@ -394,6 +391,7 @@ public struct InstructionParser
     /// </remarks>
     private readonly bool TokenizeAddressOffset(ReadOnlySpan<Token> arg, out ReadOnlySpan<Token> offset, [NotNullWhen(true)] out Token? register)
     {
+        var original = arg;
         register = null;
         offset = arg;
 
@@ -403,8 +401,7 @@ public struct InstructionParser
         var closeIndex = arg.FindNext(TokenType.CloseParenthesis);
         if (parIndex is -1 || closeIndex is -1)
         {
-            // TODO: Argument printing
-            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '' is not a valid address offset.");
+            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '{arg.Print()}' is not a valid address offset.");
             return false;
         }
 
@@ -418,15 +415,13 @@ public struct InstructionParser
         // Or there was content following the parenthesis 
         if (arg.IsEmpty)
         {
-            // TODO: Argument printing
-            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '' is not a valid address offset.");
+            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '{original.Print()}' is not a valid address offset.");
             return false;
         }
 
         if (register.Type is not TokenType.Register)
         {
-            // TODO: Argument printing
-            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '' is not a valid address offset.");
+            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '{original.Print()}' is not a valid address offset.");
             return false;
         }
 

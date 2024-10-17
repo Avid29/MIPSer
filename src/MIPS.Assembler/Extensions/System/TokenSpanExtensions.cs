@@ -49,4 +49,18 @@ public static class TokenSpanExtensions
 
         return -1;
     }
+
+    /// <summary>
+    /// Converts a token span into a string.
+    /// </summary>
+    public static string Print(this ReadOnlySpan<Token> line)
+    {
+        string str = string.Empty;
+        for (int i = 0; i < line.Length; i++)
+        {
+            str += line[i] + " ";
+        }
+
+        return str.TrimEnd();
+    }
 }

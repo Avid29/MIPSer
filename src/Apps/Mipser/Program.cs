@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Assembler;
+using MIPS.Assembler.Logging.Enum;
 
 namespace Mipser;
 
@@ -64,8 +65,18 @@ public class Program
         {
             foreach (var log in assembler.Logs)
             {
+                Console.ForegroundColor = log.Severity switch
+                {
+                    Severity.Message => ConsoleColor.Blue,
+                    Severity.Warning => ConsoleColor.Yellow,
+                    Severity.Error => ConsoleColor.Red,
+                    _ => ConsoleColor.White,
+                };
+
                 Console.WriteLine($"{log.Severity} on line {log.LineNumber}: {log.Message}");
             }
+
+            Console.ResetColor();
         }
     }
 }

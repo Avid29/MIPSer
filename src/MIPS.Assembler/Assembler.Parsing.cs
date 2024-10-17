@@ -48,8 +48,9 @@ public partial class Assembler
         
         // Make allocations if directive is present
         // NOTE: Directive allocations are made in both passes
+        // Issues are only logged on the second pass though
         if (line.Type is LineType.Directive)
-            HandleDirective(line);
+            HandleDirective(line, false);
     }
 
     private void RealizationPass(AssemblyLine line)
@@ -132,9 +133,9 @@ public partial class Assembler
         Append(Unsafe.As<uint[]>(instruction.Realize()));
     }
 
-    private void HandleDirective(AssemblyLine line)
+    private void HandleDirective(AssemblyLine line, bool log = true)
     {
-        var parser = new DirectiveParser(Context, _logger);
+        var parser = new DirectiveParser(Context, log ? _logger : null);
 
         var name = line.Directive;
         if (name is null || !parser.TryParseDirective(line, out var directive))
