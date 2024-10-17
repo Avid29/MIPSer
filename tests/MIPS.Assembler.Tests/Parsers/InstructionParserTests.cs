@@ -131,7 +131,7 @@ public class InstructionParserTests
 
         // Initialize parser
         var logger = new AssemblerLogger();
-        var parser = new InstructionParser(null, logger);
+        var parser = new InstructionParser(new InstructionTable(MipsVersion.MipsII), logger);
 
         // Parse instruction
         var line = Tokenizer.TokenizeLine(input, nameof(RunTest));

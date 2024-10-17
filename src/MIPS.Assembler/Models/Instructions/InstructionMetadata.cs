@@ -3,6 +3,7 @@
 using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace MIPS.Assembler.Models.Instructions;
@@ -12,12 +13,12 @@ namespace MIPS.Assembler.Models.Instructions;
 /// </summary>
 public readonly struct InstructionMetadata
 {
-    private static readonly Version[] AllVersions = [Version.MipsI, Version.MipsII, Version.MipsIII, Version.MipsIV, Version.MipsV, Version.MipsVI];
+    private static readonly MipsVersion[] AllVersions = [MipsVersion.MipsI, MipsVersion.MipsII, MipsVersion.MipsIII, MipsVersion.MipsIV, MipsVersion.MipsV, MipsVersion.MipsVI];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, OperationCode opCode, Argument[] argumentPattern, params Version[] versions)
+    public InstructionMetadata(string name, OperationCode opCode, Argument[] argumentPattern, params MipsVersion[] versions)
     {
         Name = name;
         OpCode = opCode;
@@ -26,13 +27,13 @@ public readonly struct InstructionMetadata
         if (versions.Length is 0)
             versions = AllVersions;
 
-        MIPSVersions = versions;
+        MIPSVersions = new(versions);
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, FunctionCode funcCode, Argument[] argumentPattern, params Version[] versions)
+    public InstructionMetadata(string name, FunctionCode funcCode, Argument[] argumentPattern, params MipsVersion[] versions)
     {
         Name = name;
         OpCode = OperationCode.Special;
@@ -42,13 +43,13 @@ public readonly struct InstructionMetadata
         if (versions.Length is 0)
             versions = AllVersions;
 
-        MIPSVersions = versions;
+        MIPSVersions = new(versions);
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, Func2Code funcCode, Argument[] argumentPattern, params Version[] versions)
+    public InstructionMetadata(string name, Func2Code funcCode, Argument[] argumentPattern, params MipsVersion[] versions)
     {
         Name = name;
         OpCode = OperationCode.Special2;
@@ -57,14 +58,14 @@ public readonly struct InstructionMetadata
 
         if (versions.Length is 0)
             versions = AllVersions;
-
-        MIPSVersions = versions;
+        
+        MIPSVersions = new(versions);
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
-    public InstructionMetadata(string name, RegImmFuncCode branchCode, Argument[] argumentPattern, params Version[] versions)
+    public InstructionMetadata(string name, RegImmFuncCode branchCode, Argument[] argumentPattern, params MipsVersion[] versions)
     {
         Name = name;
         OpCode = OperationCode.RegisterImmediate;
@@ -73,8 +74,8 @@ public readonly struct InstructionMetadata
 
         if (versions.Length is 0)
             versions = AllVersions;
-
-        MIPSVersions = versions;
+        
+        MIPSVersions = new(versions);
     }
 
     /// <summary>
@@ -83,7 +84,7 @@ public readonly struct InstructionMetadata
     /// <remarks>
     /// This is constructor is only for pseudo-instructions.
     /// </remarks>
-    public InstructionMetadata(string name, PseudoOp pseudoOp, Argument[] argumentPattern, int realizedCount, params Version[] versions)
+    public InstructionMetadata(string name, PseudoOp pseudoOp, Argument[] argumentPattern, int realizedCount, params MipsVersion[] versions)
     {
         Name = name;
         PseudoOp = pseudoOp;
@@ -92,15 +93,15 @@ public readonly struct InstructionMetadata
 
         if (versions.Length is 0)
             versions = AllVersions;
-
-        MIPSVersions = versions;
+        
+        MIPSVersions = new(versions);
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
     [JsonConstructor]
-    internal InstructionMetadata(string name, OperationCode? opCode, FunctionCode? funcCode, Func2Code? function2Code, RegImmFuncCode? registerImmediateFuncCode, PseudoOp? pseudoOp, Argument[] argumentPattern, int? realizedInstructionCount, Version[] mIPSVersions)
+    internal InstructionMetadata(string name, OperationCode? opCode, FunctionCode? funcCode, Func2Code? function2Code, RegImmFuncCode? registerImmediateFuncCode, PseudoOp? pseudoOp, Argument[] argumentPattern, int? realizedInstructionCount, HashSet<MipsVersion> mipsVersions)
     {
         Name = name;
         OpCode = opCode;
@@ -110,7 +111,7 @@ public readonly struct InstructionMetadata
         PseudoOp = pseudoOp;
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = realizedInstructionCount;
-        MIPSVersions = mIPSVersions;
+        MIPSVersions = mipsVersions;
     }
 
     /// <summary>
@@ -189,5 +190,5 @@ public readonly struct InstructionMetadata
     /// </summary>
     [JsonPropertyName("versions")]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-    public Version[] MIPSVersions { get; }
+    public HashSet<MipsVersion> MIPSVersions { get; }
 }

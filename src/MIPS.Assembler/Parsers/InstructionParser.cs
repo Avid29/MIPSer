@@ -24,6 +24,7 @@ namespace MIPS.Assembler.Parsers;
 public struct InstructionParser
 {
     private readonly AssemblerContext? _context;
+    private readonly InstructionTable _instructionTable;
     private readonly ILogger? _logger;
 
     private InstructionMetadata _meta;
@@ -40,16 +41,21 @@ public struct InstructionParser
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionParser"/> struct.
     /// </summary>
-    public InstructionParser() : this(null, null)
+    public InstructionParser(InstructionTable instructions, ILogger? logger) : this(context:null, logger)
     {
+        _instructionTable = instructions;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionParser"/> struct.
     /// </summary>
-    public InstructionParser(AssemblerContext? content, ILogger? logger)
+    public InstructionParser(AssemblerContext? context, ILogger? logger)
     {
-        _context = content;
+        _context = context;
+
+        // This contains a null suppresion so the instructionTable can
+        // be set by the calling constructor. It's not great design.
+        _instructionTable = context?.InstructionTable ?? null!; 
         _logger = logger;
         _meta = default;
         _opCode = default;
@@ -77,9 +83,16 @@ public struct InstructionParser
         Guard.IsNotNull(name);
 
         // Get instruction metadata from name
-        if (!InstructionsTable.TryGetInstruction(name.Source, out _meta))
+        if (!_instructionTable.TryGetInstruction(name.Source, out _meta, out var version))
         {
-            _logger?.Log(Severity.Error, LogId.InvalidInstructionName, $"No instruction named '{name}'.");
+            if (version is not null)
+            {
+                _logger?.Log(Severity.Error, LogId.NotInVersion, $"The instruction '{name}' requires mips version {version:d}.");
+            }
+            else
+            {
+                _logger?.Log(Severity.Error, LogId.InvalidInstructionName, $"No instruction named '{name}'.");
+            }
             return false;
         }
 

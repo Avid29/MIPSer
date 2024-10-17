@@ -2,7 +2,9 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Models;
 using MIPS.Assembler.Tests.Helpers;
+using MIPS.Models.Instructions.Enums;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,27 +22,35 @@ public class AssemblerTests
     private const string MissingArgError = "add $s0, $t0";
     private const string NumericalRegister = "addi $s0, $16, 16";
     private const string NumericalRegisterError = "addi $s0, $56, 16";
+    private const string DisabledPseudoInstructions = "move $s0, $t0";
+    private const string NotInVersion = "sync";
 
     [TestMethod(nameof(InvalidInstruction))]
-    public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, LogId.InvalidInstructionName);
+    public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, expected:LogId.InvalidInstructionName);
 
     [TestMethod(nameof(InvalidLabelNum))]
-    public async Task InvalidLabelNumTest() => await RunStringTest(InvalidLabelNum, LogId.IllegalSymbolName);
+    public async Task InvalidLabelNumTest() => await RunStringTest(InvalidLabelNum, expected:LogId.IllegalSymbolName);
 
     [TestMethod(nameof(InvalidLabelSpecial))]
-    public async Task InvalidLabelSpecialTest() => await RunStringTest(InvalidLabelSpecial, LogId.IllegalSymbolName);
+    public async Task InvalidLabelSpecialTest() => await RunStringTest(InvalidLabelSpecial, expected:LogId.IllegalSymbolName);
 
     [TestMethod(nameof(ExtraArgError))]
-    public async Task ExtraArgErrorTest() => await RunStringTest(ExtraArgError, LogId.InvalidInstructionArgCount);
+    public async Task ExtraArgErrorTest() => await RunStringTest(ExtraArgError, expected:LogId.InvalidInstructionArgCount);
 
     [TestMethod(nameof(MissingArgError))]
-    public async Task MissingArgErrorTest() => await RunStringTest(MissingArgError, LogId.InvalidInstructionArgCount);
+    public async Task MissingArgErrorTest() => await RunStringTest(MissingArgError, expected:LogId.InvalidInstructionArgCount);
 
     [TestMethod(nameof(NumericalRegister))]
     public async Task NumericalRegisterTest() => await RunStringTest(NumericalRegister);
 
     [TestMethod(nameof(NumericalRegisterError))]
-    public async Task NumericalRegisterErrorTest() => await RunStringTest(NumericalRegisterError, LogId.InvalidRegisterArgument);
+    public async Task NumericalRegisterErrorTest() => await RunStringTest(NumericalRegisterError, expected:LogId.InvalidRegisterArgument);
+
+    [TestMethod(nameof(DisabledPseudoInstructions))]
+    public async Task DisabledPseudoInstructionsErrorTest() => await RunStringTest(DisabledPseudoInstructions, new(){ AllowPseudos = false }, LogId.DisabledFeatureInUse);
+
+    [TestMethod(nameof(NotInVersion))]
+    public async Task NotInVersionTest() => await RunStringTest(NotInVersion, new(MipsVersion.MipsI), LogId.NotInVersion);
 
     [TestMethod(TestFilePathing.BranchLiteralFile)]
     public async Task BranchLiteralFileTest() => await RunFileTest(TestFilePathing.BranchLiteralFile);
@@ -87,20 +97,20 @@ public class AssemblerTests
         var stream = File.Open(path, FileMode.Open);
 
         // Run the test
-        await RunTest(stream, fileName, expected);
+        await RunTest(stream, fileName, null, expected);
     }
 
-    private static async Task RunStringTest(string str, params LogId[] expected)
+    private static async Task RunStringTest(string str, AssemblerConfig? config = null, params LogId[] expected)
     {
         // Wrap the test in a stream and run the test
         var stream = new MemoryStream(Encoding.Default.GetBytes(str));
-        await RunTest(stream, null, expected.Select((x) => (x, 1L)).ToArray());
+        await RunTest(stream, null, config, expected.Select((x) => (x, 1L)).ToArray());
     }
 
-    private static async Task RunTest(Stream stream, string? filename = null, params (LogId, long)[] expected)
+    private static async Task RunTest(Stream stream, string? filename = null, AssemblerConfig? config = null, params (LogId, long)[] expected)
     {
         // Run assembler
-        var assembler = await Assembler.AssembleAsync(stream, filename);
+        var assembler = await Assembler.AssembleAsync(stream, filename, config);
 
         // Find expected errors, warnings, and messages
         if (expected.Length != 0)

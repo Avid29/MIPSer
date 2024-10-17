@@ -13,6 +13,8 @@ public enum LogId
     IllegalSymbolName,
     DuplicateSymbolDefinition,
     TokenizerError,
+    DisabledFeatureInUse,
+    NotInVersion,
 
     // Macros
     MacroMissingValue,

@@ -39,7 +39,7 @@ public partial class Assembler
             // We'll default to 1, because if the instruction fails to parse we'll replace it
             // with a NOP on the second pass.
             int realizedCount = 1;
-            if(InstructionsTable.TryGetInstruction(line.Instruction.Source, out var meta))
+            if(Context.InstructionTable.TryGetInstruction(line.Instruction.Source, out var meta, out _))
                realizedCount = meta.RealizedInstructionCount ?? 1;
 
             // Multiply by realized instruction count to handle pseudo instructions
@@ -112,6 +112,13 @@ public partial class Assembler
         {
             // Append a NOP in place of the unparsable instruction
             Append((uint)Instruction.NOP);
+            return;
+        }
+
+        // Check if pseudo instructions are allowed
+        if (instruction.IsPseduoInstruction && !Config.AllowPseudos)
+        {
+            _logger?.Log(Severity.Error, LogId.DisabledFeatureInUse, $"Pseudo instructions are disabled");
             return;
         }
 

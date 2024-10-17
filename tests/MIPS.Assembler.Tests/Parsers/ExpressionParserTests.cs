@@ -94,9 +94,7 @@ public class ExpressionParserTests
         foreach (var (name, addr) in macros)
             obj.TryDefineSymbol(name, addr);
 
-        // This could break in the future. We're suppressing a
-        // null where in practice a value is expected
-        var context = new AssemblerContext(null!, obj);
+        var context = new AssemblerContext(obj);
         var parser = new ExpressionParser(context);
         RunTest(parser, input, expected);
     }

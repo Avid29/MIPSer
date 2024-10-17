@@ -5,6 +5,7 @@ using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
+using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
@@ -34,12 +35,13 @@ public partial class Assembler
     /// <summary>
     /// Initializes a new instance of the <see cref="Assembler"/> class.
     /// </summary>
-    private Assembler()
+    private Assembler(AssemblerConfig config)
     {
         _logger = new AssemblerLogger();
         _module = new ModuleConstruction();
         _activeSection = Section.Text;
 
+        Config = config;
         Context = new(this, _module);
     }
 
@@ -47,6 +49,11 @@ public partial class Assembler
     /// Gets the assembler context for this assembler instance.
     /// </summary>
     public AssemblerContext Context { get; }
+
+    /// <summary>
+    /// Gets the assembler's configuation.
+    /// </summary>
+    public AssemblerConfig Config { get; }
 
     /// <summary>
     /// Gets the current address.
@@ -75,9 +82,14 @@ public partial class Assembler
     /// <summary>
     /// Assembles an object module from a stream of assembly
     /// </summary>
-    public static async Task<Assembler> AssembleAsync(Stream stream, string? filename)
+    public static async Task<Assembler> AssembleAsync(Stream stream, string? filename, AssemblerConfig? config = null)
     {
-        var assembler = new Assembler();
+        if (config is null)
+        {
+            config = AssemblerConfig.Default;
+        }
+
+        var assembler = new Assembler(config);
         var tokens = await Tokenizer.TokenizeAsync(stream, filename, assembler._logger);
 
         for (int i = 1; i <= tokens.LineCount; i++)

@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Models.Addressing;
 
@@ -25,10 +26,30 @@ public class AssemblerContext
     {
         _assembler = assembler;
         _module = module;
+        InstructionTable = new InstructionTable(assembler.Config.MipsVersion);
     }
+
+    /// <remarks>
+    /// This is for testing purposes. Don't adjust behavior arround ensuring it works.
+    /// </remarks>
+    internal AssemblerContext(ModuleConstruction module)
+    {
+        _module = module;
+
+        _assembler = null!;
+        InstructionTable = null!;
+    }
+    
+    /// <inheritdoc cref="Assembler.Config"/>
+    public AssemblerConfig Config => _assembler.Config;
 
     /// <inheritdoc cref="Assembler.CurrentAddress"/>
     public Address CurrentAddress => _assembler.CurrentAddress;
+
+    /// <summary>
+    /// Gets a table of instructions for the assemlber.
+    /// </summary>
+    public InstructionTable InstructionTable { get; }
 
     /// <inheritdoc cref="ModuleConstruction.TryGetSymbol(string, out Address)"/>
     public bool TryGetSymbol(string name, out Address value) => _module.TryGetSymbol(name, out value);
