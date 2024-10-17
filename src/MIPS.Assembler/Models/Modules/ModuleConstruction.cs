@@ -94,6 +94,9 @@ public partial class ModuleConstruction
         ResetStreamPositions();
         foreach(var section in _sections)
             section.CopyTo(stream);
+
+        // Mark the end and flush
+        stream.SetLength(stream.Position);
         stream.Flush();
 
         stream.Position = 0;
