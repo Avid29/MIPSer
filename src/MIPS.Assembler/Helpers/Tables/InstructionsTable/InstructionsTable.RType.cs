@@ -33,7 +33,7 @@ public static partial class InstructionsTable
 
         { "syscall",new("syscall",  FunctionCode.SystemCall,                    []) },                                          // syscall
         { "break",  new("break",    FunctionCode.SystemCall,                    []) },                                          // break
-        { "sync",   new("sync",     FunctionCode.Sync,                          [],                     Version.MipsIIUp) },    // sync
+        { "sync",   new("sync",     FunctionCode.Sync,                          [],                     Version.MipsIItoVI) },  // sync
         
         { "mfhi",   new("mfhi",     FunctionCode.MoveFromHigh,                  MoveFromPattern) },                             // mfhi     $rd
         { "mthi",   new("mthi",     FunctionCode.MoveToHigh,                    MoveToPattern) },                               // mthi     $rs
@@ -58,11 +58,11 @@ public static partial class InstructionsTable
         { "slt",    new("slt",      FunctionCode.SetLessThan,                   StandardRPattern) },                            // slt      $rd, $rs, $rt
         { "sltu",   new("sltu",     FunctionCode.SetLessThanUnsigned,           StandardRPattern) },                            // sltu     $rd, $rs, $rt
 
-        { "tge",    new("tge",      FunctionCode.TrapOnGreaterOrEqual,          TrapComparePattern,     Version.MipsIIUp) },    // tge      $rs, $rt
-        { "tgeu",   new("tgeu",     FunctionCode.TrapOnGreaterOrEqualUnsigned,  TrapComparePattern,     Version.MipsIIUp) },    // tgeu     $rs, $rt
-        { "tlt",    new("tlt",      FunctionCode.TrapOnLessThan,                TrapComparePattern,     Version.MipsIIUp) },    // tlt      $rs, $rt
-        { "tltu",   new("tltu",     FunctionCode.TrapOnLessThanUnsigned,        TrapComparePattern,     Version.MipsIIUp) },    // tltu     $rs, $rt
-        { "teq",    new("teq",      FunctionCode.TrapOnEquals,                  TrapComparePattern,     Version.MipsIIUp) },    // teq      $rs, $rt
-        { "tne",    new("tne",      FunctionCode.TrapOnNotEquals,               TrapComparePattern,     Version.MipsIIUp) },    // tne      $rs, $rt
+        { "tge",    new("tge",      FunctionCode.TrapOnGreaterOrEqual,          TrapComparePattern,     Version.MipsIItoVI) },  // tge      $rs, $rt
+        { "tgeu",   new("tgeu",     FunctionCode.TrapOnGreaterOrEqualUnsigned,  TrapComparePattern,     Version.MipsIItoVI) },  // tgeu     $rs, $rt
+        { "tlt",    new("tlt",      FunctionCode.TrapOnLessThan,                TrapComparePattern,     Version.MipsIItoVI) },  // tlt      $rs, $rt
+        { "tltu",   new("tltu",     FunctionCode.TrapOnLessThanUnsigned,        TrapComparePattern,     Version.MipsIItoVI) },  // tltu     $rs, $rt
+        { "teq",    new("teq",      FunctionCode.TrapOnEquals,                  TrapComparePattern,     Version.MipsIItoVI) },  // teq      $rs, $rt
+        { "tne",    new("tne",      FunctionCode.TrapOnNotEquals,               TrapComparePattern,     Version.MipsIItoVI) },  // tne      $rs, $rt
     };
 }

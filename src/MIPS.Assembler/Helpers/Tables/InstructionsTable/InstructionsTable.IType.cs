@@ -36,10 +36,10 @@ public static partial class InstructionsTable
 
         { "lui",    new("lui",      OperationCode.LoadUpperImmediate,                   LoadImmediatePattern) },                    // lui      $rt, imm
 
-        { "beql",   new("beql",     OperationCode.BranchOnEqualLikely,                  BranchPattern,      Version.MipsIIUp)},     // beql     $rs, offset
-        { "bnel",   new("bnel",     OperationCode.BranchOnNotEqualLikely,               BranchPattern,      Version.MipsIIUp)},     // bnel     $rs, offset
-        { "blezl",  new("blezl",    OperationCode.BranchOnLessThanOrEqualToZeroLikely,  BranchPattern,      Version.MipsIIUp)},     // blezl    $rs, offset
-        { "bgtzl",  new("bgtzl",    OperationCode.BranchOnGreaterThanZeroLikely,        BranchPattern,      Version.MipsIIUp)},     // bgtzl    $rs, offset
+        { "beql",   new("beql",     OperationCode.BranchOnEqualLikely,                  BranchPattern,      Version.MipsIItoVI)},   // beql     $rs, offset
+        { "bnel",   new("bnel",     OperationCode.BranchOnNotEqualLikely,               BranchPattern,      Version.MipsIItoVI)},   // bnel     $rs, offset
+        { "blezl",  new("blezl",    OperationCode.BranchOnLessThanOrEqualToZeroLikely,  BranchPattern,      Version.MipsIItoVI)},   // blezl    $rs, offset
+        { "bgtzl",  new("bgtzl",    OperationCode.BranchOnGreaterThanZeroLikely,        BranchPattern,      Version.MipsIItoVI)},   // bgtzl    $rs, offset
 
         { "lb",     new("lb",       OperationCode.LoadByte,                             MemoryPattern) },                           // lb       $rt, offset($rs)
         { "lh",     new("lh",       OperationCode.LoadHalfWord,                         MemoryPattern) },                           // lh       $rt, offset($rs)
