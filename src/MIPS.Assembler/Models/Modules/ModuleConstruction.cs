@@ -31,12 +31,10 @@ public partial class ModuleConstruction
     private Stream SmallInitializedData => _sections[(int)Section.SmallInitializedData];
     private Stream SmallUninitializedData => _sections[(int)Section.SmallUninitializedData];
     private Stream UninitializedData => _sections[(int)Section.UninitializedData];
+    private Stream Strings { get; } = new MemoryStream();
 
     private uint _flags = 0;
     private uint _entryPoint = 0;
-
-    // TODO: Handle all sections property
-    private uint _strsSize = 0;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ModuleConstruction"/> class.
@@ -82,7 +80,7 @@ public partial class ModuleConstruction
             (uint)SmallInitializedData.Length,
             (uint)SmallUninitializedData.Length,
             (uint)UninitializedData.Length,
-            _strsSize,
+            (uint)Strings.Length,
             (uint)_relocations.Count,
             (uint)_references.Count,
             (uint)_definitions.Count);
@@ -101,6 +99,10 @@ public partial class ModuleConstruction
         {
             rel.Write(stream);
         }
+
+        // Write symbol name table
+        Strings.Position = 0;
+        Strings.CopyTo(stream);
 
         // Mark the end and flush
         stream.SetLength(stream.Position);

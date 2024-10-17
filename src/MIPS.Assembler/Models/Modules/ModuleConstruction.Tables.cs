@@ -2,6 +2,7 @@
 
 using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables;
+using System.Text;
 
 namespace MIPS.Assembler.Models.Modules;
 
@@ -20,6 +21,8 @@ public partial class ModuleConstruction
             return false;
 
         _definitions.Add(name, value);
+        Strings.Write(Encoding.UTF8.GetBytes(name));
+        Strings.WriteByte(0); // Null terminate
         return true;
     }
 
