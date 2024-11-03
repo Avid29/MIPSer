@@ -59,8 +59,7 @@ public class Program
 
         if (!assembler.Failed)
         {
-            
-        var module = assembler.WriteModule(outFile);
+            var module = assembler.WriteModule(outFile);
         }
 
         Console.WriteLine();

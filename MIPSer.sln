@@ -33,7 +33,17 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WinUIEditor", "submodules\W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIPS.Linker", "src\MIPS.Linker\MIPS.Linker.csproj", "{661FA50D-7E92-4094-886F-40254810A312}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MIPS.Assembler.Tests.Live", "tests\MIPS.Assembler.Tests.Live\MIPS.Assembler.Tests.Live.csproj", "{012F9A22-9E09-419B-8BB8-E4E32CFFE73D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIPS.Assembler.Tests.Live", "tests\MIPS.Assembler.Tests.Live\MIPS.Assembler.Tests.Live.csproj", "{012F9A22-9E09-419B-8BB8-E4E32CFFE73D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rasm", "rasm", "{D5B56044-9D1B-4D24-BEEE-0CE55B6AEE2F}"
+	ProjectSection(SolutionItems) = preProject
+		rasm-info\exec.h = rasm-info\exec.h
+		rasm-info\instrs.txt = rasm-info\instrs.txt
+		rasm-info\memory.txt = rasm-info\memory.txt
+		rasm-info\object_modules.txt = rasm-info\object_modules.txt
+		rasm-info\symbols.txt = rasm-info\symbols.txt
+		rasm-info\symdefs.h = rasm-info\symdefs.h
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

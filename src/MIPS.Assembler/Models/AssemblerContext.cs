@@ -3,6 +3,7 @@
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Models.Addressing;
+using MIPS.Models.Modules.Tables;
 
 namespace MIPS.Assembler.Models;
 
@@ -51,6 +52,6 @@ public class AssemblerContext
     /// </summary>
     public InstructionTable InstructionTable { get; }
 
-    /// <inheritdoc cref="ModuleConstruction.TryGetSymbol(string, out Address)"/>
-    public bool TryGetSymbol(string name, out Address value) => _module.TryGetSymbol(name, out value);
+    /// <inheritdoc cref="ModuleConstruction.TryGetSymbol(string, out SymbolEntry)"/>
+    public bool TryGetSymbol(string name, out SymbolEntry value) => _module.TryGetSymbol(name, out value);
 }

@@ -17,6 +17,7 @@ using MIPS.Models.Modules.Tables;
 using MIPS.Models.Modules.Tables.Enums;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -276,7 +277,18 @@ public struct InstructionParser
         bool signed = target is Argument.Immediate or Argument.Offset;
 
         // Clean integer to fit within argument bit size and match signs.
-        switch (CleanInteger(ref value, bitCount, signed, out var original))
+        long original = 0;
+        var cleanStatus = target switch
+        {
+            Argument.Shift => CleanInteger(ref value, bitCount, signed, out original),
+            Argument.Immediate => CleanInteger<short>(ref value, out original),
+            Argument.Offset => CleanInteger(ref value, bitCount, signed, out original),
+            Argument.Address => CleanInteger(ref value, bitCount, signed, out original),
+            Argument.FullImmediate => CleanInteger<int>(ref value, out original),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"Argument of type '{target}' attempted to parse as an expression."),
+        };
+
+        switch (cleanStatus)
         {
             case 0:
                 // Integer was already clean
@@ -446,17 +458,16 @@ public struct InstructionParser
     /// <returns>
     /// 0 if unchanged, 1 if signChanged (maybe also have been truncated), and 2 if truncated.
     /// </returns>
-    private static int CleanInteger(ref long integer, int bitCount, bool signed, out long original)
+    private static byte CleanInteger(ref long integer, int bitCount, bool signed, out long original)
     {
         // TODO: Support signed truncation
-
         original = integer;
 
         // Truncate integer to bit count
         long mask = (1L << bitCount) - 1;
         integer &= mask;
 
-        // Check for sign change
+        // Check for sign in unsigned integer
         // TODO: Handle bitCount >= 32
         if (!signed && original < 0 && bitCount < 32)
         {
@@ -465,8 +476,34 @@ public struct InstructionParser
             return 1;
         }
 
-        // Check if truncated
-        if ((ulong)integer != (ulong)original)
+        // Restore sign on signed integers
+        if (signed && original < 0)
+        {
+            integer |= ~mask;
+        }
+
+        // Check if truncated lossily
+        if ((original & ~mask) != 0 && ~(original | mask) != 0)
+            return 2;
+
+        return 0;
+    }
+    
+    /// <returns>
+    /// 0 if unchanged, 1 if signChanged (maybe also have been truncated), and 2 if truncated.
+    /// </returns>
+    private static byte CleanInteger<T>(ref long integer, out long original)
+        where T : unmanaged, IBinaryInteger<T>
+    {
+        original = integer;
+
+        var cast = T.CreateTruncating(original);
+        integer = long.CreateSaturating(cast);
+
+        if (long.Sign(original) != T.Sign(cast))
+            return 1;
+
+        if (integer != original)
             return 2;
 
         return 0;

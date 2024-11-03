@@ -14,13 +14,23 @@ public partial class ModuleConstruction
     /// <param name="name">The name of the symbol.</param>
     /// <param name="value">The value of the symbol.</param>
     /// <returns><see langword="false"/>if the symbol already exists. <see langword="true"/> otherwise.</returns>
-    public bool TryDefineSymbol(string name, Address value)
+    public bool TryDefineSymbol(string name, Address? value = null)
     {
         // Check if table already contains symbol
         if (_definitions.ContainsKey(name))
             return false;
 
-        _definitions.Add(name, value);
+        SymbolEntry entry;
+        if (value is null)
+        {
+            entry = new SymbolEntry();
+        }
+        else
+        {
+            entry = new SymbolEntry(value.Value);
+        }
+
+        _definitions.Add(name, entry);
         Strings.Write(Encoding.UTF8.GetBytes(name));
         Strings.WriteByte(0); // Null terminate
         return true;
@@ -32,7 +42,7 @@ public partial class ModuleConstruction
     /// <param name="name">The name of the symbol.</param>
     /// <param name="value">The realized value of the symbol.</param>
     /// <returns><see cref="true"/> if the symbol exists, <see cref="false"/> otherwise.</returns>
-    public bool TryGetSymbol(string name, out Address value) => _definitions.TryGetValue(name, out value);
+    public bool TryGetSymbol(string name, out SymbolEntry value) => _definitions.TryGetValue(name, out value);
 
     /// <summary>
     /// Attempts to make a reference to a symbol.

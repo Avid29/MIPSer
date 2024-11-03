@@ -21,7 +21,7 @@ public partial class ModuleConstruction
 
     private readonly List<RelocationEntry> _relocations;
     private readonly Dictionary<Address, string> _references;
-    private readonly Dictionary<string, Address> _definitions;
+    private readonly Dictionary<string, SymbolEntry> _definitions;
 
     private readonly Stream[] _sections;
 

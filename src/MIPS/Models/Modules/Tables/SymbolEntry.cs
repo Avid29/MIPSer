@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Models.Addressing;
+using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables.Enums;
 using System.Runtime.InteropServices;
 
@@ -11,6 +13,16 @@ namespace MIPS.Models.Modules.Tables;
 [StructLayout(LayoutKind.Explicit)]
 public struct SymbolEntry
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SymbolEntry"/> struct.
+    /// </summary>
+    public SymbolEntry(Address address)
+    {
+        Value = (uint)address.Value;
+        Section = address.Section;
+        Flags = SymbolFlags.Defined;
+    }
+
     /// <summary>
     /// Gets flags on the symbol entry.
     /// </summary>
@@ -38,7 +50,56 @@ public struct SymbolEntry
     /// <summary>
     /// Fills the struct to 16 bytes.
     /// </summary>
+    /// <remarks>
+    /// This is not part of RASM, but a convenience of mine.
+    /// </remarks>
     [field: FieldOffset(14)]
-    private readonly ushort _filler;
+    private Section Section { get; set; }
 
+    /// <summary>
+    /// Fills the struct to 16 bytes.
+    /// </summary>
+    [field: FieldOffset(15)]
+    private readonly byte _filler;
+
+    /// <summary>
+    /// Gets if the symbol is defined.
+    /// </summary>
+    public readonly bool IsDefined => Flags.HasFlag(SymbolFlags.Defined);
+
+    /// <summary>
+    /// Gets the address of the symbol entry.
+    /// </summary>
+    public readonly Address Address => new(Value, Section);
+
+    /// <inheritdoc/>
+    public readonly SymbolEntry Read(Stream stream)
+    {
+        stream.TryRead<uint>(out var flags);
+        stream.TryRead<uint>(out var value);
+        stream.TryRead<uint>(out var symbolIndex);
+        stream.TryRead<ushort>(out var objFileIndex);
+        stream.TryRead<byte>(out var section);
+        stream.TryRead<byte>(out _);
+
+        return new()
+        {
+            Flags = (SymbolFlags)flags,
+            Value = value,
+            SymbolIndex = symbolIndex,
+            ObjectFileIndex = objFileIndex,
+            Section = Section
+        };
+    }
+    
+    /// <inheritdoc/>
+    public readonly void Write(Stream stream)
+    {
+        stream.TryWrite((uint)Flags);
+        stream.TryWrite(Value);
+        stream.TryWrite(SymbolIndex);
+        stream.TryWrite(ObjectFileIndex);
+        stream.TryWrite((byte)Section);
+        stream.TryWrite(_filler);
+    }
 }

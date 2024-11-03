@@ -19,7 +19,6 @@ using System.Numerics;
 namespace MIPS.Assembler.Parsers;
 
 // TODO: Allow repeat with <express> [: <count>] format
-// TODO: Handle expressions
 
 /// <summary>
 /// A struct for parsing directives.
@@ -147,26 +146,25 @@ public readonly struct DirectiveParser
         if (align)
         {
             // TODO: Move magic numbers into assembler config
-            const int AlignMessage = 6;
-            const int AlignError = 16;
-
-            if (value > AlignMessage)
+            // Kinda unique behavior here warrents a comment.
+            // Any int? comparison operator involving a null returns false, so
+            // if there's no context this never executes.
+            var alignWarningThreshold = _context?.Config.AlignMessageThreshold;
+            var alignMessageThreshold = _context?.Config.AlignMessageThreshold;
+            if (value >= _context?.Config.AlignWarningThreshold)
             {
-                _logger?.Log(Severity.Message, LogId.LargeAlignment, $".align will align to the byte, using the argument as an exponent of 2. It is not advised to use a value greater than {AlignMessage}.");
+                _logger?.Log(Severity.Error, LogId.LargeAlignment, $".align may not be used with a value greater than {alignWarningThreshold}.");
             }
-
-            if (value > AlignError)
+            else if (value >= alignMessageThreshold)
             {
-                _logger?.Log(Severity.Error, LogId.LargeAlignment, $".align may not be used with a value greater than {AlignError}.");
+                _logger?.Log(Severity.Message, LogId.LargeAlignment, $".align will align to the byte, using the argument as an exponent of 2. It is not advised to use a value greater than {alignMessageThreshold}.");
             }
 
             directive = new AlignDirective((int)result.Value);
         }
         else
         {
-            const int SpaceMessage = 4096;
-
-            if (value > SpaceMessage)
+            if (value >= _context?.Config.AlignMessageThreshold)
             {
                 _logger?.Log(Severity.Message, LogId.LargeSpacing, $"This .space directive will consume {value} bytes in the binary. ");
             }
@@ -245,7 +243,7 @@ public readonly struct DirectiveParser
                 bytes.Add(0);
         }
 
-        directive = new DataDirective(bytes.ToArray());
+        directive = new DataDirective([..bytes]);
         return true;
     }
 }

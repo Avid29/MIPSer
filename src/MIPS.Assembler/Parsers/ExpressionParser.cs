@@ -223,16 +223,21 @@ public struct ExpressionParser
         if (_context is null)
             return false;
 
-        if (!_context.TryGetSymbol(t.Source, out var value))
+        if (!_context.TryGetSymbol(t.Source, out var symbol))
             return false;
 
+        if (!symbol.IsDefined)
+            return false;
+
+        var addr = symbol.Address;
+
         // Cache relocatable symbol
-        if (value.IsRelocatable)
+        if (addr.IsRelocatable)
         {
             _relocatableSymbol = t.Source;
         }
 
-        var node = new AddressNode(value);
+        var node = new AddressNode(addr);
         _tree.AddNode(node);
         return true;
     }

@@ -23,6 +23,9 @@ public static class StreamExtensions
     public static bool TryRead<T>(this Stream stream, out T value)
         where T : unmanaged, IBinaryInteger<T>
     {
+        // TODO: This doesn't feel like it should be neccesary.
+        bool signed = (-T.MultiplicativeIdentity) < T.Zero;
+
         // Initialize results
         bool success = false;
         value = default;
@@ -38,7 +41,7 @@ public static class StreamExtensions
         int realCount = stream.Read(bytes);
         if (realCount == byteCount)
         {
-            success = T.TryReadBigEndian(bytes, false, out value);
+            success = T.TryReadBigEndian(bytes, !signed, out value);
         }
 
         // Free temporary array
