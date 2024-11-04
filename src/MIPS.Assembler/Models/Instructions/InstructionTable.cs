@@ -15,8 +15,8 @@ namespace MIPS.Assembler.Models.Instructions;
 public class InstructionTable
 {
     private MipsVersion _version;
-    private Dictionary<string, InstructionMetadata> _instructionTable;
-    private Dictionary<string, MipsVersion> _outOfVersion;
+    private readonly Dictionary<string, InstructionMetadata> _instructionTable;
+    private readonly Dictionary<string, HashSet<MipsVersion>> _outOfVersion;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionTable"/> class.
@@ -42,9 +42,16 @@ public class InstructionTable
         requiredVersion = null;
         if (_instructionTable.TryGetValue(name, out metadata))
             return true;
-
-        if (_outOfVersion.TryGetValue(name, out var version))
-            requiredVersion = version;
+        
+        if (_outOfVersion.TryGetValue(name, out var versions))
+        {
+            // Higher version instruction. Get the lowest version available.
+            if (_version < versions.FirstOrDefault())
+                requiredVersion = versions.Min();
+            // Deprecated instruction. Get the highest version available.
+            else
+                requiredVersion = versions.Max();
+        }
 
         return false;
     }
@@ -74,8 +81,7 @@ public class InstructionTable
         }
         else
         {
-            // TODO: Improve required version lookup
-            _outOfVersion.Add(metadata.Name, metadata.MIPSVersions.FirstOrDefault());
+            _outOfVersion.Add(metadata.Name, metadata.MIPSVersions);
         }
     }
     

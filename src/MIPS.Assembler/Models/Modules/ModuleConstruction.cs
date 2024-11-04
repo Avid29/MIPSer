@@ -7,7 +7,6 @@ using MIPS.Models.Modules;
 using MIPS.Models.Modules.Tables;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace MIPS.Assembler.Models.Modules;
 

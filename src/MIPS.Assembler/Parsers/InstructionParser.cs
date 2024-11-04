@@ -90,7 +90,13 @@ public struct InstructionParser
         {
             if (version is not null)
             {
-                _logger?.Log(Severity.Error, LogId.NotInVersion, $"The instruction '{name}' requires mips version {version:d}.");
+                if (_context is null || version > _context?.Config.MipsVersion)
+                {
+                    _logger?.Log(Severity.Error, LogId.NotInVersion, $"The instruction '{name}' requires mips version {version:d}.");
+                } else
+                {
+                    _logger?.Log(Severity.Error, LogId.NotInVersion, $"The instruction '{name}' is deprecated. Last supported in mips version {version:d}.");
+                }
             }
             else
             {
