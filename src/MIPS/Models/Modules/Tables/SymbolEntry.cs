@@ -1,8 +1,10 @@
 ﻿// Adam Dernis 2024
 
+using CommunityToolkit.Diagnostics;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables.Enums;
+using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace MIPS.Models.Modules.Tables;
@@ -66,6 +68,33 @@ public struct SymbolEntry
     /// Gets if the symbol is defined.
     /// </summary>
     public readonly bool IsDefined => Flags.HasFlag(SymbolFlags.Defined);
+
+    /// <summary>
+    /// Gets if a flag is set on the symbol entry.
+    /// </summary>
+    /// <param name="flag">The flag to check.</param>
+    /// <returns>True if the flag is set, false otherwise.</returns>
+    public readonly bool CheckFlag(SymbolFlags flag) => Flags.HasFlag(flag);
+
+    /// <summary>
+    /// Sets a flag on the symbol entry.
+    /// </summary>
+    /// <param name="flag">The flag to set.</param>
+    /// <param name="state">The new state of the flag.</param>
+    public void SetFlag(SymbolFlags flag, bool state)
+    {
+        if (!BitOperations.IsPow2((int)flag))
+            ThrowHelper.ThrowArgumentException("Only one flag may be set at a time");
+        
+        // Clear the flag.
+        Flags &= ~flag;
+
+        // Set the flag to true.
+        if (state)
+        {
+            Flags |= flag;
+        }
+    }
 
     /// <summary>
     /// Gets the address of the symbol entry.

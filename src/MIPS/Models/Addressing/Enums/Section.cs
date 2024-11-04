@@ -8,7 +8,7 @@ namespace MIPS.Models.Addressing.Enums;
 public enum Section : byte
 {
 #pragma warning disable CS1591
-
+    
     Text,                   // text
     ReadOnlyData,           // rdata
     Data,                   // data
@@ -22,8 +22,7 @@ public enum Section : byte
     SymbolTable,
     SymbolNameTable,
 
-    None,
-
+    None = 255,
 
 #pragma warning restore CS1591
 }

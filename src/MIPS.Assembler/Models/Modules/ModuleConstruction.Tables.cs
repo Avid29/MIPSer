@@ -2,6 +2,7 @@
 
 using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables;
+using MIPS.Models.Modules.Tables.Enums;
 using System.Text;
 
 namespace MIPS.Assembler.Models.Modules;
@@ -20,19 +21,33 @@ public partial class ModuleConstruction
         if (_definitions.ContainsKey(name))
             return false;
 
+        // Get string position
+        uint strId = (uint)Strings.Position;
+
+        // Create entry
         SymbolEntry entry;
         if (value is null)
         {
-            entry = new SymbolEntry();
+            entry = new()
+            {
+                SymbolIndex = strId,
+            };
         }
         else
         {
-            entry = new SymbolEntry(value.Value);
+            entry = new(value.Value)
+            {
+                SymbolIndex = strId,
+            };
         }
 
-        _definitions.Add(name, entry);
+        // TODO: Non-label symbols.
+        entry.SetFlag(SymbolFlags.Def_Label, true);
+        
+        // Write to string stream and defintions table
         Strings.Write(Encoding.UTF8.GetBytes(name));
         Strings.WriteByte(0); // Null terminate
+        _definitions.Add(name, entry);
         return true;
     }
 

@@ -259,8 +259,10 @@ public struct InstructionParser
             return false;
         }
 
-        if (address.IsRelocatable && _context is not null)
+        if (address.IsRelocatable && target is not Argument.Offset && _context is not null)
         {
+            // TODO: Relocatable offsets
+
             var type = target switch
             {
                 Argument.Address => RelocationType.Address,

@@ -7,6 +7,7 @@ using MIPS.Models.Modules;
 using MIPS.Models.Modules.Tables;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace MIPS.Assembler.Models.Modules;
 
@@ -25,12 +26,12 @@ public partial class ModuleConstruction
 
     private readonly Stream[] _sections;
 
-    private Stream Text => _sections[(int)Section.Text];
-    private Stream ReadOnlyData => _sections[(int)Section.ReadOnlyData];
-    private Stream Data => _sections[(int)Section.Data];
-    private Stream SmallInitializedData => _sections[(int)Section.SmallInitializedData];
-    private Stream SmallUninitializedData => _sections[(int)Section.SmallUninitializedData];
-    private Stream UninitializedData => _sections[(int)Section.UninitializedData];
+    private Stream Text => GetSectionStream(Section.Text);
+    private Stream ReadOnlyData => GetSectionStream(Section.ReadOnlyData);
+    private Stream Data => GetSectionStream(Section.Data);
+    private Stream SmallInitializedData => GetSectionStream(Section.SmallInitializedData);
+    private Stream SmallUninitializedData => GetSectionStream(Section.SmallUninitializedData);
+    private Stream UninitializedData => GetSectionStream(Section.UninitializedData);
     private Stream Strings { get; } = new MemoryStream();
 
     private uint _flags = 0;
@@ -80,10 +81,10 @@ public partial class ModuleConstruction
             (uint)SmallInitializedData.Length,
             (uint)SmallUninitializedData.Length,
             (uint)UninitializedData.Length,
-            (uint)Strings.Length,
             (uint)_relocations.Count,
             (uint)_references.Count,
-            (uint)_definitions.Count);
+            (uint)_definitions.Count,
+            (uint)Strings.Length);
 
         // Try to write the header
         if(!header.TryWriteHeader(stream))
@@ -94,13 +95,15 @@ public partial class ModuleConstruction
         foreach(var section in _sections)
             section.CopyTo(stream);
 
-        // Write tables to the stream
+        // Write relocation table to the stream
         foreach(var rel in _relocations)
-        {
             rel.Write(stream);
-        }
 
-        // Write symbol name table
+        // Write symbol table to the stream
+        foreach (var symbol in _definitions.Values)
+            symbol.Write(stream);
+
+        // Write string table to the stream
         Strings.Position = 0;
         Strings.CopyTo(stream);
 
