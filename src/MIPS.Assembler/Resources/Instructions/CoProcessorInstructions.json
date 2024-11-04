@@ -15,7 +15,8 @@
     "name": "lwc3",
     "op_code": 51,
     "args": [],
-    "versions": [ 1, 2 ]
+    "versions": [ 1, 2 ],
+    "obsolete":  true
   },
   {
     "name": "swc1",
@@ -33,6 +34,7 @@
     "name": "swc3",
     "op_code": 59,
     "args": [],
-    "versions": [ 1, 2 ]
+    "versions": [ 1, 2 ],
+    "obsolete": true
   }
 ]

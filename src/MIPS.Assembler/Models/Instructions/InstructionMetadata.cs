@@ -101,7 +101,7 @@ public readonly struct InstructionMetadata
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
     [JsonConstructor]
-    internal InstructionMetadata(string name, OperationCode? opCode, FunctionCode? funcCode, Func2Code? function2Code, RegImmFuncCode? registerImmediateFuncCode, PseudoOp? pseudoOp, Argument[] argumentPattern, int? realizedInstructionCount, HashSet<MipsVersion> mipsVersions)
+    internal InstructionMetadata(string name, OperationCode? opCode, FunctionCode? funcCode, Func2Code? function2Code, RegImmFuncCode? registerImmediateFuncCode, PseudoOp? pseudoOp, Argument[] argumentPattern, int? realizedInstructionCount, HashSet<MipsVersion> mipsVersions, bool obsolete)
     {
         Name = name;
         OpCode = opCode;
@@ -112,6 +112,7 @@ public readonly struct InstructionMetadata
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = realizedInstructionCount;
         MIPSVersions = mipsVersions;
+        Obsolete = obsolete;
     }
 
     /// <summary>
@@ -191,4 +192,11 @@ public readonly struct InstructionMetadata
     [JsonPropertyName("versions")]
     [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
     public HashSet<MipsVersion> MIPSVersions { get; }
+
+    /// <summary>
+    /// Gets whether or not the instruction has been marked for removal in a future version.
+    /// </summary>
+    [JsonPropertyName("obsolete")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public bool Obsolete { get; }
 }

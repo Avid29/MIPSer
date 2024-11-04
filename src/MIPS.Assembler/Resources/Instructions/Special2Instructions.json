@@ -4,35 +4,40 @@
     "op_code": 28,
     "func2_code": 32,
     "args": [ 2, 0 ],
-    "versions": [ 1, 2, 3, 4, 5 ]
+    "versions": [ 1, 2, 3, 4, 5 ],
+    "obsolete": true
   },
   {
     "name": "clo",
     "op_code": 28,
     "func2_code": 33,
     "args": [ 2, 0 ],
-    "versions": [ 1, 2, 3, 4, 5 ]
+    "versions": [ 1, 2, 3, 4, 5 ],
+    "obsolete": true
   },
   {
     "name": "madd",
     "op_code": 28,
     "func2_code": 0,
     "args": [ 2, 0 ],
-    "versions": [ 1, 2, 3, 4, 5 ]
+    "versions": [ 1, 2, 3, 4, 5 ],
+    "obsolete": true
   },
   {
     "name": "maddu",
     "op_code": 28,
     "func2_code": 1,
     "args": [ 2, 0 ],
-    "versions": [ 1, 2, 3, 4, 5 ]
+    "versions": [ 1, 2, 3, 4, 5 ],
+    "obsolete": true
   },
   {
     "name": "msub",
     "op_code": 28,
     "func2_code": 4,
     "args": [ 2, 0 ],
-    "versions": [ 1, 2, 3, 4, 5 ]
+    "versions": [ 1, 2, 3, 4, 5 ],
+    "obsolete": true
   },
   {
     "name": "msubu",
@@ -40,13 +45,15 @@
     "func2_code": 1,
     "rt_func_code": 32,
     "args": [ 2, 0 ],
-    "versions": [ 1, 2, 3, 4, 5 ]
+    "versions": [ 1, 2, 3, 4, 5 ],
+    "obsolete": true
   },
   {
     "name": "mul",
     "op_code": 28,
     "func2_code": 2,
     "args": [ 2, 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5 ]
+    "versions": [ 1, 2, 3, 4, 5 ],
+    "obsolete": true
   }
 ]
