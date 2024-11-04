@@ -9,6 +9,7 @@ using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
+using MIPS.Models.Modules.Tables.Enums;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -125,30 +126,31 @@ public partial class Assembler
     }
 
     /// <summary>
-    /// Creates a symbol at the current address.
+    /// Defines a label at the current address.
     /// </summary>
     /// <remarks>
     /// At this stage, the label is expected to be passed in with a tailing ':' that will be trimmed.
     /// The method will still work if the semicolon is pre-trimmed.
     /// </remarks>
     /// <param name="label">The name of the symbol.</param>
-    private bool CreateSymbol(string label) => CreateSymbol(label, CurrentAddress);
+    private bool DefineLabel(string label) => DefineSymbol(label, CurrentAddress, SymbolFlags.Def_Label);
 
     /// <summary>
-    /// Creates a symbol.
+    /// Defines a symbol.
     /// </summary>
     /// <param name="label">The name of the symbol.</param>
     /// <param name="address">The value of the symbol.</param>
+    /// <param name="flags">The flags of the symbol.</param>
     /// <returns>True if successful, false on failure.</returns>
-    private bool CreateSymbol(string label, Address address)
+    private bool DefineSymbol(string label, Address address, SymbolFlags flags)
     {
         label = label.TrimEnd(':');
         if (!ValidateSymbolName(label))
             return false;
 
-        if (!_module.TryDefineSymbol(label, address))
+        if (!_module.DefineOrUpdateSymbol(label, address, flags))
         {
-            _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, $"Symbol \"{label}\" already exists.");
+            _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, $"Symbol \"{label}\" is already defined.");
             return false;
         }
 

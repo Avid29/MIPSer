@@ -1,4 +1,4 @@
-﻿# .globl main
+﻿.globl main
 
 label1:
 	ori		$s0,	$zero,	10

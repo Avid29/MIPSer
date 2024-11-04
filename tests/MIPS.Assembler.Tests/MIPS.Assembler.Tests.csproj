@@ -18,8 +18,4 @@
     <ProjectReference Include="..\..\src\MIPS.Assembler\MIPS.Assembler.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ASMs\obj\" />
-  </ItemGroup>
-
 </Project>

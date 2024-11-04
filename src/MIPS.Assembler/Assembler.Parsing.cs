@@ -1,8 +1,6 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using MIPS.Assembler.Helpers;
-using MIPS.Assembler.Helpers.Tables;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Directives;
 using MIPS.Assembler.Models.Directives.Abstract;
@@ -10,6 +8,7 @@ using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Instructions;
+using MIPS.Models.Modules.Tables.Enums;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -28,7 +27,7 @@ public partial class Assembler
 
         // Create symbol if line is labeled
         if (line.Label is not null)
-            CreateSymbol(line.Label.Source);
+            DefineLabel(line.Label.Source);
 
         // Pad instruction sized allocation if instruction is present
         if (line.Type is LineType.Instruction)
@@ -102,7 +101,8 @@ public partial class Assembler
             return;
         }
         
-        CreateSymbol(name.Source, address);
+        // TODO: Macro flags
+        DefineSymbol(name.Source, address, 0);
     }
 
     private void HandleInstruction(AssemblyLine line)
@@ -149,6 +149,9 @@ public partial class Assembler
     {
         switch (directive)
         {
+            case GlobalDirective global:
+                _module.DefineOrUpdateSymbol(global.Symbol, flags: SymbolFlags.Global);
+                break;
             case SectionDirective segment:
                 SetActiveSection(segment.ActiveSection);
                 break;

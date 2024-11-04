@@ -14,40 +14,31 @@ public partial class ModuleConstruction
     /// </summary>
     /// <param name="name">The name of the symbol.</param>
     /// <param name="value">The value of the symbol.</param>
-    /// <returns><see langword="false"/>if the symbol already exists. <see langword="true"/> otherwise.</returns>
+    /// <returns><see langword="false"/> if the symbol already exists. <see langword="true"/> otherwise.</returns>
     public bool TryDefineSymbol(string name, Address? value = null)
     {
         // Check if table already contains symbol
         if (_definitions.ContainsKey(name))
             return false;
 
-        // Get string position
-        uint strId = (uint)Strings.Position;
+        DefineSymbol(name, value, SymbolFlags.Def_Label);
+        return true;
+    }
 
-        // Create entry
-        SymbolEntry entry;
-        if (value is null)
-        {
-            entry = new()
-            {
-                SymbolIndex = strId,
-            };
-        }
+    /// <summary>
+    /// Adds or updates a symbol in the symbol table.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <param name="value"></param>
+    /// <param name="flags"></param>
+    /// <returns><see cref="false"/> if the symbol already has a value, and a new value is being defined.</returns>
+    public bool DefineOrUpdateSymbol(string name, Address? value = null, SymbolFlags? flags = null)
+    {
+        if (_definitions.ContainsKey(name))
+            return UpdateSymbol(name, value, flags);
         else
-        {
-            entry = new(value.Value)
-            {
-                SymbolIndex = strId,
-            };
-        }
+            DefineSymbol(name, value, flags);
 
-        // TODO: Non-label symbols.
-        entry.SetFlag(SymbolFlags.Def_Label, true);
-        
-        // Write to string stream and defintions table
-        Strings.Write(Encoding.UTF8.GetBytes(name));
-        Strings.WriteByte(0); // Null terminate
-        _definitions.Add(name, entry);
         return true;
     }
 
@@ -80,6 +71,64 @@ public partial class ModuleConstruction
     public bool TryTrackRelocation(RelocationEntry entry)
     {
         _relocations.Add(entry);
+        return true;
+    }
+
+    private void DefineSymbol(string name, Address? value = null, SymbolFlags? flags = null)
+    {
+        // Get string position
+        uint strId = (uint)Strings.Position;
+
+        // Create entry
+        SymbolEntry entry;
+        if (!value.HasValue)
+        {
+            entry = new()
+            {
+                SymbolIndex = strId,
+            };
+
+            entry.SetFlags(SymbolFlags.Forward, true);
+        }
+        else
+        {
+            entry = new(value.Value)
+            {
+                SymbolIndex = strId,
+            };
+        }
+
+        if (flags.HasValue)
+        {
+            entry.SetFlags(flags.Value, true);
+        }
+        
+        // Write to string stream and defintions table
+        Strings.Write(Encoding.UTF8.GetBytes(name));
+        Strings.WriteByte(0); // Null terminate
+        _definitions.Add(name, entry);
+    }
+
+    private bool UpdateSymbol(string name, Address? value = null, SymbolFlags? flags = null)
+    {
+        var entry = _definitions[name];
+
+        if (value.HasValue)
+        {
+            // Cannot update the address on an already defined symbol.
+            if (entry.IsDefined)
+                return false;
+
+            entry.Address = value.Value;
+            entry.SetFlags(SymbolFlags.Defined, true);
+        }
+
+        if (flags.HasValue)
+        {
+            entry.SetFlags(flags.Value, true);
+        }
+
+        _definitions[name] = entry;
         return true;
     }
 }
