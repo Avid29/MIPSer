@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Helpers;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables.Enums;
@@ -13,6 +14,8 @@ namespace MIPS.Models.Modules.Tables;
 [StructLayout(LayoutKind.Explicit)]
 public struct SymbolEntry
 {
+    private const byte SectionBitCount = 4;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SymbolEntry"/> struct.
     /// </summary>
@@ -50,17 +53,22 @@ public struct SymbolEntry
     /// <summary>
     /// Fills the struct to 16 bytes.
     /// </summary>
-    /// <remarks>
-    /// This is not part of RASM, but a convenience of mine.
-    /// </remarks>
     [field: FieldOffset(14)]
-    private Section Section { get; set; }
+    private readonly ushort _filler;
 
     /// <summary>
-    /// Fills the struct to 16 bytes.
+    /// Gets or sets the section specified by the 
     /// </summary>
-    [field: FieldOffset(15)]
-    private readonly byte _filler;
+    public Section Section
+    {
+        readonly get => (Section)UintMasking.GetShiftMask((uint)Flags, SectionBitCount, 0);
+        set
+        {
+            var cast = (uint)Flags;
+            UintMasking.SetShiftMask(ref cast, SectionBitCount, 0, (uint)value);
+            Flags = (SymbolFlags)cast;
+        }
+    }
 
     /// <summary>
     /// Gets if the symbol is defined.
@@ -120,7 +128,6 @@ public struct SymbolEntry
             Value = value,
             SymbolIndex = symbolIndex,
             ObjectFileIndex = objFileIndex,
-            Section = Section
         };
     }
     
@@ -131,7 +138,6 @@ public struct SymbolEntry
         stream.TryWrite(Value);
         stream.TryWrite(SymbolIndex);
         stream.TryWrite(ObjectFileIndex);
-        stream.TryWrite((byte)Section);
         stream.TryWrite(_filler);
     }
 }

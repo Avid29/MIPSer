@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Models.Addressing;
+using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables;
 using MIPS.Models.Modules.Tables.Enums;
 using System.Text;
@@ -88,6 +89,8 @@ public partial class ModuleConstruction
                 SymbolIndex = strId,
             };
 
+            // TODO: Can it be forward declined without beginning as external?
+            entry.Section = Section.External;
             entry.SetFlags(SymbolFlags.Forward, true);
         }
         else

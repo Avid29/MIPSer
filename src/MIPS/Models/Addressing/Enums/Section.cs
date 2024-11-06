@@ -9,6 +9,7 @@ public enum Section : byte
 {
 #pragma warning disable CS1591
     
+    // Standard sections
     Text,                   // text
     ReadOnlyData,           // rdata
     Data,                   // data
@@ -20,9 +21,17 @@ public enum Section : byte
     RelocationTable,
     ReferenceTable,
     SymbolTable,
-    SymbolNameTable,
+    StringTable,
 
-    None = 255,
+    // RAM
+    Heap,
+    Stack,
+
+    // Global
+    Absolute,
+    External,
+    Unknown,
+    None,
 
 #pragma warning restore CS1591
 }
