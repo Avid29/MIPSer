@@ -8,6 +8,7 @@ using RASM.Modules.Config;
 using System.Text;
 
 using RasmRelocation = RASM.Modules.Tables.RelocationEntry;
+using RasmReference = RASM.Modules.Tables.ReferenceEntry;
 using RasmSymbol = RASM.Modules.Tables.SymbolEntry;
 
 namespace RASM.Modules;
@@ -85,6 +86,14 @@ public class RasmModule : IModule<RasmModule>
             var newRelocation = RasmRelocation.Convert(relocation);
             newRelocation.Write(stream);
         }
+        
+        // Write reference table to the stream
+        //foreach (var reference in constructor.References)
+        //{
+        //    // Convert to rasm and write to stream
+        //    var newReference = RasmReference.Convert(reference);
+        //    newReference.Write(stream);
+        //}
         
         // Write symbol table to the stream
         foreach (var symbol in constructor.Symbols.Values)
