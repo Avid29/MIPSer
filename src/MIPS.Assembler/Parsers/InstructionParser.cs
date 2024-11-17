@@ -259,13 +259,15 @@ public struct InstructionParser
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"Argument of type '{target}' attempted to parse as an expression."),
         };
 
-        if (address.IsRelocatable && target is Argument.Shift)
+        if (!address.IsFixed && target is Argument.Shift)
         {
             _logger?.Log(Severity.Error, LogId.RelocatableReferenceInShift, "Shift amount argument cannot reference relocatable symbols.");
             return false;
         }
 
-        if (address.IsRelocatable && target is not Argument.Offset && _context is not null)
+        // TODO: Can branches make external references?
+
+        if (!address.IsFixed && target is not Argument.Offset && _context is not null)
         {
             Guard.IsNotNull(refSymbol);
 
@@ -273,15 +275,17 @@ public struct InstructionParser
             {
                 Argument.Address => ReferenceType.Address,
                 Argument.Immediate => ReferenceType.Lower,
-                _ => ThrowHelper.ThrowArgumentOutOfRangeException<ReferenceType>($"Argument of type '{target}' cannot be relocateable."),
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<ReferenceType>($"Argument of type '{target}' reference relocatable symbols."),
             };
 
-            if (!refSymbol.IsDefined)
+            var method = ReferenceMethod.Relocate;
+            if (address.IsExternal)
             {
-                ThrowHelper.ThrowPlatformNotSupportedException("References not yet supported.");
+                // TODO: When is it replace or subtract?
+                method = ReferenceMethod.Add;
             }
 
-            relocation = new ReferenceEntry(refSymbol.Symbol, _context.CurrentAddress, type, ReferenceMethod.Relocate);
+            relocation = new ReferenceEntry(refSymbol.Symbol, _context.CurrentAddress, type, method);
         }
 
         long value = address.Value;

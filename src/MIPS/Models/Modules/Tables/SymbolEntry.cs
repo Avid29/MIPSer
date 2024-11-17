@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Models.Addressing;
+using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables.Enums;
 using System.Diagnostics.CodeAnalysis;
 
@@ -14,7 +15,7 @@ public class SymbolEntry
     /// <summary>
     /// Initializes a new instance of the <see cref="SymbolEntry"/> class.
     /// </summary>
-    public SymbolEntry(string symbol, SymbolType type, Address? address, SymbolFlags flags = 0)
+    public SymbolEntry(string symbol, SymbolType type, Address address, SymbolFlags flags = 0)
     {
         Symbol = symbol;
         Type = type;
@@ -30,7 +31,7 @@ public class SymbolEntry
     /// <summary>
     /// Gets or sets the value of the symbol as an <see cref="Addressing.Address"/>.
     /// </summary>
-    public Address? Address { get; set; }
+    public Address Address { get; set; }
 
     /// <summary>
     /// Gets or sets the symbol type.
@@ -56,7 +57,7 @@ public class SymbolEntry
     /// Gets whether or not the symbol is defined.
     /// </summary>
     [MemberNotNullWhen(true, nameof(Address))]
-    public bool IsDefined => Address.HasValue;
+    public bool IsDefined => Address.Section is not Section.External;
 
     /// <summary>
     /// Gets if a flag is set on the symbol entry.

@@ -11,10 +11,8 @@ using MIPS.Assembler.Parsers.Expressions.Evaluator;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Addressing;
-using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Modules.Tables;
 using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -95,7 +93,7 @@ public struct ExpressionParser
             return false;
 
         // Output symbol if result is relocatable.
-        if (result.IsRelocatable)
+        if (!result.IsFixed)
         {
             // NOTE: Relocatable values can only in terms of one relocatable symbol
             // If they depend on more than one relocatable symbol, they will have
@@ -228,18 +226,11 @@ public struct ExpressionParser
         if (!_context.TryGetSymbol(t.Source, out var symbol))
             return false;
 
-        if (symbol?.Address is null)
-            return false;
-
-        var addr = symbol.Address.Value;
-
-        // Cache relocatable symbol
-        if (addr.IsRelocatable)
-        {
+        // Cache non-fixed symbol
+        if (!symbol.Address.IsFixed)
             _refSymbol = symbol;
-        }
 
-        var node = new AddressNode(addr);
+        var node = new AddressNode(symbol.Address);
         _tree.AddNode(node);
         return true;
     }

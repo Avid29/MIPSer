@@ -31,10 +31,28 @@ public struct Address
     public Section Section { get; set; }
 
     /// <summary>
+    /// Get whether or not the address is fixed and not subject to relocation.
+    /// </summary>
+    public readonly bool IsFixed => Section is Section.None;
+
+    /// <summary>
     /// Gets whether or not the address is relocating.
     /// </summary>
-    public readonly bool IsRelocatable => Section is not Section.None;
+    /// <remarks>
+    /// External addresses are not counted as relocatable.
+    /// </remarks>
+    public readonly bool IsRelocatable => !(IsFixed || IsExternal);
     
+    /// <summary>
+    /// Gets whether or not the address is external.
+    /// </summary>
+    public readonly bool IsExternal => Section is Section.External;
+
+    /// <summary>
+    /// Gets the default external address.
+    /// </summary>
+    public static Address External => new Address(0, Section.External);
+
     /// <inheritdoc/>
     public static Address operator +(Address address, long offset) => new(address.Value + offset, address.Section);
     
