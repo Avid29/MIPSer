@@ -6,6 +6,12 @@
     <IsTestProject>true</IsTestProject>
 	<GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
+	
+  <!--<ItemGroup>
+    <Compile Remove="ASMs\**" />
+    <EmbeddedResource Remove="ASMs\**" />
+    <None Remove="ASMs\**" />
+  </ItemGroup>-->
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
@@ -15,8 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\MIPS.Assembler\MIPS.Assembler.csproj" />
-    <ProjectReference Include="..\MIPS.Tests\MIPS.Tests.csproj" />
+    <ProjectReference Include="..\..\src\MIPS\MIPS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
 </Project>

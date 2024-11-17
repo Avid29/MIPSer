@@ -1,8 +1,8 @@
 ﻿// Adam Dernis 2024
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MIPS.Assembler.Tests.Helpers;
 using MIPS.Assembler.Tokenization;
+using MIPS.Tests.Helpers;
 using System.IO;
 using System.Threading.Tasks;
 

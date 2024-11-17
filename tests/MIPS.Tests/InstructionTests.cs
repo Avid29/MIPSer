@@ -1,13 +1,12 @@
 ﻿// Adam Dernis 2024
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System;
 
-namespace MIPS.Assembler.Tests;
+namespace MIPS.Tests;
 
 [TestClass]
 public class InstructionTests

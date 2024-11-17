@@ -1,10 +1,9 @@
 ﻿// Adam Dernis 2024
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MIPS.Assembler;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Models;
-using MIPS.Assembler.Tests.Helpers;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Tests.Helpers;
 using RASM.Modules;
 using RASM.Modules.Config;
 using System.IO;
@@ -12,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MIPS.Assembler.Tests;
+namespace RASM.Tests;
 
 [TestClass]
 public class AssemblerTests
@@ -28,28 +27,28 @@ public class AssemblerTests
     private const string NotInVersion = "sync";
 
     [TestMethod(nameof(InvalidInstruction))]
-    public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, expected:LogId.InvalidInstructionName);
+    public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, expected: LogId.InvalidInstructionName);
 
     [TestMethod(nameof(InvalidLabelNum))]
-    public async Task InvalidLabelNumTest() => await RunStringTest(InvalidLabelNum, expected:LogId.IllegalSymbolName);
+    public async Task InvalidLabelNumTest() => await RunStringTest(InvalidLabelNum, expected: LogId.IllegalSymbolName);
 
     [TestMethod(nameof(InvalidLabelSpecial))]
-    public async Task InvalidLabelSpecialTest() => await RunStringTest(InvalidLabelSpecial, expected:LogId.IllegalSymbolName);
+    public async Task InvalidLabelSpecialTest() => await RunStringTest(InvalidLabelSpecial, expected: LogId.IllegalSymbolName);
 
     [TestMethod(nameof(ExtraArgError))]
-    public async Task ExtraArgErrorTest() => await RunStringTest(ExtraArgError, expected:LogId.InvalidInstructionArgCount);
+    public async Task ExtraArgErrorTest() => await RunStringTest(ExtraArgError, expected: LogId.InvalidInstructionArgCount);
 
     [TestMethod(nameof(MissingArgError))]
-    public async Task MissingArgErrorTest() => await RunStringTest(MissingArgError, expected:LogId.InvalidInstructionArgCount);
+    public async Task MissingArgErrorTest() => await RunStringTest(MissingArgError, expected: LogId.InvalidInstructionArgCount);
 
     [TestMethod(nameof(NumericalRegister))]
     public async Task NumericalRegisterTest() => await RunStringTest(NumericalRegister);
 
     [TestMethod(nameof(NumericalRegisterError))]
-    public async Task NumericalRegisterErrorTest() => await RunStringTest(NumericalRegisterError, expected:LogId.InvalidRegisterArgument);
+    public async Task NumericalRegisterErrorTest() => await RunStringTest(NumericalRegisterError, expected: LogId.InvalidRegisterArgument);
 
     [TestMethod(nameof(DisabledPseudoInstructions))]
-    public async Task DisabledPseudoInstructionsErrorTest() => await RunStringTest(DisabledPseudoInstructions, new(){ AllowPseudos = false }, LogId.DisabledFeatureInUse);
+    public async Task DisabledPseudoInstructionsErrorTest() => await RunStringTest(DisabledPseudoInstructions, new() { AllowPseudos = false }, LogId.DisabledFeatureInUse);
 
     [TestMethod(nameof(NotInVersion))]
     public async Task NotInVersionTest() => await RunStringTest(NotInVersion, new(MipsVersion.MipsI), LogId.NotInVersion);
@@ -85,11 +84,11 @@ public class AssemblerTests
         (LogId.InvalidInstructionArgCount, 35));
 
     [TestMethod(TestFilePathing.DuplicateSymbolFile)]
-    public async Task DuplicateSymbolTest () => await RunFileTest(TestFilePathing.DuplicateSymbolFile,
+    public async Task DuplicateSymbolTest() => await RunFileTest(TestFilePathing.DuplicateSymbolFile,
         (LogId.DuplicateSymbolDefinition, 15));
 
     [TestMethod(TestFilePathing.SubtractAddressFile)]
-    public async Task SubtractAddressTest () => await RunFileTest(TestFilePathing.SubtractAddressFile,
+    public async Task SubtractAddressTest() => await RunFileTest(TestFilePathing.SubtractAddressFile,
         (LogId.InvalidOperationOnRelocatable, 14));
 
     private static async Task RunFileTest(string fileName, params (LogId, long)[] expected)

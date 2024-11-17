@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Formats\RASM.Modules\RASM.Modules.csproj" />
     <ProjectReference Include="..\..\src\MIPS.Assembler\MIPS.Assembler.csproj" />
-    <ProjectReference Include="..\..\src\RASM\RASM.Modules\RASM.Modules.csproj" />
   </ItemGroup>
 
 </Project>

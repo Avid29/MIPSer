@@ -1,12 +1,13 @@
 ﻿// Adam Dernis 2024
 
+using CommunityToolkit.Diagnostics;
 using System.IO;
 
-namespace MIPS.Assembler.Tests.Helpers;
+namespace MIPS.Tests.Helpers;
 
 public static class TestFilePathing
 {
-    private const string AssemblyFilesPathBase = @"../../../ASMs/";
+    private const string AssemblyFilesPathBase = @"MIPS.Tests/ASMs/";
     private const string ObjectFolder = "obj/";
 
     public const string BranchLiteralFile = "component_tests/branch_literal.asm";
@@ -28,7 +29,13 @@ public static class TestFilePathing
     /// <returns>The path of an assembly test file/</returns>
     public static string GetAssemblyFilePath(string testFile, bool fullPath = true)
     {
-        var path = Path.Combine(AssemblyFilesPathBase, testFile);
+        var testPath = FindTestsPath();
+        if (testPath is null)
+        {
+            ThrowHelper.ThrowExternalException("Could not find test directory as parent");
+        }
+
+        var path = Path.Combine(testPath, AssemblyFilesPathBase, testFile);
         if (fullPath)
         {
             path = Path.GetFullPath(path);
@@ -55,5 +62,17 @@ public static class TestFilePathing
         }
 
         return Path.Combine(dir, Path.GetFileNameWithoutExtension(original) + ".obj");
+    }
+
+    private static string? FindTestsPath()
+    {
+        string path = Directory.GetCurrentDirectory();
+        var dir = new DirectoryInfo(path);
+        while (dir is not null && dir.Name != "tests")
+        {
+            dir = dir.Parent;
+        }
+
+        return dir?.FullName;
     }
 }
