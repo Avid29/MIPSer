@@ -1,7 +1,6 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables;
 using System.Collections.Generic;
@@ -16,8 +15,7 @@ public partial class ModuleConstructor
 {
     private const int SECTION_COUNT = 6;
 
-    private readonly List<RelocationEntry> _relocations;
-    private readonly Dictionary<Address, string> _references;
+    private readonly List<ReferenceEntry> _references;
     private readonly Dictionary<string, SymbolEntry> _definitions;
 
     private readonly Stream[] _sections;
@@ -45,7 +43,6 @@ public partial class ModuleConstructor
 
         _sections = streams;
 
-        _relocations = [];
         _references = [];
         _definitions = [];
     }
@@ -81,14 +78,9 @@ public partial class ModuleConstructor
     public Stream UninitializedData => GetSectionStream(Section.UninitializedData);
 
     /// <summary>
-    /// Gets the relocations lists.
-    /// </summary>
-    public IReadOnlyList<RelocationEntry> Relocations => _relocations;
-
-    /// <summary>
     /// Gets the references dictionary.
     /// </summary>
-    public IReadOnlyDictionary<Address, string> References => _references;
+    public IReadOnlyList<ReferenceEntry> References => _references;
 
     /// <summary>
     /// Gets the symbol dictionary.

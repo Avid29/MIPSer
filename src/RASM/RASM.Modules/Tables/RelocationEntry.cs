@@ -7,7 +7,7 @@ using MIPS.Models.Addressing.Enums;
 using RASM.Modules.Tables.Enums;
 using System.Runtime.InteropServices;
 
-using CommonEntry = MIPS.Models.Modules.Tables.RelocationEntry;
+using CommonEntry = MIPS.Models.Modules.Tables.ReferenceEntry;
 using CommonType = MIPS.Models.Modules.Tables.Enums.ReferenceType;
 
 namespace RASM.Modules.Tables;

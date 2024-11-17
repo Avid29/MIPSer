@@ -18,25 +18,25 @@ public class ParsedInstruction
     /// <summary>
     /// Initializes a new instance of the <see cref="ParsedInstruction"/> class.
     /// </summary>
-    public ParsedInstruction(Instruction instruction, RelocationEntry? symbol = null)
+    public ParsedInstruction(Instruction instruction, ReferenceEntry? reference = null)
     {
         _real = instruction;
-        Relocation = symbol;
+        Reference = reference;
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParsedInstruction"/> class.
     /// </summary>
-    public ParsedInstruction(PseudoInstruction instruction, RelocationEntry? symbol = null)
+    public ParsedInstruction(PseudoInstruction instruction, ReferenceEntry? reference = null)
     {
         _pseudo = instruction;
-        Relocation = symbol;
+        Reference = reference;
     }
 
     /// <summary>
     /// Gets the symbol referenced, or null if none.
     /// </summary>
-    public RelocationEntry? Relocation { get; }
+    public ReferenceEntry? Reference { get; }
 
     /// <summary>
     /// Gets whether or not the parsed instruction was a pseudo instruction.

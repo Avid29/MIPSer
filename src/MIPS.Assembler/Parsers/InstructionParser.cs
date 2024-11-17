@@ -79,7 +79,7 @@ public struct InstructionParser
     /// <returns>Whether or not an instruction was parsed.</returns>
     public bool TryParse(AssemblyLine line, [NotNullWhen(true)] out ParsedInstruction? parsedInstruction)
     {
-        RelocationEntry? relocation = null;
+        ReferenceEntry? reference = null;
         parsedInstruction = null;
 
         var name = line.Instruction;
@@ -123,7 +123,7 @@ public struct InstructionParser
         {
             // Split out next arg
             var arg = line.Args[i];
-            TryParseArg(arg, pattern[i], out relocation);
+            TryParseArg(arg, pattern[i], out reference);
         }
 
         // Handle the pseudo-instruction condition
@@ -145,7 +145,7 @@ public struct InstructionParser
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<PseudoInstruction>(),
             };
 
-            parsedInstruction = new ParsedInstruction(pseudo, relocation);
+            parsedInstruction = new ParsedInstruction(pseudo, reference);
             return true;
         }
 
@@ -176,19 +176,19 @@ public struct InstructionParser
             _logger?.Log(Severity.Message, LogId.ZeroRegWriteBack, "This instruction writes to $zero.");
         }
 
-        parsedInstruction = new ParsedInstruction(instruction, relocation);
+        parsedInstruction = new ParsedInstruction(instruction, reference);
         return true;
     }
 
-    private bool TryParseArg(ReadOnlySpan<Token> arg, Argument type, out RelocationEntry? relocation)
+    private bool TryParseArg(ReadOnlySpan<Token> arg, Argument type, out ReferenceEntry? reference)
     {
-        relocation = null;
+        reference = null;
 
         return type switch
         {
             Argument.RS or Argument.RT or Argument.RD =>TryParseRegisterArg(arg[0], type),
-            Argument.Shift or Argument.Immediate or Argument.FullImmediate or Argument.Offset or Argument.Address => TryParseExpressionArg(arg, type, out relocation),
-            Argument.AddressOffset => TryParseAddressOffsetArg(arg, out relocation),
+            Argument.Shift or Argument.Immediate or Argument.FullImmediate or Argument.Offset or Argument.Address => TryParseExpressionArg(arg, type, out reference),
+            Argument.AddressOffset => TryParseAddressOffsetArg(arg, out reference),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument of type '{type}' is not within parsable type range."),
         };
     }
@@ -235,13 +235,13 @@ public struct InstructionParser
     /// <summary>
     /// Parses an argument as an expression and assigns it to the target component
     /// </summary>
-    private bool TryParseExpressionArg(ReadOnlySpan<Token> arg, Argument target, out RelocationEntry? relocation)
+    private bool TryParseExpressionArg(ReadOnlySpan<Token> arg, Argument target, out ReferenceEntry? relocation)
     {
         relocation = null;
         var parser = new ExpressionParser(_context, _logger);
 
         // Attempt to parse expression
-        if (!parser.TryParse(arg, out var address, out string? relSymbol))
+        if (!parser.TryParse(arg, out var address, out SymbolEntry? refSymbol))
             return false;
 
         // NOTE: Casting might truncate the value to fit the bit size.
@@ -267,7 +267,7 @@ public struct InstructionParser
 
         if (address.IsRelocatable && target is not Argument.Offset && _context is not null)
         {
-            // TODO: Relocatable offsets
+            Guard.IsNotNull(refSymbol);
 
             var type = target switch
             {
@@ -276,7 +276,12 @@ public struct InstructionParser
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<ReferenceType>($"Argument of type '{target}' cannot be relocateable."),
             };
 
-            relocation = new RelocationEntry(_context.CurrentAddress, type);
+            if (!refSymbol.IsDefined)
+            {
+                ThrowHelper.ThrowPlatformNotSupportedException("References not yet supported.");
+            }
+
+            relocation = new ReferenceEntry(refSymbol.Symbol, _context.CurrentAddress, type, ReferenceMethod.Relocate);
         }
 
         long value = address.Value;
@@ -358,7 +363,7 @@ public struct InstructionParser
     /// <summary>
     /// Parses an argument as an address offset, assigning its components to immediate and $rs.
     /// </summary>
-    private bool TryParseAddressOffsetArg(ReadOnlySpan<Token> arg, out RelocationEntry? relSymbol)
+    private bool TryParseAddressOffsetArg(ReadOnlySpan<Token> arg, out ReferenceEntry? relSymbol)
     {
         relSymbol = null;
 

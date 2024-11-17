@@ -9,6 +9,7 @@ public enum ReferenceMethod
 {
 #pragma warning disable CS1591
 
+    Relocate,
     Add,
     Replace,
     Subtract,

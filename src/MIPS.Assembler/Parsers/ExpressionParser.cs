@@ -12,7 +12,9 @@ using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Addressing;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Modules.Tables;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -29,7 +31,7 @@ public struct ExpressionParser
     private readonly IEvaluator<Address> _evaluator;
     private ExpressionTree? _tree;
     private ExpressionParserState _state;
-    private string? _relocatableSymbol;
+    private SymbolEntry? _refSymbol;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExpressionParser"/> struct.
@@ -48,7 +50,7 @@ public struct ExpressionParser
         _evaluator = new AddressEvaluator(logger);
         _tree = null;
         _state = ExpressionParserState.Start;
-        _relocatableSymbol = null;
+        _refSymbol = null;
     }
 
     /// <summary>
@@ -58,7 +60,7 @@ public struct ExpressionParser
     /// <param name="result">The expression parsed as a integer.</param>
     /// <param name="relSymbol">The symbol referenced if address expression is relocatable. Null otherwise.</param>
     /// <returns><see langword="true"/> if the expression was successfully parsed, <see langword="false"/> otherwise.</returns>
-    public bool TryParse(ReadOnlySpan<Token> expression, out Address result, out string? relSymbol)
+    public bool TryParse(ReadOnlySpan<Token> expression, out Address result, out SymbolEntry? relSymbol)
     {
         result = default;
         relSymbol = null;
@@ -98,7 +100,7 @@ public struct ExpressionParser
             // NOTE: Relocatable values can only in terms of one relocatable symbol
             // If they depend on more than one relocatable symbol, they will have
             // failed in evaluation.
-            relSymbol = _relocatableSymbol;
+            relSymbol = _refSymbol;
         }
 
         return true;
@@ -234,7 +236,7 @@ public struct ExpressionParser
         // Cache relocatable symbol
         if (addr.IsRelocatable)
         {
-            _relocatableSymbol = t.Source;
+            _refSymbol = symbol;
         }
 
         var node = new AddressNode(addr);

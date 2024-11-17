@@ -57,6 +57,35 @@ public struct ReferenceEntry : IReferenceEntry<ReferenceEntry>
     /// </summary>
     [field: FieldOffset(10)]
     public ushort ModuleIndex { get; set; }
+
+    /// <inheritdoc/>
+    public readonly ReferenceEntry Read(Stream stream)
+    {
+        stream.TryRead<uint>(out var address);
+        stream.TryRead<uint>(out var symbolIndex);
+        stream.TryRead<byte>(out var section);
+        stream.TryRead<byte>(out var type);
+        stream.TryRead<ushort>(out var moduleIndex);
+
+        return new()
+        {
+            Address = address,
+            SymbolIndex = symbolIndex,
+            Section = (Section)section,
+            Type = (ReferenceType)type,
+            ModuleIndex = moduleIndex,
+        };
+    }
+    
+    /// <inheritdoc/>
+    public readonly void Write(Stream stream)
+    {
+        stream.TryWrite(Address);
+        stream.TryWrite(SymbolIndex);
+        stream.TryWrite((byte)Section);
+        stream.TryWrite((byte)Type);
+        stream.TryWrite(ModuleIndex);
+    }
     
     /// <inheritdoc/>
     public static ReferenceEntry Convert(CommonEntry entry)

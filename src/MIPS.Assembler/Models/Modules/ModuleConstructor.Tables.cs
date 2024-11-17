@@ -51,26 +51,13 @@ public partial class ModuleConstructor
     public bool TryGetSymbol(string name, out SymbolEntry? value) => _definitions.TryGetValue(name, out value);
 
     /// <summary>
-    /// Attempts to make a reference to a symbol.
+    /// Attempts to track a reference to a symbol.
     /// </summary>
-    /// <param name="location">The location the symbol is referenced.</param>
-    /// <param name="symbol">The symbol referenced.</param>
+    /// <param name="entry">The reference information.</param>
     /// <returns>Whether or not a symbol reference was made.</returns>
-    public bool TryMakeReference(Address location, string symbol)
+    public bool TryTrackReference(ReferenceEntry entry)
     {
-        // TODO: Track upper/lower
-        _references.Add(location, symbol);
-        return true;
-    }
-
-    /// <summary>
-    /// Attempts to track a relocation entry.
-    /// </summary>
-    /// <param name="entry">The relocation information.</param>
-    /// <returns>Whether or not a relocation entry was made.</returns>
-    public bool TryTrackRelocation(RelocationEntry entry)
-    {
-        _relocations.Add(entry);
+        _references.Add(entry);
         return true;
     }
 

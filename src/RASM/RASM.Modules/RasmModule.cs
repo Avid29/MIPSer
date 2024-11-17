@@ -79,21 +79,37 @@ public class RasmModule : IModule<RasmModule>
             return pos;
         }
         
-        // Write relocation table to the stream
-        foreach (var relocation in constructor.Relocations)
+        // Create split streams for relocations and references
+        var relCount = 0;
+        var refCount = 0;
+        Stream relStream = new MemoryStream();
+        Stream refStream = new MemoryStream();
+
+        // Write reference and relocation table to their streams
+        foreach (var reference in constructor.References)
         {
-            // Convert to rasm and write to stream
-            var newRelocation = RasmRelocation.Convert(relocation);
-            newRelocation.Write(stream);
+            if (reference.IsRelocation)
+            {
+                // Convert to rasm relocation and write to relocation stream
+                var newRelocation = RasmRelocation.Convert(reference);
+                newRelocation.Write(relStream);
+                relCount++;
+            }
+            else
+            {
+                // Convert to rasm relocation, extract string, and write to reference stream
+                var newReference = RasmReference.Convert(reference);
+                newReference.SymbolIndex = (uint)GetStringPosition(reference.Symbol);
+                newReference.Write(refStream);
+                refCount++;
+            }
         }
-        
-        // Write reference table to the stream
-        //foreach (var reference in constructor.References)
-        //{
-        //    // Convert to rasm and write to stream
-        //    var newReference = RasmReference.Convert(reference);
-        //    newReference.Write(stream);
-        //}
+
+        // Append rel and ref streams
+        relStream.Position = 0;
+        refStream.Position = 0;
+        relStream.CopyTo(stream);
+        refStream.CopyTo(stream);
         
         // Write symbol table to the stream
         foreach (var symbol in constructor.Symbols.Values)
@@ -120,8 +136,7 @@ public class RasmModule : IModule<RasmModule>
             (uint)constructor.SmallInitializedData.Length,
             (uint)constructor.SmallUninitializedData.Length,
             (uint)constructor.UninitializedData.Length,
-            (uint)constructor.Relocations.Count,
-            (uint)constructor.References.Count,
+            (uint)relCount, (uint)refCount,
             (uint)constructor.Symbols.Count,
             (uint)strings.Length);
         header.TryWriteHeader(stream);
