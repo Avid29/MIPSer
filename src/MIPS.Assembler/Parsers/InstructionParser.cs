@@ -271,9 +271,9 @@ public struct InstructionParser
 
             var type = target switch
             {
-                Argument.Address => RelocationType.Address,
-                Argument.Immediate => RelocationType.SimpleImmediate,
-                _ => ThrowHelper.ThrowArgumentOutOfRangeException<RelocationType>($"Argument of type '{target}' cannot be relocateable."),
+                Argument.Address => ReferenceType.Address,
+                Argument.Immediate => ReferenceType.Lower,
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<ReferenceType>($"Argument of type '{target}' cannot be relocateable."),
             };
 
             relocation = new RelocationEntry(_context.CurrentAddress, type);

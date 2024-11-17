@@ -5,6 +5,8 @@ using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Tests.Helpers;
 using MIPS.Models.Instructions.Enums;
+using RASM.Modules;
+using RASM.Modules.Config;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -100,15 +102,20 @@ public class AssemblerTests
         await RunTest(stream, fileName, null, expected);
     }
 
-    private static async Task RunStringTest(string str, AssemblerConfig? config = null, params LogId[] expected)
+    private static async Task RunStringTest(string str, RasmConfig? config = null, params LogId[] expected)
     {
         // Wrap the test in a stream and run the test
         var stream = new MemoryStream(Encoding.Default.GetBytes(str));
         await RunTest(stream, null, config, expected.Select((x) => (x, 1L)).ToArray());
     }
 
-    private static async Task RunTest(Stream stream, string? filename = null, AssemblerConfig? config = null, params (LogId, long)[] expected)
+    private static async Task RunTest(Stream stream, string? filename = null, RasmConfig? config = null, params (LogId, long)[] expected)
     {
+        if (config is null)
+        {
+            config = new RasmConfig();
+        }
+
         // Run assembler
         var assembler = await Assembler.AssembleAsync(stream, filename, config);
 
@@ -135,7 +142,7 @@ public class AssemblerTests
         Stream result = File.Open(output, FileMode.OpenOrCreate);
 
         // Write the module and assert validity
-        var module = assembler.WriteModule(result);
+        var module = assembler.CompleteModule<RasmModule>(result);
         Assert.IsNotNull(module);
     }
 }

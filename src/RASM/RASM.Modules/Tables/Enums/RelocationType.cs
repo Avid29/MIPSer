@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-namespace MIPS.Models.Modules.Tables.Enums;
+namespace RASM.Modules.Tables.Enums;
 
 /// <summary>
 /// Gets how to preform the relocation.

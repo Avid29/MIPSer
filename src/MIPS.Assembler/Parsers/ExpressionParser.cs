@@ -226,10 +226,10 @@ public struct ExpressionParser
         if (!_context.TryGetSymbol(t.Source, out var symbol))
             return false;
 
-        if (!symbol.IsDefined)
+        if (symbol?.Address is null)
             return false;
 
-        var addr = symbol.Address;
+        var addr = symbol.Address.Value;
 
         // Cache relocatable symbol
         if (addr.IsRelocatable)

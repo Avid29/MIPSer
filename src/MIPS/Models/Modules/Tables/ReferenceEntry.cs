@@ -1,44 +1,32 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Models.Addressing.Enums;
+using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables.Enums;
-using System.Runtime.InteropServices;
 
 namespace MIPS.Models.Modules.Tables;
 
 /// <summary>
 /// An entry in the load module's reference table.
 /// </summary>
-[StructLayout(LayoutKind.Explicit)]
-public struct ReferenceEntry
+public class ReferenceEntry
 {
     /// <summary>
-    /// Gets the location of reference, within its section.
+    /// Gets or sets the symbol name.
     /// </summary>
-    [field: FieldOffset(0)]
-    public uint Address { get; set; }
+    public string? Symbol { get; set; }
 
     /// <summary>
-    /// Gets the index of the symbol name in the string table.
+    /// Gets or sets the reference location.
     /// </summary>
-    [field: FieldOffset(4)]
-    public uint SymbolIndex { get; set; }
+    public Address Address { get; set; }
 
     /// <summary>
-    /// Gets the section the <see cref="Address"/> belongs in.
+    /// Gets or sets a <see cref="ReferenceType"/> describing where to preform the bit modification.
     /// </summary>
-    [field: FieldOffset(8)]
-    public Section Section { get; set; }
-
-    /// <summary>
-    /// Gets a <see cref="ReferenceType"/> describing how to preform the reference.
-    /// </summary>
-    [field: FieldOffset(9)]
     public ReferenceType Type { get; set; }
-
+    
     /// <summary>
-    /// Gets the index of the module containing the reference.
+    /// Gets or sets a <see cref="ReferenceType"/> describing how to preform the bit modification.
     /// </summary>
-    [field: FieldOffset(10)]
-    public ushort ModuleIndex { get; set; }
+    public ReferenceMethod Method { get; set; }
 }

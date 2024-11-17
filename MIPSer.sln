@@ -35,7 +35,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIPS.Linker", "src\MIPS.Lin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MIPS.Assembler.Tests.Live", "tests\MIPS.Assembler.Tests.Live\MIPS.Assembler.Tests.Live.csproj", "{012F9A22-9E09-419B-8BB8-E4E32CFFE73D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rasm", "rasm", "{D5B56044-9D1B-4D24-BEEE-0CE55B6AEE2F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RASM", "RASM", "{D5B56044-9D1B-4D24-BEEE-0CE55B6AEE2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Specs", "Specs", "{1F0B9C38-F7D0-4B01-BF1B-19288FF7C485}"
 	ProjectSection(SolutionItems) = preProject
 		rasm-info\exec.h = rasm-info\exec.h
 		rasm-info\instrs.txt = rasm-info\instrs.txt
@@ -44,6 +46,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rasm", "rasm", "{D5B56044-9
 		rasm-info\symbols.txt = rasm-info\symbols.txt
 		rasm-info\symdefs.h = rasm-info\symdefs.h
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RASM.Modules", "src\RASM\RASM.Modules\RASM.Modules.csproj", "{BD99078A-790C-437E-B8DA-F61F0652404F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -269,6 +273,26 @@ Global
 		{012F9A22-9E09-419B-8BB8-E4E32CFFE73D}.Release|x64.Build.0 = Release|Any CPU
 		{012F9A22-9E09-419B-8BB8-E4E32CFFE73D}.Release|x86.ActiveCfg = Release|Any CPU
 		{012F9A22-9E09-419B-8BB8-E4E32CFFE73D}.Release|x86.Build.0 = Release|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Debug|ARM.Build.0 = Debug|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Debug|ARM64.ActiveCfg = Debug|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Debug|ARM64.Build.0 = Debug|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Debug|x64.Build.0 = Debug|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Debug|x86.Build.0 = Debug|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Release|ARM.Build.0 = Release|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Release|ARM64.ActiveCfg = Release|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Release|ARM64.Build.0 = Release|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Release|x64.ActiveCfg = Release|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Release|x64.Build.0 = Release|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Release|x86.ActiveCfg = Release|Any CPU
+		{BD99078A-790C-437E-B8DA-F61F0652404F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -280,6 +304,8 @@ Global
 		{C7927310-2349-4CDD-822C-E2BA44CD5975} = {F60E28CC-9A4A-480F-BF1A-00698E572165}
 		{290647E3-D8CB-46B5-87CE-409F721E441A} = {2E0C1AB2-023D-4A9A-B760-058F5FAC67A2}
 		{012F9A22-9E09-419B-8BB8-E4E32CFFE73D} = {457783DF-E788-44A7-843C-76272460B7BA}
+		{1F0B9C38-F7D0-4B01-BF1B-19288FF7C485} = {D5B56044-9D1B-4D24-BEEE-0CE55B6AEE2F}
+		{BD99078A-790C-437E-B8DA-F61F0652404F} = {D5B56044-9D1B-4D24-BEEE-0CE55B6AEE2F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {57EBE9B8-DF5B-43EA-99A8-085FA2C95C11}

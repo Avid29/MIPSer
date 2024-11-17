@@ -90,7 +90,7 @@ public class ExpressionParserTests
     private static void RunTest(string input, long? expected = null, params (string name, Address addr)[] macros)
     {
         // NOTE: This assumes symbol realization is not implemented!
-        var obj = new ModuleConstruction();
+        var obj = new ModuleConstructor();
         foreach (var (name, addr) in macros)
             obj.TryDefineSymbol(name, addr);
 

@@ -2,6 +2,7 @@
 
 using MIPS.Assembler;
 using MIPS.Assembler.Logging.Enum;
+using RASM.Modules;
 
 namespace Mipser;
 
@@ -59,7 +60,7 @@ public class Program
 
         if (!assembler.Failed)
         {
-            var module = assembler.WriteModule(outFile);
+            var module = assembler.CompleteModule<RasmModule>(outFile);
         }
 
         Console.WriteLine();

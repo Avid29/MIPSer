@@ -1,0 +1,139 @@
+﻿// Adam Dernis 2024
+
+using CommunityToolkit.Diagnostics;
+using MIPS.Assembler.Models;
+using MIPS.Assembler.Models.Modules;
+using MIPS.Assembler.Models.Modules.Interfaces;
+using RASM.Modules.Config;
+using System.Text;
+
+using RasmRelocation = RASM.Modules.Tables.RelocationEntry;
+using RasmSymbol = RASM.Modules.Tables.SymbolEntry;
+
+namespace RASM.Modules;
+
+/// <summary>
+/// A fully assembled object module.
+/// </summary>
+public class RasmModule : IModule<RasmModule>
+{
+    private Header _header;
+    private Stream _source;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RasmModule"/> class.
+    /// </summary>
+    public RasmModule(Header header, Stream source)
+    {
+        _header = header;
+        _source = source;
+    }
+
+    /// <summary>
+    /// Creates a module from a <see cref="ModuleConstructor"/>.
+    /// </summary>
+    /// <param name="stream">The stream to write the module to.</param>
+    /// <param name="constructor">The <see cref="ModuleConstructor"/> to build from.</param>
+    /// <param name="config">The configuration settings.</param>
+    /// <returns>The constructed module.</returns>
+    public static RasmModule? Create(Stream stream, ModuleConstructor constructor, AssemblerConfig config)
+    {
+        if (config is not RasmConfig rconfig)
+        {
+            ThrowHelper.ThrowArgumentException(nameof(config), $"{config} must be a {nameof(RasmConfig)}.");
+            return null;
+        }
+
+        // TODO: Flags and entry point properly
+        // TODO: Construct string list.
+
+        // Allocate space for header
+        var header = new Header(rconfig.MagicNumber, rconfig.VersionNumber, 0, 0, new uint[10]); // We'll update the strings length later.
+        header.TryWriteHeader(stream);
+
+        // Append segments to stream
+        constructor.ResetStreamPositions();
+        foreach(var section in constructor.Sections)
+            section.CopyTo(stream);
+
+        // Split string references to string table.
+        var strings = new MemoryStream();
+        var positions = new Dictionary<string, long>();
+
+        long GetStringPosition(string? symbol)
+        {
+            // TODO: Better error handling
+            if (symbol is null)
+                return 0;
+
+            // Get from table if already seen
+            if (positions.TryGetValue(symbol, out long value))
+                return value;
+            
+            // Append to table
+            var pos = strings.Position;
+            strings.Write(Encoding.UTF8.GetBytes(symbol));
+            strings.WriteByte(0); // Null terminate
+
+            // Log in table and return position
+            positions.Add(symbol, pos);
+            return pos;
+        }
+        
+        // Write relocation table to the stream
+        foreach (var relocation in constructor.Relocations)
+        {
+            // Convert to rasm and write to stream
+            var newRelocation = RasmRelocation.Convert(relocation);
+            newRelocation.Write(stream);
+        }
+        
+        // Write symbol table to the stream
+        foreach (var symbol in constructor.Symbols.Values)
+        {
+            // Convert to rasm, extract string, and write to stream
+            var newSymbol = RasmSymbol.Convert(symbol);
+            newSymbol.SymbolIndex = (uint)GetStringPosition(symbol.Symbol);
+            newSymbol.Write(stream);
+        }
+
+        // Write strings to the stream
+        strings.Position = 0;
+        strings.CopyTo(stream);
+
+        // Mark the end of the module
+        stream.SetLength(stream.Position);
+        
+        // Rewrite the header
+        stream.Position = 0;
+        header.UpdateSizes(
+            (uint)constructor.Text.Length,
+            (uint)constructor.ReadOnlyData.Length,
+            (uint)constructor.Data.Length,
+            (uint)constructor.SmallInitializedData.Length,
+            (uint)constructor.SmallUninitializedData.Length,
+            (uint)constructor.UninitializedData.Length,
+            (uint)constructor.Relocations.Count,
+            (uint)constructor.References.Count,
+            (uint)constructor.Symbols.Count,
+            (uint)strings.Length);
+        header.TryWriteHeader(stream);
+
+        // Reset position, flush, and load
+        stream.Position = 0;
+        stream.Flush();
+        return Load(stream);
+    }
+
+    /// <summary>
+    /// Loads a module from a stream.
+    /// </summary>
+    /// <returns>The module contained in the stream.</returns>
+    public static RasmModule? Load(Stream stream)
+    {
+        if(!Header.TryReadHeader(stream, out var header))
+            return null;
+
+        return new RasmModule(header, stream);
+    }
+}

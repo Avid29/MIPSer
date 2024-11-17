@@ -8,7 +8,6 @@ using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Instructions;
-using MIPS.Models.Modules.Tables.Enums;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -102,7 +101,7 @@ public partial class Assembler
         }
         
         // TODO: Macro flags
-        DefineSymbol(name.Source, address, 0);
+        DefineSymbol(name.Source, address);
     }
 
     private void HandleInstruction(AssemblyLine line)
@@ -126,7 +125,7 @@ public partial class Assembler
         // Track relocatable reference
         if (instruction.Relocation is not null)
         {
-            _module.TryTrackRelocation(instruction.Relocation.Value);
+            _module.TryTrackRelocation(instruction.Relocation);
         }
 
         // Append instruction to active segment
@@ -150,7 +149,7 @@ public partial class Assembler
         switch (directive)
         {
             case GlobalDirective global:
-                _module.DefineOrUpdateSymbol(global.Symbol, flags: SymbolFlags.Global);
+                _module.DefineOrUpdateSymbol(global.Symbol);
                 break;
             case SectionDirective segment:
                 SetActiveSection(segment.ActiveSection);

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace MIPS.Assembler.Models.Modules;
 
-public partial class ModuleConstruction
+public partial class ModuleConstructor
 {
     /// <summary>
     /// Adds a symbol to the symbol table.
@@ -22,7 +22,7 @@ public partial class ModuleConstruction
         if (_definitions.ContainsKey(name))
             return false;
 
-        DefineSymbol(name, value, SymbolFlags.Def_Label);
+        DefineSymbol(name, value);
         return true;
     }
 
@@ -31,14 +31,13 @@ public partial class ModuleConstruction
     /// </summary>
     /// <param name="name"></param>
     /// <param name="value"></param>
-    /// <param name="flags"></param>
     /// <returns><see cref="false"/> if the symbol already has a value, and a new value is being defined.</returns>
-    public bool DefineOrUpdateSymbol(string name, Address? value = null, SymbolFlags? flags = null)
+    public bool DefineOrUpdateSymbol(string name, Address? value = null)
     {
         if (_definitions.ContainsKey(name))
-            return UpdateSymbol(name, value, flags);
+            return UpdateSymbol(name, value);
         else
-            DefineSymbol(name, value, flags);
+            DefineSymbol(name, value);
 
         return true;
     }
@@ -49,7 +48,7 @@ public partial class ModuleConstruction
     /// <param name="name">The name of the symbol.</param>
     /// <param name="value">The realized value of the symbol.</param>
     /// <returns><see cref="true"/> if the symbol exists, <see cref="false"/> otherwise.</returns>
-    public bool TryGetSymbol(string name, out SymbolEntry value) => _definitions.TryGetValue(name, out value);
+    public bool TryGetSymbol(string name, out SymbolEntry? value) => _definitions.TryGetValue(name, out value);
 
     /// <summary>
     /// Attempts to make a reference to a symbol.
@@ -75,44 +74,14 @@ public partial class ModuleConstruction
         return true;
     }
 
-    private void DefineSymbol(string name, Address? value = null, SymbolFlags? flags = null)
+    private void DefineSymbol(string name, Address? value = null)
     {
-        // Get string position
-        uint strId = (uint)Strings.Position;
-
         // Create entry
-        SymbolEntry entry;
-        if (!value.HasValue)
-        {
-            entry = new()
-            {
-                SymbolIndex = strId,
-            };
-
-            // TODO: Can it be forward declined without beginning as external?
-            entry.Section = Section.External;
-            entry.SetFlags(SymbolFlags.Forward, true);
-        }
-        else
-        {
-            entry = new(value.Value)
-            {
-                SymbolIndex = strId,
-            };
-        }
-
-        if (flags.HasValue)
-        {
-            entry.SetFlags(flags.Value, true);
-        }
-        
-        // Write to string stream and defintions table
-        Strings.Write(Encoding.UTF8.GetBytes(name));
-        Strings.WriteByte(0); // Null terminate
+        var entry = new SymbolEntry(name, value);
         _definitions.Add(name, entry);
     }
 
-    private bool UpdateSymbol(string name, Address? value = null, SymbolFlags? flags = null)
+    private bool UpdateSymbol(string name, Address? value = null)
     {
         var entry = _definitions[name];
 
@@ -123,12 +92,6 @@ public partial class ModuleConstruction
                 return false;
 
             entry.Address = value.Value;
-            entry.SetFlags(SymbolFlags.Defined, true);
-        }
-
-        if (flags.HasValue)
-        {
-            entry.SetFlags(flags.Value, true);
         }
 
         _definitions[name] = entry;

@@ -3,6 +3,7 @@
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tests.Live.Enums;
 using MIPS.Assembler.Tokenization;
+using RASM.Modules;
 using System.Text;
 
 namespace MIPS.Assembler.Tests.Live;
@@ -55,7 +56,7 @@ public class Program()
         var assembler = await Assembler.AssembleAsync(stream, null);
 
         stream = new MemoryStream();
-        assembler.WriteModule(stream);
+        assembler.CompleteModule<RasmModule>(stream);
         
         Console.WriteLine("Binary:");;
         for (int i = 0; stream.Position != stream.Length; i++)

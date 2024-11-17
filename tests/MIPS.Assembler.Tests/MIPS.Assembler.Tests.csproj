@@ -16,6 +16,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\MIPS.Assembler\MIPS.Assembler.csproj" />
+    <ProjectReference Include="..\..\src\RASM\RASM.Modules\RASM.Modules.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ASMs\obj\" />
   </ItemGroup>
 
 </Project>
