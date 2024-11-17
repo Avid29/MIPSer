@@ -3,6 +3,7 @@
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace MIPS.Models.Instructions;
@@ -176,6 +177,7 @@ namespace MIPS.Models.Instructions;
 /// <summary>
 /// A struct representing an instruction.
 /// </summary>
+// TODO: Disassembling Debug Display
 public partial struct Instruction
 {
     private uint _inst;

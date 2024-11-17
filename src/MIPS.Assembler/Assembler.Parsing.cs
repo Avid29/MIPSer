@@ -150,7 +150,7 @@ public partial class Assembler
         switch (directive)
         {
             case GlobalDirective global:
-                _module.DefineOrUpdateSymbol(global.Symbol);
+                _module.DefineOrUpdateSymbol(global.Symbol, flags: SymbolFlags.Global);
                 break;
             case SectionDirective segment:
                 SetActiveSection(segment.ActiveSection);

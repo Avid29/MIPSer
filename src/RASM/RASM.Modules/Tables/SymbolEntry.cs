@@ -4,10 +4,11 @@ using MIPS.Assembler.Models.Modules.Interfaces.Tables;
 using MIPS.Helpers;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
-using MIPS.Models.Modules.Tables.Enums;
 using RASM.Modules.Tables.Enums;
 using System.Runtime.InteropServices;
+
 using CommonEntry = MIPS.Models.Modules.Tables.SymbolEntry;
+using SymbolType = MIPS.Models.Modules.Tables.Enums.SymbolType;
 
 namespace RASM.Modules.Tables;
 
@@ -18,15 +19,24 @@ namespace RASM.Modules.Tables;
 public struct SymbolEntry : ISymbolEntry<SymbolEntry>
 {
     private const byte SectionBitCount = 4;
-
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="SymbolEntry"/> struct.
     /// </summary>
-    public SymbolEntry(Address address)
+    public SymbolEntry(Address? address)
     {
-        Value = (uint)address.Value;
-        Section = address.Section;
-        Flags = SymbolFlags.Defined;
+        if (address.HasValue)
+        {
+            var adr = address.Value;
+            Value = (uint)adr.Value;
+            Section = adr.Section;
+            SetFlags(SymbolFlags.Defined, true);
+        }
+        else
+        {
+            Value = 0;
+            Section = Section.External;
+        }
     }
 
     /// <summary>
@@ -148,14 +158,11 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>
     public static SymbolEntry Convert(CommonEntry entry)
     {
         // Initialize symbol
-        var symbol = new SymbolEntry();
-        if (entry.IsDefined)
-        {
-            symbol = new SymbolEntry(entry.Address.Value);
-        }
+        var symbol = new SymbolEntry(entry.Address);
         
         // Set flags
         symbol.SetFlags(SymbolFlags.Global, entry.Global);
+        symbol.SetFlags(SymbolFlags.Forward, entry.ForwardDefined && entry.IsDefined);
         symbol.SetFlags(SymbolFlags.Def_Label, entry.Type is SymbolType.Label);
 
         // Return

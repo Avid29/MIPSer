@@ -82,13 +82,8 @@ public partial class Assembler
     /// <summary>
     /// Assembles an object module from a stream of assembly
     /// </summary>
-    public static async Task<Assembler> AssembleAsync(Stream stream, string? filename, AssemblerConfig? config = null)
+    public static async Task<Assembler> AssembleAsync(Stream stream, string? filename, AssemblerConfig config)
     {
-        if (config is null)
-        {
-            config = AssemblerConfig.Default;
-        }
-
         var assembler = new Assembler(config);
         var tokens = await Tokenizer.TokenizeAsync(stream, filename, assembler._logger);
 
@@ -135,8 +130,9 @@ public partial class Assembler
     /// <param name="label">The name of the symbol.</param>
     /// <param name="address">The value of the symbol.</param>
     /// <param name="type">The symbol type.</param>
+    /// <param name="flags">The flag info for the symbol.</param>
     /// <returns>True if successful, false on failure.</returns>
-    private bool DefineSymbol(string label, Address address, SymbolType type)
+    private bool DefineSymbol(string label, Address address, SymbolType type, SymbolFlags flags = 0)
     {
         if (!ValidateSymbolName(label))
             return false;

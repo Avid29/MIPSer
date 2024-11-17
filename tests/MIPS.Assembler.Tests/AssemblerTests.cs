@@ -111,13 +111,8 @@ public class AssemblerTests
 
     private static async Task RunTest(Stream stream, string? filename = null, RasmConfig? config = null, params (LogId, long)[] expected)
     {
-        if (config is null)
-        {
-            config = new RasmConfig();
-        }
-
         // Run assembler
-        var assembler = await Assembler.AssembleAsync(stream, filename, config);
+        var assembler = await Assembler.AssembleAsync(stream, filename, config ?? new RasmConfig());
 
         // Find expected errors, warnings, and messages
         if (expected.Length == assembler.Logs.Count)

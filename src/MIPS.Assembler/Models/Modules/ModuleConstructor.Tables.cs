@@ -1,11 +1,8 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Models.Addressing;
-using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables;
 using MIPS.Models.Modules.Tables.Enums;
-using System;
-using System.Text;
 
 namespace MIPS.Assembler.Models.Modules;
 
@@ -34,16 +31,14 @@ public partial class ModuleConstructor
     /// <param name="name"></param>
     /// <param name="value"></param>
     /// <param name="type"></param>
+    /// <param name="flags"></param>
     /// <returns><see cref="false"/> if the symbol already has a value, and a new value is being defined.</returns>
-    public bool DefineOrUpdateSymbol(string name, SymbolType? type = null, Address? value = null)
+    public bool DefineOrUpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolFlags flags = 0)
     {
         if (_definitions.ContainsKey(name))
-            return UpdateSymbol(name, value);
-        else if (type is not null)
-            DefineSymbol(name, type.Value, value);
-        else
-            return false; // Type must be provided if the defining the symbol
-
+            return UpdateSymbol(name, type, value, flags);
+            
+        DefineSymbol(name, type ?? SymbolType.Unknown, value, flags);
         return true;
     }
 
@@ -79,17 +74,24 @@ public partial class ModuleConstructor
         return true;
     }
 
-    private void DefineSymbol(string name, SymbolType type, Address? value = null)
+    private void DefineSymbol(string name, SymbolType type, Address? value = null, SymbolFlags flags = 0)
     {
         // Create entry
-        var entry = new SymbolEntry(name, type, value);
+        var entry = new SymbolEntry(name, type, value, flags);
+
+        if (!value.HasValue)
+        {
+            entry.SetFlags(SymbolFlags.ForwardDefined);
+        }
+
         _definitions.Add(name, entry);
     }
 
-    private bool UpdateSymbol(string name, Address? value = null)
+    private bool UpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolFlags flags = 0)
     {
         var entry = _definitions[name];
 
+        // Update address
         if (value.HasValue)
         {
             // Cannot update the address on an already defined symbol.
@@ -98,6 +100,19 @@ public partial class ModuleConstructor
 
             entry.Address = value.Value;
         }
+
+        // Update type
+        if (type.HasValue)
+        {
+            // Cannot update the type of an already typed symbol.
+            if (entry.Type is not SymbolType.Unknown)
+                return false;
+
+            entry.Type = type.Value;
+        }
+
+        // Update flags
+        entry.SetFlags(flags);
 
         _definitions[name] = entry;
         return true;

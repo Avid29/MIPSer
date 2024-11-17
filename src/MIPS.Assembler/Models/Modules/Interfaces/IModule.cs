@@ -18,4 +18,17 @@ public interface IModule<TSelf>
     /// <param name="config">The configuration settings.</param>
     /// <returns>The constructed module.</returns>
     public static abstract TSelf? Create(Stream stream, ModuleConstructor constructor, AssemblerConfig config);
+    
+    /// <summary>
+    /// Loads a module from a stream.
+    /// </summary>
+    /// <returns>The module contained in the stream.</returns>
+    public static abstract TSelf? Load(Stream stream);
+
+    /// <summary>
+    /// Abstracts the module into a <see cref="ModuleConstructor"/> for modification or linking.
+    /// </summary>
+    /// <param name="config">The configuration settings.</param>
+    /// <returns>The module as a <see cref="ModuleConstructor"/>.</returns>
+    public ModuleConstructor? Abstract(AssemblerConfig config);
 }

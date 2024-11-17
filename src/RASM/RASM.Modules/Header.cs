@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
+using RASM.Modules.Tables;
 using System.Runtime.CompilerServices;
 
 namespace RASM.Modules;
@@ -121,21 +122,12 @@ public unsafe struct Header
     }
 
     /// <summary>
-    /// Gets the size of the module's tables.
-    /// </summary>
-    public uint TablesSize
-    {
-        readonly get => _sizes[6];
-        internal set => _sizes[6] = value;
-    }
-
-    /// <summary>
     /// Gets the number of entries in the module's relocation table.
     /// </summary>
     public uint RelocationTableCount
     {
-        readonly get => _sizes[7];
-        internal set => _sizes[7] = value;
+        readonly get => _sizes[6];
+        internal set => _sizes[6] = value;
     }
 
     /// <summary>
@@ -143,17 +135,50 @@ public unsafe struct Header
     /// </summary>
     public uint ReferenceTableCount
     {
+        readonly get => _sizes[7];
+        internal set => _sizes[7] = value;
+    }
+
+    /// <summary>
+    /// Gets the number of entries in the defintions table.
+    /// </summary>
+    public uint DefinitionsTableCount
+    {
         readonly get => _sizes[8];
         internal set => _sizes[8] = value;
     }
 
     /// <summary>
-    /// Gets the number of entries the module's symbol table.
+    /// Gets the size of the string table.
     /// </summary>
-    public uint SymbolTableCount
+    public uint StringTableSize
     {
         readonly get => _sizes[9];
         internal set => _sizes[9] = value;
+    }
+
+    /// <summary>
+    /// Gets the expected module size.
+    /// </summary>
+    public readonly long ExpectedModuleSize
+    {
+        get
+        {
+            // Begin with the size of the header
+            long sum = sizeof(Header);
+            
+            // Add sizes of each section
+            sum += TextSize + ReadOnlyDataSize;
+            sum += DataSize + SmallDataSize;
+            sum += SmallUninitializedDataSize + UninitializedDataSize;
+            sum += StringTableSize;
+
+            // Add table counts * entry size
+            sum += RelocationTableCount * sizeof(RelocationEntry);
+            sum += ReferenceTableCount * sizeof(ReferenceEntry);
+            sum += DefinitionsTableCount * sizeof(SymbolEntry);
+            return sum;
+        }
     }
 
     /// <summary>

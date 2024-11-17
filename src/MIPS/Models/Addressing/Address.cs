@@ -1,13 +1,14 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Models.Addressing.Enums;
-using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 namespace MIPS.Models.Addressing;
 
 /// <summary>
 /// A struct containing an address and the section it belongs to.
 /// </summary>
+[DebuggerDisplay("{Section}: {Value}")]
 public struct Address
 {
     /// <summary>
@@ -33,9 +34,6 @@ public struct Address
     /// Gets whether or not the address is relocating.
     /// </summary>
     public readonly bool IsRelocatable => Section is not Section.None;
-
-    /// <inheritdoc/>
-    public override readonly string ToString() => $"{Value}";
     
     /// <inheritdoc/>
     public static Address operator +(Address address, long offset) => new(address.Value + offset, address.Section);

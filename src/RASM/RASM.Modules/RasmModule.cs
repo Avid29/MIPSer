@@ -17,7 +17,6 @@ namespace RASM.Modules;
 /// </summary>
 public class RasmModule : IModule<RasmModule>
 {
-    private Header _header;
     private Stream _source;
 
     /// <summary>
@@ -25,17 +24,16 @@ public class RasmModule : IModule<RasmModule>
     /// </summary>
     public RasmModule(Header header, Stream source)
     {
-        _header = header;
+        Header = header;
         _source = source;
     }
 
     /// <summary>
-    /// Creates a module from a <see cref="ModuleConstructor"/>.
+    /// Gets the module header info.
     /// </summary>
-    /// <param name="stream">The stream to write the module to.</param>
-    /// <param name="constructor">The <see cref="ModuleConstructor"/> to build from.</param>
-    /// <param name="config">The configuration settings.</param>
-    /// <returns>The constructed module.</returns>
+    public Header Header { get; private set; }
+
+    /// <inheritdoc/>
     public static RasmModule? Create(Stream stream, ModuleConstructor constructor, AssemblerConfig config)
     {
         if (config is not RasmConfig rconfig)
@@ -125,15 +123,45 @@ public class RasmModule : IModule<RasmModule>
         return Load(stream);
     }
 
-    /// <summary>
-    /// Loads a module from a stream.
-    /// </summary>
-    /// <returns>The module contained in the stream.</returns>
+    /// <inheritdoc/>
     public static RasmModule? Load(Stream stream)
     {
         if(!Header.TryReadHeader(stream, out var header))
             return null;
 
         return new RasmModule(header, stream);
+    }
+    
+    /// <inheritdoc/>
+    public ModuleConstructor? Abstract(AssemblerConfig config)
+    {
+        if (config is not RasmConfig rconfig)
+        {
+            ThrowHelper.ThrowArgumentException(nameof(config), $"{config} must be a {nameof(RasmConfig)}.");
+            return null;
+        }
+
+        // Validate the header for this assembly
+        if(ValidateHeader(rconfig))
+            return null;
+
+        return null;
+    }
+
+    private bool ValidateHeader(RasmConfig config)
+    {
+        // Ensure the magic number is correct
+        if (Header.Magic != config.MagicNumber)
+            return false;
+
+        // Ensure the version number is correct
+        if (Header.Version != config.VersionNumber)
+            return false;
+
+        // Ensure the module is the expected size
+        if (Header.ExpectedModuleSize != _source.Length)
+            return false;
+
+        return true;
     }
 }
