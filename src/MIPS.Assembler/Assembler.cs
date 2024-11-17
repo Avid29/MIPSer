@@ -6,13 +6,12 @@ using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
-using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
+using MIPS.Models.Modules.Tables.Enums;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace MIPS.Assembler;
@@ -128,21 +127,21 @@ public partial class Assembler
     /// The method will still work if the semicolon is pre-trimmed.
     /// </remarks>
     /// <param name="label">The name of the symbol.</param>
-    private bool DefineLabel(string label) => DefineSymbol(label, CurrentAddress);
+    private bool DefineLabel(string label) => DefineSymbol(label.TrimEnd(':'), CurrentAddress, SymbolType.Label);
 
     /// <summary>
     /// Defines a symbol.
     /// </summary>
     /// <param name="label">The name of the symbol.</param>
     /// <param name="address">The value of the symbol.</param>
+    /// <param name="type">The symbol type.</param>
     /// <returns>True if successful, false on failure.</returns>
-    private bool DefineSymbol(string label, Address address)
+    private bool DefineSymbol(string label, Address address, SymbolType type)
     {
-        label = label.TrimEnd(':');
         if (!ValidateSymbolName(label))
             return false;
 
-        if (!_module.DefineOrUpdateSymbol(label, address))
+        if (!_module.DefineOrUpdateSymbol(label, type, address))
         {
             _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, $"Symbol \"{label}\" is already defined.");
             return false;

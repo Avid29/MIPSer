@@ -7,6 +7,7 @@ using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
+using MIPS.Models.Modules.Tables.Enums;
 
 namespace MIPS.Assembler.Tests.Parsers;
 
@@ -92,7 +93,7 @@ public class ExpressionParserTests
         // NOTE: This assumes symbol realization is not implemented!
         var obj = new ModuleConstructor();
         foreach (var (name, addr) in macros)
-            obj.TryDefineSymbol(name, addr);
+            obj.TryDefineSymbol(name, SymbolType.Macro, addr);
 
         var context = new AssemblerContext(obj);
         var parser = new ExpressionParser(context);

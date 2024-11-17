@@ -4,6 +4,7 @@ using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables;
 using MIPS.Models.Modules.Tables.Enums;
+using System;
 using System.Text;
 
 namespace MIPS.Assembler.Models.Modules;
@@ -14,15 +15,16 @@ public partial class ModuleConstructor
     /// Adds a symbol to the symbol table.
     /// </summary>
     /// <param name="name">The name of the symbol.</param>
+    /// <param name="type">The symbol's type.</param>
     /// <param name="value">The value of the symbol.</param>
     /// <returns><see langword="false"/> if the symbol already exists. <see langword="true"/> otherwise.</returns>
-    public bool TryDefineSymbol(string name, Address? value = null)
+    public bool TryDefineSymbol(string name, SymbolType type, Address? value = null)
     {
         // Check if table already contains symbol
         if (_definitions.ContainsKey(name))
             return false;
 
-        DefineSymbol(name, value);
+        DefineSymbol(name, type, value);
         return true;
     }
 
@@ -31,13 +33,16 @@ public partial class ModuleConstructor
     /// </summary>
     /// <param name="name"></param>
     /// <param name="value"></param>
+    /// <param name="type"></param>
     /// <returns><see cref="false"/> if the symbol already has a value, and a new value is being defined.</returns>
-    public bool DefineOrUpdateSymbol(string name, Address? value = null)
+    public bool DefineOrUpdateSymbol(string name, SymbolType? type = null, Address? value = null)
     {
         if (_definitions.ContainsKey(name))
             return UpdateSymbol(name, value);
+        else if (type is not null)
+            DefineSymbol(name, type.Value, value);
         else
-            DefineSymbol(name, value);
+            return false; // Type must be provided if the defining the symbol
 
         return true;
     }
@@ -74,10 +79,10 @@ public partial class ModuleConstructor
         return true;
     }
 
-    private void DefineSymbol(string name, Address? value = null)
+    private void DefineSymbol(string name, SymbolType type, Address? value = null)
     {
         // Create entry
-        var entry = new SymbolEntry(name, value);
+        var entry = new SymbolEntry(name, type, value);
         _definitions.Add(name, entry);
     }
 

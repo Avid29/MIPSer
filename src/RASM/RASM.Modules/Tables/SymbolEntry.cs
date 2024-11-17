@@ -4,9 +4,9 @@ using MIPS.Assembler.Models.Modules.Interfaces.Tables;
 using MIPS.Helpers;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
+using MIPS.Models.Modules.Tables.Enums;
 using RASM.Modules.Tables.Enums;
 using System.Runtime.InteropServices;
-
 using CommonEntry = MIPS.Models.Modules.Tables.SymbolEntry;
 
 namespace RASM.Modules.Tables;
@@ -156,6 +156,7 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>
         
         // Set flags
         symbol.SetFlags(SymbolFlags.Global, entry.Global);
+        symbol.SetFlags(SymbolFlags.Def_Label, entry.Type is SymbolType.Label);
 
         // Return
         return symbol;

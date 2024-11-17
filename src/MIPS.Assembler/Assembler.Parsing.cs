@@ -8,6 +8,7 @@ using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Instructions;
+using MIPS.Models.Modules.Tables.Enums;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -101,7 +102,7 @@ public partial class Assembler
         }
         
         // TODO: Macro flags
-        DefineSymbol(name.Source, address);
+        DefineSymbol(name.Source, address, SymbolType.Macro);
     }
 
     private void HandleInstruction(AssemblyLine line)

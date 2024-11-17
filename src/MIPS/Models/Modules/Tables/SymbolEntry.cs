@@ -14,11 +14,10 @@ public class SymbolEntry
     /// <summary>
     /// Initializes a new instance of the <see cref="SymbolEntry"/> class.
     /// </summary>
-    /// <param name="symbol"></param>
-    /// <param name="address"></param>
-    public SymbolEntry(string? symbol, Address? address)
+    public SymbolEntry(string symbol, SymbolType type, Address? address)
     {
         Symbol = symbol;
+        Type = type;
         Address = address;
     }
 
@@ -26,7 +25,7 @@ public class SymbolEntry
     /// <summary>
     /// Gets or sets the symbol name of the entry.
     /// </summary>
-    public string? Symbol { get; set; }
+    public string Symbol { get; set; }
 
     /// <summary>
     /// Gets or sets the value of the symbol as an <see cref="Addressing.Address"/>.
