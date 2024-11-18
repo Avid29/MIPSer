@@ -6,12 +6,6 @@
     <IsTestProject>true</IsTestProject>
 	<GenerateDocumentationFile>false</GenerateDocumentationFile>
   </PropertyGroup>
-	
-  <!--<ItemGroup>
-    <Compile Remove="ASMs\**" />
-    <EmbeddedResource Remove="ASMs\**" />
-    <None Remove="ASMs\**" />
-  </ItemGroup>-->
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />

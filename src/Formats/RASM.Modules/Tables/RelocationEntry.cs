@@ -16,7 +16,7 @@ namespace RASM.Modules.Tables;
 /// An entry in the RASM load module's relocation table.
 /// </summary>
 [StructLayout(LayoutKind.Explicit)]
-public struct RelocationEntry : IRelocationEntry<RelocationEntry>, IBigEndianReadWritable<RelocationEntry>
+public struct RelocationEntry : IReferenceEntry<RelocationEntry>, IBigEndianReadWritable<RelocationEntry>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="RelocationEntry"/> struct.

@@ -95,7 +95,7 @@ public struct ExpressionParser
         // Output symbol if result is relocatable.
         if (!result.IsFixed)
         {
-            // NOTE: Relocatable values can only in terms of one relocatable symbol
+            // NOTE: Relocatable values can only be in terms of one relocatable symbol
             // If they depend on more than one relocatable symbol, they will have
             // failed in evaluation.
             relSymbol = _refSymbol;
