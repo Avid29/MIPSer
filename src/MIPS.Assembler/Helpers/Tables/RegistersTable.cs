@@ -18,6 +18,7 @@ public static class RegistersTable
     /// <returns>Whether or not an register exists by that name</returns>
     public static bool TryGetRegister(string name, out Register register)
         => _registerTable.TryGetValue(name, out register);
+
     private static readonly Dictionary<string, Register> _registerTable = new()
     {
         { "zero", Register.Zero },

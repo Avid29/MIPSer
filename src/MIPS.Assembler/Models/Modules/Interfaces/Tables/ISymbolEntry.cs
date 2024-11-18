@@ -16,4 +16,10 @@ public interface ISymbolEntry<TSelf>
     /// <param name="entry">The original entry class.</param>
     /// <returns>A converted relation entry as <typeparamref name="TSelf"/>.</returns>
     public static abstract TSelf Convert(SymbolEntry entry);
+
+    /// <summary>
+    /// Converts a <typeparamref name="TSelf"/> into a <see cref="SymbolEntry"/>.
+    /// </summary>
+    /// <returns>A converted relation entry as <see cref="SymbolEntry"/>.</returns>
+    public SymbolEntry Convert();
 }

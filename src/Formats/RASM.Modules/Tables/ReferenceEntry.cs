@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Assembler.Models.Modules.Interfaces.Tables;
+using MIPS.Helpers;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using RASM.Modules.Tables.Enums;
@@ -16,7 +17,7 @@ namespace RASM.Modules.Tables;
 /// An entry in the RASM load module's reference table.
 /// </summary>
 [StructLayout(LayoutKind.Explicit)]
-public struct ReferenceEntry : IReferenceEntry<ReferenceEntry>
+public struct ReferenceEntry : IReferenceEntry<ReferenceEntry>, IBigEndianReadWritable<ReferenceEntry>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="RelocationEntry"/> struct.
@@ -110,5 +111,29 @@ public struct ReferenceEntry : IReferenceEntry<ReferenceEntry>
 
         // Construct new entry
         return new ReferenceEntry(entry.Address, type | method);
+    }
+    
+    /// <inheritdoc/>
+    public readonly CommonEntry Convert()
+    {
+        var adr = new Address(Address, Section);
+
+        var type = (ReferenceType)((int)Type & 0xF) switch
+        {
+            ReferenceType.FullWord => CommonType.FullWord,
+            ReferenceType.SimpleImmediate => CommonType.Lower,
+            ReferenceType.Address => CommonType.Address,
+            _ => CommonType.Lower,
+        };
+
+        var method = (ReferenceType)((int)Type & 0xF0) switch
+        {
+            ReferenceType.Add => ReferenceMethod.Add,
+            ReferenceType.Replace => ReferenceMethod.Replace,
+            ReferenceType.Subtract => ReferenceMethod.Subtract,
+            _ => ReferenceMethod.Add,
+        };
+
+        return new CommonEntry(null, adr, type, method);
     }
 }

@@ -16,4 +16,10 @@ public interface IReferenceEntry<TSelf>
     /// <param name="entry">The original entry class.</param>
     /// <returns>A converted relation entry as <typeparamref name="TSelf"/>.</returns>
     public static abstract TSelf Convert(ReferenceEntry entry);
+
+    /// <summary>
+    /// Converts a <typeparamref name="TSelf"/> into a <see cref="ReferenceEntry"/>.
+    /// </summary>
+    /// <returns>A converted relation entry as <see cref="ReferenceEntry"/>.</returns>
+    public ReferenceEntry Convert();
 }

@@ -4,6 +4,7 @@ using MIPS.Assembler.Models.Modules.Interfaces.Tables;
 using MIPS.Helpers;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
+using MIPS.Models.Modules.Tables.Enums;
 using RASM.Modules.Tables.Enums;
 using System.Runtime.InteropServices;
 
@@ -91,5 +92,21 @@ public struct RelocationEntry : IReferenceEntry<RelocationEntry>, IBigEndianRead
         };
 
         return new RelocationEntry(entry.Address, type);
+    }
+    
+    /// <inheritdoc/>
+    public readonly CommonEntry Convert()
+    {
+        var adr = new Address(Address, Section);
+
+        var type = Type switch
+        {
+            RelocationType.FullWord => CommonType.FullWord,
+            RelocationType.SimpleImmediate => CommonType.Lower,
+            RelocationType.Address => CommonType.Address,
+            _ => CommonType.Lower,
+        };
+
+        return new CommonEntry(null, adr, type, ReferenceMethod.Relocate);
     }
 }

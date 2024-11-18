@@ -16,7 +16,7 @@ namespace RASM.Modules.Tables;
 /// An entry in the RASM load module's symbol table.
 /// </summary>
 [StructLayout(LayoutKind.Explicit)]
-public struct SymbolEntry : ISymbolEntry<SymbolEntry>
+public struct SymbolEntry : ISymbolEntry<SymbolEntry>, IBigEndianReadWritable<SymbolEntry>
 {
     private const byte SectionBitCount = 4;
     
@@ -166,6 +166,28 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>
         symbol.SetFlags(SymbolFlags.Def_Label, entry.Type is SymbolType.Label);
 
         // Return
+        return symbol;
+    }
+    
+    /// <inheritdoc/>
+    /// <remarks>
+    /// <see cref="CommonEntry.Symbol"/> will be null.
+    /// </remarks>
+    public CommonEntry Convert()
+    {
+        // Get type
+        var type = SymbolType.Macro;
+        if (CheckFlag(SymbolFlags.Def_Label))
+            type = SymbolType.Label;
+
+        // Get address and initialize
+        var adr = new Address(Value, Section);
+        var symbol = new CommonEntry(null!, type, adr); // Null suppress. We're going to overwrite it once we leave this method.
+        
+        // Set flags
+        symbol.Global = CheckFlag(SymbolFlags.Global);
+        symbol.ForwardDefined = CheckFlag(SymbolFlags.Forward);
+
         return symbol;
     }
 }

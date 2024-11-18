@@ -44,14 +44,22 @@ public class SymbolEntry
     public SymbolFlags Flags { get; set; }
 
     /// <summary>
-    /// Gets if the symbol is global.
+    /// Gets or sets if the symbol is global.
     /// </summary>
-    public bool Global => CheckFlag(SymbolFlags.Global);
+    public bool Global
+    {
+        get => CheckFlag(SymbolFlags.Global);
+        set => SetFlags(SymbolFlags.Global, value);
+    }
 
     /// <summary>
-    /// Gets if the symbol is global.
+    /// Gets if the symbol is forward defined.
     /// </summary>
-    public bool ForwardDefined => CheckFlag(SymbolFlags.ForwardDefined);
+    public bool ForwardDefined 
+    {
+        get => CheckFlag(SymbolFlags.ForwardDefined);
+        set => SetFlags(SymbolFlags.ForwardDefined, value);
+    }
 
     /// <summary>
     /// Gets whether or not the symbol is defined.

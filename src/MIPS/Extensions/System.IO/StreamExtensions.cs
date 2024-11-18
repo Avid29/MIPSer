@@ -91,4 +91,21 @@ public static class StreamExtensions
 
         return success;
     }
+    
+    /// <summary>
+    /// Copies a set number of bytes from <paramref name="source"/> to <paramref name="destination"/>.
+    /// </summary>
+    /// <param name="destination">The destination stream.</param>
+    /// <param name="source">The source stream.</param>
+    /// <param name="bytes">The number of bytes to copy.</param>
+    public static void CopyFrom(this Stream destination, Stream source, int bytes)
+    {
+        byte[] buffer = new byte[32768];
+        int read;
+        while (bytes > 0 &&  (read = source.Read(buffer, 0, Math.Min(buffer.Length, bytes))) > 0)
+        {
+            destination.Write(buffer, 0, read);
+            bytes -= read;
+        }
+    }
 }

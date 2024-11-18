@@ -23,28 +23,31 @@ public partial class ModuleConstructor
     /// <summary>
     /// Initializes a new instance of the <see cref="ModuleConstructor"/> class.
     /// </summary>
-    public ModuleConstructor(params Stream[] streams)
+    public ModuleConstructor()
+    {
+        _sections = new Stream[SECTION_COUNT];
+        for (int i = 0; i < _sections.Length; i++)
+            _sections[i] = new MemoryStream();
+        
+        _references = [];
+        _definitions = [];
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ModuleConstructor"/> class.
+    /// </summary>
+    public ModuleConstructor(Stream[] streams, List<ReferenceEntry> references, Dictionary<string, SymbolEntry> definitions)
     {
         // NOTE: Is this safe? Can I just write to the back of a stream that may not be empty?
         // I think it's not only safe, but good design for linking. Investigate more though.
-        
-        // Allow no stream arguments
-        if (streams.Length == 0)
-        {
-            streams = new Stream[SECTION_COUNT];
-            for (int i = 0; i < streams.Length; i++)
-                streams[i] = new MemoryStream();
-        }
-        
         if (streams.Length != SECTION_COUNT)
         {
             ThrowHelper.ThrowArgumentException(nameof(streams), $"{streams} must contain exactly {SECTION_COUNT} entries.");
         }
 
         _sections = streams;
-
-        _references = [];
-        _definitions = [];
+        _references = references;
+        _definitions = definitions;
     }
 
     /// <summary>

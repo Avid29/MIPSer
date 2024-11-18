@@ -138,5 +138,7 @@ public class AssemblerTests
         // Write the module and assert validity
         var module = assembler.CompleteModule<RasmModule>(result);
         Assert.IsNotNull(module);
+
+        var constructor = module.Abstract(config ?? new RasmConfig());
     }
 }

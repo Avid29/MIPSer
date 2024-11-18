@@ -1,6 +1,5 @@
 ﻿// Adam Dernis 2024
 
-using CommunityToolkit.Diagnostics;
 using RASM.Modules.Tables;
 using System.Runtime.CompilerServices;
 
@@ -9,14 +8,18 @@ namespace RASM.Modules;
 /// <summary>
 /// A struct containing the module header info in RASM format.
 /// </summary>
-public unsafe struct Header
+public struct Header
 {
+    /// <summary>
+    /// The size of the header in the module.
+    /// </summary>
+    public const int HEADER_SIZE = (sizeof(uint) * (10 + 2)) + (sizeof(ushort) * 2);
+
     private ushort _magic;
     private ushort _version;
     private uint _flags;
     private uint _entryPoint;
-
-    private fixed uint _sizes[10];
+    private uint[] _sizes;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Header"/> struct.
@@ -27,8 +30,7 @@ public unsafe struct Header
         _version = version;
         _flags = flags;
         _entryPoint = entry;
-
-        UpdateSizes(sizes);
+        _sizes = sizes;
     }
 
     /// <summary>
@@ -160,12 +162,12 @@ public unsafe struct Header
     /// <summary>
     /// Gets the expected module size.
     /// </summary>
-    public readonly long ExpectedModuleSize
+    public readonly unsafe long ExpectedModuleSize
     {
         get
         {
             // Begin with the size of the header
-            long sum = sizeof(Header);
+            long sum = HEADER_SIZE;
             
             // Add sizes of each section
             sum += TextSize + ReadOnlyDataSize;
@@ -212,9 +214,10 @@ public unsafe struct Header
         header.Version = version;
         header.Flags = flags;
         header.EntryPoint = entryPoint;
+        header._sizes = new uint[10];
         
         // Try loading size components
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < header._sizes.Length; i++)
         {
             if(!stream.TryRead<uint>(out var x))
                 return false;
@@ -250,18 +253,5 @@ public unsafe struct Header
 
         stream.Flush();
         return true;
-    }
-
-    internal void UpdateSizes(params uint[] sizes)
-    {
-        if (sizes.Length != 10)
-        {
-            ThrowHelper.ThrowArgumentException($"{nameof(sizes)} must have a length of exactly 10.");
-        }
-
-        for (int i = 0; i < sizes.Length; i++)
-        {
-            _sizes[i] = sizes[i];
-        }
     }
 }
