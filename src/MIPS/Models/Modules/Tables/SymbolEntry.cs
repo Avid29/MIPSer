@@ -10,7 +10,7 @@ namespace MIPS.Models.Modules.Tables;
 /// <summary>
 /// An entry in the load module's symbol table.
 /// </summary>
-public class SymbolEntry
+public struct SymbolEntry
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="SymbolEntry"/> class.

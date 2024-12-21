@@ -8,7 +8,7 @@ namespace MIPS.Models.Modules.Tables;
 /// <summary>
 /// An entry in the load module's reference table.
 /// </summary>
-public class ReferenceEntry
+public struct ReferenceEntry
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ReferenceEntry"/> class.
@@ -44,5 +44,5 @@ public class ReferenceEntry
     /// <summary>
     /// Gets whether or not the reference is a relocation.
     /// </summary>
-    public bool IsRelocation => Method is ReferenceMethod.Relocate;
+    public readonly bool IsRelocation => Method is ReferenceMethod.Relocate;
 }

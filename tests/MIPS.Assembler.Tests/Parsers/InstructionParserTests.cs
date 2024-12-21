@@ -130,7 +130,7 @@ public class InstructionParserTests
         bool succeeds = expected is not null;
 
         // Initialize parser
-        var logger = new AssemblerLogger();
+        var logger = new Logger();
         var parser = new InstructionParser(new InstructionTable(MipsVersion.MipsII), logger);
 
         // Parse instruction

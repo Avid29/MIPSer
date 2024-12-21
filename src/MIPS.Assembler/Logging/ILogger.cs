@@ -5,7 +5,7 @@ using MIPS.Assembler.Logging.Enum;
 namespace MIPS.Assembler.Logging;
 
 /// <summary>
-/// An interface for the <see cref="AssemblerLogger"/> that only creating logs, not reading or managing logs.
+/// An interface for the <see cref="Logger"/> that only allows creating logs, not reading or managing logs.
 /// </summary>
 public interface ILogger
 {

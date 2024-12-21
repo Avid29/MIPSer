@@ -49,5 +49,8 @@ public enum LogId
     UnrecognizedEscapeSequence,
     UnescapedQuoteInString,
 
+    // Linker Errors
+    FailedToLoadModule,
+
 #pragma warning restore CS1591
 }

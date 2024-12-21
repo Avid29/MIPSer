@@ -1,7 +1,11 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.HighPerformance;
+using CommunityToolkit.HighPerformance.Buffers;
 using MIPS.Models.Addressing.Enums;
+using MIPS.Models.Modules.Tables;
+using MIPS.Models.Modules.Tables.Enums;
 using System;
 using System.IO;
 
@@ -33,6 +37,25 @@ public partial class ModuleConstructor
         // Select buffer and write bytes
         Stream buffer = GetSectionStream(section);
         buffer.Write(bytes);
+    }
+    
+    /// <summary>
+    /// Appends the contents of a stream to the end of the specified section.
+    /// </summary>
+    /// <param name="section">The segment to append to</param>
+    /// <param name="stream">The stream to copy.</param>
+    /// <param name="seekEnd">Whether or not to seek the end of the section buffer before copying.</param>
+    /// <exception cref="ArgumentException"/>
+    public void Append(Section section, Stream stream, bool seekEnd = true)
+    {
+        // Select buffer and copy
+        Stream buffer = GetSectionStream(section);
+        if (seekEnd)
+        {
+            buffer.Seek(0, SeekOrigin.End);
+        }
+
+        stream.CopyTo(buffer);
     }
 
     /// <summary>
@@ -78,6 +101,40 @@ public partial class ModuleConstructor
     {
         foreach (var section in _sections)
             section.Position = 0;
+    }
+
+    /// <summary>
+    /// Applies a relocation.
+    /// </summary>
+    /// <param name="entry">The reference entry detailing the relocation.</param>
+    /// <param name="offset">The offset amount of the relocation.</param>
+    public void Relocate(ReferenceEntry entry, long offset)
+    {
+        // Read initial value
+        Stream stream = GetSectionStream(entry.Address.Section);
+        stream.Seek(entry.Address.Value, SeekOrigin.Begin);
+        var word = stream.Read<uint>();
+
+        // Apply relocation change
+        switch (entry.Type)
+        {
+            case ReferenceType.FullWord:
+                word += (uint)offset;
+                break;
+            case ReferenceType.Address:
+                // TODO
+                break;
+            case ReferenceType.Lower:
+                // TODO
+                break;
+        }
+
+        // Overwrite the value
+        stream.Seek(-sizeof(uint), SeekOrigin.Current);
+        stream.Write(word);
+
+        // Return to end of stream
+        stream.Seek(0, SeekOrigin.End);
     }
 
     private Stream GetSectionStream(Section section)

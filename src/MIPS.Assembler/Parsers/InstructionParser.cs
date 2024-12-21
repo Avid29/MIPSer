@@ -275,7 +275,7 @@ public struct InstructionParser
             {
                 Argument.Address => ReferenceType.Address,
                 Argument.Immediate => ReferenceType.Lower,
-                _ => ThrowHelper.ThrowArgumentOutOfRangeException<ReferenceType>($"Argument of type '{target}' reference relocatable symbols."),
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<ReferenceType>($"Argument of type '{target}' cannot reference relocatable symbols."),
             };
 
             var method = ReferenceMethod.Relocate;
@@ -285,7 +285,7 @@ public struct InstructionParser
                 method = ReferenceMethod.Add;
             }
 
-            relocation = new ReferenceEntry(refSymbol.Symbol, _context.CurrentAddress, type, method);
+            relocation = new ReferenceEntry(refSymbol.Value.Symbol, _context.CurrentAddress, type, method);
         }
 
         long value = address.Value;

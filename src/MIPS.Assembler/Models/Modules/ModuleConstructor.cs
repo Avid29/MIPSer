@@ -13,7 +13,10 @@ namespace MIPS.Assembler.Models.Modules;
 /// </summary>
 public partial class ModuleConstructor
 {
-    private const int SECTION_COUNT = 6;
+    /// <summary>
+    /// The number of explicitly writable sections in an object module.
+    /// </summary>
+    public const int SECTION_COUNT = 6;
 
     private readonly List<ReferenceEntry> _references;
     private readonly Dictionary<string, SymbolEntry> _definitions;
@@ -93,5 +96,5 @@ public partial class ModuleConstructor
     /// <summary>
     /// Gets the module sections streams.
     /// </summary>
-    public IEnumerable<Stream> Sections => _sections;
+    public IList<Stream> Sections => _sections;
 }

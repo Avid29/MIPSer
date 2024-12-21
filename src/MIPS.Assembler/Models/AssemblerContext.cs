@@ -54,5 +54,5 @@ public class AssemblerContext
     public InstructionTable InstructionTable { get; }
 
     /// <inheritdoc cref="ModuleConstructor.TryGetSymbol(string, out SymbolEntry)"/>
-    public bool TryGetSymbol(string name, [NotNullWhen(true)] out SymbolEntry? value) => _module.TryGetSymbol(name, out value);
+    public bool TryGetSymbol(string name, out SymbolEntry value) => _module.TryGetSymbol(name, out value);
 }

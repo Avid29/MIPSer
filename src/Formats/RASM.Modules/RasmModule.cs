@@ -38,8 +38,10 @@ public class RasmModule : IModule<RasmModule>
     public Header Header { get; private set; }
 
     /// <inheritdoc/>
-    public static RasmModule? Create(Stream stream, ModuleConstructor constructor, AssemblerConfig config)
+    public static RasmModule? Create(ModuleConstructor constructor, AssemblerConfig config, Stream? stream = null)
     {
+        stream ??= new MemoryStream();
+
         if (config is not RasmConfig rconfig)
         {
             ThrowHelper.ThrowArgumentException(nameof(config), $"{config} must be a {nameof(RasmConfig)}.");

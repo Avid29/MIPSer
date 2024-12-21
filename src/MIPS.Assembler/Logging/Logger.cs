@@ -6,16 +6,16 @@ using System.Collections.Generic;
 namespace MIPS.Assembler.Logging;
 
 /// <summary>
-/// An <see cref="ILogger"/> for assembly errors, warnings, and messages.
+/// An <see cref="ILogger"/> for assembly/linker errors, warnings, and messages.
 /// </summary>
-public class AssemblerLogger : ILogger
+public class Logger : ILogger
 {
     private readonly List<Log> _logs;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="AssemblerLogger"/> class.
+    /// Initializes a new instance of the <see cref="Logger"/> class.
     /// </summary>
-    public AssemblerLogger()
+    public Logger()
     {
         _logs = new List<Log>();
     }

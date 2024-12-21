@@ -28,7 +28,7 @@ namespace MIPS.Assembler;
 /// </summary>
 public partial class Assembler
 {
-    private readonly AssemblerLogger _logger;
+    private readonly Logger _logger;
     private readonly ModuleConstructor _module;
     private Section _activeSection;
 
@@ -37,7 +37,7 @@ public partial class Assembler
     /// </summary>
     private Assembler(AssemblerConfig config)
     {
-        _logger = new AssemblerLogger();
+        _logger = new Logger();
         _module = new ModuleConstructor();
         _activeSection = Section.Text;
 
@@ -80,7 +80,7 @@ public partial class Assembler
     public bool Failed => _logger.Failed;
 
     /// <summary>
-    /// Assembles an object module from a stream of assembly
+    /// Assembles an object module from a stream of assembly.
     /// </summary>
     public static async Task<Assembler> AssembleAsync(Stream stream, string? filename, AssemblerConfig config)
     {
@@ -112,7 +112,7 @@ public partial class Assembler
     /// <param name="stream">The stream to write the module to.</param>
     /// <returns>The module object.</returns>
     public T? CompleteModule<T>(Stream stream)
-        where T : IModule<T> => T.Create(stream, _module, Config);
+        where T : IModule<T> => T.Create(_module, Config, stream);
 
     /// <summary>
     /// Defines a label at the current address.

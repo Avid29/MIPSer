@@ -177,7 +177,6 @@ namespace MIPS.Models.Instructions;
 /// <summary>
 /// A struct representing an instruction.
 /// </summary>
-// TODO: Disassembling Debug Display
 public partial struct Instruction
 {
     private uint _inst;

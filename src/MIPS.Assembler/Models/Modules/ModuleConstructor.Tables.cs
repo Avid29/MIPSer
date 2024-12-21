@@ -49,7 +49,7 @@ public partial class ModuleConstructor
     /// <param name="name">The name of the symbol.</param>
     /// <param name="value">The realized value of the symbol.</param>
     /// <returns><see cref="true"/> if the symbol exists, <see cref="false"/> otherwise.</returns>
-    public bool TryGetSymbol(string name, [NotNullWhen(true)] out SymbolEntry? value) => _definitions.TryGetValue(name, out value);
+    public bool TryGetSymbol(string name, out SymbolEntry value) => _definitions.TryGetValue(name, out value);
 
     /// <summary>
     /// Attempts to track a reference to a symbol.
