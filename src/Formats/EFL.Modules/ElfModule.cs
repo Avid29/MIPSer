@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2025
 
+using EFL.Modules.Models.Header;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;

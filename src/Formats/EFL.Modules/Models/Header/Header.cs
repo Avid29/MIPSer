@@ -3,10 +3,10 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-using Machine = EFL.Modules.Header.Enums.Machine;
-using Type = EFL.Modules.Header.Enums.Type;
+using Machine = EFL.Modules.Models.Header.Enums.Machine;
+using Type = EFL.Modules.Models.Header.Enums.Type;
 
-namespace EFL.Modules.Header;
+namespace EFL.Modules.Models.Header;
 
 /// <summary>
 /// A struct containing the module header info for the ELF format.
@@ -17,7 +17,7 @@ namespace EFL.Modules.Header;
 /// <typeparam name="TAddress">The type to use for addresses.</typeparam>
 [StructLayout(LayoutKind.Sequential)]
 public struct Header<TAddress>
-    where TAddress : IBinaryInteger<TAddress>, IUnsignedNumber<TAddress>
+    where TAddress : unmanaged, IBinaryInteger<TAddress>, IUnsignedNumber<TAddress>
 {
     private HeaderIdentity _identity;
     private Type _type;
