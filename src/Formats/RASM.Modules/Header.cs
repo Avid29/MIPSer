@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace RASM.Modules;
 
 /// <summary>
-/// A struct containing the module header info in RASM format.
+/// A struct containing the module header info for the RASM format.
 /// </summary>
 public struct Header
 {

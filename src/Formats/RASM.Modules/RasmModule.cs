@@ -15,7 +15,7 @@ using RasmSymbol = RASM.Modules.Tables.SymbolEntry;
 namespace RASM.Modules;
 
 /// <summary>
-/// A fully assembled object module.
+/// A fully assembled object module in RASM format.
 /// </summary>
 public class RasmModule : IModule<RasmModule>
 {
