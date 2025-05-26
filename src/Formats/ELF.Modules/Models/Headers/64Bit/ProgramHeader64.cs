@@ -1,31 +1,32 @@
 ﻿// Adam Dernis 2025
 
-using ELF.Modules.Models.Program.Enums;
+using ELF.Modules.Models.Headers.Enums;
+using ELF.Modules.Models.Headers.Interfaces;
 using System.Runtime.InteropServices;
 
-using Type = ELF.Modules.Models.Program.Enums.Type;
+using ProgramType = ELF.Modules.Models.Headers.Enums.ProgramType;
 
-namespace ELF.Modules.Models.Program;
+namespace ELF.Modules.Models.Headers;
 
 /// <summary>
-/// A struct containing the program header info for the ELF format in 32-bit.
+/// A struct containing the program header info for the ELF format in 64-bit.
 /// </summary>
-[StructLayout(LayoutKind.Sequential)]
-public struct ProgramHeader32 : IProgramHeader<uint>
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public struct ProgramHeader64 : IProgramHeader<ulong>
 {
-    private Type _type;
-    private uint _offset;
-    private uint _vAddress;
-    private uint _pAddress;
-    private uint _sizeInFile;
-    private uint _sizeInMemory;
-    private Permissions _permissions;    // 32-bit perms/flags position
-    private uint _alignment;
+    private ProgramType _type;
+    private Permissions _permissions;     // 64-bit perms/flags position
+    private ulong _offset;
+    private ulong _vAddress;
+    private ulong _pAddress;
+    private ulong _sizeInFile;
+    private ulong _sizeInMemory;
+    private ulong _alignment;
 
     /// <summary>
     /// Gets the type of the program header.
     /// </summary>
-    public Type Type
+    public ProgramType Type
     {
         readonly get => _type;
         set => _type = value;
@@ -34,7 +35,7 @@ public struct ProgramHeader32 : IProgramHeader<uint>
     /// <summary>
     /// Gets the offset of the segment in the file image.
     /// </summary>
-    public uint Offset
+    public ulong Offset
     {
         readonly get => _offset;
         set => _offset = value;
@@ -43,7 +44,7 @@ public struct ProgramHeader32 : IProgramHeader<uint>
     /// <summary>
     /// Gets the virtual address where the segment is loaded in memory.
     /// </summary>
-    public uint VirtualAddress
+    public ulong VirtualAddress
     {
         readonly get => _vAddress;
         set => _vAddress = value;
@@ -52,7 +53,7 @@ public struct ProgramHeader32 : IProgramHeader<uint>
     /// <summary>
     /// Gets the physical address of the segment (if applicable).
     /// </summary>
-    public uint PhysicalAddress
+    public ulong PhysicalAddress
     {
         readonly get => _pAddress;
         set => _pAddress = value;
@@ -61,7 +62,7 @@ public struct ProgramHeader32 : IProgramHeader<uint>
     /// <summary>
     /// Gets the size of the segment in the file.
     /// </summary>
-    public uint SizeInFile
+    public ulong SizeInFile
     {
         readonly get => _sizeInFile;
         set => _sizeInFile = value;
@@ -70,7 +71,7 @@ public struct ProgramHeader32 : IProgramHeader<uint>
     /// <summary>
     /// Gets the size of the segment in memory.
     /// </summary>
-    public uint SizeInMemory
+    public ulong SizeInMemory
     {
         readonly get => _sizeInMemory;
         set => _sizeInMemory = value;
@@ -91,7 +92,7 @@ public struct ProgramHeader32 : IProgramHeader<uint>
     /// <summary>
     /// Gets the alignment of the segment.
     /// </summary>
-    public uint Alignment
+    public ulong Alignment
     {
         readonly get => _alignment;
         set => _alignment = value;

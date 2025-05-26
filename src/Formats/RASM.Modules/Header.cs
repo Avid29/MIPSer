@@ -189,15 +189,15 @@ public struct Header
     /// <param name="stream">The stream of the module.</param>
     /// <param name="header">The header of the module.</param>
     /// <returns><see cref="true"/> if header was successfully read. <see cref="false"/> otherwise.</returns>
-    public static bool TryReadHeader(Stream stream, out Header header)
+    public static bool TryRead(Stream stream, out Header header)
     {
         header = default;
 
         // Pre-declare explicit header components
-        Unsafe.SkipInit<ushort>(out var magic);
-        Unsafe.SkipInit<ushort>(out var version);
-        Unsafe.SkipInit<uint>(out var flags);
-        Unsafe.SkipInit<uint>(out var entryPoint);
+        Unsafe.SkipInit(out ushort magic);
+        Unsafe.SkipInit(out ushort version);
+        Unsafe.SkipInit(out uint flags);
+        Unsafe.SkipInit(out uint entryPoint);
 
         // Try reading explict header components
         bool success = stream.TryRead(out magic) && 
@@ -233,7 +233,7 @@ public struct Header
     /// </summary>
     /// <param name="stream">The stream to write the header on.</param>
     /// <returns><see cref="true"/> if header was successfully written. <see cref="false"/> otherwise.</returns>
-    public bool TryWriteHeader(Stream stream)
+    public readonly bool TryWrite(Stream stream)
     {
         // Try write explicit header components
         bool success = stream.TryWrite(Magic) &&

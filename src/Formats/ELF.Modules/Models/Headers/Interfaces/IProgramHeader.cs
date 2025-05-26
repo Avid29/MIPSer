@@ -1,11 +1,11 @@
 ﻿// Adam Dernis 2025
 
-using ELF.Modules.Models.Program.Enums;
+using ELF.Modules.Models.Headers.Enums;
 using System.Numerics;
 
-using Type = ELF.Modules.Models.Program.Enums.Type;
+using ProgramType = ELF.Modules.Models.Headers.Enums.ProgramType;
 
-namespace ELF.Modules.Models.Program;
+namespace ELF.Modules.Models.Headers.Interfaces;
 
 /// <summary>
 /// An interface for a program header in the ELF format.
@@ -20,7 +20,7 @@ public interface IProgramHeader<TAddress>
     /// <summary>
     /// Gets the type of the program header.
     /// </summary>
-    public Type Type { get; internal set; }
+    public ProgramType Type { get; internal set; }
     
     /// <summary>
     /// Gets the offset of the segment in the file image.

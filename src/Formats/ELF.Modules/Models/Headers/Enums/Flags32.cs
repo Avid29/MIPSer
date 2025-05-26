@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2025
 
-namespace ELF.Modules.Models.Section.Enums;
+namespace ELF.Modules.Models.Headers.Enums;
 
 /// <summary>
 /// An enum for the flag field of the ELF section header format in 32bit.

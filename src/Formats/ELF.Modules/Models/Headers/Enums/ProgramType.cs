@@ -1,11 +1,11 @@
 ﻿// Adam Dernis 2025
 
-namespace ELF.Modules.Models.Program.Enums;
+namespace ELF.Modules.Models.Headers.Enums;
 
 /// <summary>
 /// An enum for the type field of the ELF program header format.
 /// </summary>
-public enum Type : uint
+public enum ProgramType : uint
 {
     #pragma warning disable CS1591
 

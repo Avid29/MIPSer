@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\MIPS.Assembler\MIPS.Assembler.csproj" />
+    <ProjectReference Include="..\..\MIPS\MIPS.csproj" />
+  </ItemGroup>
+
 </Project>

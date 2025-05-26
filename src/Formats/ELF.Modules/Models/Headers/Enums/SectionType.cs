@@ -1,11 +1,11 @@
 ﻿// Adam Dernis 2025
 
-namespace ELF.Modules.Models.Section.Enums;
+namespace ELF.Modules.Models.Headers.Enums;
 
 /// <summary>
 /// An enum for the type field of the ELF section header format.
 /// </summary>
-public enum Type
+public enum SectionType : uint
 {
     #pragma warning disable CS1591
 

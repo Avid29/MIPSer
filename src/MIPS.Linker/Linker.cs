@@ -7,7 +7,6 @@ using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables;
-using System.Collections.Generic;
 
 namespace MIPS.Linker;
 

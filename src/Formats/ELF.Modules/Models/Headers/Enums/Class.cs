@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2025
 
-namespace ELF.Modules.Models.Header.Enums;
+namespace ELF.Modules.Models.Headers.Enums;
 
 /// <summary>
 /// An enum for the class field of the ELF header format.

@@ -69,7 +69,7 @@ public partial class ModuleConstructor
 
         if (!value.HasValue)
         {
-            entry.SetFlags(SymbolFlags.ForwardDefined);
+            entry.ForwardDefined = true;
         }
 
         _definitions.Add(name, entry);
@@ -98,9 +98,9 @@ public partial class ModuleConstructor
 
             entry.Type = type.Value;
         }
-
+        
         // Update flags
-        entry.SetFlags(flags);
+        entry.Flags |= flags;
 
         _definitions[name] = entry;
         return true;

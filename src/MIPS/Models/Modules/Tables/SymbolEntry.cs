@@ -65,21 +65,21 @@ public struct SymbolEntry
     /// Gets whether or not the symbol is defined.
     /// </summary>
     [MemberNotNullWhen(true, nameof(Address))]
-    public bool IsDefined => Address.Section is not Section.External;
+    public readonly bool IsDefined => Address.Section is not Section.External;
 
     /// <summary>
     /// Gets if a flag is set on the symbol entry.
     /// </summary>
     /// <param name="flag">The flag to check.</param>
     /// <returns>True if the flag is set, false otherwise.</returns>
-    public bool CheckFlag(SymbolFlags flag) => Flags.HasFlag(flag);
+    private bool CheckFlag(SymbolFlags flag) => Flags.HasFlag(flag);
 
     /// <summary>
     /// Sets a set of flags on the symbol entry.
     /// </summary>
     /// <param name="flags">The flags to set.</param>
     /// <param name="state">The new state of the flag.</param>
-    public void SetFlags(SymbolFlags flags, bool state = true)
+    private void SetFlags(SymbolFlags flags, bool state = true)
     {
         // Clear the flag.
         Flags &= ~flags;
