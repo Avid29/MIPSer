@@ -165,6 +165,8 @@ public struct InstructionParser
             InstructionType.RegisterImmediate when _meta.RegisterImmediateFuncCode.HasValue => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, (short)_immediate),
             InstructionType.RegisterImmediateBranch when _meta.RegisterImmediateFuncCode.HasValue => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, _immediate),
             InstructionType.Special2R when _meta.Function2Code.HasValue => Instruction.Create(_meta.Function2Code.Value, _rs, _rt, _rd, _shift),
+            InstructionType.Coproc0 when _meta.Co0FuncCode.HasValue => Instruction.Create(_meta.Co0FuncCode.Value),
+            InstructionType.Coproc0 when _meta.Mfmc0FuncCode.HasValue => Instruction.Create(_meta.Mfmc0FuncCode.Value, _rt, _meta.RD),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction>($"Invalid instruction meta '{_meta}'."),
         };
 
@@ -285,7 +287,7 @@ public struct InstructionParser
                 method = ReferenceMethod.Add;
             }
 
-            relocation = new ReferenceEntry(refSymbol.Value.Symbol, _context.CurrentAddress, type, method);
+            relocation = new ReferenceEntry(refSymbol.Value.Name, _context.CurrentAddress, type, method);
         }
 
         long value = address.Value;

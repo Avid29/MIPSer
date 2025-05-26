@@ -14,15 +14,15 @@ public enum Machine : ushort
     Intel_MCU = 0x06,
     Intel_80860 = 0x07,
     MIPS = 0x08,
-    MIPS_RS3k_LittleEndian = 0x0A,
+    MIPS_RS3k_LittleEndian = 0x0a,
     PowerPC = 0x14,
     PowerPC64 = 0x15,
     Arm = 0x28,
     IA64 = 0x32,
-    AMD_x86_64 = 0x3E,
-    VAX = 0x4B,
-    Arm64 = 0xB7,
-    RISV_V = 0xF3,
+    AMD_x86_64 = 0x3e,
+    VAX = 0x4b,
+    Arm64 = 0xb7,
+    RISV_V = 0xf3,
 
     #pragma warning restore
 }

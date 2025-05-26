@@ -171,7 +171,7 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>, IBigEndianReadWritable<Sy
     
     /// <inheritdoc/>
     /// <remarks>
-    /// <see cref="CommonEntry.Symbol"/> will be null.
+    /// <see cref="CommonEntry.Name"/> will be null.
     /// </remarks>
     public CommonEntry Convert()
     {

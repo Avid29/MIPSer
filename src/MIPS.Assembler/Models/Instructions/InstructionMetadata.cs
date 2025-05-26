@@ -96,22 +96,42 @@ public readonly struct InstructionMetadata
         
         MIPSVersions = new(versions);
     }
-
+    
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionMetadata"/> struct.
     /// </summary>
     [JsonConstructor]
-    internal InstructionMetadata(string name, OperationCode? opCode, FunctionCode? funcCode, Func2Code? function2Code, RegImmFuncCode? registerImmediateFuncCode, PseudoOp? pseudoOp, Argument[] argumentPattern, int? realizedInstructionCount, HashSet<MipsVersion> mipsVersions, bool obsolete)
+    internal InstructionMetadata(
+        string name,
+        OperationCode? opCode,
+        FunctionCode? funcCode,
+        Func2Code? function2Code,
+        RegImmFuncCode? registerImmediateFuncCode,
+        Co0FuncCode? co0FuncCode,
+        MFMC0FuncCode? mfmc0FuncCode,
+        byte? rs,
+        byte? rt,
+        byte? rd,
+        PseudoOp? pseudoOp,
+        Argument[] argumentPattern,
+        int? realizedInstructionCount,
+        HashSet<MipsVersion> mIPSVersions,
+        bool obsolete)
     {
         Name = name;
         OpCode = opCode;
         FuncCode = funcCode;
         Function2Code = function2Code;
         RegisterImmediateFuncCode = registerImmediateFuncCode;
+        Co0FuncCode = co0FuncCode;
+        Mfmc0FuncCode = mfmc0FuncCode;
+        RS = rs;
+        RT = rt;
+        RD = rd;
         PseudoOp = pseudoOp;
         ArgumentPattern = argumentPattern;
         RealizedInstructionCount = realizedInstructionCount;
-        MIPSVersions = mipsVersions;
+        MIPSVersions = mIPSVersions;
         Obsolete = obsolete;
     }
 
@@ -149,6 +169,41 @@ public readonly struct InstructionMetadata
     [JsonPropertyName("rt_func_code")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public RegImmFuncCode? RegisterImmediateFuncCode { get; }
+
+    /// <summary>
+    /// Gets the instruction coprocessor0 function code.
+    /// </summary>
+    [JsonPropertyName("co0_func_code")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Co0FuncCode? Co0FuncCode { get; }
+
+    /// <summary>
+    /// Gets the instruction mfmc0 function code.
+    /// </summary>
+    [JsonPropertyName("mfmc0_func_code")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public MFMC0FuncCode? Mfmc0FuncCode { get; }
+
+    /// <summary>
+    /// Gets the provided RS value.
+    /// </summary>
+    [JsonPropertyName("rs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public byte? RS { get; }
+
+    /// <summary>
+    /// Gets the provided RT value.
+    /// </summary>
+    [JsonPropertyName("rt")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public byte? RT { get; }
+
+    /// <summary>
+    /// Gets the provided RD value.
+    /// </summary>
+    [JsonPropertyName("rd")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public byte? RD { get; }
 
     /// <summary>
     /// Gets the pseudo op for a pseudo-instruction.

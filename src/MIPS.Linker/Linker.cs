@@ -67,9 +67,12 @@ public class Linker
             _module.Append((Section)i, module.Sections[i]);
         }
         
+        // Merge symbol tables
         foreach (var symEntry in module.Symbols.Values)
         {
-            // TODO: Merge symbol tables
+            // TODO: What flags are tracked?
+
+            module.TryDefineOrUpdateSymbol(symEntry.Name, symEntry.Type, symEntry.Address);
         }
 
         // Append references and apply relocations
@@ -91,5 +94,12 @@ public class Linker
         }
 
         // Resolve all references
+        foreach (var @ref in _module.References)
+        {
+            // Skip if the symbol is not defined
+            if (!(@ref.Symbol is not null && _module.TryGetSymbol(@ref.Symbol, out var symbol) && symbol.IsDefined))
+                continue;
+
+        }
     }
 }

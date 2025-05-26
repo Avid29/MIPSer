@@ -57,6 +57,7 @@ public enum OperationCode : byte
     Trap = 0x1a,
 
     Special2 = 0x1c,
+    Special3 = 0x1f,
 
     LoadByte = 0x20,
     LoadHalfWord = 0x21,

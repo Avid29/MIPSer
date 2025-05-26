@@ -128,7 +128,7 @@ public class RasmModule : IModule<RasmModule>
         {
             // Convert to rasm, extract string, and write to stream
             var newSymbol = RasmSymbol.Convert(symbol);
-            newSymbol.SymbolIndex = (uint)GetStringPosition(symbol.Symbol);
+            newSymbol.SymbolIndex = (uint)GetStringPosition(symbol.Name);
             newSymbol.Write(stream);
         }
 
@@ -221,8 +221,8 @@ public class RasmModule : IModule<RasmModule>
         foreach (var sym in symbols)
         {
             var symbol = sym.Convert();
-            symbol.Symbol = strings[(int)sym.SymbolIndex];
-            symbolTable.Add(symbol.Symbol, symbol);
+            symbol.Name = strings[(int)sym.SymbolIndex];
+            symbolTable.Add(symbol.Name, symbol);
         }
 
         // Create constructor from the sections

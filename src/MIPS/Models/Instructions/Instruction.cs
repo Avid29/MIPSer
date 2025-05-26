@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using CommunityToolkit.Diagnostics;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
@@ -273,6 +274,36 @@ public partial struct Instruction
         value.RTFuncCode = code;
         value.RS = rs;
         value.Offset = offset;
+        return value;
+    }
+    
+    /// <summary>
+    /// Creates a new <see cref="CoProc0RS.C0"/> instruction.
+    /// </summary>
+    public static Instruction Create(Co0FuncCode code)
+    {
+        Instruction value = default;
+        value.OpCode = OperationCode.Coprocessor0;
+        value.Co0FuncCode = code;
+        value.CoProc0RS = CoProc0RS.C0;
+
+        return value;
+    }
+    
+    /// <summary>
+    /// Creates a new <see cref="CoProc0RS.MFMC0"/> instruction.
+    /// </summary>
+    public static Instruction Create(MFMC0FuncCode code, Register rt = Register.Zero, byte? rd = null)
+    {
+        Instruction value = default;
+        value.OpCode = OperationCode.Coprocessor0;
+        value.MFMC0FuncCode = code;
+        value.CoProc0RS = CoProc0RS.MFMC0;
+        value.RT = rt;
+
+        // Conditionally assign
+        value.RD = rd.HasValue ? (Register)rd.Value : value.RD;
+
         return value;
     }
 

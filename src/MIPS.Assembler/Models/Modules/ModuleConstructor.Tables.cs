@@ -34,7 +34,7 @@ public partial class ModuleConstructor
     /// <param name="type"></param>
     /// <param name="flags"></param>
     /// <returns><see cref="false"/> if the symbol already has a value, and a new value is being defined.</returns>
-    public bool DefineOrUpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolFlags flags = 0)
+    public bool TryDefineOrUpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolFlags flags = 0)
     {
         if (_definitions.ContainsKey(name))
             return UpdateSymbol(name, type, value, flags);

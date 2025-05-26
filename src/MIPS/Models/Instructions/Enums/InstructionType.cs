@@ -9,11 +9,12 @@ public enum InstructionType
 {
 #pragma warning disable CS1591
     BasicR,
+    BasicI,
+    BasicJ,
     RegisterImmediate,
     RegisterImmediateBranch,
     Special2R,
-    BasicI,
-    BasicJ,
+    Coproc0,
     Pseudo,
 #pragma warning restore CS1591
 }

@@ -137,7 +137,7 @@ public partial class Assembler
         if (!ValidateSymbolName(label))
             return false;
 
-        if (!_module.DefineOrUpdateSymbol(label, type, address))
+        if (!_module.TryDefineOrUpdateSymbol(label, type, address))
         {
             _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, $"Symbol \"{label}\" is already defined.");
             return false;

@@ -15,9 +15,9 @@ public struct SymbolEntry
     /// <summary>
     /// Initializes a new instance of the <see cref="SymbolEntry"/> class.
     /// </summary>
-    public SymbolEntry(string symbol, SymbolType type, Address address, SymbolFlags flags = 0)
+    public SymbolEntry(string name, SymbolType type, Address address, SymbolFlags flags = 0)
     {
-        Symbol = symbol;
+        Name = name;
         Type = type;
         Address = address;
         Flags = flags;
@@ -26,7 +26,7 @@ public struct SymbolEntry
     /// <summary>
     /// Gets or sets the symbol name of the entry.
     /// </summary>
-    public string Symbol { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// Gets or sets the value of the symbol as an <see cref="Addressing.Address"/>.

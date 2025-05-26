@@ -4,6 +4,7 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.HighPerformance;
 using CommunityToolkit.HighPerformance.Buffers;
 using MIPS.Models.Addressing.Enums;
+using MIPS.Models.Instructions;
 using MIPS.Models.Modules.Tables;
 using MIPS.Models.Modules.Tables.Enums;
 using System;
@@ -122,10 +123,14 @@ public partial class ModuleConstructor
                 word += (uint)offset;
                 break;
             case ReferenceType.Address:
-                // TODO
+                // Kinda round about way to handle it, but this should work quite well
+                var instr = (Instruction)word;
+                word = (uint)Instruction.Create(instr.OpCode, instr.Address + (uint)offset);
                 break;
             case ReferenceType.Lower:
-                // TODO
+                uint mask = (1 << 16)-1;
+                var lower = (word & mask) + (uint)offset;
+                word = (lower & mask) + (word & ~mask);
                 break;
         }
 
