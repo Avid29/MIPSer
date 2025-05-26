@@ -15,7 +15,7 @@ using RasmSymbol = RASM.Modules.Tables.SymbolEntry;
 namespace RASM.Modules;
 
 /// <summary>
-/// A fully assembled object module.
+/// A fully assembled object module in RASM format.
 /// </summary>
 public class RasmModule : IModule<RasmModule>
 {
@@ -60,7 +60,7 @@ public class RasmModule : IModule<RasmModule>
             (uint)constructor.SmallUninitializedData.Length,
             (uint)constructor.UninitializedData.Length,
             0, 0, 0, 0); // We'll handle table sizes later
-        header.TryWriteHeader(stream);
+        header.TryWrite(stream);
 
         // Append segments to stream
         constructor.ResetStreamPositions();
@@ -128,7 +128,7 @@ public class RasmModule : IModule<RasmModule>
         {
             // Convert to rasm, extract string, and write to stream
             var newSymbol = RasmSymbol.Convert(symbol);
-            newSymbol.SymbolIndex = (uint)GetStringPosition(symbol.Symbol);
+            newSymbol.SymbolIndex = (uint)GetStringPosition(symbol.Name);
             newSymbol.Write(stream);
         }
 
@@ -145,7 +145,7 @@ public class RasmModule : IModule<RasmModule>
         header.ReferenceTableCount = refCount;
         header.DefinitionsTableCount = (uint)constructor.Symbols.Count;
         header.StringTableSize = (uint)strings.Length;
-        header.TryWriteHeader(stream);
+        header.TryWrite(stream);
 
         // Reset position, flush, and load
         stream.Position = 0;
@@ -156,7 +156,7 @@ public class RasmModule : IModule<RasmModule>
     /// <inheritdoc/>
     public static RasmModule? Load(Stream stream)
     {
-        if(!Header.TryReadHeader(stream, out var header))
+        if(!Header.TryRead(stream, out var header))
             return null;
 
         return new RasmModule(header, stream);
@@ -221,8 +221,8 @@ public class RasmModule : IModule<RasmModule>
         foreach (var sym in symbols)
         {
             var symbol = sym.Convert();
-            symbol.Symbol = strings[(int)sym.SymbolIndex];
-            symbolTable.Add(symbol.Symbol, symbol);
+            symbol.Name = strings[(int)sym.SymbolIndex];
+            symbolTable.Add(symbol.Name, symbol);
         }
 
         // Create constructor from the sections

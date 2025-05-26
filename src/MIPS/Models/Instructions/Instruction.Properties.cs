@@ -61,6 +61,15 @@ public partial struct Instruction
         readonly get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RS_BIT_OFFSET);
         private set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RS_BIT_OFFSET, (uint)value);
     }
+    
+    /// <summary>
+    /// Gets the instruction's RS value for a CoProc0 instruction.
+    /// </summary>
+    public CoProc0RS CoProc0RS
+    {
+        readonly get => (CoProc0RS)RS;
+        private set => RS = (Register)value;
+    }
 
     /// <summary>
     /// Gets the instruction's RT Register 
@@ -118,11 +127,35 @@ public partial struct Instruction
     /// Gets the instruction's function2 code.
     /// </summary>
     /// <remarks>
-    /// Instruction may or may not have function code.
+    /// Instruction may or may not have function2 code.
     /// </remarks>
     public Func2Code Func2Code
     {
         readonly get => (Func2Code)FuncCode;
+        private set => FuncCode = (FunctionCode)value;
+    }
+
+    /// <summary>
+    /// Gets the instruction's coproc0 function code.
+    /// </summary>
+    /// <remarks>
+    /// Instruction may or may not have coproc0 function code.
+    /// </remarks>
+    public Co0FuncCode Co0FuncCode
+    {
+        readonly get => (Co0FuncCode)FuncCode;
+        private set => FuncCode = (FunctionCode)value;
+    }
+
+    /// <summary>
+    /// Gets the instruction's mfmc0 function code.
+    /// </summary>
+    /// <remarks>
+    /// Instruction may or may not have coproc0 function code.
+    /// </remarks>
+    public MFMC0FuncCode MFMC0FuncCode
+    {
+        readonly get => (MFMC0FuncCode)FuncCode;
         private set => FuncCode = (FunctionCode)value;
     }
 

@@ -79,7 +79,7 @@ public readonly struct PseudoInstruction
             PseudoOp.AbsoluteValue =>
             [
                 Instruction.Create(FunctionCode.AddUnsigned, RS, Register.Zero, RT),
-                Instruction.Create(RegImmFuncCode.BranchOnGreaterOrEqualToThanZero, RS, 8),
+                Instruction.Create(RegImmFuncCode.BranchOnGreaterThanOrEqualToZero, RS, 8),
                 Instruction.Create(FunctionCode.Subtract, Register.Zero, RS, RT),
             ],
             PseudoOp.Move =>

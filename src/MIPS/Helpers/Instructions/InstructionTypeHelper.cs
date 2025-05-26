@@ -31,6 +31,7 @@ public static class InstructionTypeHelper
             OperationCode.Special2 => InstructionType.Special2R,
             OperationCode.Jump or
             OperationCode.JumpAndLink => InstructionType.BasicJ,
+            OperationCode.Coprocessor0 => InstructionType.Coproc0,
             _ => InstructionType.BasicI,
         };
     }

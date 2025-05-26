@@ -2,6 +2,7 @@
 
 using System.Buffers;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace System.IO;
 
@@ -13,14 +14,12 @@ public static class StreamExtensions
     /// <summary>
     /// Reads a <see cref="IBinaryInteger{TSelf}"/> from a stream.
     /// </summary>
-    /// <remarks>
-    /// MIPS is big endian, so this method uses big endian.
-    /// </remarks>
     /// <typeparam name="T">The <see cref="IBinaryInteger{TSelf}"/> type.</typeparam>
     /// <param name="stream">The stream to write to.</param>
     /// <param name="value">The next <typeparamref name="T"/> from the stream.</param>
+    /// <param name="littleEndian">Indicates if the bytes should be read in little endian.</param>
     /// <returns><see cref="true"/> if value was successfully read. <see cref="false"/> otherwise.</returns>
-    public static bool TryRead<T>(this Stream stream, out T value)
+    public static bool TryRead<T>(this Stream stream, out T value, bool littleEndian = false)
         where T : unmanaged, IBinaryInteger<T>
     {
         // TODO: This doesn't feel like it should be neccesary.
@@ -41,7 +40,9 @@ public static class StreamExtensions
         int realCount = stream.Read(bytes);
         if (realCount == byteCount)
         {
-            success = T.TryReadBigEndian(bytes, !signed, out value);
+            success = littleEndian
+                ? T.TryReadLittleEndian(bytes, !signed, out value)
+                : T.TryReadBigEndian(bytes, !signed, out value);
         }
 
         // Free temporary array
@@ -56,14 +57,12 @@ public static class StreamExtensions
     /// <summary>
     /// Writes a <see cref="IBinaryInteger{TSelf}"/> to a stream.
     /// </summary>
-    /// <remarks>
-    /// MIPS is big endian, so this method uses big endian.
-    /// </remarks>
     /// <typeparam name="T">The <see cref="IBinaryInteger{TSelf}"/> type.</typeparam>
     /// <param name="stream">The stream to write to.</param>
     /// <param name="value">The value to write to the stream.</param>
+    /// <param name="littleEndian">Indicates if the bytes should be written in little endian.</param>
     /// <returns><see cref="true"/> if value was successfully written. <see cref="false"/> otherwise.</returns>
-    public static bool TryWrite<T>(this Stream stream, T value)
+    public static bool TryWrite<T>(this Stream stream, T value, bool littleEndian = false)
         where T : unmanaged, IBinaryInteger<T>
     {
         // Initialize results
@@ -77,7 +76,11 @@ public static class StreamExtensions
             (pooledArray = ArrayPool<byte>.Shared.Rent(byteCount));
 
         // Write bytes
-        success = value.TryWriteBigEndian(bytes, out var bytesWritten);
+        Unsafe.SkipInit(out int bytesWritten);
+        success = littleEndian
+            ? value.TryWriteLittleEndian(bytes, out bytesWritten)
+            : value.TryWriteBigEndian(bytes, out bytesWritten);
+
         if (success && bytesWritten == byteCount)
         {
             stream.Write(bytes);

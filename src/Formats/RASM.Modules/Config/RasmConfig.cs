@@ -14,7 +14,7 @@ public class RasmConfig : AssemblerConfig
     private const ushort VERSION = 0x2C_C6;
     
     /// <summary>
-    /// Initializes a new instance of the <see cref="AssemblerConfig"/> class.
+    /// Initializes a new instance of the <see cref="RasmConfig"/> class.
     /// </summary>
     public RasmConfig(MipsVersion version = MipsVersion.MipsII) : base(version)
     {

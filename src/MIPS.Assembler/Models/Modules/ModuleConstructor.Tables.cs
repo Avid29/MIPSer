@@ -34,7 +34,7 @@ public partial class ModuleConstructor
     /// <param name="type"></param>
     /// <param name="flags"></param>
     /// <returns><see cref="false"/> if the symbol already has a value, and a new value is being defined.</returns>
-    public bool DefineOrUpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolFlags flags = 0)
+    public bool TryDefineOrUpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolFlags flags = 0)
     {
         if (_definitions.ContainsKey(name))
             return UpdateSymbol(name, type, value, flags);
@@ -69,7 +69,7 @@ public partial class ModuleConstructor
 
         if (!value.HasValue)
         {
-            entry.SetFlags(SymbolFlags.ForwardDefined);
+            entry.ForwardDefined = true;
         }
 
         _definitions.Add(name, entry);
@@ -98,9 +98,9 @@ public partial class ModuleConstructor
 
             entry.Type = type.Value;
         }
-
+        
         // Update flags
-        entry.SetFlags(flags);
+        entry.Flags |= flags;
 
         _definitions[name] = entry;
         return true;

@@ -3,7 +3,7 @@
 namespace MIPS.Models.Instructions.Enums.Registers;
 
 /// <summary>
-/// An enum for CPU registers.
+/// An enum for general process registers.
 /// </summary>
 public enum Register : byte
 {

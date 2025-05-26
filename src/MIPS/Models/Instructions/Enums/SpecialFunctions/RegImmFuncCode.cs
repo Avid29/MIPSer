@@ -22,7 +22,7 @@ public enum RegImmFuncCode : byte
 #pragma warning disable CS1591
 
     BranchOnLessThanZero = 0x00,
-    BranchOnGreaterOrEqualToThanZero = 0x01,
+    BranchOnGreaterThanOrEqualToZero = 0x01,
     BranchOnLessThanZeroLikely = 0x02,
     BranchOnGreaterThanZeroLikely = 0x03,
 

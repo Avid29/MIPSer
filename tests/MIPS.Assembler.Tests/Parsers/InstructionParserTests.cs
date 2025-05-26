@@ -24,6 +24,8 @@ public class InstructionParserTests
     private const string StoreByte = "sb $t0, -100($s0)";
     private const string Jump = "j 1000";
     private const string JumpExpression = "j 10*10";
+    private const string DI = "di $t1";
+    private const string EI = "ei $t0";
 
     private const string LoadImmediate = "li $t0, 0x10001";
 
@@ -84,6 +86,20 @@ public class InstructionParserTests
     {
         Instruction expected = Instruction.Create(OperationCode.Jump, 100);
         RunTest(JumpExpression, new ParsedInstruction(expected));
+    }
+
+    [TestMethod(DI)]
+    public void DITest()
+    {
+        Instruction expected = Instruction.Create(MFMC0FuncCode.DisableInterupts, Register.Temporary1, 12);
+        RunTest(DI, new ParsedInstruction(expected));
+    }
+
+    [TestMethod(EI)]
+    public void EITest()
+    {
+        Instruction expected = Instruction.Create(MFMC0FuncCode.EnableInterupts, Register.Temporary0, 12);
+        RunTest(EI, new ParsedInstruction(expected));
     }
     
     [TestMethod(LoadImmediate)]
