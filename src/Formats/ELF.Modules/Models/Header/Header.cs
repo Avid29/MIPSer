@@ -3,10 +3,10 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
 
-using Machine = EFL.Modules.Models.Header.Enums.Machine;
-using Type = EFL.Modules.Models.Header.Enums.Type;
+using Machine = ELF.Modules.Models.Header.Enums.Machine;
+using Type = ELF.Modules.Models.Header.Enums.Type;
 
-namespace EFL.Modules.Models.Header;
+namespace ELF.Modules.Models.Header;
 
 /// <summary>
 /// A struct containing the module header info for the ELF format.

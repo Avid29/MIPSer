@@ -1,9 +1,9 @@
 ﻿// Adam Dernis 2025
 
-using EFL.Modules.Models.Header.Enums;
+using ELF.Modules.Models.Header.Enums;
 using System.Runtime.InteropServices;
 
-namespace EFL.Modules.Models.Header;
+namespace ELF.Modules.Models.Header;
 
 /// <summary>
 /// A struct containing the module header identity info for the ELF format.

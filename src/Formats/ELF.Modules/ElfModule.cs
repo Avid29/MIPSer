@@ -1,11 +1,11 @@
 ﻿// Adam Dernis 2025
 
-using EFL.Modules.Models.Header;
+using ELF.Modules.Models.Header;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 
-namespace EFL.Modules;
+namespace ELF.Modules;
 
 /// <summary>
 /// A fully assembled object module in ELF format
