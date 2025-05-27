@@ -28,44 +28,6 @@
     "versions": [ 5, 6 ]
   },
   {
-    "name": "lwc1",
-    "op_code": 49,
-    "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
-  },
-  {
-    "name": "lwc2",
-    "op_code": 50,
-    "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
-  },
-  {
-    "name": "lwc3",
-    "op_code": 51,
-    "args": [],
-    "versions": [ 1, 2 ],
-    "obsolete": true
-  },
-  {
-    "name": "swc1",
-    "op_code": 57,
-    "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
-  },
-  {
-    "name": "swc2",
-    "op_code": 58,
-    "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
-  },
-  {
-    "name": "swc3",
-    "op_code": 59,
-    "args": [],
-    "versions": [ 1, 2 ],
-    "obsolete": true
-  },
-  {
     "name": "tlbr",
     "op_code": 16,
     "co0_func_code": 1,

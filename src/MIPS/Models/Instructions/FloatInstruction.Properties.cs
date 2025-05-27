@@ -4,7 +4,7 @@ using MIPS.Helpers;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
-using MIPS.Models.Instructions.Enums.SpecialFunctions;
+using MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 
 namespace MIPS.Models.Instructions;
 

@@ -39,5 +39,9 @@ public enum RegImmFuncCode : byte
     BranchOnLessThanZeroLikelyAndLink = 0x12,
     BranchOnGreaterThanOrEqualToZeroLikelyAndLink = 0x13,
 
+    // Revision 6
+    NoOpAndLink = 0x10,
+    BranchAndLink = 0x11
+
 #pragma warning restore CS1591
 }

@@ -2,7 +2,7 @@
 
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
-using MIPS.Models.Instructions.Enums.SpecialFunctions;
+using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
 using System.Runtime.CompilerServices;
 
 namespace MIPS.Models.Instructions;

@@ -1,11 +1,12 @@
 ﻿// Adam Dernis 2025
 
+using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 
-namespace MIPS.Models.Instructions.Enums.SpecialFunctions;
+namespace MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
 
 /// <summary>
-/// 
+/// An enum for <see cref="OperationCode.Coprocessor0"/> instruction rs field function codes.
 /// </summary>
 public enum CoProc0RSCode
 {

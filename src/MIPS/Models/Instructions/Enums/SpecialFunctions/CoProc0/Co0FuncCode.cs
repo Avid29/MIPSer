@@ -2,7 +2,7 @@
 
 using MIPS.Models.Instructions.Enums.Operations;
 
-namespace MIPS.Models.Instructions.Enums.SpecialFunctions;
+namespace MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
 
 /// <summary>
 /// An enum for <see cref="OperationCode.Coprocessor0"/> instruction function codes.

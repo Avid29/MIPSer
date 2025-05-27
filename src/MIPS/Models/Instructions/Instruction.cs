@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
@@ -181,7 +182,7 @@ public partial struct Instruction
     private uint _inst;
 
     /// <summary>
-    /// Creates a new r-type instruction.
+    /// Creates a new <see cref="InstructionType.BasicR"/> instruction.
     /// </summary>
     public static Instruction Create(FunctionCode funcCode, Register rs, Register rt, Register rd, byte shiftAmount = 0)
     {
@@ -196,7 +197,7 @@ public partial struct Instruction
     }
     
     /// <summary>
-    /// Creates a new special2 instruction.
+    /// Creates a new <see cref="InstructionType.Special2R"/> instruction.
     /// </summary>
     public static Instruction Create(Func2Code func2Code, Register rs, Register rt, Register rd, byte shiftAmount = 0)
     {
@@ -209,9 +210,24 @@ public partial struct Instruction
         value.Func2Code = func2Code;
         return value;
     }
+    
+    /// <summary>
+    /// Creates a new <see cref="InstructionType.Special3R"/> instruction.
+    /// </summary>
+    public static Instruction Create(Func3Code func3Code, Register rs, Register rt, Register rd, byte shiftAmount = 0)
+    {
+        Instruction value = default;
+        value.OpCode = OperationCode.Special3;
+        value.RS = rs;
+        value.RT = rt;
+        value.RD = rd;
+        value.ShiftAmount = shiftAmount;
+        value.Func3Code = func3Code;
+        return value;
+    }
 
     /// <summary>
-    /// Creates a new i-type instruction.
+    /// Creates a new <see cref="InstructionType.BasicI"/> instruction.
     /// </summary>
     public static Instruction Create(OperationCode opCode, Register rs, Register rt, short immediate)
     {
@@ -224,7 +240,7 @@ public partial struct Instruction
     }
 
     /// <summary>
-    /// Creates a new i-type instruction.
+    /// Creates a new <see cref="InstructionType.BasicI"/> instruction.
     /// </summary>
     /// <remarks>
     /// This is just for load upper immediate.
@@ -239,7 +255,7 @@ public partial struct Instruction
     }
 
     /// <summary>
-    /// Creates a new j-type instruction.
+    /// Creates a new <see cref="InstructionType.BasicJ"/> instruction.
     /// </summary>
     public static Instruction Create(OperationCode opCode, uint address)
     {
@@ -250,7 +266,7 @@ public partial struct Instruction
     }
     
     /// <summary>
-    /// Creates a new <see cref="OperationCode.RegisterImmediate"/> instruction.
+    /// Creates a new <see cref="InstructionType.RegisterImmediate"/> instruction.
     /// </summary>
     public static Instruction Create(RegImmFuncCode code, Register rs, short immediate)
     {
@@ -263,7 +279,7 @@ public partial struct Instruction
     }
 
     /// <summary>
-    /// Creates a new <see cref="OperationCode.RegisterImmediate"/> branch instruction.
+    /// Creates a new <see cref="InstructionType.RegisterImmediateBranch"/> branch instruction.
     /// </summary>
     public static Instruction Create(RegImmFuncCode code, Register rs, int offset)
     {

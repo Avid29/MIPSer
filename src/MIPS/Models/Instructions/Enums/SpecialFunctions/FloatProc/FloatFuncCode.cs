@@ -1,8 +1,8 @@
-﻿// Adam Dernis 2024
+﻿// Adam Dernis 2025
 
 using MIPS.Models.Instructions.Enums.Operations;
 
-namespace MIPS.Models.Instructions.Enums.SpecialFunctions;
+namespace MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 
 /// <summary>
 /// An enum for <see cref="OperationCode.Coprocessor1"/> instruction function codes.

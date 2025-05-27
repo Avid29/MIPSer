@@ -6,6 +6,7 @@ using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.Operations;
+using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
 
 namespace MIPS.Models.Instructions;
 
@@ -43,7 +44,7 @@ public partial struct Instruction
     /// <summary>
     /// Gets the instruction type.
     /// </summary>
-    public readonly InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RTFuncCode);
+    public readonly InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RTFuncCode, (CoProc0RSCode)RS);
 
     /// <summary>
     /// Gets the instruction's operation code.
@@ -124,6 +125,18 @@ public partial struct Instruction
     public Func2Code Func2Code
     {
         readonly get => (Func2Code)FuncCode;
+        internal set => FuncCode = (FunctionCode)value;
+    }
+
+    /// <summary>
+    /// Gets the instruction's function3 code.
+    /// </summary>
+    /// <remarks>
+    /// Instruction may or may not have function3 code.
+    /// </remarks>
+    public Func3Code Func3Code
+    {
+        readonly get => (Func3Code)FuncCode;
         internal set => FuncCode = (FunctionCode)value;
     }
 

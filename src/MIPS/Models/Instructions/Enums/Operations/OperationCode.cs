@@ -57,6 +57,8 @@ public enum OperationCode : byte
     Trap = 0x1a,
 
     Special2 = 0x1c,
+    JumpAndLinkX = 0x1d,
+    SIMD = 0x1e,
     Special3 = 0x1f,
 
     LoadByte = 0x20,

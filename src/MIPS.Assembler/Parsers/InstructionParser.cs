@@ -154,23 +154,42 @@ public struct InstructionParser
         _funcCode = _meta.FuncCode;
 
         // Create the instruction from its components based on the instruction type
-        var instruction = _meta.Type switch
+        // NOTE: Null suppression allowed here because the type guarentees value presence
+        Instruction instruction = _meta.OpCode switch
         {
-            // Primary Instruction Types
-            InstructionType.BasicR when _funcCode.HasValue => Instruction.Create(_funcCode.Value, _rs, _rt, _rd, _shift),
-            InstructionType.BasicI => Instruction.Create(_opCode, _rs, _rt, (short)_immediate),
-            InstructionType.BasicJ => Instruction.Create(_opCode, _address),
-            InstructionType.RegisterImmediate when _meta.RegisterImmediateFuncCode.HasValue => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, (short)_immediate),
-            InstructionType.RegisterImmediateBranch when _meta.RegisterImmediateFuncCode.HasValue => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, _immediate),
-            InstructionType.Special2R when _meta.Function2Code.HasValue => Instruction.Create(_meta.Function2Code.Value, _rs, _rt, _rd, _shift),
+            // R Type
+            OperationCode.Special => _meta.FuncCode.HasValue ?                              // Special
+                Instruction.Create(_funcCode!.Value, _rs, _rt, _rd, _shift) :
+                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.FuncCode)} value."),
+            OperationCode.Special2 => _meta.Function2Code.HasValue ?                        // Special 2
+                Instruction.Create(_meta.Function2Code.Value, _rs, _rt, _rd, _shift) :
+                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.Function2Code)} value."),
+            OperationCode.Special3 => _meta.Function3Code.HasValue ?                        // Special 3
+                Instruction.Create(_meta.Function3Code.Value, _rs, _rt, _rd, _shift) :
+                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.Function3Code)} value."),
             
-            // CoProc0 instructions
-            InstructionType.Coproc0 when _meta.CoProc0RS.HasValue => (Instruction)CoProc0Instruction.Create(_meta.CoProc0RS.Value, _rt, _rd),
-            InstructionType.Coproc0 when _meta.Co0FuncCode.HasValue => (Instruction)CoProc0Instruction.Create(_meta.Co0FuncCode.Value),
-            InstructionType.Coproc0 when _meta.Mfmc0FuncCode.HasValue => (Instruction)CoProc0Instruction.Create(_meta.Mfmc0FuncCode.Value, _rt, _meta.RD),
+            // J Type
+            OperationCode.Jump or
+            OperationCode.JumpAndLink => Instruction.Create(_opCode, _address),
 
-            // Error
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction>($"Invalid instruction meta '{_meta}'."),
+            // Coprocessor0 instructions
+            OperationCode.Coprocessor0 when _meta.Co0FuncCode.HasValue                      // C0
+                => CoProc0Instruction.Create(_meta.Co0FuncCode.Value),
+            OperationCode.Coprocessor0 when _meta.Mfmc0FuncCode.HasValue                    // MFMC0
+                => CoProc0Instruction.Create(_meta.Mfmc0FuncCode.Value, _rt, _meta.RD),
+            OperationCode.Coprocessor0 => _meta.CoProc0RS.HasValue ?                        // Co0 RS
+                CoProc0Instruction.Create(_meta.CoProc0RS.Value, _rt, _rd) :
+                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc0RS)}, {nameof(_meta.Co0FuncCode)}, or {nameof(_meta.Mfmc0FuncCode)} value."),
+            
+            // I Type
+            OperationCode.RegisterImmediate when _meta.RegisterImmediateFuncCode is         // Register Immediate Branching
+                (>= RegImmFuncCode.BranchOnLessThanZero and <= RegImmFuncCode.BranchOnGreaterThanZeroLikely) or
+                (>= RegImmFuncCode.BranchOnLessThanZeroLikelyAndLink and <= RegImmFuncCode.BranchOnLessThanZeroLikelyAndLink)
+                => Instruction.Create(_meta.RegisterImmediateFuncCode!.Value, _rs, _immediate),
+            OperationCode.RegisterImmediate => _meta.RegisterImmediateFuncCode.HasValue ?   // Register Immediate
+                Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, (short)_immediate) :
+                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.RegisterImmediateFuncCode)} value."),
+            _ => Instruction.Create(_opCode, _rs, _rt, (short)_immediate),                  // Remaining I Type instructions
         };
 
         // Check for write back to zero register
@@ -410,8 +429,8 @@ public struct InstructionParser
         // Check for numberical register
         if (byte.TryParse(regStr[1..], out var num))
         {
-            // TODO: Consider removing magic numbers
-            if (num is < 0 or > 31)
+            // Lowest register enum to highest register enum
+            if (num is < (byte)Register.Zero or > (byte)Register.ReturnAddress)
             {
                 _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"No register of number {num} exists");
                 return false;

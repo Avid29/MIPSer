@@ -9,8 +9,9 @@ public enum FloatFormat
 {
 #pragma warning disable CS1591
 
-    S,
-    D,
+    Single,
+    Double,
+    PairedSingle,
 
 #pragma warning restore CS1591
 }

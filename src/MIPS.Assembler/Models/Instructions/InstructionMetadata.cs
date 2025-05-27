@@ -1,9 +1,9 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
+using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -167,6 +167,13 @@ public readonly struct InstructionMetadata
     public Func2Code? Function2Code { get; }
 
     /// <summary>
+    /// Gets the instruction function code.
+    /// </summary>
+    [JsonPropertyName("func3_code")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Func3Code? Function3Code { get; }
+
+    /// <summary>
     /// Gets the instruction register immediate code.
     /// </summary>
     [JsonPropertyName("rt_func_code")]
@@ -221,12 +228,6 @@ public readonly struct InstructionMetadata
     [JsonPropertyName("pseudo_op")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public PseudoOp? PseudoOp { get; }
-
-    /// <summary>
-    /// Gets the function type.
-    /// </summary>
-    [JsonIgnore]
-    public readonly InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RegisterImmediateFuncCode);
 
     /// <summary>
     /// Gets the instruction parse type
