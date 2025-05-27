@@ -1,5 +1,33 @@
 ﻿[
   {
+    "name": "mfc0",
+    "op_code": 16,
+    "coproc0_rs": 0,
+    "args": [ 1, 2 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "mfhc0",
+    "op_code": 16,
+    "coproc0_rs": 2,
+    "args": [ 1, 2 ],
+    "versions": [ 5, 6 ]
+  },
+  {
+    "name": "mtc0",
+    "op_code": 16,
+    "coproc0_rs": 4,
+    "args": [ 1, 2 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "mthc0",
+    "op_code": 16,
+    "coproc0_rs": 6,
+    "args": [ 1, 2 ],
+    "versions": [ 5, 6 ]
+  },
+  {
     "name": "lwc1",
     "op_code": 49,
     "args": [],
@@ -87,6 +115,14 @@
     "versions": [ 1, 2, 3, 4, 5, 6 ]
   },
   {
+    "name": "eretnc",
+    "op_code": 16,
+    "co0_func_code": 24,
+    "rd": 1,
+    "args": [],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
     "name": "deret",
     "op_code": 16,
     "co0_func_code": 31,
@@ -112,7 +148,7 @@
     "name": "evp",
     "op_code": 16,
     "mfmc0_func_code": 4,
-    "args": [],
+    "args": [ 1 ],
     "versions": [ 6 ]
   },
   {
@@ -121,6 +157,27 @@
     "mfmc0_func_code": 32,
     "rd": 12,
     "args": [ 1 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "dvp",
+    "op_code": 16,
+    "mfmc0_func_code": 11,
+    "args": [ 1 ],
+    "versions": [ 6 ]
+  },
+  {
+    "name": "rdpgpr",
+    "op_code": 16,
+    "coproc0_rs": 10,
+    "args": [ 2, 1 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "wrpgpr",
+    "op_code": 16,
+    "coproc0_rs": 14,
+    "args": [ 2, 1 ],
     "versions": [ 2, 3, 4, 5, 6 ]
   }
 ]

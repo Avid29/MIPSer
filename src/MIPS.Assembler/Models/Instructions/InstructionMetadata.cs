@@ -107,6 +107,7 @@ public readonly struct InstructionMetadata
         FunctionCode? funcCode,
         Func2Code? function2Code,
         RegImmFuncCode? registerImmediateFuncCode,
+        CoProc0RS? coProc0RS,
         Co0FuncCode? co0FuncCode,
         MFMC0FuncCode? mfmc0FuncCode,
         byte? rs,
@@ -123,6 +124,7 @@ public readonly struct InstructionMetadata
         FuncCode = funcCode;
         Function2Code = function2Code;
         RegisterImmediateFuncCode = registerImmediateFuncCode;
+        CoProc0RS = coProc0RS;
         Co0FuncCode = co0FuncCode;
         Mfmc0FuncCode = mfmc0FuncCode;
         RS = rs;
@@ -169,6 +171,13 @@ public readonly struct InstructionMetadata
     [JsonPropertyName("rt_func_code")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public RegImmFuncCode? RegisterImmediateFuncCode { get; }
+    
+    /// <summary>
+    /// Gets the instruction rs function code for a coproc0 instruction.
+    /// </summary>
+    [JsonPropertyName("coproc0_rs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public CoProc0RS? CoProc0RS { get; }
 
     /// <summary>
     /// Gets the instruction coprocessor0 function code.

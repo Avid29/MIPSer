@@ -1,10 +1,10 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Assembler.Models;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tests.Live.Enums;
 using MIPS.Assembler.Tokenization;
 using RASM.Modules;
+using RASM.Modules.Config;
 using System.Text;
 
 namespace MIPS.Assembler.Tests.Live;
@@ -54,7 +54,7 @@ public class Program()
     private async Task<bool> TestLine(string line)
     {
         var stream = new MemoryStream(Encoding.Default.GetBytes(line));
-        var assembler = await Assembler.AssembleAsync(stream, null, new AssemblerConfig());
+        var assembler = await Assembler.AssembleAsync(stream, null, new RasmConfig());
 
         stream = new MemoryStream();
         assembler.CompleteModule<RasmModule>(stream);

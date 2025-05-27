@@ -278,6 +278,20 @@ public partial struct Instruction
     }
     
     /// <summary>
+    /// Creates a new <see cref="OperationCode.Coprocessor0"/> instruction.
+    /// </summary>
+    public static Instruction Create(CoProc0RS code, Register rt, Register rd)
+    {
+        Instruction value = default;
+        value.OpCode = OperationCode.Coprocessor0;
+        value.CoProc0RS = code;
+        value.RT = rt;
+        value.RD = rd;
+
+        return value;
+    }
+    
+    /// <summary>
     /// Creates a new <see cref="CoProc0RS.C0"/> instruction.
     /// </summary>
     public static Instruction Create(Co0FuncCode code)

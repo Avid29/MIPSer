@@ -14,6 +14,7 @@ public enum MFMC0FuncCode
     EnableVirtualProcessor = 0x4,
 
     EnableInterupts = 0x20,
+    DisableVirtualProcessor = 0x24,
 
     #pragma warning restore CS1591
 }

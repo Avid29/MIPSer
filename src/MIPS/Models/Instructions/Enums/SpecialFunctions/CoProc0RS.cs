@@ -22,10 +22,12 @@ public enum CoProc0RS
     #pragma warning disable CS1591
 
     MFC0 = 0x0,
-    MFH = 0x2,
-    MTCO = 0x4,
-    MTH = 0x6,
+    MFHC0 = 0x2,
+    MTC0 = 0x4,
+    MTHC0 = 0x6,
     MFMC0 = 0xb,
+    RDPGPR = 0xa,
+    WRPGPR = 0xe,
     C0 = 0x10,
 
     #pragma warning restore CS1591
