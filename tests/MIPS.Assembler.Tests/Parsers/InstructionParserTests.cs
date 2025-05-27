@@ -8,6 +8,7 @@ using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 
@@ -91,21 +92,21 @@ public class InstructionParserTests
     [TestMethod(DI)]
     public void DITest()
     {
-        Instruction expected = Instruction.Create(MFMC0FuncCode.DisableInterupts, Register.Temporary1, 12);
+        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, Register.Temporary1, 12);
         RunTest(DI, new ParsedInstruction(expected));
     }
 
     [TestMethod(EI)]
     public void EITest()
     {
-        Instruction expected = Instruction.Create(MFMC0FuncCode.EnableInterupts, Register.Temporary0, 12);
+        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.EnableInterupts, Register.Temporary0, 12);
         RunTest(EI, new ParsedInstruction(expected));
     }
     
     [TestMethod(LoadImmediate)]
     public void LoadImmediateTest()
     {
-        PseudoInstruction expected = new PseudoInstruction(PseudoOp.LoadImmediate){ RT = Register.Temporary0, Immediate = 0x10001 };
+        PseudoInstruction expected = new(PseudoOp.LoadImmediate) { RT = Register.Temporary0, Immediate = 0x10001 };
         RunTest(LoadImmediate, new ParsedInstruction(expected));
     }
 

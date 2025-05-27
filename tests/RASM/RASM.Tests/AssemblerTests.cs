@@ -105,7 +105,7 @@ public class AssemblerTests
     {
         // Wrap the test in a stream and run the test
         var stream = new MemoryStream(Encoding.Default.GetBytes(str));
-        await RunTest(stream, null, config, expected.Select((x) => (x, 1L)).ToArray());
+        await RunTest(stream, null, config, [..expected.Select((x) => (x, 1L))]);
     }
 
     private static async Task RunTest(Stream stream, string? filename = null, RasmConfig? config = null, params (LogId, long)[] expected)

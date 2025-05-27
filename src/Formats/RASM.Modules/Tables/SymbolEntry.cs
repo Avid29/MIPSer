@@ -117,7 +117,7 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>, IBigEndianReadWritable<Sy
     /// </summary>
     public Address Address
     {
-        get => new(Value, Section);
+        readonly get => new(Value, Section);
         set
         {
             Value = (uint)value.Value;
@@ -173,7 +173,7 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>, IBigEndianReadWritable<Sy
     /// <remarks>
     /// <see cref="CommonEntry.Name"/> will be null.
     /// </remarks>
-    public CommonEntry Convert()
+    public readonly CommonEntry Convert()
     {
         // Get type
         var type = SymbolType.Macro;
@@ -182,11 +182,12 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>, IBigEndianReadWritable<Sy
 
         // Get address and initialize
         var adr = new Address(Value, Section);
-        var symbol = new CommonEntry(null!, type, adr); // Null suppress. We're going to overwrite it once we leave this method.
-        
-        // Set flags
-        symbol.Global = CheckFlag(SymbolFlags.Global);
-        symbol.ForwardDefined = CheckFlag(SymbolFlags.Forward);
+        var symbol = new CommonEntry(null!, type, adr) // Null suppress. We're going to overwrite it once we leave this method.
+        {
+            // Set flags
+            Global = CheckFlag(SymbolFlags.Global),
+            ForwardDefined = CheckFlag(SymbolFlags.Forward)
+        }; 
 
         return symbol;
     }

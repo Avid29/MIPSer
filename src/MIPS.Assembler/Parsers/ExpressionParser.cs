@@ -174,7 +174,7 @@ public struct ExpressionParser
         return true;
     }
 
-    private bool AppendImmediate(Token t)
+    private readonly bool AppendImmediate(Token t)
     {
         long value;
         if (t.Source[0] is '\'')
@@ -205,7 +205,7 @@ public struct ExpressionParser
         return AppendImmediate(value);
     }
 
-    private bool AppendImmediate(long value)
+    private readonly bool AppendImmediate(long value)
     {
         Guard.IsNotNull(_tree);
 

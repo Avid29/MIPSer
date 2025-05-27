@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 
@@ -24,7 +24,7 @@ public readonly struct PseudoInstruction
     /// <summary>
     /// Gets or sets the psudo operation code
     /// </summary>
-    public PseudoOp PseudoOp { get; }
+    public PseudoOp PseudoOp { get; init; }
 
     /// <summary>
     /// Gets or sets the pseudo-instruction rs register.

@@ -22,7 +22,7 @@ public struct StatusRegister
     /// </summary>
     public bool InteruptEnabled
     {
-        get => UintMasking.CheckBit(_status, INTERUPT_ENABLED_BIT);
+        readonly get => UintMasking.CheckBit(_status, INTERUPT_ENABLED_BIT);
         set => UintMasking.SetBit(ref _status, INTERUPT_ENABLED_BIT, value);
     }
 
@@ -31,7 +31,7 @@ public struct StatusRegister
     /// </summary>
     public bool ExceptionLevel
     {
-        get => UintMasking.CheckBit(_status, EXCEPTION_LEVEL_BIT);
+        readonly get => UintMasking.CheckBit(_status, EXCEPTION_LEVEL_BIT);
         set => UintMasking.SetBit(ref _status, EXCEPTION_LEVEL_BIT, value);
     }
 
@@ -40,7 +40,7 @@ public struct StatusRegister
     /// </summary>
     public bool UserMode
     {
-        get => UintMasking.CheckBit(_status, USER_MODE_BIT);
+        readonly get => UintMasking.CheckBit(_status, USER_MODE_BIT);
         set => UintMasking.SetBit(ref _status, USER_MODE_BIT, value);
     }
 
@@ -49,7 +49,7 @@ public struct StatusRegister
     /// </summary>
     public byte InteruptMask
     {
-        get => (byte)UintMasking.GetShiftMask(_status, INTERUPT_MASK_SIZE, INTERUPT_MASK_OFFSET);
+        readonly get => (byte)UintMasking.GetShiftMask(_status, INTERUPT_MASK_SIZE, INTERUPT_MASK_OFFSET);
         set => UintMasking.SetShiftMask(ref _status, INTERUPT_MASK_SIZE, INTERUPT_MASK_OFFSET, value);
     }
 }

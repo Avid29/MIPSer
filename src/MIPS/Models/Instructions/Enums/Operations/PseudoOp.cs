@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-namespace MIPS.Models.Instructions.Enums;
+namespace MIPS.Models.Instructions.Enums.Operations;
 
 /// <summary>
 /// An enum for pesudo-instruction types.

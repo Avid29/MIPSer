@@ -11,6 +11,7 @@ using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Extensions.MIPS.Models.Instructions;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using MIPS.Models.Modules.Tables;
@@ -131,18 +132,14 @@ public struct InstructionParser
         {
             Guard.IsTrue(_meta.PseudoOp.HasValue);
 
-            var pseudoOp = _meta.PseudoOp.Value;
-            var pseudo = pseudoOp switch
+            var pseudo = new PseudoInstruction()
             {
-                PseudoOp.NoOperation => new PseudoInstruction(pseudoOp),
-                PseudoOp.SuperScalarNoOperation => new PseudoInstruction(pseudoOp),
-                PseudoOp.BranchOnLessThan => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt, Immediate = _immediate },
-                PseudoOp.LoadImmediate => new PseudoInstruction(pseudoOp) { RT = _rt, Immediate = _immediate },
-                PseudoOp.AbsoluteValue => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt },
-                PseudoOp.Move => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt },
-                PseudoOp.LoadAddress => new PseudoInstruction(pseudoOp) { RT = _rt, Address = _address },
-                PseudoOp.SetGreaterThanOrEqual => new PseudoInstruction(pseudoOp) { RS = _rs, RT = _rt, RD = _rd },
-                _ => ThrowHelper.ThrowArgumentOutOfRangeException<PseudoInstruction>(),
+                PseudoOp = _meta.PseudoOp.Value,
+                RS = _rs,
+                RT = _rt,
+                RD = _rd,
+                Immediate = _immediate,
+                Address = _address,
             };
 
             parsedInstruction = new ParsedInstruction(pseudo, reference);
@@ -159,15 +156,20 @@ public struct InstructionParser
         // Create the instruction from its components based on the instruction type
         var instruction = _meta.Type switch
         {
+            // Primary Instruction Types
             InstructionType.BasicR when _funcCode.HasValue => Instruction.Create(_funcCode.Value, _rs, _rt, _rd, _shift),
             InstructionType.BasicI => Instruction.Create(_opCode, _rs, _rt, (short)_immediate),
             InstructionType.BasicJ => Instruction.Create(_opCode, _address),
             InstructionType.RegisterImmediate when _meta.RegisterImmediateFuncCode.HasValue => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, (short)_immediate),
             InstructionType.RegisterImmediateBranch when _meta.RegisterImmediateFuncCode.HasValue => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, _immediate),
             InstructionType.Special2R when _meta.Function2Code.HasValue => Instruction.Create(_meta.Function2Code.Value, _rs, _rt, _rd, _shift),
-            InstructionType.Coproc0 when _meta.CoProc0RS.HasValue => Instruction.Create(_meta.CoProc0RS.Value, _rt, _rd),
-            InstructionType.Coproc0 when _meta.Co0FuncCode.HasValue => Instruction.Create(_meta.Co0FuncCode.Value),
-            InstructionType.Coproc0 when _meta.Mfmc0FuncCode.HasValue => Instruction.Create(_meta.Mfmc0FuncCode.Value, _rt, _meta.RD),
+            
+            // CoProc0 instructions
+            InstructionType.Coproc0 when _meta.CoProc0RS.HasValue => (Instruction)CoProc0Instruction.Create(_meta.CoProc0RS.Value, _rt, _rd),
+            InstructionType.Coproc0 when _meta.Co0FuncCode.HasValue => (Instruction)CoProc0Instruction.Create(_meta.Co0FuncCode.Value),
+            InstructionType.Coproc0 when _meta.Mfmc0FuncCode.HasValue => (Instruction)CoProc0Instruction.Create(_meta.Mfmc0FuncCode.Value, _rt, _meta.RD),
+
+            // Error
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction>($"Invalid instruction meta '{_meta}'."),
         };
 

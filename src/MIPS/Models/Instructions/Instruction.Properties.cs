@@ -5,6 +5,7 @@ using MIPS.Helpers;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using MIPS.Models.Instructions.Enums.Registers;
+using MIPS.Models.Instructions.Enums.Operations;
 
 namespace MIPS.Models.Instructions;
 
@@ -50,7 +51,7 @@ public partial struct Instruction
     public OperationCode OpCode
     { 
         readonly get => (OperationCode)UintMasking.GetShiftMask(_inst, OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET);
-        private set => UintMasking.SetShiftMask(ref _inst, OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET, (uint)value);
+        internal set => UintMasking.SetShiftMask(ref _inst, OPCODE_BIT_SIZE, OPCODE_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -59,25 +60,16 @@ public partial struct Instruction
     public Register RS
     { 
         readonly get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RS_BIT_OFFSET);
-        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RS_BIT_OFFSET, (uint)value);
+        internal set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RS_BIT_OFFSET, (uint)value);
     }
     
-    /// <summary>
-    /// Gets the instruction's RS value for a CoProc0 instruction.
-    /// </summary>
-    public CoProc0RS CoProc0RS
-    {
-        readonly get => (CoProc0RS)RS;
-        private set => RS = (Register)value;
-    }
-
     /// <summary>
     /// Gets the instruction's RT Register 
     /// </summary>
     public Register RT
     { 
         readonly get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RT_BIT_OFFSET);
-        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RT_BIT_OFFSET, (uint)value);
+        internal set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RT_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -90,7 +82,7 @@ public partial struct Instruction
     public RegImmFuncCode RTFuncCode
     {
         readonly get => (RegImmFuncCode)RT;
-        set => RT = (Register)value;
+        internal set => RT = (Register)value;
     }
 
     /// <summary>
@@ -99,7 +91,7 @@ public partial struct Instruction
     public Register RD
     { 
         readonly get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RD_BIT_OFFSET);
-        private set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RD_BIT_OFFSET, (uint)value);
+        internal set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RD_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -108,7 +100,7 @@ public partial struct Instruction
     public byte ShiftAmount
     { 
         readonly get => (byte)UintMasking.GetShiftMask(_inst, SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET);
-        private set => UintMasking.SetShiftMask(ref _inst, SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET, (uint)value);
+        internal set => UintMasking.SetShiftMask(ref _inst, SHIFT_AMOUNT_BIT_SIZE, SHIFT_AMOUNT_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -120,7 +112,7 @@ public partial struct Instruction
     public FunctionCode FuncCode
     { 
         readonly get => (FunctionCode)UintMasking.GetShiftMask(_inst, FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET);
-        private set => UintMasking.SetShiftMask(ref _inst, FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET, (uint)value);
+        internal set => UintMasking.SetShiftMask(ref _inst, FUNCTION_BIT_SIZE, FUNCTION_BIT_OFFSET, (uint)value);
     }
 
     /// <summary>
@@ -132,31 +124,7 @@ public partial struct Instruction
     public Func2Code Func2Code
     {
         readonly get => (Func2Code)FuncCode;
-        private set => FuncCode = (FunctionCode)value;
-    }
-
-    /// <summary>
-    /// Gets the instruction's coproc0 function code.
-    /// </summary>
-    /// <remarks>
-    /// Instruction may or may not have coproc0 function code.
-    /// </remarks>
-    public Co0FuncCode Co0FuncCode
-    {
-        readonly get => (Co0FuncCode)FuncCode;
-        private set => FuncCode = (FunctionCode)value;
-    }
-
-    /// <summary>
-    /// Gets the instruction's mfmc0 function code.
-    /// </summary>
-    /// <remarks>
-    /// Instruction may or may not have coproc0 function code.
-    /// </remarks>
-    public MFMC0FuncCode MFMC0FuncCode
-    {
-        readonly get => (MFMC0FuncCode)FuncCode;
-        private set => FuncCode = (FunctionCode)value;
+        internal set => FuncCode = (FunctionCode)value;
     }
 
     /// <summary>
@@ -165,7 +133,7 @@ public partial struct Instruction
     public short ImmediateValue
     { 
         readonly get => (short)UintMasking.GetShiftMask(_inst, IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET);
-        private set => UintMasking.SetShiftMask(ref _inst, IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET, (ushort)value);
+        internal set => UintMasking.SetShiftMask(ref _inst, IMMEDIATE_BIT_SIZE, IMMEDIATE_BIT_OFFSET, (ushort)value);
     }
 
     /// <summary>
@@ -174,7 +142,7 @@ public partial struct Instruction
     public int Offset
     {
         readonly get => ImmediateValue << 2;
-        private set => ImmediateValue = (short)(value >> 2);
+        internal set => ImmediateValue = (short)(value >> 2);
     }
 
     /// <summary>
@@ -183,6 +151,6 @@ public partial struct Instruction
     public uint Address
     { 
         readonly get => UintMasking.GetShiftMask(_inst, ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET) << 2;
-        private set => UintMasking.SetShiftMask(ref _inst, ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET, value >> 2);
+        internal set => UintMasking.SetShiftMask(ref _inst, ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET, value >> 2);
     }
 }

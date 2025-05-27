@@ -1,10 +1,8 @@
 ﻿// Adam Dernis 2024
 
-using CommunityToolkit.Diagnostics;
-using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace MIPS.Models.Instructions;
@@ -13,7 +11,7 @@ namespace MIPS.Models.Instructions;
 // ----------------------------------------------------------------------------
 //      All instructions in MIPS are 4-byte, or 32 bits.
 //
-// There are 3 types of instructions.
+// There are 3 (main) types of instructions.
 // - R type
 // - I type
 // - J type.
@@ -278,56 +276,12 @@ public partial struct Instruction
     }
     
     /// <summary>
-    /// Creates a new <see cref="OperationCode.Coprocessor0"/> instruction.
-    /// </summary>
-    public static Instruction Create(CoProc0RS code, Register rt, Register rd)
-    {
-        Instruction value = default;
-        value.OpCode = OperationCode.Coprocessor0;
-        value.CoProc0RS = code;
-        value.RT = rt;
-        value.RD = rd;
-
-        return value;
-    }
-    
-    /// <summary>
-    /// Creates a new <see cref="CoProc0RS.C0"/> instruction.
-    /// </summary>
-    public static Instruction Create(Co0FuncCode code)
-    {
-        Instruction value = default;
-        value.OpCode = OperationCode.Coprocessor0;
-        value.Co0FuncCode = code;
-        value.CoProc0RS = CoProc0RS.C0;
-
-        return value;
-    }
-    
-    /// <summary>
-    /// Creates a new <see cref="CoProc0RS.MFMC0"/> instruction.
-    /// </summary>
-    public static Instruction Create(MFMC0FuncCode code, Register rt = Register.Zero, byte? rd = null)
-    {
-        Instruction value = default;
-        value.OpCode = OperationCode.Coprocessor0;
-        value.MFMC0FuncCode = code;
-        value.CoProc0RS = CoProc0RS.MFMC0;
-        value.RT = rt;
-
-        // Conditionally assign
-        value.RD = rd.HasValue ? (Register)rd.Value : value.RD;
-
-        return value;
-    }
-
-    /// <summary>
     /// Casts a <see cref="uint"/> to a <see cref="Instruction"/>.
     /// </summary>
     public static unsafe explicit operator Instruction(uint value) => Unsafe.As<uint, Instruction>(ref value);
 
     /// <summary>
-    /// Casts a <see cref="uint"/> to a <see cref="Instruction"/>.
+    /// Casts a <see cref="Instruction"/> to a <see cref="uint"/>.
     /// </summary>
     public static unsafe explicit operator uint(Instruction value) => Unsafe.As<Instruction, uint>(ref value);
 }

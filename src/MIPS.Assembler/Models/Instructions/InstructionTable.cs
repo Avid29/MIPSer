@@ -60,7 +60,7 @@ public class InstructionTable
     {
         var assembly = Assembly.GetExecutingAssembly();
         var resources = assembly.GetManifestResourceNames();
-        resources = resources.Where(x => x.EndsWith("Instructions.json")).ToArray();
+        resources = [..resources.Where(x => x.EndsWith("Instructions.json"))];
 
         foreach (var resource in resources)
         {

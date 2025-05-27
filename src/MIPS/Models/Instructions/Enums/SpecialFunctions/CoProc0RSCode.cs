@@ -7,7 +7,7 @@ namespace MIPS.Models.Instructions.Enums.SpecialFunctions;
 /// <summary>
 /// 
 /// </summary>
-public enum CoProc0RS
+public enum CoProc0RSCode
 {
     /// <summary>
     /// Marks that there is no RS code.

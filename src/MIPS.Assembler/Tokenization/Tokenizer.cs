@@ -99,7 +99,7 @@ public class Tokenizer
         line += '\n';
         foreach (char c in line)
         {
-            bool status = ParseNextChar(c, line);
+            bool status = ParseNextChar(c);
 
             // This line is trashed, but we'll add it and keep going to find any further errors
             if (!status)
@@ -117,28 +117,28 @@ public class Tokenizer
         return true;
     }
 
-    private bool ParseNextChar(char c, string line)
+    private bool ParseNextChar(char c)
     {
         return _state switch
         {
-            TokenizerState.Begin => ParseFromBegin(c, line, false),
-            TokenizerState.LineBegin => ParseFromBegin(c, line, true),
-            TokenizerState.NewLineText => ParseNewLineText(c, line, false),
-            TokenizerState.NewLineTextWait => ParseNewLineText(c, line, true),
-            TokenizerState.Register => ParseFromRegister(c, line),
-            TokenizerState.Immediate => ParseFromImmediate(c, line),
-            TokenizerState.SpecialImmediate => ParseFromImmediate(c, line, true),
-            TokenizerState.HexImmediate => ParseFromImmediate(c, line, hex:true),
-            TokenizerState.Character => ParseFromString(c, line, true),
-            TokenizerState.String => ParseFromString(c, line, false),
-            TokenizerState.Directive => ParseFromDirective(c, line),
-            TokenizerState.Reference => ParseFromReference(c, line),
-            TokenizerState.Comment => ParseFromComment(c, line),
+            TokenizerState.Begin => ParseFromBegin(c, false),
+            TokenizerState.LineBegin => ParseFromBegin(c, true),
+            TokenizerState.NewLineText => ParseNewLineText(c, false),
+            TokenizerState.NewLineTextWait => ParseNewLineText(c, true),
+            TokenizerState.Register => ParseFromRegister(c),
+            TokenizerState.Immediate => ParseFromImmediate(c),
+            TokenizerState.SpecialImmediate => ParseFromImmediate(c, true),
+            TokenizerState.HexImmediate => ParseFromImmediate(c, hex:true),
+            TokenizerState.Character => ParseFromString(c, true),
+            TokenizerState.String => ParseFromString(c, false),
+            TokenizerState.Directive => ParseFromDirective(c),
+            TokenizerState.Reference => ParseFromReference(c),
+            TokenizerState.Comment => ParseFromComment(c),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>(nameof(_state)),
         };
     }
 
-    private bool ParseFromBegin(char c, string line, bool newLine)
+    private bool ParseFromBegin(char c, bool newLine)
     {
         // Handle new lines
         if (c == '\n')
@@ -194,7 +194,7 @@ public class Tokenizer
         };
     }
 
-    private bool ParseNewLineText(char c, string line, bool wait)
+    private bool ParseNewLineText(char c, bool wait)
     {
         // Enter waiting mode
         if (char.IsWhiteSpace(c) && c is not '\n')
@@ -213,7 +213,7 @@ public class Tokenizer
         if (c == '=')
         {
             _tokenType = TokenType.MacroDefinition;
-            return CompleteAndContinue(c, line);
+            return CompleteAndContinue(c);
         }
 
         // We're in waiting mode, we can't keep adding to the token.
@@ -221,7 +221,7 @@ public class Tokenizer
         if (wait || c is '\n')
         {
             _tokenType = TokenType.Instruction;
-            return CompleteAndContinue(c, line);
+            return CompleteAndContinue(c);
         }
 
         // There's a lot of characters that aren't valid here,
@@ -230,17 +230,17 @@ public class Tokenizer
         return HandleCharacter(c, null, TokenizerState.NewLineText);
     }
 
-    private bool ParseFromRegister(char c, string line)
+    private bool ParseFromRegister(char c)
     {
         if (char.IsLetterOrDigit(c))
         {
             return HandleCharacter(c, TokenType.Register, TokenizerState.Register);
         }
 
-        return CompleteAndContinue(c, line);
+        return CompleteAndContinue(c);
     }
 
-    private bool ParseFromImmediate(char c, string line, bool special = false, bool hex = false)
+    private bool ParseFromImmediate(char c, bool special = false, bool hex = false)
     {
         // We're in special state so the last value was a '0'.
         // Now if we see one of these characters we're handling a non-base 10 immediate.
@@ -261,10 +261,10 @@ public class Tokenizer
             return HandleCharacter(c, TokenType.Immediate, state);
         }
 
-        return CompleteAndContinue(c, line);
+        return CompleteAndContinue(c);
     }
 
-    private bool ParseFromString(char c, string line, bool isChar)
+    private bool ParseFromString(char c, bool isChar)
     {
         if (c is '\n')
         {
@@ -298,27 +298,27 @@ public class Tokenizer
         return HandleCharacter(c, newState: isChar ? TokenizerState.Character : TokenizerState.String);
     }
 
-    private bool ParseFromDirective(char c, string line)
+    private bool ParseFromDirective(char c)
     {
         if (char.IsLetterOrDigit(c))
         {
             return HandleCharacter(c, TokenType.Directive, TokenizerState.Directive);
         }
 
-        return CompleteAndContinue(c, line);
+        return CompleteAndContinue(c);
     }
 
-    private bool ParseFromReference(char c, string line)
+    private bool ParseFromReference(char c)
     {
         if (char.IsLetterOrDigit(c))
         {
             return HandleCharacter(c, TokenType.Reference, TokenizerState.Reference);
         }
 
-        return CompleteAndContinue(c, line);
+        return CompleteAndContinue(c);
     }
 
-    private bool ParseFromComment(char c, string line)
+    private bool ParseFromComment(char c)
     {
         if (c is '\n')
         {
@@ -345,13 +345,13 @@ public class Tokenizer
         return true;
     }
 
-    private bool CompleteAndContinue(char c, string line)
+    private bool CompleteAndContinue(char c)
     {
         var status = CompleteCacheToken();
         if (!status)
             return false;
 
-        return ParseNextChar(c, line);
+        return ParseNextChar(c);
     }
 
     private bool CompleteCacheToken(TokenizerState newState = TokenizerState.Begin)

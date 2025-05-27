@@ -48,7 +48,7 @@ public struct SymbolEntry
     /// </summary>
     public bool Global
     {
-        get => CheckFlag(SymbolFlags.Global);
+        readonly get => CheckFlag(SymbolFlags.Global);
         set => SetFlags(SymbolFlags.Global, value);
     }
 
@@ -57,7 +57,7 @@ public struct SymbolEntry
     /// </summary>
     public bool ForwardDefined 
     {
-        get => CheckFlag(SymbolFlags.ForwardDefined);
+        readonly get => CheckFlag(SymbolFlags.ForwardDefined);
         set => SetFlags(SymbolFlags.ForwardDefined, value);
     }
 
@@ -72,7 +72,7 @@ public struct SymbolEntry
     /// </summary>
     /// <param name="flag">The flag to check.</param>
     /// <returns>True if the flag is set, false otherwise.</returns>
-    private bool CheckFlag(SymbolFlags flag) => Flags.HasFlag(flag);
+    private readonly bool CheckFlag(SymbolFlags flag) => Flags.HasFlag(flag);
 
     /// <summary>
     /// Sets a set of flags on the symbol entry.

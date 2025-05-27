@@ -2,6 +2,7 @@
 
 using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -27,7 +28,7 @@ public readonly struct InstructionMetadata
         if (versions.Length is 0)
             versions = AllVersions;
 
-        MIPSVersions = new(versions);
+        MIPSVersions = [..versions];
     }
 
     /// <summary>
@@ -43,7 +44,7 @@ public readonly struct InstructionMetadata
         if (versions.Length is 0)
             versions = AllVersions;
 
-        MIPSVersions = new(versions);
+        MIPSVersions = [..versions];
     }
 
     /// <summary>
@@ -59,7 +60,7 @@ public readonly struct InstructionMetadata
         if (versions.Length is 0)
             versions = AllVersions;
         
-        MIPSVersions = new(versions);
+        MIPSVersions = [..versions];
     }
 
     /// <summary>
@@ -75,7 +76,7 @@ public readonly struct InstructionMetadata
         if (versions.Length is 0)
             versions = AllVersions;
         
-        MIPSVersions = new(versions);
+        MIPSVersions = [..versions];
     }
 
     /// <summary>
@@ -94,7 +95,7 @@ public readonly struct InstructionMetadata
         if (versions.Length is 0)
             versions = AllVersions;
         
-        MIPSVersions = new(versions);
+        MIPSVersions = [..versions];
     }
     
     /// <summary>
@@ -107,7 +108,7 @@ public readonly struct InstructionMetadata
         FunctionCode? funcCode,
         Func2Code? function2Code,
         RegImmFuncCode? registerImmediateFuncCode,
-        CoProc0RS? coProc0RS,
+        CoProc0RSCode? coProc0RS,
         Co0FuncCode? co0FuncCode,
         MFMC0FuncCode? mfmc0FuncCode,
         byte? rs,
@@ -177,7 +178,7 @@ public readonly struct InstructionMetadata
     /// </summary>
     [JsonPropertyName("coproc0_rs")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public CoProc0RS? CoProc0RS { get; }
+    public CoProc0RSCode? CoProc0RS { get; }
 
     /// <summary>
     /// Gets the instruction coprocessor0 function code.

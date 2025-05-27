@@ -2,7 +2,7 @@
 
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 
-namespace MIPS.Models.Instructions.Enums;
+namespace MIPS.Models.Instructions.Enums.Operations;
 
 /// <summary>
 /// An enum for instruction op codes.

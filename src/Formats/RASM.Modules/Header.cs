@@ -72,90 +72,90 @@ public struct Header
     /// <summary>
     /// Gets the size of the module's text section.
     /// </summary>
-    public uint TextSize
+    public readonly uint TextSize
     {
-        readonly get => _sizes[0];
+        get => _sizes[0];
         internal set => _sizes[0] = value;
     }
 
     /// <summary>
     /// Gets the size of the module's rdata section.
     /// </summary>
-    public uint ReadOnlyDataSize
+    public readonly uint ReadOnlyDataSize
     {
-        readonly get => _sizes[1];
+        get => _sizes[1];
         internal set => _sizes[1] = value;
     }
 
     /// <summary>
     /// Gets the size of the module's data section.
     /// </summary>
-    public uint DataSize
+    public readonly uint DataSize
     {
-        readonly get => _sizes[2];
+        get => _sizes[2];
         internal set => _sizes[2] = value;
     }
 
     /// <summary>
     /// Gets the size of the module's small initialized data section.
     /// </summary>
-    public uint SmallDataSize
+    public readonly uint SmallDataSize
     {
-        readonly get => _sizes[3];
+        get => _sizes[3];
         internal set => _sizes[3] = value;
     }
 
     /// <summary>
     /// Gets the size of the module's small initialized data section.
     /// </summary>
-    public uint SmallUninitializedDataSize
+    public readonly uint SmallUninitializedDataSize
     {
-        readonly get => _sizes[4];
+        get => _sizes[4];
         internal set => _sizes[4] = value;
     }
 
     /// <summary>
     /// Gets the size of the module's small initialized data section.
     /// </summary>
-    public uint UninitializedDataSize
+    public readonly uint UninitializedDataSize
     {
-        readonly get => _sizes[5];
+        get => _sizes[5];
         internal set => _sizes[5] = value;
     }
 
     /// <summary>
     /// Gets the number of entries in the module's relocation table.
     /// </summary>
-    public uint RelocationTableCount
+    public readonly uint RelocationTableCount
     {
-        readonly get => _sizes[6];
+        get => _sizes[6];
         internal set => _sizes[6] = value;
     }
 
     /// <summary>
     /// Gets the number of entries the module's reference table.
     /// </summary>
-    public uint ReferenceTableCount
+    public readonly uint ReferenceTableCount
     {
-        readonly get => _sizes[7];
+        get => _sizes[7];
         internal set => _sizes[7] = value;
     }
 
     /// <summary>
     /// Gets the number of entries in the defintions table.
     /// </summary>
-    public uint DefinitionsTableCount
+    public readonly uint DefinitionsTableCount
     {
-        readonly get => _sizes[8];
+        get => _sizes[8];
         internal set => _sizes[8] = value;
     }
 
     /// <summary>
     /// Gets the size of the string table.
     /// </summary>
-    public uint StringTableSize
+    public readonly uint StringTableSize
     {
-        readonly get => _sizes[9];
+        get => _sizes[9];
         internal set => _sizes[9] = value;
     }
 

@@ -51,7 +51,7 @@ public struct Address
     /// <summary>
     /// Gets the default external address.
     /// </summary>
-    public static Address External => new Address(0, Section.External);
+    public static Address External => new(0, Section.External);
 
     /// <inheritdoc/>
     public static Address operator +(Address address, long offset) => new(address.Value + offset, address.Section);

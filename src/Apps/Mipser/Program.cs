@@ -61,7 +61,7 @@ public class Program
 
         if (!assembler.Failed)
         {
-            var module = assembler.CompleteModule<RasmModule>(outFile);
+            assembler.CompleteModule<RasmModule>(outFile);
         }
 
         Console.WriteLine();

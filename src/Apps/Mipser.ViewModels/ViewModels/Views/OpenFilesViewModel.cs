@@ -28,7 +28,7 @@ public class OpenFilesViewModel : ObservableRecipient
         _messenger = messenger;
         _fileService = filesService;
 
-        OpenFiles = new ObservableCollection<BindableFile>();
+        OpenFiles = [];
         IsActive = true;
     }
 

@@ -3,7 +3,7 @@
 namespace MIPS.Models.Instructions.Enums.SpecialFunctions;
 
 /// <summary>
-/// An enum for <see cref="CoProc0RS.MFMC0"/> instruction function codes.
+/// An enum for <see cref="CoProc0RSCode.MFMC0"/> instruction function codes.
 /// </summary>
 public enum MFMC0FuncCode
 {

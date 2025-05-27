@@ -24,7 +24,7 @@ public struct CauseRegister
     /// </summary>
     public byte PendingInterupts
     {
-        get => (byte)UintMasking.GetShiftMask(_cause, PENDING_INTERUPTS_SIZE, PENDING_INTERUPTS_OFFSET);
+        readonly get => (byte)UintMasking.GetShiftMask(_cause, PENDING_INTERUPTS_SIZE, PENDING_INTERUPTS_OFFSET);
         set => UintMasking.SetShiftMask(ref _cause, PENDING_INTERUPTS_SIZE, PENDING_INTERUPTS_OFFSET, value);
     }
     
@@ -33,7 +33,7 @@ public struct CauseRegister
     /// </summary>
     public byte CoProcessorException
     {
-        get => (byte)UintMasking.GetShiftMask(_cause, COPROCESSOR_EXCEPTION_SIZE, COPROCESSOR_EXCEPTION_OFFSET);
+        readonly get => (byte)UintMasking.GetShiftMask(_cause, COPROCESSOR_EXCEPTION_SIZE, COPROCESSOR_EXCEPTION_OFFSET);
         set => UintMasking.SetShiftMask(ref _cause, COPROCESSOR_EXCEPTION_SIZE, COPROCESSOR_EXCEPTION_OFFSET, value);
     }
 
@@ -42,7 +42,7 @@ public struct CauseRegister
     /// </summary>
     public bool IsBranchDelayed
     {
-        get => UintMasking.CheckBit(_cause, BRANCH_DELAY_BIT);
+        readonly get => UintMasking.CheckBit(_cause, BRANCH_DELAY_BIT);
         set => UintMasking.SetBit(ref _cause, BRANCH_DELAY_BIT, value);
     }
 }

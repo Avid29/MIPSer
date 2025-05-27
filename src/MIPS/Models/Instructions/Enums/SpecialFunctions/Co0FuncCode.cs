@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2025
 
+using MIPS.Models.Instructions.Enums.Operations;
+
 namespace MIPS.Models.Instructions.Enums.SpecialFunctions;
 
 /// <summary>

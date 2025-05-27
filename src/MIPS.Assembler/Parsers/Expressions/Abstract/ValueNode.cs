@@ -10,10 +10,7 @@ public abstract class ValueNode<T> : ExpNode
     /// <summary>
     /// Initializes a new instance of the <see cref="ValueNode{T}"/> class.
     /// </summary>
-    protected ValueNode(T value)
-    {
-        Value = value;
-    }
+    protected ValueNode(T value) => Value = value;
 
     /// <summary>
     /// Gets the value in the <see cref="ValueNode{T}"/>.
