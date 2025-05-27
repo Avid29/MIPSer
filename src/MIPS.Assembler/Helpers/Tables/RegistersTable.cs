@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Logging;
+using MIPS.Assembler.Logging.Enum;
 using MIPS.Models.Instructions.Enums.Registers;
 using System.Collections.Generic;
 
@@ -15,11 +17,47 @@ public static class RegistersTable
     /// </summary>
     /// <param name="name">The name of the register.</param>
     /// <param name="register">The register enum value.</param>
+    /// <param name="set">Which register set table to reference.</param>
+    /// <param name="logger">Logger </param>
     /// <returns>Whether or not an register exists by that name</returns>
-    public static bool TryGetRegister(string name, out Register register)
-        => _registerTable.TryGetValue(name, out register);
+    public static bool TryGetRegister(string name, out Register register, out RegisterSet set, ILogger? logger = null)
+    {
+        register = Register.Zero;
+        set = RegisterSet.Numbered;
 
-    private static readonly Dictionary<string, Register> _registerTable = new()
+        // Check for float register
+        if (name[0] == 'f' && byte.TryParse(name[1..], out _))
+        {
+            // Fall-through to numerical register with 'f' removed..
+            set = RegisterSet.FloatingPoints;
+            name = name[1..];
+        }
+
+        // Check for numberical register
+        if (byte.TryParse(name[0..], out var num))
+        {
+            // Lowest register enum to highest register enum
+            if (num is < (byte)Register.Zero or > (byte)Register.ReturnAddress)
+            {
+                logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"No register of number {num} exists");
+                return false;
+            }
+
+            // Cast num to register
+            register = (Register)num;
+            return true;
+        }
+
+        if (_gpRegisterTable.TryGetValue(name, out register))
+        {
+            set = RegisterSet.GeneralPurpose;
+            return true;
+        }
+
+        return false;
+    }
+
+    private static readonly Dictionary<string, Register> _gpRegisterTable = new()
     {
         { "zero", Register.Zero },
 

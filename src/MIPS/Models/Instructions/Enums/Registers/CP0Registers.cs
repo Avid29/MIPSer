@@ -3,7 +3,7 @@
 namespace MIPS.Models.Instructions.Enums.Registers;
 
 /// <summary>
-/// An enum for co-processor 0 registers.
+/// An enum for coprocessor0 registers.
 /// </summary>
 public enum CP0Registers
 {

@@ -1,0 +1,386 @@
+﻿[
+  {
+    "name": "add.S",
+    "op_code": 17,
+    "float_func_code": 0,
+    "float_format": 16,
+    "args": [ 11, 9, 10 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "add.D",
+    "op_code": 17,
+    "float_func_code": 0,
+    "float_format": 17,
+    "args": [ 11, 9, 10 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "add.PS",
+    "op_code": 17,
+    "float_func_code": 0,
+    "float_format": 22,
+    "args": [ 11, 9, 10 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "sub.S",
+    "op_code": 17,
+    "float_func_code": 1,
+    "float_format": 16,
+    "args": [ 11, 9, 10 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "sub.D",
+    "op_code": 17,
+    "float_func_code": 1,
+    "float_format": 17,
+    "args": [ 11, 9, 10 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "sub.PS",
+    "op_code": 17,
+    "float_func_code": 1,
+    "float_format": 22,
+    "args": [ 11, 9, 10 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "mul.S",
+    "op_code": 17,
+    "float_func_code": 2,
+    "float_format": 16,
+    "args": [ 11, 9, 10 ],
+    "versions": [ 1, 2, 3, 4, 5 ]
+  },
+  {
+    "name": "mul.D",
+    "op_code": 17,
+    "float_func_code": 2,
+    "float_format": 17,
+    "args": [ 11, 9, 10 ],
+    "versions": [ 1, 2, 3, 4, 5 ]
+  },
+  {
+    "name": "mul.PS",
+    "op_code": 17,
+    "float_func_code": 2,
+    "float_format": 22,
+    "args": [ 11, 9, 10 ],
+    "versions": [ 3, 4, 5 ]
+  },
+  {
+    "name": "div.S",
+    "op_code": 17,
+    "float_func_code": 3,
+    "float_format": 16,
+    "args": [ 11, 9, 10 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "div.D",
+    "op_code": 17,
+    "float_func_code": 3,
+    "float_format": 17,
+    "args": [ 11, 9, 10 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "sqrt.S",
+    "op_code": 17,
+    "float_func_code": 4,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "sqrt.D",
+    "op_code": 17,
+    "float_func_code": 4,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "abs.S",
+    "op_code": 17,
+    "float_func_code": 5,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "abs.D",
+    "op_code": 17,
+    "float_func_code": 5,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "abs.PS",
+    "op_code": 17,
+    "float_func_code": 5,
+    "float_format": 22,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "mov.S",
+    "op_code": 17,
+    "float_func_code": 6,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "mov.D",
+    "op_code": 17,
+    "float_func_code": 6,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "mov.PS",
+    "op_code": 17,
+    "float_func_code": 6,
+    "float_format": 22,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "neg.S",
+    "op_code": 17,
+    "float_func_code": 7,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "neg.D",
+    "op_code": 17,
+    "float_func_code": 7,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "neg.PS",
+    "op_code": 17,
+    "float_func_code": 7,
+    "float_format": 22,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5 ]
+  },
+  {
+    "name": "round.L.S",
+    "op_code": 17,
+    "float_func_code": 8,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "round.L.D",
+    "op_code": 17,
+    "float_func_code": 8,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "trunc.L.S",
+    "op_code": 17,
+    "float_func_code": 9,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "trunc.L.D",
+    "op_code": 17,
+    "float_func_code": 9,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "ceil.L.S",
+    "op_code": 17,
+    "float_func_code": 10,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "ceil.L.D",
+    "op_code": 17,
+    "float_func_code": 10,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "floor.L.S",
+    "op_code": 17,
+    "float_func_code": 11,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "floor.L.D",
+    "op_code": 17,
+    "float_func_code": 11,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "round.W.S",
+    "op_code": 17,
+    "float_func_code": 12,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "round.W.D",
+    "op_code": 17,
+    "float_func_code": 12,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "trunc.W.S",
+    "op_code": 17,
+    "float_func_code": 13,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "trunc.W.D",
+    "op_code": 17,
+    "float_func_code": 13,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "ceil.W.S",
+    "op_code": 17,
+    "float_func_code": 14,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "ceil.W.D",
+    "op_code": 17,
+    "float_func_code": 14,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "floor.W.S",
+    "op_code": 17,
+    "float_func_code": 15,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "floor.W.D",
+    "op_code": 17,
+    "float_func_code": 15,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "cvt.S.D",
+    "op_code": 17,
+    "float_func_code": 32,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "cvt.S.W",
+    "op_code": 17,
+    "float_func_code": 32,
+    "float_format": 20,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "cvt.S.L",
+    "op_code": 17,
+    "float_func_code": 32,
+    "float_format": 21,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "cvt.D.S",
+    "op_code": 17,
+    "float_func_code": 33,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "cvt.D.W",
+    "op_code": 17,
+    "float_func_code": 33,
+    "float_format": 20,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "cvt.D.L",
+    "op_code": 17,
+    "float_func_code": 33,
+    "float_format": 21,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "cvt.W.S",
+    "op_code": 17,
+    "float_func_code": 36,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "cvt.W.D",
+    "op_code": 17,
+    "float_func_code": 36,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 1, 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "cvt.L.S",
+    "op_code": 17,
+    "float_func_code": 37,
+    "float_format": 16,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  },
+  {
+    "name": "cvt.L.D",
+    "op_code": 17,
+    "float_func_code": 37,
+    "float_format": 17,
+    "args": [ 11, 9 ],
+    "versions": [ 2, 3, 4, 5, 6 ]
+  }
+]

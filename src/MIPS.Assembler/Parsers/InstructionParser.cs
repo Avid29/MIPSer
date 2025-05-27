@@ -33,8 +33,6 @@ public struct InstructionParser
 
     private InstructionMetadata _meta;
 
-    private OperationCode _opCode;
-    private FunctionCode? _funcCode;
     private Register _rs;
     private Register _rt;
     private Register _rd;
@@ -62,8 +60,6 @@ public struct InstructionParser
         _instructionTable = context?.InstructionTable ?? null!; 
         _logger = logger;
         _meta = default;
-        _opCode = default;
-        _funcCode = default;
         _rs = default;
         _rt = default;
         _rd = default;
@@ -149,17 +145,12 @@ public struct InstructionParser
         // If it's not a pseudo instruction, there should be an OpCode
         Guard.IsNotNull(_meta.OpCode);
 
-        // Assign op code and function code
-        _opCode = _meta.OpCode.Value;
-        _funcCode = _meta.FuncCode;
-
         // Create the instruction from its components based on the instruction type
-        // NOTE: Null suppression allowed here because the type guarentees value presence
         Instruction instruction = _meta.OpCode switch
         {
             // R Type
             OperationCode.Special => _meta.FuncCode.HasValue ?                              // Special
-                Instruction.Create(_funcCode!.Value, _rs, _rt, _rd, _shift) :
+                Instruction.Create(_meta.FuncCode.Value, _rs, _rt, _rd, _shift) :
                 _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.FuncCode)} value."),
             OperationCode.Special2 => _meta.Function2Code.HasValue ?                        // Special 2
                 Instruction.Create(_meta.Function2Code.Value, _rs, _rt, _rd, _shift) :
@@ -170,7 +161,7 @@ public struct InstructionParser
             
             // J Type
             OperationCode.Jump or
-            OperationCode.JumpAndLink => Instruction.Create(_opCode, _address),
+            OperationCode.JumpAndLink => Instruction.Create(_meta.OpCode.Value, _address),
 
             // Coprocessor0 instructions
             OperationCode.Coprocessor0 when _meta.Co0FuncCode.HasValue                      // C0
@@ -181,15 +172,20 @@ public struct InstructionParser
                 CoProc0Instruction.Create(_meta.CoProc0RS.Value, _rt, _rd) :
                 _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc0RS)}, {nameof(_meta.Co0FuncCode)}, or {nameof(_meta.Mfmc0FuncCode)} value."),
             
+            // FloatingPoint instructions
+            OperationCode.Coprocessor1 => _meta.FloatFuncCode.HasValue && _meta.FloatFormat.HasValue ?
+                FloatInstruction.Create(_meta.FloatFuncCode.Value, _meta.FloatFormat.Value, (FloatRegister)_rs, (FloatRegister)_rd, (FloatRegister)_rt) :
+                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.FloatFuncCode)} and {nameof(_meta.FloatFormat)} value."),
+
             // I Type
             OperationCode.RegisterImmediate when _meta.RegisterImmediateFuncCode is         // Register Immediate Branching
                 (>= RegImmFuncCode.BranchOnLessThanZero and <= RegImmFuncCode.BranchOnGreaterThanZeroLikely) or
                 (>= RegImmFuncCode.BranchOnLessThanZeroLikelyAndLink and <= RegImmFuncCode.BranchOnLessThanZeroLikelyAndLink)
-                => Instruction.Create(_meta.RegisterImmediateFuncCode!.Value, _rs, _immediate),
+                => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, _immediate),
             OperationCode.RegisterImmediate => _meta.RegisterImmediateFuncCode.HasValue ?   // Register Immediate
                 Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, (short)_immediate) :
                 _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.RegisterImmediateFuncCode)} value."),
-            _ => Instruction.Create(_opCode, _rs, _rt, (short)_immediate),                  // Remaining I Type instructions
+            _ => Instruction.Create(_meta.OpCode.Value, _rs, _rt, (short)_immediate),                  // Remaining I Type instructions
         };
 
         // Check for write back to zero register
@@ -210,7 +206,7 @@ public struct InstructionParser
 
         return type switch
         {
-            Argument.RS or Argument.RT or Argument.RD =>TryParseRegisterArg(arg[0], type),
+            (>= Argument.RS and <= Argument.RD) or (>= Argument.FS and <= Argument.FD) =>TryParseRegisterArg(arg[0], type),
             Argument.Shift or Argument.Immediate or Argument.FullImmediate or Argument.Offset or Argument.Address => TryParseExpressionArg(arg, type, out reference),
             Argument.AddressOffset => TryParseAddressOffsetArg(arg, out reference),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument of type '{type}' is not within parsable type range."),
@@ -224,8 +220,10 @@ public struct InstructionParser
     {
         // Get reference to selected register argument
         ref Register reg = ref _rs;
+        RegisterSet set = RegisterSet.GeneralPurpose;
         switch (target)
         {
+            // GPU Registers
             case Argument.RS:
                 reg = ref _rs;
                 break;
@@ -236,13 +234,27 @@ public struct InstructionParser
                 reg = ref _rd;
                 break;
 
+            // Float Registers
+            case Argument.FS:
+                reg = ref _rs;
+                set = RegisterSet.FloatingPoints;
+                break;
+            case Argument.FT:
+                reg = ref _rt;
+                set = RegisterSet.FloatingPoints;
+                break;
+            case Argument.FD:
+                reg = ref _rd;
+                set = RegisterSet.FloatingPoints;
+                break;
+
             // Invalid target type
             default:
                 // TODO: improve message
                 return ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument of type '{target}' attempted to parse as a register.");
         }
 
-        if (!TryParseRegister(arg, out var register))
+        if (!TryParseRegister(arg, out var register, set))
         {
             // Register could not be parsed.
             // Error already logged.
@@ -414,7 +426,7 @@ public struct InstructionParser
         return true;
     }
 
-    private readonly bool TryParseRegister(Token arg, out Register register)
+    private readonly bool TryParseRegister(Token arg, out Register register, RegisterSet set = RegisterSet.GeneralPurpose)
     {
         register = Register.Zero;
 
@@ -426,26 +438,18 @@ public struct InstructionParser
             return false;
         }
 
-        // Check for numberical register
-        if (byte.TryParse(regStr[1..], out var num))
-        {
-            // Lowest register enum to highest register enum
-            if (num is < (byte)Register.Zero or > (byte)Register.ReturnAddress)
-            {
-                _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"No register of number {num} exists");
-                return false;
-            }
-
-            // Cast num to register
-            register = (Register)num;
-            return true;
-        }
-
         // Get named register from table
-        if (!RegistersTable.TryGetRegister(regStr[1..], out register))
+        if (!RegistersTable.TryGetRegister(regStr[1..], out register, out RegisterSet parsedSet))
         {
             // Register does not exist in table
             _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"No register '{arg}' exists.");
+            return false;
+        }
+
+        // Match register set
+        if (parsedSet != RegisterSet.Numbered && parsedSet != set)
+        {
+            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"Register '{arg}' is not parse of register set '{set}'.");
             return false;
         }
 

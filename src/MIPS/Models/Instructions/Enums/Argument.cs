@@ -51,4 +51,19 @@ public enum Argument
     /// A 32 bit immediate value
     /// </summary>
     FullImmediate,
+
+    /// <summary>
+    /// The fs register.
+    /// </summary>
+    FS,
+
+    /// <summary>
+    /// The ft register.
+    /// </summary>
+    FT,
+
+    /// <summary>
+    /// The fd register.
+    /// </summary>
+    FD,
 }

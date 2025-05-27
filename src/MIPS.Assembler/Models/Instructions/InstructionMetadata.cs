@@ -4,6 +4,7 @@ using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
+using MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -111,6 +112,8 @@ public readonly struct InstructionMetadata
         CoProc0RSCode? coProc0RS,
         Co0FuncCode? co0FuncCode,
         MFMC0FuncCode? mfmc0FuncCode,
+        FloatFuncCode? floatFuncCode,
+        FloatFormat? floatFormat,
         byte? rs,
         byte? rt,
         byte? rd,
@@ -128,6 +131,8 @@ public readonly struct InstructionMetadata
         CoProc0RS = coProc0RS;
         Co0FuncCode = co0FuncCode;
         Mfmc0FuncCode = mfmc0FuncCode;
+        FloatFuncCode = floatFuncCode;
+        FloatFormat = floatFormat;
         RS = rs;
         RT = rt;
         RD = rd;
@@ -200,6 +205,20 @@ public readonly struct InstructionMetadata
     [JsonPropertyName("mfmc0_func_code")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public MFMC0FuncCode? Mfmc0FuncCode { get; }
+
+    /// <summary>
+    /// Gets the instruction float function code.
+    /// </summary>
+    [JsonPropertyName("float_func_code")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public FloatFuncCode? FloatFuncCode { get; }
+
+    /// <summary>
+    /// Gets the instruction float function code.
+    /// </summary>
+    [JsonPropertyName("float_format")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public FloatFormat? FloatFormat { get; }
 
     /// <summary>
     /// Gets the provided RS value.

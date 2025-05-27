@@ -3,6 +3,7 @@
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
+using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 using System.Runtime.CompilerServices;
 
@@ -11,23 +12,76 @@ namespace MIPS.Models.Instructions;
 /// <summary>
 /// A struct representing an instruction utilizing the floating-point coprocessor.
 /// </summary>
-public partial struct FloatInstruction
+public struct FloatInstruction
 {
-    private uint _inst;
+    private Instruction _inst;
     
     /// <summary>
     /// Creates a new floating-point coprocessor instruction.
     /// </summary>
-    public static FloatInstruction Create(FloatFuncCode funcCode, FloatFormat format, FloatRegister ft, FloatRegister fs, FloatRegister fd)
+    public static FloatInstruction Create(FloatFuncCode funcCode, FloatFormat format, FloatRegister fs, FloatRegister fd, FloatRegister ft = FloatRegister.F0)
     {
         FloatInstruction value = default;
         value.OpCode = OperationCode.Coprocessor1;
         value.FloatFuncCode = funcCode;
         value.Format = format;
-        value.FT = ft;
         value.FS = fs;
         value.FD = fd;
+        value.FT = ft;
         return value;
+    }
+    /// <summary>
+    /// Gets the instruction's operation code.
+    /// </summary>
+    public OperationCode OpCode
+    { 
+        readonly get => _inst.OpCode;
+        private set => _inst.OpCode = value;
+    }
+
+    /// <summary>
+    /// Gets the instruction's float function code.
+    /// </summary>
+    public FloatFuncCode FloatFuncCode
+    {
+        readonly get => (FloatFuncCode)_inst.FuncCode;
+        private set => _inst.FuncCode = (FunctionCode)value;
+    }
+
+    /// <summary>
+    /// Gets the instruction's format.
+    /// </summary>
+    public FloatFormat Format
+    {
+        readonly get => (FloatFormat)_inst.RS;
+        private set => _inst.RS = (Register)value;
+    }
+
+    /// <summary>
+    /// Gets the instruction's FT Register.
+    /// </summary>
+    public FloatRegister FT
+    {
+        readonly get => (FloatRegister)_inst.RT;
+        private set => _inst.RT = (Register)value;
+    }
+
+    /// <summary>
+    /// Gets the instruction's FS Register.
+    /// </summary>
+    public FloatRegister FS
+    {
+        readonly get => (FloatRegister)_inst.RT;
+        private set => _inst.RT = (Register)value;
+    }
+
+    /// <summary>
+    /// Gets the instruction's FD Register.
+    /// </summary>
+    public FloatRegister FD
+    {
+        readonly get => (FloatRegister)_inst.ShiftAmount;
+        private set => _inst.ShiftAmount = (byte)value;
     }
     
     /// <summary>

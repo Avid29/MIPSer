@@ -12,6 +12,7 @@ using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
+using MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 
 namespace MIPS.Assembler.Tests.Parsers;
 
@@ -28,6 +29,7 @@ public class InstructionParserTests
     private const string JumpExpression = "j 10*10";
     private const string DI = "di $t1";
     private const string EI = "ei $t0";
+    private const string CVT_S_D = "cvt.S.D $f4, $f8";
 
     private const string LoadImmediate = "li $t0, 0x10001";
 
@@ -102,6 +104,13 @@ public class InstructionParserTests
     {
         Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.EnableInterupts, Register.Temporary0, 12);
         RunTest(EI, new ParsedInstruction(expected));
+    }
+
+    [TestMethod(CVT_S_D)]
+    public void CVT_S_DTest()
+    {
+        Instruction expected = FloatInstruction.Create(FloatFuncCode.ConvertToSingle, FloatFormat.Double, FloatRegister.F8, FloatRegister.F4);
+        RunTest(CVT_S_D, new ParsedInstruction(expected));
     }
     
     [TestMethod(LoadImmediate)]
