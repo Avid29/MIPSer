@@ -8,7 +8,7 @@ namespace MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 /// <summary>
 /// An enum for <see cref="OperationCode.Coprocessor1"/> instruction rs field function codes.
 /// </summary>
-public enum FloatProcRSCode
+public enum CoProc1RSCode
 {
     /// <summary>
     /// Marks that there is no RS code.

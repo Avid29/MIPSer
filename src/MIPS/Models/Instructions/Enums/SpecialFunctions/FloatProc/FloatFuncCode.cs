@@ -27,6 +27,7 @@ public enum FloatFuncCode
     Truncate_W = 0x0d,
     Ceiling_W = 0x0e,
     Floor_W = 0x0f,
+    Reciprical = 0x15,
 
     ConvertToSingle = 0x20,
     ConvertToDouble = 0x21,

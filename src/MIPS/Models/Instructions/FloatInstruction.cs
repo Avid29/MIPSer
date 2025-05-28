@@ -94,6 +94,20 @@ public struct FloatInstruction
         value.FT = ft;
         return value;
     }
+    
+    /// <summary>
+    /// Creates a new floating-point coprocessor instruction.
+    /// </summary>
+    public static FloatInstruction Create(CoProc1RSCode code, Register rt, FloatRegister fs)
+    {
+        FloatInstruction value = default;
+        value.OpCode = OperationCode.Coprocessor1;
+        value.CoProc1RSCode = code;
+        value.RT = rt;
+        value.FS = fs;
+        return value;
+    }
+
     /// <summary>
     /// Gets the instruction's operation code.
     /// </summary>
@@ -115,6 +129,15 @@ public struct FloatInstruction
     /// <summary>
     /// Gets the instruction's format.
     /// </summary>
+    public CoProc1RSCode CoProc1RSCode
+    {
+        readonly get => (CoProc1RSCode)_inst.RS;
+        private set => _inst.RS = (Register)value;
+    }
+
+    /// <summary>
+    /// Gets the instruction's format.
+    /// </summary>
     public FloatFormat Format
     {
         readonly get => (FloatFormat)_inst.RS;
@@ -128,6 +151,15 @@ public struct FloatInstruction
     {
         readonly get => (FloatRegister)_inst.RT;
         private set => _inst.RT = (Register)value;
+    }
+
+    /// <summary>
+    /// Gets the instruction's RT Register.
+    /// </summary>
+    public Register RT
+    {
+        readonly get => _inst.RT;
+        private set => _inst.RT = value;
     }
 
     /// <summary>

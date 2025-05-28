@@ -1,8 +1,10 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tests.Live.Enums;
 using MIPS.Assembler.Tokenization;
+using MIPS.Models.Instructions.Enums;
 using RASM.Modules;
 using RASM.Modules.Config;
 using System.Text;
@@ -92,25 +94,34 @@ public class Program()
     {
         line = line.Trim('>');
         line = line.Trim();
-        var modeArgs = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var cmdArgs = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
-        switch (modeArgs[0])
+        switch (cmdArgs[0])
         {
             case "mode":
-                if (modeArgs.Length != 2)
+                if (cmdArgs.Length != 2)
                 {
-                    Console.WriteLine("Mode command does ");
+                    Console.WriteLine("Mode command requires exactly 1 argument 'mode'.");
                     return;
                 }
 
-                SwapMode(modeArgs[1]);
+                SwapMode(cmdArgs[1]);
+                break;
+            case "dump":
+                if (cmdArgs.Length != 2)
+                {
+                    Console.WriteLine("Dump command requires exactly 1 argument 'table'.");
+                    return;
+                }
+
+                Dump(cmdArgs[1]);
                 break;
         }
     }
 
     void SwapMode(string mode)
     {
-        mode = mode.ToLower().Trim();
+        mode = mode.Trim().ToLower();
         TestMode? newMode = mode switch
         {
             "line" => TestMode.Line,
@@ -126,5 +137,20 @@ public class Program()
 
         _mode = newMode.Value;
         Console.WriteLine($"Mode swapped to {_mode} mode");
+    }
+
+    void Dump(string tableArg)
+    {
+        tableArg = tableArg.Trim().ToLower();
+        switch (tableArg)
+        {
+            case "instructions":
+                var instructions = new InstructionTable(MipsVersion.MipsIII).GetInstructions().OrderBy(x => x.Name);
+                foreach (var instr in instructions)
+                {
+                    Console.WriteLine(instr.UsagePattern);
+                }
+                break;
+        }
     }
 }

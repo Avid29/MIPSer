@@ -8,7 +8,7 @@ using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
-using MIPS.Extensions.MIPS.Models.Instructions;
+using MIPS.Extensions;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
@@ -173,9 +173,11 @@ public struct InstructionParser
                 _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc0RS)}, {nameof(_meta.Co0FuncCode)}, or {nameof(_meta.Mfmc0FuncCode)} value."),
             
             // FloatingPoint instructions
-            OperationCode.Coprocessor1 => _meta.FloatFuncCode.HasValue && _meta.FloatFormat.HasValue ?
-                FloatInstruction.Create(_meta.FloatFuncCode.Value, _meta.FloatFormat.Value, (FloatRegister)_rs, (FloatRegister)_rd, (FloatRegister)_rt) :
-                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.FloatFuncCode)} and {nameof(_meta.FloatFormat)} value."),
+            OperationCode.Coprocessor1 when _meta.FloatFuncCode.HasValue && _meta.FloatFormat.HasValue  // Floating-Point
+                => FloatInstruction.Create(_meta.FloatFuncCode.Value, _meta.FloatFormat.Value, (FloatRegister)_rs, (FloatRegister)_rd, (FloatRegister)_rt),
+            OperationCode.Coprocessor1 => _meta.CoProc1RS.HasValue ?                                    // CoProc1
+                FloatInstruction.Create(_meta.CoProc1RS.Value, _rt, (FloatRegister)_rs) :
+                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc1RS)} value or {nameof(_meta.FloatFuncCode)} and {nameof(_meta.FloatFormat)} values."),
 
             // I Type
             OperationCode.RegisterImmediate when _meta.RegisterImmediateFuncCode is         // Register Immediate Branching
@@ -185,7 +187,7 @@ public struct InstructionParser
             OperationCode.RegisterImmediate => _meta.RegisterImmediateFuncCode.HasValue ?   // Register Immediate
                 Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, (short)_immediate) :
                 _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.RegisterImmediateFuncCode)} value."),
-            _ => Instruction.Create(_meta.OpCode.Value, _rs, _rt, (short)_immediate),                  // Remaining I Type instructions
+            _ => Instruction.Create(_meta.OpCode.Value, _rs, _rt, (short)_immediate),   // Remaining I Type instructions
         };
 
         // Check for write back to zero register

@@ -66,6 +66,10 @@ public readonly struct PseudoInstruction
             [
                 Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Zero, Register.Zero, 1),
             ],
+            PseudoOp.UnconditionalBranch =>
+            [
+                Instruction.Create(OperationCode.BranchOnEquals, Register.Zero, Register.Zero, (short)Immediate),
+            ],
             PseudoOp.BranchOnLessThan =>
             [
                 Instruction.Create(FunctionCode.SetLessThan, RS, RT, Register.AssemblerTemporary),

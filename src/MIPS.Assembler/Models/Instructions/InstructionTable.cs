@@ -56,6 +56,8 @@ public class InstructionTable
         return false;
     }
 
+    internal InstructionMetadata[] GetInstructions() => [.._instructionTable.Values];
+
     private void Initialize()
     {
         var assembly = Assembly.GetExecutingAssembly();

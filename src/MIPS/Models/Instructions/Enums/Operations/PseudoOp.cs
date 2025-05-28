@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2024
+﻿// Adam Dernis 2025
 
 namespace MIPS.Models.Instructions.Enums.Operations;
 
@@ -11,6 +11,7 @@ public enum PseudoOp
 
     NoOperation,
     SuperScalarNoOperation,
+    UnconditionalBranch,
     BranchAndLink,
     BranchOnLessThan,
     LoadImmediate,

@@ -1,11 +1,14 @@
 ﻿// Adam Dernis 2024
 
+using CommunityToolkit.Diagnostics;
+using MIPS.Extensions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace MIPS.Assembler.Models.Instructions;
@@ -110,6 +113,7 @@ public readonly struct InstructionMetadata
         Func2Code? function2Code,
         RegImmFuncCode? registerImmediateFuncCode,
         CoProc0RSCode? coProc0RS,
+        CoProc1RSCode? coProc1RS,
         Co0FuncCode? co0FuncCode,
         MFMC0FuncCode? mfmc0FuncCode,
         FloatFuncCode? floatFuncCode,
@@ -129,6 +133,7 @@ public readonly struct InstructionMetadata
         Function2Code = function2Code;
         RegisterImmediateFuncCode = registerImmediateFuncCode;
         CoProc0RS = coProc0RS;
+        CoProc1RS = coProc1RS;
         Co0FuncCode = co0FuncCode;
         Mfmc0FuncCode = mfmc0FuncCode;
         FloatFuncCode = floatFuncCode;
@@ -191,6 +196,13 @@ public readonly struct InstructionMetadata
     [JsonPropertyName("coproc0_rs")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public CoProc0RSCode? CoProc0RS { get; }
+    
+    /// <summary>
+    /// Gets the instruction rs function code for a float instruction.
+    /// </summary>
+    [JsonPropertyName("coproc1_rs")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public CoProc1RSCode? CoProc1RS { get; }
 
     /// <summary>
     /// Gets the instruction coprocessor0 function code.
@@ -284,4 +296,26 @@ public readonly struct InstructionMetadata
     [JsonPropertyName("obsolete")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool Obsolete { get; }
+
+    /// <summary>
+    /// Gets a string showing the usage pattern for the instruction.
+    /// </summary>
+    public string UsagePattern
+    {
+        get
+        {
+            StringBuilder pattern = new($"{Name} ");
+            for (int i = 0; i < ArgumentPattern.Length; i++)
+            {
+                pattern.Append(ArgumentPattern[i].GetArgPatternString());
+
+                if (i < ArgumentPattern.Length - 1)
+                {
+                    pattern.Append(", ");
+                }
+            }
+
+            return $"{pattern}";
+        }
+    }
 }

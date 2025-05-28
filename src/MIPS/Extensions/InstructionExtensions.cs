@@ -6,7 +6,7 @@ using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 
-namespace MIPS.Extensions.MIPS.Models.Instructions;
+namespace MIPS.Extensions;
 
 /// <summary>
 /// A static class containing instruction extensions.
@@ -20,7 +20,7 @@ public static class InstructionExtensions
     /// <returns>Which register the instruction writes back to.</returns>
     public static Register? GetWritebackRegister(this Instruction instruction)
     {
-        var arg = GetWritebackArgument(instruction);
+        var arg = instruction.GetWritebackArgument();
 
         return arg switch
         {

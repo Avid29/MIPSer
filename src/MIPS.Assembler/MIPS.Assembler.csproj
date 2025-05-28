@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Instructions\CoProcessor1Instructions.json" />
     <EmbeddedResource Include="Resources\Instructions\FloatingPointInstructions.json" />
     <EmbeddedResource Include="Resources\Instructions\CoProcessor0Instructions.json" />
     <EmbeddedResource Include="Resources\Instructions\ITypeInstructions.json" />
