@@ -13,7 +13,7 @@ namespace MIPS.Models.Instructions;
 
 //                               MIPS Primary Instructions Layout
 // ----------------------------------------------------------------------------
-//      All instructions in MIPS are 4-byte, or 32 bits.
+//      All instructions in MIPS are 4-bytes (32 bits).
 //
 // There are 3 primary types of instructions.
 // - R type
@@ -43,7 +43,7 @@ namespace MIPS.Models.Instructions;
 //      immediate shift instruction again being the exception.
 //
 // RD Register:
-//      RD is the write back register of the value calculated by the instruction.
+//      RD is the writeback register of the value calculated by the instruction.
 //
 // Shift Amount:
 //      Shift amount is only used for immediate shift instructions. It specifies the
@@ -63,7 +63,9 @@ namespace MIPS.Models.Instructions;
 // ------- + ------ + ----- + ----- + ----- + ----- + ------ +
 // Meaning | R Type |   $s0 |   $s1 |   $t0 |   N/A |    add |
 // ------- + ------ + ----- + ----- + ----- + ----- + ------ +
-//
+// Binary  |    00000010 00010001 01000000 00100000 |
+// Hex     |                            02 11 40 20 |
+// ------- + -------------------------------------- +
 //
 // > sll $t0, $s0, 3
 //         |  Oper  |  $rs  |  $rt  |  $rd  | Shift |  Func  |
@@ -74,6 +76,9 @@ namespace MIPS.Models.Instructions;
 // ------- + ------ + ----- + ----- + ----- + ----- + ------ +
 // Meaning | R Type |   N/A |   $s0 |   $t0 |     3 |    sll |
 // ------- + ------ + ----- + ----- + ----- + ----- + ------ +
+// Binary  |    00000000 00010000 01000000 11000000 |
+// Hex     |                            00 10 40 c0 |
+// ------- + -------------------------------------- +
 //
 // 
 //                            I Type Instructions Summary
@@ -108,18 +113,23 @@ namespace MIPS.Models.Instructions;
 // Decimal |      8 |    16 |     8 |               20 |
 // ------- + ------ + ----- + ----- + ---------------- +
 // Meaning |   addi |   $s0 |   $t0 |               20 |
-// ------- + ------ + ----- + ----- + ---------------- +
-//
+// ------- + ------ + ----- + ----- + ------------ + - +
+// Binary  |   00100010 00001000 00000000 00010100 |
+// Hex     |                           22 08 00 14 |
+// ------- + ------------------------------------- +
 //
 // > bltz $a0, $t0, (label of +64)
 //         |  Oper  |  $rs  |  $rt  | Immediate Value  |
 //  ------ + ------ + ----- + ----- + ---------------- |
 // Binary  | 000110 | 00100 | 01000 | 0000000000010000 |
 // Hex     |     06 |    04 |    08 |               10 |
-// Decimal |      6 |    04 |     8 |               16 |
+// Decimal |      6 |     4 |     8 |               16 |
 // ------- + ------ + ----- + ----- + ---------------- +
 // Meaning |   bltz |   $a0 |   $t0 |               64 |
-// ------- + ------ + ----- + ----- + ---------------- +
+// ------- + ------ + ----- + ----- + ------------ + - +
+// Binary  |   00011000 10001000 00000000 00010000 |
+// Hex     |                           18 88 00 10 |
+// ------- + ------------------------------------- +
 //
 // Note: The meaning of the immediate value is 4x the actual value because the instructions are aligned
 // to the 4 byte boundary. As a result, the last 4 bits can be dropped and can be utilized in the front
@@ -129,12 +139,15 @@ namespace MIPS.Models.Instructions;
 // > sw $s0, 24($sp)
 //         |  Oper  |  $rs  |  $rt  | Immediate Value  |
 //  ------ + ------ + ----- + ----- + ---------------- |
-// Binary  | 000110 | 11101 | 10000 | 0000000000011000 |
-// Hex     |     06 |    1D |    10 |               18 |
-// Decimal |      6 |    29 |    16 |               24 |
+// Binary  | 101011 | 11101 | 10000 | 0000000000011000 |
+// Hex     |     2b |    1D |    10 |               18 |
+// Decimal |     43 |    29 |    16 |               24 |
 // ------- + ------ + ----- + ----- + ---------------- +
 // Meaning |     sw |   $sp |   $s0 |               24 |
-// ------- + ------ + ----- + ----- + ---------------- +
+// ------- + ------ + ----- + ----- + ------------ + - +
+// Binary  |   10101111 10110000 00000000 00011000 |
+// Hex     |                           af b0 00 18 |
+// ------- + ------------------------------------- +
 //
 //
 // 
@@ -157,25 +170,30 @@ namespace MIPS.Models.Instructions;
 //                       J Type Instruction Assembled Examples
 // ----------------------------------------------------------------------------
 // > j (label at 9,912)
-//         |  Oper  |           Address          |
-//  ------ + ------ + -------------------------- |
-// Binary  | 000010 | 00000000000000100110101110 |
-// Hex     |     02 |                       09AE |
-// Decimal |      2 |                       2478 |
-// ------- + ------ + -------------------------- +
-// Meaning |      j |                       9912 |
-// ------- + ------ + -------------------------- +
-//
+//         |  Oper  |              Address          |
+//  ------ + ------ + ----------------------------- |
+// Binary  | 000010 | 00 00000000 00001001 10101110 |
+// Hex     |     02 |                         09 AE |
+// Decimal |      2 |                          2478 |
+// ------- + ------ + ----------------------------- +
+// Meaning |      j |                          9912 |
+// ------- + ------ + ----------------------------- +
+// Binary  |    00001000 00000000 00001001 10101110 |
+// Hex     |                            08 00 09 ae |
+// ------- + -------------------------------------- +
 //
 // > jal (label at 6,808)
-//         |  Oper  |           Address          |
-//  ------ + ------ + -------------------------- |
-// Binary  | 000011 | 00000000000000011010100110 |
-// Hex     |     03 |                       06A6 |
-// Decimal |      3 |                       1702 |
-// ------- + ------ + -------------------------- +
-// Meaning |    jal |                       6808 |
-// ------- + ------ + -------------------------- +
+//         |  Oper  |              Address          |
+//  ------ + ------ + ----------------------------- |
+// Binary  | 000011 | 00 00000000 00000110 10100110 |
+// Hex     |     03 |                         06 A6 |
+// Decimal |      3 |                          1702 |
+// ------- + ------ + ----------------------------- +
+// Meaning |    jal |                          6808 |
+// ------- + ------ + ----------------------------- +
+// Binary  |    00001100 00000000 00000110 10100110 |
+// Hex     |                            0c 00 06 a6 |
+// ------- + -------------------------------------- +
 
 /// <summary>
 /// A struct representing an instruction.
