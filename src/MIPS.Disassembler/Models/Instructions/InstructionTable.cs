@@ -2,6 +2,7 @@
 
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Models.Instructions.Abstract;
+using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 
 namespace MIPS.Disassembler.Models.Instructions;
@@ -35,6 +36,7 @@ public class InstructionTable : InstructionTableBase<(byte op, byte func, byte)>
                 InstructionType.RegisterImmediate or
                 InstructionType.RegisterImmediateBranch => (byte?)metadata.RegisterImmediateFuncCode,
                 
+                InstructionType.Coproc1 => (byte?)metadata.CoProc1RS,
                 InstructionType.Float => (byte?)metadata.FloatFuncCode,
                 _ => 0,
             };

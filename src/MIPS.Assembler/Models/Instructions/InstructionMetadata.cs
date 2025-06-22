@@ -301,7 +301,7 @@ public readonly struct InstructionMetadata
     /// Gets the function's type.
     /// </summary>
     [JsonIgnore]
-    public InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RegisterImmediateFuncCode, CoProc0RS);
+    public InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RegisterImmediateFuncCode, CoProc0RS ?? (CoProc0RSCode?)CoProc1RS);
 
     /// <summary>
     /// Gets a string showing the usage pattern for the instruction.

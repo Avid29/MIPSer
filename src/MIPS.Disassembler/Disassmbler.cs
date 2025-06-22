@@ -54,6 +54,7 @@ public class Disassmbler
             InstructionType.RegisterImmediate or
             InstructionType.RegisterImmediateBranch => (byte)instruction.RTFuncCode,
 
+            InstructionType.Coproc1 => (byte)((FloatInstruction)instruction).CoProc1RSCode,
             InstructionType.Float => (byte)((FloatInstruction)instruction).FloatFuncCode,
 
             _ => 255,

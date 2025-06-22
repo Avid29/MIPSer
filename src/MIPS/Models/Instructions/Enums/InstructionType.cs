@@ -19,6 +19,7 @@ public enum InstructionType
     Coproc0,
     Coproc0C0,
     Coproc0MFMC0,
+    Coproc1,
     Float,
     Pseudo,
 

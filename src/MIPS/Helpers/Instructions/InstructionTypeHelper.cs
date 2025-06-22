@@ -5,6 +5,7 @@ using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
+using MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 
 namespace MIPS.Helpers.Instructions;
 
@@ -48,7 +49,11 @@ public static class InstructionTypeHelper
                 CoProc0RSCode.C0 => InstructionType.Coproc0C0,
                 _ => InstructionType.Coproc0,
             },
-            OperationCode.Coprocessor1 => InstructionType.Float,
+
+            OperationCode.Coprocessor1
+                when !rsFuncCode.HasValue || (CoProc1RSCode)rsFuncCode.Value is > CoProc1RSCode.Single and < CoProc1RSCode.PairedSingle => InstructionType.Float,
+            OperationCode.Coprocessor1 => InstructionType.Coproc1,
+
             _ => InstructionType.BasicI,
         };
     }

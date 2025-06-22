@@ -179,7 +179,7 @@ public struct FloatInstruction
         readonly get => (FloatRegister)_inst.ShiftAmount;
         private set => _inst.ShiftAmount = (byte)value;
     }
-    
+
     /// <summary>
     /// Casts a <see cref="uint"/> to a <see cref="FloatInstruction"/>.
     /// </summary>
