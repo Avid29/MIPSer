@@ -36,24 +36,30 @@ public static class InstructionTypeHelper
             OperationCode.RegisterImmediate
                 when rtFuncCode is <= RegImmFuncCode.BranchOnGreaterThanZeroLikely
                 or >= RegImmFuncCode.BranchOnLessThanZeroAndLink => InstructionType.RegisterImmediateBranch,
-
             OperationCode.RegisterImmediate => InstructionType.RegisterImmediate,
-
+            
+            // J Type
             OperationCode.Jump or
             OperationCode.JumpAndLink => InstructionType.BasicJ,
-
+            
+            // CoProc0
             OperationCode.Coprocessor0
-                when rsFuncCode.HasValue => rsFuncCode.Value switch
-            {
-                CoProc0RSCode.MFMC0 => InstructionType.Coproc0MFMC0,
-                CoProc0RSCode.C0 => InstructionType.Coproc0C0,
-                _ => InstructionType.Coproc0,
-            },
+                => rsFuncCode switch
+                {
+                    CoProc0RSCode.MFMC0 => InstructionType.Coproc0MFMC0,
+                    CoProc0RSCode.C0 => InstructionType.Coproc0C0,
+                    _ => InstructionType.Coproc0,
+                },
 
+            // CoProc1
             OperationCode.Coprocessor1
-                when !rsFuncCode.HasValue || (CoProc1RSCode)rsFuncCode.Value is > CoProc1RSCode.Single and < CoProc1RSCode.PairedSingle => InstructionType.Float,
-            OperationCode.Coprocessor1 => InstructionType.Coproc1,
+                => (CoProc1RSCode?)rsFuncCode switch
+                {
+                    null or >= CoProc1RSCode.Single and <= CoProc1RSCode.PairedSingle => InstructionType.Float,
+                    _ => InstructionType.Coproc1,
+                },
 
+            // I Type is the default
             _ => InstructionType.BasicI,
         };
     }
