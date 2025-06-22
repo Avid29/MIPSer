@@ -64,7 +64,7 @@ public static class RegistersTable
     /// <param name="register">The register value.</param>
     /// <param name="set">The set the register belongs to.</param>
     /// <returns>The name of the register as a string.</returns>
-    public static string GetRegisterString(Register register, RegisterSet? set)
+    public static string GetRegisterString(Register register, RegisterSet? set = RegisterSet.GeneralPurpose)
     {
         // Default to numbered.
         set ??= RegisterSet.Numbered;

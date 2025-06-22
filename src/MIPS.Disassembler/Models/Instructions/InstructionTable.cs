@@ -9,7 +9,7 @@ namespace MIPS.Disassembler.Models.Instructions;
 /// <summary>
 /// A class for managing instruction lookup by opcode and function code.
 /// </summary>
-public class InstructionTable : InstructionTableBase<(byte, byte)>
+public class InstructionTable : InstructionTableBase<(byte op, byte func, byte)>
 {   
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionTable"/> class.
@@ -34,13 +34,17 @@ public class InstructionTable : InstructionTableBase<(byte, byte)>
                 
                 InstructionType.RegisterImmediate or
                 InstructionType.RegisterImmediateBranch => (byte?)metadata.RegisterImmediateFuncCode,
+                
+                InstructionType.Float => (byte?)metadata.FloatFuncCode,
                 _ => 0,
             };
 
             if (metadata.OpCode is null || funcCode is null)
                 return;
 
-            (byte, byte) key = ((byte)metadata.OpCode, (byte)funcCode);
+            byte fmt = ((byte?)metadata.FloatFormat) ?? 0; 
+
+            (byte, byte, byte) key = ((byte)metadata.OpCode, (byte)funcCode, (byte)fmt);
             LookupTable.TryAdd(key, metadata);
         }
     }

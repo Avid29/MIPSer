@@ -7,7 +7,6 @@ using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Registers;
 using System.Text;
-using System.Xml.Linq;
 
 namespace MIPS.Disassembler;
 
@@ -54,10 +53,19 @@ public class Disassmbler
             
             InstructionType.RegisterImmediate or
             InstructionType.RegisterImmediateBranch => (byte)instruction.RTFuncCode,
+
+            InstructionType.Float => (byte)((FloatInstruction)instruction).FloatFuncCode,
+
             _ => 255,
         };
 
-        var key = ((byte)instruction.OpCode, funcCode);
+        byte fmt = 0;
+        if (instruction.Type is InstructionType.Float)
+        {
+            fmt = (byte)((FloatInstruction)instruction).Format;
+        }
+
+        var key = ((byte)instruction.OpCode, funcCode, fmt);
         if (!InstructionTable.TryGetInstruction(key, out var meta, out _))
         {
             return "Unknown instruction";
@@ -68,18 +76,18 @@ public class Disassmbler
         {
             pattern.Append(meta.ArgumentPattern[i] switch
             {
-                Argument.RS => RegistersTable.GetRegisterString(instruction.RS, RegisterSet.GeneralPurpose),
-                Argument.RT => RegistersTable.GetRegisterString(instruction.RT, RegisterSet.GeneralPurpose),
-                Argument.RD => RegistersTable.GetRegisterString(instruction.RD, RegisterSet.GeneralPurpose),
+                Argument.RS => RegistersTable.GetRegisterString(instruction.RS),
+                Argument.RT => RegistersTable.GetRegisterString(instruction.RT),
+                Argument.RD => RegistersTable.GetRegisterString(instruction.RD),
                 Argument.Shift => instruction.ShiftAmount,
                 Argument.Immediate => instruction.ImmediateValue,
                 Argument.Offset => instruction.Offset,
                 Argument.Address => instruction.Address,
-                Argument.AddressOffset => $"{instruction.Offset}({RegistersTable.GetRegisterString(instruction.RS, RegisterSet.GeneralPurpose)})",
+                Argument.AddressOffset => $"{instruction.Offset}({RegistersTable.GetRegisterString(instruction.RS)})",
                 Argument.FullImmediate => 0, // Won't happen until pseudo-instruction disassembly
-                Argument.FS => ((FloatInstruction)instruction).FS,
-                Argument.FT => ((FloatInstruction)instruction).FT,
-                Argument.FD => ((FloatInstruction)instruction).FD,
+                Argument.FS => RegistersTable.GetRegisterString((Register)((FloatInstruction)instruction).FS, RegisterSet.FloatingPoints),
+                Argument.FT => RegistersTable.GetRegisterString((Register)((FloatInstruction)instruction).FT, RegisterSet.FloatingPoints),
+                Argument.FD => RegistersTable.GetRegisterString((Register)((FloatInstruction)instruction).FD, RegisterSet.FloatingPoints),
                 _ => "unknown",
             });
 
