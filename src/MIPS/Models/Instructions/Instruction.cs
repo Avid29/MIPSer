@@ -7,6 +7,8 @@ using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
+using MIPS.Services;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace MIPS.Models.Instructions;
@@ -198,6 +200,7 @@ namespace MIPS.Models.Instructions;
 /// <summary>
 /// A struct representing an instruction.
 /// </summary>
+[DebuggerDisplay("{Disassembled}")]
 public struct Instruction
 {
     // Universal
@@ -467,6 +470,15 @@ public struct Instruction
         internal set => UintMasking.SetShiftMask(ref _inst, ADDRESS_BIT_SIZE, ADDRESS_BIT_OFFSET, value >> 2);
     }
     
+    #if DEBUG
+
+    /// <summary>
+    /// Gets the instruction disassembled as assembly code.
+    /// </summary>
+    public readonly string Disassembled => ServiceCollection.DisassemblerService?.Disassemble(this) ?? "No disassembler provided";
+
+    #endif
+
     /// <summary>
     /// Casts a <see cref="uint"/> to a <see cref="Instruction"/>.
     /// </summary>

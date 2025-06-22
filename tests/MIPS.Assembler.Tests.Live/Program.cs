@@ -5,8 +5,10 @@ using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tests.Live.Enums;
 using MIPS.Assembler.Tokenization;
 using MIPS.Disassembler;
+using MIPS.Disassembler.Services;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Services;
 using RASM.Modules;
 using RASM.Modules.Config;
 using System.Text;
@@ -19,6 +21,8 @@ public class Program()
 
     static async Task Main()
     {
+        ServiceCollection.DisassemblerService = new DisassemblerService();
+
         var program = new Program();
         while (true)
         {
