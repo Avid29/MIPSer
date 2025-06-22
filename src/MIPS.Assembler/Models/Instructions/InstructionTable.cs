@@ -1,33 +1,24 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Models.Instructions.Abstract;
 using MIPS.Models.Instructions.Enums;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text.Json;
 
 namespace MIPS.Assembler.Models.Instructions;
 
 /// <summary>
 /// A class for managing instruction lookup by name.
 /// </summary>
-public class InstructionTable
+public class InstructionTable : InstructionTableBase<string>
 {
-    private MipsVersion _version;
-    private readonly Dictionary<string, InstructionMetadata> _instructionTable;
-    private readonly Dictionary<string, HashSet<MipsVersion>> _outOfVersion;
+    private readonly Dictionary<string, HashSet<MipsVersion>> _outOfVersion = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionTable"/> class.
     /// </summary>
-    public InstructionTable(MipsVersion version)
+    public InstructionTable(MipsVersion version) : base(version)
     {
-        _version = version;
-
-        _instructionTable = [];
-        _outOfVersion = [];
-        Initialize();
     }
 
     /// <summary>
@@ -37,16 +28,16 @@ public class InstructionTable
     /// <param name="metadata">The instruction metadata.</param>
     /// <param name="requiredVersion">The required version to have this instruction, if there is one.</param>
     /// <returns>Whether or not an instruction exists by that name</returns>
-    public bool TryGetInstruction(string name, out InstructionMetadata metadata, out MipsVersion? requiredVersion)
+    public override bool TryGetInstruction(string name, out InstructionMetadata metadata, out MipsVersion? requiredVersion)
     {
         requiredVersion = null;
-        if (_instructionTable.TryGetValue(name, out metadata))
+        if (base.TryGetInstruction(name, out metadata, out _))
             return true;
         
         if (_outOfVersion.TryGetValue(name, out var versions))
         {
             // Higher version instruction. Get the lowest version available.
-            if (_version < versions.FirstOrDefault())
+            if (Version < versions.FirstOrDefault())
                 requiredVersion = versions.Min();
             // Deprecated instruction. Get the highest version available.
             else
@@ -56,47 +47,16 @@ public class InstructionTable
         return false;
     }
 
-    internal InstructionMetadata[] GetInstructions() => [.._instructionTable.Values];
-
-    private void Initialize()
+    /// <inheritdoc/>
+    protected override void LoadInsturction(InstructionMetadata metadata)
     {
-        var assembly = Assembly.GetExecutingAssembly();
-        var resources = assembly.GetManifestResourceNames();
-        resources = [..resources.Where(x => x.EndsWith("Instructions.json"))];
-
-        foreach (var resource in resources)
+        if (metadata.MIPSVersions.Contains(Version))
         {
-            var instructions = LoadInstructionSet(assembly, resource);
-
-            foreach (var instruction in instructions)
-            {
-                LoadInsturction(instruction);
-            }
-        }
-    }
-
-    private void LoadInsturction(InstructionMetadata metadata)
-    {
-        if (metadata.MIPSVersions.Contains(_version))
-        {
-            _instructionTable.Add(metadata.Name, metadata);
+            LookupTable.Add(metadata.Name, metadata);
         }
         else
         {
             _outOfVersion.Add(metadata.Name, metadata.MIPSVersions);
         }
-    }
-    
-    private static InstructionMetadata[] LoadInstructionSet(Assembly assembly, string resourceName)
-    {
-        using Stream? stream = assembly.GetManifestResourceStream(resourceName);
-        if (stream is null)
-            return [];
-
-        var instructions = JsonSerializer.Deserialize<InstructionMetadata[]>(stream);
-        if (instructions is null)
-            return [];
-
-        return instructions;
     }
 }

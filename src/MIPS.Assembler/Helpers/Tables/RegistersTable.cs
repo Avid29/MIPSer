@@ -4,6 +4,7 @@ using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Models.Instructions.Enums.Registers;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MIPS.Assembler.Helpers.Tables;
 
@@ -19,7 +20,7 @@ public static class RegistersTable
     /// <param name="register">The register enum value.</param>
     /// <param name="set">Which register set table to reference.</param>
     /// <param name="logger">Logger </param>
-    /// <returns>Whether or not an register exists by that name</returns>
+    /// <returns>Whether or not an register exists by that name.</returns>
     public static bool TryGetRegister(string name, out Register register, out RegisterSet set, ILogger? logger = null)
     {
         register = Register.Zero;
@@ -55,6 +56,30 @@ public static class RegistersTable
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Attempts to get a register's string by value.
+    /// </summary>
+    /// <param name="register">The register value.</param>
+    /// <param name="set">The set the register belongs to.</param>
+    /// <returns>The name of the register as a string.</returns>
+    public static string GetRegisterString(Register register, RegisterSet? set)
+    {
+        // Default to numbered.
+        set ??= RegisterSet.Numbered;
+
+        string name = set switch
+        {
+            // This is O(n) when it could easily be O(1), but n is 32. So idc.
+            RegisterSet.GeneralPurpose => _gpRegisterTable.First(x => x.Value == register).Key,
+            RegisterSet.FloatingPoints => $"f{(int)register}",
+            //RegisterSet.CoProc0 => throw new System.NotImplementedException("CoProc0 registers not implemented."),    
+            _ or RegisterSet.Numbered => $"{(int)register}",
+        };
+
+        // Prepend '$'
+        return $"${name}";
     }
 
     private static readonly Dictionary<string, Register> _gpRegisterTable = new()

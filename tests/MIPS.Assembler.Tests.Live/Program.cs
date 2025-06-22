@@ -4,6 +4,8 @@ using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tests.Live.Enums;
 using MIPS.Assembler.Tokenization;
+using MIPS.Disassembler;
+using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using RASM.Modules;
 using RASM.Modules.Config;
@@ -61,7 +63,8 @@ public class Program()
         stream = new MemoryStream();
         assembler.CompleteModule<RasmModule>(stream);
         
-        Console.WriteLine("Binary:");;
+        Console.WriteLine("\nBinary:");
+        uint inst = 0;
         for (int i = 0; stream.Position != stream.Length; i++)
         {
             int x = stream.ReadByte();
@@ -71,9 +74,17 @@ public class Program()
                 Console.Write("  ");
             if (i % 8 is 7)
                 Console.WriteLine();
+
+            inst = inst << 8;
+            inst += (uint)x;
         }
 
-        Console.WriteLine();
+        Console.WriteLine("\n");
+        Console.WriteLine("Disassembly:");
+        var disassembly = new Disassmbler(new RasmConfig()).DisassmbleInstruction((Instruction)inst);
+        Console.WriteLine(disassembly);
+
+        Console.WriteLine("\n");
         return !assembler.Failed;
     }
 

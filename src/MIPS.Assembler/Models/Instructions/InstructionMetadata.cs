@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2024
 
-using CommunityToolkit.Diagnostics;
 using MIPS.Extensions;
+using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
@@ -296,6 +296,12 @@ public readonly struct InstructionMetadata
     [JsonPropertyName("obsolete")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool Obsolete { get; }
+
+    /// <summary>
+    /// Gets the function's type.
+    /// </summary>
+    [JsonIgnore]
+    public InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RegisterImmediateFuncCode, CoProc0RS);
 
     /// <summary>
     /// Gets a string showing the usage pattern for the instruction.
