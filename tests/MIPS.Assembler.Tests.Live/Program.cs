@@ -123,13 +123,19 @@ public class Program()
                 SwapMode(cmdArgs[1]);
                 break;
             case "dump":
-                if (cmdArgs.Length != 2)
+                if (cmdArgs.Length is not (2 or 3))
                 {
-                    Console.WriteLine("Dump command requires exactly 1 argument 'table'.");
+                    Console.WriteLine("Dump command requires 1 or 2 argument 'table' and 'MIPS Version'.");
                     return;
                 }
 
-                Dump(cmdArgs[1]);
+                var version = MipsVersion.MipsII;
+                if (cmdArgs.Length is 3)
+                {
+                    version = (MipsVersion)int.Parse(cmdArgs[2]);
+                }
+
+                Dump(cmdArgs[1], version);
                 break;
         }
     }
@@ -154,17 +160,21 @@ public class Program()
         Console.WriteLine($"Mode swapped to {_mode} mode");
     }
 
-    void Dump(string tableArg)
+    void Dump(string tableArg, MipsVersion version = MipsVersion.MipsII)
     {
         tableArg = tableArg.Trim().ToLower();
         switch (tableArg)
         {
             case "instructions":
-                var instructions = new InstructionTable(MipsVersion.MipsIII).GetInstructions().OrderBy(x => x.Name);
+                var instructions = new InstructionTable(version).GetInstructions().OrderBy(x => x.Name);
                 foreach (var instr in instructions)
                 {
+                    if (instr.IsPseudoInstruction)
+                        Console.Write("* ");
+
                     Console.WriteLine(instr.UsagePattern);
                 }
+                Console.WriteLine("* Pseudo Instruction");
                 break;
         }
     }
