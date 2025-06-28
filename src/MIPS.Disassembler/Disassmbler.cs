@@ -54,6 +54,8 @@ public class Disassmbler
             InstructionType.RegisterImmediate or
             InstructionType.RegisterImmediateBranch => (byte)instruction.RTFuncCode,
 
+            // TODO: Disassembling CoProc0 instructions
+
             InstructionType.Coproc1 => (byte)((FloatInstruction)instruction).CoProc1RSCode,
             InstructionType.Float => (byte)((FloatInstruction)instruction).FloatFuncCode,
 

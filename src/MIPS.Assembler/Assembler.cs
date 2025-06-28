@@ -18,9 +18,20 @@ namespace MIPS.Assembler;
 
 //                                          Overview
 // ------------------------------------------------------------------------------------------------
-//     This assembler works in two passes. The first pass will track all labels and macros. The 
-// first pass will also allocate all static memory, replacing instructions with blank allocations.
-// The second pass will then assemble all instructions and overwrite the blank allocations.
+//     This assembler works in two passes.
+//
+//     Pass 1 - Alignment Pass:
+//      - Track all labels and marcos
+//      - Assess instruction size
+//        - All acutal instructions are bytes
+//        - Pseudo instructions have a real instruction count
+//      - Allocate memory
+//        - Note: Memory will be assigned as well where possible,
+//          but all memory will be overwritten on the second pass.
+//
+//     Pass 2 - Realization Pass:
+//      - Assemble instructions
+//      - Assign memory
 //
 
 /// <summary>
@@ -87,15 +98,18 @@ public partial class Assembler
         var assembler = new Assembler(config);
         var tokens = await Tokenizer.TokenizeAsync(stream, filename, assembler._logger);
 
+        // Run the alignment pass on each line
         for (int i = 1; i <= tokens.LineCount; i++)
         {
             assembler._logger.CurrentLine = i;
             assembler.AlignmentPass(tokens[i]);
         }
 
+        // Reset all streams to start
         assembler._activeSection = Section.Text;
         assembler._module.ResetStreamPositions();
 
+        // Run the realization pass on each line
         for (int i = 1; i <= tokens.LineCount; i++)
         {
             assembler._logger.CurrentLine = i;
@@ -134,9 +148,13 @@ public partial class Assembler
     /// <returns>True if successful, false on failure.</returns>
     private bool DefineSymbol(string label, Address address, SymbolType type, SymbolFlags flags = 0)
     {
+        // Ensure the symbol has a valid name
         if (!ValidateSymbolName(label))
             return false;
 
+        // Define the symbol or update by adding flags, address or type.
+        // NOTE: The type can only be updated if it is currently unknown
+        //       and the address can only be updated if it's undeclared/external.
         if (!_module.TryDefineOrUpdateSymbol(label, type, address))
         {
             _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, $"Symbol \"{label}\" is already defined.");
