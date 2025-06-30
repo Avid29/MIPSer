@@ -55,6 +55,7 @@ public class Disassmbler
             InstructionType.RegisterImmediateBranch => (byte)instruction.RTFuncCode,
 
             // TODO: Disassembling CoProc0 instructions
+            //InstructionType.Coproc0 => (byte)((CoProc0Instruction)instruction).CoProc0RSCode,
 
             InstructionType.Coproc1 => (byte)((FloatInstruction)instruction).CoProc1RSCode,
             InstructionType.Float => (byte)((FloatInstruction)instruction).FloatFuncCode,
@@ -86,7 +87,7 @@ public class Disassmbler
                 Argument.Immediate => instruction.ImmediateValue,
                 Argument.Offset => instruction.Offset,
                 Argument.Address => instruction.Address,
-                Argument.AddressOffset => $"{instruction.Offset}({RegistersTable.GetRegisterString(instruction.RS)})",
+                Argument.AddressBase => $"{instruction.ImmediateValue}({RegistersTable.GetRegisterString(instruction.RS)})",
                 Argument.FullImmediate => 0, // Won't happen until pseudo-instruction disassembly
                 Argument.FS => RegistersTable.GetRegisterString((Register)((FloatInstruction)instruction).FS, RegisterSet.FloatingPoints),
                 Argument.FT => RegistersTable.GetRegisterString((Register)((FloatInstruction)instruction).FT, RegisterSet.FloatingPoints),

@@ -179,15 +179,28 @@ public struct InstructionParser
                 FloatInstruction.Create(_meta.CoProc1RS.Value, _rt, (FloatRegister)_rs) :
                 _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc1RS)} value or {nameof(_meta.FloatFuncCode)} and {nameof(_meta.FloatFormat)} values."),
 
-            // I Type
-            OperationCode.RegisterImmediate when _meta.RegisterImmediateFuncCode is         // Register Immediate Branching
+            // Register Immediate
+            OperationCode.RegisterImmediate => _meta.RegisterImmediateFuncCode switch
+            {
+                // Register Immediate Branching
                 (>= RegImmFuncCode.BranchOnLessThanZero and <= RegImmFuncCode.BranchOnGreaterThanZeroLikely) or
-                (>= RegImmFuncCode.BranchOnLessThanZeroLikelyAndLink and <= RegImmFuncCode.BranchOnLessThanZeroLikelyAndLink)
-                => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, _immediate),
-            OperationCode.RegisterImmediate => _meta.RegisterImmediateFuncCode.HasValue ?   // Register Immediate
-                Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, (short)_immediate) :
-                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.RegisterImmediateFuncCode)} value."),
-            _ => Instruction.Create(_meta.OpCode.Value, _rs, _rt, (short)_immediate),   // Remaining I Type instructions
+                (>= RegImmFuncCode.BranchOnLessThanZeroAndLink and <= RegImmFuncCode.BranchOnGreaterThanOrEqualToZeroLikelyAndLink)
+                    => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, _immediate),
+
+                // Throw exception if null
+                null => ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.RegisterImmediateFuncCode)} value."),
+
+                // Register Immediate
+                _ => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, (short)_immediate)
+            },
+            
+            // I-Type Branch
+            (>= OperationCode.BranchOnEquals and <= OperationCode.BranchGreaterThanZero) or
+            (>= OperationCode.BranchOnEqualLikely and <= OperationCode.BranchOnGreaterThanZeroLikely)
+                    => Instruction.Create(_meta.OpCode.Value, _rs, _rt, _immediate),
+
+            // Remaining I Type instructions
+            _ => Instruction.Create(_meta.OpCode.Value, _rs, _rt, (short)_immediate),
         };
 
         // Check for write back to zero register
@@ -210,7 +223,7 @@ public struct InstructionParser
         {
             (>= Argument.RS and <= Argument.RD) or (>= Argument.FS and <= Argument.FD) =>TryParseRegisterArg(arg[0], type),
             Argument.Shift or Argument.Immediate or Argument.FullImmediate or Argument.Offset or Argument.Address => TryParseExpressionArg(arg, type, out reference),
-            Argument.AddressOffset => TryParseAddressOffsetArg(arg, out reference),
+            Argument.AddressBase => TryParseAddressOffsetArg(arg, out reference),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument of type '{type}' is not within parsable type range."),
         };
     }

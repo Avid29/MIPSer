@@ -290,6 +290,19 @@ public struct Instruction
     /// <summary>
     /// Creates a new <see cref="InstructionType.BasicI"/> instruction.
     /// </summary>
+    public static Instruction Create(OperationCode opCode, Register rs, Register rt, int offset)
+    {
+        Instruction value = default;
+        value.OpCode = opCode;
+        value.RS = rs;
+        value.RT = rt;
+        value.Offset = offset;
+        return value;
+    }
+
+    /// <summary>
+    /// Creates a new <see cref="InstructionType.BasicI"/> instruction.
+    /// </summary>
     /// <remarks>
     /// This is just for load upper immediate.
     /// </remarks>

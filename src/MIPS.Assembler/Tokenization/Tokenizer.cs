@@ -58,8 +58,10 @@ public class Tokenizer
     /// <returns>A list of tokens.</returns>
     public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null, ILogger? logger = null)
     {
+        // Create tokenizer
         Tokenizer tokenizer = new(filename, logger);
 
+        // Parse line by line from stream
         using var reader = new StreamReader(stream);
         while (!reader.EndOfStream)
         {
@@ -101,7 +103,8 @@ public class Tokenizer
         {
             bool status = ParseNextChar(c);
 
-            // This line is trashed, but we'll add it and keep going to find any further errors
+            // This line is invalid and cannot be tokenized.
+            // Regardless, we'll add what was parsable and keep going to find any further errors
             if (!status)
             {
                 TokenLines.Add(new([..Tokens]));
@@ -159,6 +162,7 @@ public class Tokenizer
         }
         else
         {
+            // Begin a special immediate, 
             if (c is '0')
             {
                 return HandleCharacter(c, TokenType.Immediate, TokenizerState.SpecialImmediate);
@@ -251,16 +255,21 @@ public class Tokenizer
 
         var state = hex ? TokenizerState.HexImmediate : TokenizerState.Immediate;
 
+        // Continue parsing the current token if digit
         if (char.IsDigit(c))
         {
             return HandleCharacter(c, TokenType.Immediate, state);
         }
 
-        if (hex && (char.IsBetween(c, 'a', 'f') || char.IsBetween(c, 'A', 'F')))
+        // If the immediate is a hexidemical the characters 'A' through 'F',
+        // in upper or lowercase, continue parsing the current token.
+        if (hex && (char.IsBetween(char.ToLower(c), 'a', 'f')))
         {
             return HandleCharacter(c, TokenType.Immediate, state);
         }
 
+        // Complete the current token and process the current character as the
+        // start of the next.
         return CompleteAndContinue(c);
     }
 
@@ -272,6 +281,9 @@ public class Tokenizer
             return false;
         }
 
+        // Only parsing a single character.
+        // This is similar behavior to string parsing, so it's combined as a parameter
+        // on the string parsing function.
         if (isChar)
         {
             if (_cache.Length is 1 && c is '\'')

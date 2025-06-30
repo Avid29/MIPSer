@@ -43,9 +43,9 @@ public enum Argument
     Address,
 
     /// <summary>
-    /// An memory address from a register, and a 16-bit offset.
+    /// An base memory address from a register, and a 16-bit offset.
     /// </summary>
-    AddressOffset,
+    AddressBase,
 
     /// <summary>
     /// A 32 bit immediate value

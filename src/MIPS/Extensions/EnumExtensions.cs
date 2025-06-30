@@ -23,7 +23,7 @@ public static class EnumExtensions
             Argument.Immediate => "immediate",
             Argument.Offset => "offset",
             Argument.Address => "addr",
-            Argument.AddressOffset => "offset(base)",
+            Argument.AddressBase => "offset(base)",
             Argument.FullImmediate => "immediate",
             Argument.FS => "$fs",
             Argument.FT => "$ft",

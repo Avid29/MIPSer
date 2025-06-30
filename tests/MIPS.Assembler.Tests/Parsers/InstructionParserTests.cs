@@ -1,11 +1,13 @@
 // Adam Dernis 2024
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MIPS.Assembler.Helpers.Tables;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
+using MIPS.Disassembler.Services;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
@@ -13,6 +15,10 @@ using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
+using MIPS.Services;
+using MIPS.Tests.Helpers;
+using System;
+using System.Text;
 
 namespace MIPS.Assembler.Tests.Parsers;
 
@@ -53,7 +59,7 @@ public class InstructionParserTests
     [TestMethod(Addi)]
     public void AddiTest()
     {
-        Instruction expected = Instruction.Create(OperationCode.AddImmediate, Register.Saved0, Register.Temporary0, 100);
+        Instruction expected = Instruction.Create(OperationCode.AddImmediate, Register.Saved0, Register.Temporary0, (short)100);
         RunTest(Addi, new ParsedInstruction(expected));
     }
 
@@ -67,14 +73,14 @@ public class InstructionParserTests
     [TestMethod(LoadWord)]
     public void LoadWordTest()
     {
-        Instruction expected = Instruction.Create(OperationCode.LoadWord, Register.Saved0, Register.Temporary0, 100);
+        Instruction expected = Instruction.Create(OperationCode.LoadWord, Register.Saved0, Register.Temporary0, (short)100);
         RunTest(LoadWord, new ParsedInstruction(expected));
     }
 
     [TestMethod(StoreByte)]
     public void StoreByteTest()
     {
-        Instruction expected = Instruction.Create(OperationCode.StoreByte, Register.Saved0, Register.Temporary0, -100);
+        Instruction expected = Instruction.Create(OperationCode.StoreByte, Register.Saved0, Register.Temporary0, (short)-100);
         RunTest(StoreByte, new ParsedInstruction(expected));
     }
 
@@ -150,6 +156,68 @@ public class InstructionParserTests
     public void TooManyArgsTest()
     {
         RunTest(TooManyArgs, logId: LogId.InvalidInstructionArgCount);
+    }
+
+    [TestMethod("Generated Tests")]
+    public void GeneratedTests()
+    {
+        #if DEBUG
+        ServiceCollection.DisassemblerService = new DisassemblerService();
+        #endif
+
+        var table = new InstructionTable(MipsVersion.MipsII);
+        var parser = new InstructionParser(table, null);
+
+        foreach(var instruction in table.GetInstructions())
+        {
+            if (instruction.IsPseudoInstruction)
+                    continue;
+
+            // TODO: Disassembling CoProc0 instructions
+            if (instruction.OpCode is OperationCode.Coprocessor0)
+                    continue;
+
+            // Generate instruction
+            StringBuilder line = new(instruction.Name);
+            line.Append(' ');
+
+            foreach(var arg in instruction.ArgumentPattern)
+            {
+
+                line.Append(arg switch
+                {
+                    Argument.RS or Argument.RT or Argument.RD => RegistersTable.GetRegisterString(ArgGenerator.RandomRegister()),
+                    Argument.FS or Argument.FT or Argument.FD => RegistersTable.GetRegisterString(ArgGenerator.RandomRegister(), RegisterSet.FloatingPoints),
+                    Argument.Immediate => $"{ArgGenerator.RandomImmediate()}",
+                    Argument.Offset => $"{ArgGenerator.RandomOffset()}",
+                    Argument.Address => $"{ArgGenerator.RandomAddress()}",
+                    Argument.AddressBase => $"{ArgGenerator.RandomImmediate()}({RegistersTable.GetRegisterString(ArgGenerator.RandomRegister())})",
+                    Argument.Shift => $"{ArgGenerator.RandomShift()}",
+                    Argument.FullImmediate => Random.Shared.Next(),
+                    _ => throw new NotImplementedException(),
+                });
+
+                line.Append(", ");
+            }
+
+            // Remove final ", "
+            if (instruction.ArgumentPattern.Length > 0)
+                line.Remove(line.Length-2,2);
+            
+            // Parse instruction
+            var input = line.ToString();
+            var tokenized = Tokenizer.TokenizeLine(input, nameof(RunTest));
+            var succeeded = parser.TryParse(tokenized, out var actual);
+
+            // Validate execution
+            Assert.IsTrue(succeeded, input);
+            var result = actual?.Realize()[0];
+            Assert.IsTrue(result.HasValue, input);
+
+#if DEBUG
+            Assert.IsTrue(input == result.Value.Disassembled, $"\"{input}\" != \"{result.Value.Disassembled}\"");
+#endif
+        }
     }
 
     private static void RunTest(string input, ParsedInstruction? expected = null, LogId? logId = null, string? expectedSymbol = null)

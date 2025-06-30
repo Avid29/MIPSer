@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\MIPS.Assembler\MIPS.Assembler.csproj" />
+    <ProjectReference Include="..\..\src\MIPS.Disassembler\MIPS.Disassembler.csproj" />
     <ProjectReference Include="..\MIPS.Tests\MIPS.Tests.csproj" />
   </ItemGroup>
 

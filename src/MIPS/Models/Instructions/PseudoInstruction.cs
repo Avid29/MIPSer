@@ -97,7 +97,7 @@ public readonly struct PseudoInstruction
             ],
             PseudoOp.SetGreaterThanOrEqual =>
             [
-                Instruction.Create(OperationCode.AddImmediateUnsigned, RT, RT, -1),
+                Instruction.Create(OperationCode.AddImmediateUnsigned, RT, RT, (short)-1),
                 Instruction.Create(FunctionCode.SetLessThan, RS, RT, RD),
             ],
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction[]>(),

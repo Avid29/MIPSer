@@ -65,7 +65,7 @@
   {
     "name": "break",
     "op_code": 0,
-    "func_code": 12,
+    "func_code": 13,
     "args": [],
     "versions": [ 1, 2, 3, 4, 5, 6 ]
   },
