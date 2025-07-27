@@ -1,8 +1,8 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Emulator.System.CPU.Models.Registers;
+using MIPS.Interpreter.System.CPU.Models.Registers;
 
-namespace MIPS.Emulator.System.CPU.CoProcessors;
+namespace MIPS.Interpreter.System.CPU.CoProcessors;
 
 /// <summary>
 /// A class representing the 0th co-processor unit.

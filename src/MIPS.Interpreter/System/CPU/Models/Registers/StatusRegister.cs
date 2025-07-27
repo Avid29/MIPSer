@@ -2,7 +2,7 @@
 
 using MIPS.Helpers;
 
-namespace MIPS.Emulator.System.CPU.Models.Registers;
+namespace MIPS.Interpreter.System.CPU.Models.Registers;
 
 /// <summary>
 /// TODO

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <RootNamespace>MIPS.Emulator</RootNamespace>
+	  <RootNamespace>MIPS.Interpreter</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

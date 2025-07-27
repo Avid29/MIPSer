@@ -8,7 +8,7 @@ using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System;
 
-namespace MIPS.Emulator.System.CPU;
+namespace MIPS.Interpreter.System.CPU;
 
 public partial class ProcessingUnit
 {

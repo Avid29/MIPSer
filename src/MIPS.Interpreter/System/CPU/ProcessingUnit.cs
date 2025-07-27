@@ -1,9 +1,9 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Emulator.System.CPU.Models;
+using MIPS.Interpreter.System.CPU.Models;
 using MIPS.Models.Instructions.Enums.Registers;
 
-namespace MIPS.Emulator.System.CPU;
+namespace MIPS.Interpreter.System.CPU;
 
 /// <summary>
 /// A class representing a processor unit.
