@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2024
+﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Models.Instructions;
@@ -10,7 +10,7 @@ using System;
 
 namespace MIPS.Interpreter.System.CPU;
 
-public partial class ProcessingUnit
+public partial class Processor
 {
     private struct Execution
     {
@@ -61,7 +61,7 @@ public partial class ProcessingUnit
         // Increment program counter if not handled by execution
         if (!execution.PCHandled)
         {
-            _regFile.ProgramCounter += 4;
+            ProgramCounter += 4;
         }
     }
 
@@ -195,41 +195,41 @@ public partial class ProcessingUnit
         throw new NotImplementedException();
     }
 
-    private uint MFHI(uint rs, uint rt, byte shift) => _regFile.High;
+    private uint MFHI(uint rs, uint rt, byte shift) => High;
     private uint MTHI(uint rs, uint rt, byte shift)
     {
-        _regFile.High = rs;
+        High = rs;
         return 0;
     }
-    private uint MFLO(uint rs, uint rt, byte shift) => _regFile.Low;
+    private uint MFLO(uint rs, uint rt, byte shift) => Low;
     private uint MTLO(uint rs, uint rt, byte shift)
     {
-        _regFile.Low = rs;
+        Low = rs;
         return 0;
     }
 
     private uint MULT(uint rs, uint rt, byte shift)
     {
-        _regFile.Low = (uint)((int)rs * (int)rt);
+        Low = (uint)((int)rs * (int)rt);
         // TODO: High bits
         return 0;
     }
     private uint MULTU(uint rs, uint rt, byte shift)
     {
-        _regFile.Low = rs * rt;
+        Low = rs * rt;
         // TODO: High bits
         return 0;
     }
     private uint DIV(uint rs, uint rt, byte shift)
     {
-        _regFile.Low = (uint)((int)rs / (int)rt);
-        _regFile.High = (uint)((int)rs % (int)rt);
+        Low = (uint)((int)rs / (int)rt);
+        High = (uint)((int)rs % (int)rt);
         return 0;
     }
     private uint DIVU(uint rs, uint rt, byte shift)
     {
-        _regFile.Low = rs / rt;
-        _regFile.High = rs % rt;
+        Low = rs / rt;
+        High = rs % rt;
         return 0;
     }
 

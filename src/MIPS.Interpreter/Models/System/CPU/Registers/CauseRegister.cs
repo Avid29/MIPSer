@@ -1,8 +1,8 @@
-﻿// Adam Dernis 2024
+﻿// Avishai Dernis 2025
 
 using MIPS.Helpers;
 
-namespace MIPS.Interpreter.System.CPU.Models.Registers;
+namespace MIPS.Interpreter.Models.System.CPU.Registers;
 
 /// <summary>
 /// TODO

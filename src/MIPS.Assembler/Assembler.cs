@@ -126,7 +126,7 @@ public partial class Assembler
     /// <param name="stream">The stream to write the module to.</param>
     /// <returns>The module object.</returns>
     public T? CompleteModule<T>(Stream stream)
-        where T : IModule<T> => T.Create(_module, Config, stream);
+        where T : IBuildModule<T> => T.Create(_module, Config, stream);
 
     /// <summary>
     /// Defines a label at the current address.

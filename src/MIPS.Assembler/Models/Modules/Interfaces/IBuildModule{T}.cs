@@ -7,8 +7,8 @@ namespace MIPS.Assembler.Models.Modules.Interfaces;
 /// <summary>
 /// An interface for a module implementation with knowledge of the underlying type.
 /// </summary>
-public interface IModule<TSelf> : IModule
-    where TSelf : IModule<TSelf>
+public interface IBuildModule<TSelf> : IBuildModule
+    where TSelf : IBuildModule<TSelf>
 {
     /// <summary>
     /// Creates a module from a <see cref="ModuleConstructor"/>.

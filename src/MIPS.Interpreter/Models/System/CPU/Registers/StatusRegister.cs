@@ -1,8 +1,9 @@
-﻿// Adam Dernis 2024
+﻿// Avishai Dernis 2025
 
 using MIPS.Helpers;
+using System.Runtime.CompilerServices;
 
-namespace MIPS.Interpreter.System.CPU.Models.Registers;
+namespace MIPS.Interpreter.Models.System.CPU.Registers;
 
 /// <summary>
 /// TODO
@@ -52,4 +53,14 @@ public struct StatusRegister
         readonly get => (byte)UintMasking.GetShiftMask(_status, INTERUPT_MASK_SIZE, INTERUPT_MASK_OFFSET);
         set => UintMasking.SetShiftMask(ref _status, INTERUPT_MASK_SIZE, INTERUPT_MASK_OFFSET, value);
     }
+
+    /// <summary>
+    /// Casts a <see cref="uint"/> to a <see cref="StatusRegister"/>.
+    /// </summary>
+    public static unsafe explicit operator StatusRegister(uint value) => Unsafe.As<uint, StatusRegister>(ref value);
+
+    /// <summary>
+    /// Casts a <see cref="StatusRegister"/> to a <see cref="uint"/>.
+    /// </summary>
+    public static unsafe explicit operator uint(StatusRegister value) => Unsafe.As<StatusRegister, uint>(ref value);
 }

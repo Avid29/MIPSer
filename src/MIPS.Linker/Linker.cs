@@ -37,7 +37,7 @@ public class Linker
     /// <param name="modules"></param>
     /// <param name="config"></param>
     /// <returns></returns>
-    public static Linker Link(IModule[] modules, AssemblerConfig config)
+    public static Linker Link(IBuildModule[] modules, AssemblerConfig config)
     {
         var linker = new Linker(config);
         foreach (var m in modules)

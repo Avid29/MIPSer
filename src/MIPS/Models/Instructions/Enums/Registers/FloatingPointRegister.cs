@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2024
+﻿// Avishai Dernis 2025
 
 namespace MIPS.Models.Instructions.Enums.Registers;
 

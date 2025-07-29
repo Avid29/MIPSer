@@ -17,7 +17,7 @@ namespace RASM.Modules;
 /// <summary>
 /// A fully assembled object module in RASM format.
 /// </summary>
-public class RasmModule : IModule<RasmModule>
+public class RasmModule : IBuildModule<RasmModule>
 {
     private const int SECTION_COUNT = 6;
 

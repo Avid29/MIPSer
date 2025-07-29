@@ -4,12 +4,6 @@
 	  <RootNamespace>MIPS.Interpreter</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="System\Memory\**" />
-    <EmbeddedResource Remove="System\Memory\**" />
-    <None Remove="System\Memory\**" />
-  </ItemGroup>
-
 	<ItemGroup>
     <ProjectReference Include="..\MIPS\MIPS.csproj" />
   </ItemGroup>

@@ -5,7 +5,7 @@ namespace MIPS.Assembler.Models.Modules.Interfaces;
 /// <summary>
 /// An interface for a module implementation.
 /// </summary>
-public interface IModule
+public interface IBuildModule
 {
     /// <summary>
     /// Abstracts the module into a <see cref="ModuleConstructor"/> for modification or linking.

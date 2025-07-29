@@ -3,13 +3,14 @@
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
+using MIPS.Interpreter.Models.Modules;
 
 namespace Raw.Modules;
 
 /// <summary>
-/// A raw wrapper format for 
+/// A raw wrapper format for a module that contains the raw binary data of the assembled program.
 /// </summary>
-public class RawModule : IModule<RawModule>
+public class RawModule : IBuildModule<RawModule>, IExecutableModule
 {
     private readonly Stream _source;
     

@@ -13,7 +13,7 @@ namespace ELF.Modules;
 /// <summary>
 /// A fully assembled object module in ELF format
 /// </summary>
-public class ElfModule : IModule<ElfModule>
+public class ElfModule : IBuildModule<ElfModule>
 {
     /// <inheritdoc/>
     public unsafe static ElfModule? Create(ModuleConstructor constructor, AssemblerConfig config, Stream? stream = null)
