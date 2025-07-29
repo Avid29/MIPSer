@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2024
+﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Helpers.Tables;
@@ -87,6 +87,7 @@ public struct InstructionParser
         {
             if (version is not null)
             {
+                // The instruction exists, but is not supported with the active MIPS version.
                 if (_context is null || version > _context?.Config.MipsVersion)
                 {
                     _logger?.Log(Severity.Error, LogId.NotInVersion, $"The instruction '{name}' requires mips version {version:d}.");
@@ -97,6 +98,7 @@ public struct InstructionParser
             }
             else
             {
+                // The instruction does not exist in the table.
                 _logger?.Log(Severity.Error, LogId.InvalidInstructionName, $"No instruction named '{name}'.");
             }
             return false;
@@ -221,8 +223,11 @@ public struct InstructionParser
 
         return type switch
         {
-            (>= Argument.RS and <= Argument.RD) or (>= Argument.FS and <= Argument.FD) =>TryParseRegisterArg(arg[0], type),
+            // Register arguments
+            (>= Argument.RS and <= Argument.RD) or (>= Argument.FS and <= Argument.FD) or Argument.RT_Numbered => TryParseRegisterArg(arg[0], type),
+            // Expression arguments
             Argument.Shift or Argument.Immediate or Argument.FullImmediate or Argument.Offset or Argument.Address => TryParseExpressionArg(arg, type, out reference),
+            // Address offset arguments
             Argument.AddressBase => TryParseAddressOffsetArg(arg, out reference),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>($"Argument of type '{type}' is not within parsable type range."),
         };
@@ -261,6 +266,12 @@ public struct InstructionParser
             case Argument.FD:
                 reg = ref _rd;
                 set = RegisterSet.FloatingPoints;
+                break;
+
+            // RT Register for coprocessors
+            case Argument.RT_Numbered:
+                reg = ref _rt;
+                set = RegisterSet.Numbered;
                 break;
 
             // Invalid target type
@@ -425,9 +436,8 @@ public struct InstructionParser
         // NOTE: Be careful about forwards to other parse functions with regards to 
         // error logging. Address offset argument errors might be inappropriately logged.
 
-
         // Split the string into an offset and a register, return false if failed
-        if (!TokenizeAddressOffset(arg, out var offsetStr, out var regStr))
+        if (!SplitAddressOffset(arg, out var offsetStr, out var regStr))
             return false;
 
         // Try parse offset component into immediate, return false if failed
@@ -471,19 +481,21 @@ public struct InstructionParser
         return true;
     }
 
+    /// <summary>
+    /// Splits an address offset argument into a token span for the offset and the address register token.
+    /// </summary>
     /// <remarks>
     /// Upon return offset and register do not need to be valid offset and register strings.
     /// The register is just the component in parenthesis. The offset is just the component before the parenthesis.
     /// Nothing may follow the parenthesis.
     /// </remarks>
-    private readonly bool TokenizeAddressOffset(ReadOnlySpan<Token> arg, out ReadOnlySpan<Token> offset, [NotNullWhen(true)] out Token? register)
+    private readonly bool SplitAddressOffset(ReadOnlySpan<Token> arg, out ReadOnlySpan<Token> offset, [NotNullWhen(true)] out Token? register)
     {
         var original = arg;
         register = null;
         offset = arg;
 
         // Find parenthesis start and end
-        // Parenthesis wrap the register
         var parIndex = arg.FindNext(TokenType.OpenParenthesis);
         var closeIndex = arg.FindNext(TokenType.CloseParenthesis);
         if (parIndex is -1 || closeIndex is -1)
@@ -492,21 +504,19 @@ public struct InstructionParser
             return false;
         }
 
+        // Offset is everything before the parenthesis
         offset = arg[..parIndex];
         arg = arg[(parIndex+1)..];
 
+        // Register is everything between the parenthesis,
+        // and must be a single token.
         register = arg[0];
 
         // Parenthesis pair was not found
         // Or contains both an opening and closing parenthesis, but they are not matched.
-        // Or there was content following the parenthesis 
-        if (arg.IsEmpty)
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '{original.Print()}' is not a valid address offset.");
-            return false;
-        }
-
-        if (register.Type is not TokenType.Register)
+        // Or there was content following the parenthesis.
+        // Or the token inside the parenthesis is not a register.
+        if (arg.IsEmpty || register.Type is not TokenType.Register)
         {
             _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '{original.Print()}' is not a valid address offset.");
             return false;

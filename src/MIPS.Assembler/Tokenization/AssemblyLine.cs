@@ -19,7 +19,7 @@ public class AssemblyLine
     public AssemblyLine(Token[] tokens)
     {
         _tokens = tokens;
-        SubTokenize();
+        GroupTokens();
     }
 
     /// <summary>
@@ -69,7 +69,11 @@ public class AssemblyLine
     /// </summary>
     public AssemblyLineArgs Args { get; private set; }
 
-    private void SubTokenize()
+    /// <summary>
+    /// Extracts the label if present, then determines the type of line
+    /// and seperates the identifying token from the arguments.
+    /// </summary>
+    private void GroupTokens()
     {
         Type = LineType.None;
 
@@ -80,39 +84,39 @@ public class AssemblyLine
         // Convert the line to a segment
         ArraySegment<Token> segment = _tokens;
 
-        // Grab the label
+        // Grab label if present
         if (segment[0].Type is TokenType.LabelDeclaration)
         {
             Label = segment[0];
             segment = segment[1..];
         }
 
-        // The line only contains a label
+        // The line contains only a label or is empty
         if (segment.Count == 0)
             return;
 
         // Handle line type
-        var next = segment[0];
-        switch(next.Type)
+        var head = segment[0];
+        switch(head.Type)
         {   
             case TokenType.MacroDefinition:
-                Macro = next;
+                Macro = head;
                 Type = LineType.Macro;
                 return;
             case TokenType.Instruction:
-                Instruction = next;
+                Instruction = head;
                 Type = LineType.Instruction;
                 break;
             case TokenType.Directive:
-                Directive = next;
+                Directive = head;
                 Type = LineType.Directive;
                 break;
         }
         
-        // NOTE: The assignment token is left as part of the arg.
+        // NOTE: For Macros, the assignment token is left as part of the arg.
         // The assembler will need to verify it is present, and log if it is not.
-        // However, unless proceeded by an assignment token this never should have
-        // been tokenized as a macro.
+        // However, unless proceeded by an assignment token the line should never have
+        // been tokenized as a macro in the first place.
         Args = new AssemblyLineArgs(segment[1..]);
     }
 }

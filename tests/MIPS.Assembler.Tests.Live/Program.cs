@@ -67,7 +67,7 @@ public class Program()
         stream = new MemoryStream();
         assembler.CompleteModule<RasmModule>(stream);
         
-        Console.WriteLine("\nBinary:");
+        Console.Write("\nBinary: ");
         uint inst = 0;
         for (int i = 0; stream.Position != stream.Length; i++)
         {
@@ -83,10 +83,10 @@ public class Program()
             inst += (uint)x;
         }
 
-        Console.WriteLine("\n");
-        Console.WriteLine("Disassembly:");
+        Console.Write("\n\nDisassembly: ");
         var disassembly = new Disassmbler(new RasmConfig()).DisassmbleInstruction((Instruction)inst);
-        Console.WriteLine(disassembly);
+        
+        Console.Write(disassembly);
 
         Console.WriteLine("\n");
         return !assembler.Failed;

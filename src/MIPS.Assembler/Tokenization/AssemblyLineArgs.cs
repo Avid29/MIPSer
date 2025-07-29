@@ -50,11 +50,13 @@ public struct AssemblyLineArgs
                 break;
             }
 
-            var arg = tokens[..nextComma];
+            // Extract the argument up to the next comma,
+            // then slice tokens to the start of the next argument
+            args.Add(tokens[..nextComma]);
             tokens = tokens[(nextComma+1)..];
-            args.Add(arg);
         }
 
+        // Convert the list to an array segment
         _args = [..args];
     }
 }

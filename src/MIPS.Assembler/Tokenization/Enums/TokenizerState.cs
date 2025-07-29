@@ -10,7 +10,7 @@ public enum TokenizerState
 #pragma warning disable CS1591
 
     LineBegin,
-    Begin,
+    ArgBegin,
     NewLineText,
     NewLineTextWait,    // Waiting for a ':', '=', or other to mark a label, macro, or instruction
     Register,
