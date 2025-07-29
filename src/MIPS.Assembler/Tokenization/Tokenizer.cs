@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2024
+﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
@@ -82,12 +82,10 @@ public class Tokenizer
         if (line.Contains('\n'))
             ThrowHelper.ThrowArgumentException("Single line tokenizer cannot contain a new line.");
 
-        // This is a debug tool.
-        // We just want to tokenize an expression,
-        // so we don't want directives, instructions, or labels
+        // This is a debug tool for tokenizing only an expression
         if (expression)
         {
-            tokenizer._state = TokenizerState.Begin;
+            tokenizer._state = TokenizerState.ArgBegin;
         }
 
         tokenizer.ParseLine(line);
@@ -124,7 +122,7 @@ public class Tokenizer
     {
         return _state switch
         {
-            TokenizerState.Begin => ParseFromBegin(c, false),
+            TokenizerState.ArgBegin => ParseFromBegin(c, false),
             TokenizerState.LineBegin => ParseFromBegin(c, true),
             TokenizerState.NewLineText => ParseNewLineText(c, false),
             TokenizerState.NewLineTextWait => ParseNewLineText(c, true),
@@ -184,7 +182,7 @@ public class Tokenizer
             '+' or '-' or '*' or '/' or '%' or
             '|' or '&' or '^' => HandleCharacter(c, TokenType.Operator),
 
-            '.' => newLine ? HandleCharacter(c, newState: TokenizerState.Directive) : false,
+            '.' => newLine && HandleCharacter(c, newState: TokenizerState.Directive),
             '$' => HandleCharacter(c, newState: TokenizerState.Register),
             '\'' => HandleCharacter(c, newState: TokenizerState.Character),
             '"' => HandleCharacter(c, newState: TokenizerState.String),
@@ -340,12 +338,12 @@ public class Tokenizer
         return true;
     }
 
-    private bool HandleCharacter(char c, TokenType? type = null, TokenizerState newState = TokenizerState.Begin)
+    private bool HandleCharacter(char c, TokenType? type = null, TokenizerState newState = TokenizerState.ArgBegin)
     {
         _cache += c;
         _tokenType = type;
 
-        if (newState is TokenizerState.Begin or TokenizerState.LineBegin)
+        if (newState is TokenizerState.ArgBegin or TokenizerState.LineBegin)
         {
             if (type is null)
                 ThrowHelper.ThrowArgumentException(nameof(type));
@@ -366,7 +364,7 @@ public class Tokenizer
         return ParseNextChar(c);
     }
 
-    private bool CompleteCacheToken(TokenizerState newState = TokenizerState.Begin)
+    private bool CompleteCacheToken(TokenizerState newState = TokenizerState.ArgBegin)
     {
         // This method can be used to denote the completion of a comment block
         if (_state is not TokenizerState.Comment)

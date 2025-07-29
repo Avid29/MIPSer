@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2024
+﻿// Avishai Dernis 2025
 
 namespace MIPS.Models.Instructions.Enums;
 
@@ -7,24 +7,13 @@ namespace MIPS.Models.Instructions.Enums;
 /// </summary>
 public enum Argument
 {
-    /// <summary>
-    /// The rs register.
-    /// </summary>
+    #pragma warning disable CS1591
+
+    // General Registers
     RS,
-
-    /// <summary>
-    /// The rt register.
-    /// </summary>
     RT,
-
-    /// <summary>
-    /// The rd register.
-    /// </summary>
     RD,
 
-    /// <summary>
-    /// The shift component.
-    /// </summary>
     Shift,
 
     /// <summary>
@@ -52,18 +41,13 @@ public enum Argument
     /// </summary>
     FullImmediate,
 
-    /// <summary>
-    /// The fs register.
-    /// </summary>
+    // Floating Point Registers
     FS,
-
-    /// <summary>
-    /// The ft register.
-    /// </summary>
     FT,
-
-    /// <summary>
-    /// The fd register.
-    /// </summary>
     FD,
+
+    // RT Register argument for coprocessors. Must use numbered register name.
+    RT_Numbered,
+
+    #pragma warning restore CS1591
 }

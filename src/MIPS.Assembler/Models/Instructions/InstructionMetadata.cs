@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2024
+﻿// Avishai Dernis 2025
 
 using MIPS.Extensions;
 using MIPS.Helpers.Instructions;
@@ -14,8 +14,11 @@ using System.Text.Json.Serialization;
 namespace MIPS.Assembler.Models.Instructions;
 
 /// <summary>
-/// A struct containing metadata on an instruction.
+/// A struct containing info on how an instruction is encoded.
 /// </summary>
+/// <remarks>
+/// This struct is JSON Serializable.
+/// </remarks>
 public readonly struct InstructionMetadata
 {
     private static readonly MipsVersion[] AllVersions = [MipsVersion.MipsI, MipsVersion.MipsII, MipsVersion.MipsIII, MipsVersion.MipsIV, MipsVersion.MipsV, MipsVersion.MipsVI];
