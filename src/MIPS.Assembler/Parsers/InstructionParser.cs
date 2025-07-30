@@ -496,9 +496,10 @@ public struct InstructionParser
         offset = arg;
 
         // Find parenthesis start and end
+        // Parenthsis must be matched and contain a single token
         var parIndex = arg.FindNext(TokenType.OpenParenthesis);
         var closeIndex = arg.FindNext(TokenType.CloseParenthesis);
-        if (parIndex is -1 || closeIndex is -1)
+        if (parIndex is -1 || closeIndex is -1 || closeIndex - parIndex != 2)
         {
             _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '{arg.Print()}' is not a valid address offset.");
             return false;
@@ -511,6 +512,7 @@ public struct InstructionParser
         // Register is everything between the parenthesis,
         // and must be a single token.
         register = arg[0];
+        arg = arg[1..];
 
         // Parenthesis pair was not found
         // Or contains both an opening and closing parenthesis, but they are not matched.

@@ -1,4 +1,4 @@
-﻿// Adam Dernis 2024
+﻿// Avishai Dernis 2025
 
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
@@ -27,15 +27,16 @@ public static class RegistersTable
         set = RegisterSet.Numbered;
 
         // Check for float register
-        if (name[0] == 'f' && byte.TryParse(name[1..], out _))
+        if (name[0] == 'f')
         {
-            // Fall-through to numerical register with 'f' removed..
+            // Assign set as floating point then fall-through to numerical
+            // register set parsing with the 'f' removed
             set = RegisterSet.FloatingPoints;
             name = name[1..];
         }
 
         // Check for numberical register
-        if (byte.TryParse(name[0..], out var num))
+        if (byte.TryParse(name, out var num))
         {
             // Lowest register enum to highest register enum
             if (num is < (byte)Register.Zero or > (byte)Register.ReturnAddress)
@@ -71,7 +72,7 @@ public static class RegistersTable
 
         string name = set switch
         {
-            // This is O(n) when it could easily be O(1), but n is 32. So idc.
+            // This is O(n) when it could easily be O(1). But n is 32, so idc.
             RegisterSet.GeneralPurpose => _gpRegisterTable.First(x => x.Value == register).Key,
             RegisterSet.FloatingPoints => $"f{(int)register}",
             //RegisterSet.CoProc0 => throw new System.NotImplementedException("CoProc0 registers not implemented."),    

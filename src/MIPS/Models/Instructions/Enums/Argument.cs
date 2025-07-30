@@ -37,7 +37,7 @@ public enum Argument
     AddressBase,
 
     /// <summary>
-    /// A 32 bit immediate value
+    /// A 32 bit immediate value.
     /// </summary>
     FullImmediate,
 
