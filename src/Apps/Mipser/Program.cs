@@ -4,6 +4,7 @@ using MIPS.Assembler;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
 using RASM.Modules;
+using RASM.Modules.Config;
 
 namespace Mipser;
 
@@ -53,7 +54,7 @@ public class Program
 
         var inFile = File.Open(filePath, FileMode.Open);
         var outFile = File.Open(resultFile, FileMode.Create);
-        var assembler = await Assembler.AssembleAsync(inFile, filePath, new AssemblerConfig());
+        var assembler = await Assembler.AssembleAsync(inFile, filePath, new RasmConfig());
 
         Console.WriteLine(!assembler.Failed
             ? $"Assembled with {assembler.Logs.Count} messages."

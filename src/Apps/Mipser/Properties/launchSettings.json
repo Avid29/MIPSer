@@ -3,7 +3,7 @@
     "Mipser": {
       "commandName": "Project",
       "commandLineArgs": "playground1.asm",
-      "workingDirectory": "C:\\Users\\avid2\\source\\repos\\Personal\\MIPSer\\tests\\MIPS.Assembler.Tests\\ASMs"
+      "workingDirectory": "C:\\Users\\avid2\\source\\repos\\Personal\\MIPSer\\tests\\MIPS.Tests\\ASMs"
     }
   }
 }

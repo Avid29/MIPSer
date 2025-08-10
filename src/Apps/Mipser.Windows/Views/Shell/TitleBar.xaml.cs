@@ -23,6 +23,7 @@ public sealed partial class TitleBar : UserControl
 
         Loaded += TitleBar_Loaded;
     }
+
     private WindowViewModel ViewModel => (WindowViewModel)DataContext;
 
     private void TitleBar_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
