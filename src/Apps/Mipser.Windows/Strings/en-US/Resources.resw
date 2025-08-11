@@ -162,4 +162,46 @@
   <data name="NewFile" xml:space="preserve">
     <value>New File</value>
   </data>
+  <data name="HelpMBI.Title" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="ViewMBI.Title" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="ToggleFullScreenMFI.Text" xml:space="preserve">
+    <value>Toggle Full Screen</value>
+  </data>
+  <data name="CheatSheetMFI.Text" xml:space="preserve">
+    <value>Show Cheat Sheet</value>
+  </data>
+  <data name="AboutMFI.Text" xml:space="preserve">
+    <value>About Mipser</value>
+  </data>
+  <data name="Arithmetic (Signed)" xml:space="preserve">
+    <value>Arithmetic (Signed)</value>
+  </data>
+  <data name="Arithmetic (Unsigned)" xml:space="preserve">
+    <value>Arithmetic (Unsigned)</value>
+  </data>
+  <data name="Logical" xml:space="preserve">
+    <value>Logical</value>
+  </data>
+  <data name="Data" xml:space="preserve">
+    <value>Data</value>
+  </data>
+  <data name="Memory" xml:space="preserve">
+    <value>Memory</value>
+  </data>
+  <data name="Jump" xml:space="preserve">
+    <value>Jump</value>
+  </data>
+  <data name="Branch" xml:space="preserve">
+    <value>Branch</value>
+  </data>
+  <data name="Compare" xml:space="preserve">
+    <value>Compare</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>System</value>
+  </data>
 </root>

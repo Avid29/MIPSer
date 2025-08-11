@@ -162,4 +162,46 @@
   <data name="NewFile" xml:space="preserve">
     <value>קובץ חדש</value>
   </data>
+  <data name="HelpMBI.Title" xml:space="preserve">
+    <value>עזרה</value>
+  </data>
+  <data name="ViewMBI.Title" xml:space="preserve">
+    <value>הצג</value>
+  </data>
+  <data name="ToggleFullScreenMFI.Text" xml:space="preserve">
+    <value>הפעלה/כיבוי מסך מלא</value>
+  </data>
+  <data name="CheatSheetMFI.Text" xml:space="preserve">
+    <value>הצג גיליון רמאות</value>
+  </data>
+  <data name="AboutMFI.Text" xml:space="preserve">
+    <value>אודות Mipser</value>
+  </data>
+  <data name="Arithmetic (Signed)" xml:space="preserve">
+    <value>אריתמטית (עם סימן)</value>
+  </data>
+  <data name="Arithmetic (Unsigned)" xml:space="preserve">
+    <value>אריתמטית (ללא סימן)</value>
+  </data>
+  <data name="Logical" xml:space="preserve">
+    <value>לוגית</value>
+  </data>
+  <data name="Data" xml:space="preserve">
+    <value>נתונים</value>
+  </data>
+  <data name="Memory" xml:space="preserve">
+    <value>זיכרון</value>
+  </data>
+  <data name="Jump" xml:space="preserve">
+    <value>קיפוץ</value>
+  </data>
+  <data name="Branch" xml:space="preserve">
+    <value>הסתעפות</value>
+  </data>
+  <data name="Compare" xml:space="preserve">
+    <value>השוואה</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>מערכת</value>
+  </data>
 </root>

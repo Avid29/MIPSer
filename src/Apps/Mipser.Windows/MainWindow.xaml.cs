@@ -1,6 +1,8 @@
 // Adam Dernis 2024
 
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
+using Mipser.ViewModels;
 
 namespace Mipser.Windows;
 
@@ -15,5 +17,9 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         this.InitializeComponent();
+
+        ViewModel = App.Current.Services.GetRequiredService<WindowViewModel>();
     }
+
+    private WindowViewModel ViewModel { get; }
 }

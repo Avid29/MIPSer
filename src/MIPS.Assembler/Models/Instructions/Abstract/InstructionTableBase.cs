@@ -52,8 +52,11 @@ public abstract class InstructionTableBase<T>
         return false;
     }
 
-
-    internal InstructionMetadata[] GetInstructions() => [..LookupTable.Values];
+    /// <summary>
+    /// Gets all instructions in the instruction table.
+    /// </summary>
+    /// <returns>An array of the instructions in the table.</returns>
+    public InstructionMetadata[] GetInstructions() => [..LookupTable.Values];
 
     private void Initialize()
     {

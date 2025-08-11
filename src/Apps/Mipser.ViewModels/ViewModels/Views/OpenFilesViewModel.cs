@@ -19,7 +19,7 @@ public class OpenFilesViewModel : ObservableRecipient
     private readonly IFilesService _fileService;
 
     private BindableFile? _currentFile;
-
+     
     /// <summary>
     /// Initializes a new instance of the <see cref="OpenFilesViewModel"/> class.
     /// </summary>

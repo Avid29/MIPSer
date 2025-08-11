@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Mipser.Windows.Views.CheatSheet"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:data="using:MIPS.Assembler.Models.Instructions"
+    xmlns:convert="using:Mipser.Windows.Converter"
+    xmlns:collections="using:CommunityToolkit.Mvvm.Collections"
+    mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <FontFamily x:Key="HappyMonkey">ms-appx:///Assets/Fonts/HappyMonkey-Regular.ttf#Happy Monkey</FontFamily>
+        
+        <SolidColorBrush x:Key="PrimaryBackground" Color="#1A1A1A"/>
+        <SolidColorBrush x:Key="HeaderForeground" Color="#8C8C8C"/>
+
+        <!--Colors-->
+        <Color x:Key="Color1">#FE8482</Color>
+        <Color x:Key="Color2">#FFC47A</Color>
+        <Color x:Key="Color3">#F8FC8B</Color>
+        <Color x:Key="Color4">#A7FA95</Color>
+        <Color x:Key="Color5">#73EEFD</Color>
+        <Color x:Key="Color6">#77A7FD</Color>
+        <Color x:Key="Color7">#9B88FC</Color>
+        <Color x:Key="Color8">#FA9EF6</Color>
+        
+        <!--Instruction Types-->
+        <SolidColorBrush x:Key="RInst" Color="{StaticResource Color1}"/>
+        <SolidColorBrush x:Key="R2Inst" Color="{StaticResource Color2}"/>
+        <SolidColorBrush x:Key="IInst" Color="{StaticResource Color5}"/>
+        <SolidColorBrush x:Key="JInst" Color="{StaticResource Color4}"/>
+        <SolidColorBrush x:Key="RegImmInst" Color="{StaticResource Color8}"/>
+        <SolidColorBrush x:Key="CoProc0Inst" Color="{StaticResource Color3}"/>
+        <SolidColorBrush x:Key="CoProc1Inst" Color="{StaticResource Color3}"/>
+        <SolidColorBrush x:Key="CoProc1XInst" Color="{StaticResource Color7}"/>
+        <SolidColorBrush x:Key="CoProcIInst" Color="{StaticResource Color6}"/>
+        
+        <!--Argument Types-->
+        <SolidColorBrush x:Key="GPRArg" Color="{StaticResource Color1}"/>
+        <SolidColorBrush x:Key="CPRArg" Color="{StaticResource Color2}"/>
+        <SolidColorBrush x:Key="ImmArg" Color="{StaticResource Color3}"/>
+
+        <convert:InstructionTypeToColorConverter x:Key="InstructionTypeToColorConverter"
+                                                 RTypeInstructionColor="{StaticResource RInst}"
+                                                 ITypeInstructionColor="{StaticResource IInst}"
+                                                 JTypeInstructionColor="{StaticResource JInst}"
+                                                 RegImmInstructionColor="{StaticResource RegImmInst}"
+                                                 SpecialInstructionColor="{StaticResource R2Inst}"
+                                                 CoProc0InstructionColor="{StaticResource CoProc0Inst}"
+                                                 CoProc1InstructionColor="{StaticResource CoProc1Inst}"/>
+        
+        <CollectionViewSource
+            x:Name="InstructionsViewSource"
+            IsSourceGrouped="True"
+            Source="{x:Bind ViewModel.Instructions, Mode=OneWay}" />
+        
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource PrimaryBackground}">
+        <!--<SemanticZoom>
+            <SemanticZoom.ZoomedInView>-->
+                <ListView ItemsSource="{x:Bind InstructionsViewSource.View, Mode=OneWay}" SelectionMode="None">
+                    <ListView.GroupStyle>
+                        <GroupStyle HidesIfEmpty="True">
+                            <GroupStyle.HeaderContainerStyle>
+                                <Style TargetType="ListViewHeaderItem">
+                                    <Setter Property="MinHeight" Value="0"/>
+                                    <Setter Property="Padding" Value="8,4,8,0"/>
+                                    <Setter Property="Margin" Value="0"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListViewHeaderItem">
+                                                <ContentPresenter x:Name="ContentPresenter"
+                                                                  Margin="{TemplateBinding Padding}"
+                                                                  Content="{TemplateBinding Content}"
+                                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                  ContentTransitions="{TemplateBinding ContentTransitions}"
+                                                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.HeaderContainerStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate x:DataType="collections:IReadOnlyObservableGroup">
+                                    <TextBlock
+                                        FontSize="16" FontFamily="{StaticResource HappyMonkey}"
+                                        Foreground="{ThemeResource HeaderForeground}"
+                                        Text="{x:Bind Key}" />
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="data:InstructionMetadata">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{x:Bind Name}" FontSize="14" FontFamily="Cascadia Code"
+                                           Foreground="{Binding Type, Converter={StaticResource InstructionTypeToColorConverter}}"/>
+                                <TextBlock Text="{x:Bind UsagePattern}" FontSize="14" FontFamily="Cascadia Code" Grid.Column="1"
+                                           Foreground="{Binding Type, Converter={StaticResource InstructionTypeToColorConverter}}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="MinHeight" Value="0"/>
+                            <Setter Property="Padding" Value="8,1"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+            <!--</SemanticZoom.ZoomedInView>
+        </SemanticZoom>-->
+    </Grid>
+</UserControl>

@@ -1,0 +1,108 @@
+{
+  "name": "Common",
+  "groups": [
+    {
+      "name": "Arithmetic (Signed)",
+      "instructions": [
+        "add",
+        "addi",
+        "sub",
+        "subi",
+        "mul",
+        "mult",
+        "div",
+        "sra",
+        "srav",
+        "madd",
+        "msub"
+      ]
+    },
+    {
+      "name": "Arithmetic (Unsigned)",
+      "instructions": [
+        "addu",
+        "addiu",
+        "subu",
+        "multu",
+        "divu",
+        "maddu",
+        "msubu"
+      ]
+    },
+    {
+      "name": "Logical",
+      "instructions": [
+        "and",
+        "andi",
+        "or",
+        "ori",
+        "xor",
+        "xori",
+        "nor",
+        "sll",
+        "srl",
+        "sllv",
+        "srlv"
+      ]
+    },
+    {
+      "name": "Data",
+      "instructions": [
+        "lui",
+        "mflo",
+        "mfhi",
+        "mtlo",
+        "mthi"
+      ]
+    },
+    {
+      "name": "Memory",
+      "instructions": [
+        "lb",
+        "sb",
+        "lh",
+        "sh",
+        "lw",
+        "sw",
+        "lbu",
+        "lhu"
+      ]
+    },
+    {
+      "name": "Jump",
+      "instructions": [
+        "j",
+        "jal",
+        "jr",
+        "jalr"
+      ]
+    },
+    {
+      "name": "Branch",
+      "instructions": [
+        "beq",
+        "bne",
+        "blez",
+        "bgtz",
+        "bltz",
+        "bgez"
+      ]
+    },
+    {
+      "name": "Compare",
+      "instructions": [
+        "slt",
+        "slti",
+        "sltu",
+        "sltiu"
+      ]
+    },
+    {
+      "name": "System",
+      "instructions": [
+        "syscall",
+        "break"
+      ]
+    }
+  ]
+}

@@ -6,6 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:shell="using:Mipser.Windows.Views.Shell"
+    xmlns:views="using:Mipser.Windows.Views"
     mc:Ignorable="d">
 
     <Grid Background="{StaticResource PrimaryBackground}">
@@ -30,6 +31,10 @@
             <shell:OpenFilesView/>
 
             <shell:Explorer Grid.Column="1"/>
+        </Grid>
+        
+        <Grid Grid.RowSpan="2">
+            <views:CheatSheet Visibility="{x:Bind ViewModel.IsCheatSheetOpen, Mode=OneWay}"/>
         </Grid>
     </Grid>
 </Window>

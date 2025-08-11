@@ -85,6 +85,28 @@
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                 </MenuBarItem>
+                <MenuBarItem x:Uid="ViewMBI" Title="View">
+                    <MenuFlyoutItem x:Uid="ToggleFullScreenMFI" Text="Toggle Full Screen">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72B;" />
+                        </MenuFlyoutItem.Icon>
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Modifiers="Control,Shift" Key="F12"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+               </MenuBarItem>
+                <MenuBarItem x:Uid="HelpMBI" Title="Help">
+                    <MenuFlyoutItem x:Uid="CheatSheetMFI" Text="Show Cheatsheet" Command="{x:Bind ViewModel.OpenCheatSheetCommand, Mode=OneWay}">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE8A5;" />
+                        </MenuFlyoutItem.Icon>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutItem x:Uid="AboutMFI" Text="About Mipser">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE946;" />
+                        </MenuFlyoutItem.Icon>
+                    </MenuFlyoutItem>
+                </MenuBarItem>
             </MenuBar>
 
             <Border x:Name="AppTitleBar" Grid.Column="1" Height="24" Background="Transparent"/>
