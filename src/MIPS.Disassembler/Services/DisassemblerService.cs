@@ -16,8 +16,8 @@ public class DisassemblerService : IDisassemblerService
     /// <inheritdoc/>
     public string Disassemble(Instruction instruction)
     {
-        var disassmbler = new Disassmbler(new AssemblerConfig());
-        return disassmbler.DisassmbleInstruction(instruction);
+        var disassmbler = new Disassembler(new AssemblerConfig());
+        return disassmbler.DisassembleInstruction(instruction);
     }
 }
 

@@ -11,14 +11,14 @@ using System.Text;
 namespace MIPS.Disassembler;
 
 /// <summary>
-/// A MIPS disassmbler.
+/// A MIPS disassembler.
 /// </summary>
-public class Disassmbler
+public class Disassembler
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="Disassmbler"/> class.
+    /// Initializes a new instance of the <see cref="Disassembler"/> class.
     /// </summary>
-    public Disassmbler(AssemblerConfig config)
+    public Disassembler(AssemblerConfig config)
     {
         Config = config;
         InstructionTable = new InstructionTable(config.MipsVersion);
@@ -39,7 +39,7 @@ public class Disassmbler
     /// </summary>
     /// <param name="instruction">The instruction to disassmble.</param>
     /// <returns>The instruction as a string.</returns>
-    public string DisassmbleInstruction(Instruction instruction)
+    public string DisassembleInstruction(Instruction instruction)
     {
         byte funcCode = instruction.Type switch
         {
