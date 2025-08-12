@@ -1,0 +1,72 @@
+{
+  "name": "Float",
+  "groups": [
+    {
+      "name": "Move",
+      "instructions": [
+        "mov.fmt",
+        "mfc1",
+        "mtc1",
+        "cfc1",
+        "ctc1",
+        "lwc1",
+        "swc1",
+        "ldc1",
+        "sdc1",
+        "lwxc1",
+        "swxc1",
+        "ldxc1",
+        "sdxc1"
+      ]
+    },
+    {
+      "name": "Floating-Point Arithmetic",
+      "instructions": [
+        "add.fmt",
+        "sub.fmt",
+        "mul.fmt",
+        "div.fmt",
+        "abs.fmt",
+        "neg.fmt",
+        "sqrt.fmt",
+        "recip.fmt",
+        "rsqrt.fmt",
+        "madd.fmt",
+        "msub.fmt",
+        "nmadd.fmt",
+        "nmsub.fmt"
+      ]
+    },
+    {
+      "name": "Floating-Point Rounding",
+      "instructions": [
+        "round.W.fmt",
+        "round.L.fmt",
+        "trunc.W.fmt",
+        "trunc.L.fmt",
+        "floor.W.fmt",
+        "floor.L.fmt",
+        "ceil.W.fmt",
+        "ceil.L.fmt"
+      ]
+    },
+    {
+      "name": "Floating-Point Conversion",
+      "instructions": [
+        "cvt.S.fmt",
+        "cvt.D.fmt",
+        "cvt.W.fmt",
+        "cvt.L.fmt"
+      ]
+    },
+    {
+      "name": "Conditional Move",
+      "instructions": [
+        "movz.fmt",
+        "movn.fmt",
+        "movt.fmt",
+        "movf.fmt"
+      ]
+    }
+  ]
+}

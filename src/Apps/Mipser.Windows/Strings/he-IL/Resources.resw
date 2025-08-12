@@ -178,10 +178,10 @@
     <value>אודות Mipser</value>
   </data>
   <data name="Arithmetic (Signed)" xml:space="preserve">
-    <value>אריתמטית (עם סימן)</value>
+    <value>חשבון (עם סימן)</value>
   </data>
   <data name="Arithmetic (Unsigned)" xml:space="preserve">
-    <value>אריתמטית (ללא סימן)</value>
+    <value>חשבון (ללא סימן)</value>
   </data>
   <data name="Logical" xml:space="preserve">
     <value>לוגית</value>
@@ -239,5 +239,17 @@
   </data>
   <data name="Trap" xml:space="preserve">
     <value>מלכודת</value>
+  </data>
+  <data name="Floating-Point Arithmetic" xml:space="preserve">
+    <value>חשבון נקודה צפה</value>
+  </data>
+  <data name="Floating-Point Rounding" xml:space="preserve">
+    <value>עיגול נקודה צפה</value>
+  </data>
+  <data name="Floating-Point Conversion" xml:space="preserve">
+    <value>המרת נקודה צפה</value>
+  </data>
+  <data name="Conditional Move" xml:space="preserve">
+    <value>העברה מותנית</value>
   </data>
 </root>

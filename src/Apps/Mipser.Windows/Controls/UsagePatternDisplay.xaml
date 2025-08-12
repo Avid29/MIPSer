@@ -8,5 +8,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <RichTextBlock x:Name="UsagePatternTextBlock"/>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <RichTextBlock x:Name="NameTextBlock"/>
+        <RichTextBlock x:Name="UsagePatternTextBlock" Grid.Column="1"/>
+    </Grid>
 </UserControl>

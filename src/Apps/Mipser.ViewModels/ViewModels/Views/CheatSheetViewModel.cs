@@ -29,6 +29,7 @@ public class CheatSheetViewModel : ObservableRecipient
         var instructions = table.GetInstructions();
 
         CommonInstructions = new(LoadInstructionSet("CommonInstructions.json", instructions) ?? []);
+        FloatInstructions = new(LoadInstructionSet("FloatInstructions.json", instructions) ?? []);
         CoProc0Instructions = new(LoadInstructionSet("CoProc0Instructions.json", instructions) ?? []);
         Specialized0Instructions = new(LoadInstructionSet("SpecializedInstructions.json", instructions) ?? []);
 
@@ -69,6 +70,11 @@ public class CheatSheetViewModel : ObservableRecipient
     /// Gets an <see cref="ObservableGroupedCollection{String, InstructionMetadata}"/> of common instruction metadatas, grouped by category.
     /// </summary>
     public ObservableGroupedCollection<string, InstructionMetadata>? CommonInstructions { get; }
+    
+    /// <summary>
+    /// Gets an <see cref="ObservableGroupedCollection{String, InstructionMetadata}"/> of floating-point instruction metadatas, grouped by category.
+    /// </summary>
+    public ObservableGroupedCollection<string, InstructionMetadata>? FloatInstructions { get; }
     
     /// <summary>
     /// Gets an <see cref="ObservableGroupedCollection{String, InstructionMetadata}"/> of coproc0 instruction metadatas, grouped by category.

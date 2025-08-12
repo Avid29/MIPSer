@@ -240,4 +240,16 @@
   <data name="Trap" xml:space="preserve">
     <value>Trap</value>
   </data>
+  <data name="Floating-Point Arithmetic" xml:space="preserve">
+    <value>Floating-Point Arithmetic</value>
+  </data>
+  <data name="Floating-Point Rounding" xml:space="preserve">
+    <value>Floating-Point Rounding</value>
+  </data>
+  <data name="Floating-Point Conversion" xml:space="preserve">
+    <value>Floating-Point Conversion</value>
+  </data>
+  <data name="Conditional Move" xml:space="preserve">
+    <value>Conditional Move</value>
+  </data>
 </root>
