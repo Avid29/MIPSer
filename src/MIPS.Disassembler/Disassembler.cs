@@ -67,9 +67,10 @@ public class Disassembler
         if (instruction.Type is InstructionType.Float)
         {
             fmt = (byte)((FloatInstruction)instruction).Format;
+            // TODO: Utilize the format for disassembly
         }
 
-        var key = ((byte)instruction.OpCode, funcCode, fmt);
+        var key = ((byte)instruction.OpCode, funcCode, instruction.Type is InstructionType.Float);
         if (!InstructionTable.TryGetInstruction(key, out var meta, out _))
         {
             return "Unknown instruction";

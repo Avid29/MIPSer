@@ -25,6 +25,7 @@ public enum LogId
     InvalidInstructionArgCount,
     InvalidRegisterArgument,
     InvalidAddressOffsetArgument,
+    InvalidFloatFormat,
     BranchBetweenSections,
     IntegerTruncated,
     RelocatableReferenceInShift,

@@ -120,7 +120,7 @@ public readonly struct InstructionMetadata
         Co0FuncCode? co0FuncCode,
         MFMC0FuncCode? mfmc0FuncCode,
         FloatFuncCode? floatFuncCode,
-        FloatFormat? floatFormat,
+        HashSet<FloatFormat>? floatFormats,
         byte? rs,
         byte? rt,
         byte? rd,
@@ -140,7 +140,7 @@ public readonly struct InstructionMetadata
         Co0FuncCode = co0FuncCode;
         Mfmc0FuncCode = mfmc0FuncCode;
         FloatFuncCode = floatFuncCode;
-        FloatFormat = floatFormat;
+        FloatFormats = floatFormats;
         RS = rs;
         RT = rt;
         RD = rd;
@@ -231,9 +231,9 @@ public readonly struct InstructionMetadata
     /// <summary>
     /// Gets the instruction float function code.
     /// </summary>
-    [JsonPropertyName("float_format")]
+    [JsonPropertyName("float_formats")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public FloatFormat? FloatFormat { get; }
+    public HashSet<FloatFormat>? FloatFormats { get; }
 
     /// <summary>
     /// Gets the provided RS value.

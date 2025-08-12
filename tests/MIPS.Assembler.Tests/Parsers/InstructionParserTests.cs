@@ -177,13 +177,14 @@ public class InstructionParserTests
             if (instruction.OpCode is OperationCode.Coprocessor0)
                     continue;
 
+            // TODO: Handle formatted instructions
+
             // Generate instruction
             StringBuilder line = new(instruction.Name);
             line.Append(' ');
 
             foreach(var arg in instruction.ArgumentPattern)
             {
-
                 line.Append(arg switch
                 {
                     Argument.RS or Argument.RT or Argument.RD => RegistersTable.GetRegisterString(ArgGenerator.RandomRegister()),

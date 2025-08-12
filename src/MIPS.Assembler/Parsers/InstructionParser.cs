@@ -36,6 +36,7 @@ public struct InstructionParser
     private Register _rs;
     private Register _rt;
     private Register _rd;
+    private FloatFormat _format;
     private byte _shift;
     private int _immediate;
     private uint _address;
@@ -79,11 +80,40 @@ public struct InstructionParser
         ReferenceEntry? reference = null;
         parsedInstruction = null;
 
-        var name = line.Instruction;
+        var name = line.Instruction?.Source;
         Guard.IsNotNull(name);
 
+        // Parse out format from instruction name if present
+        if (name.Contains('.'))
+        {
+            var split = name.LastIndexOf('.');
+            var format = name[(split+1)..];
+            name = name[..split] + ".fmt";
+
+            // TODO: Handle parsing after grabbing metadata to improve error messages.
+
+            // TODO: Do I like this here?
+            // No. But it's currently too small to warrent its own class/file.
+            _format = format.ToLower() switch
+            {
+                "s" => FloatFormat.Single,
+                "d" => FloatFormat.Double,
+                "w" => FloatFormat.Word,
+                "l" => FloatFormat.Long,
+                "ps" => FloatFormat.PairedSingle,
+                _ => 0
+            };
+
+            // If the format is not recognized, log an error
+            if (_format == 0)
+            {
+                _logger?.Log(Severity.Error, LogId.InvalidFloatFormat, $"Invalid float format '{format}' in instruction '{name}'.");
+                return false;
+            }
+        }
+
         // Get instruction metadata from name
-        if (!_instructionTable.TryGetInstruction(name.Source, out _meta, out var version))
+        if (!_instructionTable.TryGetInstruction(name, out _meta, out var version))
         {
             if (version is not null)
             {
@@ -101,6 +131,13 @@ public struct InstructionParser
                 // The instruction does not exist in the table.
                 _logger?.Log(Severity.Error, LogId.InvalidInstructionName, $"No instruction named '{name}'.");
             }
+            return false;
+        }
+
+        // Check that the float format is supported valid with the instruction, if applicable
+        if (_meta.FloatFormats is not null && !_meta.FloatFormats.Contains(_format))
+        {
+            _logger?.Log(Severity.Error, LogId.InvalidFloatFormat, $"Instruction '{name}' does not support float format '{_format}'.");
             return false;
         }
 
@@ -175,11 +212,11 @@ public struct InstructionParser
                 _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc0RS)}, {nameof(_meta.Co0FuncCode)}, or {nameof(_meta.Mfmc0FuncCode)} value."),
             
             // FloatingPoint instructions
-            OperationCode.Coprocessor1 when _meta.FloatFuncCode.HasValue && _meta.FloatFormat.HasValue  // Floating-Point
-                => FloatInstruction.Create(_meta.FloatFuncCode.Value, _meta.FloatFormat.Value, (FloatRegister)_rs, (FloatRegister)_rd, (FloatRegister)_rt),
+            OperationCode.Coprocessor1 when _meta.FloatFuncCode.HasValue && _meta.FloatFormats is not null  // Floating-Point
+                => FloatInstruction.Create(_meta.FloatFuncCode.Value, _format, (FloatRegister)_rs, (FloatRegister)_rd, (FloatRegister)_rt),
             OperationCode.Coprocessor1 => _meta.CoProc1RS.HasValue ?                                    // CoProc1
                 FloatInstruction.Create(_meta.CoProc1RS.Value, _rt, (FloatRegister)_rs) :
-                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc1RS)} value or {nameof(_meta.FloatFuncCode)} and {nameof(_meta.FloatFormat)} values."),
+                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc1RS)} or {nameof(_meta.FloatFuncCode)} value."),
 
             // Register Immediate
             OperationCode.RegisterImmediate => _meta.RegisterImmediateFuncCode switch
@@ -208,7 +245,7 @@ public struct InstructionParser
         // Check for write back to zero register
         // Give a warning if not an explicit nop operation
         // TODO: Check on pseudo-instructions
-        if (instruction.GetWritebackRegister() is Register.Zero && name.Source != "nop")
+        if (instruction.GetWritebackRegister() is Register.Zero && name != "nop")
         {
             _logger?.Log(Severity.Message, LogId.ZeroRegWriteBack, "This instruction writes to $zero.");
         }
