@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using MIPS.Assembler.Models.Instructions;
-using Mipser.Models;
+using Mipser.Models.CheatSheet;
 using Mipser.Services.Localization;
 using System.Collections.Generic;
 using System.IO;

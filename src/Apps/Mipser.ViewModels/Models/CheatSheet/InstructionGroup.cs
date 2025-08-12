@@ -2,7 +2,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace Mipser.Models;
+namespace Mipser.Models.CheatSheet;
 
 /// <summary>
 /// A class representing a group of instructions.

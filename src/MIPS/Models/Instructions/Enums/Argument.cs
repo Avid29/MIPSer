@@ -46,7 +46,8 @@ public enum Argument
     FT,
     FD,
 
-    // RT Register argument for coprocessors. Must use numbered register name.
+    // RS/RT Register argument for coprocessors. Must use numbered register name.
+    RS_Numbered,
     RT_Numbered,
 
     #pragma warning restore CS1591
