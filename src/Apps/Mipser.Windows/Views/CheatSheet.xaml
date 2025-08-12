@@ -9,7 +9,7 @@
     xmlns:data="using:MIPS.Assembler.Models.Instructions"
     xmlns:convert="using:Mipser.Windows.Converter"
     xmlns:helper="using:Mipser.Windows.Helpers"
-    xmlns:controls="using:Mipser.Windows.Controls"
+    xmlns:cheat="using:Mipser.Windows.Controls.CheatSheet"
     FlowDirection="LeftToRight"
     mc:Ignorable="d">
     
@@ -71,7 +71,7 @@
         </DataTemplate>
         
         <DataTemplate x:Key="InstructionEntryTemplate" x:DataType="data:InstructionMetadata">
-            <controls:UsagePatternDisplay Metadata="{x:Bind}" FontSize="14" FontFamily="Cascadia Code"
+            <cheat:UsagePatternDisplay Metadata="{x:Bind}" FontSize="14" FontFamily="Cascadia Code"
                                           InstructionBrushPalette="{StaticResource InstructionBrushPalette}"
                                           ArgumentBrushPalette="{StaticResource ArgumentBrushPalette}"/>
         </DataTemplate>
@@ -135,6 +135,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="1000"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -162,9 +163,20 @@
                 </StackPanel>
             </Border>
             
-            <!--Floating-Point-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
                     Grid.Column="1">
+                <StackPanel>
+                    <!--<TextBlock x:Uid="CommonInstructionsTB" Text="Common Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>-->
+                    <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind ViewModel.Pattern}"
+                                                  FontFamily="{StaticResource HappyMonkey}"/>
+                </StackPanel>
+            </Border>
+            
+            
+            
+            <!--Floating-Point-->
+            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
+                    Grid.Column="2">
                 <StackPanel>
                     <TextBlock x:Uid="FloatInstructionsTB" Text="Floating-Point Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>
                     <ListView ItemsSource="{x:Bind FloatInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
@@ -206,7 +218,7 @@
             
             <!--Specialized-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
-                    Grid.Row="1" Grid.Column="1">
+                    Grid.Row="1" Grid.Column="2">
                 <StackPanel>
                     <TextBlock x:Uid="SpecializedInstructionsTB" Text="Specialized Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>
                     <ListView ItemsSource="{x:Bind SpecializedInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"

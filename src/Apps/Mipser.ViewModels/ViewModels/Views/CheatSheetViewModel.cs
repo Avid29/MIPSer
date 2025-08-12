@@ -33,7 +33,26 @@ public class CheatSheetViewModel : ObservableRecipient
         CoProc0Instructions = new(LoadInstructionSet("CoProc0Instructions.json", instructions) ?? []);
         Specialized0Instructions = new(LoadInstructionSet("SpecializedInstructions.json", instructions) ?? []);
 
+        Pattern = LoadEncodingPattern();
+
         IsActive = true;
+    }
+
+    private EncodingPattern? LoadEncodingPattern()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var resources = assembly.GetManifestResourceNames();
+        var resource = resources.First(x => x.EndsWith("PrimaryEncodings.json"));
+        
+        using Stream? stream = assembly.GetManifestResourceStream(resource);
+        if (stream is null)
+            return null;
+
+        var patterns = JsonSerializer.Deserialize<EncodingPattern[]>(stream);
+        if (patterns is null)
+            return null;
+
+        return patterns[0];
     }
 
     private static IEnumerable<IGrouping<string, InstructionMetadata>>? LoadInstructionSet(string filename, InstructionMetadata[] instructions)
@@ -65,6 +84,11 @@ public class CheatSheetViewModel : ObservableRecipient
 
         return groups;
     }
+
+    /// <summary>
+    /// TEMP
+    /// </summary>
+    public EncodingPattern? Pattern { get; }
 
     /// <summary>
     /// Gets an <see cref="ObservableGroupedCollection{String, InstructionMetadata}"/> of common instruction metadatas, grouped by category.

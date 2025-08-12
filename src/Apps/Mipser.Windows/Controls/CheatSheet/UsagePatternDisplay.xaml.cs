@@ -11,7 +11,7 @@ using MIPS.Models.Instructions.Enums;
 using Mipser.Services.Localization;
 using Mipser.Windows.Helpers;
 
-namespace Mipser.Windows.Controls;
+namespace Mipser.Windows.Controls.CheatSheet;
 
 /// <summary>
 /// A control for displaying usage patterns with colored .

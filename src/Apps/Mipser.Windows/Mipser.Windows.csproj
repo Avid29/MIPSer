@@ -20,6 +20,7 @@
     <Content Remove="Assets\Fonts\HappyMonkey-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Controls\CheatSheet\EncodingPatternDisplay.xaml" />
     <None Remove="Controls\Editors\HexEditor.xaml" />
     <None Remove="Controls\Editors\TextEditor.xaml" />
     <None Remove="Controls\UsagePatternDisplay.xaml" />
@@ -67,6 +68,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\submodules\WinUIEdit\WinUIEditor\WinUIEditor.vcxproj" />
     <ProjectReference Include="..\Mipser.ViewModels\Mipser.ViewModels.csproj" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Page Update="Controls\CheatSheet\EncodingPatternDisplay.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 	
   <ItemGroup>

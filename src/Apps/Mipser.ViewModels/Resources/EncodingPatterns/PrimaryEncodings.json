@@ -1,0 +1,97 @@
+[
+  {
+    "name": "Register (R) Type Instructions",
+    "sections": [
+      {
+        "name": "OP Code",
+        "size": 6,
+        "offset": 26
+      },
+      {
+        "name": "RS",
+        "size": 5,
+        "offset": 21
+      },
+      {
+        "name": "RT",
+        "size": 5,
+        "offset": 16
+      },
+      {
+        "name": "RD",
+        "size": 5,
+        "offset": 11
+      },
+      {
+        "name": "Function Code",
+        "size": 6,
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "name": "Immediate (I) Type Instructions",
+    "sections": [
+      {
+        "name": "OP Code",
+        "size": 6,
+        "offset": 26
+      },
+      {
+        "name": "RS",
+        "size": 5,
+        "offset": 21
+      },
+      {
+        "name": "RT",
+        "size": 5,
+        "offset": 16
+      },
+      {
+        "name": "Immediate Value",
+        "size": 16,
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "name": "Jump (J) Type Instructions",
+    "sections": [
+      {
+        "name": "OP Code",
+        "size": 6,
+        "offset": 26
+      },
+      {
+        "name": "Address",
+        "size": 26,
+        "offset": 0
+      }
+    ]
+  },
+  {
+    "name": "Branch/Trap (B) Type Instructions",
+    "sections": [
+      {
+        "name": "OP Code",
+        "size": 6,
+        "offset": 26
+      },
+      {
+        "name": "RS",
+        "size": 5,
+        "offset": 21
+      },
+      {
+        "name": "Branch/Trap Code",
+        "size": 5,
+        "offset": 16
+      },
+      {
+        "name": "Immediate Value",
+        "size": 16,
+        "offset": 0
+      }
+    ]
+  }
+]
