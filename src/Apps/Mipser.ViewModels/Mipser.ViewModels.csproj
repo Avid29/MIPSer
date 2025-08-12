@@ -10,6 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Instructions\SpecializedInstructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\CoProc0Instructions.json" />
     <EmbeddedResource Include="Resources\Instructions\CommonInstructions.json" />
   </ItemGroup>
 

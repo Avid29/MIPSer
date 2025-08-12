@@ -204,4 +204,40 @@
   <data name="System" xml:space="preserve">
     <value>System</value>
   </data>
+  <data name="Usage_offset" xml:space="preserve">
+    <value>offset</value>
+  </data>
+  <data name="Usage_address" xml:space="preserve">
+    <value>address</value>
+  </data>
+  <data name="Usage_shift" xml:space="preserve">
+    <value>shift</value>
+  </data>
+  <data name="Usage_immediate" xml:space="preserve">
+    <value>immediate</value>
+  </data>
+  <data name="CommonInstructionsTB.Text" xml:space="preserve">
+    <value>Common Instruction</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Move</value>
+  </data>
+  <data name="Interrupts" xml:space="preserve">
+    <value>Interrupts</value>
+  </data>
+  <data name="CoProc0InstructionsTB.Text" xml:space="preserve">
+    <value>CoProcessor0 Instruction</value>
+  </data>
+  <data name="Debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="Translation Lookaside Buffer" xml:space="preserve">
+    <value>Translation Lookaside Buffer</value>
+  </data>
+  <data name="SpecializedInstructionsTB.Text" xml:space="preserve">
+    <value>Specialized Instructions</value>
+  </data>
+  <data name="Trap" xml:space="preserve">
+    <value>Trap</value>
+  </data>
 </root>

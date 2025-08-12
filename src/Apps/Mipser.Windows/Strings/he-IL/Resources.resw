@@ -204,4 +204,40 @@
   <data name="System" xml:space="preserve">
     <value>מערכת</value>
   </data>
+  <data name="Usage_shift" xml:space="preserve">
+    <value>הזזה</value>
+  </data>
+  <data name="Usage_address" xml:space="preserve">
+    <value>כתובת</value>
+  </data>
+  <data name="Usage_offset" xml:space="preserve">
+    <value>היסט</value>
+  </data>
+  <data name="Usage_immediate" xml:space="preserve">
+    <value>מיידי</value>
+  </data>
+  <data name="CommonInstructionsTB.Text" xml:space="preserve">
+    <value>הוראות משותפות</value>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>העברה</value>
+  </data>
+  <data name="Interrupts" xml:space="preserve">
+    <value>פסיקות</value>
+  </data>
+  <data name="CoProc0InstructionsTB.Text" xml:space="preserve">
+    <value>הוראות מעבד-משנה 0</value>
+  </data>
+  <data name="Debug" xml:space="preserve">
+    <value>ניפוי שגיאות</value>
+  </data>
+  <data name="Translation Lookaside Buffer" xml:space="preserve">
+    <value>מטמון תרגום כתובות (TLB)</value>
+  </data>
+  <data name="SpecializedInstructionsTB.Text" xml:space="preserve">
+    <value>הוראות מיוחדות</value>
+  </data>
+  <data name="Trap" xml:space="preserve">
+    <value>מלכודת</value>
+  </data>
 </root>

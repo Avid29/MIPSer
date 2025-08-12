@@ -34,13 +34,13 @@ public static class InstructionTypeHelper
             OperationCode.Special3 => InstructionType.Special3R,
 
             OperationCode.RegisterImmediate
-                when rtFuncCode is <= RegImmFuncCode.BranchOnGreaterThanZeroLikely
-                or >= RegImmFuncCode.BranchOnLessThanZeroAndLink => InstructionType.RegisterImmediateBranch,
+                when rtFuncCode is <= RegImmFuncCode.BranchOnGreaterThanZeroLikely or
+                >= RegImmFuncCode.BranchOnLessThanZeroAndLink => InstructionType.RegisterImmediateBranch,
             OperationCode.RegisterImmediate => InstructionType.RegisterImmediate,
             
             // J Type
-            OperationCode.Jump or
-            OperationCode.JumpAndLink => InstructionType.BasicJ,
+            OperationCode.Jump or OperationCode.JumpAndLink or
+            OperationCode.JumpAndLinkX => InstructionType.BasicJ,
             
             // CoProc0
             OperationCode.Coprocessor0
@@ -55,7 +55,7 @@ public static class InstructionTypeHelper
             OperationCode.Coprocessor1
                 => (CoProc1RSCode?)rsFuncCode switch
                 {
-                    null or >= CoProc1RSCode.Single and <= CoProc1RSCode.PairedSingle => InstructionType.Float,
+                    null or (>= CoProc1RSCode.Single and <= CoProc1RSCode.PairedSingle) => InstructionType.Float,
                     _ => InstructionType.Coproc1,
                 },
 

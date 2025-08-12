@@ -5,9 +5,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:collections="using:CommunityToolkit.Mvvm.Collections"
     xmlns:data="using:MIPS.Assembler.Models.Instructions"
     xmlns:convert="using:Mipser.Windows.Converter"
-    xmlns:collections="using:CommunityToolkit.Mvvm.Collections"
+    xmlns:controls="using:Mipser.Windows.Controls"
+    FlowDirection="LeftToRight"
     mc:Ignorable="d">
     
     <UserControl.Resources>
@@ -41,6 +43,7 @@
         <SolidColorBrush x:Key="GPRArg" Color="{StaticResource Color1}"/>
         <SolidColorBrush x:Key="CPRArg" Color="{StaticResource Color2}"/>
         <SolidColorBrush x:Key="ImmArg" Color="{StaticResource Color3}"/>
+        <SolidColorBrush x:Key="MiscArg" Color="{StaticResource Color7}"/>
 
         <convert:InstructionTypeToColorConverter x:Key="InstructionTypeToColorConverter"
                                                  RTypeInstructionColor="{StaticResource RInst}"
@@ -51,72 +54,149 @@
                                                  CoProc0InstructionColor="{StaticResource CoProc0Inst}"
                                                  CoProc1InstructionColor="{StaticResource CoProc1Inst}"/>
         
+        <DataTemplate x:Key="InstructionGroupHeaderTemplate" x:DataType="collections:IReadOnlyObservableGroup">
+            <TextBlock
+                FontSize="16" FontFamily="{StaticResource HappyMonkey}"
+                Foreground="{ThemeResource HeaderForeground}"
+                Text="{x:Bind Key}" />
+        </DataTemplate>
+        
+        <DataTemplate x:Key="InstructionEntryTemplate" x:DataType="data:InstructionMetadata">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="80"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{x:Bind Name}" FontSize="14" FontFamily="Cascadia Code"
+                           Foreground="{Binding Type, Converter={StaticResource InstructionTypeToColorConverter}}"/>
+                <controls:UsagePatternDisplay UsagePattern="{x:Bind ArgumentPattern}" Grid.Column="1"
+                                              FontSize="14" FontFamily="Cascadia Code"
+                                              GPRegisterBrush="{StaticResource GPRArg}"
+                                              CPRegisterBrush="{StaticResource CPRArg}"
+                                              ImmediateValueBrush="{StaticResource ImmArg}"
+                                              MiscArgBrush="{StaticResource MiscArg}"/>
+            </Grid>
+        </DataTemplate>
+        
+        <Style x:Key="SectionBorderStyle" TargetType="Border">
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="10,8"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Width" Value="500"/>
+        </Style>
+        
+        <Style TargetType="ListViewHeaderItem">
+            <Setter Property="MinHeight" Value="0"/>
+            <Setter Property="Padding" Value="8,4,8,0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewHeaderItem">
+                        <ContentPresenter x:Name="ContentPresenter"
+                                          Margin="{TemplateBinding Padding}"
+                                          Content="{TemplateBinding Content}"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          ContentTransitions="{TemplateBinding ContentTransitions}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="ListViewItem">
+            <Setter Property="MinHeight" Value="0"/>
+            <Setter Property="Padding" Value="8,1"/>
+            <Setter Property="FlowDirection" Value="LeftToRight"/>
+        </Style>
+        
         <CollectionViewSource
-            x:Name="InstructionsViewSource"
+            x:Name="CommonInstructionsViewSource"
             IsSourceGrouped="True"
-            Source="{x:Bind ViewModel.Instructions, Mode=OneWay}" />
+            Source="{x:Bind ViewModel.CommonInstructions, Mode=OneWay}" />
+        <CollectionViewSource
+            x:Name="CoProc0InstructionsViewSource"
+            IsSourceGrouped="True"
+            Source="{x:Bind ViewModel.CoProc0Instructions, Mode=OneWay}" />
+        <CollectionViewSource
+            x:Name="SpecializedInstructionsViewSource"
+            IsSourceGrouped="True"
+            Source="{x:Bind ViewModel.Specialized0Instructions, Mode=OneWay}" />
         
     </UserControl.Resources>
-
-    <Grid Background="{StaticResource PrimaryBackground}">
-        <!--<SemanticZoom>
-            <SemanticZoom.ZoomedInView>-->
-                <ListView ItemsSource="{x:Bind InstructionsViewSource.View, Mode=OneWay}" SelectionMode="None">
-                    <ListView.GroupStyle>
-                        <GroupStyle HidesIfEmpty="True">
-                            <GroupStyle.HeaderContainerStyle>
-                                <Style TargetType="ListViewHeaderItem">
-                                    <Setter Property="MinHeight" Value="0"/>
-                                    <Setter Property="Padding" Value="8,4,8,0"/>
-                                    <Setter Property="Margin" Value="0"/>
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="ListViewHeaderItem">
-                                                <ContentPresenter x:Name="ContentPresenter"
-                                                                  Margin="{TemplateBinding Padding}"
-                                                                  Content="{TemplateBinding Content}"
-                                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                                  ContentTransitions="{TemplateBinding ContentTransitions}"
-                                                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </GroupStyle.HeaderContainerStyle>
-                            <GroupStyle.HeaderTemplate>
-                                <DataTemplate x:DataType="collections:IReadOnlyObservableGroup">
-                                    <TextBlock
-                                        FontSize="16" FontFamily="{StaticResource HappyMonkey}"
-                                        Foreground="{ThemeResource HeaderForeground}"
-                                        Text="{x:Bind Key}" />
-                                </DataTemplate>
-                            </GroupStyle.HeaderTemplate>
-                        </GroupStyle>
-                    </ListView.GroupStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="data:InstructionMetadata">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="200"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="{x:Bind Name}" FontSize="14" FontFamily="Cascadia Code"
-                                           Foreground="{Binding Type, Converter={StaticResource InstructionTypeToColorConverter}}"/>
-                                <TextBlock Text="{x:Bind UsagePattern}" FontSize="14" FontFamily="Cascadia Code" Grid.Column="1"
-                                           Foreground="{Binding Type, Converter={StaticResource InstructionTypeToColorConverter}}"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="MinHeight" Value="0"/>
-                            <Setter Property="Padding" Value="8,1"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                </ListView>
-            <!--</SemanticZoom.ZoomedInView>
-        </SemanticZoom>-->
-    </Grid>
+    
+    <ScrollViewer VerticalScrollMode="Enabled" HorizontalScrollMode="Enabled" ZoomMode="Enabled"
+                  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible"
+                  Background="{StaticResource PrimaryBackground}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <Grid Padding="500">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="1000"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <!--Common-->
+            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White">
+                <StackPanel>
+                    <TextBlock x:Uid="CommonInstructionsTB" Text="Common Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>
+                    <ListView ItemsSource="{x:Bind CommonInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
+                              ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsVerticalRailEnabled="False"
+                              ItemTemplate="{StaticResource InstructionEntryTemplate}">
+                        <ListView.GroupStyle>
+                            <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
+                        </ListView.GroupStyle>
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel HorizontalAlignment="Left"
+                                            Padding="8"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
+                    Grid.Row="1">
+                <StackPanel>
+                    <TextBlock x:Uid="CoProc0InstructionsTB" Text="CoProcessor0 Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>
+                    <ListView ItemsSource="{x:Bind CoProc0InstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
+                              ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsVerticalRailEnabled="False"
+                              ItemTemplate="{StaticResource InstructionEntryTemplate}">
+                        <ListView.GroupStyle>
+                            <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
+                        </ListView.GroupStyle>
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel HorizontalAlignment="Left"
+                                            Padding="8"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
+                    Grid.Row="1" Grid.Column="1">
+                <StackPanel>
+                    <TextBlock x:Uid="SpecializedInstructionsTB" Text="Specialized Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>
+                    <ListView ItemsSource="{x:Bind SpecializedInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
+                              ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsVerticalRailEnabled="False"
+                              ItemTemplate="{StaticResource InstructionEntryTemplate}">
+                        <ListView.GroupStyle>
+                            <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
+                        </ListView.GroupStyle>
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel HorizontalAlignment="Left"
+                                            Padding="8"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

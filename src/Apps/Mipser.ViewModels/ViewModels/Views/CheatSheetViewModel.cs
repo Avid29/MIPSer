@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using MIPS.Assembler.Models.Instructions;
 using Mipser.Models;
 using Mipser.Services.Localization;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -27,21 +28,30 @@ public class CheatSheetViewModel : ObservableRecipient
         var table = new InstructionTable(MIPS.Models.Instructions.Enums.MipsVersion.MipsIII);
         var instructions = table.GetInstructions();
 
+        CommonInstructions = new(LoadInstructionSet("CommonInstructions.json", instructions) ?? []);
+        CoProc0Instructions = new(LoadInstructionSet("CoProc0Instructions.json", instructions) ?? []);
+        Specialized0Instructions = new(LoadInstructionSet("SpecializedInstructions.json", instructions) ?? []);
+
+        IsActive = true;
+    }
+
+    private static IEnumerable<IGrouping<string, InstructionMetadata>>? LoadInstructionSet(string filename, InstructionMetadata[] instructions)
+    {
         // Load groupings
         var assembly = Assembly.GetExecutingAssembly();
         var resources = assembly.GetManifestResourceNames();
-        var resource = resources.First(x => x.EndsWith("CommonInstructions.json"));
+        var resource = resources.First(x => x.EndsWith(filename));
         
         using Stream? stream = assembly.GetManifestResourceStream(resource);
         if (stream is null)
-            return;
+            return null;
 
         var collection = JsonSerializer.Deserialize<InstructionCollection>(stream);
         if (collection is null)
-            return;
+            return null;
 
         // Grab localization service
-        var localize = Ioc.Default.GetService<ILocalizationService>();
+        var localize = Ioc.Default.GetRequiredService<ILocalizationService>();
 
         // Create the grouped collection
         var simplePairs = collection.Groups.SelectMany(
@@ -50,14 +60,23 @@ public class CheatSheetViewModel : ObservableRecipient
             pair => pair.instruction,
             instruction => instruction.Name,
             (pair, instruction) => (pair.GroupName, instruction));
-        var groups = pairs.GroupBy(x => localize?[x.GroupName] ?? x.GroupName, x => x.instruction);
+        var groups = pairs.GroupBy(x => localize[x.GroupName], x => x.instruction);
 
-        Instructions = new(groups);
-
-        IsActive = true;
+        return groups;
     }
+
     /// <summary>
-    /// Gets an <see cref="ObservableGroupedCollection{String, InstructionMetadata}"/> of grouped instruction metadatas.
+    /// Gets an <see cref="ObservableGroupedCollection{String, InstructionMetadata}"/> of common instruction metadatas, grouped by category.
     /// </summary>
-    public ObservableGroupedCollection<string, InstructionMetadata>? Instructions { get; }
+    public ObservableGroupedCollection<string, InstructionMetadata>? CommonInstructions { get; }
+    
+    /// <summary>
+    /// Gets an <see cref="ObservableGroupedCollection{String, InstructionMetadata}"/> of coproc0 instruction metadatas, grouped by category.
+    /// </summary>
+    public ObservableGroupedCollection<string, InstructionMetadata>? CoProc0Instructions { get; }
+    
+    /// <summary>
+    /// Gets an <see cref="ObservableGroupedCollection{String, InstructionMetadata}"/> of specialized instruction metadatas, grouped by category.
+    /// </summary>
+    public ObservableGroupedCollection<string, InstructionMetadata>? Specialized0Instructions { get; }
 }

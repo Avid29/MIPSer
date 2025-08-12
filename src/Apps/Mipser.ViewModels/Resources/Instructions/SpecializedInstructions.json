@@ -1,0 +1,48 @@
+{
+  "name": "Specialized",
+  "groups": [
+    {
+      "name": "Logical",
+      "instructions": [
+        "ext",
+        "ins",
+        "seb",
+        "seh",
+        "wsbh",
+        "clz",
+        "clo"
+      ]
+    },
+    {
+      "name": "Jump",
+      "instructions": [
+        "jalx"
+      ]
+    },
+    {
+      "name": "Trap",
+      "instructions": [
+        "teq",
+        "tne",
+        "teqi",
+        "tnei",
+        "tge",
+        "tlt",
+        "tgeu",
+        "tltu",
+        "tgei",
+        "tlti",
+        "tgeui",
+        "tltui"
+      ]
+    },
+    {
+      "name": "System",
+      "instructions": [
+        "sdbbp",
+        "ehb",
+        "wrpgpr"
+      ]
+    }
+  ]
+}

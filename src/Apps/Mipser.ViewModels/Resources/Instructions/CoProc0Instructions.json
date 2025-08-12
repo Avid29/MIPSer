@@ -1,0 +1,36 @@
+{
+  "name": "CoProc0",
+  "groups": [
+    {
+      "name": "Move",
+      "instructions": [
+        "mfc0",
+        "mtc0"
+      ]
+    },
+    {
+      "name": "Interrupts",
+      "instructions": [
+        "ei",
+        "di",
+        "eret",
+        "wait"
+      ]
+    },
+    {
+      "name": "Translation Lookaside Buffer",
+      "instructions": [
+        "tlbp",
+        "tlbr",
+        "tlbwi",
+        "tlbwr"
+      ]
+    },
+    {
+      "name": "Debug",
+      "instructions": [
+        "deret"
+      ]
+    }
+  ]
+}
