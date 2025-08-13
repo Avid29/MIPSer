@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Models.Instructions.Enums;
+using Mipser.Models.CheatSheet.Enums;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Mipser.Models.CheatSheet;
@@ -20,7 +21,7 @@ public record EncodingSection
     /// Gets or sets the number of bits used for the section.
     /// </summary>
     [JsonPropertyName("size")]
-    public int BitSize { get; set; }
+    public int BitCount { get; set; }
 
     /// <summary>
     /// Gets or sets the starting bit offset for the section.
@@ -37,7 +38,22 @@ public record EncodingSection
     /// <summary>
     /// Gets or sets the type of the section, indicating how it should be interpreted.
     /// </summary>
-    public Argument? Argument { get; set; }
+    [JsonPropertyName("type")]
+    public EncodingSectionType? Type { get; set; }
+
+    /// <summary>
+    /// Gets how the section should be labelled in the encoding pattern display.
+    /// </summary>
+    public string? Display
+    {
+        get
+        {
+            if (!ConstantValue.HasValue)
+                return Name;
+
+            return string.Format($"{{0:b{BitCount}}}", ConstantValue.Value);
+        }
+    }
 
     /// <summary>
     /// Gets the start of the bit range for the section.
@@ -47,5 +63,5 @@ public record EncodingSection
     /// <summary>
     /// Gets the end of the bit range for the section.
     /// </summary>
-    public int BitRangeEnd => BitOffset + BitSize - 1;
+    public int BitRangeEnd => BitOffset + BitCount - 1;
 }

@@ -4,10 +4,13 @@ using CommunityToolkit.Mvvm.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using MIPS.Assembler.Models.Instructions;
+using MIPS.Models.Instructions.Enums;
 using Mipser.Models.CheatSheet;
 using Mipser.Services.Localization;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.IO.Enumeration;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
@@ -25,7 +28,7 @@ public class CheatSheetViewModel : ObservableRecipient
     public CheatSheetViewModel()
     {
         // TODO: Load the instruction metadata from a service.
-        var table = new InstructionTable(MIPS.Models.Instructions.Enums.MipsVersion.MipsIII);
+        var table = new InstructionTable(MipsVersion.MipsIII);
         var instructions = table.GetInstructions();
 
         CommonInstructions = new(LoadInstructionSet("CommonInstructions.json", instructions) ?? []);
@@ -33,16 +36,16 @@ public class CheatSheetViewModel : ObservableRecipient
         CoProc0Instructions = new(LoadInstructionSet("CoProc0Instructions.json", instructions) ?? []);
         Specialized0Instructions = new(LoadInstructionSet("SpecializedInstructions.json", instructions) ?? []);
 
-        Pattern = LoadEncodingPattern();
+        PrimaryEncodingPatterns = new(LoadEncodingPatterns("PrimaryEncodings.json") ?? []);
 
         IsActive = true;
     }
 
-    private EncodingPattern? LoadEncodingPattern()
+    private static IEnumerable<EncodingPattern>? LoadEncodingPatterns(string filename)
     {
         var assembly = Assembly.GetExecutingAssembly();
         var resources = assembly.GetManifestResourceNames();
-        var resource = resources.First(x => x.EndsWith("PrimaryEncodings.json"));
+        var resource = resources.First(x => x.EndsWith(filename));
         
         using Stream? stream = assembly.GetManifestResourceStream(resource);
         if (stream is null)
@@ -52,7 +55,7 @@ public class CheatSheetViewModel : ObservableRecipient
         if (patterns is null)
             return null;
 
-        return patterns[0];
+        return patterns;
     }
 
     private static IEnumerable<IGrouping<string, InstructionMetadata>>? LoadInstructionSet(string filename, InstructionMetadata[] instructions)
@@ -86,9 +89,9 @@ public class CheatSheetViewModel : ObservableRecipient
     }
 
     /// <summary>
-    /// TEMP
+    /// Gets an <see cref="ObservableCollection{EncodingPattern}"/> of the primary encoding patterns.
     /// </summary>
-    public EncodingPattern? Pattern { get; }
+    public ObservableCollection<EncodingPattern> PrimaryEncodingPatterns { get; }
 
     /// <summary>
     /// Gets an <see cref="ObservableGroupedCollection{String, InstructionMetadata}"/> of common instruction metadatas, grouped by category.

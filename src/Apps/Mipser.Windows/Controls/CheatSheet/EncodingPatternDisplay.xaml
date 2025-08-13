@@ -7,43 +7,44 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:Mipser.Windows.Controls.CheatSheet"
     xmlns:data="using:Mipser.Models.CheatSheet"
+    xmlns:convert="using:Mipser.Windows.Converter"
     mc:Ignorable="d">
-    <Grid HorizontalAlignment="Center">
+    
+    <UserControl.Resources>
+        <convert:EncodingPatternSectionColorConverter x:Key="EncodingPatternSectionColorConverter"
+                                                      Palette="{x:Bind SectionBrushPalette}"/>
+
+        <DataTemplate x:Name="EncodingSectionTemplate" x:DataType="data:EncodingSection">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="18"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="18"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="{x:Bind BitRangeEnd}" Margin="4,0" Grid.Row="0"
+                           HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock Text="{x:Bind BitRangeStart}" Margin="4,0" Grid.Row="0"
+                           HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                <Border CornerRadius="2" Background="{Binding Type, Converter={StaticResource EncodingPatternSectionColorConverter}}" Height="24" Margin="1,0" Grid.Row="1">
+                    <Viewbox Margin="2">
+                        <TextBlock Text="{x:Bind Display}" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Viewbox>
+                </Border>
+                <RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                               Grid.Row="2" IsTextSelectionEnabled="False">
+                    <Paragraph>
+                        <Run Text="{x:Bind BitCount}"/>
+                        <Run Text=" "/>
+                        <Run x:Uid="BitsRUN" Text="Bits"/>
+                    </Paragraph>
+                </RichTextBlock>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <Grid HorizontalAlignment="Stretch">
         <Border CornerRadius="2" BorderThickness="2" BorderBrush="Black" Background="Black"
                 Height="27" VerticalAlignment="Top" Margin="0,17,0,0"/>
-        <ItemsRepeater x:Name="Container" ItemsSource="{x:Bind EncodingPattern.Sections, Mode=OneWay}"
-                       Margin="2,0">
-            <ItemsRepeater.ItemTemplate>
-                <DataTemplate x:DataType="data:EncodingSection">
-                    <Grid Width="80">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="18"/>
-                            <RowDefinition/>
-                            <RowDefinition Height="18"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="{x:Bind BitRangeEnd}" Margin="4,0" Grid.Row="0"
-                                   HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <TextBlock Text="{x:Bind BitRangeStart}" Margin="4,0" Grid.Row="0"
-                                   HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                        <Border CornerRadius="2" Background="White" Height="24" Grid.Row="1">
-                            <Viewbox Margin="2">
-                                <TextBlock Text="{x:Bind Name}" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Viewbox>
-                        </Border>
-                        <RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                                       Grid.Row="2" IsTextSelectionEnabled="False">
-                            <Paragraph>
-                                <Run Text="{x:Bind BitSize}"/>
-                                <Run Text=" "/>
-                                <Run x:Uid="BitsRUN" Text="Bits"/>
-                            </Paragraph>
-                        </RichTextBlock>
-                    </Grid>
-                </DataTemplate>
-            </ItemsRepeater.ItemTemplate>
-            <ItemsRepeater.Layout>
-                <StackLayout Orientation="Horizontal" Spacing="1"/>
-            </ItemsRepeater.Layout>
-        </ItemsRepeater>
+        <Grid x:Name="Container" Margin="1,0,0,0"/>
     </Grid>
 </UserControl>

@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:collections="using:CommunityToolkit.Mvvm.Collections"
     xmlns:data="using:MIPS.Assembler.Models.Instructions"
+    xmlns:models="using:Mipser.Models.CheatSheet"
     xmlns:convert="using:Mipser.Windows.Converter"
     xmlns:helper="using:Mipser.Windows.Helpers"
     xmlns:cheat="using:Mipser.Windows.Controls.CheatSheet"
@@ -46,6 +47,21 @@
         <SolidColorBrush x:Key="ImmArg" Color="{StaticResource Color3}"/>
         <SolidColorBrush x:Key="FormatArg" Color="{StaticResource Color8}"/>
         <SolidColorBrush x:Key="MiscArg" Color="{StaticResource Color7}"/>
+        
+        <!--Sections Types-->
+        <SolidColorBrush x:Key="OpCodeSection" Color="{StaticResource Color4}"/>
+        <SolidColorBrush x:Key="FuncCodeSection" Color="{StaticResource Color5}"/>
+        <SolidColorBrush x:Key="RegFuncCodeSection" Color="{StaticResource Color8}"/>
+        <SolidColorBrush x:Key="GPRSection" Color="{StaticResource Color1}"/>
+        <SolidColorBrush x:Key="CPRSection" Color="{StaticResource Color2}"/>
+        <SolidColorBrush x:Key="ImmSection" Color="{StaticResource Color3}"/>
+        <SolidColorBrush x:Key="FormatSection" Color="{StaticResource Color7}"/>
+        <LinearGradientBrush x:Key="GeneralOrCoRegisterSection" StartPoint="0.5,0" EndPoint="0.5,1">
+            <GradientStopCollection>
+                <GradientStop Color="{StaticResource Color1}" Offset="0"/>
+                <GradientStop Color="{StaticResource Color2}" Offset="1"/>
+            </GradientStopCollection>
+        </LinearGradientBrush>
 
         <helper:InstructionTypeBrushPalette x:Key="InstructionBrushPalette"
                                             RType="{StaticResource RInst}"
@@ -62,6 +78,16 @@
                                      ImmediateValueBrush="{StaticResource ImmArg}"
                                      FormatBrush="{StaticResource FormatArg}"
                                      MiscArgBrush="{StaticResource MiscArg}"/>
+
+        <helper:EncodingPatternSectionBrushPalette x:Key="SectionBrushPalette"
+                                                   OpCodeBrush="{StaticResource OpCodeSection}"
+                                                   FuncCodeBrush="{StaticResource FuncCodeSection}"
+                                                   RegisterFuncCodeBrush="{StaticResource RegFuncCodeSection}"
+                                                   GPRegisterBrush="{StaticResource GPRSection}"
+                                                   CPRegisterBrush="{StaticResource CPRSection}"
+                                                   ImmediateValueBrush="{StaticResource ImmSection}"
+                                                   FormatBrush="{StaticResource FormatSection}"
+                                                   GeneralOrCoRegisterBrush="{StaticResource GeneralOrCoRegisterSection}"/>
         
         <DataTemplate x:Key="InstructionGroupHeaderTemplate" x:DataType="collections:IReadOnlyObservableGroup">
             <TextBlock
@@ -77,11 +103,10 @@
         </DataTemplate>
         
         <Style x:Key="SectionBorderStyle" TargetType="Border">
-            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Margin" Value="8"/>
             <Setter Property="Padding" Value="10,8"/>
             <Setter Property="BorderThickness" Value="2"/>
             <Setter Property="CornerRadius" Value="8"/>
-            <Setter Property="Width" Value="500"/>
         </Style>
         
         <Style TargetType="ListViewHeaderItem">
@@ -133,9 +158,9 @@
                   Background="{StaticResource PrimaryBackground}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid Padding="500">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="516"/>
+                <ColumnDefinition Width="516"/>
+                <ColumnDefinition Width="516"/>
                 <ColumnDefinition Width="1000"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -163,16 +188,23 @@
                 </StackPanel>
             </Border>
             
-            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
+            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
                     Grid.Column="1">
                 <StackPanel>
-                    <!--<TextBlock x:Uid="CommonInstructionsTB" Text="Common Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>-->
-                    <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind ViewModel.Pattern}"
-                                                  FontFamily="{StaticResource HappyMonkey}"/>
+                    <TextBlock x:Uid="PrimaryInstructionTypePatternsTB" Text="Primary Instruction Types Encoding Patterns" FontFamily="{StaticResource HappyMonkey}"/>
+                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.PrimaryEncodingPatterns, Mode=OneWay}" Margin="16,0">
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate x:DataType="models:EncodingPattern">
+                                <StackPanel>
+                                    <TextBlock Text="{x:Bind Name, Mode=OneWay}" Foreground="{StaticResource HeaderForeground}" Margin="0,2" FontFamily="{StaticResource HappyMonkey}"/>
+                                    <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind}" SectionBrushPalette="{StaticResource SectionBrushPalette}"
+                                                                  FontFamily="{StaticResource HappyMonkey}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
                 </StackPanel>
             </Border>
-            
-            
             
             <!--Floating-Point-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
