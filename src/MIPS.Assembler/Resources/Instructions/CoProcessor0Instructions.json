@@ -4,7 +4,8 @@
     "op_code": 16,
     "coproc0_rs": 0,
     "args": [ 1, 2 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "GPR[$rt] = CPR[0, $rd, 0]"
   },
   {
     "name": "mfhc0",
@@ -18,7 +19,8 @@
     "op_code": 16,
     "coproc0_rs": 4,
     "args": [ 1, 2 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "GPR[$rt] = CPR[0, $rd, 0]"
   },
   {
     "name": "mthc0",
@@ -32,14 +34,16 @@
     "op_code": 16,
     "co0_func_code": 1,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "Read Indexed TLB Entry"
   },
   {
     "name": "tlbwi",
     "op_code": 16,
     "co0_func_code": 2,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "Write Indexed TLB Entry"
   },
   {
     "name": "tlbinv",
@@ -60,21 +64,24 @@
     "op_code": 16,
     "co0_func_code": 6,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "Write Random TLB Entry"
   },
   {
     "name": "tlbp",
     "op_code": 16,
     "co0_func_code": 8,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$Index = probe_tlb($EntryHi)"
   },
   {
     "name": "eret",
     "op_code": 16,
     "co0_func_code": 24,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "Return from interrupt, exception, or trap"
   },
   {
     "name": "eretnc",
@@ -89,14 +96,16 @@
     "op_code": 16,
     "co0_func_code": 31,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$PC = $DEPC"
   },
   {
     "name": "wait",
     "op_code": 16,
     "co0_func_code": 32,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "Enter Standby Mode"
   },
   {
     "name": "di",

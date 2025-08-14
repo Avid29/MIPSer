@@ -4,70 +4,80 @@
     "op_code": 0,
     "func_code": 0,
     "args": [ 2, 1, 3 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rt << sa"
   },
   {
     "name": "srl",
     "op_code": 0,
     "func_code": 2,
     "args": [ 2, 1, 3 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rt >> sa"
   },
   {
     "name": "sra",
     "op_code": 0,
     "func_code": 3,
     "args": [ 2, 1, 3 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rt >> sa"
   },
   {
     "name": "sllv",
     "op_code": 0,
     "func_code": 4,
     "args": [ 2, 1, 0 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rt << $rs"
   },
   {
     "name": "srlv",
     "op_code": 0,
     "func_code": 6,
     "args": [ 2, 1, 0 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rt >> $rs"
   },
   {
     "name": "srav",
     "op_code": 0,
     "func_code": 7,
     "args": [ 2, 1, 0 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rt >> $rs"
   },
   {
     "name": "jr",
     "op_code": 0,
     "func_code": 8,
     "args": [ 0 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$pc = $rs"
   },
   {
     "name": "jalr",
     "op_code": 0,
     "func_code": 9,
     "args": [ 0 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$ra = ret_addr,\n$pc = $rs"
   },
   {
     "name": "syscall",
     "op_code": 0,
     "func_code": 12,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "Make a syscall interrupt"
   },
   {
     "name": "break",
     "op_code": 0,
     "func_code": 13,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "Make a breakpoint exception"
   },
   {
     "name": "sync",
@@ -81,167 +91,191 @@
     "op_code": 0,
     "func_code": 16,
     "args": [ 2 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $Hi"
   },
   {
     "name": "mthi",
     "op_code": 0,
     "func_code": 17,
     "args": [ 0 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$Hi = $rs"
   },
   {
     "name": "mflo",
     "op_code": 0,
     "func_code": 18,
     "args": [ 2 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $Lo"
   },
   {
     "name": "mtlo",
     "op_code": 0,
     "func_code": 19,
     "args": [ 0 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$Lo = $rs"
   },
   {
     "name": "mult",
     "op_code": 0,
     "func_code": 24,
     "args": [ 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "($Hi,$Lo) = $rs * $rt"
   },
   {
     "name": "multu",
     "op_code": 0,
     "func_code": 25,
     "args": [ 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "($Hi,$Lo) = $rs * $rt"
   },
   {
     "name": "div",
     "op_code": 0,
     "func_code": 26,
     "args": [ 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$Lo = $rs / $rt,\n$Hi = $rs % $rt"
   },
   {
     "name": "divu",
     "op_code": 0,
     "func_code": 27,
     "args": [ 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$Lo = $rs / $rt,\n$Hi = $rs % $rt"
   },
   {
     "name": "add",
     "op_code": 0,
     "func_code": 32,
     "args": [ 2, 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rs + $rt"
   },
   {
     "name": "addu",
     "op_code": 0,
     "func_code": 33,
     "args": [ 2, 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rs + $rt"
   },
   {
     "name": "sub",
     "op_code": 0,
     "func_code": 34,
     "args": [ 2, 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rs - $rt"
   },
   {
     "name": "subu",
     "op_code": 0,
     "func_code": 35,
     "args": [ 2, 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rs - $rt"
   },
   {
     "name": "and",
     "op_code": 0,
     "func_code": 36,
     "args": [ 2, 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rs & $rt"
   },
   {
     "name": "or",
     "op_code": 0,
     "func_code": 37,
     "args": [ 2, 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rs | $rt"
   },
   {
     "name": "xor",
     "op_code": 0,
     "func_code": 38,
     "args": [ 2, 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rs ^ $rt"
   },
   {
     "name": "nor",
     "op_code": 0,
     "func_code": 39,
     "args": [ 2, 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = ~($rs | $rt)"
   },
   {
     "name": "slt",
     "op_code": 0,
     "func_code": 42,
     "args": [ 2, 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rs < $rt ? 1 : 0"
   },
   {
     "name": "sltu",
     "op_code": 0,
     "func_code": 43,
     "args": [ 2, 0, 1 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$rd = $rs < $rt ? 1 : 0"
   },
   {
     "name": "tge",
     "op_code": 0,
     "func_code": 48,
     "args": [ 0, 1 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "if ($rs >= $rt) Invoke Trap"
   },
   {
     "name": "tgeu",
     "op_code": 0,
     "func_code": 49,
     "args": [ 0, 1 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "if ($rs >= $rt) Invoke Trap"
   },
   {
     "name": "tlt",
     "op_code": 0,
     "func_code": 50,
     "args": [ 0, 1 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "if ($rs < $rt) Invoke Trap"
   },
   {
     "name": "tltu",
     "op_code": 0,
     "func_code": 51,
     "args": [ 0, 1 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "if ($rs < $rt) Invoke Trap"
   },
   {
     "name": "teq",
     "op_code": 0,
     "func_code": 52,
     "args": [ 0, 1 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "if ($rs == $rt) Invoke Trap"
   },
   {
     "name": "tne",
     "op_code": 0,
     "func_code": 54,
     "args": [ 0, 1 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "if ($rs != $rt) Invoke Trap"
   }
 ]

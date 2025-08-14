@@ -5,7 +5,8 @@
     "float_func_code": 0,
     "float_formats": [ 16, 17, 22 ],
     "args": [ 11, 9, 10 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = $fs + $ft"
   },
   {
     "name": "sub.fmt",
@@ -13,7 +14,8 @@
     "float_func_code": 1,
     "float_formats": [ 16, 17, 22 ],
     "args": [ 11, 9, 10 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = $fs - $ft"
   },
   {
     "name": "mul.fmt",
@@ -21,7 +23,8 @@
     "float_func_code": 2,
     "float_formats": [ 16, 17, 22 ],
     "args": [ 11, 9, 10 ],
-    "versions": [ 1, 2, 3, 4, 5 ]
+    "versions": [ 1, 2, 3, 4, 5 ],
+    "behavior": "$fd = $fs * $ft"
   },
   {
     "name": "div.fmt",
@@ -29,7 +32,8 @@
     "float_func_code": 3,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9, 10 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = $fs / $ft"
   },
   {
     "name": "sqrt.fmt",
@@ -37,7 +41,8 @@
     "float_func_code": 4,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = sqrt($fs)"
   },
   {
     "name": "abs.fmt",
@@ -45,7 +50,8 @@
     "float_func_code": 5,
     "float_formats": [ 16, 17, 22 ],
     "args": [ 11, 9 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = abs($fs)"
   },
   {
     "name": "mov.fmt",
@@ -53,7 +59,8 @@
     "float_func_code": 6,
     "float_formats": [ 16, 17, 22 ],
     "args": [ 11, 9 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = $fs"
   },
   {
     "name": "neg.fmt",
@@ -61,7 +68,8 @@
     "float_func_code": 7,
     "float_formats": [ 16, 17, 22 ],
     "args": [ 11, 9 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = -($fs)"
   },
   {
     "name": "round.L.fmt",
@@ -69,7 +77,8 @@
     "float_func_code": 8,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (long)round($fs)"
   },
   {
     "name": "trunc.L.fmt",
@@ -77,7 +86,8 @@
     "float_func_code": 9,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (long)trunc($fs)"
   },
   {
     "name": "ceil.L.fmt",
@@ -85,7 +95,8 @@
     "float_func_code": 10,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (long)ceil($fs)"
   },
   {
     "name": "floor.L.fmt",
@@ -93,7 +104,8 @@
     "float_func_code": 11,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (long)floor($fs)"
   },
   {
     "name": "round.W.fmt",
@@ -101,7 +113,8 @@
     "float_func_code": 12,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (int)round($fs)"
   },
   {
     "name": "trunc.W.fmt",
@@ -109,7 +122,8 @@
     "float_func_code": 13,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (int)trunc($fs)"
   },
   {
     "name": "ceil.W.fmt",
@@ -117,7 +131,8 @@
     "float_func_code": 14,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (int)ceil($fs)"
   },
   {
     "name": "floor.W.fmt",
@@ -125,7 +140,8 @@
     "float_func_code": 15,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (int)floor($fs)"
   },
   {
     "name": "cvt.S.fmt",
@@ -133,7 +149,8 @@
     "float_func_code": 32,
     "float_formats": [ 17, 20, 21 ],
     "args": [ 11, 9 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (float)$fs"
   },
   {
     "name": "cvt.D.fmt",
@@ -141,7 +158,8 @@
     "float_func_code": 33,
     "float_formats": [ 16, 20, 21 ],
     "args": [ 11, 9 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (double)$fs"
   },
   {
     "name": "cvt.W.fmt",
@@ -149,7 +167,8 @@
     "float_func_code": 36,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9 ],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (int)$fs"
   },
   {
     "name": "cvt.L.fmt",
@@ -157,6 +176,7 @@
     "float_func_code": 37,
     "float_formats": [ 16, 17 ],
     "args": [ 11, 9 ],
-    "versions": [ 2, 3, 4, 5, 6 ]
+    "versions": [ 2, 3, 4, 5, 6 ],
+    "behavior": "$fd = (long)$fs"
   }
 ]

@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
@@ -10,6 +11,7 @@ using MIPS.Extensions;
 using MIPS.Models.Instructions.Enums;
 using Mipser.Services.Localization;
 using Mipser.Windows.Helpers;
+using Windows.UI.Text;
 
 namespace Mipser.Windows.Controls.CheatSheet;
 
@@ -58,6 +60,7 @@ public sealed partial class UsagePatternDisplay : UserControl
 
         UpdateNameDisplay(data, localizer);
         UpdateUsageDisplay(data.ArgumentPattern, localizer);
+        UpdateBehaviorDisplay(data.Behavior, localizer);
     }
 
     private void UpdateNameDisplay(InstructionMetadata data, ILocalizationService localizer)
@@ -129,6 +132,30 @@ public sealed partial class UsagePatternDisplay : UserControl
 
         UsagePatternTextBlock.Blocks.Clear();
         UsagePatternTextBlock.Blocks.Add(usage);
+    }
+
+    private void UpdateBehaviorDisplay(string? behavior, ILocalizationService localizer)
+    {
+        if (string.IsNullOrWhiteSpace(behavior))
+        {
+            BehaviorTextBlock.Visibility = Visibility.Collapsed;
+            return;
+        }
+        BehaviorTextBlock.Visibility = Visibility.Visible;
+
+        var behaviorParagraph = new Paragraph
+        {
+            Inlines =
+            {
+                new Run
+                {
+                    Text = behavior,
+                    FontStyle = FontStyle.Italic,
+                },
+            }
+        };
+        BehaviorTextBlock.Blocks.Clear();
+        BehaviorTextBlock.Blocks.Add(behaviorParagraph);
     }
 
     private Inline CreateArgumentRun(Argument arg, ILocalizationService localizer)

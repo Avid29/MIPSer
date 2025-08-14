@@ -11,11 +11,12 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="120"/>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
         <RichTextBlock x:Name="NameTextBlock"/>
         <RichTextBlock x:Name="UsagePatternTextBlock" Grid.Column="1"/>
+        <RichTextBlock x:Name="BehaviorTextBlock" TextWrapping="WrapWholeWords" Grid.Column="2"/>
     </Grid>
 </UserControl>

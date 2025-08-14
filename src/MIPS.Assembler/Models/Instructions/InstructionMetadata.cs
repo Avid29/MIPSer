@@ -128,7 +128,8 @@ public readonly struct InstructionMetadata
         Argument[] argumentPattern,
         int? realizedInstructionCount,
         HashSet<MipsVersion> mIPSVersions,
-        bool obsolete)
+        bool obsolete,
+        string behavior)
     {
         Name = name;
         OpCode = opCode;
@@ -149,6 +150,7 @@ public readonly struct InstructionMetadata
         RealizedInstructionCount = realizedInstructionCount;
         MIPSVersions = mIPSVersions;
         Obsolete = obsolete;
+        Behavior = behavior;
     }
 
     /// <summary>
@@ -299,6 +301,12 @@ public readonly struct InstructionMetadata
     [JsonPropertyName("obsolete")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
     public bool Obsolete { get; }
+
+    /// <summary>
+    /// Gets a string describing the behavior of the instruction.
+    /// </summary>
+    [JsonPropertyName("behavior")]
+    public string? Behavior { get; }
 
     /// <summary>
     /// Gets the function's type.
