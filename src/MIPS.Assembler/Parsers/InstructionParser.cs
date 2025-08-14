@@ -174,8 +174,8 @@ public struct InstructionParser
                 _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.Function3Code)} value."),
             
             // J Type
-            OperationCode.Jump or
-            OperationCode.JumpAndLink => Instruction.Create(_meta.OpCode.Value, _address),
+            OperationCode.Jump or OperationCode.JumpAndLink 
+            or OperationCode.JumpAndLinkX => Instruction.Create(_meta.OpCode.Value, _address),
 
             // Coprocessor0 instructions
             OperationCode.Coprocessor0 when _meta.Co0FuncCode.HasValue                      // C0

@@ -62,7 +62,7 @@ public class InstructionTests
         {
             var addr = ArgGenerator.RandomAddress();
             var instruction = Instruction.Create(ArgGenerator.RandomOpCode(false), addr);
-            Assert.AreEqual(addr, instruction.Address, $"Error seeting address to {addr}");
+            Assert.AreEqual(addr, instruction.Address, $"Error setting address to {addr}");
         }
     }
 
