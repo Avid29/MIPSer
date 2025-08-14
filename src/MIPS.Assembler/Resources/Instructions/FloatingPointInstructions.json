@@ -72,7 +72,7 @@
     "versions": [ 2, 3, 4, 5, 6 ]
   },
   {
-    "name": "trunc.L.S",
+    "name": "trunc.L.fmt",
     "op_code": 17,
     "float_func_code": 9,
     "float_formats": [ 16, 17 ],

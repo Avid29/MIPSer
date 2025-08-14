@@ -63,20 +63,25 @@ public class Disassembler
             _ => 255,
         };
 
-        byte fmt = 0;
+        // If the instruction is a float instruction, retrieve the format.
+        FloatFormat? format = null;
         if (instruction.Type is InstructionType.Float)
-        {
-            fmt = (byte)((FloatInstruction)instruction).Format;
-            // TODO: Utilize the format for disassembly
-        }
+            format = ((FloatInstruction)instruction).Format;
 
         var key = ((byte)instruction.OpCode, funcCode, instruction.Type is InstructionType.Float);
         if (!InstructionTable.TryGetInstruction(key, out var meta, out _))
         {
             return "Unknown instruction";
         }
-        
-        StringBuilder pattern = new($"{meta.Name} ");
+
+        // Apply the format to the name if it exists.
+        var name = meta.Name;
+        if (format is not null)
+        {
+            name = FloatFormatTable.ApplyFormat(name, format.Value);
+        }
+
+        StringBuilder pattern = new($"{name} ");
         for (int i = 0; i < meta.ArgumentPattern.Length; i++)
         {
             pattern.Append(meta.ArgumentPattern[i] switch

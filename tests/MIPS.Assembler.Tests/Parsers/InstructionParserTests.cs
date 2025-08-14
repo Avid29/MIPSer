@@ -177,10 +177,15 @@ public class InstructionParserTests
             if (instruction.OpCode is OperationCode.Coprocessor0)
                     continue;
 
-            // TODO: Handle formatted instructions
+            // Apply format to instruction name, if applicable
+            var name = instruction.Name;
+            if (name.EndsWith(".fmt"))
+            {
+                name = FloatFormatTable.ApplyFormat(name, ArgGenerator.RandomFormat(instruction.FloatFormats));
+            }
 
             // Generate instruction
-            StringBuilder line = new(instruction.Name);
+            StringBuilder line = new(name);
             line.Append(' ');
 
             foreach(var arg in instruction.ArgumentPattern)

@@ -1,9 +1,12 @@
 ﻿// Adam Dernis 2025
 
+using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MIPS.Tests.Helpers;
 
@@ -26,4 +29,6 @@ public class ArgGenerator
     public static OperationCode RandomOpCode(bool safe = true) => (OperationCode)Random.Shared.Next(safe ? (int)OperationCode.StoreWordCoprocessor3 : int.MaxValue);
 
     public static FunctionCode RandomFuncCode(bool safe = true) => (FunctionCode)Random.Shared.Next(safe ? (int)FunctionCode.SetLessThanUnsigned : int.MaxValue);
+
+    public static FloatFormat RandomFormat(HashSet<FloatFormat>? set) => set?.ElementAt(Random.Shared.Next(set.Count-1)) ?? FloatFormat.Single;
 }

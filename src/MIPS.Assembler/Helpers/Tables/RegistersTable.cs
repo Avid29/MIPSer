@@ -25,9 +25,14 @@ public static class RegistersTable
     {
         register = Register.Zero;
         set = RegisterSet.Numbered;
+        
+        // Trime the '$' prefix
+        if (name.StartsWith('$'))
+            name = name[1..];
 
         // Check for float register
-        if (name[0] == 'f')
+        // TODO: Checking "fp" explcitly is a bit of a hack, but it works (at least for now).
+        if (name[0] == 'f' && name != "fp")
         {
             // Assign set as floating point then fall-through to numerical
             // register set parsing with the 'f' removed

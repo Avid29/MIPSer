@@ -84,33 +84,8 @@ public struct InstructionParser
         Guard.IsNotNull(name);
 
         // Parse out format from instruction name if present
-        if (name.Contains('.'))
-        {
-            var split = name.LastIndexOf('.');
-            var format = name[(split+1)..];
-            name = name[..split] + ".fmt";
-
-            // TODO: Handle parsing after grabbing metadata to improve error messages.
-
-            // TODO: Do I like this here?
-            // No. But it's currently too small to warrent its own class/file.
-            _format = format.ToLower() switch
-            {
-                "s" => FloatFormat.Single,
-                "d" => FloatFormat.Double,
-                "w" => FloatFormat.Word,
-                "l" => FloatFormat.Long,
-                "ps" => FloatFormat.PairedSingle,
-                _ => 0
-            };
-
-            // If the format is not recognized, log an error
-            if (_format == 0)
-            {
-                _logger?.Log(Severity.Error, LogId.InvalidFloatFormat, $"Invalid float format '{format}' in instruction '{name}'.");
-                return false;
-            }
-        }
+        if (FloatFormatTable.TryGetFloatFormat(name, out _format, out var lookupName))
+            name = lookupName;
 
         // Get instruction metadata from name
         if (!_instructionTable.TryGetInstruction(name, out _meta, out var version))
@@ -501,7 +476,7 @@ public struct InstructionParser
         }
 
         // Get named register from table
-        if (!RegistersTable.TryGetRegister(regStr[1..], out register, out RegisterSet parsedSet))
+        if (!RegistersTable.TryGetRegister(regStr, out register, out RegisterSet parsedSet))
         {
             // Register does not exist in table
             _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"No register '{arg}' exists.");
