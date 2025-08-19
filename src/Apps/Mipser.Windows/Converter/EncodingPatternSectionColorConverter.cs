@@ -1,11 +1,9 @@
 ﻿// Avishai Dernis 2025
 
-using CommunityToolkit.Diagnostics;
 using Microsoft.UI;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
 using MIPS.Models.Instructions.Enums;
-using Mipser.Models.CheatSheet;
 using Mipser.Models.CheatSheet.Enums;
 using Mipser.Windows.Helpers;
 using System;

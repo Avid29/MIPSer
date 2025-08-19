@@ -102,7 +102,15 @@
                                           ArgumentBrushPalette="{StaticResource ArgumentBrushPalette}"/>
         </DataTemplate>
         
-        <Style x:Key="SectionBorderStyle" TargetType="Border">
+        <DataTemplate x:Key="EncodingPatternDisplayTemplate" x:DataType="models:EncodingPattern">
+            <StackPanel>
+                <TextBlock Text="{x:Bind Name, Mode=OneWay}" Foreground="{StaticResource HeaderForeground}" Margin="0,2" FontFamily="{StaticResource HappyMonkey}"/>
+                <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind}" SectionBrushPalette="{StaticResource SectionBrushPalette}"
+                                              FontFamily="{StaticResource HappyMonkey}"/>
+            </StackPanel>
+        </DataTemplate>
+
+            <Style x:Key="SectionBorderStyle" TargetType="Border">
             <Setter Property="Margin" Value="8"/>
             <Setter Property="Padding" Value="10,8"/>
             <Setter Property="BorderThickness" Value="2"/>
@@ -161,6 +169,7 @@
                 <ColumnDefinition Width="648"/>
                 <ColumnDefinition Width="648"/>
                 <ColumnDefinition Width="648"/>
+                <ColumnDefinition Width="648"/>
                 <ColumnDefinition Width="1000"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -168,7 +177,7 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             
-            <!--Common-->
+            <!--Common Instructions-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White">
                 <StackPanel>
                     <TextBlock x:Uid="CommonInstructionsTB" Text="Common Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>
@@ -188,25 +197,17 @@
                 </StackPanel>
             </Border>
             
+            <!--Common Encoding-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
                     Grid.Column="1">
                 <StackPanel>
                     <TextBlock x:Uid="PrimaryInstructionTypePatternsTB" Text="Primary Instruction Types Encoding Patterns" FontFamily="{StaticResource HappyMonkey}"/>
-                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.PrimaryEncodingPatterns, Mode=OneWay}" Margin="16,0">
-                        <ItemsRepeater.ItemTemplate>
-                            <DataTemplate x:DataType="models:EncodingPattern">
-                                <StackPanel>
-                                    <TextBlock Text="{x:Bind Name, Mode=OneWay}" Foreground="{StaticResource HeaderForeground}" Margin="0,2" FontFamily="{StaticResource HappyMonkey}"/>
-                                    <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind}" SectionBrushPalette="{StaticResource SectionBrushPalette}"
-                                                                  FontFamily="{StaticResource HappyMonkey}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsRepeater.ItemTemplate>
-                    </ItemsRepeater>
+                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.PrimaryEncodingPatterns, Mode=OneWay}" Margin="16,0" ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
+
                 </StackPanel>
             </Border>
             
-            <!--Floating-Point-->
+            <!--Floating-Point Instructions-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
                     Grid.Column="2">
                 <StackPanel>
@@ -227,7 +228,17 @@
                 </StackPanel>
             </Border>
             
-            <!--CoProcessor0-->
+            <!--Floating-Point Encoding-->
+            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
+                    Grid.Column="3">
+                <StackPanel>
+                    <TextBlock x:Uid="PrimaryInstructionTypePatternsTB" Text="Primary Instruction Types Encoding Patterns" FontFamily="{StaticResource HappyMonkey}"/>
+                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.CoProcessor1Patterns, Mode=OneWay}" Margin="16,0" ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
+
+                </StackPanel>
+            </Border>
+            
+            <!--CoProcessor0 Instructions-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
                     Grid.Row="1">
                 <StackPanel>
@@ -248,7 +259,7 @@
                 </StackPanel>
             </Border>
             
-            <!--Specialized-->
+            <!--Specialized Instructions-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
                     Grid.Row="1" Grid.Column="2">
                 <StackPanel>

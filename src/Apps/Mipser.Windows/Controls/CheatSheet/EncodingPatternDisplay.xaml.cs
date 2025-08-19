@@ -64,8 +64,8 @@ public sealed partial class EncodingPatternDisplay : UserControl
             // Create content control for the section
             var content = new ContentControl
             {
-                DataContext = section,
-                ContentTemplate = EncodingSectionTemplate,
+                Content = section,
+                ContentTemplateSelector = EncodingSectionTemplateSelector,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 HorizontalContentAlignment = HorizontalAlignment.Stretch,
             };

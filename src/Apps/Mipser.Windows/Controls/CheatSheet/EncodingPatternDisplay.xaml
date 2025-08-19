@@ -8,38 +8,81 @@
     xmlns:local="using:Mipser.Windows.Controls.CheatSheet"
     xmlns:data="using:Mipser.Models.CheatSheet"
     xmlns:convert="using:Mipser.Windows.Converter"
+    xmlns:selector="using:Mipser.Windows.Selector"
+    xmlns:c="using:CommunityToolkit.WinUI.Converters"
     mc:Ignorable="d">
     
     <UserControl.Resources>
         <convert:EncodingPatternSectionColorConverter x:Key="EncodingPatternSectionColorConverter"
                                                       Palette="{x:Bind SectionBrushPalette}"/>
 
-        <DataTemplate x:Name="EncodingSectionTemplate" x:DataType="data:EncodingSection">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="18"/>
-                    <RowDefinition/>
-                    <RowDefinition Height="18"/>
-                </Grid.RowDefinitions>
-                <TextBlock Text="{x:Bind BitRangeEnd}" Margin="4,0" Grid.Row="0"
-                           HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBlock Text="{x:Bind BitRangeStart}" Margin="4,0" Grid.Row="0"
-                           HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                <Border CornerRadius="2" Background="{Binding Type, Converter={StaticResource EncodingPatternSectionColorConverter}}" Height="24" Margin="1,0" Grid.Row="1">
-                    <Viewbox Margin="2">
-                        <TextBlock Text="{x:Bind Display}" Foreground="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Viewbox>
-                </Border>
-                <RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                               Grid.Row="2" IsTextSelectionEnabled="False">
-                    <Paragraph>
-                        <Run Text="{x:Bind BitCount}"/>
-                        <Run Text=" "/>
-                        <Run x:Uid="BitsRUN" Text="Bits"/>
-                    </Paragraph>
-                </RichTextBlock>
-            </Grid>
-        </DataTemplate>
+        <convert:EncodingPatternForegroundConverter x:Key="EncodingPatternSectionForegroundConverter">
+            <convert:EncodingPatternForegroundConverter.Default>
+                <SolidColorBrush Color="Black"/>
+            </convert:EncodingPatternForegroundConverter.Default>
+            <convert:EncodingPatternForegroundConverter.Reserved>
+                <SolidColorBrush Color="White"/>
+            </convert:EncodingPatternForegroundConverter.Reserved>
+        </convert:EncodingPatternForegroundConverter>
+        
+        <selector:EncodingTemplateConverter x:Name="EncodingSectionTemplateSelector">
+            <selector:EncodingTemplateConverter.DefaultTemplate>  
+                <DataTemplate x:Name="EncodingSectionTemplate" x:DataType="data:EncodingSection">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="18"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="18"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{x:Bind BitRangeEnd}" Margin="4,0" Grid.Row="0"
+                                   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <TextBlock Text="{x:Bind BitRangeStart}" Margin="4,0" Grid.Row="0"
+                                   HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <Border CornerRadius="2" Background="{Binding Type, Converter={StaticResource EncodingPatternSectionColorConverter}}" Height="24" Margin="1,0" Grid.Row="1">
+                            <Viewbox Margin="2">
+                                <TextBlock Text="{x:Bind Display}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="{x:Bind Type, Converter={StaticResource EncodingPatternSectionForegroundConverter}}"/>
+                            </Viewbox>
+                        </Border>
+                        <RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                                       Grid.Row="2" IsTextSelectionEnabled="False">
+                            <Paragraph>
+                                <Run Text="{x:Bind BitCount}"/>
+                                <Run Text=" "/>
+                                <Run x:Uid="BitsRUN" Text="Bits"/>
+                            </Paragraph>
+                        </RichTextBlock>
+                    </Grid>
+                </DataTemplate>
+            </selector:EncodingTemplateConverter.DefaultTemplate>
+            <selector:EncodingTemplateConverter.NarrowTemplate>
+                <DataTemplate x:Name="NarrowEncodingSectionTemplate" x:DataType="data:EncodingSection">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="18"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="18"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="{x:Bind BitRangeStart}" Grid.Row="0"
+                                   HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                        <Border CornerRadius="2" Background="{Binding Type, Converter={StaticResource EncodingPatternSectionColorConverter}}" Height="24" Margin="1,0" Grid.Row="1">
+                            <Viewbox Margin="2">
+                                <TextBlock Text="{x:Bind Display}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="{x:Bind Type, Converter={StaticResource EncodingPatternSectionForegroundConverter}}"/>
+                            </Viewbox>
+                        </Border>
+                        <RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                                       Grid.Row="2" IsTextSelectionEnabled="False">
+                            <Paragraph>
+                                <Run Text="{x:Bind BitCount}"/>
+                            </Paragraph>
+                        </RichTextBlock>
+                    </Grid>
+                </DataTemplate>
+            </selector:EncodingTemplateConverter.NarrowTemplate>
+        </selector:EncodingTemplateConverter>
     </UserControl.Resources>
     
     <Grid HorizontalAlignment="Stretch">

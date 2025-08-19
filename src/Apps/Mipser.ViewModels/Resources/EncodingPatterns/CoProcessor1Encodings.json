@@ -1,0 +1,92 @@
+[
+  {
+    "name": "Floating Point Instructions",
+    "sections": [
+      {
+        "name": "OP Code",
+        "size": 6,
+        "offset": 26,
+        "type": 0,
+        "value": 17
+      },
+      {
+        "size": 1,
+        "offset": 25,
+        "type": -1,
+        "value": 1
+      },
+      {
+        "name": "Format",
+        "size": 4,
+        "offset": 21,
+        "type": 3
+      },
+      {
+        "name": "FT",
+        "size": 5,
+        "offset": 16,
+        "type": 5
+      },
+      {
+        "name": "FS",
+        "size": 5,
+        "offset": 11,
+        "type": 5
+      },
+      {
+        "name": "FD",
+        "size": 5,
+        "offset": 6,
+        "type": 5
+      },
+      {
+        "name": "Function Code",
+        "size": 6,
+        "offset": 0,
+        "type": 1
+      }
+    ]
+  },
+  {
+    "name": "CoProcessor1 Move Instructions",
+    "sections": [
+      {
+        "name": "OP Code",
+        "size": 6,
+        "offset": 26,
+        "type": 0,
+        "value": 17
+      },
+      {
+        "size": 2,
+        "offset": 24,
+        "type": -1,
+        "value": 0
+      },
+      {
+        "name": "Mov Code",
+        "size": 3,
+        "offset": 21,
+        "type": 2
+      },
+      {
+        "name": "RT",
+        "size": 5,
+        "offset": 16,
+        "type": 3
+      },
+      {
+        "name": "FS",
+        "size": 5,
+        "offset": 11,
+        "type": 5
+      },
+      {
+        "size": 11,
+        "offset": 0,
+        "type": -1,
+        "value": 0
+      }
+    ]
+  }
+]

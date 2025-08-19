@@ -37,6 +37,7 @@ public class CheatSheetViewModel : ObservableRecipient
         Specialized0Instructions = new(LoadInstructionSet("SpecializedInstructions.json", instructions) ?? []);
 
         PrimaryEncodingPatterns = new(LoadEncodingPatterns("PrimaryEncodings.json") ?? []);
+        CoProcessor1Patterns = new(LoadEncodingPatterns("CoProcessor1Encodings.json") ?? []);
 
         IsActive = true;
     }
@@ -92,6 +93,11 @@ public class CheatSheetViewModel : ObservableRecipient
     /// Gets an <see cref="ObservableCollection{EncodingPattern}"/> of the primary encoding patterns.
     /// </summary>
     public ObservableCollection<EncodingPattern> PrimaryEncodingPatterns { get; }
+
+    /// <summary>
+    /// Gets an <see cref="ObservableCollection{EncodingPattern}"/> of the primary encoding patterns.
+    /// </summary>
+    public ObservableCollection<EncodingPattern> CoProcessor1Patterns { get; }
 
     /// <summary>
     /// Gets an <see cref="ObservableGroupedCollection{String, InstructionMetadata}"/> of common instruction metadatas, grouped by category.
