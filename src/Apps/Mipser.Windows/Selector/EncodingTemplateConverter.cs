@@ -10,7 +10,7 @@ public partial class EncodingTemplateConverter : DataTemplateSelector
 {
     protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container)
     {
-        if (NarrowTemplate is null || DefaultTemplate is null)
+        if (SingleTemplate is null || NarrowTemplate is null || DefaultTemplate is null)
             return null;
 
         if (item is not EncodingSection es)
@@ -18,7 +18,8 @@ public partial class EncodingTemplateConverter : DataTemplateSelector
 
         return es.BitCount switch
         {
-            1 => NarrowTemplate,
+            1 => SingleTemplate,
+            >= 2 and <= 3 => NarrowTemplate,
             _ => DefaultTemplate,
         };
     }
@@ -26,4 +27,6 @@ public partial class EncodingTemplateConverter : DataTemplateSelector
     public DataTemplate? DefaultTemplate { get; set; }
 
     public DataTemplate? NarrowTemplate { get; set; }
+
+    public DataTemplate? SingleTemplate { get; set; }
 }

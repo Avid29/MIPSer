@@ -64,6 +64,34 @@
                             <RowDefinition/>
                             <RowDefinition Height="18"/>
                         </Grid.RowDefinitions>
+                        <TextBlock Text="{x:Bind BitRangeEnd}"  Grid.Row="0"
+                                   HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <TextBlock Text="{x:Bind BitRangeStart}" Margin="2,0" Grid.Row="0"
+                                   HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        <Border CornerRadius="2" Background="{Binding Type, Converter={StaticResource EncodingPatternSectionColorConverter}}" Height="24" Margin="1,0" Grid.Row="1">
+                            <Viewbox Margin="2">
+                                <TextBlock Text="{x:Bind Display}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                                           Foreground="{x:Bind Type, Converter={StaticResource EncodingPatternSectionForegroundConverter}}"/>
+                            </Viewbox>
+                        </Border>
+                        <RichTextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                                       Grid.Row="2" IsTextSelectionEnabled="False">
+                            <Paragraph>
+                                <Run Text="{x:Bind BitCount}"/>
+                            </Paragraph>
+                        </RichTextBlock>
+                    </Grid>
+                </DataTemplate>
+            </selector:EncodingTemplateConverter.NarrowTemplate>
+            <selector:EncodingTemplateConverter.SingleTemplate>
+                <DataTemplate x:Name="SingleEncodingSectionTemplate" x:DataType="data:EncodingSection">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="18"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="18"/>
+                        </Grid.RowDefinitions>
                         <TextBlock Text="{x:Bind BitRangeStart}" Grid.Row="0"
                                    HorizontalAlignment="Center" VerticalAlignment="Top"/>
                         <Border CornerRadius="2" Background="{Binding Type, Converter={StaticResource EncodingPatternSectionColorConverter}}" Height="24" Margin="1,0" Grid.Row="1">
@@ -81,7 +109,7 @@
                         </RichTextBlock>
                     </Grid>
                 </DataTemplate>
-            </selector:EncodingTemplateConverter.NarrowTemplate>
+            </selector:EncodingTemplateConverter.SingleTemplate>
         </selector:EncodingTemplateConverter>
     </UserControl.Resources>
     

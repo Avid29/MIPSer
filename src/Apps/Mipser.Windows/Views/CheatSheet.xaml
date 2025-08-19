@@ -259,6 +259,16 @@
                 </StackPanel>
             </Border>
             
+            <!--CoProcessor0 Encoding-->
+            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
+                    Grid.Row="1" Grid.Column="1" >
+                <StackPanel>
+                    <TextBlock x:Uid="PrimaryInstructionTypePatternsTB" Text="CoProcessor0 Instruction Types Encoding Patterns" FontFamily="{StaticResource HappyMonkey}"/>
+                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.CoProcessor0Patterns, Mode=OneWay}" Margin="16,0"
+                                   ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
+                </StackPanel>
+            </Border>
+            
             <!--Specialized Instructions-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
                     Grid.Row="1" Grid.Column="2">
