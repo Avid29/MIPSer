@@ -4,7 +4,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.Models.CheatSheet;
 
-namespace Mipser.Windows.Selector;
+namespace Mipser.Windows.Selectors;
 
 public partial class EncodingTemplateConverter : DataTemplateSelector
 {

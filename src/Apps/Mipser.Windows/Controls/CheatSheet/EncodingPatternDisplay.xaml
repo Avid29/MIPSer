@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:Mipser.Windows.Controls.CheatSheet"
     xmlns:data="using:Mipser.Models.CheatSheet"
-    xmlns:convert="using:Mipser.Windows.Converter"
-    xmlns:selector="using:Mipser.Windows.Selector"
+    xmlns:convert="using:Mipser.Windows.Converters"
+    xmlns:selector="using:Mipser.Windows.Selectors"
     xmlns:c="using:CommunityToolkit.WinUI.Converters"
     mc:Ignorable="d">
     

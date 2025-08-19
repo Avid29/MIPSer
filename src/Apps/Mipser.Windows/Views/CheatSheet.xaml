@@ -8,7 +8,7 @@
     xmlns:collections="using:CommunityToolkit.Mvvm.Collections"
     xmlns:data="using:MIPS.Assembler.Models.Instructions"
     xmlns:models="using:Mipser.Models.CheatSheet"
-    xmlns:convert="using:Mipser.Windows.Converter"
+    xmlns:convert="using:Mipser.Windows.Converters"
     xmlns:helper="using:Mipser.Windows.Helpers"
     xmlns:cheat="using:Mipser.Windows.Controls.CheatSheet"
     FlowDirection="LeftToRight"

@@ -6,7 +6,7 @@ using MIPS.Models.Instructions.Enums;
 using Mipser.Models.CheatSheet.Enums;
 using System;
 
-namespace Mipser.Windows.Converter;
+namespace Mipser.Windows.Converters;
 
 /// <summary>
 /// A converter that converts an <see cref="InstructionType"/> into a <see cref="SolidColorBrush"/>.
