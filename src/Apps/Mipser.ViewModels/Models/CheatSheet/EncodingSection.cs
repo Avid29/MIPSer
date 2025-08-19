@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using Mipser.Models.CheatSheet.Enums;
+using System;
 using System.Linq;
 using System.Text.Json.Serialization;
 
@@ -51,7 +52,26 @@ public record EncodingSection
             if (!ConstantValue.HasValue)
                 return Name;
 
-            return string.Format($"{{0:b{BitCount}}}", ConstantValue.Value);
+            string binary = string.Format($"{{0:b{BitCount}}}", ConstantValue.Value);
+
+            if (BitCount is 6)
+            {
+                return $"{binary[0..3]} {binary[3..6]}";
+            }
+
+            if (BitCount > 4)
+            {
+                string result = "";
+                for (int i = 0; i < binary.Length; i += 4)
+                {
+                    var end = int.Min(i + 4, binary.Length);
+                    result += $"{binary[i..end]} ";
+                }
+
+                return result.Trim();
+            }
+
+            return binary;
         }
     }
 
