@@ -92,7 +92,7 @@ public class InstructionTable : InstructionTableBase<string>
         {
             LoadInstruction(metadata.Name, metadata);
         }
-        else
+        else if (!_outOfVersion.ContainsKey(metadata.Name))
         {
             _outOfVersion.Add(metadata.Name, metadata.MIPSVersions);
         }

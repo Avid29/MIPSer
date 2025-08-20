@@ -33,8 +33,9 @@ public class InstructionParserTests
     private const string StoreByte = "sb $t0, -100($s0)";
     private const string Jump = "j 1000";
     private const string JumpExpression = "j 10*10";
-    private const string DI = "di $t1";
-    private const string EI = "ei $t0";
+    private const string DI = "di";
+    private const string DIArg = "di $t1";
+    private const string EI = "ei";
     private const string CVT_S_D = "cvt.S.D $f4, $f8";
 
     private const string LoadImmediate = "li $t0, 0x10001";
@@ -101,14 +102,21 @@ public class InstructionParserTests
     [TestMethod(DI)]
     public void DITest()
     {
-        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, Register.Temporary1, 12);
+        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, Register.Zero, 12);
         RunTest(DI, new ParsedInstruction(expected));
+    }
+
+    [TestMethod(DIArg)]
+    public void DIArgTest()
+    {
+        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, Register.Temporary1, 12);
+        RunTest(DIArg, new ParsedInstruction(expected));
     }
 
     [TestMethod(EI)]
     public void EITest()
     {
-        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.EnableInterupts, Register.Temporary0, 12);
+        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.EnableInterupts, Register.Zero, 12);
         RunTest(EI, new ParsedInstruction(expected));
     }
 

@@ -57,7 +57,11 @@ public abstract class InstructionTableBase<T>
     /// Gets all instructions in the instruction table.
     /// </summary>
     /// <returns>An array of the instructions in the table.</returns>
-    public InstructionMetadata[] GetInstructions() => [..LookupTable.Values.SelectMany(x => x)];
+    public InstructionMetadata[] GetInstructions() =>
+        [..LookupTable.Values
+            .Select(x => x
+                .OrderByDescending(x => x.ArgumentPattern.Length)
+                .First())];
 
     private void Initialize()
     {
