@@ -166,10 +166,10 @@
                   Background="{StaticResource PrimaryBackground}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid Padding="500">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="648"/>
-                <ColumnDefinition Width="648"/>
-                <ColumnDefinition Width="648"/>
-                <ColumnDefinition Width="648"/>
+                <ColumnDefinition Width="696"/>
+                <ColumnDefinition Width="696"/>
+                <ColumnDefinition Width="696"/>
+                <ColumnDefinition Width="696"/>
                 <ColumnDefinition Width="1000"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>

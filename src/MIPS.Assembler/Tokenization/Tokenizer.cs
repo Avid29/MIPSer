@@ -19,6 +19,7 @@ public class Tokenizer
 {
     private readonly ILogger? _logger;
 
+    private TokenizerMode _mode;
     private TokenizerState _state;
     private string _cache;
     private TokenType? _tokenType;
@@ -30,12 +31,13 @@ public class Tokenizer
     /// <summary>
     /// Initializes a new instance of the <see cref="Tokenizer"/> class.
     /// </summary>
-    private Tokenizer(string? filename, ILogger? logger = null)
+    private Tokenizer(string? filename, ILogger? logger = null, TokenizerMode mode = TokenizerMode.Assembly)
     {
         _logger = logger;
 
         TokenLines = [];
         Tokens = [];
+        _mode = mode;
         _state = TokenizerState.LineBegin;
         _cache = string.Empty;
         _tokenType = null;
@@ -43,6 +45,7 @@ public class Tokenizer
         _filename = filename;
         _line = 1;
         _column = 0;
+        _mode = mode;
     }
 
     private List<AssemblyLine> TokenLines { get; }
@@ -75,15 +78,18 @@ public class Tokenizer
         return new TokenizedAssmebly(tokenizer.TokenLines);
     }
 
-    internal static AssemblyLine TokenizeLine(string line, string? filename = null, bool expression = false)
+    /// <summary>
+    /// Tokenizes a single line of assembly code.
+    /// </summary>
+    public static AssemblyLine TokenizeLine(string line, string? filename = null, TokenizerMode mode = TokenizerMode.Assembly)
     {
-        Tokenizer tokenizer = new(filename);
+        Tokenizer tokenizer = new(filename, mode: mode);
 
         if (line.Contains('\n'))
             ThrowHelper.ThrowArgumentException("Single line tokenizer cannot contain a new line.");
 
         // This is a debug tool for tokenizing only an expression
-        if (expression)
+        if (mode is not TokenizerMode.Assembly)
         {
             tokenizer._state = TokenizerState.ArgBegin;
         }
@@ -135,6 +141,7 @@ public class Tokenizer
             TokenizerState.Directive => ParseFromDirective(c),
             TokenizerState.Reference => ParseFromReference(c),
             TokenizerState.Comment => ParseFromComment(c),
+            TokenizerState.Whitespace => ParseFromWhitespace(c),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>(nameof(_state)),
         };
     }
@@ -148,9 +155,12 @@ public class Tokenizer
             return true;
         }
 
-        // Ignore whitespace between tokens.
+        // We track whitespace between tokens
+        // This will be discarded, unless in behavior mode
         if (char.IsWhiteSpace(c))
-            return true;
+        {
+            return HandleCharacter(c, TokenType.Whitespace, TokenizerState.Whitespace);
+        }
 
         if (newLine && char.IsLetterOrDigit(c))
         {
@@ -171,7 +181,7 @@ public class Tokenizer
                 return HandleCharacter(c, TokenType.Immediate, TokenizerState.Immediate);
             }
 
-            if (char.IsLetter(c))
+            if (char.IsLetter(c) || c is '_')
             {
                 return HandleCharacter(c, TokenType.Reference, TokenizerState.Reference);
             }
@@ -189,9 +199,17 @@ public class Tokenizer
 
             '(' => HandleCharacter(c, TokenType.OpenParenthesis),
             ')' => HandleCharacter(c, TokenType.CloseParenthesis),
+            '[' => HandleCharacter(c, TokenType.OpenBracket),
+            ']' => HandleCharacter(c, TokenType.CloseBracket),
             ',' => HandleCharacter(c, TokenType.Comma),
             '=' => HandleCharacter(c, TokenType.Assign),
             '#' => HandleCharacter(c, null, TokenizerState.Comment),
+            
+            // Behavioral operators
+            '!' => _mode is TokenizerMode.BehaviorExpression && HandleCharacter(c, TokenType.Operator),
+            '<' => _mode is TokenizerMode.BehaviorExpression && HandleCharacter(c, TokenType.Operator),
+            '>' => _mode is TokenizerMode.BehaviorExpression && HandleCharacter(c, TokenType.Operator),
+            '~' => _mode is TokenizerMode.BehaviorExpression && HandleCharacter(c, TokenType.Operator),
             _ => false,
         };
     }
@@ -201,8 +219,7 @@ public class Tokenizer
         // Enter waiting mode
         if (char.IsWhiteSpace(c) && c is not '\n')
         {
-            _state = TokenizerState.NewLineTextWait;
-            return true;
+            return HandleCharacter(c, TokenType.Whitespace, TokenizerState.NewLineTextWait);
         }
 
         // Text is a label declaration.
@@ -320,7 +337,7 @@ public class Tokenizer
 
     private bool ParseFromReference(char c)
     {
-        if (char.IsLetterOrDigit(c))
+        if (char.IsLetterOrDigit(c) || c is '_')
         {
             return HandleCharacter(c, TokenType.Reference, TokenizerState.Reference);
         }
@@ -336,6 +353,14 @@ public class Tokenizer
         }
 
         return true;
+    }
+
+    private bool ParseFromWhitespace(char c)
+    {
+        if (char.IsWhiteSpace(c))
+            return HandleCharacter(c, TokenType.Whitespace, TokenizerState.Whitespace);
+
+        return CompleteAndContinue(c);
     }
 
     private bool HandleCharacter(char c, TokenType? type = null, TokenizerState newState = TokenizerState.ArgBegin)
@@ -384,9 +409,13 @@ public class Tokenizer
                 return false;
             }
 
-            // Create the token and add to list
-            Token token = new(_cache, _filename, _line, _column, _tokenType.Value);
-            Tokens?.Add(token);
+            // Add the token if not whitespace. Unless in behavior mode, then add the whitespace token
+            if (_tokenType is not TokenType.Whitespace || _mode is TokenizerMode.BehaviorExpression)
+            {
+                // Create the token and add to list
+                Token token = new(_cache, _filename, _line, _column, _tokenType.Value);
+                Tokens?.Add(token);
+            }
         }
 
         // Reset cache

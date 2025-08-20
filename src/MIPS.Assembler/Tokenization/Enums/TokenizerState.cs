@@ -22,6 +22,7 @@ public enum TokenizerState
     Directive,
     Reference,
     Comment,
+    Whitespace,
 
 #pragma warning restore CS1591
 }

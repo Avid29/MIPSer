@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using MIPS.Assembler.Helpers.Tables;
 using MIPS.Extensions;
 using MIPS.Helpers.Instructions;
 using MIPS.Models.Instructions.Enums;
@@ -324,7 +325,7 @@ public readonly struct InstructionMetadata
             StringBuilder pattern = new($"{Name} ");
             for (int i = 0; i < ArgumentPattern.Length; i++)
             {
-                pattern.Append(ArgumentPattern[i].GetArgPatternString());
+                pattern.Append(ArgumentTable.GetArgPatternString(ArgumentPattern[i]));
 
                 if (i < ArgumentPattern.Length - 1)
                 {

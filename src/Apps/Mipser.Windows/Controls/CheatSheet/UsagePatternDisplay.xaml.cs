@@ -6,11 +6,16 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
+using MIPS.Assembler.Helpers.Tables;
 using MIPS.Assembler.Models.Instructions;
+using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Extensions;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Registers;
 using Mipser.Services.Localization;
 using Mipser.Windows.Helpers;
+using System.Threading.Tasks;
 using Windows.UI.Text;
 
 namespace Mipser.Windows.Controls.CheatSheet;
@@ -143,19 +148,37 @@ public sealed partial class UsagePatternDisplay : UserControl
         }
         BehaviorTextBlock.Visibility = Visibility.Visible;
 
-        var behaviorParagraph = new Paragraph
+        // Create a new Paragraph for the behavior text
+        // Tokenize the behavior string
+        var paragraph = new Paragraph();
+        var tokens = Tokenizer.TokenizeLine(behavior, null, TokenizerMode.BehaviorExpression);
+
+        foreach (var token in tokens.Tokens)
         {
-            Inlines =
-            {
-                new Run
-                {
-                    Text = behavior,
-                    FontStyle = FontStyle.Italic,
-                },
-            }
-        };
+            paragraph.Inlines.Add(CreateTokenRun(token, localizer));
+        }
+
         BehaviorTextBlock.Blocks.Clear();
-        BehaviorTextBlock.Blocks.Add(behaviorParagraph);
+        BehaviorTextBlock.Blocks.Add(paragraph);
+    }
+
+    private Inline CreateTokenRun(Token token, ILocalizationService localizer)
+    {
+        // Handle strict argument tokens
+        if (ArgumentTable.TryGetArgument(token.Source, out var arg))
+            return CreateArgumentRun(arg, localizer);
+        
+        var run = new Run
+        {
+            Text = token.Source,
+        };
+
+        if (token.Type is TokenType.Register)
+        {
+            run.Foreground = ArgumentBrushPalette?.MiscArgBrush;
+        }
+
+        return run;
     }
 
     private Inline CreateArgumentRun(Argument arg, ILocalizationService localizer)
@@ -164,18 +187,18 @@ public sealed partial class UsagePatternDisplay : UserControl
         {
             Argument.RS or Argument.RT or Argument.RD => new Run
             {
-                Text = arg.GetArgPatternString(),
+                Text = ArgumentTable.GetArgPatternString(arg),
                 Foreground = ArgumentBrushPalette?.GPRegisterBrush,
             },
             Argument.FS or Argument.FT or Argument.FD or Argument.RT_Numbered => new Run
             {
-                Text = arg.GetArgPatternString(),
+                Text = ArgumentTable.GetArgPatternString(arg),
                 Foreground = ArgumentBrushPalette?.CPRegisterBrush,
             },
             Argument.Immediate or Argument.Offset or Argument.Address or
             Argument.Shift or Argument.FullImmediate => new Run
             {
-                Text = localizer[$"Usage_{arg.GetArgPatternString()}"],
+                Text = localizer[$"Usage_{ArgumentTable.GetArgPatternString(arg)}"],
                 Foreground = ArgumentBrushPalette?.ImmediateValueBrush,
             },
             Argument.AddressBase => new Span
@@ -184,13 +207,13 @@ public sealed partial class UsagePatternDisplay : UserControl
                 {
                     new Run
                     {
-                        Text = localizer[$"Usage_{Argument.Offset.GetArgPatternString()}"],
+                        Text = localizer[$"Usage_{ArgumentTable.GetArgPatternString(Argument.Offset)}"],
                         Foreground = ArgumentBrushPalette?.ImmediateValueBrush,
                     },
                     new Run { Text = "(" },
                     new Run
                     {
-                        Text = Argument.RS.GetArgPatternString(),
+                        Text = ArgumentTable.GetArgPatternString(Argument.RS),
                         Foreground = ArgumentBrushPalette?.GPRegisterBrush,
                     },
                     new Run { Text = ")" },

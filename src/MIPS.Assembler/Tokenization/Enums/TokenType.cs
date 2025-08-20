@@ -21,10 +21,14 @@ public enum TokenType
 
     OpenParenthesis,
     CloseParenthesis,
+    OpenBracket,
+    CloseBracket,
     Comma,
 
     MacroDefinition,
     Assign,
+
+    Whitespace,     // Used to maintain spacing in behavior mode
 
 #pragma warning restore CS1591
 }

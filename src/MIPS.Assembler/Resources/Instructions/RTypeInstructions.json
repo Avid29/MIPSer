@@ -61,7 +61,7 @@
     "func_code": 9,
     "args": [ 0 ],
     "versions": [ 1, 2, 3, 4, 5, 6 ],
-    "behavior": "$ra = ret_addr,\n$pc = $rs"
+    "behavior": "$ra = ret_addr, $pc = $rs"
   },
   {
     "name": "syscall",
@@ -140,7 +140,7 @@
     "func_code": 26,
     "args": [ 0, 1 ],
     "versions": [ 1, 2, 3, 4, 5, 6 ],
-    "behavior": "$Lo = $rs / $rt,\n$Hi = $rs % $rt"
+    "behavior": "$Lo = $rs / $rt, $Hi = $rs % $rt"
   },
   {
     "name": "divu",
@@ -148,7 +148,7 @@
     "func_code": 27,
     "args": [ 0, 1 ],
     "versions": [ 1, 2, 3, 4, 5, 6 ],
-    "behavior": "$Lo = $rs / $rt,\n$Hi = $rs % $rt"
+    "behavior": "$Lo = $rs / $rt, $Hi = $rs % $rt"
   },
   {
     "name": "add",
