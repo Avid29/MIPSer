@@ -197,15 +197,26 @@
                 </StackPanel>
             </Border>
             
-            <!--Common Encoding-->
-            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
-                    Grid.Column="1">
-                <StackPanel>
-                    <TextBlock x:Uid="PrimaryInstructionTypePatternsTB" Text="Primary Instruction Types Encoding Patterns" FontFamily="{StaticResource HappyMonkey}"/>
-                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.PrimaryEncodingPatterns, Mode=OneWay}" Margin="16,0" ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
+            <StackPanel Grid.Column="1">
+                <!--Common Encoding-->
+                <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
+                        Grid.Column="1">
+                    <StackPanel>
+                        <TextBlock x:Uid="PrimaryInstructionTypePatternsTB" Text="Primary Instruction Types Encoding Patterns" FontFamily="{StaticResource HappyMonkey}"/>
+                        <ItemsRepeater ItemsSource="{x:Bind ViewModel.PrimaryEncodingPatterns, Mode=OneWay}" Margin="16,0" ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
 
-                </StackPanel>
-            </Border>
+                    </StackPanel>
+                </Border>
+                
+                <!--Register Encoding-->
+                <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color1}">
+                    <StackPanel>
+                        <TextBlock x:Uid="GeneralPurposeRegisterEncodingTB" Text="General Purpose Register Encoding" FontFamily="{StaticResource HappyMonkey}"/>
+                        <cheat:EncodingTableDisplay Rows="8" Columns="4" FontFamily="{StaticResource HappyMonkey}"
+                                                    HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
             
             <!--Floating-Point Instructions-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
