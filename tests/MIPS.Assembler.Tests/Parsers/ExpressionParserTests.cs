@@ -5,6 +5,7 @@ using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables.Enums;
@@ -102,7 +103,7 @@ public class ExpressionParserTests
 
     private static void RunTest(ExpressionParser parser, string input, long? expected = null)
     {
-        var line = Tokenizer.TokenizeLine(input, nameof(RunTest), true);
+        var line = Tokenizer.TokenizeLine(input, nameof(RunTest), TokenizerMode.Expression);
         bool success = parser.TryParse(line.Tokens, out var actual, out _);
         Assert.AreEqual(success, expected.HasValue);
         if (expected.HasValue)

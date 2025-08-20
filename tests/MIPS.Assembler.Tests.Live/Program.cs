@@ -4,6 +4,7 @@ using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tests.Live.Enums;
 using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Disassembler.Services;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
@@ -102,7 +103,7 @@ public class Program()
 
     private bool TestExpression(string line)
     {
-        var tokens = Tokenizer.TokenizeLine(line, expression:true);
+        var tokens = Tokenizer.TokenizeLine(line, mode: TokenizerMode.Expression);
         var parser = new ExpressionParser();
         bool success = parser.TryParse(tokens.Tokens, out var result, out _);
 

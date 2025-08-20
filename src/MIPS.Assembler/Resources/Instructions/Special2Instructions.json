@@ -5,6 +5,7 @@
     "func2_code": 32,
     "args": [ 2, 0 ],
     "versions": [ 1, 2, 3, 4, 5 ],
+    "behavior": "$rd = leading_zeros($rs)",
     "obsolete": true
   },
   {
@@ -13,6 +14,7 @@
     "func2_code": 33,
     "args": [ 2, 0 ],
     "versions": [ 1, 2, 3, 4, 5 ],
+    "behavior": "$rd = leading_ones($rs)",
     "obsolete": true
   },
   {
