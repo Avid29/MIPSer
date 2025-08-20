@@ -4,68 +4,68 @@
     {
       "name": "Move",
       "instructions": [
-        "mov.fmt",
-        "mfc1",
-        "mtc1",
-        "cfc1",
-        "ctc1",
-        "lwc1",
-        "swc1",
-        "ldc1",
-        "sdc1",
-        "lwxc1",
-        "swxc1",
-        "ldxc1",
-        "sdxc1"
+        "mov.fmt:2",
+        "mfc1:2",
+        "mtc1:2",
+        "cfc1:2",
+        "ctc1:2",
+        "lwc1:2",
+        "swc1:2",
+        "ldc1:2",
+        "sdc1:2",
+        "lwxc1:2",
+        "swxc1:2",
+        "ldxc1:2",
+        "sdxc1:2"
       ]
     },
     {
       "name": "Floating-Point Arithmetic",
       "instructions": [
-        "add.fmt",
-        "sub.fmt",
-        "mul.fmt",
-        "div.fmt",
-        "abs.fmt",
-        "neg.fmt",
-        "sqrt.fmt",
-        "recip.fmt",
-        "rsqrt.fmt",
-        "madd.fmt",
-        "msub.fmt",
-        "nmadd.fmt",
-        "nmsub.fmt"
+        "add.fmt:3",
+        "sub.fmt:3",
+        "mul.fmt:3",
+        "div.fmt:3",
+        "abs.fmt:2",
+        "neg.fmt:2",
+        "sqrt.fmt:2",
+        "recip.fmt:2",
+        "rsqrt.fmt:2",
+        "madd.fmt:4",
+        "msub.fmt:4",
+        "nmadd.fmt:4",
+        "nmsub.fmt:4"
       ]
     },
     {
       "name": "Floating-Point Rounding",
       "instructions": [
-        "round.W.fmt",
-        "round.L.fmt",
-        "trunc.W.fmt",
-        "trunc.L.fmt",
-        "floor.W.fmt",
-        "floor.L.fmt",
-        "ceil.W.fmt",
-        "ceil.L.fmt"
+        "round.W.fmt:2",
+        "round.L.fmt:2",
+        "trunc.W.fmt:2",
+        "trunc.L.fmt:2",
+        "floor.W.fmt:2",
+        "floor.L.fmt:2",
+        "ceil.W.fmt:2",
+        "ceil.L.fmt:2"
       ]
     },
     {
       "name": "Floating-Point Conversion",
       "instructions": [
-        "cvt.S.fmt",
-        "cvt.D.fmt",
-        "cvt.W.fmt",
-        "cvt.L.fmt"
+        "cvt.S.fmt:2",
+        "cvt.D.fmt:2",
+        "cvt.W.fmt:2",
+        "cvt.L.fmt:2"
       ]
     },
     {
       "name": "Conditional Move",
       "instructions": [
-        "movz.fmt",
-        "movn.fmt",
-        "movt.fmt",
-        "movf.fmt"
+        "movz.fmt:3",
+        "movn.fmt:3",
+        "movt.fmt:3",
+        "movf.fmt:3"
       ]
     }
   ]

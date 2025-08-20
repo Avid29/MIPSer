@@ -4,32 +4,36 @@
     {
       "name": "Move",
       "instructions": [
-        "mfc0",
-        "mtc0"
+        "mfc0:2",
+        "mfc0:3",
+        "mtc0:2",
+        "mtc0:3"
       ]
     },
     {
       "name": "Interrupts",
       "instructions": [
-        "ei",
-        "di",
-        "eret",
-        "wait"
+        "ei:0",
+        "ei:1",
+        "di:0",
+        "di:1",
+        "eret:0",
+        "wait:0"
       ]
     },
     {
       "name": "Translation Lookaside Buffer",
       "instructions": [
-        "tlbp",
-        "tlbr",
-        "tlbwi",
-        "tlbwr"
+        "tlbp:0",
+        "tlbr:0",
+        "tlbwi:0",
+        "tlbwr:0"
       ]
     },
     {
       "name": "Debug",
       "instructions": [
-        "deret"
+        "deret:0"
       ]
     }
   ]

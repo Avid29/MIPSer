@@ -10,7 +10,6 @@ using Mipser.Services.Localization;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.IO.Enumeration;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
@@ -29,7 +28,7 @@ public class CheatSheetViewModel : ObservableRecipient
     {
         // TODO: Load the instruction metadata from a service.
         var table = new InstructionTable(MipsVersion.MipsIII);
-        var instructions = table.GetInstructions();
+        var instructions = table.GetInstructions(false);
 
         CommonInstructions = new(LoadInstructionSet("CommonInstructions.json", instructions) ?? []);
         FloatInstructions = new(LoadInstructionSet("FloatInstructions.json", instructions) ?? []);
@@ -84,7 +83,7 @@ public class CheatSheetViewModel : ObservableRecipient
             group => group.Instructions.Select(instruction => (group.GroupName, instruction)));
         var pairs = simplePairs.Join(instructions,
             pair => pair.instruction,
-            instruction => instruction.Name,
+            instruction => instruction.Identifier,
             (pair, instruction) => (pair.GroupName, instruction));
         var groups = pairs.GroupBy(x => localize[x.GroupName], x => x.instruction);
 
