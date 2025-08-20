@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\EncodingPatterns\UniqueEncodings.json" />
     <EmbeddedResource Include="Resources\EncodingPatterns\CoProcessor0Encodings.json" />
     <EmbeddedResource Include="Resources\EncodingPatterns\CoProcessor1Encodings.json" />
     <EmbeddedResource Include="Resources\EncodingPatterns\PrimaryEncodings.json" />

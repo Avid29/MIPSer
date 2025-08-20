@@ -31,7 +31,7 @@ public partial class EncodingPatternSectionColorConverter : IValueConverter
             EncodingSectionType.Immediate => Palette.ImmediateValueBrush,
             EncodingSectionType.GeneralPurposeRegister => Palette.GPRegisterBrush,
             EncodingSectionType.CoProcessorRegister => Palette.CPRegisterBrush,
-            EncodingSectionType.Format => Palette.FormatBrush,
+            EncodingSectionType.Other => Palette.FormatBrush,
             EncodingSectionType.GeneralOrCoProcessorRegister => Palette.GeneralOrCoRegisterBrush,
             _ or EncodingSectionType.Reserved => new SolidColorBrush(Colors.Transparent),
             //_ => ThrowHelper.ThrowArgumentOutOfRangeException<object>($"Unknown InstructionType: {type}"),

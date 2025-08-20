@@ -16,7 +16,7 @@ public enum EncodingSectionType
     GeneralPurposeRegister,
     Immediate,
     CoProcessorRegister,
-    Format,
+    Other,
 
     // Composite purposes
     GeneralOrCoProcessorRegister,

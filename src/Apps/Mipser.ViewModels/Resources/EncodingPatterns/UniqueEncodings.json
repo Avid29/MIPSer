@@ -1,0 +1,111 @@
+[
+  {
+    "name": "SYSCALL / BREAK / SDBBP",
+    "sections": [
+      {
+        "name": "OP Code",
+        "size": 6,
+        "offset": 26,
+        "type": 0
+      },
+      {
+        "name": "Code",
+        "size": 20,
+        "offset": 6,
+        "type": 4
+      },
+      {
+        "name": "Functon Code",
+        "size": 6,
+        "offset": 0,
+        "type": 1
+      }
+    ]
+  },
+  {
+    "name": "SYNC",
+    "sections": [
+      {
+        "name": "OP Code",
+        "size": 6,
+        "offset": 26,
+        "type": 0,
+        "value": 0
+      },
+      {
+        "size": 15,
+        "offset": 11,
+        "type": -1,
+        "value":  0
+      },
+      {
+        "name": "Sync Type",
+        "size": 5,
+        "offset": 6,
+        "type": 6
+      },
+      {
+        "name": "Functon Code",
+        "size": 6,
+        "offset": 0,
+        "type": 1,
+        "value": 15
+      }
+    ]
+  },
+  {
+    "name": "CACHE / PREF",
+    "sections": [
+      {
+        "name": "OP Code",
+        "size": 6,
+        "offset": 26,
+        "type": 0,
+        "value": 0
+      },
+      {
+        "name": "Source Register (rs)",
+        "size": 5,
+        "offset": 21,
+        "type": 3
+      },
+      {
+        "name": "Op / Hint",
+        "size": 5,
+        "offset": 16,
+        "type": 6
+      },
+      {
+        "name": "Offset",
+        "size": 16,
+        "offset": 0,
+        "type": 4
+      }
+    ]
+  },
+  {
+    "name": "Execution Hazard Barrier",
+    "sections": [
+      {
+        "name": "OP Code",
+        "size": 6,
+        "offset": 26,
+        "type": 0,
+        "value": 0
+      },
+      {
+        "size": 20,
+        "offset": 6,
+        "type": -1,
+        "value": 3
+      },
+      {
+        "name": "Functon Code",
+        "size": 6,
+        "offset": 0,
+        "type": 1,
+        "value": 0
+      }
+    ]
+  }
+]

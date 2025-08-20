@@ -289,6 +289,17 @@
                     </ListView>
                 </StackPanel>
             </Border>
+            
+            <!--Unique Encoding-->
+            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
+                    Grid.Row="1" Grid.Column="3" >
+                <StackPanel>
+                    <TextBlock x:Uid="UniqueInstructionPatternsTB" Text="Unique Instruction Encoding Patterns" FontFamily="{StaticResource HappyMonkey}"/>
+                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.UniquePatterns, Mode=OneWay}" Margin="16,0"
+                                   ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
+                </StackPanel>
+            </Border>
+            
         </Grid>
     </ScrollViewer>
 </UserControl>
