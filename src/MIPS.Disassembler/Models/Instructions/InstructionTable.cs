@@ -48,7 +48,7 @@ public class InstructionTable : InstructionTableBase<(byte op, byte func, bool)>
             
             bool hasFormat = metadata.FloatFormats is not null;
             (byte, byte, bool) key = ((byte)metadata.OpCode, (byte)funcCode, hasFormat);
-            LookupTable.TryAdd(key, metadata);
+            LoadInstruction(key, metadata);
         }
     }
 }

@@ -18,6 +18,7 @@ using MIPS.Models.Modules.Tables;
 using MIPS.Models.Modules.Tables.Enums;
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Numerics;
 
 namespace MIPS.Assembler.Parsers;
@@ -84,11 +85,10 @@ public struct InstructionParser
         Guard.IsNotNull(name);
 
         // Parse out format from instruction name if present
-        if (FloatFormatTable.TryGetFloatFormat(name, out _format, out var lookupName))
-            name = lookupName;
+        if (FloatFormatTable.TryGetFloatFormat(name, out _format, out var formattedName))
+            name = formattedName;
 
-        // Get instruction metadata from name
-        if (!_instructionTable.TryGetInstruction(name, out _meta, out var version))
+        if (!_instructionTable.TryGetInstruction(name, out var metas, out var version))
         {
             if (version is not null)
             {
@@ -106,8 +106,26 @@ public struct InstructionParser
                 // The instruction does not exist in the table.
                 _logger?.Log(Severity.Error, LogId.InvalidInstructionName, $"No instruction named '{name}'.");
             }
+
             return false;
         }
+
+        // Assert instruction metadata with proper argument count exists
+        if (!metas.Any(x => x.ArgumentPattern.Length == line.Args.Count))
+        {
+            // TODO: Improve messaging
+            var message = $"Instruction '{name}' does not have the appropriate number of arguments.";
+            //var message = line.Args.Count < pattern.Length
+            //    ? $"Instruction '{name}' doesn't have enough arguments. Found {line.Args.Count} arguments when expecting {_meta.ArgumentPattern.Length}."
+            //    : $"Instruction '{name}' has too many arguments! Found {line.Args.Count} arguments when expecting {_meta.ArgumentPattern.Length}.";
+
+            _logger?.Log(Severity.Error, LogId.InvalidInstructionArgCount, message);
+            return false;
+        }
+
+        // Find instruction pattern with matching argument count
+        _meta = metas.FirstOrDefault(x => x.ArgumentPattern.Length == line.Args.Count);
+        
 
         // Check that the float format is supported valid with the instruction, if applicable
         if (_meta.FloatFormats is not null && !_meta.FloatFormats.Contains(_format))
@@ -118,17 +136,6 @@ public struct InstructionParser
 
         // Parse argument data according to pattern
         Argument[] pattern = _meta.ArgumentPattern;
-        
-        // Assert proper argument count for instruction
-        if (line.Args.Count != pattern.Length)
-        {
-            var message = line.Args.Count < pattern.Length
-                ? $"Instruction '{name}' doesn't have enough arguments. Found {line.Args.Count} arguments when expecting {_meta.ArgumentPattern.Length}."
-                : $"Instruction '{name}' has too many arguments! Found {line.Args.Count} arguments when expecting {_meta.ArgumentPattern.Length}.";
-
-            _logger?.Log(Severity.Error, LogId.InvalidInstructionArgCount, message);
-            return false;
-        }
 
         for (int i = 0; i < line.Args.Count; i++)
         {

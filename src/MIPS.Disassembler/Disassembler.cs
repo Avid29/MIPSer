@@ -6,6 +6,7 @@ using MIPS.Disassembler.Models.Instructions;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Registers;
+using System.Linq;
 using System.Text;
 
 namespace MIPS.Disassembler;
@@ -69,12 +70,15 @@ public class Disassembler
             format = ((FloatInstruction)instruction).Format;
 
         var key = ((byte)instruction.OpCode, funcCode, instruction.Type is InstructionType.Float);
-        if (!InstructionTable.TryGetInstruction(key, out var meta, out _))
+        if (!InstructionTable.TryGetInstruction(key, out var metas, out _))
         {
             return "Unknown instruction";
         }
 
-        // Apply the format to the name if it exists.
+        // Take the metadata with the most arguments
+        var meta = metas.OrderByDescending(x => x.ArgumentPattern.Length).First();
+
+        // Apply the format to the name if it exists
         var name = meta.Name;
         if (format is not null)
         {

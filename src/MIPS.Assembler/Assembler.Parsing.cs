@@ -38,7 +38,7 @@ public partial class Assembler
             // We'll default to 1, because if the instruction fails to parse we'll replace it
             // with a NOP on the second pass.
             int realizedCount = 1;
-            if(Context.InstructionTable.TryGetInstruction(line.Instruction.Source, out var meta, out _))
+            if(Context.InstructionTable.TryGetInstruction(line.Instruction.Source, line.Args.Count, out var meta, out _))
                realizedCount = meta.RealizedInstructionCount ?? 1;
 
             // Multiply by realized instruction count to handle pseudo instructions

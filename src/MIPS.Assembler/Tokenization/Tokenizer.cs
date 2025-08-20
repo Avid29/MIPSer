@@ -219,7 +219,8 @@ public class Tokenizer
         // Enter waiting mode
         if (char.IsWhiteSpace(c) && c is not '\n')
         {
-            return HandleCharacter(c, TokenType.Whitespace, TokenizerState.NewLineTextWait);
+            _state = TokenizerState.NewLineTextWait;
+            return true;
         }
 
         // Text is a label declaration.

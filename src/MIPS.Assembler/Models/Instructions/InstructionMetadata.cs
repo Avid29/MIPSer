@@ -316,6 +316,14 @@ public readonly struct InstructionMetadata
     public InstructionType Type => InstructionTypeHelper.GetInstructionType(OpCode, RegisterImmediateFuncCode, CoProc0RS ?? (CoProc0RSCode?)CoProc1RS);
 
     /// <summary>
+    /// Gets an identifier for the instruction, including the argument pattern.
+    /// </summary>
+    /// <remarks>
+    /// Introduces a variable argument count. Currently this appears to be an adequate approach.
+    /// </remarks>
+    public string Identifier => $"{Name}:{ArgumentPattern.Length}";
+
+    /// <summary>
     /// Gets a string showing the usage pattern for the instruction.
     /// </summary>
     public string UsagePattern
