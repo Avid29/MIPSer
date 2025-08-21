@@ -10,19 +10,22 @@ namespace MIPS.Interpreter.Models.System;
 /// </summary>
 public class Computer
 {
-    private readonly RAM _memory;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Computer"/> class.
     /// </summary>
     public Computer()
     {
-        _memory = new RAM();
-        Processor = new Processor(_memory);
+        Memory = new RAM();
+        Processor = new Processor(Memory);
     }
 
     /// <summary>
     /// Gets the processor of the computer system.
     /// </summary>
     public Processor Processor { get; }
+
+    /// <summary>
+    /// Gets the memory of the computer system.
+    /// </summary>
+    public RAM Memory { get; }
 }

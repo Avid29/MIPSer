@@ -2,7 +2,6 @@
 
 using MIPS.Interpreter.Models.System.CPU.Registers;
 using MIPS.Interpreter.Models.System.Memory;
-using MIPS.Models.Instructions.Enums.Registers;
 
 namespace MIPS.Interpreter.System.CPU;
 

@@ -1,6 +1,9 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Interpreter.Models.System.CPU.Registers;
+using MIPS.Interpreter.Models.System.Execution;
+using MIPS.Interpreter.Models.System.Execution.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
@@ -13,33 +16,12 @@ namespace MIPS.Interpreter.System.CPU;
 
 public partial class Processor
 {
-    delegate uint RTypeDelegate(uint rs, uint rt, byte shift, out uint? pc);
-    delegate uint ITypeDelegate(uint rs, short immediate);
-    delegate uint JTypeDelegate(uint rs, out uint? pc);
-    delegate void BTypeDelegate(uint rs, uint rt, int offset, out uint? pc);
+    delegate uint BasicRDelegate(uint rs, uint rt);
+    delegate ulong MultRDelegate(uint rs, uint rt);
+    delegate uint ShiftRDelegate(uint rs, byte shift);
 
-    private readonly struct Execution(uint output, Register destination, uint? newPc)
-    {
-        /// <summary>
-        /// Gets the execution output.
-        /// </summary>
-        public uint Output { get; } = output;
-
-        /// <summary>
-        /// Gets the register destination of the output.
-        /// </summary>
-        /// <remarks>
-        /// <see cref="Register.Zero"/> if none.
-        /// </remarks>
-        public Register Destination { get; } = destination;
-
-        public uint? NewPc { get; } = newPc;
-
-        /// <summary>
-        /// Gets a value indicating whether or not execution handled the PC changing.
-        /// </summary>
-        public bool PCHandled => NewPc is not null;
-    }
+    delegate uint BasicIDelegate(uint rs, short imm);
+    delegate uint MemoryIDelegate(uint rs, byte mem);
 
     /// <summary>
     /// Executes an instruction.
@@ -47,19 +29,44 @@ public partial class Processor
     /// <param name="instruction">The instruction to execute.</param>
     public void Execute(Instruction instruction)
     {
-        // Run operation
-        Execution execution = instruction.Type switch
+        // Create exeuction
+        var execution = CreateExecution(instruction);
+        Apply(execution);
+    }
+
+    private void Apply(Execution execution)
+    {
+        var regFile = execution.RegisterSet switch
         {
-            InstructionType.BasicR => ExecuteR(instruction),
-            InstructionType.BasicJ => ExecuteJ(instruction),
-            InstructionType.BasicI => ExecuteI(instruction),
-            InstructionType.RegisterImmediate or 
-            InstructionType.RegisterImmediateBranch => ExecuteB(instruction),
-            _ => ThrowHelper.ThrowInvalidDataException<Execution>($"Invalid instruction type '{instruction.Type}'."),
+            RegisterSet.Numbered => null,
+            RegisterSet.GeneralPurpose => _regFile,
+            _ => ThrowHelper.ThrowNotSupportedException<RegisterFile>(),
         };
 
-        // Apply register write back
-        _regFile[execution.Destination] = execution.Output;
+        if (regFile is not null)
+        {
+            regFile[execution.Destination] = execution.Output;
+        }
+
+        switch (execution.SideEffects)
+        {
+            case SecondaryWritebacks.Low:
+                Low = execution.Low;
+                break;
+            case SecondaryWritebacks.High:
+                High = execution.High;
+                break;
+            case SecondaryWritebacks.HighLow:
+                Low = execution.Low;
+                High = execution.High;
+                break;
+            case SecondaryWritebacks.ProgramCounter:
+                ProgramCounter = execution.ProgramCounter;
+                break;
+            case SecondaryWritebacks.Memory:
+                _memory[execution.MemAddress] = execution.Output;
+                break;
+        }
 
         // Increment program counter if not handled by execution
         if (!execution.PCHandled)
@@ -68,368 +75,218 @@ public partial class Processor
         }
     }
 
-    private Execution ExecuteR(Instruction instruction)
+    private Execution CreateExecution(Instruction instruction)
     {
-        var dest = instruction.RD;
-        bool pcHandled = instruction.FuncCode is FunctionCode.JumpRegister or FunctionCode.JumpAndLinkRegister;
         var rs = _regFile[instruction.RS];
         var rt = _regFile[instruction.RT];
         var shift = instruction.ShiftAmount;
 
-        RTypeDelegate operation = instruction.FuncCode switch
+        return instruction.OpCode switch
         {
-            FunctionCode.ShiftLeftLogical => SLL,
-            FunctionCode.ShiftRightLogical => SRL,
-            FunctionCode.ShiftRightArithmetic => SRA,
+            OperationCode.Special => instruction.FuncCode switch
+            {
 
-            FunctionCode.ShiftLeftLogicalVariable => SLLV,
-            FunctionCode.ShiftRightLogicalVariable => SRLV,
-            FunctionCode.ShiftRightArithmeticVariable => SRAV,
+                // Shift
+                FunctionCode.ShiftLeftLogical => ShiftR(instruction, (rt, shift) => rt << shift),
+                FunctionCode.ShiftRightLogical => ShiftR(instruction, (rt, shift) => rt >> shift),
+                FunctionCode.ShiftRightArithmetic => ShiftR(instruction, (rt, shift) => rt >> shift), // TODO: Arithmetic Shift
+                FunctionCode.ShiftLeftLogicalVariable => BasicR(instruction, (rs, rt) => rt << (int)rs),
+                FunctionCode.ShiftRightLogicalVariable => BasicR(instruction, (rs, rt) => rt >> (int)rs),
+                FunctionCode.ShiftRightArithmeticVariable => BasicR(instruction, (rs, rt) => rt >> (int)rs), // TODO: Arithmetic Shift
+                
+                
+                // Arithmetic
+                FunctionCode.Add => BasicR(instruction, (rs, rt) => (uint)((int)rs + (int)rt)),
+                FunctionCode.AddUnsigned => BasicR(instruction, (rs, rt) => rs + rt),
+                FunctionCode.Subtract => BasicR(instruction, (rs, rt) => (uint)((int)rs - (int)rt)),
+                FunctionCode.SubtractUnsigned => BasicR(instruction, (rs, rt) => rs - rt),
+                
+                // Logical
+                FunctionCode.And => BasicR(instruction, (rs, rt) => rs & rs),
+                FunctionCode.Or => BasicR(instruction, (rs, rt) => rs | rs),
+                FunctionCode.ExclusiveOr => BasicR(instruction, (rs, rt) => rs ^ rs),
+                FunctionCode.Nor => BasicR(instruction, (rs, rt) => ~(rs & rs)),
 
-            FunctionCode.JumpRegister => JR,
-            FunctionCode.JumpAndLinkRegister => JALR,
+                // Compare
+                FunctionCode.SetLessThan => BasicR(instruction, (rs, rt) => (uint)((int)rs < (int)rt ? 1 : 0)),
+                FunctionCode.SetLessThanUnsigned => BasicR(instruction, (rs, rt) => (uint)(rs < rt ? 1 : 0)),
 
-            FunctionCode.SystemCall => SYSCALL,
-            FunctionCode.Break => BREAK,
+                // Jump register
+                FunctionCode.JumpRegister => JumpR(instruction),
+                FunctionCode.JumpAndLinkRegister => JumpR(instruction, instruction.RD),
 
-            FunctionCode.MoveFromHigh => MFHI,
-            FunctionCode.MoveToHigh => MTHI,
-            FunctionCode.MoveFromLow => MFLO,
-            FunctionCode.MoveToLow => MTLO,
+                FunctionCode.SystemCall => throw new NotImplementedException(),
+                FunctionCode.Break => throw new NotImplementedException(),
+                FunctionCode.Sync => throw new NotImplementedException(),
 
-            FunctionCode.Multiply => MULT,
-            FunctionCode.MultiplyUnsigned => MULTU,
-            FunctionCode.Divide => DIV,
-            FunctionCode.DivideUnsigned => DIVU,
+                FunctionCode.MoveFromHigh => new Execution
+                {
+                    Output = High,
+                    Destination = instruction.RD,
+                },
+                FunctionCode.MoveToHigh => new Execution
+                {
+                    High = rs,
+                },
+                FunctionCode.MoveFromLow => new Execution
+                {
+                    Output = Low,
+                    Destination = instruction.RD,
+                },
+                FunctionCode.MoveToLow => new Execution
+                {
+                    Low = rs,
+                },
 
-            FunctionCode.Add => ADD,
-            FunctionCode.AddUnsigned => ADDU,
-            FunctionCode.Subtract => SUB,
-            FunctionCode.SubtractUnsigned => SUBU,
+                FunctionCode.Multiply => MultR(instruction, (rs, rt) => (ulong)((long)rs * rt)),
+                FunctionCode.MultiplyUnsigned => MultR(instruction, (rs, rt) => (ulong)rs * rt),
+                FunctionCode.Divide => throw new NotImplementedException(),
+                FunctionCode.DivideUnsigned => throw new NotImplementedException(),
+                FunctionCode.TrapOnGreaterOrEqual => throw new NotImplementedException(),
+                FunctionCode.TrapOnGreaterOrEqualUnsigned => throw new NotImplementedException(),
+                FunctionCode.TrapOnLessThan => throw new NotImplementedException(),
+                FunctionCode.TrapOnLessThanUnsigned => throw new NotImplementedException(),
+                FunctionCode.TrapOnEquals => throw new NotImplementedException(),
+                FunctionCode.TrapOnNotEquals => throw new NotImplementedException(),
+                _ => throw new NotImplementedException(),
+            },
+            OperationCode.Jump => new Execution
+            {
+                ProgramCounter = instruction.Address,
+            },
+            OperationCode.JumpAndLink => new Execution
+            {
+                ProgramCounter = instruction.Address,
+                Destination = Register.ReturnAddress,
+                Output = ProgramCounter,
+            },
 
-            FunctionCode.And => AND,
-            FunctionCode.Or => OR,
-            FunctionCode.ExclusiveOr => XOR,
-            FunctionCode.Nor => NOR,
+            OperationCode.RegisterImmediate => throw new NotImplementedException(),
+            OperationCode.BranchOnEquals => throw new NotImplementedException(),
+            OperationCode.BranchOnNotEquals => throw new NotImplementedException(),
+            OperationCode.BranchOnLessThanOrEqualToZero => throw new NotImplementedException(),
+            OperationCode.BranchOnGreaterThanZero => throw new NotImplementedException(),
+            OperationCode.AddImmediate => BasicI(instruction, (rs, imm) => (uint)((int)rs + imm)),
+            OperationCode.AddImmediateUnsigned => BasicI(instruction, (rs, imm) => rs + (ushort)imm),
+            OperationCode.SetLessThanImmediate => throw new NotImplementedException(),
+            OperationCode.SetLessThanImmediateUnsigned => throw new NotImplementedException(),
 
-            FunctionCode.SetLessThan => SLT,
-            FunctionCode.SetLessThanUnsigned => SLTU,
+            OperationCode.AndImmediate => BasicI(instruction, (rs, imm) => rs & (ushort)imm),
+            OperationCode.OrImmediate => BasicI(instruction, (rs, imm) => rs | (ushort)imm),
+            OperationCode.ExclusiveOrImmediate => BasicI(instruction, (rs, imm) => rs ^ (ushort)imm),
+            OperationCode.LoadUpperImmediate => BasicI(instruction, (rs, imm) => (uint)((ushort)imm << 16)),
 
-            _ => ThrowHelper.ThrowInvalidDataException<RTypeDelegate>($"Invalid function code '{instruction.FuncCode}'."),
+            OperationCode.Coprocessor0 => throw new NotImplementedException(),
+            OperationCode.Coprocessor1 => throw new NotImplementedException(),
+            OperationCode.Coprocessor2 => throw new NotImplementedException(),
+            OperationCode.Coprocessor3 => throw new NotImplementedException(),
+            OperationCode.BranchOnEqualLikely => throw new NotImplementedException(),
+            OperationCode.BranchOnNotEqualLikely => throw new NotImplementedException(),
+            OperationCode.BranchOnLessThanOrEqualToZeroLikely => throw new NotImplementedException(),
+            OperationCode.BranchOnGreaterThanZeroLikely => throw new NotImplementedException(),
+            OperationCode.Trap => throw new NotImplementedException(),
+            OperationCode.Special2 => throw new NotImplementedException(),
+            OperationCode.JumpAndLinkX => throw new NotImplementedException(),
+            OperationCode.SIMD => throw new NotImplementedException(),
+            OperationCode.Special3 => throw new NotImplementedException(),
+            OperationCode.LoadByte => throw new NotImplementedException(),
+            OperationCode.LoadHalfWord => throw new NotImplementedException(),
+            OperationCode.LoadWordLeft => throw new NotImplementedException(),
+            OperationCode.LoadWord => throw new NotImplementedException(),
+            OperationCode.LoadByteUnsigned => throw new NotImplementedException(),
+            OperationCode.LoadHalfWordUnsigned => throw new NotImplementedException(),
+            OperationCode.LoadWordRight => throw new NotImplementedException(),
+            OperationCode.StoreByte => throw new NotImplementedException(),
+            OperationCode.StoreHalfWord => throw new NotImplementedException(),
+            OperationCode.StoreWordLeft => throw new NotImplementedException(),
+            OperationCode.StoreWord => throw new NotImplementedException(),
+            OperationCode.StoreWordRight => throw new NotImplementedException(),
+            OperationCode.LoadLinkedWord => throw new NotImplementedException(),
+            OperationCode.LoadWordCoprocessor1 => throw new NotImplementedException(),
+            OperationCode.LoadWordCoprocessor2 => throw new NotImplementedException(),
+            OperationCode.LoadWordCoprocessor3 => throw new NotImplementedException(),
+            OperationCode.LoadDoubleWordCoprocessor1 => throw new NotImplementedException(),
+            OperationCode.LoadDoubleWordCoprocessor2 => throw new NotImplementedException(),
+            OperationCode.LoadDoubleWordCoprocessor3 => throw new NotImplementedException(),
+            OperationCode.StoreConditionalWord => throw new NotImplementedException(),
+            OperationCode.StoreWordCoprocessor1 => throw new NotImplementedException(),
+            OperationCode.StoreWordCoprocessor2 => throw new NotImplementedException(),
+            OperationCode.StoreWordCoprocessor3 => throw new NotImplementedException(),
+            _ => throw new NotImplementedException()
         };
-
-        var output = operation(rs, rt, shift, out var pc);
-        return new Execution(output, dest, pc);
     }
 
-    private Execution ExecuteJ(Instruction instruction)
-    {
-        JTypeDelegate operation = instruction.OpCode switch
-        {
-            OperationCode.Jump => J,
-            OperationCode.JumpAndLink => JAL,
-            _ => ThrowHelper.ThrowInvalidDataException<JTypeDelegate>($"Invalid operation code '{instruction.OpCode}'.")
-        };
-
-        var ouput = operation(instruction.Address, out var pc);
-        return new Execution(0, Register.Zero, pc);
-    }
-
-    private Execution ExecuteI(Instruction instruction)
-    {
-        var dest = instruction.RT;
-        var rs = _regFile[instruction.RS];
-        var immediate = instruction.ImmediateValue;
-
-        ITypeDelegate operation = instruction.OpCode switch
-        {
-            OperationCode.AddImmediate => ADDI,
-            OperationCode.AddImmediateUnsigned => ADDIU,
-            OperationCode.SetLessThanImmediate => SLTI,
-            OperationCode.SetLessThanImmediateUnsigned => SLTIU,
-
-            OperationCode.AndImmediate => ANDI,
-            OperationCode.OrImmediate => ORI,
-            OperationCode.ExclusiveOrImmediate => XORI,
-            _ => ThrowHelper.ThrowInvalidDataException<ITypeDelegate>($"Invalid operation code '{instruction.OpCode}'.")
-        };
-
-        var output = operation(rs, immediate);
-        return new Execution(output, dest, null);
-    }
-
-    private Execution ExecuteB(Instruction instruction)
+    private Execution BasicR(Instruction instruction, BasicRDelegate func)
     {
         var rs = _regFile[instruction.RS];
         var rt = _regFile[instruction.RT];
-        var offset = instruction.Offset;
+        var shift = instruction.ShiftAmount;
 
-        BTypeDelegate operation = instruction.OpCode switch
+        var dest = instruction.RD;
+        uint value = func(rs, rt);
+
+        return new Execution
         {
-            OperationCode.BranchOnEquals => BEQ,
-            OperationCode.BranchOnNotEquals => BNE,
-            OperationCode.BranchOnLessThanOrEqualToZero => BLEZ,
-            OperationCode.BranchOnGreaterThanZero => BGTZ,
-            _ => ThrowHelper.ThrowInvalidDataException<BTypeDelegate>($"Invalid operation code '{instruction.OpCode}'.")
+            Destination = dest,
+            Output = value,
         };
-
-        operation(rs, rt, offset, out var pc);
-        return new Execution(0, Register.Zero, null);
     }
 
-    // R Type functions
-    private uint SLL(uint rs, uint rt, byte shift, out uint? pc)
+    private Execution ShiftR(Instruction instruction, ShiftRDelegate func)
     {
-        pc = null;
-        return rt << shift;
-    }
+        var rs = _regFile[instruction.RS];
+        var rt = _regFile[instruction.RT];
+        var shift = instruction.ShiftAmount;
 
-    private uint SRL(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return rt >> shift;
-    }
+        var dest = instruction.RD;
+        uint value = func(rs, shift);
 
-    private uint SRA(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return rt >> shift; // TODO: Arithmetic Shift
-    }
-
-    private uint SLLV(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return rt << (int)rs;
-    }
-
-    private uint SRLV(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return rt >> (int)rs;
-    }
-
-    private uint SRAV(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return rt >> (int)rs; // TODO: Arithmetic Shift
-    }
-
-    private uint JR(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = rs;
-        return 0;
-    }
-
-    private uint JALR(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = rs;
-        return ProgramCounter;
-    }
-
-    private uint SYSCALL(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        throw new NotImplementedException();
-    }
-    private uint BREAK(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        throw new NotImplementedException();
-    }
-
-    private uint MFHI(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return High;
-    }
-
-    private uint MTHI(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        High = rs;
-        pc = null;
-        return 0;
-    }
-    private uint MFLO(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return Low;
-    }
-
-    private uint MTLO(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        Low = rs;
-        pc = null;
-        return 0;
-    }
-
-    private uint MULT(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        Low = (uint)((int)rs * (int)rt);
-        pc = null;
-        // TODO: High bits
-        return 0;
-    }
-    private uint MULTU(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        Low = rs * rt;
-        pc = null;
-        // TODO: High bits
-        return 0;
-    }
-    private uint DIV(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        Low = (uint)((int)rs / (int)rt);
-        High = (uint)((int)rs % (int)rt);
-        pc = null;
-        return 0;
-    }
-    private uint DIVU(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        Low = rs / rt;
-        High = rs % rt;
-        pc = null;
-        return 0;
-    }
-
-    private uint ADD(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return (uint)((int)rs + (int)rt);
-    }
-
-    private uint ADDU(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return rs + rt;
-    }
-
-    private uint SUB(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return (uint)((int)rs - (int)rt);
-    }
-
-    private uint SUBU(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return rs - rt;
-    }
-
-    private uint AND(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return rs & rt;
-    }
-
-    private uint OR(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return rs | rt;
-    }
-
-    private uint XOR(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return rs ^ rt;
-    }
-
-    private uint NOR(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return ~(rs | rt);
-    }
-
-    private uint SLT(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return (uint)((int)rs < (int)rt ? 1 : 0);
-    }
-
-    private uint SLTU(uint rs, uint rt, byte shift, out uint? pc)
-    {
-        pc = null;
-        return (uint)(rs < rt ? 1 : 0);
-    }
-
-    // J Type functions
-    private uint J(uint addr, out uint? pc)
-    {
-        pc = addr * 4;
-        return 0;
-    }
-
-    private uint JAL(uint addr, out uint? pc)
-    {
-        J(addr, out pc);
-        return ProgramCounter;
-    }
-    
-    // B Type functions
-    private void BEQ(uint rs, uint rt, int offset, out uint? pc)
-    {
-        pc = null;
-        BranchConditionally(rs == rt, offset, out pc);
-    }
-
-    private void BNE(uint rs, uint rt, int offset, out uint? pc)
-    {
-        pc = null;
-        BranchConditionally(rs != rt, offset, out pc);
-    }
-
-    private void BLEZ(uint rs, uint rt, int offset, out uint? pc)
-    {
-        pc = null;
-        BranchConditionally(rs <= 0, offset, out pc);
-    }
-
-    private void BGTZ(uint rs, uint rt, int offset, out uint? pc)
-    {
-        pc = null;
-        BranchConditionally(rs > 0, offset, out pc);
-    }
-    
-    // I Type functions
-    private uint ADDI(uint rs, short immediate)
-    {
-        return (uint)((int)rs + immediate);
-    }
-
-    private uint ADDIU(uint rs, short immediate)
-    {
-        return (uint)(rs + immediate);
-    }
-
-    private uint SLTI(uint rs, short immediate)
-    {
-        return (uint)((int)rs < immediate ? 1 : 0);
-    }
-
-    private uint SLTIU(uint rs, short immediate)
-    {
-        return (uint)(rs < immediate ? 1 : 0);
-    }
-
-    private uint ANDI(uint rs, short immediate)
-    {
-        return (uint)(rs & immediate);
-    }
-
-    private uint ORI(uint rs, short immediate)
-    {
-        return (rs | (ushort)immediate);
-    }
-
-    private uint XORI(uint rs, short immediate)
-    {
-        return (uint)(rs ^ immediate);
-    }
-
-    private void BranchConditionally(bool branch, int offset, out uint? pc)
-    {
-        pc = null;
-
-        if (branch)
+        return new Execution
         {
-            pc = (uint)(ProgramCounter + offset);
-        }
+            Destination = dest,
+            Output = value,
+        };
+    }
+
+    private Execution MultR(Instruction instruction, MultRDelegate func)
+    {
+        var rs = _regFile[instruction.RS];
+        var rt = _regFile[instruction.RT];
+        
+        var dest = instruction.RD;
+        ulong value = func(rs, rt);
+
+        return new Execution
+        {
+            HighLow = value,
+        };
+    }
+
+    private Execution JumpR(Instruction instruction, Register link = Register.Zero)
+    {
+        var rs = _regFile[instruction.RS];
+
+        return new Execution
+        {
+            ProgramCounter = rs,
+            Destination = link,
+            Output = ProgramCounter,
+        };
+    }
+
+
+    private Execution BasicI(Instruction instruction, BasicIDelegate func)
+    {
+        var rs = _regFile[instruction.RS];
+        var imm = instruction.ImmediateValue;
+
+        var dest = instruction.RT;
+        uint value = func(rs, imm);
+
+        return new Execution
+        {
+            Destination = dest,
+            Output = value,
+        };
     }
 }

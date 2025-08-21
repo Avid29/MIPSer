@@ -3,7 +3,6 @@
 using MIPS.Interpreter.Models.Modules;
 using MIPS.Interpreter.Models.System;
 using MIPS.Models.Instructions;
-using System.IO;
 
 namespace MIPS.Interpreter;
 
@@ -23,6 +22,8 @@ public class Interpreter
         _module = module;
         _computer = new Computer();
 
+        // Initialize memory and pc
+        Load();
         _computer.Processor.ProgramCounter = _module.EntryAdress;
     }
 
@@ -31,11 +32,20 @@ public class Interpreter
     /// </summary>
     public void StepInstruction()
     {
-        _module.Contents.Seek(_computer.Processor.ProgramCounter, SeekOrigin.Begin);
-        if(!_module.Contents.TryRead(out uint word))
-            return;
-
+        var word = _computer.Memory[_computer.Processor.ProgramCounter];
         var instruction = (Instruction)word;
+
         _computer.Processor.Execute(instruction);
+    }
+
+    private void Load()
+    {
+        var source = _module.Contents;
+        source.Position = 0;
+        while (source.Position < source.Length)
+        {
+            var destination = _computer.Memory.AsStream((uint)source.Position);
+            source.CopyTo(destination, (int)long.Min(destination.Length, source.Length - source.Position));
+        }
     }
 }
