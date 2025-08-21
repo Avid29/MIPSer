@@ -134,6 +134,9 @@ public struct InstructionParser
             return false;
         }
 
+        // Applies provided values
+        LoadProvidedFields();
+
         // Parse argument data according to pattern
         Argument[] pattern = _meta.ArgumentPattern;
 
@@ -598,5 +601,21 @@ public struct InstructionParser
             return 2;
 
         return 0;
+    }
+
+    private void LoadProvidedFields()
+    {
+        LoadField(ref _rs, (Register?)_meta.RS);
+        LoadField(ref _rt, (Register?)_meta.RT);
+        LoadField(ref _rd, (Register?)_meta.RD);
+    }
+
+    private void LoadField<T>(ref T field, T? value)
+        where T : unmanaged
+    {
+        if (value.HasValue)
+        {
+            field = value.Value;
+        }
     }
 }
