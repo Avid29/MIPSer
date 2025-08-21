@@ -29,6 +29,7 @@ public class RegisterFile
         {
             // Register is out of the indexable bounds. Do nothing.
             if (register < 0 || register >= _registers.Length)
+                return;
 
             _registers[register] = value;
         }

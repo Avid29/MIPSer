@@ -216,7 +216,7 @@ public struct InstructionParser
             },
             
             // I-Type Branch
-            (>= OperationCode.BranchOnEquals and <= OperationCode.BranchGreaterThanZero) or
+            (>= OperationCode.BranchOnEquals and <= OperationCode.BranchOnGreaterThanZero) or
             (>= OperationCode.BranchOnEqualLikely and <= OperationCode.BranchOnGreaterThanZeroLikely)
                     => Instruction.Create(_meta.OpCode.Value, _rs, _rt, _immediate),
 

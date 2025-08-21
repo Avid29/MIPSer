@@ -1,5 +1,7 @@
 ﻿// Avishai Dernis 2025
 
+using System.IO;
+
 namespace MIPS.Interpreter.Models.Modules;
 
 /// <summary>
@@ -7,4 +9,13 @@ namespace MIPS.Interpreter.Models.Modules;
 /// </summary>
 public interface IExecutableModule
 {
+    /// <summary>
+    /// Gets the contents of the executable.
+    /// </summary>
+    public Stream Contents { get; }
+
+    /// <summary>
+    /// Gets the entry address of the executable.
+    /// </summary>
+    public uint EntryAdress { get; }
 }

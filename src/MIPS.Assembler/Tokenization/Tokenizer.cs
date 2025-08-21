@@ -159,6 +159,9 @@ public class Tokenizer
         // This will be discarded, unless in behavior mode
         if (char.IsWhiteSpace(c))
         {
+            if (newLine)
+                return true;
+
             return HandleCharacter(c, TokenType.Whitespace, TokenizerState.Whitespace);
         }
 

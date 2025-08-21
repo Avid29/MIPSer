@@ -37,24 +37,4 @@ public partial class Processor
         _regFile = new RegisterFile();
         _memory = memory;
     }
-
-    private void Jump(uint address)
-        => ProgramCounter = address;
-
-    private void JumpPartial(uint address)
-    {
-        // TODO: Maintain paging
-        Jump(address * 4);
-    }
-
-    private void JumpOffset(short offset)
-    {
-        ProgramCounter = (uint)((int)ProgramCounter + offset);
-    }
-
-    private void Link()
-    {
-        // Assign return address to instruction after caller location 
-        _regFile[Register.ReturnAddress] = ProgramCounter + 4;
-    }
 }
