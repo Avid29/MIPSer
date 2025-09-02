@@ -8,10 +8,13 @@
     xmlns:collections="using:CommunityToolkit.Mvvm.Collections"
     xmlns:data="using:MIPS.Assembler.Models.Instructions"
     xmlns:models="using:Mipser.Models.CheatSheet"
+    xmlns:reg="using:MIPS.Models.Instructions.Enums.Registers"
     xmlns:convert="using:Mipser.Windows.Converters"
     xmlns:helper="using:Mipser.Windows.Helpers"
     xmlns:cheat="using:Mipser.Windows.Controls.CheatSheet"
+    xmlns:tables="using:MIPS.Assembler.Helpers.Tables"
     FlowDirection="LeftToRight"
+    Loaded="UserControl_Loaded"
     mc:Ignorable="d">
     
     <UserControl.Resources>
@@ -56,6 +59,17 @@
         <SolidColorBrush x:Key="CPRSection" Color="{StaticResource Color2}"/>
         <SolidColorBrush x:Key="ImmSection" Color="{StaticResource Color3}"/>
         <SolidColorBrush x:Key="FormatSection" Color="{StaticResource Color7}"/>
+        
+        <!--Register Encoding Types-->
+        <SolidColorBrush x:Key="SavedRegister" Color="{StaticResource Color5}"/>
+        <SolidColorBrush x:Key="TempRegister" Color="{StaticResource Color1}"/>
+        <SolidColorBrush x:Key="ArgRegister" Color="{StaticResource Color8}"/>
+        <SolidColorBrush x:Key="ReturnValueRegister" Color="{StaticResource Color4}"/>
+        <SolidColorBrush x:Key="ReturnAddressRegister" Color="{StaticResource Color2}"/>
+        <SolidColorBrush x:Key="EnvironmentRegister" Color="{StaticResource Color6}"/>
+        <SolidColorBrush x:Key="KernelRegister" Color="{StaticResource Color3}"/>
+        <SolidColorBrush x:Key="OtherRegister" Color="{StaticResource Color7}"/>
+        
         <LinearGradientBrush x:Key="GeneralOrCoRegisterSection" StartPoint="0.5,0" EndPoint="0.5,1">
             <GradientStopCollection>
                 <GradientStop Color="{StaticResource Color1}" Offset="0"/>
@@ -89,6 +103,16 @@
                                                    FormatBrush="{StaticResource FormatSection}"
                                                    GeneralOrCoRegisterBrush="{StaticResource GeneralOrCoRegisterSection}"/>
         
+        <convert:RegisterEncodingColorConverter x:Key="RegisterEncodingColorConverter"
+                                                SavedBrush="{StaticResource SavedRegister}"
+                                                TempBrush="{StaticResource TempRegister}"
+                                                ArgBrush="{StaticResource ArgRegister}"
+                                                ReturnValueBrush="{StaticResource ReturnValueRegister}"
+                                                ReturnAddressBrush="{StaticResource ReturnAddressRegister}"
+                                                EnvironmentBrush="{StaticResource EnvironmentRegister}"
+                                                KernelBrush="{StaticResource KernelRegister}"
+                                                OtherBrush="{StaticResource OtherRegister}"/>
+        
         <DataTemplate x:Key="InstructionGroupHeaderTemplate" x:DataType="collections:IReadOnlyObservableGroup">
             <TextBlock
                 FontSize="16" FontFamily="{StaticResource HappyMonkey}"
@@ -109,8 +133,17 @@
                                               FontFamily="{StaticResource HappyMonkey}"/>
             </StackPanel>
         </DataTemplate>
+        
+        <DataTemplate x:Key="RegisterEncodingCellTemplate" x:DataType="reg:Register">
+            <Border Background="{x:Bind (reg:Register), Converter={StaticResource RegisterEncodingColorConverter}}"
+                    CornerRadius="4" Margin="1">
+                <TextBlock Text="{x:Bind tables:RegistersTable.GetRegisterString((reg:Register), reg:RegisterSet.GeneralPurpose)}" Foreground="Black"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           FontFamily="{StaticResource HappyMonkey}"/>
+            </Border>
+        </DataTemplate>
 
-            <Style x:Key="SectionBorderStyle" TargetType="Border">
+        <Style x:Key="SectionBorderStyle" TargetType="Border">
             <Setter Property="Margin" Value="8"/>
             <Setter Property="Padding" Value="10,8"/>
             <Setter Property="BorderThickness" Value="2"/>
@@ -212,8 +245,9 @@
                 <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color1}">
                     <StackPanel>
                         <TextBlock x:Uid="GeneralPurposeRegisterEncodingTB" Text="General Purpose Register Encoding" FontFamily="{StaticResource HappyMonkey}"/>
-                        <cheat:EncodingTableDisplay Rows="8" Columns="4" FontFamily="{StaticResource HappyMonkey}"
-                                                    HorizontalAlignment="Center"/>
+                        <cheat:EncodingTableDisplay x:Name="RegisterEncodingTable" Rows="8" Columns="4"
+                                                    FontFamily="{StaticResource HappyMonkey}" HorizontalAlignment="Center"
+                                                    CellTemplate="{StaticResource RegisterEncodingCellTemplate}"/>
                     </StackPanel>
                 </Border>
             </StackPanel>

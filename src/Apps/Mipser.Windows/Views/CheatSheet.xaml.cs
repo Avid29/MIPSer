@@ -2,6 +2,7 @@
 
 using Microsoft.UI.Xaml.Controls;
 using Mipser.ViewModels.Views;
+using System.Linq;
 
 namespace Mipser.Windows.Views;
 
@@ -14,4 +15,10 @@ public sealed partial class CheatSheet : UserControl
     }
 
     private CheatSheetViewModel ViewModel => (CheatSheetViewModel)DataContext;
+
+    private void UserControl_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        // This is stupid, but whatever for now
+        RegisterEncodingTable.CellData = ViewModel.GPRegisters.Select(x => (object)x).ToArray();
+    }
 }

@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
+using MIPS.Models.Instructions.Enums.Registers;
 using Mipser.Models.CheatSheet;
 using Mipser.Services.Localization;
 using System.Collections.Generic;
@@ -39,6 +40,8 @@ public class CheatSheetViewModel : ObservableRecipient
         CoProcessor1Patterns = new(LoadEncodingPatterns("CoProcessor1Encodings.json") ?? []);
         CoProcessor0Patterns = new(LoadEncodingPatterns("CoProcessor0Encodings.json") ?? []);
         UniquePatterns = new(LoadEncodingPatterns("UniqueEncodings.json") ?? []);
+
+        GPRegisters = [..Enumerable.Range(0, 32).Select(x => (Register)x)];
 
         IsActive = true;
     }
@@ -129,4 +132,9 @@ public class CheatSheetViewModel : ObservableRecipient
     /// Gets an <see cref="ObservableGroupedCollection{String, InstructionMetadata}"/> of specialized instruction metadatas, grouped by category.
     /// </summary>
     public ObservableGroupedCollection<string, InstructionMetadata>? Specialized0Instructions { get; }
+
+    /// <summary>
+    /// Gets the list of general purpose registers.
+    /// </summary>
+    public Register[] GPRegisters { get; }
 }

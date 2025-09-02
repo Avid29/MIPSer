@@ -85,15 +85,13 @@ public partial class Processor
         {
             OperationCode.Special => instruction.FuncCode switch
             {
-
                 // Shift
                 FunctionCode.ShiftLeftLogical => ShiftR(instruction, (rt, shift) => rt << shift),
                 FunctionCode.ShiftRightLogical => ShiftR(instruction, (rt, shift) => rt >> shift),
-                FunctionCode.ShiftRightArithmetic => ShiftR(instruction, (rt, shift) => rt >> shift), // TODO: Arithmetic Shift
+                FunctionCode.ShiftRightArithmetic => ShiftR(instruction, (rt, shift) => (uint)((int)rt >> shift)),
                 FunctionCode.ShiftLeftLogicalVariable => BasicR(instruction, (rs, rt) => rt << (int)rs),
                 FunctionCode.ShiftRightLogicalVariable => BasicR(instruction, (rs, rt) => rt >> (int)rs),
-                FunctionCode.ShiftRightArithmeticVariable => BasicR(instruction, (rs, rt) => rt >> (int)rs), // TODO: Arithmetic Shift
-                
+                FunctionCode.ShiftRightArithmeticVariable => BasicR(instruction, (rs, rt) => (uint)((int)rt >> (int)rs)),
                 
                 // Arithmetic
                 FunctionCode.Add => BasicR(instruction, (rs, rt) => (uint)((int)rs + (int)rt)),
@@ -140,6 +138,7 @@ public partial class Processor
 
                 FunctionCode.Multiply => MultR(instruction, (rs, rt) => (ulong)((long)rs * rt)),
                 FunctionCode.MultiplyUnsigned => MultR(instruction, (rs, rt) => (ulong)rs * rt),
+
                 FunctionCode.Divide => throw new NotImplementedException(),
                 FunctionCode.DivideUnsigned => throw new NotImplementedException(),
                 FunctionCode.TrapOnGreaterOrEqual => throw new NotImplementedException(),
