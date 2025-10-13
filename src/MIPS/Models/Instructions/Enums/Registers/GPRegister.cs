@@ -5,7 +5,7 @@ namespace MIPS.Models.Instructions.Enums.Registers;
 /// <summary>
 /// An enum for general process registers.
 /// </summary>
-public enum Register : byte
+public enum GPRegister : byte
 {
 #pragma warning disable CS1591
 

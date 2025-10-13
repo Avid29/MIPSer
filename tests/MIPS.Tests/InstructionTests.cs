@@ -28,7 +28,7 @@ public class InstructionTests
     {
         // This test sets each register argument to each potential register with an otherwise random instruction.
         // It then asserts the readback is equivilient.
-        for (var i = Register.Zero; i <= Register.ReturnAddress; i++)
+        for (var i = GPRegister.Zero; i <= GPRegister.ReturnAddress; i++)
         {
             var instruction = Instruction.Create(
                 ArgGenerator.RandomOpCode(false),

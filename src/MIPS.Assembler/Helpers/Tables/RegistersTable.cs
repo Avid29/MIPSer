@@ -23,9 +23,9 @@ public static class RegistersTable
     /// <param name="set">Which register set table to reference.</param>
     /// <param name="logger">Logger </param>
     /// <returns>Whether or not an register exists by that name.</returns>
-    public static bool TryGetRegister(string name, out Register register, out RegisterSet set, ILogger? logger = null)
+    public static bool TryGetRegister(string name, out GPRegister register, out RegisterSet set, ILogger? logger = null)
     {
-        register = Register.Zero;
+        register = GPRegister.Zero;
         set = RegisterSet.Numbered;
         
         // Trime the '$' prefix
@@ -46,14 +46,14 @@ public static class RegistersTable
         if (byte.TryParse(name, out var num))
         {
             // Lowest register enum to highest register enum
-            if (num is < (byte)Register.Zero or > (byte)Register.ReturnAddress)
+            if (num is < (byte)GPRegister.Zero or > (byte)GPRegister.ReturnAddress)
             {
                 logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"No register of number {num} exists");
                 return false;
             }
 
             // Cast num to register
-            register = (Register)num;
+            register = (GPRegister)num;
             return true;
         }
 
@@ -72,7 +72,7 @@ public static class RegistersTable
     /// <param name="register">The register value.</param>
     /// <param name="set">The set the register belongs to.</param>
     /// <returns>The name of the register as a string.</returns>
-    public static string GetRegisterString(Register register, RegisterSet? set = RegisterSet.GeneralPurpose)
+    public static string GetRegisterString(GPRegister register, RegisterSet? set = RegisterSet.GeneralPurpose)
     {
         // Default to numbered.
         set ??= RegisterSet.Numbered;
@@ -90,48 +90,48 @@ public static class RegistersTable
         return $"${name}";
     }
 
-    private static readonly Dictionary<string, Register> _gpRegisterTable = new()
+    private static readonly Dictionary<string, GPRegister> _gpRegisterTable = new()
     {
-        { "zero", Register.Zero },
+        { "zero", GPRegister.Zero },
 
-        { "at", Register.AssemblerTemporary },
+        { "at", GPRegister.AssemblerTemporary },
 
-        { "v0", Register.ReturnValue0 },
-        { "v1", Register.ReturnValue1 },
+        { "v0", GPRegister.ReturnValue0 },
+        { "v1", GPRegister.ReturnValue1 },
 
-        { "a0", Register.Argument0 },
-        { "a1", Register.Argument1 },
-        { "a2", Register.Argument2 },
-        { "a3", Register.Argument3 },
+        { "a0", GPRegister.Argument0 },
+        { "a1", GPRegister.Argument1 },
+        { "a2", GPRegister.Argument2 },
+        { "a3", GPRegister.Argument3 },
 
-        { "t0", Register.Temporary0 },
-        { "t1", Register.Temporary1 },
-        { "t2", Register.Temporary2 },
-        { "t3", Register.Temporary3 },
-        { "t4", Register.Temporary4 },
-        { "t5", Register.Temporary5 },
-        { "t6", Register.Temporary6 },
-        { "t7", Register.Temporary7 },
+        { "t0", GPRegister.Temporary0 },
+        { "t1", GPRegister.Temporary1 },
+        { "t2", GPRegister.Temporary2 },
+        { "t3", GPRegister.Temporary3 },
+        { "t4", GPRegister.Temporary4 },
+        { "t5", GPRegister.Temporary5 },
+        { "t6", GPRegister.Temporary6 },
+        { "t7", GPRegister.Temporary7 },
 
-        { "s0", Register.Saved0 },
-        { "s1", Register.Saved1 },
-        { "s2", Register.Saved2 },
-        { "s3", Register.Saved3 },
-        { "s4", Register.Saved4 },
-        { "s5", Register.Saved5 },
-        { "s6", Register.Saved6 },
-        { "s7", Register.Saved7 },
+        { "s0", GPRegister.Saved0 },
+        { "s1", GPRegister.Saved1 },
+        { "s2", GPRegister.Saved2 },
+        { "s3", GPRegister.Saved3 },
+        { "s4", GPRegister.Saved4 },
+        { "s5", GPRegister.Saved5 },
+        { "s6", GPRegister.Saved6 },
+        { "s7", GPRegister.Saved7 },
 
-        { "t8", Register.Temporary8 },
-        { "t9", Register.Temporary9 },
+        { "t8", GPRegister.Temporary8 },
+        { "t9", GPRegister.Temporary9 },
 
-        { "k0", Register.Kernel0 },
-        { "k1", Register.Kernel1 },
+        { "k0", GPRegister.Kernel0 },
+        { "k1", GPRegister.Kernel1 },
 
-        { "gp", Register.GlobalPointer },
-        { "sp", Register.StackPointer },
-        { "fp", Register.FramePointer },
+        { "gp", GPRegister.GlobalPointer },
+        { "sp", GPRegister.StackPointer },
+        { "fp", GPRegister.FramePointer },
 
-        { "ra", Register.ReturnAddress },
+        { "ra", GPRegister.ReturnAddress },
     };
 }

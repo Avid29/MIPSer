@@ -38,20 +38,20 @@ public class RegisterFile
     /// <summary>
     /// Gets or sets the value in a register.
     /// </summary>
-    public uint this[Register register]
+    public uint this[GPRegister register]
     {
         get => this[(int)register];
         set
         {
             // Cannot set zero register. Do nothing.
-            if (register is Register.Zero)
+            if (register is GPRegister.Zero)
                 return;
 
             this[(int)register] = value;
         }
     }
 
-    /// <inheritdoc cref="this[Register]"/>
+    /// <inheritdoc cref="this[GPRegister]"/>
     public uint this[CP0Registers register]
     {
         get => this[(int)register];

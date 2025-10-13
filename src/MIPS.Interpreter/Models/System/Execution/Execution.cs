@@ -13,7 +13,7 @@ public struct Execution()
     private readonly uint _writeValue;
     private readonly uint _pc;
     private readonly uint _memAddress;
-    private readonly Register _reg;
+    private readonly GPRegister _reg;
 
     /// <summary>
     /// Gets the execution output.
@@ -28,9 +28,9 @@ public struct Execution()
     /// Gets the general purpose register destination of the output.
     /// </summary>
     /// <remarks>
-    /// <see cref="Register.Zero"/> if none.
+    /// <see cref="GPRegister.Zero"/> if none.
     /// </remarks>
-    public Register Destination
+    public GPRegister Destination
     {
         readonly get => Get(_reg, RegisterSet.GeneralPurpose);
         init => Set(ref _reg, value, RegisterSet.GeneralPurpose);
@@ -42,7 +42,7 @@ public struct Execution()
     public CP0Registers CPR0
     {
         readonly get => Get((CP0Registers)_reg, RegisterSet.CoProc0);
-        init => Set(ref _reg, (Register)value, RegisterSet.CoProc0);
+        init => Set(ref _reg, (GPRegister)value, RegisterSet.CoProc0);
     }
     
     /// <summary>
@@ -51,7 +51,7 @@ public struct Execution()
     public FloatRegister FPR
     {
         readonly get => Get((FloatRegister)_reg, RegisterSet.FloatingPoints);
-        init => Set(ref _reg, (Register)value, RegisterSet.FloatingPoints);
+        init => Set(ref _reg, (GPRegister)value, RegisterSet.FloatingPoints);
     }
 
     /// <summary>
@@ -119,7 +119,7 @@ public struct Execution()
     public static Execution NoOp => new()
     {
         SideEffects = SecondaryWritebacks.None,
-        Destination = Register.Zero,
+        Destination = GPRegister.Zero,
         RegisterSet = RegisterSet.GeneralPurpose,
     };
 

@@ -98,7 +98,7 @@ public struct FloatInstruction
     /// <summary>
     /// Creates a new floating-point coprocessor instruction.
     /// </summary>
-    public static FloatInstruction Create(CoProc1RSCode code, Register rt, FloatRegister fs)
+    public static FloatInstruction Create(CoProc1RSCode code, GPRegister rt, FloatRegister fs)
     {
         FloatInstruction value = default;
         value.OpCode = OperationCode.Coprocessor1;
@@ -132,7 +132,7 @@ public struct FloatInstruction
     public CoProc1RSCode CoProc1RSCode
     {
         readonly get => (CoProc1RSCode)_inst.RS;
-        private set => _inst.RS = (Register)value;
+        private set => _inst.RS = (GPRegister)value;
     }
 
     /// <summary>
@@ -141,7 +141,7 @@ public struct FloatInstruction
     public FloatFormat Format
     {
         readonly get => (FloatFormat)_inst.RS;
-        private set => _inst.RS = (Register)value;
+        private set => _inst.RS = (GPRegister)value;
     }
 
     /// <summary>
@@ -150,13 +150,13 @@ public struct FloatInstruction
     public FloatRegister FT
     {
         readonly get => (FloatRegister)_inst.RT;
-        private set => _inst.RT = (Register)value;
+        private set => _inst.RT = (GPRegister)value;
     }
 
     /// <summary>
     /// Gets the instruction's RT Register.
     /// </summary>
-    public Register RT
+    public GPRegister RT
     {
         readonly get => _inst.RT;
         private set => _inst.RT = value;
@@ -168,7 +168,7 @@ public struct FloatInstruction
     public FloatRegister FS
     {
         readonly get => (FloatRegister)_inst.RD;
-        private set => _inst.RD = (Register)value;
+        private set => _inst.RD = (GPRegister)value;
     }
 
     /// <summary>

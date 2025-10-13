@@ -11,20 +11,20 @@ namespace Mipser.Windows.Converters
     {
         public object? Convert(object value, Type targetType, object parameter, string language)
         {
-            if (value is not Register reg)
+            if (value is not GPRegister reg)
                 return null;
 
             return reg switch
             {
-                Register.Zero or Register.AssemblerTemporary => OtherBrush,
-                Register.ReturnValue0 or Register.ReturnValue1 => ReturnValueBrush,
-                >= Register.Argument0 and <= Register.Argument3 => ArgBrush,
-                (>= Register.Temporary0 and <= Register.Temporary7)
-                or Register.Temporary8 or Register.Temporary9 => TempBrush,
-                >= Register.Saved0 and <= Register.Saved7 => SavedBrush,
-                Register.Kernel0 or Register.Kernel1 => KernelBrush,
-                Register.GlobalPointer or Register.StackPointer or Register.FramePointer => EnvironmentBrush,
-                Register.ReturnAddress => ReturnAddressBrush,
+                GPRegister.Zero or GPRegister.AssemblerTemporary => OtherBrush,
+                GPRegister.ReturnValue0 or GPRegister.ReturnValue1 => ReturnValueBrush,
+                >= GPRegister.Argument0 and <= GPRegister.Argument3 => ArgBrush,
+                (>= GPRegister.Temporary0 and <= GPRegister.Temporary7)
+                or GPRegister.Temporary8 or GPRegister.Temporary9 => TempBrush,
+                >= GPRegister.Saved0 and <= GPRegister.Saved7 => SavedBrush,
+                GPRegister.Kernel0 or GPRegister.Kernel1 => KernelBrush,
+                GPRegister.GlobalPointer or GPRegister.StackPointer or GPRegister.FramePointer => EnvironmentBrush,
+                GPRegister.ReturnAddress => ReturnAddressBrush,
                 _ => null
             };
         }

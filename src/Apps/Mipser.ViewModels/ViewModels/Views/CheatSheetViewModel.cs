@@ -41,7 +41,7 @@ public class CheatSheetViewModel : ObservableRecipient
         CoProcessor0Patterns = new(LoadEncodingPatterns("CoProcessor0Encodings.json") ?? []);
         UniquePatterns = new(LoadEncodingPatterns("UniqueEncodings.json") ?? []);
 
-        GPRegisters = [..Enumerable.Range(0, 32).Select(x => (Register)x)];
+        GPRegisters = [..Enumerable.Range(0, 32).Select(x => (GPRegister)x)];
 
         IsActive = true;
     }
@@ -136,5 +136,5 @@ public class CheatSheetViewModel : ObservableRecipient
     /// <summary>
     /// Gets the list of general purpose registers.
     /// </summary>
-    public Register[] GPRegisters { get; }
+    public GPRegister[] GPRegisters { get; }
 }

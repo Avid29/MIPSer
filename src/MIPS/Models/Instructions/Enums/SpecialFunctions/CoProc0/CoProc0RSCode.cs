@@ -16,7 +16,7 @@ public enum CoProc0RSCode
     /// <remarks>
     /// This value is too large to encode in a real instruction. If by accident
     /// this were encoded into an <see cref="Instruction"/> struct, it would become 
-    /// <see cref="MFC0"/> (or <see cref="Register.Zero"/>) upon unencoding.
+    /// <see cref="MFC0"/> (or <see cref="GPRegister.Zero"/>) upon unencoding.
     /// </remarks>
     None = 0x20,
 

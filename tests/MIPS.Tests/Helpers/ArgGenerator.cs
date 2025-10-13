@@ -24,7 +24,7 @@ public class ArgGenerator
 
     public static uint RandomAddress(bool safe = true) => (uint)Random.Shared.Next(safe ? (1 << 26)-1 : int.MaxValue) & ~(uint)0b11;
 
-    public static Register RandomRegister(bool safe = true) => (Register)Random.Shared.Next(safe ? (int)Register.ReturnAddress : int.MaxValue);
+    public static GPRegister RandomRegister(bool safe = true) => (GPRegister)Random.Shared.Next(safe ? (int)GPRegister.ReturnAddress : int.MaxValue);
 
     public static OperationCode RandomOpCode(bool safe = true) => (OperationCode)Random.Shared.Next(safe ? (int)OperationCode.StoreWordCoprocessor3 : int.MaxValue);
 

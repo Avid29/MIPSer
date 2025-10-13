@@ -54,35 +54,35 @@ public class InstructionParserTests
     [TestMethod(Add)]
     public void AddTest()
     {
-        Instruction expected = Instruction.Create(FunctionCode.Add, Register.Saved0, Register.Saved1, Register.Temporary0);
+        Instruction expected = Instruction.Create(FunctionCode.Add, GPRegister.Saved0, GPRegister.Saved1, GPRegister.Temporary0);
         RunTest(Add, new ParsedInstruction(expected));
     }
 
     [TestMethod(Addi)]
     public void AddiTest()
     {
-        Instruction expected = Instruction.Create(OperationCode.AddImmediate, Register.Saved0, Register.Temporary0, (short)100);
+        Instruction expected = Instruction.Create(OperationCode.AddImmediate, GPRegister.Saved0, GPRegister.Temporary0, (short)100);
         RunTest(Addi, new ParsedInstruction(expected));
     }
 
     [TestMethod(Sll)]
     public void SllTest()
     {
-        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 3);
+        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 3);
         RunTest(Sll, new ParsedInstruction(expected));
     }
 
     [TestMethod(LoadWord)]
     public void LoadWordTest()
     {
-        Instruction expected = Instruction.Create(OperationCode.LoadWord, Register.Saved0, Register.Temporary0, (short)100);
+        Instruction expected = Instruction.Create(OperationCode.LoadWord, GPRegister.Saved0, GPRegister.Temporary0, (short)100);
         RunTest(LoadWord, new ParsedInstruction(expected));
     }
 
     [TestMethod(StoreByte)]
     public void StoreByteTest()
     {
-        Instruction expected = Instruction.Create(OperationCode.StoreByte, Register.Saved0, Register.Temporary0, (short)-100);
+        Instruction expected = Instruction.Create(OperationCode.StoreByte, GPRegister.Saved0, GPRegister.Temporary0, (short)-100);
         RunTest(StoreByte, new ParsedInstruction(expected));
     }
 
@@ -103,21 +103,21 @@ public class InstructionParserTests
     [TestMethod(DI)]
     public void DITest()
     {
-        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, Register.Zero, 12);
+        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Zero, 12);
         RunTest(DI, new ParsedInstruction(expected));
     }
 
     [TestMethod(DIArg)]
     public void DIArgTest()
     {
-        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, Register.Temporary1, 12);
+        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Temporary1, 12);
         RunTest(DIArg, new ParsedInstruction(expected));
     }
 
     [TestMethod(EI)]
     public void EITest()
     {
-        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.EnableInterupts, Register.Zero, 12);
+        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.EnableInterupts, GPRegister.Zero, 12);
         RunTest(EI, new ParsedInstruction(expected));
     }
 
@@ -131,21 +131,21 @@ public class InstructionParserTests
     [TestMethod(LoadImmediate)]
     public void LoadImmediateTest()
     {
-        PseudoInstruction expected = new(PseudoOp.LoadImmediate) { RT = Register.Temporary0, Immediate = 0x10001 };
+        PseudoInstruction expected = new(PseudoOp.LoadImmediate) { RT = GPRegister.Temporary0, Immediate = 0x10001 };
         RunTest(LoadImmediate, new ParsedInstruction(expected));
     }
 
     [TestMethod(SllWarnTruncate)]
     public void SllWarnTruncateTest()
     {
-        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 1);
+        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 1);
         RunTest(SllWarnTruncate, new ParsedInstruction(expected), logId:LogId.IntegerTruncated);
     }
 
     [TestMethod(SllWarnSigned)]
     public void SllWarnSignedTest()
     {
-        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 31);
+        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 31);
         RunTest(SllWarnSigned, new ParsedInstruction(expected), logId:LogId.IntegerTruncated);
     }
 

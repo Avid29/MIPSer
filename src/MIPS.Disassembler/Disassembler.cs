@@ -99,9 +99,9 @@ public class Disassembler
                 Argument.Address => instruction.Address,
                 Argument.AddressBase => $"{instruction.ImmediateValue}({RegistersTable.GetRegisterString(instruction.RS)})",
                 Argument.FullImmediate => 0, // Won't happen until pseudo-instruction disassembly
-                Argument.FS => RegistersTable.GetRegisterString((Register)((FloatInstruction)instruction).FS, RegisterSet.FloatingPoints),
-                Argument.FT => RegistersTable.GetRegisterString((Register)((FloatInstruction)instruction).FT, RegisterSet.FloatingPoints),
-                Argument.FD => RegistersTable.GetRegisterString((Register)((FloatInstruction)instruction).FD, RegisterSet.FloatingPoints),
+                Argument.FS => RegistersTable.GetRegisterString((GPRegister)((FloatInstruction)instruction).FS, RegisterSet.FloatingPoints),
+                Argument.FT => RegistersTable.GetRegisterString((GPRegister)((FloatInstruction)instruction).FT, RegisterSet.FloatingPoints),
+                Argument.FD => RegistersTable.GetRegisterString((GPRegister)((FloatInstruction)instruction).FD, RegisterSet.FloatingPoints),
                 _ => "unknown",
             });
 

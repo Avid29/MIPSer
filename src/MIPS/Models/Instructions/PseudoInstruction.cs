@@ -29,17 +29,17 @@ public readonly struct PseudoInstruction
     /// <summary>
     /// Gets or sets the pseudo-instruction rs register.
     /// </summary>
-    public Register RS { get; init; }
+    public GPRegister RS { get; init; }
     
     /// <summary>
     /// Gets or sets the pseudo-instruction rt register.
     /// </summary>
-    public Register RT { get; init; }
+    public GPRegister RT { get; init; }
     
     /// <summary>
     /// Gets or sets the pseudo-instruction rd register.
     /// </summary>
-    public Register RD { get; init; }
+    public GPRegister RD { get; init; }
     
     /// <summary>
     /// Gets or sets the pseudo-instruction immediate value.
@@ -60,40 +60,40 @@ public readonly struct PseudoInstruction
         {
             PseudoOp.NoOperation =>
             [
-                Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Zero, Register.Zero, 0),
+                Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Zero, GPRegister.Zero, 0),
             ],
             PseudoOp.SuperScalarNoOperation =>
             [
-                Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Zero, Register.Zero, 1),
+                Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Zero, GPRegister.Zero, 1),
             ],
             PseudoOp.UnconditionalBranch =>
             [
-                Instruction.Create(OperationCode.BranchOnEquals, Register.Zero, Register.Zero, (short)Immediate),
+                Instruction.Create(OperationCode.BranchOnEquals, GPRegister.Zero, GPRegister.Zero, (short)Immediate),
             ],
             PseudoOp.BranchOnLessThan =>
             [
-                Instruction.Create(FunctionCode.SetLessThan, RS, RT, Register.AssemblerTemporary),
-                Instruction.Create(OperationCode.BranchOnNotEquals, Register.AssemblerTemporary, Register.Zero, (short)Immediate)
+                Instruction.Create(FunctionCode.SetLessThan, RS, RT, GPRegister.AssemblerTemporary),
+                Instruction.Create(OperationCode.BranchOnNotEquals, GPRegister.AssemblerTemporary, GPRegister.Zero, (short)Immediate)
             ],
             PseudoOp.LoadImmediate =>
             [
-                Instruction.Create(OperationCode.LoadUpperImmediate, Register.AssemblerTemporary, (short)(Immediate >> 16)),
-                Instruction.Create(OperationCode.OrImmediate, RT, Register.AssemblerTemporary, (short)Immediate)
+                Instruction.Create(OperationCode.LoadUpperImmediate, GPRegister.AssemblerTemporary, (short)(Immediate >> 16)),
+                Instruction.Create(OperationCode.OrImmediate, RT, GPRegister.AssemblerTemporary, (short)Immediate)
             ],
             PseudoOp.AbsoluteValue =>
             [
-                Instruction.Create(FunctionCode.AddUnsigned, RS, Register.Zero, RT),
+                Instruction.Create(FunctionCode.AddUnsigned, RS, GPRegister.Zero, RT),
                 Instruction.Create(RegImmFuncCode.BranchOnGreaterThanOrEqualToZero, RS, 8),
-                Instruction.Create(FunctionCode.Subtract, Register.Zero, RS, RT),
+                Instruction.Create(FunctionCode.Subtract, GPRegister.Zero, RS, RT),
             ],
             PseudoOp.Move =>
             [
-                Instruction.Create(FunctionCode.Add, RS, Register.Zero, RT),
+                Instruction.Create(FunctionCode.Add, RS, GPRegister.Zero, RT),
             ],
             PseudoOp.LoadAddress =>
             [
-                Instruction.Create(OperationCode.LoadUpperImmediate, Register.AssemblerTemporary, (short)(Address >> 16)),
-                Instruction.Create(OperationCode.OrImmediate, RT, Register.AssemblerTemporary, (short)Address)
+                Instruction.Create(OperationCode.LoadUpperImmediate, GPRegister.AssemblerTemporary, (short)(Address >> 16)),
+                Instruction.Create(OperationCode.OrImmediate, RT, GPRegister.AssemblerTemporary, (short)Address)
             ],
             PseudoOp.SetGreaterThanOrEqual =>
             [

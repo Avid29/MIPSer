@@ -144,7 +144,7 @@ public partial struct CoProc0Instruction
     /// <summary>
     /// Creates a new <see cref="OperationCode.Coprocessor0"/> instruction.
     /// </summary>
-    public static CoProc0Instruction Create(CoProc0RSCode code, Register rt, Register rd)
+    public static CoProc0Instruction Create(CoProc0RSCode code, GPRegister rt, GPRegister rd)
     {
         CoProc0Instruction value = default;
         value.OpCode = OperationCode.Coprocessor0;
@@ -171,7 +171,7 @@ public partial struct CoProc0Instruction
     /// <summary>
     /// Creates a new <see cref="CoProc0RSCode.MFMC0"/> instruction.
     /// </summary>
-    public static CoProc0Instruction Create(MFMC0FuncCode code, Register rt = Register.Zero, byte? rd = null)
+    public static CoProc0Instruction Create(MFMC0FuncCode code, GPRegister rt = GPRegister.Zero, byte? rd = null)
     {
         CoProc0Instruction value = default;
         value.OpCode = OperationCode.Coprocessor0;
@@ -180,7 +180,7 @@ public partial struct CoProc0Instruction
         value.RT = rt;
 
         // Conditionally assign
-        value.RD = rd.HasValue ? (Register)rd.Value : value.RD;
+        value.RD = rd.HasValue ? (GPRegister)rd.Value : value.RD;
 
         return value;
     }
@@ -200,13 +200,13 @@ public partial struct CoProc0Instruction
     public CoProc0RSCode CoProc0RSCode
     { 
         readonly get => (CoProc0RSCode)_inst.RS;
-        internal set => _inst.RS = (Register)value;
+        internal set => _inst.RS = (GPRegister)value;
     }
 
     /// <summary>
     /// Gets the instruction's RT Register 
     /// </summary>
-    public Register RT
+    public GPRegister RT
     { 
         readonly get => _inst.RT;
         internal set => _inst.RT = value;
@@ -215,7 +215,7 @@ public partial struct CoProc0Instruction
     /// <summary>
     /// Gets the instruction's RD Register 
     /// </summary>
-    public Register RD
+    public GPRegister RD
     { 
         readonly get => _inst.RD;
         internal set => _inst.RD = value;

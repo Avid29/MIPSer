@@ -156,7 +156,7 @@ public partial class Processor
             OperationCode.JumpAndLink => new Execution
             {
                 ProgramCounter = instruction.Address,
-                Destination = Register.ReturnAddress,
+                Destination = GPRegister.ReturnAddress,
                 Output = ProgramCounter,
             },
 
@@ -261,7 +261,7 @@ public partial class Processor
         };
     }
 
-    private Execution JumpR(Instruction instruction, Register link = Register.Zero)
+    private Execution JumpR(Instruction instruction, GPRegister link = GPRegister.Zero)
     {
         var rs = _regFile[instruction.RS];
 

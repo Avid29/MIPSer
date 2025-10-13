@@ -232,7 +232,7 @@ public struct Instruction
     /// <summary>
     /// Creates a new <see cref="InstructionType.BasicR"/> instruction.
     /// </summary>
-    public static Instruction Create(FunctionCode funcCode, Register rs, Register rt, Register rd, byte shiftAmount = 0)
+    public static Instruction Create(FunctionCode funcCode, GPRegister rs, GPRegister rt, GPRegister rd, byte shiftAmount = 0)
     {
         Instruction value = default;
         value.OpCode = OperationCode.Special;
@@ -247,7 +247,7 @@ public struct Instruction
     /// <summary>
     /// Creates a new <see cref="InstructionType.Special2R"/> instruction.
     /// </summary>
-    public static Instruction Create(Func2Code func2Code, Register rs, Register rt, Register rd, byte shiftAmount = 0)
+    public static Instruction Create(Func2Code func2Code, GPRegister rs, GPRegister rt, GPRegister rd, byte shiftAmount = 0)
     {
         Instruction value = default;
         value.OpCode = OperationCode.Special2;
@@ -262,7 +262,7 @@ public struct Instruction
     /// <summary>
     /// Creates a new <see cref="InstructionType.Special3R"/> instruction.
     /// </summary>
-    public static Instruction Create(Func3Code func3Code, Register rs, Register rt, Register rd, byte shiftAmount = 0)
+    public static Instruction Create(Func3Code func3Code, GPRegister rs, GPRegister rt, GPRegister rd, byte shiftAmount = 0)
     {
         Instruction value = default;
         value.OpCode = OperationCode.Special3;
@@ -277,7 +277,7 @@ public struct Instruction
     /// <summary>
     /// Creates a new <see cref="InstructionType.BasicI"/> instruction.
     /// </summary>
-    public static Instruction Create(OperationCode opCode, Register rs, Register rt, short immediate)
+    public static Instruction Create(OperationCode opCode, GPRegister rs, GPRegister rt, short immediate)
     {
         Instruction value = default;
         value.OpCode = opCode;
@@ -290,7 +290,7 @@ public struct Instruction
     /// <summary>
     /// Creates a new <see cref="InstructionType.BasicI"/> instruction.
     /// </summary>
-    public static Instruction Create(OperationCode opCode, Register rs, Register rt, int offset)
+    public static Instruction Create(OperationCode opCode, GPRegister rs, GPRegister rt, int offset)
     {
         Instruction value = default;
         value.OpCode = opCode;
@@ -306,7 +306,7 @@ public struct Instruction
     /// <remarks>
     /// This is just for load upper immediate.
     /// </remarks>
-    public static Instruction Create(OperationCode opCode, Register rt, short immediate)
+    public static Instruction Create(OperationCode opCode, GPRegister rt, short immediate)
     {
         Instruction value = default;
         value.OpCode = opCode;
@@ -329,7 +329,7 @@ public struct Instruction
     /// <summary>
     /// Creates a new <see cref="InstructionType.RegisterImmediate"/> instruction.
     /// </summary>
-    public static Instruction Create(RegImmFuncCode code, Register rs, short immediate)
+    public static Instruction Create(RegImmFuncCode code, GPRegister rs, short immediate)
     {
         Instruction value = default;
         value.OpCode = OperationCode.RegisterImmediate;
@@ -342,7 +342,7 @@ public struct Instruction
     /// <summary>
     /// Creates a new <see cref="InstructionType.RegisterImmediateBranch"/> branch instruction.
     /// </summary>
-    public static Instruction Create(RegImmFuncCode code, Register rs, int offset)
+    public static Instruction Create(RegImmFuncCode code, GPRegister rs, int offset)
     {
         Instruction value = default;
         value.OpCode = OperationCode.RegisterImmediate;
@@ -374,18 +374,18 @@ public struct Instruction
     /// <summary>
     /// Gets the instruction's RS Register 
     /// </summary>
-    public Register RS
+    public GPRegister RS
     { 
-        readonly get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RS_BIT_OFFSET);
+        readonly get => (GPRegister)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RS_BIT_OFFSET);
         internal set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RS_BIT_OFFSET, (uint)value);
     }
     
     /// <summary>
     /// Gets the instruction's RT Register 
     /// </summary>
-    public Register RT
+    public GPRegister RT
     { 
-        readonly get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RT_BIT_OFFSET);
+        readonly get => (GPRegister)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RT_BIT_OFFSET);
         internal set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RT_BIT_OFFSET, (uint)value);
     }
 
@@ -399,15 +399,15 @@ public struct Instruction
     public RegImmFuncCode RTFuncCode
     {
         readonly get => (RegImmFuncCode)RT;
-        internal set => RT = (Register)value;
+        internal set => RT = (GPRegister)value;
     }
 
     /// <summary>
     /// Gets the instruction's RD Register 
     /// </summary>
-    public Register RD
+    public GPRegister RD
     { 
-        readonly get => (Register)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RD_BIT_OFFSET);
+        readonly get => (GPRegister)UintMasking.GetShiftMask(_inst, REGISTER_BIT_SIZE, RD_BIT_OFFSET);
         internal set => UintMasking.SetShiftMask(ref _inst, REGISTER_BIT_SIZE, RD_BIT_OFFSET, (uint)value);
     }
 

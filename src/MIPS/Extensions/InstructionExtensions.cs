@@ -18,7 +18,7 @@ public static class InstructionExtensions
     /// </summary>
     /// <param name="instruction">The instruction.</param>
     /// <returns>Which register the instruction writes back to.</returns>
-    public static Register? GetWritebackRegister(this Instruction instruction)
+    public static GPRegister? GetWritebackRegister(this Instruction instruction)
     {
         var arg = instruction.GetWritebackArgument();
 
