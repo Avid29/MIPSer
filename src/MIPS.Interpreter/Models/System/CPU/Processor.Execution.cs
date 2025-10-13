@@ -19,9 +19,9 @@ public partial class Processor
     delegate uint BasicRDelegate(uint rs, uint rt);
     delegate ulong MultRDelegate(uint rs, uint rt);
     delegate uint ShiftRDelegate(uint rs, byte shift);
-
     delegate uint BasicIDelegate(uint rs, short imm);
-    delegate uint MemoryIDelegate(uint rs, byte mem);
+    delegate uint MemoryDelegate(uint rs, byte mem);
+    delegate bool BranchDelegate(uint rs, uint rt);
 
     /// <summary>
     /// Executes an instruction.
@@ -161,8 +161,8 @@ public partial class Processor
             },
 
             OperationCode.RegisterImmediate => throw new NotImplementedException(),
-            OperationCode.BranchOnEquals => throw new NotImplementedException(),
-            OperationCode.BranchOnNotEquals => throw new NotImplementedException(),
+            OperationCode.BranchOnEquals => Branch(instruction, (rs, rt) => rs == rt),
+            OperationCode.BranchOnNotEquals => Branch(instruction, (rs, rt) => rs != rt),
             OperationCode.BranchOnLessThanOrEqualToZero => throw new NotImplementedException(),
             OperationCode.BranchOnGreaterThanZero => throw new NotImplementedException(),
             OperationCode.AddImmediate => BasicI(instruction, (rs, imm) => (uint)((int)rs + imm)),
@@ -273,7 +273,6 @@ public partial class Processor
         };
     }
 
-
     private Execution BasicI(Instruction instruction, BasicIDelegate func)
     {
         var rs = _regFile[instruction.RS];
@@ -287,5 +286,22 @@ public partial class Processor
             Destination = dest,
             Output = value,
         };
+    }
+
+    private Execution Branch(Instruction instruction, BranchDelegate func)
+    {
+        var rs = _regFile[instruction.RS];
+        var rt = _regFile[instruction.RT];
+        var imm = instruction.Offset;
+
+        if (func(rs, rt))
+        {
+            return new Execution
+            {
+                ProgramCounter = (uint)(ProgramCounter + imm),
+            };
+        }
+
+        return Execution.NoOp;
     }
 }

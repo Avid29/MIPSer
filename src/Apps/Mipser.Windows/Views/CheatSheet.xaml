@@ -128,7 +128,7 @@
         
         <DataTemplate x:Key="EncodingPatternDisplayTemplate" x:DataType="models:EncodingPattern">
             <StackPanel>
-                <TextBlock Text="{x:Bind Name, Mode=OneWay}" Foreground="{StaticResource HeaderForeground}" Margin="0,2" FontFamily="{StaticResource HappyMonkey}"/>
+                <TextBlock Text="{x:Bind Name}" Foreground="{StaticResource HeaderForeground}" Margin="0,2" FontFamily="{StaticResource HappyMonkey}"/>
                 <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind}" SectionBrushPalette="{StaticResource SectionBrushPalette}"
                                               FontFamily="{StaticResource HappyMonkey}"/>
             </StackPanel>
@@ -139,7 +139,7 @@
                     CornerRadius="4" Margin="1">
                 <TextBlock Text="{x:Bind tables:RegistersTable.GetRegisterString((reg:Register), reg:RegisterSet.GeneralPurpose)}" Foreground="Black"
                            HorizontalAlignment="Center" VerticalAlignment="Center"
-                           FontFamily="{StaticResource HappyMonkey}"/>
+                           FontFamily="{StaticResource HappyMonkey}" FontSize="18"/>
             </Border>
         </DataTemplate>
 

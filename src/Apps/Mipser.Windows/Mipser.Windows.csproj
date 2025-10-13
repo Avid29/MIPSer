@@ -20,20 +20,6 @@
     <Content Remove="Assets\Fonts\HappyMonkey-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Controls\CheatSheet\EncodingPatternDisplay.xaml" />
-    <None Remove="Controls\CheatSheet\EncodingTableDisplay.xaml" />
-    <None Remove="Controls\Editors\HexEditor.xaml" />
-    <None Remove="Controls\Editors\TextEditor.xaml" />
-    <None Remove="Controls\UsagePatternDisplay.xaml" />
-    <None Remove="Resources\Brushes.xaml" />
-    <None Remove="Views\CheatSheet.xaml" />
-    <None Remove="Views\FileViewer.xaml" />
-    <None Remove="Views\Shell\Explorer.xaml" />
-    <None Remove="Views\Shell\OpenFilesView.xaml" />
-    <None Remove="Views\Shell\TitleBar.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />

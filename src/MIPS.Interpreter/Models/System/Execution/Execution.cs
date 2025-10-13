@@ -114,6 +114,16 @@ public struct Execution()
     public SecondaryWritebacks SideEffects {get; private set; }
 
     /// <summary>
+    /// Gets an execution that does nothing.
+    /// </summary>
+    public static Execution NoOp => new()
+    {
+        SideEffects = SecondaryWritebacks.None,
+        Destination = Register.Zero,
+        RegisterSet = RegisterSet.GeneralPurpose,
+    };
+
+    /// <summary>
     /// Gets a value indicating whether or not execution handled the PC changing.
     /// </summary>
     public readonly bool PCHandled => SideEffects == SecondaryWritebacks.ProgramCounter;

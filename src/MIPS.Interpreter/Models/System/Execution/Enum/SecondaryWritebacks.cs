@@ -31,6 +31,10 @@ public enum SecondaryWritebacks
     /// <summary>
     /// Writes to both the low and high register.
     /// </summary>
+    /// <remarks>
+    /// Somewhat by coincidence, this is equivalent to <see cref="Low"/> | <see cref="High"/>, but other values coul
+    /// also use to two low bits.
+    /// </remarks>
     HighLow = Low | High,
 
     /// <summary>
