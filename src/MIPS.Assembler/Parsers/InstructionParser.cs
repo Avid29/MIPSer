@@ -333,22 +333,6 @@ public struct InstructionParser
         // This is the desired behavior, but when logging errors this
         // should be handled explicitly and drop an assembler warning.
 
-        // Determine the bits allowed by the 
-        int bitCount = target switch
-        {
-            Argument.Shift => 5,
-            Argument.Immediate or Argument.Offset => 16, 
-            Argument.Address => 26,
-            Argument.FullImmediate => 32,
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"Argument of type '{target}' attempted to parse as an expression."),
-        };
-
-        int shiftAmount = target switch
-        {
-            Argument.Offset or Argument.Address => 2,
-            _ => 0,
-        };
-
         if (!address.IsFixed && target is Argument.Shift)
         {
             _logger?.Log(Severity.Error, LogId.RelocatableReferenceInShift, "Shift amount argument cannot reference relocatable symbols.");
@@ -380,21 +364,22 @@ public struct InstructionParser
 
         long value = address.Value;
 
-        // Shift and Address are unsigned. Immediate and offset are the only signed arguments
-        bool signed = target is Argument.Immediate or Argument.Offset;
-
-        // Clean integer to fit within argument bit size and match signs.
-        long original = 0;
-        var cleanStatus = target switch
+        // Determine casting details for the argument
+        (int bitCount, int shiftAmount, bool signed) = target switch
         {
-            Argument.Shift => CastInteger(ref value, bitCount, shiftAmount, signed, out original),
-            Argument.Immediate => CastInteger(ref value, bitCount, shiftAmount, signed, out original),
-            Argument.Offset => CastInteger(ref value, bitCount, shiftAmount, signed, out original),
-            Argument.Address => CastInteger(ref value, bitCount, shiftAmount, signed, out original),
-            Argument.FullImmediate => CastInteger(ref value, bitCount, shiftAmount, signed, out original),
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<CastingChanges>($"Argument of type '{target}' attempted to parse as an expression."),
+            Argument.Shift => (5, 0, false),
+            Argument.Offset => (16, 2, false),
+            Argument.Immediate => (16, 0, true),
+            Argument.Address => (26, 2, false),
+            Argument.FullImmediate => (32, 0, true),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<(byte, byte, bool)>($"Argument of type '{target}' attempted to parse as an expression."),
         };
 
+        // Clean integer to fit within argument bit size and match signs.
+        long original = value;
+        var cleanStatus = CastInteger(ref value, bitCount, shiftAmount, signed);
+
+        // Log a warning for any changes made to the value when casting.
         switch (cleanStatus)
         {
             case CastingChanges.SignChanged:
@@ -559,11 +544,10 @@ public struct InstructionParser
     /// <param name="bitCount">The number of bits after casting.</param>
     /// <param name="shiftAmount">The number of bits that will drop from the bottom.</param>
     /// <param name="signed">Whether or not the new value should be signed.</param>
-    /// <param name="original">The original value.</param>
     /// <returns>The changes made to the integer.</returns>
-    private static CastingChanges CastInteger(ref long integer, int bitCount, int shiftAmount, bool signed, out long original)
+    private static CastingChanges CastInteger(ref long integer, int bitCount, int shiftAmount, bool signed = false)
     {
-        original = integer;
+        var original = integer;
 
         Guard.IsGreaterThan(bitCount, 1);
         Guard.IsLessThanOrEqualTo(bitCount +  shiftAmount, 64);
