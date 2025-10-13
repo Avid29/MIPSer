@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tests.Live.Enums;
@@ -67,35 +68,48 @@ public class Program()
         stream = new MemoryStream();
         assembler.CompleteModule<RasmModule>(stream);
 
-        if (assembler.Failed)
+        if (!assembler.Failed)
+        {
+            Console.Write("\nBinary: ");
+            uint inst = 0;
+            for (int i = 0; stream.Position != stream.Length; i++)
+            {
+                int x = stream.ReadByte();
+
+                Console.Write($"{x:X2} ");
+                if (i % 4 is 3)
+                    Console.Write("  ");
+                if (i % 8 is 7)
+                    Console.WriteLine();
+
+                inst = inst << 8;
+                inst += (uint)x;
+            }
+
+            Console.Write("\n\nDisassembly: ");
+            var disassembly = new Disassembler.Disassembler(new RasmConfig()).DisassembleInstruction((Instruction)inst);
+            Console.Write(disassembly);
+        }
+        else
         {
             Console.WriteLine("\nAssembly failed:");
-            foreach (var error in assembler.Logs)
-            {
-                Console.WriteLine($"- {error.Message}");
-            }
         }
 
-        Console.Write("\nBinary: ");
-        uint inst = 0;
-        for (int i = 0; stream.Position != stream.Length; i++)
+        Console.WriteLine();
+        foreach (var error in assembler.Logs)
         {
-            int x = stream.ReadByte();
+            (string message, ConsoleColor color) = error.Severity switch 
+            {
+                Severity.Error => ("Error", ConsoleColor.Red),
+                Severity.Warning => ("Warning", ConsoleColor.Yellow),
+                Severity.Message => ("Message", ConsoleColor.Blue),
+                _ => ("Something", ConsoleColor.Magenta)
+            };
 
-            Console.Write($"{x:X2} ");
-            if (i % 4 is 3)
-                Console.Write("  ");
-            if (i % 8 is 7)
-                Console.WriteLine();
-
-            inst = inst << 8;
-            inst += (uint)x;
+            Console.ForegroundColor = color;
+            Console.WriteLine($"{message} - {error.Message}");
+            Console.ForegroundColor = ConsoleColor.White;
         }
-
-        Console.Write("\n\nDisassembly: ");
-        var disassembly = new Disassembler.Disassembler(new RasmConfig()).DisassembleInstruction((Instruction)inst);
-        
-        Console.Write(disassembly);
 
         Console.WriteLine("\n");
         return !assembler.Failed;

@@ -494,7 +494,7 @@ public struct InstructionParser
             // Truncated and sign changed
             CastingChanges.TruncatedAndSignChanged =>
             $"Expression '{arg.Print()}' evaluated to {original}, but was truncated to an" +
-            $"unsigned value with {bitCount}-bits dropping the lower {shiftAmount} bits," +
+            $"unsigned value with {bitCount}-bits and dropping the lower {shiftAmount} bits," +
             $"resulting in {value}.",
 
             // No changes
@@ -523,12 +523,14 @@ public struct InstructionParser
         Guard.IsGreaterThan(bitCount, 1);
         Guard.IsLessThanOrEqualTo(bitCount + shiftAmount, 64);
 
-        // Mask for lowest bitCount bits
-        long upperMask = bitCount == 64 ? -1L : (1L << bitCount) - 1;
-        var lowerMask = (-1L << shiftAmount) - 1;
+        // Create a masks for the high and low truncating bits,
+        // as well as an overall remaining bits map.
+        var upperMask = bitCount == 64 ? -1L : (1L << (bitCount + shiftAmount)) - 1;
+        var lowerMask = ~((1L << shiftAmount) - 1);
+        var mask = (upperMask & lowerMask);
 
         // Truncate mask upper and lower bits
-        long truncated = integer & (upperMask & lowerMask);
+        long truncated = integer & mask;
 
         // Sign extend if signed and not full width
         if (signed && bitCount < 64)
@@ -537,6 +539,8 @@ public struct InstructionParser
             if ((truncated & signBit) != 0)
                 truncated |= ~upperMask; // Sign extend
         }
+        
+        integer = truncated;
 
         // Compute changes
         var changes = CastingChanges.None;
@@ -551,7 +555,7 @@ public struct InstructionParser
             changes |= CastingChanges.Truncated;
 
         // Check for lower truncation
-        if ((original & lowerMask) != 0)
+        if ((original & ~lowerMask) != 0)
         {
             changes |= CastingChanges.Truncated;
         }
