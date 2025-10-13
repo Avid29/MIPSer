@@ -337,9 +337,8 @@ public struct InstructionParser
         int bitCount = target switch
         {
             Argument.Shift => 5,
-            Argument.Immediate => 16,
-            Argument.Offset => 16,  // Offset and address are only 16/26 bits in storage. However, the last
-            Argument.Address => 26, // two bits are dropped so the 18th and 28th bits must be cleaned too
+            Argument.Immediate or Argument.Offset => 16, 
+            Argument.Address => 26,
             Argument.FullImmediate => 32,
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"Argument of type '{target}' attempted to parse as an expression."),
         };
