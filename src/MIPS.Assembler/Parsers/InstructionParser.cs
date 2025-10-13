@@ -6,6 +6,7 @@ using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Instructions;
+using MIPS.Assembler.Parsers.Enums;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using MIPS.Extensions;
@@ -337,10 +338,16 @@ public struct InstructionParser
         {
             Argument.Shift => 5,
             Argument.Immediate => 16,
-            Argument.Offset => 18,  // Offset and address are only 16/26 bits in storage. However, the last
-            Argument.Address => 28, // two bits are dropped so the 18th and 28th bits must be cleaned too
+            Argument.Offset => 16,  // Offset and address are only 16/26 bits in storage. However, the last
+            Argument.Address => 26, // two bits are dropped so the 18th and 28th bits must be cleaned too
             Argument.FullImmediate => 32,
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"Argument of type '{target}' attempted to parse as an expression."),
+        };
+
+        int shiftAmount = target switch
+        {
+            Argument.Offset or Argument.Address => 2,
+            _ => 0,
         };
 
         if (!address.IsFixed && target is Argument.Shift)
@@ -381,30 +388,27 @@ public struct InstructionParser
         long original = 0;
         var cleanStatus = target switch
         {
-            Argument.Shift => CleanInteger(ref value, bitCount, signed, out original),
-            Argument.Immediate => CleanInteger<short>(ref value, out original),
-            Argument.Offset => CleanInteger(ref value, bitCount, signed, out original),
-            Argument.Address => CleanInteger(ref value, bitCount, signed, out original),
-            Argument.FullImmediate => CleanInteger<int>(ref value, out original),
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<int>($"Argument of type '{target}' attempted to parse as an expression."),
+            Argument.Shift => CastInteger(ref value, bitCount, shiftAmount, signed, out original),
+            Argument.Immediate => CastInteger(ref value, bitCount, shiftAmount, signed, out original),
+            Argument.Offset => CastInteger(ref value, bitCount, shiftAmount, signed, out original),
+            Argument.Address => CastInteger(ref value, bitCount, shiftAmount, signed, out original),
+            Argument.FullImmediate => CastInteger(ref value, bitCount, shiftAmount, signed, out original),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<CastingChanges>($"Argument of type '{target}' attempted to parse as an expression."),
         };
 
         switch (cleanStatus)
         {
-            case 0:
-                // Integer was already clean
-                break;
-
-            case 1:
-                // Integer was negative, but needs to be unsigned.
-                // Also may have been truncated.
+            case CastingChanges.SignChanged:
                 _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"Expression '{arg.Print()}' evaluated to signed value {original}," +
-                                                                       $" but was cast to unsigned value and truncated to {bitCount}-bits, resulting in {value}.");
+                                                                       $" but was cast to an unsigned value, resulting in {value}.");
                 break;
-            case 2:
-                // Integer was truncated.
+            case CastingChanges.Truncated:
                 _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"Expression '{arg.Print()}' evaluated to {original}," +
-                                                  $" but was truncated to {bitCount}-bits, resulting in {value}.");
+                                                  $" but was truncated to {bitCount}-bits dropping the lower {shiftAmount} bits, resulting in {value}.");
+                break;
+            case CastingChanges.TruncatedAndSignChanged:
+                                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"Expression '{arg.Print()}' evaluated to {original}," +
+                                                  $" but was truncated to an unsigned value with {bitCount}-bits dropping the lower {shiftAmount} bits, resulting in {value}.");
                 break;
         }
 
@@ -549,60 +553,59 @@ public struct InstructionParser
         return true;
     }
 
-    /// <returns>
-    /// 0 if unchanged, 1 if signChanged (maybe also have been truncated), and 2 if truncated.
-    /// </returns>
-    private static byte CleanInteger(ref long integer, int bitCount, bool signed, out long original)
+    /// <remarks>
+    /// This does not apply the <paramref name="shiftAmount"/>! It only masks the lower bits.
+    /// </remarks>
+    /// <param name="integer">A reference to the integer to modify.</param>
+    /// <param name="bitCount">The number of bits after casting.</param>
+    /// <param name="shiftAmount">The number of bits that will drop from the bottom.</param>
+    /// <param name="signed">Whether or not the new value should be signed.</param>
+    /// <param name="original">The original value.</param>
+    /// <returns>The changes made to the integer.</returns>
+    private static CastingChanges CastInteger(ref long integer, int bitCount, int shiftAmount, bool signed, out long original)
     {
-        // TODO: Support signed truncation
         original = integer;
 
-        // Truncate integer to bit count
-        long mask = (1L << bitCount) - 1;
-        integer &= mask;
+        Guard.IsGreaterThan(bitCount, 1);
+        Guard.IsLessThanOrEqualTo(bitCount +  shiftAmount, 64);
 
-        // Check for sign in unsigned integer
-        // TODO: Handle bitCount >= 32
-        if (!signed && original < 0 && bitCount < 32)
+        // Mask for lowest bitCount bits
+        long upperMask = bitCount == 64 ? -1L : (1L << bitCount) - 1;
+        var lowerMask = (-1L << shiftAmount) - 1;
+
+        // Truncate mask upper and lower bits
+        long truncated = integer & (upperMask & lowerMask);
+
+        // Sign extend if signed and not full width
+        if (signed && bitCount < 64)
         {
-            // Remove sign from truncated integer
-            integer = (uint)integer;
-            return 1;
+            long signBit = 1L << (bitCount - 1);
+            if ((truncated & signBit) != 0)
+                truncated |= ~upperMask; // Sign extend
         }
 
-        // Restore sign on signed integers
-        if (signed && original < 0)
+        // Compute changes
+        var changes = CastingChanges.None;
+        
+        // Check if the sign changed
+        if((original < 0) != (truncated < 0))
+            changes |= CastingChanges.SignChanged;
+
+        // Check for upper truncation
+        long upperBits = integer & ~upperMask;
+        if(upperBits != 0 && upperBits != ~upperMask)
+            changes |= CastingChanges.Truncated;
+
+        // Check for lower truncation
+        if ((original & lowerMask) != 0)
         {
-            integer |= ~mask;
+            changes |= CastingChanges.Truncated;
         }
 
-        // Check if truncated lossily
-        if ((original & ~mask) != 0 && ~(original | mask) != 0)
-            return 2;
-
-        return 0;
+        // Return combined code
+        return changes;
     }
     
-    /// <returns>
-    /// 0 if unchanged, 1 if signChanged (maybe also have been truncated), and 2 if truncated.
-    /// </returns>
-    private static byte CleanInteger<T>(ref long integer, out long original)
-        where T : unmanaged, IBinaryInteger<T>
-    {
-        original = integer;
-
-        var cast = T.CreateTruncating(original);
-        integer = long.CreateSaturating(cast);
-
-        if (long.Sign(original) != T.Sign(cast))
-            return 1;
-
-        if (integer != original)
-            return 2;
-
-        return 0;
-    }
-
     private void LoadProvidedFields()
     {
         LoadField(ref _rs, (Register?)_meta.RS);

@@ -42,6 +42,7 @@ public class InstructionParserTests
 
     private const string SllWarnTruncate = "sll $t0, $s0, 33";
     private const string SllWarnSigned = "sll $t0, $s0, -1";
+    private const string JWarnTruncate = "j 0x1";
 
     private const string XkcdFail = "xkcd $t0, $s0, $s1";
     private const string TooFewArgs = "add $t0, $s0";
@@ -146,6 +147,13 @@ public class InstructionParserTests
     {
         Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, Register.Zero, Register.Saved0, Register.Temporary0, 31);
         RunTest(SllWarnSigned, new ParsedInstruction(expected), logId:LogId.IntegerTruncated);
+    }
+
+    [TestMethod(JWarnTruncate)]
+    public void JWarnTruncateTest()
+    {
+        Instruction expected = Instruction.Create(OperationCode.Jump, 0x1);
+        RunTest(JWarnTruncate, new ParsedInstruction(expected), logId:LogId.IntegerTruncated);
     }
 
     [TestMethod(XkcdFail)]
