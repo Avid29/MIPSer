@@ -134,10 +134,10 @@
             </StackPanel>
         </DataTemplate>
         
-        <DataTemplate x:Key="RegisterEncodingCellTemplate" x:DataType="reg:Register">
-            <Border Background="{x:Bind (reg:Register), Converter={StaticResource RegisterEncodingColorConverter}}"
+        <DataTemplate x:Key="RegisterEncodingCellTemplate" x:DataType="reg:GPRegister">
+            <Border Background="{x:Bind (reg:GPRegister), Converter={StaticResource RegisterEncodingColorConverter}}"
                     CornerRadius="4" Margin="1">
-                <TextBlock Text="{x:Bind tables:RegistersTable.GetRegisterString((reg:Register), reg:RegisterSet.GeneralPurpose)}" Foreground="Black"
+                <TextBlock Text="{x:Bind tables:RegistersTable.GetRegisterString((reg:GPRegister), reg:RegisterSet.GeneralPurpose)}" Foreground="Black"
                            HorizontalAlignment="Center" VerticalAlignment="Center"
                            FontFamily="{StaticResource HappyMonkey}" FontSize="18"/>
             </Border>
