@@ -7,7 +7,6 @@ using MIPS.Assembler.Tokenization.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 namespace MIPS.Assembler.Tokenization;
@@ -102,18 +101,16 @@ public class Tokenizer
     {
         Tokens = [];
 
+        bool status = true;
         line += '\n';
         foreach (char c in line)
         {
-            bool status = ParseNextChar(c);
+            status = ParseNextChar(c);
 
             // This line is invalid and cannot be tokenized.
             // Regardless, we'll add what was parsable and keep going to find any further errors
             if (!status)
-            {
-                TokenLines.Add(new([..Tokens]));
-                return false;
-            }
+                break;
 
             _column++;
         }
@@ -121,25 +118,39 @@ public class Tokenizer
         _line++;
         _column = 0;
         TokenLines.Add(new([..Tokens]));
-        return true;
+        return status;
     }
 
     private bool ParseNextChar(char c)
     {
         return _state switch
         {
-            TokenizerState.ArgBegin => ParseFromBegin(c, false),
+            // Beginning of a new argument or line
             TokenizerState.LineBegin => ParseFromBegin(c, true),
+            TokenizerState.ArgBegin => ParseFromBegin(c, false),
+
+            // Instructions, labels, macros, etc. at beginning of line
             TokenizerState.NewLineText => ParseNewLineText(c, false),
             TokenizerState.NewLineTextWait => ParseNewLineText(c, true),
+
+            // Registers
             TokenizerState.Register => ParseFromRegister(c),
+
+            // Immediate values
             TokenizerState.Immediate => ParseFromImmediate(c),
             TokenizerState.SpecialImmediate => ParseFromImmediate(c, true),
-            TokenizerState.HexImmediate => ParseFromImmediate(c, hex:true),
+            TokenizerState.BinaryImmediate or TokenizerState.OctImmediate or
+            TokenizerState.HexImmediate or TokenizerState.BadImmediate => ParseFromImmediate(c, state:_state),
+
+            // String and character literals
             TokenizerState.Character => ParseFromString(c, true),
             TokenizerState.String => ParseFromString(c, false),
+
+            // Directives and references
             TokenizerState.Directive => ParseFromDirective(c),
             TokenizerState.Reference => ParseFromReference(c),
+
+            // Comments and whitespace
             TokenizerState.Comment => ParseFromComment(c),
             TokenizerState.Whitespace => ParseFromWhitespace(c),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>(nameof(_state)),
@@ -263,28 +274,44 @@ public class Tokenizer
         return CompleteAndContinue(c);
     }
 
-    private bool ParseFromImmediate(char c, bool special = false, bool hex = false)
+    private bool ParseFromImmediate(char c, bool special = false, TokenizerState state = TokenizerState.Immediate)
     {
         // We're in special state so the last value was a '0'.
         // Now if we see one of these characters we're handling a non-base 10 immediate.
         if (special && c is 'b' or 'o' or 'x')
         {
-            return HandleCharacter(c, null, c is 'x' ? TokenizerState.HexImmediate : TokenizerState.Immediate);
+            var newState = c switch
+            {
+                'b' => TokenizerState.BinaryImmediate,
+                'o' => TokenizerState.OctImmediate,
+                'x' => TokenizerState.HexImmediate,
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<TokenizerState>(nameof(c)),
+            };
+
+            return HandleCharacter(c, null, newState);
         }
 
-        var state = hex ? TokenizerState.HexImmediate : TokenizerState.Immediate;
+        // Which characters are valid depends on the immediate state
+        Func<char, bool> check = state switch
+        {
+            TokenizerState.BinaryImmediate => c => c is '0' or '1',
+            TokenizerState.OctImmediate => c => char.IsBetween(c, '0', '7'),
+            TokenizerState.HexImmediate => c => char.IsDigit(c) || char.IsBetween(char.ToLower(c), 'a', 'f'),
+            TokenizerState.BadImmediate => _ => false,
+            _ => char.IsDigit,
+        };
 
-        // Continue parsing the current token if digit
-        if (char.IsDigit(c))
+        // Validate character for immediate state
+        if (check(c))
         {
             return HandleCharacter(c, TokenType.Immediate, state);
         }
 
-        // If the immediate is a hexidemical the characters 'A' through 'F',
-        // in upper or lowercase, continue parsing the current token.
-        if (hex && (char.IsBetween(char.ToLower(c), 'a', 'f')))
+        // Track bad immediate creation, but log nothing.
+        // This will be logged later during parsing.
+        if (char.IsLetterOrDigit(c))
         {
-            return HandleCharacter(c, TokenType.Immediate, state);
+            return HandleCharacter(c, TokenType.Immediate, TokenizerState.BadImmediate);
         }
 
         // Complete the current token and process the current character as the
@@ -376,7 +403,7 @@ public class Tokenizer
         {
             if (type is null)
                 ThrowHelper.ThrowArgumentException(nameof(type));
-
+            
             return CompleteCacheToken(newState);
         }
 

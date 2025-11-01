@@ -29,6 +29,8 @@ public class ExpressionParserTests
     private const string Binary = "0b1010";
     private const string Oct = "0o12";
     private const string Hex = "0xa";
+    private const string BadBinary = "0b102";
+
 
     private const string Char = "'a'";
     private const string AddChar = "'a' + 10";
@@ -68,6 +70,9 @@ public class ExpressionParserTests
 
     [TestMethod(Binary)]
     public void BinaryTest() => RunTest(Binary, 0b1010);
+    
+    [TestMethod(BadBinary)]
+    public void BadBinaryTest() => RunTest(BadBinary);
 
     [TestMethod(Oct)]
     public void OctTest() => RunTest(Oct, 10); // C# doesn't support oct...

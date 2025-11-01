@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
+using Microsoft.VisualBasic;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
@@ -193,9 +194,16 @@ public struct ExpressionParser
                 _ => ThrowHelper.ThrowArgumentException<int>($"{t.Source[1]} is not a valid special immediate mode."),
             };
             
-            // TODO: The tokenizer will currently allow base 10 digits in binary and oct immediates
-            // This should be prevented or handled somewhere. For now it's "handled" here as an exception.
-            value = Convert.ToInt64(t.Source[2..], @base);
+            // The tokenizer will allow bad immediates to be created. This is handled here when the convert throws an exception.
+            try
+            {
+                value = Convert.ToInt64(t.Source[2..], @base);
+            }
+            catch
+            {
+                _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Could not parse '{t.Source}' as an immediate value.");
+                return false;
+            }
         }
         else if (!long.TryParse(t.Source, out value))
         {

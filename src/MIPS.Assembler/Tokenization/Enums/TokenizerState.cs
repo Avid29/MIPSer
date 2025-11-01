@@ -16,7 +16,10 @@ public enum TokenizerState
     Register,
     Immediate,
     SpecialImmediate,   // This is after the first 0 because it could be followed by an x, o, or b etc making it hex, oct, or binary etc
-    HexImmediate,
+    BinaryImmediate,    // After 0b
+    OctImmediate,       // After 0o
+    HexImmediate,       // After 0x
+    BadImmediate,       // After an invalid character for the base
     Character,
     String,
     Directive,
