@@ -36,9 +36,14 @@ public class ExpressionParserTests
     private const string Hex = "0xa";
     private const string BadBinary = "0b102";
 
+    private const string OrderOfOps1 = "4 * 2 + 2";
+    private const string OrderOfOps2 = "4 + 2 * 2";
 
     private const string Char = "'a'";
+    private const string EscapeChar = @"'\n'";
     private const string AddChar = "'a' + 10";
+    private const string LongChar = "'abc'";
+    private const string BadEscapeChar = @"'\x'";
 
     private const string Macro = "macro + 10";
     private const string MacroFail = "macro + macro";
@@ -97,11 +102,26 @@ public class ExpressionParserTests
     [TestMethod(Hex)]
     public void HexTest() => RunTest(Hex, 0xa);
 
+    [TestMethod(OrderOfOps1)]
+    public void OrderOfOps1Test() => RunTest(OrderOfOps1, 4 * 2 + 2);
+
+    [TestMethod(OrderOfOps2)]
+    public void OrderOfOps2Test() => RunTest(OrderOfOps2, 4 + 2 * 2);
+
     [TestMethod(Char)]
     public void CharTest() => RunTest(Char, 'a');
 
+    [TestMethod(EscapeChar)]
+    public void EscapeCharTest() => RunTest(EscapeChar, '\n');
+
     [TestMethod(AddChar)]
     public void AddCharTest() => RunTest(AddChar, 'a' + 10);
+
+    [TestMethod(LongChar)]
+    public void LongCharTest() => RunTest(LongChar);
+
+    [TestMethod(BadEscapeChar)]
+    public void BadEscapeCharTest() => RunTest(BadEscapeChar);
 
     [TestMethod(Macro)]
     public void MarcoTest() => RunTest(Macro, 10 + 10, ("macro", new Address(10, Section.Text)));

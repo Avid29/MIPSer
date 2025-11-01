@@ -322,7 +322,8 @@ public class Tokenizer
     {
         if (c is '\n')
         {
-            _logger?.Log(Severity.Error, LogId.MultiLineString, $"Strings may not wrap between lines.", _line);
+            var expected = isChar ? "Character literals" : "Strings";
+            _logger?.Log(Severity.Error, LogId.MultiLineString, $"{expected} may not wrap between lines.", _line);
             return false;
         }
 
@@ -337,11 +338,7 @@ public class Tokenizer
                 return false;
             }
 
-            // TODO: Allow escaped characters.
-            if (_cache.Length is >= 2 && c is not '\'')
-                return false;
-
-            if (_cache.Length is 2 && c is '\'')
+            if (_cache.Length is >= 2 && c is '\'')
             {
                 return HandleCharacter(c, TokenType.Immediate);
             }

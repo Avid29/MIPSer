@@ -14,6 +14,9 @@ public class StringParserTests
     [TestMethod("\"\"")]
     public void LiteralEmptyTest() => RunTest("\"\"", "");
 
+    [TestMethod(@"\")]
+    public void InvalidEscapeTest() => RunTest(@"\");
+
     [TestMethod("Hello\nWorld")]
     public void HelloWorld2LineTest() => RunTest("\"Hello\\nWorld\"", "Hello\nWorld");
 

@@ -161,7 +161,11 @@ public struct ExpressionParser
         if (t.Source[0] is '\'')
         {
             // Character literal
-            value = t.Source[1];
+            var strParser = new StringParser(_logger);
+            if (!strParser.TryParseChar(t.Source, out char c))
+                return false;
+
+            value = c;
         }
         else if (t.Source.Length > 2 && !char.IsDigit(t.Source[1]))
         {

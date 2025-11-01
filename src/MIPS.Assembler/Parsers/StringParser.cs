@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 
@@ -29,8 +30,35 @@ public struct StringParser
     /// <param name="literal">The resulting string literal</param>
     /// <returns><see cref="true"/> if the string was successfully parsed. <see cref="false"/> otherwise.</returns>
     public bool TryParseString(string input, out string literal)
+        => TryParse(input, '"', out literal);
+
+    /// <summary>
+    /// Attempts to parse a single character from a char statement.
+    /// </summary>
+    /// <param name="input">The char statement.</param>
+    /// <param name="c">The char literal.</param>
+    /// <returns>Whether or not a character was successfully parsed.</returns>
+    public bool TryParseChar(string input, out char c)
+    {
+        c = default;
+
+        if (!TryParse(input, '\'', out string literal))
+            return false;
+
+        if (literal.Length != 1)
+        {
+            _logger?.Log(Severity.Error, LogId.InvalidCharLiteral, $"Character literal must be a single character.");
+            return false;
+        }
+
+        c = literal[0];
+        return true;
+    }
+
+    private bool TryParse(string input, char wrap, out string literal)
     {
         literal = string.Empty;
+        _escapeState = false;
 
         // Trim whitespace
         input = input.Trim();
@@ -39,9 +67,16 @@ public struct StringParser
             return false;
 
         // Ensure string begins and ends with quotes
-        if (input[0] != '"' || input[^1] != '"')
+        if (input[0] != wrap || input[^1] != wrap)
         {
-            _logger?.Log(Severity.Error, LogId.NotAString, $"Expected a string. '{input}' is not a string.");
+            string expected  = wrap switch
+            {
+                '"' => "string",
+                '\'' => "char",
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>($"{wrap} expected to be either a ''' or '\"' character."),
+            };
+
+            _logger?.Log(Severity.Error, LogId.NotAString, $"Expected a {expected}.");
             return false;
         }
 
@@ -54,15 +89,21 @@ public struct StringParser
             }
             else
             {
-                if (!TryParseChar(c, ref literal))
+                if (!TryParseByChar(c, ref literal))
                     return false;
             }
+        }
+
+        if (_escapeState)
+        {
+            _logger?.Log(Severity.Error, LogId.UnrecognizedEscapeSequence, "String ends with incomplete escape sequence.");
+            return false;
         }
 
         return true;
     }
 
-    private bool TryParseChar(char c, ref string literal)
+    private bool TryParseByChar(char c, ref string literal)
     {
         switch (c)
         {
