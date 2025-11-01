@@ -11,6 +11,7 @@ using System.Text;
 using RasmRelocation = RASM.Modules.Tables.RelocationEntry;
 using RasmReference = RASM.Modules.Tables.ReferenceEntry;
 using RasmSymbol = RASM.Modules.Tables.SymbolEntry;
+using MIPS.Models.Addressing.Enums;
 
 namespace RASM.Modules;
 
@@ -65,7 +66,7 @@ public class RasmModule : IBuildModule<RasmModule>
         // Append segments to stream
         constructor.ResetStreamPositions();
         foreach(var section in constructor.Sections)
-            section.CopyTo(stream);
+            section.Stream.CopyTo(stream);
 
         // Split string references to string table.
         var strings = new MemoryStream();
@@ -182,14 +183,14 @@ public class RasmModule : IBuildModule<RasmModule>
         uint[] sizes =
             [Header.TextSize, Header.ReadOnlyDataSize, Header.DataSize, Header.SmallDataSize,
             Header.SmallUninitializedDataSize, Header.UninitializedDataSize];
-        var sections = new Stream[SECTION_COUNT];
+        var sections = new ModuleSection[SECTION_COUNT];
         for (int i = 0; i < sections.Length; i++)
         {
             var size = (int)sizes[i];
-            sections[i] = new MemoryStream(size);
+            sections[i] = new ModuleSection((Section)i);
             if (size is not 0)
             {
-                sections[i].CopyFrom(_source, size);
+                sections[i].Stream.CopyFrom(_source, size);
             }
         }
 

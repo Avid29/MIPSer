@@ -92,7 +92,7 @@ public partial class ModuleConstructor
         if (section is < Section.Text or > Section.UninitializedData)
             ThrowHelper.ThrowArgumentOutOfRangeException($"Section must be between {Section.Text} and {Section.UninitializedData}.");
 
-        return _sections[(int)section].Position;
+        return _sections[(int)section].Stream.Position;
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public partial class ModuleConstructor
     public void ResetStreamPositions()
     {
         foreach (var section in _sections)
-            section.Position = 0;
+            section.Stream.Position = 0;
     }
 
     /// <summary>
@@ -147,6 +147,6 @@ public partial class ModuleConstructor
         if (section is < Section.Text or > Section.UninitializedData)
             ThrowHelper.ThrowArgumentOutOfRangeException($"Section must be between {Section.Text} and {Section.UninitializedData}.");
 
-        return _sections[(int)section];
+        return _sections[(int)section].Stream;
     }
 }

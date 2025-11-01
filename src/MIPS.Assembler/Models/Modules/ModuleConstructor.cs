@@ -21,16 +21,16 @@ public partial class ModuleConstructor
     private readonly List<ReferenceEntry> _references;
     private readonly Dictionary<string, SymbolEntry> _definitions;
 
-    private readonly Stream[] _sections;
+    private readonly ModuleSection[] _sections;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ModuleConstructor"/> class.
     /// </summary>
     public ModuleConstructor()
     {
-        _sections = new Stream[SECTION_COUNT];
+        _sections = new ModuleSection[SECTION_COUNT];
         for (int i = 0; i < _sections.Length; i++)
-            _sections[i] = new MemoryStream();
+            _sections[i] = new ModuleSection((Section)i);
         
         _references = [];
         _definitions = [];
@@ -39,16 +39,16 @@ public partial class ModuleConstructor
     /// <summary>
     /// Initializes a new instance of the <see cref="ModuleConstructor"/> class.
     /// </summary>
-    public ModuleConstructor(Stream[] streams, List<ReferenceEntry> references, Dictionary<string, SymbolEntry> definitions)
+    public ModuleConstructor(ModuleSection[] sections, List<ReferenceEntry> references, Dictionary<string, SymbolEntry> definitions)
     {
         // NOTE: Is this safe? Can I just write to the back of a stream that may not be empty?
         // I think it's not only safe, but good design for linking. Investigate more though.
-        if (streams.Length != SECTION_COUNT)
+        if (sections.Length != SECTION_COUNT)
         {
-            ThrowHelper.ThrowArgumentException(nameof(streams), $"{streams} must contain exactly {SECTION_COUNT} entries.");
+            ThrowHelper.ThrowArgumentException(nameof(sections), $"{sections} must contain exactly {SECTION_COUNT} entries.");
         }
 
-        _sections = streams;
+        _sections = sections;
         _references = references;
         _definitions = definitions;
     }
@@ -96,5 +96,5 @@ public partial class ModuleConstructor
     /// <summary>
     /// Gets the module sections streams.
     /// </summary>
-    public IList<Stream> Sections => _sections;
+    public IList<ModuleSection> Sections => _sections;
 }

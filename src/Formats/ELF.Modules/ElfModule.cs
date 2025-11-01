@@ -52,7 +52,7 @@ public class ElfModule : IBuildModule<ElfModule>
         // Append segments to stream
         constructor.ResetStreamPositions();
         foreach (var section in constructor.Sections)
-            section.CopyTo(stream);
+            section.Stream.CopyTo(stream);
 
         throw new NotImplementedException();
     }

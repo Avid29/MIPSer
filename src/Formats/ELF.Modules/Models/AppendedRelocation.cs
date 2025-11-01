@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2025
 
+using ELF.Modules.Models.Enums;
 using System.Numerics;
 
 namespace ELF.Modules.Models;
@@ -40,4 +41,9 @@ public struct AppendedRelocation<TAddress>
         readonly get => _append;
         internal set => _append = value;
     }
+
+    /// <summary>
+    /// Gets the type of relocation.
+    /// </summary>
+    public readonly RelocationTypes Type => (RelocationTypes)(byte.CreateTruncating(Info));
 }

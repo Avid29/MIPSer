@@ -36,7 +36,7 @@ public class RawModule : IBuildModule<RawModule>, IExecutableModule
         // Append segments to stream
         constructor.ResetStreamPositions();
         foreach(var section in constructor.Sections)
-            section.CopyTo(stream);
+            section.Stream.CopyTo(stream);
 
         return Load(stream);
     }

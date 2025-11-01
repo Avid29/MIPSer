@@ -18,9 +18,9 @@ public struct Execution()
     /// <summary>
     /// Gets the execution output.
     /// </summary>
-    public uint Output
+    public readonly uint Output
     {
-        readonly get => _writeValue;
+        get => _writeValue;
         init => _writeValue = value;
     }
     
@@ -157,9 +157,9 @@ public struct Execution()
         return fallback;
     }
 
-    private void Set<T>(ref T field, T value, SecondaryWritebacks set)
+    private void Set<T>(ref T field, T value, SecondaryWritebacks sideEffects)
     {
         field = value;
-        SideEffects = set;
+        SideEffects = sideEffects;
     }
 }
