@@ -54,6 +54,22 @@ public interface IEvaluator<T>
     bool TryMod(T left, T right, out T result);
 
     /// <summary>
+    /// Apply a unary plus to <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">The child.</param>
+    /// <param name="result">The result of a unary plus on <paramref name="value"/>.</param>
+    /// <returns>Whether or not a unary plus of the child could be taken </returns>
+    bool TryUnaryPlus(T value, out T result);
+
+    /// <summary>
+    /// Negate <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">The child.</param>
+    /// <param name="result">Negation of <paramref name="value"/>.</param>
+    /// <returns>Whether or not the negation of the child could be taken.</returns>
+    bool TryNegate(T value, out T result);
+
+    /// <summary>
     /// Logical AND of <paramref name="left"/> and <paramref name="right"/>.
     /// </summary>
     /// <param name="left">The left-hand child.</param>
@@ -79,4 +95,12 @@ public interface IEvaluator<T>
     /// <param name="result">Logical XOR of <paramref name="left"/> and <paramref name="right"/>.</param>
     /// <returns>Whether or not the Logical XOR of the items could be taken.</returns>
     bool TryXor(T left, T right, out T result);
+
+    /// <summary>
+    /// Logical NOT of <paramref name="value"/>.
+    /// </summary>
+    /// <param name="value">The child.</param>
+    /// <param name="result">Logical NOT of <paramref name="value"/>.</param>
+    /// <returns>Whether or not the logical NOT of the child could be taken.</returns>
+    bool TryNot(T value, out T result);
 }

@@ -9,7 +9,7 @@ public enum Operation
 {
 #pragma warning disable CS1591
 
-    // Arithmetic 
+    // Arithmetic
     Addition,
     Subtraction,
     Multiplication,
@@ -20,6 +20,11 @@ public enum Operation
     And,
     Or,
     Xor,
+
+    // Unary
+    UnaryPlus,
+    Negation,
+    Not,
 
 #pragma warning restore CS1591
 }

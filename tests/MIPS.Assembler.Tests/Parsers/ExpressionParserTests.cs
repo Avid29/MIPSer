@@ -25,6 +25,7 @@ public class ExpressionParserTests
     private const string And = "9 & 3";
     private const string Or = "9 | 3";
     private const string Xor = "9 ^ 3";
+    private const string Not = "~10";
 
     private const string Binary = "0b1010";
     private const string Oct = "0o12";
@@ -67,6 +68,9 @@ public class ExpressionParserTests
 
     [TestMethod(Xor)]
     public void XorTest() => RunTest(Xor, 9 ^ 3);
+
+    [TestMethod(Not)]
+    public void NotTest() => RunTest(Not, ~10);
 
     [TestMethod(Binary)]
     public void BinaryTest() => RunTest(Binary, 0b1010);

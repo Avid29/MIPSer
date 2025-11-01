@@ -9,29 +9,39 @@ using MIPS.Models.Addressing;
 namespace MIPS.Assembler.Parsers.Expressions;
 
 /// <summary>
-/// A class for an operator in an expression tree.
+/// A class for a binary operator in an expression tree.
 /// </summary>
-public class OperNode : ExpNode
+public class BinaryOperNode : OperNode
 {
     private ExpNode? _left;
     private ExpNode? _right;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="OperNode"/> class.
+    /// Initializes a new instance of the <see cref="BinaryOperNode"/> class.
     /// </summary>
-    public OperNode(Operation operation)
+    public BinaryOperNode(Operation operation) : base(operation)
     {
-        Operation = operation;
     }
 
     /// <summary>
-    /// Gets or sets the operation of the <see cref="OperNode"/>.
+    /// Gets or sets the left hand child of the <see cref="BinaryOperNode"/>.
     /// </summary>
-    public Operation Operation { get; }
+    public ExpNode? LeftChild
+    {
+        get => _left;
+        set => SetChild(ref _left, value);
+    }
 
     /// <summary>
-    /// Gets the type of the expression.
+    /// Gets or sets the right hand child of the <see cref="BinaryOperNode"/>.
     /// </summary>
+    public ExpNode? RightChild
+    {
+        get => _right;
+        set => SetChild(ref _right, value);
+    }
+
+    /// <inheritdoc/>
     /// <remarks>
     /// Determined by its children. Invalid if they don't match.
     /// </remarks>
@@ -49,6 +59,26 @@ public class OperNode : ExpNode
             // Types don't match, it's an invalid expression
             return ExpressionType.Invalid;
         }
+    }
+    
+    /// <inheritdoc/>
+    public override bool TryAddChild(ExpNode node)
+    {
+        // We can only add to the right child, left is always filled first
+        if (RightChild is not null)
+            return false;
+
+        RightChild = node;
+        return true;
+    }
+    
+    /// <inheritdoc/>
+    public override bool TryInsertNode(BinaryOperNode node)
+    {
+        // Insert the binary operator between this operator and its right child
+        node.LeftChild = RightChild;
+        RightChild = node;
+        return true;
     }
 
     /// <inheritdoc/>
@@ -81,59 +111,9 @@ public class OperNode : ExpNode
             Operation.And => evaluator.TryAnd(left, right, out result),
             Operation.Or => evaluator.TryOr(left, right, out result),
             Operation.Xor => evaluator.TryXor(left, right, out result),
+
+
             _ => ThrowHelper.ThrowArgumentException<bool>(),
         };
     }
-
-    /// <summary>
-    /// Gets or sets the left hand child of the <see cref="OperNode"/>.
-    /// </summary>
-    public ExpNode? LeftChild
-    {
-        get => _left;
-        set => SetChild(ref _left, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the right hand child of the <see cref="OperNode"/>.
-    /// </summary>
-    public ExpNode? RightChild
-    {
-        get => _right;
-        set => SetChild(ref _right, value);
-    }
-
-    private void SetChild(ref ExpNode? child, ExpNode? value)
-    {
-        // Clear current child's parent
-        if (child is not null)
-            child.Parent = null;
-
-        // Assign new child's parent
-        if (value is not null)
-            value.Parent = this;
-
-        // Assign new child
-        child = value;
-
-    }
-
-    /// <summary>
-    /// Gets the priority of the operation by order of operations.
-    /// </summary>
-    /// <remarks>
-    /// Lower is lower on the tree and therefore executed earlier.
-    /// </remarks>
-    public int Priority => Operation switch
-    {
-        Operation.Addition => 3,
-        Operation.Subtraction => 3,
-        Operation.Multiplication => 2,
-        Operation.Division => 2,
-        Operation.Modulus => 2,
-        Operation.And => 1,
-        Operation.Or => 1,
-        Operation.Xor => 1,
-        _ => ThrowHelper.ThrowArgumentException<int>("Cannot assess priority of invalid operation.")
-    };
 }

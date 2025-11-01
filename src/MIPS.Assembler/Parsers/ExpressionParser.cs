@@ -7,6 +7,7 @@ using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Parsers.Enums;
 using MIPS.Assembler.Parsers.Expressions;
+using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
 using MIPS.Assembler.Tokenization;
@@ -73,10 +74,11 @@ public struct ExpressionParser
             // Switch on the state, call the appropriate function, and track success
             bool success = _state switch
             {
-                ExpressionParserState.Start => TryParseFromStart(token),
-                ExpressionParserState.Immediate => TryParseFromImmediate(token),
-                ExpressionParserState.Reference => TryParseFromReference(token),
-                ExpressionParserState.Operator => TryParseFromOperator(token),
+                ExpressionParserState.Start or
+                ExpressionParserState.Operator => TryParseFromStart(token),
+
+                ExpressionParserState.Immediate or
+                ExpressionParserState.Reference => TryParseAsOperator(token),
                 _ => false,
             };
 
@@ -122,10 +124,9 @@ public struct ExpressionParser
 
         // '-' at the start marks a unary '-', which we'll just handle by adding a 0 in front
         if (t.Type is TokenType.Operator &&
-            t.Source is "+" or "-")
+            t.Source is "+" or "-" or "~")
         {
-            AppendImmediate(0);
-            return TryParseFromImmediate(t);
+            return TryParseAsOperator(t, true);
         }
 
         // TODO: Char handling
@@ -138,37 +139,23 @@ public struct ExpressionParser
         return false;
     }
 
-    private bool TryParseFromImmediate(Token t)
+    private bool TryParseAsOperator(Token t, bool unary = false)
     {
         if (t.Type is TokenType.Operator &&
-            IsOperator(t, out var oper))
+            IsOperator(t, out var oper, unary))
         {
-            TryParseOperator(oper);
+            TryParseOperator(oper, unary);
             return true;
         }
 
         return false;
     }
 
-    private bool TryParseFromReference(Token t)
-    {
-        if (t.Type is TokenType.Operator &&
-            IsOperator(t, out var oper))
-        {
-            TryParseOperator(oper);
-            return true;
-        }
-
-        return false;
-    }
-
-    private bool TryParseFromOperator(Token t) => TryParseFromStart(t);
-
-    private bool TryParseOperator(Operation oper)
+    private bool TryParseOperator(Operation oper, bool unary)
     {
         Guard.IsNotNull(_tree);
 
-        var node = new OperNode(oper);
+        OperNode node = unary ? new UnaryOperNode(oper) : new BinaryOperNode(oper);
         _tree.AddNode(node);
 
         _state = ExpressionParserState.Operator;
@@ -243,25 +230,39 @@ public struct ExpressionParser
         return true;
     }
 
-    private static bool IsOperator(Token t, out Operation oper)
+    private static bool IsOperator(Token t, out Operation oper, bool unary = false)
     {
-        oper = t.Source switch
+        if (unary)
         {
-            // Arithmetic
-            "+" => Operation.Addition,
-            "-" => Operation.Subtraction,
-            "*" => Operation.Multiplication,
-            "/" => Operation.Division,
-            "%" => Operation.Modulus,
+            oper = t.Source switch
+            {
+                "+" => Operation.UnaryPlus,
+                "-" => Operation.Negation,
+                "~" => Operation.Not,
+                _ => (Operation)(-1),
+            };
+        }
+        else
+        {
+            oper = t.Source switch
+            {
+                // Arithmetic
+                "+" => Operation.Addition,
+                "-" => Operation.Subtraction,
+                "*" => Operation.Multiplication,
+                "/" => Operation.Division,
+                "%" => Operation.Modulus,
 
-            // Logical
-            "&" => Operation.And,
-            "|" => Operation.Or,
-            "^" => Operation.Xor,
+                // Logical
+                "&" => Operation.And,
+                "|" => Operation.Or,
+                "^" => Operation.Xor,
+                "~" => Operation.Not,
 
-            // Invalid
-            _ => (Operation)(-1),
-        };
+                // Invalid
+                _ => (Operation)(-1),
+            };
+        }
 
         return oper != (Operation)(-1);
     }

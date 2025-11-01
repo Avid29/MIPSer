@@ -54,11 +54,14 @@ public readonly struct DirectiveParser
             // Section directives
             ".text" => TryParseSection(name, line.Args, out directive),
             ".data" => TryParseSection(name, line.Args, out directive),
+
             // Global References
             ".globl" => TryParseGlobal(line.Args, out directive),
+
             // Align or Space
             ".align" => TryParseAlignOrSpace(line.Args, out directive, true),
             ".space" => TryParseAlignOrSpace(line.Args, out directive, false),
+
             // Data
             ".word" => TryParseData<int>(name, line.Args, out directive),
             ".half" => TryParseData<short>(name, line.Args, out directive),

@@ -204,7 +204,7 @@ public class Tokenizer
         return c switch
         {
             '+' or '-' or '*' or '/' or '%' or
-            '|' or '&' or '^' => HandleCharacter(c, TokenType.Operator),
+            '|' or '&' or '^' or '~' => HandleCharacter(c, TokenType.Operator),
 
             '.' => newLine && HandleCharacter(c, newState: TokenizerState.Directive),
             '$' => HandleCharacter(c, newState: TokenizerState.Register),
@@ -223,7 +223,6 @@ public class Tokenizer
             '!' => _mode is TokenizerMode.BehaviorExpression && HandleCharacter(c, TokenType.Operator),
             '<' => _mode is TokenizerMode.BehaviorExpression && HandleCharacter(c, TokenType.Operator),
             '>' => _mode is TokenizerMode.BehaviorExpression && HandleCharacter(c, TokenType.Operator),
-            '~' => _mode is TokenizerMode.BehaviorExpression && HandleCharacter(c, TokenType.Operator),
             _ => false,
         };
     }

@@ -23,7 +23,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public readonly bool TryAdd(Address left, Address right, out Address result)
+    public bool TryAdd(Address left, Address right, out Address result)
     {
         result = default;
 
@@ -39,113 +39,140 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public readonly bool TrySubtract(Address left, Address right, out Address result)
+    public bool TrySubtract(Address left, Address right, out Address result)
     {
         result = default;
 
-        if (right.IsRelocatable)
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot subtract a relocatable symbol.");
+        if (CheckRelocatable(right, "subtract"))
             return false;
-        }
 
         result = left - right.Value;
         return true;
     }
 
     /// <inheritdoc/>
-    public readonly bool TryMultiply(Address left, Address right, out Address result)
+    public bool TryMultiply(Address left, Address right, out Address result)
     {
         result = default;
 
         // Cannot multiply relocatable addressing 
-        if (left.IsRelocatable || right.IsRelocatable)
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot multiply with relocatable symbols.");
+        if (CheckRelocatable(left, right, "multiply"))
             return false;
-        }
 
         result = new Address(left.Value * right.Value, Section.None);
         return true;
     }
 
     /// <inheritdoc/>
-    public readonly bool TryDivide(Address left, Address right, out Address result)
+    public bool TryDivide(Address left, Address right, out Address result)
     {
         result = default;
 
         // Cannot divide relocatable addressing
-        if (left.IsRelocatable || right.IsRelocatable)
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot divide with relocatable symbols.");
+        if (CheckRelocatable(left, right, "divide"))
             return false;
-        }
 
         result = new Address(left.Value / right.Value, Section.None);
         return true;
     }
 
     /// <inheritdoc/>
-    public readonly bool TryMod(Address left, Address right, out Address result)
+    public bool TryMod(Address left, Address right, out Address result)
     {
         result = default;
 
         // Cannot mod relocatable addressing
-        if (left.IsRelocatable || right.IsRelocatable)
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot take modulus with relocatable symbols.");
+        if (CheckRelocatable(left, right, "mod"))
             return false;
-        }
 
         result = new Address(left.Value % right.Value, Section.None);
         return true;
     }
-
+    
     /// <inheritdoc/>
-    public readonly bool TryAnd(Address left, Address right, out Address result)
+    public readonly bool TryUnaryPlus(Address value, out Address result)
+    {
+        result = value;
+        return true;
+    }
+    
+    /// <inheritdoc/>
+    public readonly bool TryNegate(Address value, out Address result)
     {
         result = default;
 
-        // Cannot AND relocatable addressing
-        if (left.IsRelocatable || right.IsRelocatable)
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot perform logical AND with relocatable symbols.");
+        // Cannot negate relocatable addressing
+        if (CheckRelocatable(value, "negate"))
             return false;
-        }
+
+        result = new Address(-value.Value, Section.None);
+        return true;
+    }
+
+    /// <inheritdoc/>
+    public bool TryAnd(Address left, Address right, out Address result)
+    {
+        result = default;
+        
+        // Cannot AND relocatable addressing
+        if (CheckRelocatable(left, right, "AND"))
+            return false;
 
         result = new Address(left.Value & right.Value, Section.None);
         return true;
     }
 
     /// <inheritdoc/>
-    public readonly bool TryOr(Address left, Address right, out Address result)
+    public bool TryOr(Address left, Address right, out Address result)
     {
         result = default;
-
+        
         // Cannot OR relocatable addressing
-        if (left.IsRelocatable || right.IsRelocatable)
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot perform logical OR with relocatable symbols.");
+        if (CheckRelocatable(left, right, "OR"))
             return false;
-        }
 
         result = new Address(left.Value | right.Value, Section.None);
         return true;
     }
 
     /// <inheritdoc/>
-    public readonly bool TryXor(Address left, Address right, out Address result)
+    public bool TryXor(Address left, Address right, out Address result)
     {
         result = default;
 
         // Cannot XOR relocatable addressing
-        if (left.IsRelocatable || right.IsRelocatable)
-        {
-            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, "Cannot perform logical XOR with relocatable symbols.");
+        if (CheckRelocatable(left, right, "XOR"))
             return false;
-        }
 
         result = new Address(left.Value ^ right.Value, Section.None);
         return true;
+    }
+    
+    /// <inheritdoc/>
+    public bool TryNot(Address value, out Address result)
+    {
+        result = default;
+
+        // Cannot NOT relocatable addressing
+        if (CheckRelocatable(value, "logical NOT"))
+            return false;
+
+        result = new Address(~value.Value, Section.None);
+        return true;
+    }
+
+    private bool CheckRelocatable(Address value, string operation)
+    {
+        if (value.IsRelocatable)
+        {
+            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, $"Cannot {operation} with relocatable symbols.");
+            return true;
+        }
+        return false;
+    }
+
+    private bool CheckRelocatable(Address left, Address right, string operation)
+    {
+        return CheckRelocatable(left, operation) || CheckRelocatable(right, operation);
     }
 }

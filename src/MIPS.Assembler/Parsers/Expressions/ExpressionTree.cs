@@ -42,43 +42,56 @@ public class ExpressionTree
     /// <summary>
     /// Adds a <see cref="AddressNode"/> to the expression tree.
     /// </summary>
-    public void AddNode(AddressNode node)
+    public void AddNode(ExpNode node)
     {
+        if (node is BinaryOperNode bNode)
+        {
+            AddNode(bNode);
+            return;
+        }
+
         // Handle first value node
         if (_root is null)
         {
             _root = node;
+
+            // Set active node if root is an operation
+            if (_root is OperNode operNode)
+            {
+                _activeNode = operNode;
+            }
+
             return;
         }
 
         // Ensure tree has an operation for non-first node
-        if (_activeNode is null)
+        if (_activeNode is null) 
         {
             ThrowHelper.ThrowInvalidOperationException("Second value node inserted with no operation in the tree");
         }
 
-        // Ensure tree has space for node
-        if (_activeNode.RightChild is not null)
+        // Attempt to add to active node
+        bool added = _activeNode.TryAddChild(node);
+
+        // Throw if could not add
+        if (!added)
         {
             ThrowHelper.ThrowInvalidOperationException("Value node inserted with no space in the tree.");
         }
-
-        // Set child as active node's right child
-        _activeNode.RightChild = node;
     }
 
     /// <summary>
-    /// Adds <see cref="OperNode"/> to the expression tree.
+    /// Adds <see cref="BinaryOperNode"/> to the expression tree.
     /// </summary>
     /// <param name="node"></param>
-    public void AddNode(OperNode node)
+    private void AddNode(BinaryOperNode node)
     {
         // Handle first operation node
         if (_activeNode is null)
         {
             if (_root is null)
             {
-                ThrowHelper.ThrowInvalidOperationException("Cannot add operation to any empty tree. Insert value node first.");
+                ThrowHelper.ThrowInvalidOperationException("Cannot add binary operator to an empty tree. Insert value node first.");
             }
 
             // Assign root node to left child and elevate to root
@@ -99,8 +112,7 @@ public class ExpressionTree
         {
             // Insert operation above current right child and
             // move right child to node's left child
-            node.LeftChild = _activeNode.RightChild;
-            _activeNode.RightChild = node;
+            _activeNode.TryInsertNode(node);
         }
 
         _activeNode = node;
