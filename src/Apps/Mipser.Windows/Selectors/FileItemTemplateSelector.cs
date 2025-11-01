@@ -26,8 +26,8 @@ public partial class FileItemTemplateSelector : DataTemplateSelector
     {
         return item switch
         {
-            BindableFile _ => BindableFileTemplate,
-            BindableFolder _ => BindableFolderTemplate,
+            BindableFile => BindableFileTemplate,
+            BindableFolder => BindableFolderTemplate,
             _ => null,
         };
     }

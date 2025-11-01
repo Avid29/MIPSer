@@ -8,6 +8,7 @@ using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Registers;
 using Mipser.Models.CheatSheet;
 using Mipser.Services.Localization;
+using Mipser.ViewModels.Views.Abstract;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -20,7 +21,7 @@ namespace Mipser.ViewModels.Views;
 /// <summary>
 /// A view model for the cheatsheet.
 /// </summary>
-public class CheatSheetViewModel : ObservableRecipient
+public class CheatSheetViewModel : PageViewModel
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="CheatSheetViewModel"/> class.
@@ -45,6 +46,9 @@ public class CheatSheetViewModel : ObservableRecipient
 
         IsActive = true;
     }
+    
+    /// <inheritdoc/>
+    public override string Title => "MIPS Cheatsheet"; // TODO: Localization
 
     private static IEnumerable<EncodingPattern>? LoadEncodingPatterns(string filename)
     {

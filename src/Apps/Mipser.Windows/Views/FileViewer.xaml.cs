@@ -1,7 +1,7 @@
 // Adam Dernis 2024
 
 using Microsoft.UI.Xaml.Controls;
-using Mipser.Bindables.Files;
+using Mipser.ViewModels.Views;
 using WinUIEditor;
 
 namespace Mipser.Windows.Views;
@@ -19,13 +19,13 @@ public sealed partial class FileViewer : UserControl
         this.InitializeComponent();
     }
 
-    private BindableFile ViewModel => (BindableFile)this.DataContext;
+    private FilePageViewModel ViewModel => (FilePageViewModel)this.DataContext;
 
     private void CodeEditorControl_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         if (sender is CodeEditorControl editor)
         {
-            editor.Editor.SetText(ViewModel.Contents);
+            editor.Editor.SetText(ViewModel.File.Contents);
         }
     }
 }

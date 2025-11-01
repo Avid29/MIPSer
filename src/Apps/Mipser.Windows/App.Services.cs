@@ -23,9 +23,10 @@ public partial class App
             .AddSingleton<IFilesService, FilesService>()
 
             // ViewModels
-            .AddSingleton<WindowViewModel>()
-            .AddSingleton<ExplorerViewModel>()
-            .AddSingleton<OpenFilesViewModel>()
+            .AddTransient<ExplorerViewModel>()
+            .AddTransient<CheatSheetViewModel>()
+            .AddTransient<PanelViewModel>()
+            .AddTransient<WindowViewModel>()
             .BuildServiceProvider();
     }
 }

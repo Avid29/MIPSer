@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:shell="using:Mipser.Windows.Views.Shell"
     xmlns:views="using:Mipser.Windows.Views"
+    xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
     mc:Ignorable="d">
 
     <Grid Background="{StaticResource PrimaryBackground}">
@@ -16,25 +17,27 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-
         <!--Title Bar-->
         <shell:TitleBar/>
 
         <Grid Grid.Row="1">
-
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="280"/>
+                <ColumnDefinition Width="280" MaxWidth="600" MinWidth="50"/>
             </Grid.ColumnDefinitions>
 
             <!--Content View-->
-            <shell:OpenFilesView/>
+            <shell:PanelView Margin="0,0,7,0" DataContext="{x:Bind ViewModel.MainPanel, Mode=OneWay}"/>
 
+            <ctc:GridSplitter Grid.Column="1"
+                              HorizontalAlignment="Left"
+                              ResizeBehavior="BasedOnAlignment">
+                <ctc:GridSplitter.RenderTransform>
+                    <TranslateTransform X="-7"/>
+                </ctc:GridSplitter.RenderTransform>
+            </ctc:GridSplitter>
+            
             <shell:Explorer Grid.Column="1"/>
-        </Grid>
-        
-        <Grid Grid.RowSpan="2">
-            <views:CheatSheet Visibility="{x:Bind ViewModel.IsCheatSheetOpen, Mode=OneWay}"/>
         </Grid>
     </Grid>
 </Window>

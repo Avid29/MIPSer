@@ -7,6 +7,7 @@ using Mipser.Bindables.Files.Abstract;
 using Mipser.Messages.Files;
 using Mipser.Services.Dispatcher;
 using Mipser.Services.Files;
+using Mipser.ViewModels.Views.Abstract;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace Mipser.ViewModels.Views;
 /// <summary>
 /// A view model for the explorer.
 /// </summary>
-public class ExplorerViewModel : ObservableRecipient
+public class ExplorerViewModel : PageViewModel
 {
     private readonly IMessenger _messenger;
     private readonly IFilesService _fileService;
@@ -32,6 +33,9 @@ public class ExplorerViewModel : ObservableRecipient
 
         IsActive = true;
     }
+
+    /// <inheritdoc/>
+    public override string Title => "Explorer"; // TODO: Localization
 
     /// <summary>
     /// Gets or sets the currently selected file.
