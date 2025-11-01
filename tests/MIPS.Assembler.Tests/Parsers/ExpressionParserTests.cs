@@ -27,6 +27,10 @@ public class ExpressionParserTests
     private const string Xor = "9 ^ 3";
     private const string Not = "~10";
 
+    private const string BOpUOp = "10 * -10";
+    private const string UOpBOp = "-*10";
+    private const string DoubleValue = "10 10";
+
     private const string Binary = "0b1010";
     private const string Oct = "0o12";
     private const string Hex = "0xa";
@@ -71,6 +75,15 @@ public class ExpressionParserTests
 
     [TestMethod(Not)]
     public void NotTest() => RunTest(Not, ~10);
+
+    [TestMethod(BOpUOp)]
+    public void BOpUOpTest() => RunTest(BOpUOp, 10 * -10);
+
+    [TestMethod(UOpBOp)]
+    public void UOpBOpTest() => RunTest(UOpBOp);
+
+    [TestMethod(DoubleValue)]
+    public void DoubleValueTest() => RunTest(DoubleValue);
 
     [TestMethod(Binary)]
     public void BinaryTest() => RunTest(Binary, 0b1010);

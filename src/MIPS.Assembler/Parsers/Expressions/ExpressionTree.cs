@@ -44,78 +44,65 @@ public class ExpressionTree
     /// </summary>
     public void AddNode(ExpNode node)
     {
-        if (node is BinaryOperNode bNode)
-        {
-            AddNode(bNode);
-            return;
-        }
-
-        // Handle first value node
+        // Handle first node
         if (_root is null)
         {
-            _root = node;
-
-            // Set active node if root is an operation
-            if (_root is OperNode operNode)
+            switch (node)
             {
-                _activeNode = operNode;
+                // A binary operation cannot be added to an empty tree
+                case BinaryOperNode:
+                    ThrowHelper.ThrowInvalidOperationException("Cannot add binary operator to an empty tree. Insert value node first.");
+                    break;
+                case UnaryOperNode uNode:
+                    _activeNode = uNode;
+                    goto default;
+                default:
+                    _root = node;
+                    return;
             }
-
-            return;
         }
 
-        // Ensure tree has an operation for non-first node
-        if (_activeNode is null) 
+        // Handle insertion
+        switch (node)
         {
-            ThrowHelper.ThrowInvalidOperationException("Second value node inserted with no operation in the tree");
+            // Insert binary node
+            case BinaryOperNode bNode:
+                ShiftToInsertionPoint(bNode.Priority);
+                if (_activeNode is null)
+                {
+                    // Node is highest priority and becomes the parent of the root node
+                    bNode.LeftChild = _root;
+                    _root = node;
+                }
+                else
+                {
+                    // Insert operation above current right child and
+                    // move right child to node's left child
+                    _activeNode.TryInsertNode(bNode);
+                }
+                break;
+
+            default:
+                // Handle double value condition
+                if (_activeNode is null)
+                {
+                    ThrowHelper.ThrowInvalidOperationException("Two value nodes inserted with no operation between them");
+                }
+
+                // Attempt to add as a child of the active node
+                // Throw if could not add
+                if (!_activeNode.TryAddChild(node))
+                {
+                    ThrowHelper.ThrowInvalidOperationException("Value node inserted with no space in the tree.");
+                }
+                break;
         }
 
-        // Attempt to add to active node
-        bool added = _activeNode.TryAddChild(node);
-
-        // Throw if could not add
-        if (!added)
+        // Set active node if root is an operation
+        if (node is OperNode oNode)
         {
-            ThrowHelper.ThrowInvalidOperationException("Value node inserted with no space in the tree.");
+            _activeNode = oNode;
         }
-    }
-
-    /// <summary>
-    /// Adds <see cref="BinaryOperNode"/> to the expression tree.
-    /// </summary>
-    /// <param name="node"></param>
-    private void AddNode(BinaryOperNode node)
-    {
-        // Handle first operation node
-        if (_activeNode is null)
-        {
-            if (_root is null)
-            {
-                ThrowHelper.ThrowInvalidOperationException("Cannot add binary operator to an empty tree. Insert value node first.");
-            }
-
-            // Assign root node to left child and elevate to root
-            node.LeftChild = _root;
-            _root = node;
-            _activeNode = node;
-            return;
-        }
-
-        ShiftToInsertionPoint(node.Priority);
-
-        if (_activeNode is null)
-        {
-            // Node is highest priority and becomes the parent of the root node
-            node.LeftChild = _root;
-        }
-        else
-        {
-            // Insert operation above current right child and
-            // move right child to node's left child
-            _activeNode.TryInsertNode(node);
-        }
-
-        _activeNode = node;
     }
 
     /// <remarks>

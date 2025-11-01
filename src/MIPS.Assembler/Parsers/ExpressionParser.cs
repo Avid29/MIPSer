@@ -129,13 +129,6 @@ public struct ExpressionParser
             return TryParseAsOperator(t, true);
         }
 
-        // TODO: Char handling
-        //if (t.Type is '\'')
-        //{
-        //    _state = ExpressionParserState.Char;
-        //    return true;
-        //}
-
         return false;
     }
 
