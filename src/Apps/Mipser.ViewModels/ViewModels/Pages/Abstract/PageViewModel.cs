@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace Mipser.ViewModels.Views.Abstract
+namespace Mipser.ViewModels.Pages.Abstract
 {
     /// <summary>
     /// A base class for page view models.

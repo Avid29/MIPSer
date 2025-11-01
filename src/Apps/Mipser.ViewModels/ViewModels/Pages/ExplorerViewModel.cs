@@ -7,11 +7,11 @@ using Mipser.Bindables.Files.Abstract;
 using Mipser.Messages.Files;
 using Mipser.Services.Dispatcher;
 using Mipser.Services.Files;
-using Mipser.ViewModels.Views.Abstract;
+using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
-namespace Mipser.ViewModels.Views;
+namespace Mipser.ViewModels.Pages;
 
 /// <summary>
 /// A view model for the explorer.

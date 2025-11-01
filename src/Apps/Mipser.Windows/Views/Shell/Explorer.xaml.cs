@@ -3,7 +3,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.Bindables.Files;
-using Mipser.ViewModels.Views;
+using Mipser.ViewModels.Pages;
 
 namespace Mipser.Windows.Views.Shell;
 

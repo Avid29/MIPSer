@@ -7,7 +7,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
 using Mipser.Messages.Pages;
-using Mipser.ViewModels.Views;
+using Mipser.ViewModels.Pages;
 using System.Linq;
 
 namespace Mipser.ViewModels;

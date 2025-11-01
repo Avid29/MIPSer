@@ -2,7 +2,7 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Mipser.ViewModels.Views;
+using Mipser.ViewModels.Pages;
 
 namespace Mipser.Windows.Selectors
 {

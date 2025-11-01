@@ -6,8 +6,8 @@ using Mipser.Bindables.Files;
 using Mipser.Messages.Files;
 using Mipser.Messages.Pages;
 using Mipser.Services.Files;
-using Mipser.ViewModels.Views;
-using Mipser.ViewModels.Views.Abstract;
+using Mipser.ViewModels.Pages;
+using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 

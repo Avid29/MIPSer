@@ -1,9 +1,9 @@
 ﻿// Avishai Dernis 2025
 
 using Mipser.Bindables.Files;
-using Mipser.ViewModels.Views.Abstract;
+using Mipser.ViewModels.Pages.Abstract;
 
-namespace Mipser.ViewModels.Views
+namespace Mipser.ViewModels.Pages
 {
     /// <summary>
     /// A view model for a file page.

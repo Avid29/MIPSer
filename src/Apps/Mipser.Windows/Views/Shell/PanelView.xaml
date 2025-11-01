@@ -7,8 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:Mipser.Windows.Views"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
-    xmlns:vmv="using:Mipser.ViewModels.Views"
-    xmlns:vmva="using:Mipser.ViewModels.Views.Abstract"
+    xmlns:vmv="using:Mipser.ViewModels.Pages"
+    xmlns:vmva="using:Mipser.ViewModels.Pages.Abstract"
     xmlns:selectors="using:Mipser.Windows.Selectors"
     mc:Ignorable="d">
 

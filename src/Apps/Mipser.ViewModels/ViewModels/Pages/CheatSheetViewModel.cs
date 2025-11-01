@@ -1,14 +1,13 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Collections;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Registers;
 using Mipser.Models.CheatSheet;
 using Mipser.Services.Localization;
-using Mipser.ViewModels.Views.Abstract;
+using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -16,7 +15,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
-namespace Mipser.ViewModels.Views;
+namespace Mipser.ViewModels.Pages;
 
 /// <summary>
 /// A view model for the cheatsheet.

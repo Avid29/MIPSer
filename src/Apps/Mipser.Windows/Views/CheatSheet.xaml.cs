@@ -1,7 +1,7 @@
 // Avishai Dernis 2025
 
 using Microsoft.UI.Xaml.Controls;
-using Mipser.ViewModels.Views;
+using Mipser.ViewModels.Pages;
 using System.Linq;
 
 namespace Mipser.Windows.Views;

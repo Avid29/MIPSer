@@ -1,7 +1,7 @@
 // Adam Dernis 2024
 
 using Microsoft.UI.Xaml.Controls;
-using Mipser.ViewModels.Views;
+using Mipser.ViewModels.Pages;
 using WinUIEditor;
 
 namespace Mipser.Windows.Views;

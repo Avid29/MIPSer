@@ -3,7 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.ViewModels;
-using Mipser.ViewModels.Views.Abstract;
+using Mipser.ViewModels.Pages.Abstract;
 
 namespace Mipser.Windows.Views.Shell;
 

@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-using Mipser.ViewModels.Views.Abstract;
+using Mipser.ViewModels.Pages.Abstract;
 
 namespace Mipser.Messages.Pages;
 
