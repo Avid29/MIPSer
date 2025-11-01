@@ -10,7 +10,7 @@ public sealed class FileSaveRequestMessage
     /// <summary>
     /// Initializes a new instance of the <see cref="FileSaveRequestMessage"/> class.
     /// </summary>
-    public FileSaveRequestMessage(bool saveAsNewFile)
+    public FileSaveRequestMessage(bool saveAsNewFile = false)
     {
         SaveAsNewFile = saveAsNewFile;
     }

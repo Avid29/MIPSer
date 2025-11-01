@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <!--Title Bar-->
-        <shell:TitleBar/>
+        <shell:TitleBar DataContext="{x:Bind ViewModel, Mode=OneWay}"/>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

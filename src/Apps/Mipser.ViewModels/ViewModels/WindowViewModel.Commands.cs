@@ -11,14 +11,14 @@ namespace Mipser.ViewModels;
 public partial class WindowViewModel
 {
     /// <summary>
-    /// Gets or sets the main <see cref="PanelViewModel"/> for the window.
-    /// </summary>
-    public PanelViewModel MainPanel { get; }
-
-    /// <summary>
     /// Gets a command that creates and opens an anonymous file.
     /// </summary>
     public RelayCommand CreateNewFileCommand { get; }
+
+    /// <summary>
+    /// Gets the command that saves the current file.
+    /// </summary>
+    public RelayCommand SaveFileCommand { get; }
 
     /// <summary>
     /// Gets a command that picks and opens a file.
@@ -41,6 +41,8 @@ public partial class WindowViewModel
     public RelayCommand OpenCheatSheetCommand { get; }
 
     private void CreateNewFile() => _messenger.Send(new FileCreateNewRequestMessage());
+
+    private void SaveFile() => _messenger.Send(new FileSaveRequestMessage());
 
     private void PickAndOpenFile() => _messenger.Send(new FilePickAndOpenRequestMessage());
 

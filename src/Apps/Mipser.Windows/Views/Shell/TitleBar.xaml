@@ -37,7 +37,7 @@
                         </MenuFlyoutItem>
                     </MenuFlyoutSubItem>
                     <MenuFlyoutSeparator/>
-                    <MenuFlyoutItem x:Uid="SaveMFI" Icon="Save" Text="Save">
+                    <MenuFlyoutItem x:Uid="SaveMFI" Icon="Save" Text="Save" Command="{x:Bind ViewModel.SaveFileCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="S"/>
                         </MenuFlyoutItem.KeyboardAccelerators>

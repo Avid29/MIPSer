@@ -24,14 +24,33 @@ namespace Mipser.ViewModels.Pages
         public FilePageViewModel(BindableFile file)
         {
             File = file;
+
+            File.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(BindableFile.Name) || e.PropertyName == nameof(BindableFile.IsDirty))
+                {
+                    OnPropertyChanged(nameof(Title));
+                }
+            };
         }
 
         /// <inheritdoc/>
-        public override string Title => File.Name;
+        public override string Title => File.Name + (File.IsDirty ? " *" : string.Empty);
 
         /// <summary>
         /// Gets the bindable file for this page.
         /// </summary>
-        public BindableFile File { get; set; }
+        public BindableFile File { get; }
+
+        /// <summary>
+        /// Saves changes to the file.
+        /// </summary>
+        public async void Save()
+        {
+            // TODO: Save as dialog for anonymous files.
+
+            await File.Save();
+            OnPropertyChanged(Title);
+        }
     }
 }

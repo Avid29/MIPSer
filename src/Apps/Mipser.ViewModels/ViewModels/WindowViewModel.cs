@@ -30,6 +30,7 @@ public partial class WindowViewModel : ObservableRecipient
         MainPanel = Ioc.Default.GetRequiredService<PanelViewModel>();
 
         CreateNewFileCommand = new RelayCommand(CreateNewFile);
+        SaveFileCommand = new RelayCommand(SaveFile);
         PickAndOpenFileCommand = new RelayCommand(PickAndOpenFile);
         PickAndOpenFolderCommand = new RelayCommand(PickAndOpenFolder);
         CloseFileCommand = new RelayCommand(CloseFile);
@@ -38,9 +39,22 @@ public partial class WindowViewModel : ObservableRecipient
         IsActive = true;
     }
     
+    /// <summary>
+    /// Gets or sets the main <see cref="PanelViewModel"/> for the window.
+    /// </summary>
+    public PanelViewModel MainPanel { get; }
+
+    
     /// <inheritdoc/>
     protected override void OnActivated()
     {
+        // File
+        _messenger.Register<WindowViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.MainPanel.CreateNewFile());
+        _messenger.Register<WindowViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.MainPanel.PickAndOpenFileAsync());
+        _messenger.Register<WindowViewModel, PageCloseRequestMessage>(this, (r, m) => r.MainPanel.ClosePage(m.Page));
+        _messenger.Register<WindowViewModel, FileSaveRequestMessage>(this, (r, m) => r.MainPanel.SaveCurrentFile());
+
+        // Help
         _messenger.Register<WindowViewModel, OpenCheatSheetRequestMessage>(this, (r, m) =>
         {
             // Check if the cheat sheet is already open, and open it if not.
@@ -54,8 +68,5 @@ public partial class WindowViewModel : ObservableRecipient
             // Navigate to the cheat sheet.
             r.MainPanel.CurrentPage = page;
         });
-        _messenger.Register<WindowViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.MainPanel.CreateNewFile());
-        _messenger.Register<WindowViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.MainPanel.PickAndOpenFileAsync());
-        _messenger.Register<WindowViewModel, PageCloseRequestMessage>(this, (r, m) => r.MainPanel.ClosePage(m.Page));
     }
 }

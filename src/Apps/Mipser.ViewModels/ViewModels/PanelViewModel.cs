@@ -18,7 +18,6 @@ namespace Mipser.ViewModels;
 /// </summary>
 public class PanelViewModel : ObservableObject
 {
-    private readonly IMessenger _messenger;
     private readonly IFilesService _fileService;
 
     private PageViewModel? _currentPage;
@@ -26,9 +25,8 @@ public class PanelViewModel : ObservableObject
     /// <summary>
     /// Initializes a new instance of the <see cref="PanelViewModel"/> class.
     /// </summary>
-    public PanelViewModel(IMessenger messenger, IFilesService filesService)
+    public PanelViewModel(IFilesService filesService)
     {
-        _messenger = messenger;
         _fileService = filesService;
 
         OpenPages = [];
@@ -62,8 +60,23 @@ public class PanelViewModel : ObservableObject
         if (file is null)
             return;
 
-        var bindable = new BindableFile(file);
-        OpenPages.Add(new FilePageViewModel(bindable));
+        var page = new FilePageViewModel(new BindableFile(file));
+        OpenPages.Add(page);
+        CurrentPage = page;
+    }
+
+    /// <summary>
+    /// Attempts to save the current file.
+    /// </summary>
+    /// <remarks>
+    /// Does nothing if the current page is not a file.
+    /// </remarks>
+    public void SaveCurrentFile()
+    {
+        if (CurrentPage is not FilePageViewModel filePage)
+            return;
+
+        filePage.Save();
     }
 
     /// <summary>
@@ -72,12 +85,12 @@ public class PanelViewModel : ObservableObject
     /// <remarks>
     /// Does not save the file.
     /// </remarks>
-    public void ClosePage(PageViewModel? file)
+    public void ClosePage(PageViewModel? page)
     {
-        file ??= CurrentPage;
-        if (file is null)
+        page ??= CurrentPage;
+        if (page is null)
             return;
 
-        OpenPages.Remove(file);
+        OpenPages.Remove(page);
     }
 }

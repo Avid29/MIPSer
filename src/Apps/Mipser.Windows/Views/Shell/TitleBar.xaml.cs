@@ -19,8 +19,6 @@ public sealed partial class TitleBar : UserControl
     {
         this.InitializeComponent();
 
-        DataContext = App.Current.Services.GetRequiredService<WindowViewModel>();
-
         Loaded += TitleBar_Loaded;
     }
 
