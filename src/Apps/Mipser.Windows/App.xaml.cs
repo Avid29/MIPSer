@@ -1,9 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Mvvm.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
-using Mipser.Services.Localization;
 
 namespace Mipser.Windows;
 
@@ -22,7 +20,6 @@ public partial class App : Application
         Ioc.Default.ConfigureServices(Services);
 
         this.InitializeComponent();
-
     }
 
     /// <summary>

@@ -26,7 +26,7 @@ public class LocalizationService : ILocalizationService
     {
         get
         {
-            string flowDirectionSetting = ResourceContext.GetForCurrentView().QualifierValues["LayoutDirection"];
+            string flowDirectionSetting = ResourceContext.GetForViewIndependentUse().QualifierValues["LayoutDirection"];
             return flowDirectionSetting == "RTL";
         }
     }
