@@ -40,7 +40,7 @@ public class AssemblerConfig
     /// <summary>
     /// Gets the threshold alignment size where the assembler will give a warning.
     /// </summary>
-    public int SpaceWarningThreshold { get; init; } = 4096;
+    public int SpaceMessageThreshold { get; init; } = 4096;
 
     /// <summary>
     /// Gets the default configuration.

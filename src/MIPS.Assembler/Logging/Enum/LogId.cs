@@ -29,12 +29,11 @@ public enum LogId
     BranchBetweenSections,
     IntegerTruncated,
     RelocatableReferenceInShift,
-    ZeroRegWriteBack,
+    ZeroRegWriteback,
 
     // Expression parser
     UnparsableExpression,
     InvalidExpressionOperation,
-    InvalidOperationOnRelocatable,
 
     // Directive parser
     InvalidDirectiveDataArg,
@@ -47,6 +46,7 @@ public enum LogId
     NotAString,
     MultiLineString,
     InvalidCharLiteral,
+    IncompleteEscapeSequence,
     UnrecognizedEscapeSequence,
     UnescapedQuoteInString,
 

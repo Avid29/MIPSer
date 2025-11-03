@@ -47,7 +47,7 @@ public struct StringParser
 
         if (literal.Length != 1)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidCharLiteral, $"Character literal must be a single character.");
+            _logger?.Log(Severity.Error, LogId.InvalidCharLiteral, "MustBeSingleCharacter");
             return false;
         }
 
@@ -69,14 +69,14 @@ public struct StringParser
         // Ensure string begins and ends with quotes
         if (input[0] != wrap || input[^1] != wrap)
         {
-            string expected  = wrap switch
+            string expected = wrap switch
             {
-                '"' => "string",
-                '\'' => "char",
+                '"' => "String",
+                '\'' => "Char",
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>($"{wrap} expected to be either a ''' or '\"' character."),
             };
 
-            _logger?.Log(Severity.Error, LogId.NotAString, $"Expected a {expected}.");
+            _logger?.Log(Severity.Error, LogId.NotAString, $"Expected{expected}");
             return false;
         }
 
@@ -96,7 +96,7 @@ public struct StringParser
 
         if (_escapeState)
         {
-            _logger?.Log(Severity.Error, LogId.UnrecognizedEscapeSequence, "String ends with incomplete escape sequence.");
+            _logger?.Log(Severity.Error, LogId.IncompleteEscapeSequence, "IncompleteEscapeSequence");
             return false;
         }
 
@@ -108,7 +108,7 @@ public struct StringParser
         switch (c)
         {
             case '"':
-                _logger?.Log(Severity.Error, LogId.UnescapedQuoteInString, "Unespaced quote inside string.");
+                _logger?.Log(Severity.Error, LogId.UnescapedQuoteInString, "UnescapedQuoteInString");
                 return false;
             case '\\':
                 _escapeState = true;
@@ -139,7 +139,7 @@ public struct StringParser
 
         if (e == (char)0)
         {
-            _logger?.Log(Severity.Error, LogId.UnrecognizedEscapeSequence, $"'\\{c}' was not a recognized escape sequence.");
+            _logger?.Log(Severity.Error, LogId.UnrecognizedEscapeSequence, "UnrecognizedEscapeSequence", @$"\{c}");
             return false;
         }
 

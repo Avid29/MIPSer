@@ -1,17 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	  <RootNamespace>MIPS.Assembler</RootNamespace>
+	  <DefaultLanguage>en-US</DefaultLanguage>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\Instructions\ITypeInstructions.json" />
-    <None Remove="Resources\Instructions\JTypeInstructions.json" />
-    <None Remove="Resources\Instructions\PseudoInstructions.json" />
-    <None Remove="Resources\Instructions\RegImmInstructions.json" />
-    <None Remove="Resources\Instructions\RTypeInstructions.json" />
-    <None Remove="Resources\Instructions\Special2Instructions.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Instructions\CoProcessor1Instructions.json" />
@@ -27,11 +19,27 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.3.2" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.10" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MIPS\MIPS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Logger.en-US.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Logger.en-US.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Logger.en-US.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Logger.en-US.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

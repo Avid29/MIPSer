@@ -68,7 +68,7 @@ public struct ExpressionParser
         _tree = new ExpressionTree();
         _state = ExpressionParserState.Start;
 
-        // Build tree from string expression
+        // Build tree from tokens expression
         foreach (var token in expression)
         {
             // Switch on the state, call the appropriate function, and track success
@@ -85,8 +85,7 @@ public struct ExpressionParser
             // Parsing failed
             if (!success)
             {
-                // TODO: Convert token lines to string
-                _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Could not parse '{expression.Print()}' as an expression.");
+                _logger?.Log(Severity.Error, LogId.UnparsableExpression, "ExpressionParsingFailed", expression.Print());
                 return false;
             }
         }
@@ -185,7 +184,6 @@ public struct ExpressionParser
             }
             catch
             {
-                _logger?.Log(Severity.Error, LogId.UnparsableExpression, $"Could not parse '{t.Source}' as an immediate value.");
                 return false;
             }
         }

@@ -21,9 +21,8 @@ public static class RegistersTable
     /// <param name="name">The name of the register.</param>
     /// <param name="register">The register enum value.</param>
     /// <param name="set">Which register set table to reference.</param>
-    /// <param name="logger">Logger </param>
     /// <returns>Whether or not an register exists by that name.</returns>
-    public static bool TryGetRegister(string name, out GPRegister register, out RegisterSet set, ILogger? logger = null)
+    public static bool TryGetRegister(string name, out GPRegister register, out RegisterSet set)
     {
         register = GPRegister.Zero;
         set = RegisterSet.Numbered;
@@ -47,10 +46,7 @@ public static class RegistersTable
         {
             // Lowest register enum to highest register enum
             if (num is < (byte)GPRegister.Zero or > (byte)GPRegister.ReturnAddress)
-            {
-                logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"No register of number {num} exists");
                 return false;
-            }
 
             // Cast num to register
             register = (GPRegister)num;

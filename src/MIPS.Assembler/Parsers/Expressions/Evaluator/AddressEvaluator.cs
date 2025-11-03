@@ -30,7 +30,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         // If both address are relocatable
         if (left.IsRelocatable && right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "Cannot sum two relocatable symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "CantAddRelocatables");
             return false;
         }
 
@@ -43,7 +43,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     {
         result = default;
 
-        if (CheckRelocatable(right, "subtract"))
+        if (CheckRelocatable(right, "Subtract"))
             return false;
 
         result = left - right.Value;
@@ -56,7 +56,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         result = default;
 
         // Cannot multiply relocatable addressing 
-        if (CheckRelocatable(left, right, "multiply"))
+        if (CheckRelocatable(left, right, "Multiply"))
             return false;
 
         result = new Address(left.Value * right.Value, Section.None);
@@ -69,7 +69,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         result = default;
 
         // Cannot divide relocatable addressing
-        if (CheckRelocatable(left, right, "divide"))
+        if (CheckRelocatable(left, right, "Divide"))
             return false;
 
         result = new Address(left.Value / right.Value, Section.None);
@@ -82,7 +82,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         result = default;
 
         // Cannot mod relocatable addressing
-        if (CheckRelocatable(left, right, "mod"))
+        if (CheckRelocatable(left, right, "Modulus"))
             return false;
 
         result = new Address(left.Value % right.Value, Section.None);
@@ -102,7 +102,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         result = default;
 
         // Cannot negate relocatable addressing
-        if (CheckRelocatable(value, "negate"))
+        if (CheckRelocatable(value, "Negate"))
             return false;
 
         result = new Address(-value.Value, Section.None);
@@ -154,7 +154,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         result = default;
 
         // Cannot NOT relocatable addressing
-        if (CheckRelocatable(value, "logical NOT"))
+        if (CheckRelocatable(value, "NOT"))
             return false;
 
         result = new Address(~value.Value, Section.None);
@@ -165,7 +165,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     {
         if (value.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidOperationOnRelocatable, $"Cannot {operation} with relocatable symbols.");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, $"Cant{operation}Relocatable");
             return true;
         }
         return false;

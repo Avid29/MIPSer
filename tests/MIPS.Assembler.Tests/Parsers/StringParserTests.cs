@@ -11,6 +11,9 @@ public class StringParserTests
     [TestMethod("Empty")]
     public void EmptyTest() => RunTest("", null);
 
+    [TestMethod("''")]
+    public void LiteralEmptyCharTest() => RunCharTest("''");
+
     [TestMethod("\"\"")]
     public void LiteralEmptyTest() => RunTest("\"\"", "");
 
@@ -24,12 +27,25 @@ public class StringParserTests
     {
         // Declare parser and attempt parsing
         var parser = new StringParser();
-        if(!parser.TryParseString(input, out var actual))
+        if (!parser.TryParseString(input, out string actual))
         {
             Assert.IsNull(expected);
             return;
         }
 
+        // Assert the result matches the expected
+        Assert.AreEqual(expected, actual);
+    }
+
+    private static void RunCharTest(string input, char? expected = null)
+    {
+        // Declare parser and attempt parsing
+        var parser = new StringParser();
+        if (!parser.TryParseChar(input, out char actual))
+        {
+            Assert.IsNull(expected);
+            return;
+        }
         // Assert the result matches the expected
         Assert.AreEqual(expected, actual);
     }

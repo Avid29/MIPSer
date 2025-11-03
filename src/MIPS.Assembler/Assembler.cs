@@ -49,6 +49,7 @@ public partial class Assembler
     private Assembler(AssemblerConfig config)
     {
         _logger = new Logger();
+
         _module = new ModuleConstructor();
         _activeSection = Section.Text;
 
@@ -157,7 +158,7 @@ public partial class Assembler
         //       and the address can only be updated if it's undeclared/external.
         if (!_module.TryDefineOrUpdateSymbol(label, type, address))
         {
-            _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, $"Symbol \"{label}\" is already defined.");
+            _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, "SymbolAlreadyDefined", label);
             return false;
         }
 

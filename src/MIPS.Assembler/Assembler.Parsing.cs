@@ -88,7 +88,7 @@ public partial class Assembler
 
         if (expression.IsEmpty)
         {
-            _logger.Log(Severity.Error, LogId.MacroMissingValue, $"Symbol '{name}' missing value.");
+            _logger.Log(Severity.Error, LogId.MacroMissingValue, "SymbolMissingValue", name);
             return;
         }
         
@@ -97,7 +97,7 @@ public partial class Assembler
         
         if (address.IsRelocatable)
         {
-            _logger.Log(Severity.Error, LogId.MacroCannotBeRelocatable, $"Macros may not be a relocatable expression.");
+            _logger.Log(Severity.Error, LogId.MacroCannotBeRelocatable, "NoRelocatableMacros");
             return;
         }
         
@@ -119,7 +119,7 @@ public partial class Assembler
         // Check if pseudo instructions are allowed
         if (instruction.IsPseduoInstruction && !Config.AllowPseudos)
         {
-            _logger?.Log(Severity.Error, LogId.DisabledFeatureInUse, $"Pseudo instructions are disabled");
+            _logger?.Log(Severity.Error, LogId.DisabledFeatureInUse, "PseudoInstructionsDisabled");
             return;
         }
 
@@ -168,7 +168,7 @@ public partial class Assembler
     {
         if (char.IsDigit(symbol[0]))
         {
-            _logger?.Log(Severity.Error, LogId.IllegalSymbolName, $"{symbol} is not a valid symbol name. Symbol names cannot begin with a digit.");
+            _logger?.Log(Severity.Error, LogId.IllegalSymbolName, "SymbolsCannotBeginWithDigits", symbol);
             return false;
         }
 
@@ -176,7 +176,7 @@ public partial class Assembler
         {
             if (!char.IsLetterOrDigit(c))
             {
-                _logger?.Log(Severity.Error, LogId.IllegalSymbolName, $"{symbol} is not a valid symbol name. Symbol names cannot contain the character {c}.");
+                _logger?.Log(Severity.Error, LogId.IllegalSymbolName, "SymbolCannotContain", symbol, c);
                 return false;
             }
         }

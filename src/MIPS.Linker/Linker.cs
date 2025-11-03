@@ -45,7 +45,7 @@ public class Linker
             var module = m.Abstract(config);
             if (module is null)
             {
-                linker._logger.Log(Severity.Error, LogId.FailedToLoadModule, "A module could not be loaded, and therefore failed to link.");
+                linker._logger.Log(Severity.Error, LogId.FailedToLoadModule, "FailedToLoadModule");
                 continue;
             }
 

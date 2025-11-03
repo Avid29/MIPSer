@@ -16,7 +16,7 @@ namespace MIPS.Assembler.Tokenization;
 /// </summary>
 public class Tokenizer
 {
-    private readonly ILogger? _logger;
+    private readonly Logger? _logger;
 
     private TokenizerMode _mode;
     private TokenizerState _state;
@@ -30,7 +30,7 @@ public class Tokenizer
     /// <summary>
     /// Initializes a new instance of the <see cref="Tokenizer"/> class.
     /// </summary>
-    private Tokenizer(string? filename, ILogger? logger = null, TokenizerMode mode = TokenizerMode.Assembly)
+    private Tokenizer(string? filename, Logger? logger = null, TokenizerMode mode = TokenizerMode.Assembly)
     {
         _logger = logger;
 
@@ -42,7 +42,7 @@ public class Tokenizer
         _tokenType = null;
 
         _filename = filename;
-        _line = 1;
+        Line = 1;
         _column = 0;
         _mode = mode;
     }
@@ -51,6 +51,19 @@ public class Tokenizer
 
     private List<Token> Tokens { get; set; }
 
+    private int Line
+    {
+        get => _line;
+        set
+        {
+            _line = value;
+            if (_logger is not null)
+            {
+                _logger.CurrentLine = value;
+            }
+        }
+    }
+
     /// <summary>
     /// Tokenizes a stream of assembly code.
     /// </summary>
@@ -58,7 +71,7 @@ public class Tokenizer
     /// <param name="filename">The filename of the stream.</param>
     /// <param name="logger">The logger to use when tracking errors.</param>
     /// <returns>A list of tokens.</returns>
-    public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null, ILogger? logger = null)
+    public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null, Logger? logger = null)
     {
         // Create tokenizer
         Tokenizer tokenizer = new(filename, logger);
@@ -115,7 +128,7 @@ public class Tokenizer
             _column++;
         }
 
-        _line++;
+        Line++;
         _column = 0;
         TokenLines.Add(new([..Tokens]));
         return status;
@@ -322,8 +335,8 @@ public class Tokenizer
     {
         if (c is '\n')
         {
-            var expected = isChar ? "Character literals" : "Strings";
-            _logger?.Log(Severity.Error, LogId.MultiLineString, $"{expected} may not wrap between lines.", _line);
+            var expected = isChar ? "Characters" : "Strings";
+            _logger?.Log(Severity.Error, LogId.MultiLineString, $"{expected}CantWrapLines.");
             return false;
         }
 
@@ -334,7 +347,7 @@ public class Tokenizer
         {
             if (_cache.Length is 1 && c is '\'')
             {
-                _logger?.Log(Severity.Error, LogId.InvalidCharLiteral, $"Empty character literal.", _line);
+                _logger?.Log(Severity.Error, LogId.InvalidCharLiteral, "EmptyCharacterLiteral");
                 return false;
             }
 
@@ -426,13 +439,13 @@ public class Tokenizer
             {
                 string message = _state switch
                 {
-                    TokenizerState.Reference => $"Incomplete symbol reference \"{_cache}\".",
-                    TokenizerState.Immediate => $"Incomplete immediate value \"{_cache}\".",
-                    TokenizerState.Register => $"Incomplete register name \"{_cache}\".",
-                    _ => $"Incomplete token \"{_cache}\"",
+                    TokenizerState.Reference => $"IncompleteReference",
+                    TokenizerState.Immediate => $"IncompleteImmediate",
+                    TokenizerState.Register => $"IncompleteRegister",
+                    _ => $"IncompleteToken",
                 };
 
-                _logger?.Log(Severity.Error, LogId.TokenizerError, message, _line);
+                _logger?.Log(Severity.Error, LogId.TokenizerError, message, _cache);
                 return false;
             }
 
@@ -440,7 +453,7 @@ public class Tokenizer
             if (_tokenType is not TokenType.Whitespace || _mode is TokenizerMode.BehaviorExpression)
             {
                 // Create the token and add to list
-                Token token = new(_cache, _filename, _line, _column, _tokenType.Value);
+                Token token = new(_cache, _filename, Line, _column, _tokenType.Value);
                 Tokens?.Add(token);
             }
         }

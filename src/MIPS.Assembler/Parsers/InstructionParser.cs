@@ -124,7 +124,7 @@ public struct InstructionParser
         // TODO: Check on pseudo-instructions
         if (instruction.GetWritebackRegister() is GPRegister.Zero && name != "nop")
         {
-            _logger?.Log(Severity.Message, LogId.ZeroRegWriteBack, "This instruction writes to $zero.");
+            _logger?.Log(Severity.Message, LogId.ZeroRegWriteback, "ZeroRegisterWriteback");
         }
 
         parsedInstruction = new ParsedInstruction(instruction, reference);
@@ -157,7 +157,8 @@ public struct InstructionParser
             };
 
             // Log the error
-            _logger?.Log(Severity.Error, id, message);
+            // TODO: Improve version formatting
+            _logger?.Log(Severity.Error, id, message, name, $"{version:d}");
             return false;
         }
 
@@ -165,12 +166,11 @@ public struct InstructionParser
         if (!metas.Any(x => x.ArgumentPattern.Length == line.Args.Count))
         {
             // TODO: Improve messaging
-            var message = $"Instruction '{name}' does not have the appropriate number of arguments.";
             //var message = line.Args.Count < pattern.Length
             //    ? $"Instruction '{name}' doesn't have enough arguments. Found {line.Args.Count} arguments when expecting {_meta.ArgumentPattern.Length}."
             //    : $"Instruction '{name}' has too many arguments! Found {line.Args.Count} arguments when expecting {_meta.ArgumentPattern.Length}.";
 
-            _logger?.Log(Severity.Error, LogId.InvalidInstructionArgCount, message);
+            _logger?.Log(Severity.Error, LogId.InvalidInstructionArgCount, "WrongArgumentCount", name, line.Args.Count);
             return false;
         }
 
@@ -180,7 +180,7 @@ public struct InstructionParser
         // Check that the float format is supported valid with the instruction, if applicable
         if (_meta.FloatFormats is not null && !_meta.FloatFormats.Contains(_format))
         {
-            _logger?.Log(Severity.Error, LogId.InvalidFloatFormat, $"Instruction '{name}' does not support float format '{_format}'.");
+            _logger?.Log(Severity.Error, LogId.InvalidFloatFormat, $"DoesNotSupportFormat{_format}.", name);
             return false;
         }
 
@@ -196,7 +196,7 @@ public struct InstructionParser
             // Register arguments
             (>= Argument.RS and <= Argument.RD) or
             (>= Argument.FS and <= Argument.FD) or
-            Argument.RT_Numbered => TryParseRegisterArg(arg[0], type),
+            Argument.RT_Numbered => TryParseRegisterArg(arg, type),
 
             // Expression arguments
             Argument.Shift or Argument.Immediate or
@@ -213,8 +213,14 @@ public struct InstructionParser
     /// <summary>
     /// Parses an argument as a register and assigns it to the target component.
     /// </summary>
-    private unsafe bool TryParseRegisterArg(Token arg, Argument target)
+    private unsafe bool TryParseRegisterArg(ReadOnlySpan<Token> arg, Argument target)
     {
+        if (arg.Length is not 1)
+        {
+            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, "ArgumentNotARegister", arg.Print());
+            return false;
+        }
+
         // Get reference to selected register argument
         RefTuple<Ref<GPRegister>, RegisterSet> pair = target switch
         {
@@ -235,7 +241,7 @@ public struct InstructionParser
         (Ref<GPRegister> regRef, RegisterSet set) = pair;
         ref GPRegister reg = ref regRef.Value;
 
-        if (!TryParseRegister(arg, out var register, set))
+        if (!TryParseRegister(arg[0], out var register, set))
         {
             // Register could not be parsed.
             // Error already logged.
@@ -260,10 +266,6 @@ public struct InstructionParser
         // Attempt to parse expression
         if (!parser.TryParse(arg, out var address, out SymbolEntry? refSymbol))
             return false;
-
-        // NOTE: Casting might truncate the value to fit the bit size.
-        // This is the desired behavior, but when logging errors this
-        // should be handled explicitly and drop an assembler warning.
 
         if (!address.IsFixed && target is Argument.Shift)
         {
@@ -294,6 +296,10 @@ public struct InstructionParser
             relocation = new ReferenceEntry(refSymbol.Value.Name, _context.CurrentAddress, type, method);
         }
 
+        // NOTE: Casting might truncate the value to fit the bit size.
+        // This is the desired behavior, but when logging errors this
+        // should be handled explicitly and drop an assembler warning.
+
         long value = address.Value;
 
         // Truncates the value to fit the target argument
@@ -322,7 +328,7 @@ public struct InstructionParser
                     var @base = _context.CurrentAddress + 4;
                     if (@base.Section != address.Section)
                     {
-                        _logger?.Log(Severity.Error, LogId.BranchBetweenSections, $"Cannot branch between section.");
+                        _logger?.Log(Severity.Error, LogId.BranchBetweenSections, "CantBranchBetweenSections");
                         return false;
                     }
 
@@ -372,7 +378,7 @@ public struct InstructionParser
         var regStr = arg.Source;
         if (regStr[0] != '$')
         {
-            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"'{arg}' is not a valid register argument.");
+            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, "ArgumentNotARegister", arg);
             return false;
         }
 
@@ -380,14 +386,14 @@ public struct InstructionParser
         if (!RegistersTable.TryGetRegister(regStr, out register, out RegisterSet parsedSet))
         {
             // Register does not exist in table
-            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"No register '{arg}' exists.");
+            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, "RegisterNotFound", arg);
             return false;
         }
 
         // Match register set
         if (parsedSet != RegisterSet.Numbered && parsedSet != set)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"Register '{arg}' is not parse of register set '{set}'.");
+            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, $"RegisterMustBeIn{set}Set", arg);
             return false;
         }
 
@@ -402,38 +408,32 @@ public struct InstructionParser
     /// The register is just the component in parenthesis. The offset is just the component before the parenthesis.
     /// Nothing may follow the parenthesis.
     /// </remarks>
-    private readonly bool SplitAddressOffset(ReadOnlySpan<Token> arg, out ReadOnlySpan<Token> offset, [NotNullWhen(true)] out Token? register)
+    private readonly bool SplitAddressOffset(ReadOnlySpan<Token> arg, out ReadOnlySpan<Token> offset, out ReadOnlySpan<Token> register)
     {
-        var original = arg;
-        register = null;
         offset = arg;
+        register = [];
 
-        // Find parenthesis start and end
-        // Parenthsis must be matched and contain a single token
+        // Find matched parenthesis start and end
         var parIndex = arg.FindNext(TokenType.OpenParenthesis);
         var closeIndex = arg.FindNext(TokenType.CloseParenthesis);
-        if (parIndex is -1 || closeIndex is -1 || closeIndex - parIndex != 2)
+        if (parIndex is -1 || closeIndex is -1)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '{arg.Print()}' is not a valid address offset.");
+            // TODO: Improve messaging
+            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, "InvalidAddressOffsetArgument", arg.Print());
             return false;
         }
 
         // Offset is everything before the parenthesis
         offset = arg[..parIndex];
-        arg = arg[(parIndex + 1)..];
 
-        // Register is everything between the parenthesis,
-        // and must be a single token.
-        register = arg[0];
-        arg = arg[1..];
+        // Register is everything between the parenthesis
+        register = arg[(parIndex+1)..closeIndex];
 
-        // Parenthesis pair was not found
-        // Or contains both an opening and closing parenthesis, but they are not matched.
-        // Or there was content following the parenthesis.
-        // Or the token inside the parenthesis is not a register.
-        if (arg.IsEmpty || register.Type is not TokenType.Register)
+        // Ensure there's no content following the parenthesis.
+        if (!arg[(closeIndex+1)..].IsEmpty)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, $"Argument '{original.Print()}' is not a valid address offset.");
+            // TODO: Improve messaging
+            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, "InvalidAddressOffsetArgument", arg.Print());
             return false;
         }
 
@@ -453,37 +453,14 @@ public struct InstructionParser
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<(byte, byte, bool)>($"Argument of type '{target}' attempted to parse as an expression."),
         };
 
-        // Clean integer to fit within argument bit size and match signs.
+        // Clean integer to fit within argument bit size and match signs
         long original = value;
         var cleanStatus = CastInteger(ref value, bitCount, shiftAmount, signed);
 
-        // Generate a message if any changes made to the value when casting.
-        var message = cleanStatus switch
+        // Log a message if the value was truncated and/or had its sign changed
+        if (cleanStatus is not CastingChanges.None)
         {
-            // Sign changed
-            CastingChanges.SignChanged =>
-            $"Expression '{arg.Print()}' evaluated to signed value {original}" +
-            $"but was cast to an unsigned value, resulting in {value}.",
-
-            // Truncated
-            CastingChanges.Truncated =>
-            $"Expression '{arg.Print()}' evaluated to {original}, but was truncated to " +
-            $"{bitCount}-bits dropping the lower {shiftAmount} bits, resulting in {value}.",
-
-            // Truncated and sign changed
-            CastingChanges.TruncatedAndSignChanged =>
-            $"Expression '{arg.Print()}' evaluated to {original}, but was truncated to an" +
-            $"unsigned value with {bitCount}-bits and dropping the lower {shiftAmount} bits," +
-            $"resulting in {value}.",
-
-            // No changes
-            _ => null,
-        };
-
-        // If a message was generated, log it
-        if (message is not null)
-        {
-            _logger?.Log(Severity.Warning, LogId.IntegerTruncated, message);
+            _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"CastWarning{cleanStatus}", arg.Print(), original, value, bitCount, shiftAmount);
         }
     }
 
@@ -503,7 +480,7 @@ public struct InstructionParser
         Guard.IsLessThanOrEqualTo(bitCount + shiftAmount, 64);
 
         // Create a masks for the high and low truncating bits,
-        // as well as an overall remaining bits map.
+        // as well as an overall remaining bits map
         var upperMask = bitCount == 64 ? -1L : (1L << (bitCount + shiftAmount)) - 1;
         var lowerMask = ~((1L << shiftAmount) - 1);
         var mask = (upperMask & lowerMask);
@@ -524,19 +501,19 @@ public struct InstructionParser
         // Compute changes
         var changes = CastingChanges.None;
 
-        // Check if the sign changed
-        if ((original < 0) != (truncated < 0))
+        // Check if the sign was dropped
+        if (!signed && original < 0)
             changes |= CastingChanges.SignChanged;
 
         // Check for upper truncation
         long upperBits = original & ~upperMask;
         if (upperBits != 0 && upperBits != ~upperMask)
-            changes |= CastingChanges.Truncated;
+            changes |= CastingChanges.TruncatedHigh;
 
         // Check for lower truncation
         if ((original & ~lowerMask) != 0)
         {
-            changes |= CastingChanges.Truncated;
+            changes |= CastingChanges.TruncatedLow;
         }
 
         // Return combined code

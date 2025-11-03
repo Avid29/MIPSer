@@ -76,8 +76,8 @@ public class AssemblerTests
         (LogId.InvalidInstructionArgCount, 14),
         (LogId.InvalidInstructionName, 16),
         (LogId.UnparsableExpression, 19),
-        (LogId.InvalidAddressOffsetArgument, 24), // Debateably should be a register error
-        (LogId.ZeroRegWriteBack, 29),
+        (LogId.InvalidRegisterArgument, 24), // Debateably should be an InvalidAddressOffsetArgument error
+        (LogId.ZeroRegWriteback, 29),
         (LogId.IntegerTruncated, 30),
         (LogId.InvalidRegisterArgument, 32),
         (LogId.InvalidCharLiteral, 35),
@@ -89,7 +89,7 @@ public class AssemblerTests
 
     [TestMethod(TestFilePathing.SubtractAddressFile)]
     public async Task SubtractAddressTest() => await RunFileTest(TestFilePathing.SubtractAddressFile,
-        (LogId.InvalidOperationOnRelocatable, 14));
+        (LogId.InvalidExpressionOperation, 14));
 
     private static async Task RunFileTest(string fileName, params (LogId, long)[] expected)
     {

@@ -12,6 +12,7 @@ using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Numerics;
 
@@ -78,13 +79,13 @@ public readonly struct DirectiveParser
     {
         directive = null;
 
+        string sectionName = name.Source;
         if (args.Count is not 0)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, "Section directives can not be parsed with any arguments.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, "DirectiveTakesNoArguments", sectionName);
             return false;
         }
 
-        string sectionName = name.Source;
         Section section = sectionName switch
         {
             ".text" => Section.Text,
@@ -99,22 +100,29 @@ public readonly struct DirectiveParser
     private bool TryParseGlobal(AssemblyLineArgs args, out Directive? directive)
     {
         // TODO: Can you declare multiple globals on one line?
-
         directive = null;
 
         // Global only takes one argument
-        if (args.Count is not 1 && args[0].Length is not 1)
+        if (args.Count is not 1)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, $".globl only takes one argument. Cannot parse {args.Count} arguments.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, "DirectiveTakesOneArgument", ".globl");
             return false;
         }
 
+        if (args[0].Length is not 1)
+        {
+            // TODO: Improve message
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, "DirectiveNonSymbolArgumentSmall", ".globl");
+            return false;
+        }
+
+        // Get argument
         var arg = args[0][0];
 
         // Global only takes references as an argument
         if (arg.Type is not TokenType.Reference)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $".globl only takes a symbol for an argument. Cannot parse {arg.Source}.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, "DirectiveNonSymbolArgument", ".globl", arg.Source);
         }
 
         directive = new GlobalDirective(arg.Source);
@@ -127,19 +135,21 @@ public readonly struct DirectiveParser
         string directiveName = align ? ".align" : ".space";
 
         // Space only takes one argument
-        if (args.Count is not 1 && args[0].Length is not 1)
+        if (args.Count is not 1)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, $"{directiveName} only takes one argument. Cannot parse {args.Count} arguments.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, "DirectiveTakesOneArgument", directiveName);
             return false;
         }
 
+        // Parse argument
         var parser = new ExpressionParser(_context, _logger);
         if (!parser.TryParse(args[0], out Address result, out _))
             return false;
 
+        // Argument must not be relocatable
         if (result.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, $"'{args[0].Print()}' is not a valid {directiveName} argument.");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, "DirectiveNoRelocatableArguments", directiveName);
             return false;
         }
 
@@ -147,28 +157,28 @@ public readonly struct DirectiveParser
 
         if (align)
         {
-            // TODO: Move magic numbers into assembler config
             // Kinda unique behavior here warrents a comment.
             // Any int? comparison operator involving a null returns false, so
             // if there's no context this never executes.
-            var alignWarningThreshold = _context?.Config.AlignMessageThreshold;
+            var alignWarningThreshold = _context?.Config.AlignWarningThreshold;
             var alignMessageThreshold = _context?.Config.AlignMessageThreshold;
-            if (value >= _context?.Config.AlignWarningThreshold)
+            if (value >= alignWarningThreshold)
             {
-                _logger?.Log(Severity.Error, LogId.LargeAlignment, $".align may not be used with a value greater than {alignWarningThreshold}.");
+                _logger?.Log(Severity.Warning, LogId.LargeAlignment, "DirectiveLargeAlignWarning", value, alignWarningThreshold);
             }
             else if (value >= alignMessageThreshold)
             {
-                _logger?.Log(Severity.Message, LogId.LargeAlignment, $".align will align to the byte, using the argument as an exponent of 2. It is not advised to use a value greater than {alignMessageThreshold}.");
+                _logger?.Log(Severity.Message, LogId.LargeAlignment, "DirectiveLargeAlignMessage", value, alignMessageThreshold);
             }
 
             directive = new AlignDirective((int)result.Value);
         }
         else
         {
-            if (value >= _context?.Config.AlignMessageThreshold)
+            var spaceMessageThreshold = _context?.Config.SpaceMessageThreshold;
+            if (value >= spaceMessageThreshold)
             {
-                _logger?.Log(Severity.Message, LogId.LargeSpacing, $"This .space directive will consume {value} bytes in the binary. ");
+                _logger?.Log(Severity.Message, LogId.LargeSpacing, "DirectiveLargeAlignMessage", value, spaceMessageThreshold);
             }
 
             directive = new DataDirective(new byte[value]);
@@ -200,15 +210,15 @@ public readonly struct DirectiveParser
             if (result.IsRelocatable)
             {
                 // TODO: Can data be a reference to a relocatable address?
-                _logger?.Log(Severity.Error, LogId.InvalidDirectiveDataArg, $"{name} allocations cannot be relocatable.");
+                _logger?.Log(Severity.Error, LogId.InvalidDirectiveDataArg, "DirectiveAllocationNoRelocatableArguments", name);
                 return false;
             }
-
+            
+            // TODO: Double check the logic here. Does this always detect the error?
             value = T.CreateTruncating(result.Value);
             if (value != T.CreateSaturating(result.Value))
             {
-                // TODO: Double check the logic here. Does this always detect the error?
-                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, $"'{arg.Print()}' was evaluated to {result.Value} and subsequently truncated to {value}.");
+                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, "DirectiveAllocationTruncated",  arg.Print(), result.Value, value);
             }
 
             value.WriteBigEndian(bytes, pos);
