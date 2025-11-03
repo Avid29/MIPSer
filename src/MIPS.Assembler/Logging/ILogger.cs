@@ -11,12 +11,19 @@ namespace MIPS.Assembler.Logging;
 /// </summary>
 public interface ILogger
 {
+    /// <inheritdoc cref="Log(Severity, LogId, ReadOnlySpan{Token}, string, object?[])"/>
+    void Log(Severity severity, LogId id, int lineNum, string messageKey, params object?[] args);
+
+    /// <inheritdoc cref="Log(Severity, LogId, ReadOnlySpan{Token}, string, object?[])"/>
+    void Log(Severity severity, LogId id, Token token, string messageKey, params object?[] args);
+
     /// <summary>
     /// Creates a new log.
     /// </summary>
     /// <param name="severity">The severity of the consequences of the log.</param>
     /// <param name="id">The id of the log.</param>
-    /// <param name="message">The log message.</param>
+    /// <param name="tokens">The token(s) where the log occured.</param>
+    /// <param name="messageKey">The log resource key for the log message .</param>
     /// <param name="args">The arguments to format the message with.</param>
-    void Log(Severity severity, LogId id, string message, params object?[] args);
+    void Log(Severity severity, LogId id, ReadOnlySpan<Token> tokens, string messageKey, params object?[] args);
 }

@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Parsers.Expressions.Abstract;
+
 namespace MIPS.Assembler.Parsers.Expressions.Evaluator;
 
 /// <summary>
@@ -11,96 +13,107 @@ public interface IEvaluator<T>
     /// <summary>
     /// Add <paramref name="left"/> and <paramref name="right"/>.
     /// </summary>
+    /// <param name="node">The expression node being evaluated.</param>
     /// <param name="left">The left-hand child.</param>
     /// <param name="right">The right-hand child.</param>
     /// <param name="result">The sum of <paramref name="left"/> and <paramref name="right"/>.</param>
     /// <returns>Whether or not the sum of the items could be taken.</returns>
-    bool TryAdd(T left, T right, out T result);
+    bool TryAdd(BinaryOperNode node, T left, T right, out T result);
 
     /// <summary>
     /// Subtract <paramref name="right"/> from <paramref name="left"/>.
     /// </summary>
+    /// <param name="node">The expression node being evaluated.</param>
     /// <param name="left">The left-hand child.</param>
     /// <param name="right">The right-hand child.</param>
     /// <param name="result">The difference between <paramref name="left"/> and <paramref name="right"/></param>
     /// <returns>Whether or not the difference of the items could be taken.</returns>
-    bool TrySubtract(T left, T right, out T result);
+    bool TrySubtract(BinaryOperNode node, T left, T right, out T result);
 
     /// <summary>
     /// Multiply <paramref name="left"/> and <paramref name="right"/>.
     /// </summary>
+    /// <param name="node">The expression node being evaluated.</param>
     /// <param name="left">The left-hand child.</param>
     /// <param name="right">The right-hand child.</param>
     /// <param name="result">The product of <paramref name="left"/> and <paramref name="right"/>.</param>
     /// <returns>Whether or not the product of the items could be taken.</returns>
-    bool TryMultiply(T left, T right, out T result);
+    bool TryMultiply(BinaryOperNode node, T left, T right, out T result);
 
     /// <summary>
     /// Divide <paramref name="left"/> by <paramref name="right"/>.
     /// </summary>
+    /// <param name="node">The expression node being evaluated.</param>
     /// <param name="left">The left-hand child.</param>
     /// <param name="right">The right-hand child.</param>
     /// <param name="result">The quotient of <paramref name="left"/> divided by <paramref name="right"/>.</param>
     /// <returns>Whether or not the quotient of the items could be taken.</returns>
-    bool TryDivide(T left, T right, out T result);
+    bool TryDivide(BinaryOperNode node, T left, T right, out T result);
 
     /// <summary>
     /// Modulus of <paramref name="left"/> divided by <paramref name="right"/>.
     /// </summary>
+    /// <param name="node">The expression node being evaluated.</param>
     /// <param name="left">The left-hand child.</param>
     /// <param name="right">The right-hand child.</param>
     /// <param name="result">The remainder of <paramref name="left"/> divided by <paramref name="right"/>.</param>
     /// <returns>Whether or not the remainder of dividing the items could be taken.</returns>
-    bool TryMod(T left, T right, out T result);
+    bool TryMod(BinaryOperNode node, T left, T right, out T result);
 
     /// <summary>
     /// Apply a unary plus to <paramref name="value"/>.
     /// </summary>
+    /// <param name="node">The expression node being evaluated.</param>
     /// <param name="value">The child.</param>
     /// <param name="result">The result of a unary plus on <paramref name="value"/>.</param>
     /// <returns>Whether or not a unary plus of the child could be taken </returns>
-    bool TryUnaryPlus(T value, out T result);
+    bool TryUnaryPlus(UnaryOperNode node, T value, out T result);
 
     /// <summary>
     /// Negate <paramref name="value"/>.
     /// </summary>
+    /// <param name="node">The expression node being evaluated.</param>
     /// <param name="value">The child.</param>
     /// <param name="result">Negation of <paramref name="value"/>.</param>
     /// <returns>Whether or not the negation of the child could be taken.</returns>
-    bool TryNegate(T value, out T result);
+    bool TryNegate(UnaryOperNode node, T value, out T result);
 
     /// <summary>
     /// Logical AND of <paramref name="left"/> and <paramref name="right"/>.
     /// </summary>
+    /// <param name="node">The expression node being evaluated.</param>
     /// <param name="left">The left-hand child.</param>
     /// <param name="right">The right-hand child.</param>
     /// <param name="result">Logical AND of <paramref name="left"/> and <paramref name="right"/>.</param>
     /// <returns>Whether or not the Logical AND of the items could be taken.</returns>
-    bool TryAnd(T left, T right, out T result);
+    bool TryAnd(BinaryOperNode node, T left, T right, out T result);
 
     /// <summary>
     /// Logical OR of <paramref name="left"/> and <paramref name="right"/>.
     /// </summary>
+    /// <param name="node">The expression node being evaluated.</param>
     /// <param name="left">The left-hand child.</param>
     /// <param name="right">The right-hand child.</param>
     /// <param name="result">Logical OR of <paramref name="left"/> and <paramref name="right"/>.</param>
     /// <returns>Whether or not the Logical OR of the items could be taken.</returns>
-    bool TryOr(T left, T right, out T result);
+    bool TryOr(BinaryOperNode node, T left, T right, out T result);
 
     /// <summary>
     /// Logical XOR of <paramref name="left"/> and <paramref name="right"/>.
     /// </summary>
+    /// <param name="node">The expression node being evaluated.</param>
     /// <param name="left">The left-hand child.</param>
     /// <param name="right">The right-hand child.</param>
     /// <param name="result">Logical XOR of <paramref name="left"/> and <paramref name="right"/>.</param>
     /// <returns>Whether or not the Logical XOR of the items could be taken.</returns>
-    bool TryXor(T left, T right, out T result);
+    bool TryXor(BinaryOperNode node, T left, T right, out T result);
 
     /// <summary>
     /// Logical NOT of <paramref name="value"/>.
     /// </summary>
+    /// <param name="node">The expression node being evaluated.</param>
     /// <param name="value">The child.</param>
     /// <param name="result">Logical NOT of <paramref name="value"/>.</param>
     /// <returns>Whether or not the logical NOT of the child could be taken.</returns>
-    bool TryNot(T value, out T result);
+    bool TryNot(UnaryOperNode node, T value, out T result);
 }

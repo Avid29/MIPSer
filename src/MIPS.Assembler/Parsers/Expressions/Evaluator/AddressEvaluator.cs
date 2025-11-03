@@ -1,7 +1,9 @@
 ﻿// Adam Dernis 2024
 
+using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 
@@ -23,14 +25,14 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryAdd(Address left, Address right, out Address result)
+    public bool TryAdd(BinaryOperNode node, Address left, Address right, out Address result)
     {
         result = default;
 
         // If both address are relocatable
         if (left.IsRelocatable && right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, "CantAddRelocatables");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, node.ExpressionToken, "CantAddRelocatables");
             return false;
         }
 
@@ -39,11 +41,11 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TrySubtract(Address left, Address right, out Address result)
+    public bool TrySubtract(BinaryOperNode node, Address left, Address right, out Address result)
     {
         result = default;
 
-        if (CheckRelocatable(right, "Subtract"))
+        if (CheckRelocatable(node.RightChild, right, "Subtract"))
             return false;
 
         result = left - right.Value;
@@ -51,12 +53,12 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryMultiply(Address left, Address right, out Address result)
+    public bool TryMultiply(BinaryOperNode node, Address left, Address right, out Address result)
     {
         result = default;
 
         // Cannot multiply relocatable addressing 
-        if (CheckRelocatable(left, right, "Multiply"))
+        if (CheckRelocatable(node, left, right, "Multiply"))
             return false;
 
         result = new Address(left.Value * right.Value, Section.None);
@@ -64,12 +66,12 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryDivide(Address left, Address right, out Address result)
+    public bool TryDivide(BinaryOperNode node, Address left, Address right, out Address result)
     {
         result = default;
 
         // Cannot divide relocatable addressing
-        if (CheckRelocatable(left, right, "Divide"))
+        if (CheckRelocatable(node, left, right, "Divide"))
             return false;
 
         result = new Address(left.Value / right.Value, Section.None);
@@ -77,12 +79,12 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryMod(Address left, Address right, out Address result)
+    public bool TryMod(BinaryOperNode node, Address left, Address right, out Address result)
     {
         result = default;
 
         // Cannot mod relocatable addressing
-        if (CheckRelocatable(left, right, "Modulus"))
+        if (CheckRelocatable(node, left, right, "Modulus"))
             return false;
 
         result = new Address(left.Value % right.Value, Section.None);
@@ -90,19 +92,19 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
     
     /// <inheritdoc/>
-    public readonly bool TryUnaryPlus(Address value, out Address result)
+    public readonly bool TryUnaryPlus(UnaryOperNode node, Address value, out Address result)
     {
         result = value;
         return true;
     }
     
     /// <inheritdoc/>
-    public readonly bool TryNegate(Address value, out Address result)
+    public readonly bool TryNegate(UnaryOperNode node, Address value, out Address result)
     {
         result = default;
 
         // Cannot negate relocatable addressing
-        if (CheckRelocatable(value, "Negate"))
+        if (CheckRelocatable(node, value, "Negate"))
             return false;
 
         result = new Address(-value.Value, Section.None);
@@ -110,12 +112,12 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryAnd(Address left, Address right, out Address result)
+    public bool TryAnd(BinaryOperNode node, Address left, Address right, out Address result)
     {
         result = default;
         
         // Cannot AND relocatable addressing
-        if (CheckRelocatable(left, right, "AND"))
+        if (CheckRelocatable(node, left, right, "AND"))
             return false;
 
         result = new Address(left.Value & right.Value, Section.None);
@@ -123,12 +125,12 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryOr(Address left, Address right, out Address result)
+    public bool TryOr(BinaryOperNode node, Address left, Address right, out Address result)
     {
         result = default;
         
         // Cannot OR relocatable addressing
-        if (CheckRelocatable(left, right, "OR"))
+        if (CheckRelocatable(node, left, right, "OR"))
             return false;
 
         result = new Address(left.Value | right.Value, Section.None);
@@ -136,12 +138,12 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryXor(Address left, Address right, out Address result)
+    public bool TryXor(BinaryOperNode node, Address left, Address right, out Address result)
     {
         result = default;
 
         // Cannot XOR relocatable addressing
-        if (CheckRelocatable(left, right, "XOR"))
+        if (CheckRelocatable(node, left, right, "XOR"))
             return false;
 
         result = new Address(left.Value ^ right.Value, Section.None);
@@ -149,30 +151,32 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
     
     /// <inheritdoc/>
-    public bool TryNot(Address value, out Address result)
+    public bool TryNot(UnaryOperNode node, Address value, out Address result)
     {
         result = default;
 
         // Cannot NOT relocatable addressing
-        if (CheckRelocatable(value, "NOT"))
+        if (CheckRelocatable(node, value, "NOT"))
             return false;
 
         result = new Address(~value.Value, Section.None);
         return true;
     }
 
-    private bool CheckRelocatable(Address value, string operation)
+    private bool CheckRelocatable(ExpNode? node, Address value, string operation)
     {
+        Guard.IsNotNull(node);
+
         if (value.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, $"Cant{operation}Relocatable");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, node.ExpressionToken, $"Cant{operation}Relocatable");
             return true;
         }
         return false;
     }
 
-    private bool CheckRelocatable(Address left, Address right, string operation)
+    private bool CheckRelocatable(BinaryOperNode node, Address left, Address right, string operation)
     {
-        return CheckRelocatable(left, operation) || CheckRelocatable(right, operation);
+        return CheckRelocatable(node.LeftChild, left, operation) || CheckRelocatable(node.RightChild, right, operation);
     }
 }

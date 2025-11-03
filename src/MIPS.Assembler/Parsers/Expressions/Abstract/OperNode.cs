@@ -3,6 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Parsers.Expressions.Abstract;
@@ -15,7 +16,7 @@ public abstract class OperNode : ExpNode
     /// <summary>
     /// Initializes a new instance of the <see cref="OperNode"/> class.
     /// </summary>
-    public OperNode(Operation operation)
+    public OperNode(Token token, Operation operation) : base(token)
     {
         Operation = operation;
     }

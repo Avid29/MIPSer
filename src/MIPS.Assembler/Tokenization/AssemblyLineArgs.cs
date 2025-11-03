@@ -26,9 +26,12 @@ public struct AssemblyLineArgs
     /// <summary>
     /// Gets an arg from the args array;
     /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    public readonly ReadOnlySpan<Token> this[int index] => _args is not null ? _args[index].AsSpan() : [];
+    public readonly ReadOnlySpan<Token> this[int index] => _args is not null ? _args[index] : [];
+
+    /// <summary>
+    /// Gets a range of args from the args array.
+    /// </summary>
+    public readonly ReadOnlySpan<ArraySegment<Token>> this[Range range] => _args is not null ? _args[range] : [];
 
     /// <summary>
     /// Gets the number of args.

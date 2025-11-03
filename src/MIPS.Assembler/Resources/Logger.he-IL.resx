@@ -123,21 +123,26 @@
   <data name="NoRelocatableMacros" xml:space="preserve">
     <value>מאקרו אינו יכול להיות ביטוי בר־הזזה.</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="PseudoInstructionsDisabled" type="System.Resources.ResXNullRef, System.Windows.Forms">
+  <data name="PseudoInstructionsDisabled" xml:space="preserve">
     <value>פסאודו־פקודות מנוטרלות.</value>
   </data>
   <data name="RegisterNotFound" xml:space="preserve">
     <value>לא קיים אוגר בשם ‎'{0}'.</value>
   </data>
-  <data name="SymbolAlreadyDefined" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="SymbolAlreadyDefined" xml:space="preserve">
+    <value>הסימבול ‎'{0}'‎ כבר מוגדר.</value>
+  </data>
+  <data name="SymbolCannotContain" xml:space="preserve">
+    <value>‎'{0}' אינו שם סימבול תקין. שמות סימבולים אינם יכולים להכיל את התו ‎'{1}'.</value>
   </data>
   <data name="SymbolMissingValue" xml:space="preserve">
     <value>לסימבול ‎'{0}' חסר ערך.</value>
   </data>
-  <data name="SymbolsCannotBeginWithDigits" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="SymbolsCannotBeginWithDigits" xml:space="preserve">
+    <value>‎'{0}' אינו שם סימבול תקין. שמות סימבולים אינם יכולים להתחיל בספרה.</value>
+  </data>
+  <data name="DirectiveTakesNoArguments" xml:space="preserve">
+    <value>‎'{0}' אינו יכול לקבל ארגומנטים.</value>
   </data>
   <data name="DirectiveTakesOneArgument" xml:space="preserve">
     <value>‎'{0}' מקבל ארגומנט אחד בלבד.</value>
@@ -310,19 +315,7 @@
   <data name="FailedToLoadModule" xml:space="preserve">
     <value />
   </data>
-  <data name="PseudoInstructionsDisabled" xml:space="preserve">
-    <value>פסאודו־פקודות מנוטרלות.</value>
-  </data>
-  <data name="SymbolAlreadyDefined" xml:space="preserve">
-    <value>הסימבול ‎'{0}'‎ כבר מוגדר.</value>
-  </data>
-  <data name="SymbolCannotContain" xml:space="preserve">
-    <value>‎'{0}' אינו שם סימבול תקין. שמות סימבולים אינם יכולים להכיל את התו ‎'{1}'.</value>
-  </data>
-  <data name="SymbolsCannotBeginWithDigits" xml:space="preserve">
-    <value>‎'{0}' אינו שם סימבול תקין. שמות סימבולים אינם יכולים להתחיל בספרה.</value>
-  </data>
-  <data name="DirectiveTakesNoArguments" xml:space="preserve">
-    <value>‎'{0}' אינו יכול לקבל ארגומנטים.</value>
+  <data name="DirectiveRequiresAnArgument" xml:space="preserve">
+    <value>'{0}' צריך ארגומנט.</value>
   </data>
 </root>

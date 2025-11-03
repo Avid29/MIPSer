@@ -4,6 +4,7 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Parsers.Expressions;
@@ -17,7 +18,7 @@ public class UnaryOperNode : OperNode
     /// <summary>
     /// Initializes a new instance of the <see cref="UnaryOperNode"/> class.
     /// </summary>
-    public UnaryOperNode(Operation operation) : base(operation)
+    public UnaryOperNode(Token token, Operation operation) : base(token, operation)
     {
     }
 
@@ -62,16 +63,13 @@ public class UnaryOperNode : OperNode
 
         // Evaluate child first
         if (!(Child?.TryEvaluate(evaluator, out Address child) ?? false))
-        {
-            // TODO: Log error
             return false;
-        }
 
         return Operation switch
         {
-            Operation.UnaryPlus => evaluator.TryUnaryPlus(child, out result),
-            Operation.Negation => evaluator.TryNegate(child, out result),
-            Operation.Not => evaluator.TryNot(child, out result),
+            Operation.UnaryPlus => evaluator.TryUnaryPlus(this, child, out result),
+            Operation.Negation => evaluator.TryNegate(this, child, out result),
+            Operation.Not => evaluator.TryNot(this, child, out result),
             _ => ThrowHelper.ThrowArgumentException<bool>(),
         };
     }

@@ -16,7 +16,7 @@ namespace MIPS.Assembler.Tokenization;
 /// </summary>
 public class Tokenizer
 {
-    private readonly Logger? _logger;
+    private readonly ILogger? _logger;
 
     private TokenizerMode _mode;
     private TokenizerState _state;
@@ -30,7 +30,7 @@ public class Tokenizer
     /// <summary>
     /// Initializes a new instance of the <see cref="Tokenizer"/> class.
     /// </summary>
-    private Tokenizer(string? filename, Logger? logger = null, TokenizerMode mode = TokenizerMode.Assembly)
+    private Tokenizer(string? filename, ILogger? logger = null, TokenizerMode mode = TokenizerMode.Assembly)
     {
         _logger = logger;
 
@@ -54,14 +54,7 @@ public class Tokenizer
     private int Line
     {
         get => _line;
-        set
-        {
-            _line = value;
-            if (_logger is not null)
-            {
-                _logger.CurrentLine = value;
-            }
-        }
+        set => _line = value;
     }
 
     /// <summary>
@@ -71,7 +64,7 @@ public class Tokenizer
     /// <param name="filename">The filename of the stream.</param>
     /// <param name="logger">The logger to use when tracking errors.</param>
     /// <returns>A list of tokens.</returns>
-    public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null, Logger? logger = null)
+    public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null, ILogger? logger = null)
     {
         // Create tokenizer
         Tokenizer tokenizer = new(filename, logger);
@@ -336,7 +329,7 @@ public class Tokenizer
         if (c is '\n')
         {
             var expected = isChar ? "Characters" : "Strings";
-            _logger?.Log(Severity.Error, LogId.MultiLineString, $"{expected}CantWrapLines.");
+            _logger?.Log(Severity.Error, LogId.MultiLineString, Line, $"{expected}CantWrapLines.");
             return false;
         }
 
@@ -347,7 +340,7 @@ public class Tokenizer
         {
             if (_cache.Length is 1 && c is '\'')
             {
-                _logger?.Log(Severity.Error, LogId.InvalidCharLiteral, "EmptyCharacterLiteral");
+                _logger?.Log(Severity.Error, LogId.InvalidCharLiteral, Line, "EmptyCharacterLiteral");
                 return false;
             }
 
@@ -445,7 +438,7 @@ public class Tokenizer
                     _ => $"IncompleteToken",
                 };
 
-                _logger?.Log(Severity.Error, LogId.TokenizerError, message, _cache);
+                _logger?.Log(Severity.Error, LogId.TokenizerError, Line, message, _cache);
                 return false;
             }
 

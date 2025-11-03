@@ -2,9 +2,9 @@
 
 using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Tokenization;
+using System;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Resources;
 
 namespace MIPS.Assembler.Logging;
 
@@ -30,18 +30,27 @@ public class Logger : ILogger
     /// </summary>
     public bool Failed { get; private set; }
 
-    /// <summary>
-    /// Gets or sets the current line being assembled.
-    /// </summary>
-    public int CurrentLine { get; set; }
+    /// <inheritdoc/>
+    public void Log(Severity severity, LogId id, ReadOnlySpan<Token> token, string messageKey, params object?[] args)
+        => Log(severity, id, token.Length > 0 ? token[0].LineNum : 0, messageKey, args);
 
     /// <inheritdoc/>
-    public void Log(Severity severity, LogId id, string message, params object?[] args)
+    public void Log(Severity severity, LogId id, Token token, string messageKey, params object?[] args)
+        => Log(severity, id, [token], messageKey, args);
+    
+    /// <inheritdoc/>
+    public void Log(Severity severity, LogId id, string messageKey, params object?[] args)
     {
-        var localizedMessage = _localizer[message];
+        throw new NotImplementedException();
+    }
+    
+    /// <inheritdoc/>
+    public void Log(Severity severity, LogId id, int lineNum, string messageKey, params object?[] args)
+    {
+        var localizedMessage = _localizer[messageKey];
         var formattedMessage = string.Format(localizedMessage, args);
 
-        var log = new Log(id, formattedMessage, severity, CurrentLine);
+        var log = new Log(id, formattedMessage, severity, lineNum);
         _logs.Add(log);
 
         if (severity is Severity.Error)

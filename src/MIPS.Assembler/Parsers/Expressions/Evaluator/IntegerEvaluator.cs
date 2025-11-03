@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Parsers.Expressions.Abstract;
+
 namespace MIPS.Assembler.Parsers.Expressions.Evaluator;
 
 /// <summary>
@@ -8,77 +10,77 @@ namespace MIPS.Assembler.Parsers.Expressions.Evaluator;
 public readonly struct IntegerEvaluator : IEvaluator<long>
 {
     /// <inheritdoc/>
-    public bool TryAdd(long left, long right, out long result)
+    public bool TryAdd(BinaryOperNode node, long left, long right, out long result)
     {
         result = left + right;
         return true;
     }
 
     /// <inheritdoc/>
-    public bool TrySubtract(long left, long right, out long result)
+    public bool TrySubtract(BinaryOperNode node, long left, long right, out long result)
     {
         result = left - right;
         return true;
     }
 
     /// <inheritdoc/>
-    public bool TryMultiply(long left, long right, out long result)
+    public bool TryMultiply(BinaryOperNode node, long left, long right, out long result)
     {
         result = left * right;
         return true;
     }
 
     /// <inheritdoc/>
-    public bool TryDivide(long left, long right, out long result)
+    public bool TryDivide(BinaryOperNode node, long left, long right, out long result)
     {
         result = left / right;
         return true;
     }
 
     /// <inheritdoc/>
-    public bool TryMod(long left, long right, out long result)
+    public bool TryMod(BinaryOperNode node, long left, long right, out long result)
     {
         result = left % right;
         return true;
     }
     
     /// <inheritdoc/>
-    public bool TryUnaryPlus(long value, out long result)
+    public bool TryUnaryPlus(UnaryOperNode node, long value, out long result)
     {
         result = value;
         return true;
     }
     
     /// <inheritdoc/>
-    public bool TryNegate(long value, out long result)
+    public bool TryNegate(UnaryOperNode node, long value, out long result)
     {
         result = -value;
         return true;
     }
 
     /// <inheritdoc/>
-    public bool TryAnd(long left, long right, out long result)
+    public bool TryAnd(BinaryOperNode node, long left, long right, out long result)
     {
         result = left & right;
         return true;
     }
 
     /// <inheritdoc/>
-    public bool TryOr(long left, long right, out long result)
+    public bool TryOr(BinaryOperNode node, long left, long right, out long result)
     {
         result = left | right;
         return true;
     }
 
     /// <inheritdoc/>
-    public bool TryXor(long left, long right, out long result)
+    public bool TryXor(BinaryOperNode node, long left, long right, out long result)
     {
         result = left ^ right;
         return true;
     }
     
     /// <inheritdoc/>
-    public bool TryNot(long value, out long result)
+    public bool TryNot(UnaryOperNode node, long value, out long result)
     {
         result = ~value;
         return true;

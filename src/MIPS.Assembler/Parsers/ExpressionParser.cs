@@ -85,7 +85,7 @@ public struct ExpressionParser
             // Parsing failed
             if (!success)
             {
-                _logger?.Log(Severity.Error, LogId.UnparsableExpression, "ExpressionParsingFailed", expression.Print());
+                _logger?.Log(Severity.Error, LogId.UnparsableExpression, expression, "ExpressionParsingFailed", expression.Print());
                 return false;
             }
         }
@@ -131,96 +131,90 @@ public struct ExpressionParser
         return false;
     }
 
-    private bool TryParseAsOperator(Token t, bool unary = false)
+    private bool TryParseAsOperator(Token token, bool unary = false)
     {
-        if (t.Type is TokenType.Operator &&
-            IsOperator(t, out var oper, unary))
+        if (token.Type is TokenType.Operator &&
+            IsOperator(token, out var oper, unary))
         {
-            TryParseOperator(oper, unary);
+            TryParseOperator(token, oper, unary);
             return true;
         }
 
         return false;
     }
 
-    private bool TryParseOperator(Operation oper, bool unary)
+    private bool TryParseOperator(Token token, Operation oper, bool unary)
     {
         Guard.IsNotNull(_tree);
 
-        OperNode node = unary ? new UnaryOperNode(oper) : new BinaryOperNode(oper);
+        OperNode node = unary ? new UnaryOperNode(token, oper) : new BinaryOperNode(token, oper);
         _tree.AddNode(node);
 
         _state = ExpressionParserState.Operator;
         return true;
     }
 
-    private readonly bool AppendImmediate(Token t)
+    private readonly bool AppendImmediate(Token token)
     {
+        Guard.IsNotNull(_tree);
+
         long value;
-        if (t.Source[0] is '\'')
+        if (token.Source[0] is '\'')
         {
             // Character literal
-            var strParser = new StringParser(_logger);
-            if (!strParser.TryParseChar(t.Source, out char c))
+            if (!StringParser.TryParseChar(token, out char c))
                 return false;
 
             value = c;
         }
-        else if (t.Source.Length > 2 && !char.IsDigit(t.Source[1]))
+        else if (token.Source.Length > 2 && !char.IsDigit(token.Source[1]))
         {
             // Binary, Oct, or Hex
-            int @base = t.Source[1] switch
+            int @base = token.Source[1] switch
             {
                 'b' => 2,
                 'o' => 8,
                 'x' => 16,
-                _ => ThrowHelper.ThrowArgumentException<int>($"{t.Source[1]} is not a valid special immediate mode."),
+                _ => ThrowHelper.ThrowArgumentException<int>($"{token.Source[1]} is not a valid special immediate mode."),
             };
             
             // The tokenizer will allow bad immediates to be created. This is handled here when the convert throws an exception.
             try
             {
-                value = Convert.ToInt64(t.Source[2..], @base);
+                value = Convert.ToInt64(token.Source[2..], @base);
             }
             catch
             {
                 return false;
             }
         }
-        else if (!long.TryParse(t.Source, out value))
+        else if (!long.TryParse(token.Source, out value))
         {
             return false;
         }
-
-        return AppendImmediate(value);
-    }
-
-    private readonly bool AppendImmediate(long value)
-    {
-        Guard.IsNotNull(_tree);
-
+        
         // Construct node
-        var node = new AddressNode(value);
+        var node = new AddressNode(token, value);
         _tree.AddNode(node);
 
         return true;
     }
 
-    private bool AppendReference(Token t)
+    private bool AppendReference(Token token)
     {
         Guard.IsNotNull(_tree);
 
         if (_context is null)
             return false;
 
-        if (!_context.TryGetSymbol(t.Source, out var symbol))
+        if (!_context.TryGetSymbol(token.Source, out var symbol))
             return false;
 
         // Cache non-fixed symbol
         if (!symbol.Address.IsFixed)
             _refSymbol = symbol;
 
-        var node = new AddressNode(symbol.Address);
+        var node = new AddressNode(token, symbol.Address);
         _tree.AddNode(node);
         return true;
     }

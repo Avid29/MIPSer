@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Tokenization;
+
 namespace MIPS.Assembler.Parsers.Expressions.Abstract;
 
 /// <summary>
@@ -10,7 +12,7 @@ public abstract class ValueNode<T> : ExpNode
     /// <summary>
     /// Initializes a new instance of the <see cref="ValueNode{T}"/> class.
     /// </summary>
-    protected ValueNode(T value) => Value = value;
+    protected ValueNode(Token token, T value) : base(token) => Value = value;
 
     /// <summary>
     /// Gets the value in the <see cref="ValueNode{T}"/>.

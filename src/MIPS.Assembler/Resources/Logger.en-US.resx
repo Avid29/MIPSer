@@ -315,4 +315,7 @@
   <data name="FailedToLoadModule" xml:space="preserve">
     <value>Module could not be loaded.</value>
   </data>
+  <data name="DirectiveRequiresAnArgument" xml:space="preserve">
+    <value>'{0}' requires an argument.</value>
+  </data>
 </root>

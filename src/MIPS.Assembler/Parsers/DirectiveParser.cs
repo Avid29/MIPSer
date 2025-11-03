@@ -48,25 +48,25 @@ public readonly struct DirectiveParser
         directive = null;
 
         Guard.IsNotNull(line.Directive);
-        var name = line.Directive;
+        var token = line.Directive;
 
-        return name.Source switch
+        return token.Source switch
         {
             // Section directives
-            ".text" => TryParseSection(name, line.Args, out directive),
-            ".data" => TryParseSection(name, line.Args, out directive),
+            ".text" => TryParseSection(token, line.Args, out directive),
+            ".data" => TryParseSection(token, line.Args, out directive),
 
             // Global References
-            ".globl" => TryParseGlobal(line.Args, out directive),
+            ".globl" => TryParseGlobal(token, line.Args, out directive),
 
             // Align or Space
-            ".align" => TryParseAlignOrSpace(line.Args, out directive, true),
-            ".space" => TryParseAlignOrSpace(line.Args, out directive, false),
+            ".align" => TryParseAlignOrSpace(token, line.Args, out directive, true),
+            ".space" => TryParseAlignOrSpace(token, line.Args, out directive, false),
 
             // Data
-            ".word" => TryParseData<int>(name, line.Args, out directive),
-            ".half" => TryParseData<short>(name, line.Args, out directive),
-            ".byte" => TryParseData<byte>(name, line.Args, out directive),
+            ".word" => TryParseData<int>(token, line.Args, out directive),
+            ".half" => TryParseData<short>(token, line.Args, out directive),
+            ".byte" => TryParseData<byte>(token, line.Args, out directive),
             ".ascii" => TryParseAscii(line.Args, false, out directive),
             ".asciiz" => TryParseAscii(line.Args, true, out directive),
 
@@ -82,7 +82,7 @@ public readonly struct DirectiveParser
         string sectionName = name.Source;
         if (args.Count is not 0)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, "DirectiveTakesNoArguments", sectionName);
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, name, "DirectiveTakesNoArguments", sectionName);
             return false;
         }
 
@@ -97,22 +97,30 @@ public readonly struct DirectiveParser
         return true;
     }
 
-    private bool TryParseGlobal(AssemblyLineArgs args, out Directive? directive)
+    private bool TryParseGlobal(Token token, AssemblyLineArgs args, out Directive? directive)
     {
         // TODO: Can you declare multiple globals on one line?
         directive = null;
 
-        // Global only takes one argument
-        if (args.Count is not 1)
+        // Global requires an argument
+        if (args.Count is 0)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, "DirectiveTakesOneArgument", ".globl");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, token, "DirectiveRequiresAnArgument", ".globl");
+            return false;
+        }
+
+        // Global takes only one argument
+        if (args.Count is > 1)
+        {
+            // TODO: Improve token range message
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, args[1], "DirectiveTakesOneArgument", ".globl");
             return false;
         }
 
         if (args[0].Length is not 1)
         {
             // TODO: Improve message
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, "DirectiveNonSymbolArgumentSmall", ".globl");
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, args[0], "DirectiveNonSymbolArgumentSmall", ".globl");
             return false;
         }
 
@@ -122,22 +130,29 @@ public readonly struct DirectiveParser
         // Global only takes references as an argument
         if (arg.Type is not TokenType.Reference)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, "DirectiveNonSymbolArgument", ".globl", arg.Source);
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, arg, "DirectiveNonSymbolArgument", ".globl", arg.Source);
         }
 
         directive = new GlobalDirective(arg.Source);
         return true;
     }
 
-    private bool TryParseAlignOrSpace(AssemblyLineArgs args, out Directive? directive, bool align)
+    private bool TryParseAlignOrSpace(Token token, AssemblyLineArgs args, out Directive? directive, bool align)
     {
         directive = null;
         string directiveName = align ? ".align" : ".space";
 
-        // Space only takes one argument
-        if (args.Count is not 1)
+        // Space and Align require an argument
+        if (args.Count is 0)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, "DirectiveTakesOneArgument", directiveName);
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, token, "DirectiveRequiresAnArgument", directiveName);
+            return false;
+        }
+        
+        // Space and Align take only one argument
+        if (args.Count is > 1)
+        {
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, args[1], "DirectiveTakesOneArgument", directiveName);
             return false;
         }
 
@@ -149,7 +164,7 @@ public readonly struct DirectiveParser
         // Argument must not be relocatable
         if (result.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, "DirectiveNoRelocatableArguments", directiveName);
+            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, args[0], "DirectiveNoRelocatableArguments", directiveName);
             return false;
         }
 
@@ -164,11 +179,11 @@ public readonly struct DirectiveParser
             var alignMessageThreshold = _context?.Config.AlignMessageThreshold;
             if (value >= alignWarningThreshold)
             {
-                _logger?.Log(Severity.Warning, LogId.LargeAlignment, "DirectiveLargeAlignWarning", value, alignWarningThreshold);
+                _logger?.Log(Severity.Warning, LogId.LargeAlignment, args[0], "DirectiveLargeAlignWarning", value, alignWarningThreshold);
             }
             else if (value >= alignMessageThreshold)
             {
-                _logger?.Log(Severity.Message, LogId.LargeAlignment, "DirectiveLargeAlignMessage", value, alignMessageThreshold);
+                _logger?.Log(Severity.Message, LogId.LargeAlignment, args[0], "DirectiveLargeAlignMessage", value, alignMessageThreshold);
             }
 
             directive = new AlignDirective((int)result.Value);
@@ -178,7 +193,7 @@ public readonly struct DirectiveParser
             var spaceMessageThreshold = _context?.Config.SpaceMessageThreshold;
             if (value >= spaceMessageThreshold)
             {
-                _logger?.Log(Severity.Message, LogId.LargeSpacing, "DirectiveLargeAlignMessage", value, spaceMessageThreshold);
+                _logger?.Log(Severity.Message, LogId.LargeSpacing, args[0], "DirectiveLargeAlignMessage", value, spaceMessageThreshold);
             }
 
             directive = new DataDirective(new byte[value]);
@@ -210,7 +225,7 @@ public readonly struct DirectiveParser
             if (result.IsRelocatable)
             {
                 // TODO: Can data be a reference to a relocatable address?
-                _logger?.Log(Severity.Error, LogId.InvalidDirectiveDataArg, "DirectiveAllocationNoRelocatableArguments", name);
+                _logger?.Log(Severity.Error, LogId.InvalidDirectiveDataArg, args[0], "DirectiveAllocationNoRelocatableArguments", name);
                 return false;
             }
             
@@ -218,7 +233,7 @@ public readonly struct DirectiveParser
             value = T.CreateTruncating(result.Value);
             if (value != T.CreateSaturating(result.Value))
             {
-                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, "DirectiveAllocationTruncated",  arg.Print(), result.Value, value);
+                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, arg, "DirectiveAllocationTruncated",  arg.Print(), result.Value, value);
             }
 
             value.WriteBigEndian(bytes, pos);
@@ -233,8 +248,6 @@ public readonly struct DirectiveParser
     {
         directive = null;
 
-        var parser = new StringParser(_logger);
-
         var bytes = new List<byte>();
 
         for (int i =  0; i < args.Count; i++)
@@ -243,7 +256,7 @@ public readonly struct DirectiveParser
 
             // TODO: Evaluate expressions
             // Parse string statement to string literal
-            if (!parser.TryParseString(arg[0].Source, out var value))
+            if (!StringParser.TryParseString(arg[0], out var value))
                 return false;
 
             // Copy to byte list

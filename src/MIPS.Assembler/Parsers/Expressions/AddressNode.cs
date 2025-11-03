@@ -3,6 +3,7 @@
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 
@@ -16,14 +17,14 @@ public class AddressNode : ValueNode<Address>
     /// <summary>
     /// Initializes a new instance of the <see cref="AddressNode"/> class.
     /// </summary>
-    public AddressNode(long value, Section section = Section.None) : this(new Address(value, section))
+    public AddressNode(Token token, long value, Section section = Section.None) : this(token, new Address(value, section))
     {
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AddressNode"/> class.
     /// </summary>
-    public AddressNode(Address value) : base(value)
+    public AddressNode(Token token, Address value) : base(token, value)
     {
     }
 

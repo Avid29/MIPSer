@@ -2,6 +2,7 @@
 
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Parsers.Expressions.Abstract;
@@ -12,6 +13,14 @@ namespace MIPS.Assembler.Parsers.Expressions.Abstract;
 public abstract class ExpNode
 {
     /// <summary>
+    /// Initializes a new instance of the <see cref="ExpNode"/> class.
+    /// </summary>
+    protected ExpNode(Token token)
+    {
+        ExpressionToken = token;
+    }
+
+    /// <summary>
     /// Gets the node's parent in the expression tree.
     /// </summary>
     public OperNode? Parent { get; set; }
@@ -20,6 +29,11 @@ public abstract class ExpNode
     /// Gets the type of the expression node.
     /// </summary>
     public abstract ExpressionType Type { get; }
+
+    /// <summary>
+    /// Gets the token that make up this expression node.
+    /// </summary>
+    public Token ExpressionToken { get; init; }
 
     /// <summary>
     /// Evaluate the expression tree as a type.

@@ -27,7 +27,7 @@ public partial class Assembler
 
         // Create symbol if line is labeled
         if (line.Label is not null)
-            DefineLabel(line.Label.Source);
+            DefineLabel(line.Label);
 
         // Pad instruction sized allocation if instruction is present
         if (line.Type is LineType.Instruction)
@@ -88,7 +88,7 @@ public partial class Assembler
 
         if (expression.IsEmpty)
         {
-            _logger.Log(Severity.Error, LogId.MacroMissingValue, "SymbolMissingValue", name);
+            _logger.Log(Severity.Error, LogId.MacroMissingValue, expression[0], "SymbolMissingValue", name);
             return;
         }
         
@@ -97,12 +97,12 @@ public partial class Assembler
         
         if (address.IsRelocatable)
         {
-            _logger.Log(Severity.Error, LogId.MacroCannotBeRelocatable, "NoRelocatableMacros");
+            _logger.Log(Severity.Error, LogId.MacroCannotBeRelocatable, expression[0], "NoRelocatableMacros");
             return;
         }
         
         // TODO: Macro flags
-        DefineSymbol(name.Source, address, SymbolType.Macro);
+        DefineSymbol(name, address, SymbolType.Macro);
     }
 
     private void HandleInstruction(AssemblyLine line)
@@ -119,7 +119,7 @@ public partial class Assembler
         // Check if pseudo instructions are allowed
         if (instruction.IsPseduoInstruction && !Config.AllowPseudos)
         {
-            _logger?.Log(Severity.Error, LogId.DisabledFeatureInUse, "PseudoInstructionsDisabled");
+            _logger?.Log(Severity.Error, LogId.DisabledFeatureInUse, line.Tokens[0], "PseudoInstructionsDisabled");
             return;
         }
 
@@ -164,19 +164,20 @@ public partial class Assembler
         }
     }
     
-    private bool ValidateSymbolName(string symbol)
+    private bool ValidateSymbolName(Token symbol, out string name)
     {
-        if (char.IsDigit(symbol[0]))
+        name = symbol.Source.TrimEnd(':');
+        if (char.IsDigit(name[0]))
         {
-            _logger?.Log(Severity.Error, LogId.IllegalSymbolName, "SymbolsCannotBeginWithDigits", symbol);
+            _logger?.Log(Severity.Error, LogId.IllegalSymbolName, symbol, "SymbolsCannotBeginWithDigits", name);
             return false;
         }
 
-        foreach (char c in symbol)
+        foreach (char c in name)
         {
             if (!char.IsLetterOrDigit(c))
             {
-                _logger?.Log(Severity.Error, LogId.IllegalSymbolName, "SymbolCannotContain", symbol, c);
+                _logger?.Log(Severity.Error, LogId.IllegalSymbolName, symbol, "SymbolCannotContain", name, c);
                 return false;
             }
         }

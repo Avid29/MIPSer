@@ -101,10 +101,7 @@ public partial class Assembler
 
         // Run the alignment pass on each line
         for (int i = 1; i <= tokens.LineCount; i++)
-        {
-            assembler._logger.CurrentLine = i;
             assembler.AlignmentPass(tokens[i]);
-        }
 
         // Reset all streams to start
         assembler._activeSection = Section.Text;
@@ -112,10 +109,7 @@ public partial class Assembler
 
         // Run the realization pass on each line
         for (int i = 1; i <= tokens.LineCount; i++)
-        {
-            assembler._logger.CurrentLine = i;
             assembler.RealizationPass(tokens[i]);
-        }
 
         return assembler;
     }
@@ -137,7 +131,7 @@ public partial class Assembler
     /// The method will still work if the semicolon is pre-trimmed.
     /// </remarks>
     /// <param name="label">The name of the symbol.</param>
-    private bool DefineLabel(string label) => DefineSymbol(label.TrimEnd(':'), CurrentAddress, SymbolType.Label);
+    private bool DefineLabel(Token label) => DefineSymbol(label, CurrentAddress, SymbolType.Label);
 
     /// <summary>
     /// Defines a symbol.
@@ -147,18 +141,18 @@ public partial class Assembler
     /// <param name="type">The symbol type.</param>
     /// <param name="flags">The flag info for the symbol.</param>
     /// <returns>True if successful, false on failure.</returns>
-    private bool DefineSymbol(string label, Address address, SymbolType type, SymbolFlags flags = 0)
+    private bool DefineSymbol(Token label, Address address, SymbolType type, SymbolFlags flags = 0)
     {
         // Ensure the symbol has a valid name
-        if (!ValidateSymbolName(label))
+        if (!ValidateSymbolName(label, out var name))
             return false;
 
         // Define the symbol or update by adding flags, address or type.
         // NOTE: The type can only be updated if it is currently unknown
         //       and the address can only be updated if it's undeclared/external.
-        if (!_module.TryDefineOrUpdateSymbol(label, type, address))
+        if (!_module.TryDefineOrUpdateSymbol(name, type, address))
         {
-            _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, "SymbolAlreadyDefined", label);
+            _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, label, "SymbolAlreadyDefined", label);
             return false;
         }
 

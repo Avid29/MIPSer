@@ -4,6 +4,7 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
+using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Parsers.Expressions;
@@ -19,7 +20,7 @@ public class BinaryOperNode : OperNode
     /// <summary>
     /// Initializes a new instance of the <see cref="BinaryOperNode"/> class.
     /// </summary>
-    public BinaryOperNode(Operation operation) : base(operation)
+    public BinaryOperNode(Token token, Operation operation) : base(token, operation)
     {
     }
 
@@ -86,31 +87,25 @@ public class BinaryOperNode : OperNode
     {
         result = default;
 
-        if (!(LeftChild?.TryEvaluate(evaluator, out Address left) ?? false))
-        {
-            // TODO: Log error
+        // Evaluate children, and return false if either fails.
+        // They log their own errors, so no need to log another.
+        if ((!(LeftChild?.TryEvaluate(evaluator, out Address left) ?? false)) ||
+            (!(RightChild?.TryEvaluate(evaluator, out Address right) ?? false)))
             return false;
-        }
-
-        if (!(RightChild?.TryEvaluate(evaluator, out Address right) ?? false))
-        {
-            // TODO: Log error
-            return false;
-        }
 
         return Operation switch
         {
             // Arithmetic
-            Operation.Addition => evaluator.TryAdd(left, right, out result),
-            Operation.Subtraction => evaluator.TrySubtract(left, right, out result),
-            Operation.Multiplication => evaluator.TryMultiply(left, right, out result),
-            Operation.Division => evaluator.TryDivide(left, right, out result),
-            Operation.Modulus => evaluator.TryMod(left, right, out result),
+            Operation.Addition => evaluator.TryAdd(this, left, right, out result),
+            Operation.Subtraction => evaluator.TrySubtract(this, left, right, out result),
+            Operation.Multiplication => evaluator.TryMultiply(this, left, right, out result),
+            Operation.Division => evaluator.TryDivide(this, left, right, out result),
+            Operation.Modulus => evaluator.TryMod(this, left, right, out result),
 
             // Logical
-            Operation.And => evaluator.TryAnd(left, right, out result),
-            Operation.Or => evaluator.TryOr(left, right, out result),
-            Operation.Xor => evaluator.TryXor(left, right, out result),
+            Operation.And => evaluator.TryAnd(this, left, right, out result),
+            Operation.Or => evaluator.TryOr(this, left, right, out result),
+            Operation.Xor => evaluator.TryXor(this, left, right, out result),
 
 
             _ => ThrowHelper.ThrowArgumentException<bool>(),
