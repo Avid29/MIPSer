@@ -3,7 +3,7 @@
 namespace Mipser.Messages.Files;
 
 /// <summary>
-/// A message sent to create a new file.
+/// A message sent to request creating a new file.
 /// </summary>
 public sealed class FileCreateNewRequestMessage
 {

@@ -1,7 +1,9 @@
 ﻿// Avishai Dernis 2025
 
+using MIPS.Assembler;
 using Mipser.Bindables.Files;
 using Mipser.ViewModels.Pages.Abstract;
+using RASM.Modules.Config;
 
 namespace Mipser.ViewModels.Pages
 {
@@ -43,13 +45,25 @@ namespace Mipser.ViewModels.Pages
         public BindableFile File { get; }
 
         /// <summary>
+        /// Assembles the file.
+        /// </summary>
+        public async void Assemble()
+        {
+            var stream = await File.GetStreamAsync();
+            if (stream is null)
+                return;
+
+            await Assembler.AssembleAsync(stream, File.Name, new RasmConfig());
+        }
+
+        /// <summary>
         /// Saves changes to the file.
         /// </summary>
         public async void Save()
         {
             // TODO: Save as dialog for anonymous files.
 
-            await File.Save();
+            await File.SaveAsync();
             OnPropertyChanged(Title);
         }
     }

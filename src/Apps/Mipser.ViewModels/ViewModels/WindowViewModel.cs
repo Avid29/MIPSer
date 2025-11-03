@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Mipser.Messages.Build;
 using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
 using Mipser.Messages.Pages;
@@ -34,6 +35,7 @@ public partial class WindowViewModel : ObservableRecipient
         PickAndOpenFileCommand = new RelayCommand(PickAndOpenFile);
         PickAndOpenFolderCommand = new RelayCommand(PickAndOpenFolder);
         CloseFileCommand = new RelayCommand(CloseFile);
+        AssembleFileCommand = new RelayCommand(AssembleFile);
         OpenCheatSheetCommand = new RelayCommand(OpenCheatSheet);
 
         IsActive = true;
@@ -44,7 +46,11 @@ public partial class WindowViewModel : ObservableRecipient
     /// </summary>
     public PanelViewModel MainPanel { get; }
 
-    
+    /// <summary>
+    /// Gets the currently open <see cref="FilePageViewModel"/>, or null if the current page is not a file.
+    /// </summary>
+    public FilePageViewModel? CurrentFileViewModel => MainPanel.CurrentPage as FilePageViewModel;
+
     /// <inheritdoc/>
     protected override void OnActivated()
     {
@@ -52,7 +58,8 @@ public partial class WindowViewModel : ObservableRecipient
         _messenger.Register<WindowViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.MainPanel.CreateNewFile());
         _messenger.Register<WindowViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.MainPanel.PickAndOpenFileAsync());
         _messenger.Register<WindowViewModel, PageCloseRequestMessage>(this, (r, m) => r.MainPanel.ClosePage(m.Page));
-        _messenger.Register<WindowViewModel, FileSaveRequestMessage>(this, (r, m) => r.MainPanel.SaveCurrentFile());
+        _messenger.Register<WindowViewModel, AssembleFileRequestMessage>(this, (r, m) => r.CurrentFileViewModel?.Assemble());
+        _messenger.Register<WindowViewModel, FileSaveRequestMessage>(this, (r, m) => r.CurrentFileViewModel?.Save());
 
         // Help
         _messenger.Register<WindowViewModel, OpenCheatSheetRequestMessage>(this, (r, m) =>

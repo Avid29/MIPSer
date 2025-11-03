@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Mipser.Messages.Build;
 using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
 using Mipser.Messages.Pages;
@@ -36,6 +37,11 @@ public partial class WindowViewModel
     public RelayCommand CloseFileCommand { get; }
 
     /// <summary>
+    /// Gets a command that assembles the current file.
+    /// </summary>
+    public RelayCommand AssembleFileCommand { get; }
+
+    /// <summary>
     /// Gets a command that closes the currently open file.
     /// </summary>
     public RelayCommand OpenCheatSheetCommand { get; }
@@ -49,6 +55,8 @@ public partial class WindowViewModel
     private void PickAndOpenFolder() => _messenger.Send(new FolderPickAndOpenRequestMessage());
 
     private void CloseFile() => _messenger.Send(new PageCloseRequestMessage());
+
+    private void AssembleFile() => _messenger.Send(new AssembleFileRequestMessage());
 
     private void OpenCheatSheet() => _messenger.Send(new OpenCheatSheetRequestMessage());
 }

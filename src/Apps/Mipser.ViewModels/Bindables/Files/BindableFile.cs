@@ -51,6 +51,17 @@ public class BindableFile : BindableFilesItemBase
     }
 
     /// <summary>
+    /// Gets a <see cref="Stream"/> for reading the file contents.
+    /// </summary>
+    public async Task<Stream?> GetStreamAsync()
+    {
+        if (_file is null)
+            return null;
+
+        return await _file.OpenStreamForReadAsync();
+    }
+
+    /// <summary>
     /// Gets a value indicating whether the file has unsaved changes.
     /// </summary>
     public bool IsDirty
@@ -65,7 +76,7 @@ public class BindableFile : BindableFilesItemBase
     /// <summary>
     /// Saves the file contents.
     /// </summary>
-    public async Task Save() => await SaveContent();
+    public async Task SaveAsync() => await SaveContent();
 
     private async Task LoadContent()
     {
