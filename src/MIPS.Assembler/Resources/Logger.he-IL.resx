@@ -235,87 +235,87 @@
     <value>הפקודה ‎'{0}'‎ הוצאה משימוש. נתמכה לאחרונה בגרסת MIPS ‎{1}.</value>
   </data>
   <data name="WrongArgumentCount" xml:space="preserve">
-    <value />
+    <value>הפקודה ‎'{0}'‎ אינה יכולה לקבל ‎{1}‎ ארגומנטים.</value>
   </data>
   <data name="DoesNotSupportFormatSingle" xml:space="preserve">
-    <value />
+    <value>הפקודה ‎'{0}'‎ אינה תומכת בתצורה ‎'Single'‎ (דיוק יחיד).</value>
   </data>
   <data name="DoesNotSupportFormatDouble" xml:space="preserve">
-    <value />
+    <value>הפקודה ‎'{0}'‎ אינה תומכת בתצורה ‎'Double'‎ (דיוק כפול).</value>
   </data>
   <data name="DoesNotSupportFormatWord" xml:space="preserve">
-    <value />
+    <value>הפקודה ‎'{0}'‎ אינה תומכת בתצורה ‎'Word'‎ (מילה).</value>
   </data>
   <data name="DoesNotSupportFormatLong" xml:space="preserve">
-    <value />
+    <value>הפקודה ‎'{0}'‎ אינה תומכת בתצורה ‎'Long'‎ (ארוך).</value>
   </data>
   <data name="DoesNotSupportFormatPairedSingle" xml:space="preserve">
-    <value />
+    <value>הפקודה ‎'{0}'‎ אינה תומכת בתצורה ‎'Paired Single'‎ (זוג דיוק יחיד).</value>
   </data>
   <data name="NoRelocatableShiftAmount" xml:space="preserve">
-    <value />
+    <value>ארגומנט של גודל ההזזה לא יכול להפנות לסימבולים בני־הזזה.</value>
   </data>
   <data name="CantBranchBetweenSections" xml:space="preserve">
-    <value />
+    <value>לא ניתן לבצע הסתעפות בין מקטעים.</value>
   </data>
   <data name="ArgumentNotARegister" xml:space="preserve">
-    <value />
+    <value>‎'{0}'‎ אינו ארגומנט אוגר תקין.</value>
   </data>
   <data name="RegisterMustBeInGeneralPurposeSet" xml:space="preserve">
-    <value />
+    <value>ארגומנט האוגר ‎'{0}'‎ אינו תקין. עליו להיות באוסף האוגרים הכלליים.</value>
   </data>
   <data name="RegisterMustBeInCoProc0Set" xml:space="preserve">
-    <value />
+    <value>ארגומנט האוגר ‎'{0}'‎ אינו תקין. עליו להיות באוסף האוגרים של Coprocessor0.</value>
   </data>
   <data name="RegisterMustBeInFloatingPointsSet" xml:space="preserve">
-    <value />
+    <value>ארגומנט האוגר ‎'{0}'‎ אינו תקין. עליו להיות באוסף האוגרים של נקודה צפה.</value>
   </data>
   <data name="InvalidAddressOffsetArgument" xml:space="preserve">
-    <value />
+    <value>הארגומנט ‎'{0}'‎ אינו היסט כתובת תקין.</value>
   </data>
   <data name="CastWarningSignChanged" xml:space="preserve">
-    <value />
+    <value>הביטוי ‎'{0}'‎ הוערך לערך חתום ‎'{1}'‎ אך הומר לערך בלתי־חתום, והתוצאה היא ‎'{2}'‎.</value>
   </data>
   <data name="CastWarningTruncatedHigh" xml:space="preserve">
-    <value />
+    <value>הביטוי ‎'{0}'‎ הוערך ל־{1}‎ אך נחתך ל־{3}‎ סיביות, והתוצאה היא ‎'{2}'‎.</value>
   </data>
   <data name="CastWarningTruncatedHighAndSignChanged" xml:space="preserve">
-    <value />
+    <value>הביטוי ‎'{0}'‎ הוערך ל־{1}‎ אך נחתך לערך בלתי־חתום של ‎{3}‎ סיביות, והתוצאה היא ‎{2}‎.</value>
   </data>
   <data name="CastWarningTruncatedLowAndHigh" xml:space="preserve">
-    <value />
+    <value>הביטוי ‎'{0}'‎ הוערך ל־{1}‎ אך נחתך ל־{3}‎ סיביות לאחר שהוסרו {4}‎ הסיביות הנמוכות, והתוצאה היא ‎{2}‎.</value>
   </data>
   <data name="CastWarningTruncatedLow" xml:space="preserve">
-    <value />
+    <value>הביטוי ‎'{0}'‎ הוערך ל־{1}‎ אך נחתך לאחר שהוסרו {4}‎ הסיביות הנמוכות, והתוצאה היא ‎{2}‎.</value>
   </data>
   <data name="CastWarningTruncatedLowAndHighAndSignChanged" xml:space="preserve">
-    <value />
+    <value>הביטוי ‎'{0}'‎ הוערך ל־‎'{1}'‎ אך נחתך לערך בלתי־חתום של ‎'{3}‎ סיביות' לאחר שהוסרו ‎'{4}‎ הסיביות הנמוכות, והתוצאה היא ‎'{2}'‎.</value>
   </data>
   <data name="CastWarningTruncatedLowAndSignChanged" xml:space="preserve">
-    <value />
+    <value>הביטוי ‎'{0}'‎ הוערך ל־{1}‎ אך נחתך לערך בלתי־חתום לאחר הסרת {4}‎ הסיביות הנמוכות, והתוצאה היא ‎{2}‎.</value>
   </data>
   <data name="MustBeSingleCharacter" xml:space="preserve">
-    <value />
+    <value>תו־ממש חייב להכיל תו אחד בלבד.</value>
   </data>
   <data name="ExpectedString" xml:space="preserve">
-    <value />
+    <value>נדרשה מחרוזת.</value>
   </data>
   <data name="ExpectedChar" xml:space="preserve">
-    <value />
+    <value>נדרש תו.</value>
   </data>
   <data name="IncompleteEscapeSequence" xml:space="preserve">
-    <value />
+    <value>רצף בריחה לא שלם.</value>
   </data>
   <data name="UnescapedQuoteInString" xml:space="preserve">
-    <value />
+    <value>גרש שאינה מופרדת בתוך מחרוזת.</value>
   </data>
   <data name="UnrecognizedEscapeSequence" xml:space="preserve">
-    <value />
+    <value>‎'{0}'‎ אינו רצף בריחה מוכר.</value>
   </data>
   <data name="FailedToLoadModule" xml:space="preserve">
-    <value />
+    <value>לא ניתן היה לטעון את המודול.</value>
   </data>
   <data name="DirectiveRequiresAnArgument" xml:space="preserve">
-    <value>'{0}' צריך ארגומנט.</value>
+    <value>‎'{0}'‎ דורש ארגומנט.</value>
   </data>
 </root>

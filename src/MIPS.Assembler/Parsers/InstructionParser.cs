@@ -183,7 +183,7 @@ public struct InstructionParser
         if (_meta.FloatFormats is not null && !_meta.FloatFormats.Contains(_format))
         {
             // TODO: Should float format be a seperate token?
-            _logger?.Log(Severity.Error, LogId.InvalidFloatFormat, line.Instruction, $"DoesNotSupportFormat{_format}.", name);
+            _logger?.Log(Severity.Error, LogId.InvalidFloatFormat, line.Instruction, $"DoesNotSupportFormat{_format}", name);
             return false;
         }
 
