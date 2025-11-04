@@ -70,7 +70,7 @@ public class ExplorerViewModel : PageViewModel
             return;
 
         RootFolder = new BindableFolder(folder);
-        await RootFolder.LoadChildren();
+        await RootFolder.LoadChildrenAsync();
         
         OnPropertyChanged(nameof(RootFolder));
     }

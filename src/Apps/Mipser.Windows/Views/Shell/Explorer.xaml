@@ -10,7 +10,6 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-
         <DataTemplate x:Key="FileTemplate" x:DataType="filedata:BindableFile">
             <TreeViewItem AutomationProperties.Name="{x:Bind Name, Mode=OneWay}">
                 <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
@@ -18,7 +17,9 @@
         </DataTemplate>
 
         <DataTemplate x:Key="FolderTemplate" x:DataType="filedata:BindableFolder">
-            <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneWay}" HasUnrealizedChildren="{x:Bind ChildrenNotCalculated, Mode=OneWay}">
+            <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneWay}"
+                          HasUnrealizedChildren="{x:Bind ChildrenNotCalculated, Mode=OneWay}"
+                          AutomationProperties.Name="{x:Bind Name, Mode=OneWay}">
                 <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
             </TreeViewItem>
         </DataTemplate>

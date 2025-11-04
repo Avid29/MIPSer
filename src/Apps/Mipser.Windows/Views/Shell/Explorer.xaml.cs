@@ -25,9 +25,9 @@ public sealed partial class Explorer : UserControl
 
     private async void TreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
     {
-        if (args.Node.HasUnrealizedChildren && args.Item is BindableFolder folder)
+        if (args.Item is BindableFolder folder && folder.ChildrenNotCalculated)
         {
-            await folder.LoadChildren();
+            await folder.LoadChildrenAsync();
         }
     }
 }

@@ -5,7 +5,7 @@
 
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Dark">
-            <SolidColorBrush x:Key="PrimaryBackground" Color="#FF121212"/>
+            <SolidColorBrush x:Key="PrimaryBackground" Color="#FF131215"/>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
             <SolidColorBrush x:Key="PrimaryBackground" Color="#FFFFFF"/>

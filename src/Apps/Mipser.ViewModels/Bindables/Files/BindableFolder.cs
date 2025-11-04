@@ -53,7 +53,7 @@ public class BindableFolder : BindableFilesItemBase
     /// <summary>
     /// Loads the node's children.
     /// </summary>
-    public async Task LoadChildren()
+    public async Task LoadChildrenAsync()
     {
         var items = await _folder.GetItemsAsync();
         var children = items.Select(x =>
