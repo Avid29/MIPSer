@@ -6,9 +6,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:editor="using:WinUIEditor"
+    xmlns:asmedit="using:Mipser.Editors.AssemblyEditBox"
     mc:Ignorable="d">
 
-    <editor:CodeEditorControl Loaded="CodeEditorControl_Loaded" HighlightingLanguage="assembly" Margin="0,8,0,0"
-                              FlowDirection="LeftToRight"/>
+    <!--<editor:CodeEditorControl Loaded="CodeEditorControl_Loaded" HighlightingLanguage="assembly" Margin="0,8,0,0"
+                              FlowDirection="LeftToRight"/>-->
+    
+    <asmedit:AssemblyEditBox FlowDirection="LeftToRight" Margin="0,8,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
 </UserControl>

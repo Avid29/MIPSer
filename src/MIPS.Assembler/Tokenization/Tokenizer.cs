@@ -6,6 +6,7 @@ using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Tokenization.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -26,6 +27,7 @@ public class Tokenizer
     private readonly string? _filename;
     private int _line;
     private int _column;
+    private int _cacheColumn;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Tokenizer"/> class.
@@ -57,25 +59,31 @@ public class Tokenizer
         set => _line = value;
     }
 
+    /// <inheritdoc/>
+    public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null, ILogger? logger = null)
+    {
+        using var reader = new StreamReader(stream);
+        return await TokenizeAsync(reader, filename, logger);
+    }
+
     /// <summary>
     /// Tokenizes a stream of assembly code.
     /// </summary>
-    /// <param name="stream">The stream of code.</param>
+    /// <param name="reader">The stream of code.</param>
     /// <param name="filename">The filename of the stream.</param>
     /// <param name="logger">The logger to use when tracking errors.</param>
     /// <returns>A list of tokens.</returns>
-    public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null, ILogger? logger = null)
+    public static async Task<TokenizedAssmebly> TokenizeAsync(TextReader reader, string? filename = null, ILogger? logger = null)
     {
         // Create tokenizer
         Tokenizer tokenizer = new(filename, logger);
 
         // Parse line by line from stream
-        using var reader = new StreamReader(stream);
-        while (!reader.EndOfStream)
+        while (true)
         {
             var line = await reader.ReadLineAsync();
             if (line is null)
-                ThrowHelper.ThrowArgumentNullException(nameof(line));
+                break;
 
             tokenizer.ParseLine(line);
         }
@@ -158,7 +166,7 @@ public class Tokenizer
 
             // Comments and whitespace
             TokenizerState.Comment => ParseFromComment(c),
-            TokenizerState.Whitespace => ParseFromWhitespace(c),
+            TokenizerState.Whitespace or TokenizerState.NewLineWhitespace => ParseFromWhitespace(c, state:_state),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>(nameof(_state)),
         };
     }
@@ -176,10 +184,7 @@ public class Tokenizer
         // This will be discarded, unless in behavior mode
         if (char.IsWhiteSpace(c))
         {
-            if (newLine)
-                return true;
-
-            return HandleCharacter(c, TokenType.Whitespace, TokenizerState.Whitespace);
+            return HandleCharacter(c, TokenType.Whitespace, newLine ? TokenizerState.NewLineWhitespace : TokenizerState.Whitespace);
         }
 
         if (newLine && char.IsLetterOrDigit(c))
@@ -388,12 +393,17 @@ public class Tokenizer
         return true;
     }
 
-    private bool ParseFromWhitespace(char c)
+    private bool ParseFromWhitespace(char c, TokenizerState state = TokenizerState.Whitespace)
     {
         if (char.IsWhiteSpace(c))
-            return HandleCharacter(c, TokenType.Whitespace, TokenizerState.Whitespace);
+            return HandleCharacter(c, TokenType.Whitespace, state);
 
-        return CompleteAndContinue(c);
+        var newState = state switch
+        {
+            TokenizerState.NewLineWhitespace => TokenizerState.LineBegin,
+            _ => TokenizerState.ArgBegin,
+        };
+        return CompleteAndContinue(c, newState);
     }
 
     private bool HandleCharacter(char c, TokenType? type = null, TokenizerState newState = TokenizerState.ArgBegin)
@@ -413,9 +423,9 @@ public class Tokenizer
         return true;
     }
 
-    private bool CompleteAndContinue(char c)
+    private bool CompleteAndContinue(char c, TokenizerState newState = TokenizerState.ArgBegin)
     {
-        var status = CompleteCacheToken();
+        var status = CompleteCacheToken(newState);
         if (!status)
             return false;
 
@@ -446,13 +456,14 @@ public class Tokenizer
             if (_tokenType is not TokenType.Whitespace || _mode is TokenizerMode.BehaviorExpression)
             {
                 // Create the token and add to list
-                Token token = new(_cache, _filename, Line, _column, _tokenType.Value);
+                Token token = new(_cache, _filename, Line, _cacheColumn, _tokenType.Value);
                 Tokens?.Add(token);
             }
         }
 
         // Reset cache
         _cache = string.Empty;
+        _cacheColumn = _column;
         _tokenType = null;
         _state = newState;
         return true;

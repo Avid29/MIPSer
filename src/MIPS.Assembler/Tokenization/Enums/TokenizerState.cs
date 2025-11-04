@@ -25,6 +25,7 @@ public enum TokenizerState
     Directive,
     Reference,
     Comment,
+    NewLineWhitespace,  // Whitespace at the start of a new line
     Whitespace,
 
 #pragma warning restore CS1591
