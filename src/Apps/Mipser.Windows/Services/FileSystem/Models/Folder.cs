@@ -1,13 +1,13 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using Mipser.Services.Files.Models;
+using Mipser.Services.FileSystem.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace Mipser.Windows.Services.Files.Models;
+namespace Mipser.Windows.Services.FileSystem.Models;
 
 /// <summary>
 /// An <see cref="IFolder"/> implementation wrapping a <see cref="StorageFolder"/>.

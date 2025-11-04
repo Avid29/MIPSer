@@ -1,12 +1,12 @@
 ﻿// Adam Dernis 2024
 
-using Mipser.Services.Files.Models;
+using Mipser.Services.FileSystem.Models;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace Mipser.Windows.Services.Files.Models;
+namespace Mipser.Windows.Services.FileSystem.Models;
 
 /// <summary>
 /// An <see cref="IFile"/> implementation wrapping <see cref="StorageFile"/>.

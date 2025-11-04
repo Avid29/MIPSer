@@ -27,7 +27,7 @@
             </Grid.ColumnDefinitions>
 
             <!--Content View-->
-            <shell:PanelView Margin="0,0,7,0" DataContext="{x:Bind ViewModel.MainPanel, Mode=OneWay}"/>
+            <shell:PanelView x:Name="MainPanel" DataContext="{x:Bind ViewModel.MainPanelViewModel, Mode=OneWay}" Margin="0,0,7,0"/>
 
             <ctc:GridSplitter Grid.Column="1"
                               HorizontalAlignment="Left"

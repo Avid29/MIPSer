@@ -10,6 +10,7 @@
     xmlns:vmv="using:Mipser.ViewModels.Pages"
     xmlns:vmva="using:Mipser.ViewModels.Pages.Abstract"
     xmlns:selectors="using:Mipser.Windows.Selectors"
+    GotFocus="UserControl_GotFocus"
     mc:Ignorable="d">
 
     <UserControl.Resources>

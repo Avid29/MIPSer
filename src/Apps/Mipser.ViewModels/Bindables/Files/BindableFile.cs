@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using Mipser.Bindables.Files.Abstract;
-using Mipser.Services.Files.Models;
+using Mipser.Services.FileSystem.Models;
 using System.IO;
 using System.Threading.Tasks;
 

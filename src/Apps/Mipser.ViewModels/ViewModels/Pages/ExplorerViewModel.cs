@@ -6,7 +6,7 @@ using Mipser.Bindables.Files;
 using Mipser.Bindables.Files.Abstract;
 using Mipser.Messages.Files;
 using Mipser.Services.Dispatcher;
-using Mipser.Services.Files;
+using Mipser.Services.FileSystem;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -19,14 +19,14 @@ namespace Mipser.ViewModels.Pages;
 public class ExplorerViewModel : PageViewModel
 {
     private readonly IMessenger _messenger;
-    private readonly IFilesService _fileService;
+    private readonly IFileSystemService _fileService;
 
     private BindableFolder? _rootFolder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExplorerViewModel"/> class.
     /// </summary>
-    public ExplorerViewModel(IMessenger messenger, IFilesService filesService)
+    public ExplorerViewModel(IMessenger messenger, IFileSystemService filesService)
     {
         _messenger = messenger;
         _fileService = filesService;

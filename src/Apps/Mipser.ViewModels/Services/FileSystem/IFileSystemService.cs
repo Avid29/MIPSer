@@ -1,14 +1,14 @@
 ﻿// Adam Dernis 2024
 
-using Mipser.Services.Files.Models;
+using Mipser.Services.FileSystem.Models;
 using System.Threading.Tasks;
 
-namespace Mipser.Services.Files;
+namespace Mipser.Services.FileSystem;
 
 /// <summary>
 /// An interface for a files service
 /// </summary>
-public interface IFilesService
+public interface IFileSystemService
 {
     /// <summary>
     /// Attempts to get a file.

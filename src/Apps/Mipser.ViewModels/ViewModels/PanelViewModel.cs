@@ -1,11 +1,8 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Bindables.Files;
-using Mipser.Messages.Files;
-using Mipser.Messages.Pages;
-using Mipser.Services.Files;
+using Mipser.Services.FileSystem;
 using Mipser.ViewModels.Pages;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.ObjectModel;
@@ -18,14 +15,14 @@ namespace Mipser.ViewModels;
 /// </summary>
 public class PanelViewModel : ObservableObject
 {
-    private readonly IFilesService _fileService;
+    private readonly IFileSystemService _fileService;
 
     private PageViewModel? _currentPage;
      
     /// <summary>
     /// Initializes a new instance of the <see cref="PanelViewModel"/> class.
     /// </summary>
-    public PanelViewModel(IFilesService filesService)
+    public PanelViewModel(IFileSystemService filesService)
     {
         _fileService = filesService;
 
@@ -49,7 +46,12 @@ public class PanelViewModel : ObservableObject
     /// <summary>
     /// Creates and opens a new anonymous file.
     /// </summary>
-    public void CreateNewFile() => OpenPages.Add(new FilePageViewModel());
+    public void CreateNewFile()
+    {
+        var page = new FilePageViewModel();
+        OpenPages.Add(page);
+        CurrentPage = page;
+    }
 
     /// <summary>
     /// Picks and opens a file.

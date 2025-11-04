@@ -1,20 +1,20 @@
 ﻿// Adam Dernis 2024
 
-using Mipser.Services.Files;
-using Mipser.Services.Files.Models;
-using Mipser.Windows.Services.Files.Models;
+using Mipser.Services.FileSystem;
+using Mipser.Services.FileSystem.Models;
+using Mipser.Windows.Services.FileSystem.Models;
 using System;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
 
-namespace Mipser.Windows.Services.Files;
+namespace Mipser.Windows.Services.FileSystem;
 
 /// <summary>
-/// An <see cref="IFilesService"/> implementation wrapping <see cref="StorageFile"/>.
+/// An <see cref="IFileSystemService"/> implementation wrapping <see cref="StorageFile"/>.
 /// </summary>
-public class FilesService : IFilesService
+public class FileSystemService : IFileSystemService
 {
     /// <inheritdoc/>
     public async Task<IFile?> TryGetFileAsync(string path) => new File(await StorageFile.GetFileFromPathAsync(path));

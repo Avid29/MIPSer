@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-namespace Mipser.Services.Files.Models;
+namespace Mipser.Services.FileSystem.Models;
 
 /// <summary>
 /// An interface for a files item.

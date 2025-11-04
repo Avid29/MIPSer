@@ -8,6 +8,7 @@
     xmlns:editor="using:WinUIEditor"
     mc:Ignorable="d">
 
-    <editor:CodeEditorControl Loaded="CodeEditorControl_Loaded" HighlightingLanguage="assembly" Margin="0,8,0,0"/>
+    <editor:CodeEditorControl Loaded="CodeEditorControl_Loaded" HighlightingLanguage="assembly" Margin="0,8,0,0"
+                              FlowDirection="LeftToRight"/>
 
 </UserControl>

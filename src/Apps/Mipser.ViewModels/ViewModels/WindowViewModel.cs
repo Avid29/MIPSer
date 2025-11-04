@@ -1,15 +1,9 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Mipser.Messages.Build;
-using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
-using Mipser.Messages.Pages;
-using Mipser.ViewModels.Pages;
-using System.Linq;
 
 namespace Mipser.ViewModels;
 
@@ -23,12 +17,11 @@ public partial class WindowViewModel : ObservableRecipient
     /// <summary>
     /// Initializes a new instance of the <see cref="WindowViewModel"/> class.
     /// </summary>
-    /// <param name="messenger"></param>
-    public WindowViewModel(IMessenger messenger)
+    public WindowViewModel(MainViewModel mainViewModel, PanelViewModel panelViewModel, IMessenger messenger)
     {
         _messenger = messenger;
-
-        MainPanel = Ioc.Default.GetRequiredService<PanelViewModel>();
+        MainViewModel = mainViewModel;
+        MainPanelViewModel = panelViewModel;
 
         CreateNewFileCommand = new RelayCommand(CreateNewFile);
         SaveFileCommand = new RelayCommand(SaveFile);
@@ -39,41 +32,18 @@ public partial class WindowViewModel : ObservableRecipient
         OpenCheatSheetCommand = new RelayCommand(OpenCheatSheet);
 
         IsActive = true;
+
+        // Notify that the main panel is focused on startup
+        _messenger.Send(new PanelFocusChangedMessage(MainPanelViewModel));
     }
-    
-    /// <summary>
-    /// Gets or sets the main <see cref="PanelViewModel"/> for the window.
-    /// </summary>
-    public PanelViewModel MainPanel { get; }
 
     /// <summary>
-    /// Gets the currently open <see cref="FilePageViewModel"/>, or null if the current page is not a file.
+    /// Gets the <see cref="MainViewModel"/> for the app.
     /// </summary>
-    public FilePageViewModel? CurrentFileViewModel => MainPanel.CurrentPage as FilePageViewModel;
+    public MainViewModel MainViewModel { get; }
 
-    /// <inheritdoc/>
-    protected override void OnActivated()
-    {
-        // File
-        _messenger.Register<WindowViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.MainPanel.CreateNewFile());
-        _messenger.Register<WindowViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.MainPanel.PickAndOpenFileAsync());
-        _messenger.Register<WindowViewModel, PageCloseRequestMessage>(this, (r, m) => r.MainPanel.ClosePage(m.Page));
-        _messenger.Register<WindowViewModel, AssembleFileRequestMessage>(this, (r, m) => r.CurrentFileViewModel?.Assemble());
-        _messenger.Register<WindowViewModel, FileSaveRequestMessage>(this, (r, m) => r.CurrentFileViewModel?.Save());
-
-        // Help
-        _messenger.Register<WindowViewModel, OpenCheatSheetRequestMessage>(this, (r, m) =>
-        {
-            // Check if the cheat sheet is already open, and open it if not.
-            var page = r.MainPanel.OpenPages.FirstOrDefault(p => p is CheatSheetViewModel);
-            if (page is null)
-            {
-                page = Ioc.Default.GetRequiredService<CheatSheetViewModel>();
-                r.MainPanel.OpenPages.Add(page);
-            }
-
-            // Navigate to the cheat sheet.
-            r.MainPanel.CurrentPage = page;
-        });
-    }
+    /// <summary>
+    /// Gets the <see cref="PanelViewModel"/> for the main panel in the window.
+    /// </summary>
+    public PanelViewModel MainPanelViewModel { get; }
 }

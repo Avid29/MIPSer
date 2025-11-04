@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using Mipser.Bindables.Files.Abstract;
-using Mipser.Services.Files.Models;
+using Mipser.Services.FileSystem.Models;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
