@@ -14,7 +14,7 @@ public partial class AssemblyEditBox
 {
     private bool @lock = false;
 
-    private async Task UpdateSyntaxHighlighting()
+    private async Task UpdateSyntaxHighlightingAsync()
     {
         if (@lock)
             return;

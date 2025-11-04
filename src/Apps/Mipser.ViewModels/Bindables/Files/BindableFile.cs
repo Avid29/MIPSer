@@ -99,6 +99,7 @@ public class BindableFile : BindableFilesItemBase
             await using var stream = await _file.OpenStreamForWriteAsync();
             using var writer = new StreamWriter(stream);
             await writer.WriteAsync(Contents ?? string.Empty);
+            stream.SetLength(stream.Position);
         }
         catch
         {

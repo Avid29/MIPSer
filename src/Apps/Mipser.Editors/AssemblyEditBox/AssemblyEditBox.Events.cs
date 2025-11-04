@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using Microsoft.UI.Text;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -17,6 +18,7 @@ public partial class AssemblyEditBox
         this.Unloaded += AssemblyEditBox_Unloaded;
 
         TextChanging += AssemblyEditBox_TextChanging;
+        TextChanged += AssemblyEditBox_TextChanged;
         SelectionChanging += AssemblyEditBox_SelectionChanging;
         SelectionChanged += AssemblyEditBox_SelectionChanged;
     }
@@ -32,8 +34,15 @@ public partial class AssemblyEditBox
     {
         if (!args.IsContentChanging)
             return;
+        
+        Document.GetText(TextGetOptions.None, out var str);
+        UpdateTextProperty(str);
 
-        await UpdateSyntaxHighlighting();
+        await UpdateSyntaxHighlightingAsync();
+    }
+
+    private void AssemblyEditBox_TextChanged(object sender, RoutedEventArgs e)
+    {
     }
 
     private void AssemblyEditBox_SelectionChanging(RichEditBox sender, RichEditBoxSelectionChangingEventArgs args)

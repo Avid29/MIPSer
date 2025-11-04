@@ -3,7 +3,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.ViewModels.Pages;
-using WinUIEditor;
 
 namespace Mipser.Windows.Views;
 
@@ -22,11 +21,8 @@ public sealed partial class FileViewer : UserControl
 
     private FilePageViewModel ViewModel => (FilePageViewModel)this.DataContext;
 
-    private void CodeEditorControl_Loaded(object sender, RoutedEventArgs e)
+    private void AssemblyEditBox_TextChanged(object sender, RoutedEventArgs e)
     {
-        if (sender is CodeEditorControl editor)
-        {
-            editor.Editor.SetText(ViewModel.File.Contents);
-        }
+        
     }
 }

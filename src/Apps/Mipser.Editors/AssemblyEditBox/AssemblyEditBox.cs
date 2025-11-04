@@ -40,6 +40,10 @@ public partial class AssemblyEditBox : RichEditBox
     /// </summary>
     public void ApplyLogHighlights(IReadOnlyList<Log> logs)
     {
-
+        foreach (var log in logs)
+        {
+            var range = Document.GetRange(log.Location.Index, log.Location.Index + 5);
+            range.CharacterFormat.Underline = Microsoft.UI.Text.UnderlineType.HeavyWave;
+        }
     }
 }
