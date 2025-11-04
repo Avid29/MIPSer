@@ -25,6 +25,7 @@ public enum TokenizerState
     Directive,
     Reference,
     Comment,
+    Complete,           // The last token is complete, but creation should be deferred in order to get the column right
     NewLineWhitespace,  // Whitespace at the start of a new line
     Whitespace,
 

@@ -28,6 +28,7 @@ public enum TokenType
     MacroDefinition,
     Assign,
 
+    Comment,
     Whitespace,     // Used to maintain spacing in behavior mode
 
 #pragma warning restore CS1591

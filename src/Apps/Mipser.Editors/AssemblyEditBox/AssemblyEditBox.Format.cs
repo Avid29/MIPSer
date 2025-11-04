@@ -48,7 +48,7 @@ public partial class AssemblyEditBox
         lineRange.CharacterFormat.ForegroundColor = Colors.White;
 
         // Tokenize the line
-        var tokenized = Tokenizer.TokenizeLine(line);
+        var tokenized = Tokenizer.TokenizeLine(line, mode:TokenizerMode.IDE);
         foreach(var token in tokenized.Tokens)
         {
             var tokenStart = lineStart + token.Column;
@@ -69,6 +69,7 @@ public partial class AssemblyEditBox
                 TokenType.Directive => "#FA9EF6".ToColor(),
                 TokenType.Comma => "#77A7FD".ToColor(),
                 TokenType.String => "#FFC47A".ToColor(),
+                TokenType.Comment => "#9B88FC".ToColor(),
                 _ => Colors.White,
             };
         }

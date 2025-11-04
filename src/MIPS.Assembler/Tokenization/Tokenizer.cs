@@ -102,7 +102,7 @@ public class Tokenizer
             ThrowHelper.ThrowArgumentException("Single line tokenizer cannot contain a new line.");
 
         // This is a debug tool for tokenizing only an expression
-        if (mode is not TokenizerMode.Assembly)
+        if (mode is TokenizerMode.BehaviorExpression or TokenizerMode.Expression)
         {
             tokenizer._state = TokenizerState.ArgBegin;
         }
@@ -119,12 +119,10 @@ public class Tokenizer
         line += '\n';
         foreach (char c in line)
         {
-            status = ParseNextChar(c);
-
             // This line is invalid and cannot be tokenized.
             // Regardless, we'll add what was parsable and keep going to find any further errors
-            if (!status)
-                break;
+            if (!ParseNextChar(c))
+                status = false;
 
             _column++;
         }
@@ -154,11 +152,13 @@ public class Tokenizer
             TokenizerState.Immediate => ParseFromImmediate(c),
             TokenizerState.SpecialImmediate => ParseFromImmediate(c, true),
             TokenizerState.BinaryImmediate or TokenizerState.OctImmediate or
-            TokenizerState.HexImmediate or TokenizerState.BadImmediate => ParseFromImmediate(c, state:_state),
+            TokenizerState.HexImmediate or TokenizerState.BadImmediate => ParseFromImmediate(c, state: _state),
 
             // String and character literals
             TokenizerState.Character => ParseFromString(c, true),
             TokenizerState.String => ParseFromString(c, false),
+
+            TokenizerState.Complete => ParseFromComplete(c),
 
             // Directives and references
             TokenizerState.Directive => ParseFromDirective(c),
@@ -166,7 +166,7 @@ public class Tokenizer
 
             // Comments and whitespace
             TokenizerState.Comment => ParseFromComment(c),
-            TokenizerState.Whitespace or TokenizerState.NewLineWhitespace => ParseFromWhitespace(c, state:_state),
+            TokenizerState.Whitespace or TokenizerState.NewLineWhitespace => ParseFromWhitespace(c, state: _state),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>(nameof(_state)),
         };
     }
@@ -214,22 +214,26 @@ public class Tokenizer
 
         return c switch
         {
+            // Operators
             '+' or '-' or '*' or '/' or '%' or
             '|' or '&' or '^' or '~' => HandleCharacter(c, TokenType.Operator),
 
-            '.' => newLine && HandleCharacter(c, newState: TokenizerState.Directive),
-            '$' => HandleCharacter(c, newState: TokenizerState.Register),
-            '\'' => HandleCharacter(c, newState: TokenizerState.Character),
-            '"' => HandleCharacter(c, newState: TokenizerState.String),
-
+            // Alt-Operators
             '(' => HandleCharacter(c, TokenType.OpenParenthesis),
             ')' => HandleCharacter(c, TokenType.CloseParenthesis),
             '[' => HandleCharacter(c, TokenType.OpenBracket),
             ']' => HandleCharacter(c, TokenType.CloseBracket),
             ',' => HandleCharacter(c, TokenType.Comma),
             '=' => HandleCharacter(c, TokenType.Assign),
-            '#' => HandleCharacter(c, null, TokenizerState.Comment),
-            
+
+            '.' => newLine && HandleCharacter(c, TokenType.Directive, TokenizerState.Directive),
+            '$' => HandleCharacter(c, TokenType.Register, TokenizerState.Register),
+            '\'' => HandleCharacter(c, newState: TokenizerState.Character),
+            '"' => HandleCharacter(c, newState: TokenizerState.String),
+
+            // Comments
+            '#' => HandleCharacter(c, TokenType.Comment, TokenizerState.Comment),
+
             // Behavioral operators
             '!' => _mode is TokenizerMode.BehaviorExpression && HandleCharacter(c, TokenType.Operator),
             '<' => _mode is TokenizerMode.BehaviorExpression && HandleCharacter(c, TokenType.Operator),
@@ -343,10 +347,11 @@ public class Tokenizer
         // on the string parsing function.
         if (isChar)
         {
+            // We notice the empty literal here, but defer reporting until the assembly step
             if (_cache.Length is 1 && c is '\'')
             {
-                _logger?.Log(Severity.Error, LogId.InvalidCharLiteral, Line, "EmptyCharacterLiteral");
-                return false;
+                //_logger?.Log(Severity.Error, LogId.InvalidCharLiteral, Line, "EmptyCharacterLiteral");
+                return HandleCharacter(c, TokenType.Immediate);
             }
 
             if (_cache.Length is >= 2 && c is '\'')
@@ -362,6 +367,8 @@ public class Tokenizer
 
         return HandleCharacter(c, newState: isChar ? TokenizerState.Character : TokenizerState.String);
     }
+
+    private bool ParseFromComplete(char c) => CompleteAndContinue(c);
 
     private bool ParseFromDirective(char c)
     {
@@ -390,7 +397,7 @@ public class Tokenizer
             return CompleteCacheToken(TokenizerState.LineBegin);
         }
 
-        return true;
+        return HandleCharacter(c, TokenType.Comment, TokenizerState.Comment);
     }
 
     private bool ParseFromWhitespace(char c, TokenizerState state = TokenizerState.Whitespace)
@@ -406,7 +413,7 @@ public class Tokenizer
         return CompleteAndContinue(c, newState);
     }
 
-    private bool HandleCharacter(char c, TokenType? type = null, TokenizerState newState = TokenizerState.ArgBegin)
+    private bool HandleCharacter(char c, TokenType? type = null, TokenizerState newState = TokenizerState.Complete)
     {
         _cache += c;
         _tokenType = type;
@@ -415,7 +422,7 @@ public class Tokenizer
         {
             if (type is null)
                 ThrowHelper.ThrowArgumentException(nameof(type));
-            
+
             return CompleteCacheToken(newState);
         }
 
@@ -434,31 +441,27 @@ public class Tokenizer
 
     private bool CompleteCacheToken(TokenizerState newState = TokenizerState.ArgBegin)
     {
-        // This method can be used to denote the completion of a comment block
-        if (_state is not TokenizerState.Comment)
+        // Token must be created if cache is completed and not a comment
+        if (_tokenType is null)
         {
-            // Token must be created if cache is completed and not a comment
-            if (_tokenType is null)
+            string message = _state switch
             {
-                string message = _state switch
-                {
-                    TokenizerState.Reference => $"IncompleteReference",
-                    TokenizerState.Immediate => $"IncompleteImmediate",
-                    TokenizerState.Register => $"IncompleteRegister",
-                    _ => $"IncompleteToken",
-                };
+                TokenizerState.Reference => $"IncompleteReference",
+                TokenizerState.Immediate => $"IncompleteImmediate",
+                TokenizerState.Register => $"IncompleteRegister",
+                _ => $"IncompleteToken",
+            };
 
-                _logger?.Log(Severity.Error, LogId.TokenizerError, Line, message, _cache);
-                return false;
-            }
+            _logger?.Log(Severity.Error, LogId.TokenizerError, Line, message, _cache);
+            return false;
+        }
 
-            // Add the token if not whitespace. Unless in behavior mode, then add the whitespace token
-            if (_tokenType is not TokenType.Whitespace || _mode is TokenizerMode.BehaviorExpression)
-            {
-                // Create the token and add to list
-                Token token = new(_cache, _filename, Line, _cacheColumn, _tokenType.Value);
-                Tokens?.Add(token);
-            }
+        // Add the token if not whitespace. Unless in behavior mode, then add the whitespace token
+        if (_tokenType is not TokenType.Whitespace and not TokenType.Comment || _mode is TokenizerMode.BehaviorExpression or TokenizerMode.IDE)
+        {
+            // Create the token and add to list
+            Token token = new(_cache, _filename, Line, _cacheColumn, _tokenType.Value);
+            Tokens?.Add(token);
         }
 
         // Reset cache

@@ -1,5 +1,6 @@
 // Adam Dernis 2024
 
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.ViewModels.Pages;
 using WinUIEditor;
@@ -21,7 +22,7 @@ public sealed partial class FileViewer : UserControl
 
     private FilePageViewModel ViewModel => (FilePageViewModel)this.DataContext;
 
-    private void CodeEditorControl_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void CodeEditorControl_Loaded(object sender, RoutedEventArgs e)
     {
         if (sender is CodeEditorControl editor)
         {

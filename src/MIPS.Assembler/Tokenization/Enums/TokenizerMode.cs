@@ -21,4 +21,9 @@ public enum TokenizerMode
     /// Tokenizing a behavior expression. This is used for the cheatsheet and other documentation purposes.
     /// </summary>
     BehaviorExpression,
+
+    /// <summary>
+    /// Tokenizing for the IDE. Log every token, including whitespace.
+    /// </summary>
+    IDE,
 }
