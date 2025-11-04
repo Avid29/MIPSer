@@ -7,7 +7,6 @@ using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using System.IO;
 using System.Threading.Tasks;
-using Windows.UI;
 
 namespace Mipser.Editors.AssemblyEditBox;
 
@@ -41,12 +40,15 @@ public partial class AssemblyEditBox
 
     private void FormatLine(int lineStart, string line)
     {
-        var tokenized = Tokenizer.TokenizeLine(line);
-        
+        // Batch the following display updates
+        Document.BatchDisplayUpdates();
+
         // Clear the line to white
         var lineRange = Document.GetRange(lineStart, lineStart + line.Length);
         lineRange.CharacterFormat.ForegroundColor = Colors.White;
 
+        // Tokenize the line
+        var tokenized = Tokenizer.TokenizeLine(line);
         foreach(var token in tokenized.Tokens)
         {
             var tokenStart = lineStart + token.Column;
@@ -70,5 +72,8 @@ public partial class AssemblyEditBox
                 _ => Colors.White,
             };
         }
+
+        // Apply display updates
+        Document.ApplyDisplayUpdates();
     }
 }
