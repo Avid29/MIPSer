@@ -336,9 +336,11 @@ public class Tokenizer
     {
         if (c is '\n')
         {
-            var expected = isChar ? "Characters" : "Strings";
-            _logger?.Log(Severity.Error, LogId.MultiLineString, _location, $"{expected}CantWrapLines.");
-            return false;
+            // TODO: Move error to assembler
+            //var expected = isChar ? "Characters" : "Strings";
+            //_logger?.Log(Severity.Error, LogId.MultiLineString, _location, $"{expected}CantWrapLines.");
+
+            return HandleCharacter(c, isChar ? TokenType.Immediate : TokenType.String);
         }
 
         // Only parsing a single character.
@@ -451,7 +453,9 @@ public class Tokenizer
                 _ => $"IncompleteToken",
             };
 
-            _logger?.Log(Severity.Error, LogId.TokenizerError, _location, message, _cache);
+
+            // TODO: Ensure this cannot be reached
+            //_logger?.Log(Severity.Error, LogId.TokenizerError, _location, message, _cache);
             return false;
         }
 

@@ -2,6 +2,7 @@
 
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Tokenization;
+using System;
 
 namespace MIPS.Assembler.Logging;
 
@@ -13,12 +14,12 @@ public class Log
     /// <summary>
     /// Initializes a new instance of the <see cref="Log"/> class.
     /// </summary>
-    internal Log(LogId id, string message, Severity severity, TextLocation location)
+    internal Log(LogId id, string message, Severity severity, Token[] tokens)
     {
         Id = id;
         Message = message;
         Severity = severity;
-        Location = location;
+        Tokens = tokens;
     }
 
     /// <summary>
@@ -40,7 +41,29 @@ public class Log
     public Severity Severity { get; }
 
     /// <summary>
-    /// Gets the location where the event was logged.
+    /// Gets the tokens that caused the log.
     /// </summary>
-    public TextLocation Location { get; }
+    public Token[] Tokens { get; }
+
+    /// <summary>
+    /// Gets the where the log occured.
+    /// </summary>
+    public int Line => Tokens[0].Location.Line;
+
+    /// <summary>
+    /// Gets the starting index of the log.
+    /// </summary>
+    public int Start => Tokens[0].Location.Index;
+    
+    /// <summary>
+    /// Gets the ending index of the log.
+    /// </summary>
+    public int End
+    {
+        get
+        {
+            var last = Tokens[^1];
+            return last.Location.Index + last.Source.Length;
+        }
+    }
 }

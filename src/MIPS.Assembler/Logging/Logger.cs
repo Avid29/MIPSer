@@ -31,31 +31,22 @@ public class Logger : ILogger
     public bool Failed { get; private set; }
 
     /// <inheritdoc/>
-    public void Log(Severity severity, LogId id, ReadOnlySpan<Token> token, string messageKey, params object?[] args)
-        => Log(severity, id, token.Length > 0 ? token[0].Location : default, messageKey, args);
-
-    /// <inheritdoc/>
     public void Log(Severity severity, LogId id, Token token, string messageKey, params object?[] args)
         => Log(severity, id, [token], messageKey, args);
     
     /// <inheritdoc/>
-    public void Log(Severity severity, LogId id, string messageKey, params object?[] args)
-    {
-        throw new NotImplementedException();
-    }
-    
-    /// <inheritdoc/>
-    public void Log(Severity severity, LogId id, TextLocation location, string messageKey, params object?[] args)
+    public void Log(Severity severity, LogId id, ReadOnlySpan<Token> tokens, string messageKey, params object?[] args)
     {
         var localizedMessage = _localizer[messageKey];
         var formattedMessage = string.Format(localizedMessage, args);
 
-        var log = new Log(id, formattedMessage, severity, location);
+        var log = new Log(id, formattedMessage, severity, tokens.ToArray());
         _logs.Add(log);
 
         if (severity is Severity.Error)
             Failed = true;
     }
+    
 
     /// <summary>
     /// Gets a readonly list of logs.

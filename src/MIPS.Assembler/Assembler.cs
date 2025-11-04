@@ -90,14 +90,32 @@ public partial class Assembler
     /// Gets whether or not the assembler failed to assemble a valid module.
     /// </summary>
     public bool Failed => _logger.Failed;
-
+    
+    /// <summary>
+    /// Assembles an object module from a stream of assembly.
+    /// </summary>
+    public static async Task<Assembler> AssembleAsync(string str, string? filename, AssemblerConfig config)
+    {
+        using var reader = new StringReader(str);
+        return await AssembleAsync(reader, filename, config);
+    }
+    
     /// <summary>
     /// Assembles an object module from a stream of assembly.
     /// </summary>
     public static async Task<Assembler> AssembleAsync(Stream stream, string? filename, AssemblerConfig config)
     {
+        using var reader = new StreamReader(stream);
+        return await AssembleAsync(reader, filename, config);
+    }
+
+    /// <summary>
+    /// Assembles an object module from a stream of assembly.
+    /// </summary>
+    public static async Task<Assembler> AssembleAsync(TextReader reader, string? filename, AssemblerConfig config)
+    {
         var assembler = new Assembler(config);
-        var tokens = await Tokenizer.TokenizeAsync(stream, filename, assembler._logger);
+        var tokens = await Tokenizer.TokenizeAsync(reader, filename, assembler._logger);
 
         // Run the alignment pass on each line
         for (int i = 1; i <= tokens.LineCount; i++)

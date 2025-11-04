@@ -118,7 +118,7 @@ public class AssemblerTests
         {
             foreach (var (id, line) in expected)
             {
-                var logEntry = assembler.Logs.FirstOrDefault(x => x.Id == id && x.Location.Line == line);
+                var logEntry = assembler.Logs.FirstOrDefault(x => x.Id == id && x.Line == line);
                 Assert.IsNotNull(logEntry, $"Could not find matching {id} error on line {line}");
             }
         }

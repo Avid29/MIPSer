@@ -12,9 +12,6 @@ namespace MIPS.Assembler.Logging;
 public interface ILogger
 {
     /// <inheritdoc cref="Log(Severity, LogId, ReadOnlySpan{Token}, string, object?[])"/>
-    void Log(Severity severity, LogId id, TextLocation location, string messageKey, params object?[] args);
-
-    /// <inheritdoc cref="Log(Severity, LogId, ReadOnlySpan{Token}, string, object?[])"/>
     void Log(Severity severity, LogId id, Token token, string messageKey, params object?[] args);
 
     /// <summary>

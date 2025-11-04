@@ -13,6 +13,6 @@
                               FlowDirection="LeftToRight"/>-->
     
     <asmedit:AssemblyEditBox Text="{x:Bind ViewModel.File.Contents, Mode=TwoWay}"
-                             FlowDirection="LeftToRight" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextChanged="AssemblyEditBox_TextChanged"/>
+                             FlowDirection="LeftToRight" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextChanging="AssemblyEditBox_TextChanging"/>
 
 </UserControl>

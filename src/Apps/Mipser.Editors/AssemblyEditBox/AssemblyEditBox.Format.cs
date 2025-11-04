@@ -3,8 +3,11 @@
 using CommunityToolkit.WinUI.Helpers;
 using Microsoft.UI;
 using Microsoft.UI.Text;
+using MIPS.Assembler.Logging;
+using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -13,6 +16,36 @@ namespace Mipser.Editors.AssemblyEditBox;
 public partial class AssemblyEditBox
 {
     private bool @lock = false;
+
+    /// <summary>
+    /// Applies formatting based on a log messages.
+    /// </summary>
+    public void ApplyLogHighlights(IReadOnlyList<Log> logs)
+    {
+        Document.BatchDisplayUpdates();
+
+        // Clear underlines
+        Document.GetText(TextGetOptions.None, out var temp);
+        var range = Document.GetRange(0, temp.Length -1);
+        range.CharacterFormat.Underline = UnderlineType.None;
+
+        foreach (var log in logs)
+        {
+            // Get log range
+            range = Document.GetRange(log.Start, log.End);
+
+            // Underline range
+            range.CharacterFormat.Underline = log.Severity switch
+            {
+                Severity.Message => UnderlineType.ThickDotted,
+                Severity.Warning => UnderlineType.Wave,
+                Severity.Error => UnderlineType.Wave,
+                _ => UnderlineType.Undefined,
+            };
+        }
+
+        Document.ApplyDisplayUpdates();
+    }
 
     private async Task UpdateSyntaxHighlightingAsync()
     {
