@@ -1,11 +1,13 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.WinUI.Helpers;
 using Microsoft.UI;
 using Microsoft.UI.Text;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using System.IO;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace Mipser.Editors.AssemblyEditBox;
 
@@ -53,12 +55,18 @@ public partial class AssemblyEditBox
 
             tokenDocumentRange.CharacterFormat.ForegroundColor = token.Type switch
             {
-                TokenType.LabelDeclaration => Colors.Blue,
-                TokenType.Directive => Colors.Purple,
-                TokenType.Instruction => Colors.DarkCyan,
-                TokenType.Register => Colors.Brown,
-                TokenType.Immediate => Colors.LightYellow,
-                TokenType.String => Colors.Maroon,
+                TokenType.Instruction => "#A7FA95".ToColor(),
+                TokenType.Register => "#FE8482".ToColor(),
+                TokenType.Immediate => "#F8FC8B".ToColor(),
+
+                TokenType.Reference or 
+                TokenType.LabelDeclaration => "#73EEFD".ToColor(),
+
+                TokenType.Operator => "#77A7FD".ToColor(),
+
+                TokenType.Directive => "#FA9EF6".ToColor(),
+                TokenType.Comma => "#77A7FD".ToColor(),
+                TokenType.String => "#FFC47A".ToColor(),
                 _ => Colors.White,
             };
         }

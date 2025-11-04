@@ -36,6 +36,7 @@
                 <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
                     <ContentControl Content="{x:Bind (vmva:PageViewModel), Mode=OneWay}"
                                     ContentTemplateSelector="{StaticResource PageTemplateSelector}"
+                                    CornerRadius="8"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     HorizontalContentAlignment="Stretch"
