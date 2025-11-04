@@ -1,11 +1,9 @@
 ﻿// Adam Dernis 2024
 
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Bindables.Files;
 using Mipser.Bindables.Files.Abstract;
 using Mipser.Messages.Files;
-using Mipser.Services.Dispatcher;
 using Mipser.Services.FileSystem;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.ObjectModel;

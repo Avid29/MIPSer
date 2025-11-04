@@ -44,7 +44,7 @@ public enum LogId
 
     // Char/String parsing
     NotAString,
-    MultiLineString,
+    IncompleteString,
     InvalidCharLiteral,
     IncompleteEscapeSequence,
     UnrecognizedEscapeSequence,

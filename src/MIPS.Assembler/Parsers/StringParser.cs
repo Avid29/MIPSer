@@ -82,7 +82,8 @@ public ref struct StringParser
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<string>($"{wrap} expected to be either a ''' or '\"' character."),
             };
 
-            _logger?.Log(Severity.Error, LogId.NotAString, _token, $"Expected{expected}");
+            // TODO: Improve message
+            _logger?.Log(Severity.Error, LogId.IncompleteString, _token, $"Expected{expected}");
             return false;
         }
 
