@@ -2,6 +2,8 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using MIPS.Assembler.Logging;
+using System.Collections.Generic;
 
 namespace Mipser.Editors.AssemblyEditBox;
 
@@ -31,5 +33,13 @@ public partial class AssemblyEditBox : RichEditBox
         _selectedLineHighlightBorder = GetTemplateChild(SelectedLineHighlightBorderPartName) as Border;
 
         this.Loaded += AssemblyEditBox_Loaded;
+    }
+
+    /// <summary>
+    /// Applies formatting based on a log messages.
+    /// </summary>
+    public void ApplyLogHighlights(IReadOnlyList<Log> logs)
+    {
+
     }
 }

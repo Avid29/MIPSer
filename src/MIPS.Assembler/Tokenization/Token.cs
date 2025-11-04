@@ -9,10 +9,9 @@ namespace MIPS.Assembler.Tokenization;
 /// </summary>
 /// <param name="source">The token as a string.</param>
 /// <param name="filename">The name of the file the token appears in.</param>
-/// <param name="lineNum">The line the token appears on.</param>
-/// <param name="column">The column of the token on the line.</param>
+/// <param name="location">The location of the start of the token.</param>
 /// <param name="type">The token type.</param>
-public class Token(string source, string? filename, int lineNum, int column, TokenType type)
+public class Token(string source, string? filename, TextLocation location, TokenType type)
 {
     /// <summary>
     /// Gets the value of the token as a string.
@@ -25,14 +24,9 @@ public class Token(string source, string? filename, int lineNum, int column, Tok
     public string? Filename { get; } = filename;
 
     /// <summary>
-    /// Gets the token's linenum.
+    /// Gets the token's location.
     /// </summary>
-    public int LineNum { get; } = lineNum;
-
-    /// <summary>
-    /// Gets the token's start column.
-    /// </summary>
-    public int Column { get; } = column;
+    public TextLocation Location { get; } = location;
 
     /// <summary>
     /// Gets the token's type.

@@ -37,7 +37,7 @@ public class StringParserTests
     private static void RunTest<T>(ParseFunc<T> func, string input, T expected, bool expectNull)
     {
         // Declare parser and attempt parsing
-        var token = new Token(input, default, default, default, default);
+        var token = new Token(input, default, default, default);
         if (!func(token, out T actual, null))
         {
             Assert.IsTrue(expectNull);

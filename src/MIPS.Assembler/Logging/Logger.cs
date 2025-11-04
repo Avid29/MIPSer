@@ -32,7 +32,7 @@ public class Logger : ILogger
 
     /// <inheritdoc/>
     public void Log(Severity severity, LogId id, ReadOnlySpan<Token> token, string messageKey, params object?[] args)
-        => Log(severity, id, token.Length > 0 ? token[0].LineNum : 0, messageKey, args);
+        => Log(severity, id, token.Length > 0 ? token[0].Location : default, messageKey, args);
 
     /// <inheritdoc/>
     public void Log(Severity severity, LogId id, Token token, string messageKey, params object?[] args)
@@ -45,12 +45,12 @@ public class Logger : ILogger
     }
     
     /// <inheritdoc/>
-    public void Log(Severity severity, LogId id, int lineNum, string messageKey, params object?[] args)
+    public void Log(Severity severity, LogId id, TextLocation location, string messageKey, params object?[] args)
     {
         var localizedMessage = _localizer[messageKey];
         var formattedMessage = string.Format(localizedMessage, args);
 
-        var log = new Log(id, formattedMessage, severity, lineNum);
+        var log = new Log(id, formattedMessage, severity, location);
         _logs.Add(log);
 
         if (severity is Severity.Error)

@@ -18,16 +18,15 @@ namespace MIPS.Assembler.Tokenization;
 public class Tokenizer
 {
     private readonly ILogger? _logger;
+    private readonly TokenizerMode _mode;
 
-    private TokenizerMode _mode;
     private TokenizerState _state;
     private string _cache;
     private TokenType? _tokenType;
 
     private readonly string? _filename;
-    private int _line;
-    private int _column;
-    private int _cacheColumn;
+    private TextLocation _location;
+    private TextLocation _cacheLocation;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Tokenizer"/> class.
@@ -42,22 +41,20 @@ public class Tokenizer
         _state = TokenizerState.LineBegin;
         _cache = string.Empty;
         _tokenType = null;
-
+        _location = new TextLocation
+        {
+            Index = 0,
+            Line = 1,
+            Column = 1,
+        };
+        _cacheLocation = _location;
         _filename = filename;
-        Line = 1;
-        _column = 0;
         _mode = mode;
     }
 
     private List<AssemblyLine> TokenLines { get; }
 
     private List<Token> Tokens { get; set; }
-
-    private int Line
-    {
-        get => _line;
-        set => _line = value;
-    }
 
     /// <inheritdoc/>
     public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null, ILogger? logger = null)
@@ -124,11 +121,13 @@ public class Tokenizer
             if (!ParseNextChar(c))
                 status = false;
 
-            _column++;
+            _location.Index++;
+            _location.Column++;
         }
 
-        Line++;
-        _column = 0;
+        _location.Line++;
+        _location.Column = 1;
+        _cacheLocation = _location;
         TokenLines.Add(new([..Tokens]));
         return status;
     }
@@ -338,7 +337,7 @@ public class Tokenizer
         if (c is '\n')
         {
             var expected = isChar ? "Characters" : "Strings";
-            _logger?.Log(Severity.Error, LogId.MultiLineString, Line, $"{expected}CantWrapLines.");
+            _logger?.Log(Severity.Error, LogId.MultiLineString, _location, $"{expected}CantWrapLines.");
             return false;
         }
 
@@ -452,7 +451,7 @@ public class Tokenizer
                 _ => $"IncompleteToken",
             };
 
-            _logger?.Log(Severity.Error, LogId.TokenizerError, Line, message, _cache);
+            _logger?.Log(Severity.Error, LogId.TokenizerError, _location, message, _cache);
             return false;
         }
 
@@ -460,13 +459,13 @@ public class Tokenizer
         if (_tokenType is not TokenType.Whitespace and not TokenType.Comment || _mode is TokenizerMode.BehaviorExpression or TokenizerMode.IDE)
         {
             // Create the token and add to list
-            Token token = new(_cache, _filename, Line, _cacheColumn, _tokenType.Value);
+            Token token = new(_cache, _filename, _cacheLocation, _tokenType.Value);
             Tokens?.Add(token);
         }
 
         // Reset cache
         _cache = string.Empty;
-        _cacheColumn = _column;
+        _cacheLocation = _location;
         _tokenType = null;
         _state = newState;
         return true;

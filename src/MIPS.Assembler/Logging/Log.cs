@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Tokenization;
 
 namespace MIPS.Assembler.Logging;
 
@@ -12,12 +13,12 @@ public class Log
     /// <summary>
     /// Initializes a new instance of the <see cref="Log"/> class.
     /// </summary>
-    internal Log(LogId id, string message, Severity severity, int lineNumber)
+    internal Log(LogId id, string message, Severity severity, TextLocation location)
     {
         Id = id;
         Message = message;
         Severity = severity;
-        LineNumber = lineNumber;
+        Location = location;
     }
 
     /// <summary>
@@ -39,7 +40,7 @@ public class Log
     public Severity Severity { get; }
 
     /// <summary>
-    /// Gets the line where the even was logged.
+    /// Gets the location where the event was logged.
     /// </summary>
-    public int LineNumber { get; }
+    public TextLocation Location { get; }
 }

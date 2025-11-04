@@ -51,7 +51,7 @@ public partial class AssemblyEditBox
         var tokenized = Tokenizer.TokenizeLine(line, mode:TokenizerMode.IDE);
         foreach(var token in tokenized.Tokens)
         {
-            var tokenStart = lineStart + token.Column;
+            var tokenStart = lineStart + token.Location.Column-1;
             var tokenEnd = tokenStart + token.Source.Length;
             var tokenDocumentRange = Document.GetRange(tokenStart, tokenEnd);
 
