@@ -1,15 +1,13 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.WinUI.Helpers;
-using Microsoft.UI;
-using Microsoft.UI.Text;
-using MIPS.Assembler.Logging;
-using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
-using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Windows.UI;
 
 namespace Mipser.Editors.AssemblyEditBox;
 
@@ -20,94 +18,123 @@ public partial class AssemblyEditBox
     /// <summary>
     /// Applies formatting based on a log messages.
     /// </summary>
-    public void ApplyLogHighlights(IReadOnlyList<Log> logs)
+    //public void ApplyLogHighlights(IReadOnlyList<Log> logs)
+    //{
+    //    // Clear underlines
+    //    Document.GetText(TextGetOptions.None, out var temp);
+    //    var range = Document.GetRange(0, temp.Length - 1);
+    //    range.CharacterFormat.Underline = UnderlineType.None;
+
+    //    foreach (var log in logs)
+    //    {
+    //        // Get log range
+    //        range = Document.GetRange(log.Start, log.End);
+
+    //        // Underline range
+    //        range.CharacterFormat.Underline = log.Severity switch
+    //        {
+    //            Severity.Message => UnderlineType.ThickDotted,
+    //            Severity.Warning => UnderlineType.Wave,
+    //            Severity.Error => UnderlineType.Wave,
+    //            _ => UnderlineType.Undefined,
+    //        };
+    //    }
+    //}
+
+    private void UpdateSyntaxHighlighting()
     {
-        Document.BatchDisplayUpdates();
-
-        // Clear underlines
-        Document.GetText(TextGetOptions.None, out var temp);
-        var range = Document.GetRange(0, temp.Length -1);
-        range.CharacterFormat.Underline = UnderlineType.None;
-
-        foreach (var log in logs)
-        {
-            // Get log range
-            range = Document.GetRange(log.Start, log.End);
-
-            // Underline range
-            range.CharacterFormat.Underline = log.Severity switch
-            {
-                Severity.Message => UnderlineType.ThickDotted,
-                Severity.Warning => UnderlineType.Wave,
-                Severity.Error => UnderlineType.Wave,
-                _ => UnderlineType.Undefined,
-            };
-        }
-
-        Document.ApplyDisplayUpdates();
-    }
-
-    private async Task UpdateSyntaxHighlightingAsync()
-    {
-        if (@lock)
+        if (@lock || _codeEditor is null)
             return;
 
         @lock = true;
-        Document.GetText(TextGetOptions.None, out string text);
+        var editor = _codeEditor.Editor;
+
+        // Clear the style
+        editor.StartStyling(0, 0);
+        editor.SetStyling(editor.Length, 0);
         
         // Format line by line
+        var text = editor.GetText(editor.Length);
         var reader = new StringReader(text);
         int pos = 0;
         while (true)
         {
-            var line = await reader.ReadLineAsync();
+            var line = reader.ReadLine();
             if (line is null)
                 break;
 
             // TODO: Check if the line has been updated
             FormatLine(pos, line);
-            pos += line.Length + 1;
+            pos += line.Length + 2;
         }
+
         @lock = false;
     }
 
     private void FormatLine(int lineStart, string line)
     {
-        // Batch the following display updates
-        Document.BatchDisplayUpdates();
+        Guard.IsNotNull(_codeEditor);
+        var editor = _codeEditor.Editor;
 
         // Clear the line to white
-        var lineRange = Document.GetRange(lineStart, lineStart + line.Length);
-        lineRange.CharacterFormat.ForegroundColor = Colors.White;
+        editor.StartStyling(lineStart, 0);
+        editor.SetStyling(line.Length, 0);
 
         // Tokenize the line
         var tokenized = Tokenizer.TokenizeLine(line, mode:TokenizerMode.IDE);
         foreach(var token in tokenized.Tokens)
         {
-            var tokenStart = lineStart + token.Location.Column-1;
-            var tokenEnd = tokenStart + token.Source.Length;
-            var tokenDocumentRange = Document.GetRange(tokenStart, tokenEnd);
-
-            tokenDocumentRange.CharacterFormat.ForegroundColor = token.Type switch
+            var style = token.Type switch
             {
-                TokenType.Instruction => "#A7FA95".ToColor(),
-                TokenType.Register => "#FE8482".ToColor(),
-                TokenType.Immediate => "#F8FC8B".ToColor(),
+                TokenType.Instruction => InstructionStyleIndex,
+                TokenType.Register => RegisterStyleIndex,
+                TokenType.Immediate => ImmediateStyleIndex,
 
-                TokenType.Reference or 
-                TokenType.LabelDeclaration => "#73EEFD".ToColor(),
+                TokenType.Reference or
+                TokenType.LabelDeclaration => ReferenceStyleIndex,
 
-                TokenType.Operator => "#77A7FD".ToColor(),
+                TokenType.Operator => OperatorStyleIndex,
 
-                TokenType.Directive => "#FA9EF6".ToColor(),
-                TokenType.Comma => "#77A7FD".ToColor(),
-                TokenType.String => "#FFC47A".ToColor(),
-                TokenType.Comment => "#9B88FC".ToColor(),
-                _ => Colors.White,
+                TokenType.Directive => DirectiveStyleIndex,
+                TokenType.Comma => CommaStyleIndex,
+                TokenType.String => StringStyleIndex,
+                TokenType.Comment => CommentStyleIndex,
+
+                _ => 0,
             };
-        }
 
-        // Apply display updates
-        Document.ApplyDisplayUpdates();
+            editor.StartStyling(lineStart + token.Location.Index, 0);
+            editor.SetStyling(token.Source.Length, style);
+        }
     }
+
+    private const int InstructionStyleIndex = 1; 
+    private const int RegisterStyleIndex = 2; 
+    private const int ImmediateStyleIndex = 3;
+    private const int ReferenceStyleIndex = 4;
+    private const int OperatorStyleIndex = 5;
+    private const int DirectiveStyleIndex = 6;
+    private const int CommaStyleIndex = 7;
+    private const int StringStyleIndex = 8;
+    private const int CommentStyleIndex = 9;
+
+    private void SetupHighlighting()
+    {
+        Guard.IsNotNull(_codeEditor);
+        var editor = _codeEditor.Editor;
+
+        editor.StyleSetFore(InstructionStyleIndex, ToInt("#A7FA95".ToColor()));
+        editor.StyleSetFore(RegisterStyleIndex, ToInt("#FE8482".ToColor()));
+        editor.StyleSetFore(ImmediateStyleIndex, ToInt("#F8FC8B".ToColor()));
+        editor.StyleSetFore(ReferenceStyleIndex, ToInt("#73EEFD".ToColor()));
+        editor.StyleSetFore(OperatorStyleIndex, ToInt("#77A7FD".ToColor()));
+        editor.StyleSetFore(DirectiveStyleIndex, ToInt("#FA9EF6".ToColor()));
+        editor.StyleSetFore(CommaStyleIndex, ToInt("#77A7FD".ToColor()));
+        editor.StyleSetFore(StringStyleIndex, ToInt("#FFC47A".ToColor()));
+        editor.StyleSetFore(CommentStyleIndex, ToInt("#9B88FC".ToColor()));
+
+        UpdateSyntaxHighlighting();
+    }
+
+    private int ToInt(Color color) =>  color.R | color.G << 8 | color.B << 16;
 }

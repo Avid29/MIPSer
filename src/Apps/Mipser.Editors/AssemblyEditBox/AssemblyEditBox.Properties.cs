@@ -13,11 +13,11 @@ public partial class AssemblyEditBox
     public static readonly DependencyProperty TextProperty =
         DependencyProperty.Register(nameof(Text), typeof(string), typeof(AssemblyEditBox), new PropertyMetadata(string.Empty));
 
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="SelectedRange"/> property.
-    /// </summary>
-    public static readonly DependencyProperty SelectionRangeProperty =
-        DependencyProperty.Register(nameof(SelectedRange), typeof(Range), typeof(AssemblyEditBox), new PropertyMetadata(new Range(0, 0)));
+    ///// <summary>
+    ///// A <see cref="DependencyProperty"/> for the <see cref="SelectedRange"/> property.
+    ///// </summary>
+    //public static readonly DependencyProperty SelectionRangeProperty =
+    //    DependencyProperty.Register(nameof(SelectedRange), typeof(Range), typeof(AssemblyEditBox), new PropertyMetadata(new Range(0, 0)));
 
     /// <summary>
     /// Gets or sets the text contained in the editbox.
@@ -34,21 +34,18 @@ public partial class AssemblyEditBox
             // That causes unneccesary looping
 
             SetValue(TextProperty, value);
-            Document.SetText(Microsoft.UI.Text.TextSetOptions.None, value);
-
-            // TODO: Improve
-            _ = UpdateSyntaxHighlightingAsync();
+            _codeEditor?.Editor.SetText(value);
         }
     }
 
-    /// <summary>
-    /// Gets or sets the selected range.
-    /// </summary>
-    public Range SelectedRange
-    {
-        get => (Range)GetValue(SelectionRangeProperty);
-        set => SetValue(SelectionRangeProperty, value);
-    }
+    ///// <summary>
+    ///// Gets or sets the selected range.
+    ///// </summary>
+    //public Range SelectedRange
+    //{
+    //    get => (Range)GetValue(SelectionRangeProperty);
+    //    set => SetValue(SelectionRangeProperty, value);
+    //}
 
-    private void UpdateTextProperty(string value) =>  SetValue(TextProperty, value);
+    private void UpdateTextProperty(string value) => SetValue(TextProperty, value);
 }

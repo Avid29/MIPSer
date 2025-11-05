@@ -9,10 +9,6 @@
     xmlns:asmedit="using:Mipser.Editors.AssemblyEditBox"
     mc:Ignorable="d">
 
-    <!--<editor:CodeEditorControl Loaded="CodeEditorControl_Loaded" HighlightingLanguage="assembly" Margin="0,8,0,0"
-                              FlowDirection="LeftToRight"/>-->
-    
-    <asmedit:AssemblyEditBox Text="{x:Bind ViewModel.File.Contents, Mode=TwoWay}"
-                             FlowDirection="LeftToRight" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TextChanging="AssemblyEditBox_TextChanging"/>
+    <asmedit:AssemblyEditBox Text="{x:Bind ViewModel.File.Contents, Mode=TwoWay}" FlowDirection="LeftToRight"/>
 
 </UserControl>

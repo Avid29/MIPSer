@@ -1,9 +1,6 @@
 // Avishai Dernis 2025
 
 using Microsoft.UI.Xaml.Controls;
-using MIPS.Assembler;
-using MIPS.Assembler.Models;
-using Mipser.Editors.AssemblyEditBox;
 using Mipser.ViewModels.Pages;
 
 namespace Mipser.Windows.Views;
@@ -22,14 +19,4 @@ public sealed partial class FileViewer : UserControl
     }
 
     private FilePageViewModel ViewModel => (FilePageViewModel)this.DataContext;
-
-    private async void AssemblyEditBox_TextChanging(RichEditBox sender, RichEditBoxTextChangingEventArgs args)
-    {
-        if (!args.IsContentChanging)
-            return;
-
-        // TODO: Centralize assembly
-        var assembler = await Assembler.AssembleAsync(ViewModel.File.Contents ?? string.Empty, ViewModel.File.Name, new AssemblerConfig());
-        ((AssemblyEditBox)sender).ApplyLogHighlights(assembler.Logs);
-    }
 }
