@@ -8,6 +8,7 @@ using MIPS.Assembler.Models;
 using Mipser.Messages.Build;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace Mipser.ViewModels.Pages;
 

@@ -18,6 +18,14 @@ public class LocalizationService : ILocalizationService
 
     private ResourceLoader Loader => _loader ??= ResourceLoader.GetForViewIndependentUse();
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="LocalizationService"/> class.
+    /// </summary>
+    public LocalizationService()
+    {
+        UpdateLanguage(LanguageOverride);
+    }
+
     /// <inheritdoc/>
     public string this[string key] => Loader.GetString(key);
 
@@ -35,7 +43,7 @@ public class LocalizationService : ILocalizationService
     public string LanguageOverride
     {
         get => ApplicationLanguages.PrimaryLanguageOverride;
-        set => ApplicationLanguages.PrimaryLanguageOverride = value;
+        set => UpdateLanguage(value);
     }
 
     /// <inheritdoc/>
@@ -43,4 +51,11 @@ public class LocalizationService : ILocalizationService
 
     /// <inheritdoc/>
     public IReadOnlyList<string> AvailableLanguages => ApplicationLanguages.ManifestLanguages;
+
+    private void UpdateLanguage(string code)
+    {
+        ApplicationLanguages.PrimaryLanguageOverride = code;
+        CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture
+            = new CultureInfo(code);
+    }
 }
