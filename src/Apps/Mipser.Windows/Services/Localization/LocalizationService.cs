@@ -40,7 +40,7 @@ public class LocalizationService : ILocalizationService
     }
 
     /// <inheritdoc/>
-    public string LanguageOverride
+    public string? LanguageOverride
     {
         get => ApplicationLanguages.PrimaryLanguageOverride;
         set => UpdateLanguage(value);
@@ -52,10 +52,10 @@ public class LocalizationService : ILocalizationService
     /// <inheritdoc/>
     public IReadOnlyList<string> AvailableLanguages => ApplicationLanguages.ManifestLanguages;
 
-    private void UpdateLanguage(string code)
+    private void UpdateLanguage(string? code)
     {
         ApplicationLanguages.PrimaryLanguageOverride = code;
-        CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture
-            = new CultureInfo(code);
+        CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture =
+            code is null ? CultureInfo.InstalledUICulture : new CultureInfo(code);
     }
 }
