@@ -19,6 +19,7 @@ public partial class AssemblyEditBox
         _codeEditor.Editor.Modified += Editor_Modified;
         _codeEditor.DefaultColorsChanged += CodeEditor_SyntaxHighlightingApplied;
         _codeEditor.SyntaxHighlightingApplied += CodeEditor_SyntaxHighlightingApplied;
+        _codeEditor.Editor.StyleNeeded += Editor_StyleNeeded;
 
         _codeEditor.HighlightingLanguage = "asm";
     }
@@ -27,7 +28,10 @@ public partial class AssemblyEditBox
     {
         var text = sender.GetText(sender.Length);
         UpdateTextProperty(text);
-        
+    }
+
+    private void Editor_StyleNeeded(Editor sender, StyleNeededEventArgs args)
+    {
         UpdateSyntaxHighlighting();
     }
 
