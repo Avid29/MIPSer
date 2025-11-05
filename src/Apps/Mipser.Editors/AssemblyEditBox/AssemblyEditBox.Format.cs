@@ -2,8 +2,11 @@
 
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.WinUI.Helpers;
+using MIPS.Assembler.Logging;
+using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -18,28 +21,32 @@ public partial class AssemblyEditBox
     /// <summary>
     /// Applies formatting based on a log messages.
     /// </summary>
-    //public void ApplyLogHighlights(IReadOnlyList<Log> logs)
-    //{
-    //    // Clear underlines
-    //    Document.GetText(TextGetOptions.None, out var temp);
-    //    var range = Document.GetRange(0, temp.Length - 1);
-    //    range.CharacterFormat.Underline = UnderlineType.None;
+    public void ApplyLogHighlights(IReadOnlyList<Log> logs)
+    {
+        if (_codeEditor is null)
+            return;
 
-    //    foreach (var log in logs)
-    //    {
-    //        // Get log range
-    //        range = Document.GetRange(log.Start, log.End);
+        // Clear underlines
+        for (int i = ErrorIndicatorIndex; i <= MessageIndicatorIndex; i++)
+        {
+            _codeEditor.Editor.IndicatorCurrent = i;
+            _codeEditor.Editor.IndicatorClearRange(0, -1);
+        }
 
-    //        // Underline range
-    //        range.CharacterFormat.Underline = log.Severity switch
-    //        {
-    //            Severity.Message => UnderlineType.ThickDotted,
-    //            Severity.Warning => UnderlineType.Wave,
-    //            Severity.Error => UnderlineType.Wave,
-    //            _ => UnderlineType.Undefined,
-    //        };
-    //    }
-    //}
+        foreach (var log in logs)
+        {
+            // Underline range
+            _codeEditor.Editor.IndicatorCurrent = log.Severity switch
+            {
+                Severity.Message => MessageIndicatorIndex,
+                Severity.Warning => WarningIndicatorIndex,
+                Severity.Error => ErrorIndicatorIndex,
+                _ => ErrorIndicatorIndex,
+            };
+
+            _codeEditor.Editor.IndicatorFillRange(log.Start, log.End);
+        }
+    }
 
     private void UpdateSyntaxHighlighting()
     {
@@ -52,7 +59,7 @@ public partial class AssemblyEditBox
         // Clear the style
         editor.StartStyling(0, 0);
         editor.SetStyling(editor.Length, 0);
-        
+
         // Format line by line
         var text = editor.GetText(editor.Length);
         var reader = new StringReader(text);
@@ -81,8 +88,8 @@ public partial class AssemblyEditBox
         editor.SetStyling(line.Length, 0);
 
         // Tokenize the line
-        var tokenized = Tokenizer.TokenizeLine(line, mode:TokenizerMode.IDE);
-        foreach(var token in tokenized.Tokens)
+        var tokenized = Tokenizer.TokenizeLine(line, mode: TokenizerMode.IDE);
+        foreach (var token in tokenized.Tokens)
         {
             var style = token.Type switch
             {
@@ -108,8 +115,8 @@ public partial class AssemblyEditBox
         }
     }
 
-    private const int InstructionStyleIndex = 1; 
-    private const int RegisterStyleIndex = 2; 
+    private const int InstructionStyleIndex = 1;
+    private const int RegisterStyleIndex = 2;
     private const int ImmediateStyleIndex = 3;
     private const int ReferenceStyleIndex = 4;
     private const int OperatorStyleIndex = 5;
@@ -136,5 +143,16 @@ public partial class AssemblyEditBox
         UpdateSyntaxHighlighting();
     }
 
-    private int ToInt(Color color) =>  color.R | color.G << 8 | color.B << 16;
+    private const int ErrorIndicatorIndex = 8;
+    private const int WarningIndicatorIndex = 9;
+    private const int MessageIndicatorIndex = 10;
+
+    private void SetupIndicators()
+    {
+        Guard.IsNotNull(_codeEditor);
+
+        //_codeEditor.Editor.
+    }
+
+    private int ToInt(Color color) => color.R | color.G << 8 | color.B << 16;
 }

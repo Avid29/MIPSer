@@ -2,12 +2,18 @@
 
 using CommunityToolkit.Diagnostics;
 using Microsoft.UI.Xaml;
+using System;
 using WinUIEditor;
 
 namespace Mipser.Editors.AssemblyEditBox;
 
 public partial class AssemblyEditBox
 {
+    /// <summary>
+    /// An event invoked when the <see cref="Text"/> property changes
+    /// </summary>
+    public event EventHandler? TextChanged;
+
     private void AssemblyEditBox_Loaded(object sender, RoutedEventArgs e)
     {
         // While loaded, detach the loaded event and attach unloaded event

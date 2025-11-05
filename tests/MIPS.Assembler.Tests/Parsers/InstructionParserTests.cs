@@ -228,7 +228,7 @@ public class InstructionParserTests
             
             // Parse instruction
             var input = line.ToString();
-            var tokenized = Tokenizer.Tokenize(input, nameof(RunTest));
+            var tokenized = Tokenizer.TokenizeLine(input, nameof(RunTest));
             var succeeded = parser.TryParse(tokenized, out var actual);
 
             // Validate execution
@@ -251,7 +251,7 @@ public class InstructionParserTests
         var parser = new InstructionParser(new InstructionTable(MipsVersion.MipsII), logger);
 
         // Parse instruction
-        var line = Tokenizer.Tokenize(input, nameof(RunTest));
+        var line = Tokenizer.TokenizeLine(input, nameof(RunTest));
         var succeeded = parser.TryParse(line, out var actual);
 
         // Validate results

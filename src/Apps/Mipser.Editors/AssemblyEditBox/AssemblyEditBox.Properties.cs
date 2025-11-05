@@ -11,7 +11,7 @@ public partial class AssemblyEditBox
     /// A <see cref="DependencyProperty"/> for the <see cref="Text"/> property.
     /// </summary>
     public static readonly DependencyProperty TextProperty =
-        DependencyProperty.Register(nameof(Text), typeof(string), typeof(AssemblyEditBox), new PropertyMetadata(string.Empty));
+        DependencyProperty.Register(nameof(Text), typeof(string), typeof(AssemblyEditBox), new PropertyMetadata(string.Empty, OnTextChanged));
 
     ///// <summary>
     ///// A <see cref="DependencyProperty"/> for the <see cref="SelectedRange"/> property.
@@ -48,4 +48,12 @@ public partial class AssemblyEditBox
     //}
 
     private void UpdateTextProperty(string value) => SetValue(TextProperty, value);
+
+    private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)
+    {
+        if (d is not AssemblyEditBox asmBox)
+            return;
+
+        asmBox.TextChanged?.Invoke(d, EventArgs.Empty);
+    }
 }
