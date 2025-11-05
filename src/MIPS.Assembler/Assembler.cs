@@ -170,7 +170,7 @@ public partial class Assembler
         //       and the address can only be updated if it's undeclared/external.
         if (!_module.TryDefineOrUpdateSymbol(name, type, address))
         {
-            _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, label, "SymbolAlreadyDefined", label);
+            _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, label, "SymbolAlreadyDefined", name);
             return false;
         }
 

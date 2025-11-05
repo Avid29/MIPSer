@@ -124,7 +124,7 @@
     <value>מאקרו אינו יכול להיות ביטוי בר־הזזה.</value>
   </data>
   <data name="PseudoInstructionsDisabled" xml:space="preserve">
-    <value>פסאודו־פקודות מנוטרלות.</value>
+    <value>פסאודו־הוראות מנוטרלות.</value>
   </data>
   <data name="RegisterNotFound" xml:space="preserve">
     <value>לא קיים אוגר בשם ‎'{0}'.</value>
@@ -226,31 +226,31 @@
     <value>לא ניתן לחסר סימבול בר־הזזה.</value>
   </data>
   <data name="ZeroRegisterWriteback" xml:space="preserve">
-    <value>פקודה זו כותבת לאוגר ‎$zero‎.</value>
+    <value>הוראה זו כותבת לאוגר ‎$zero‎.</value>
   </data>
   <data name="RequiresVersion" xml:space="preserve">
-    <value>הפקודה ‎'{0}'‎ דורשת גרסת MIPS ‎{1}.</value>
+    <value>ההוראה ‎'{0}'‎ דורשת גרסת MIPS ‎{1}.</value>
   </data>
   <data name="RemovedInVersion" xml:space="preserve">
-    <value>הפקודה ‎'{0}'‎ הוצאה משימוש. נתמכה לאחרונה בגרסת MIPS ‎{1}.</value>
+    <value>ההוראה ‎'{0}'‎ הוצאה משימוש. נתמכה לאחרונה בגרסת MIPS ‎{1}.</value>
   </data>
   <data name="WrongArgumentCount" xml:space="preserve">
-    <value>הפקודה ‎'{0}'‎ אינה יכולה לקבל ‎{1}‎ ארגומנטים.</value>
+    <value>ההוראה ‎'{0}'‎ אינה יכולה לקבל ‎{1}‎ ארגומנטים.</value>
   </data>
   <data name="DoesNotSupportFormatSingle" xml:space="preserve">
-    <value>הפקודה ‎'{0}'‎ אינה תומכת בתצורה ‎'Single'‎ (דיוק יחיד).</value>
+    <value>ההוראה ‎'{0}'‎ אינה תומכת בתצורה ‎'Single'‎ (דיוק יחיד).</value>
   </data>
   <data name="DoesNotSupportFormatDouble" xml:space="preserve">
-    <value>הפקודה ‎'{0}'‎ אינה תומכת בתצורה ‎'Double'‎ (דיוק כפול).</value>
+    <value>ההוראה ‎'{0}'‎ אינה תומכת בתצורה ‎'Double'‎ (דיוק כפול).</value>
   </data>
   <data name="DoesNotSupportFormatWord" xml:space="preserve">
-    <value>הפקודה ‎'{0}'‎ אינה תומכת בתצורה ‎'Word'‎ (מילה).</value>
+    <value>ההוראה ‎'{0}'‎ אינה תומכת בתצורה ‎'Word'‎ (מילה).</value>
   </data>
   <data name="DoesNotSupportFormatLong" xml:space="preserve">
-    <value>הפקודה ‎'{0}'‎ אינה תומכת בתצורה ‎'Long'‎ (ארוך).</value>
+    <value>ההוראה ‎'{0}'‎ אינה תומכת בתצורה ‎'Long'‎ (ארוך).</value>
   </data>
   <data name="DoesNotSupportFormatPairedSingle" xml:space="preserve">
-    <value>הפקודה ‎'{0}'‎ אינה תומכת בתצורה ‎'Paired Single'‎ (זוג דיוק יחיד).</value>
+    <value>ההוראה ‎'{0}'‎ אינה תומכת בתצורה ‎'Paired Single'‎ (זוג דיוק יחיד).</value>
   </data>
   <data name="NoRelocatableShiftAmount" xml:space="preserve">
     <value>ארגומנט של גודל ההזזה לא יכול להפנות לסימבולים בני־הזזה.</value>
@@ -317,5 +317,8 @@
   </data>
   <data name="DirectiveRequiresAnArgument" xml:space="preserve">
     <value>‎'{0}'‎ דורש ארגומנט.</value>
+  </data>
+  <data name="NoInstructionNamed" xml:space="preserve">
+    <value>אין הוראה בשם '{0}'.</value>
   </data>
 </root>

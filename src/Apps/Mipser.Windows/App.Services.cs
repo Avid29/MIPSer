@@ -32,6 +32,7 @@ public partial class App
             .AddSingleton<MainViewModel>()
             .AddTransient<ExplorerViewModel>()
             .AddTransient<CheatSheetViewModel>()
+            .AddTransient<ErrorListViewModel>()
             .AddTransient<PanelViewModel>()
             .AddTransient<WindowViewModel>()
             .BuildServiceProvider();

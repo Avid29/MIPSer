@@ -104,7 +104,7 @@
             
             <!--  Build  -->
             <MenuBarItem x:Uid="BuildMBI" Title="Build">
-                <MenuFlyoutItem x:Uid="AssembleProjectMFI" Text="Assemble Project" Command="{x:Bind ViewModel.AssembleFileCommand, Mode=OneWay}">
+                <MenuFlyoutItem x:Uid="AssembleProjectMFI" Text="Assemble Project">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEBD2;" />
                     </MenuFlyoutItem.Icon>
@@ -113,7 +113,7 @@
                         <KeyboardAccelerator Modifiers="Control" Key="B"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="AssembleFileMFI" Text="Assemble File">
+                <MenuFlyoutItem x:Uid="AssembleFileMFI" Text="Assemble File" Command="{x:Bind ViewModel.AssembleFileCommand, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Shift" Key="F5"/>
                         <KeyboardAccelerator Modifiers="Control,Shift" Key="B"/>

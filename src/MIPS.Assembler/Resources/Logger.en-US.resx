@@ -318,4 +318,7 @@
   <data name="DirectiveRequiresAnArgument" xml:space="preserve">
     <value>'{0}' requires an argument.</value>
   </data>
+  <data name="NoInstructionNamed" xml:space="preserve">
+    <value>No instruction named '{0}'.</value>
+  </data>
 </root>

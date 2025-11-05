@@ -9,7 +9,7 @@
     xmlns:logger="using:MIPS.Assembler.Logging"
     mc:Ignorable="d">
 
-    <ListView>
+    <ListView ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}">
         <ListView.Header>
             <ctc:DataTable>
                 <!-- Severity Icon -->
@@ -34,6 +34,5 @@
                 <Setter Property="HorizontalContentAlignment" Value="Left" />
             </Style>
         </ListView.ItemContainerStyle>
-
     </ListView>
 </UserControl>

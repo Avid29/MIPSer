@@ -149,13 +149,13 @@ public struct InstructionParser
             {
                 // The instruction requires a higher MIPS version
                 not null when _context is null || version > _context?.Config.MipsVersion =>
-                    (LogId.NotInVersion, $"The instruction '{name}' requires mips version {version:d}."),
+                    (LogId.NotInVersion, "RequiresVersion"),
 
                 // The instruction is deprecated
-                not null => (LogId.NotInVersion, $"The instruction '{name}' is deprecated. Last supported in mips version {version:d}."),
+                not null => (LogId.NotInVersion, "RemovedInVersion"),
 
                 // The instruction does not exist.
-                null => (LogId.InvalidInstructionName, $"No instruction named '{name}'.")
+                null => (LogId.InvalidInstructionName, "NoInstructionNamed")
             };
 
             // Log the error
