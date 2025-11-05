@@ -17,12 +17,12 @@
         <selectors:PageTemplateSelector x:Key="PageTemplateSelector">
             <selectors:PageTemplateSelector.CheatSheetPageTemplate>
                 <DataTemplate x:DataType="vmv:CheatSheetViewModel">
-                    <pages:CheatSheet/>
+                    <pages:CheatSheet DataContext="{x:Bind}"/>
                 </DataTemplate>
             </selectors:PageTemplateSelector.CheatSheetPageTemplate>
             <selectors:PageTemplateSelector.FilePageTemplate>
                 <DataTemplate x:DataType="vmv:FilePageViewModel">
-                    <pages:FileViewer/>
+                    <pages:FileViewer ViewModel="{x:Bind}"/>
                 </DataTemplate>
             </selectors:PageTemplateSelector.FilePageTemplate>
         </selectors:PageTemplateSelector>
@@ -33,15 +33,16 @@
         <TabView.TabItemTemplate>
             <DataTemplate x:DataType="vmva:PageViewModel">
                 <!--* for unsaved and italics for anonymous-->
-                <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
-                    <ContentControl Content="{x:Bind (vmva:PageViewModel), Mode=OneWay}"
-                                    ContentTemplateSelector="{StaticResource PageTemplateSelector}"
-                                    CornerRadius="8"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    HorizontalContentAlignment="Stretch"
-                                    VerticalContentAlignment="Stretch"/>
-
+                <TabViewItem Header="{x:Bind Title, Mode=OneWay}"
+                             Content="{x:Bind (vmva:PageViewModel), Mode=OneWay}"
+                             ContentTemplateSelector="{StaticResource PageTemplateSelector}">
+                    <!-- TODO: Sometimes, before the TabView "warms up", the templating will fail.-->
+                    <!-- Ask Michael or Arlo what they think sometime.-->
+                    <TabViewItem.HeaderTemplate>
+                        <DataTemplate x:DataType="x:String">
+                            <TextBlock Text="{x:Bind Mode=OneWay}"/>
+                        </DataTemplate>
+                    </TabViewItem.HeaderTemplate>
                 </TabViewItem>
             </DataTemplate>
         </TabView.TabItemTemplate>

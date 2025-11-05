@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Bindables.Files;
 using Mipser.Bindables.Files.Abstract;
 using Mipser.Messages.Files;
-using Mipser.Services.FileSystem;
+using Mipser.Services.Files;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -63,7 +63,7 @@ public class ExplorerViewModel : PageViewModel
 
     private async Task PickAndOpenFolderAsync()
     {
-        var folder = await _fileService.TryPickAndOpenFolderAsync();
+        var folder = await _fileService.PickFolderAsync();
         if (folder is null)
             return;
 

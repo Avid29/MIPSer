@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mipser.Bindables.Files;
-using Mipser.Services.FileSystem;
+using Mipser.Services.Files;
 using Mipser.ViewModels.Pages;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.ObjectModel;
@@ -15,17 +15,13 @@ namespace Mipser.ViewModels;
 /// </summary>
 public class PanelViewModel : ObservableObject
 {
-    private readonly IFileSystemService _fileService;
-
     private PageViewModel? _currentPage;
      
     /// <summary>
     /// Initializes a new instance of the <see cref="PanelViewModel"/> class.
     /// </summary>
-    public PanelViewModel(IFileSystemService filesService)
+    public PanelViewModel()
     {
-        _fileService = filesService;
-
         OpenPages = [];
     }
 
@@ -44,30 +40,6 @@ public class PanelViewModel : ObservableObject
     public ObservableCollection<PageViewModel> OpenPages { get; }
 
     /// <summary>
-    /// Creates and opens a new anonymous file.
-    /// </summary>
-    public void CreateNewFile()
-    {
-        var page = new FilePageViewModel();
-        OpenPages.Add(page);
-        CurrentPage = page;
-    }
-
-    /// <summary>
-    /// Picks and opens a file.
-    /// </summary>
-    public async Task PickAndOpenFileAsync()
-    {
-        var file = await _fileService.TryPickAndOpenFileAsync();
-        if (file is null)
-            return;
-
-        var page = new FilePageViewModel(new BindableFile(file));
-        OpenPages.Add(page);
-        CurrentPage = page;
-    }
-
-    /// <summary>
     /// Attempts to save the current file.
     /// </summary>
     /// <remarks>
@@ -82,7 +54,16 @@ public class PanelViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Closes a file.
+    /// Opens a page.
+    /// </summary>
+    public void OpenPage(PageViewModel page)
+    {
+        OpenPages.Add(page);
+        CurrentPage = page;
+    }
+
+    /// <summary>
+    /// Closes a page.
     /// </summary>
     /// <remarks>
     /// Does not save the file.

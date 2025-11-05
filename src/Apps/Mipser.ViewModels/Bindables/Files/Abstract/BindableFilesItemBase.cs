@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
-using Mipser.Services.FileSystem.Models;
+using Mipser.Services.Files.Models;
 using Mipser.Services.Localization;
 
 namespace Mipser.Bindables.Files.Abstract;

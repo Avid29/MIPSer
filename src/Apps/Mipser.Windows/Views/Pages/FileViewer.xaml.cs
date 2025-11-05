@@ -1,5 +1,6 @@
 // Avishai Dernis 2025
 
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.ViewModels.Pages;
 
@@ -18,5 +19,5 @@ public sealed partial class FileViewer : UserControl
         this.InitializeComponent();
     }
 
-    private FilePageViewModel ViewModel => (FilePageViewModel)this.DataContext;
+    public FilePageViewModel? ViewModel { get; set; }
 }

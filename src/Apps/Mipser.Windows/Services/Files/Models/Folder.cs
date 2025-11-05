@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using Mipser.Services.FileSystem.Models;
+using Mipser.Services.Files.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

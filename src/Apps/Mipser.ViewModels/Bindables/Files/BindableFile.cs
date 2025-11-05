@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using Mipser.Bindables.Files.Abstract;
-using Mipser.Services.FileSystem.Models;
+using Mipser.Services.Files.Models;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -19,7 +19,7 @@ public class BindableFile : BindableFilesItemBase
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFile"/> class.
     /// </summary>
-    public BindableFile()
+    private BindableFile()
     {
     }
 
@@ -29,8 +29,12 @@ public class BindableFile : BindableFilesItemBase
     public BindableFile(IFile file)
     {
         _file = file;
-        _ = LoadContent();
     }
+
+    /// <summary>
+    /// Gets an anonymous bindable file.
+    /// </summary>
+    public static BindableFile Anonymous => new();
 
     /// <summary>
     /// Gets if the file exists in storage, or just in memory.
@@ -78,7 +82,10 @@ public class BindableFile : BindableFilesItemBase
     /// </summary>
     public async Task SaveAsync() => await SaveContent();
 
-    private async Task LoadContent()
+    /// <summary>
+    /// Loads the files content.
+    /// </summary>
+    public async Task LoadContent()
     {
         if (_file is null)
             return;

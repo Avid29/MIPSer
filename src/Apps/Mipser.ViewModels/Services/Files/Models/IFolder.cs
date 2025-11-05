@@ -2,7 +2,7 @@
 
 using System.Threading.Tasks;
 
-namespace Mipser.Services.FileSystem.Models;
+namespace Mipser.Services.Files.Models;
 
 /// <summary>
 /// An interface for a folder.

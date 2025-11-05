@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2024
 
-using Mipser.Services.FileSystem;
-using Mipser.Services.FileSystem.Models;
+using Mipser.Services.Files;
+using Mipser.Services.Files.Models;
 using Mipser.Windows.Services.FileSystem.Models;
 using System;
 using System.Threading.Tasks;
@@ -17,10 +17,20 @@ namespace Mipser.Windows.Services.FileSystem;
 public class FileSystemService : IFileSystemService
 {
     /// <inheritdoc/>
-    public async Task<IFile?> TryGetFileAsync(string path) => new File(await StorageFile.GetFileFromPathAsync(path));
+    public async Task<IFile?> GetFileAsync(string path)
+    {
+        try
+        {
+            var file = await StorageFile.GetFileFromPathAsync(path);
+            return new File(file);
+        } catch
+        {
+            return null;
+        }
+    }
 
     /// <inheritdoc/>
-    public async Task<IFile?> TryPickAndOpenFileAsync()
+    public async Task<IFile?> PickFileAsync()
     {
         var picker = new FileOpenPicker
         {
@@ -38,7 +48,7 @@ public class FileSystemService : IFileSystemService
     }
 
     /// <inheritdoc/>
-    public async Task<IFolder?> TryPickAndOpenFolderAsync()
+    public async Task<IFolder?> PickFolderAsync()
     {
         var picker = new FolderPicker
         {
@@ -56,7 +66,7 @@ public class FileSystemService : IFileSystemService
     }
 
     /// <inheritdoc/>
-    public async Task<IFile?> TryPickAndSaveFileAsync(string filename)
+    public async Task<IFile?> PickSaveFileAsync(string filename)
     {
         var picker = new FileSavePicker
         {

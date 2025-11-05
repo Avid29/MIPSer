@@ -40,4 +40,9 @@ public sealed partial class PanelView : UserControl
     {
         Ioc.Default.GetRequiredService<IMessenger>().Send(new PanelFocusChangedMessage(ViewModel));
     }
+
+    private void ContentControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+    {
+        InvalidateViewport();
+    }
 }

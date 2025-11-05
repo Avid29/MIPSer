@@ -1,9 +1,9 @@
 ﻿// Adam Dernis 2024
 
-using Mipser.Services.FileSystem.Models;
+using Mipser.Services.Files.Models;
 using System.Threading.Tasks;
 
-namespace Mipser.Services.FileSystem;
+namespace Mipser.Services.Files;
 
 /// <summary>
 /// An interface for a files service
@@ -14,24 +14,23 @@ public interface IFileSystemService
     /// Attempts to get a file.
     /// </summary>
     /// <param name="path">The path of the file</param>
-    Task<IFile?> TryGetFileAsync(string path);
-
-    /// <summary>
-    /// Attempts to pick a file to open.
-    /// </summary>
-    /// <returns>An <see cref="IFile"/> to open, if successful.</returns>
-    Task<IFile?> TryPickAndOpenFileAsync();
-
+    Task<IFile?> GetFileAsync(string path);
 
     /// <summary>
     /// Attempts to pick a folder to open.
     /// </summary>
     /// <returns>An <see cref="IFolder"/> to open, if successful.</returns>
-    Task<IFolder?> TryPickAndOpenFolderAsync();
+    Task<IFolder?> PickFolderAsync();
+
+    /// <summary>
+    /// Attempts to pick a file to open.
+    /// </summary>
+    /// <returns>An <see cref="IFile"/> to open, if successful.</returns>
+    Task<IFile?> PickFileAsync();
 
     /// <summary>
     /// Attempts to pick a file to open.
     /// </summary>
     /// <returns>An <see cref="IFile"/> to save to, if successful.</returns>
-    Task<IFile?> TryPickAndSaveFileAsync(string filename);
+    Task<IFile?> PickSaveFileAsync(string filename);
 }
