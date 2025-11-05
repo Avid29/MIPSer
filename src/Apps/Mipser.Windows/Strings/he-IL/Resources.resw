@@ -252,14 +252,16 @@
   <data name="Conditional Move" xml:space="preserve">
     <value>העברה מותנית</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="BuildMBI.Title" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="BuildMBI.Title" xml:space="preserve">
+    <value>בנייה</value>
   </data>
-  <data name="AssembleProjectMFI.Text" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="AssembleProjectMFI.Text" xml:space="preserve">
+    <value>הרכב פרויקט</value>
   </data>
-  <data name="AssembleFileMFI.Text" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
+  <data name="AssembleFileMFI.Text" xml:space="preserve">
+    <value>הרכב קובץ</value>
+  </data>
+  <data name="MessageDC.Content" xml:space="preserve">
+    <value>הודעה</value>
   </data>
 </root>

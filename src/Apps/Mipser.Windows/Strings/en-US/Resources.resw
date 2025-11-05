@@ -261,4 +261,7 @@
   <data name="AssembleFileMFI.Text" xml:space="preserve">
     <value>Assemble File</value>
   </data>
+  <data name="MessageDC.Content" xml:space="preserve">
+    <value>Message</value>
+  </data>
 </root>

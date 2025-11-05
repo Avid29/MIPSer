@@ -3,7 +3,7 @@
 using Microsoft.UI.Xaml.Controls;
 using Mipser.ViewModels.Pages;
 
-namespace Mipser.Windows.Views;
+namespace Mipser.Windows.Views.Pages;
 
 /// <summary>
 /// A viewer for files.
@@ -19,11 +19,4 @@ public sealed partial class FileViewer : UserControl
     }
 
     private FilePageViewModel ViewModel => (FilePageViewModel)this.DataContext;
-
-    private void AssemblyEditBox_TextChanged(object sender, System.EventArgs e)
-    {
-        // TODO: Centralize assembly
-        //var assembler = await Assembler.AssembleAsync(ViewModel.File.Contents ?? string.Empty, ViewModel.File.Name, new AssemblerConfig());
-        //((AssemblyEditBox)sender).ApplyLogHighlights(assembler.Logs);
-    }
 }

@@ -4,7 +4,7 @@ using Microsoft.UI.Xaml.Controls;
 using Mipser.ViewModels.Pages;
 using System.Linq;
 
-namespace Mipser.Windows.Views;
+namespace Mipser.Windows.Views.Pages;
 
 public sealed partial class CheatSheet : UserControl
 {

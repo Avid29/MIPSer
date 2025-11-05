@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Mipser.Windows.Views.Pages.ErrorList"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
+    xmlns:logger="using:MIPS.Assembler.Logging"
+    mc:Ignorable="d">
+
+    <ListView>
+        <ListView.Header>
+            <ctc:DataTable>
+                <!-- Severity Icon -->
+                <ctc:DataColumn CanResize="True" MinWidth="36" MaxWidth="36"/>
+                <ctc:DataColumn x:Uid="MessageDC" Content="Message"
+                                CanResize="True" MinWidth="200"/>
+                <!--<ctc:DataColumn x:Uid="FileDC" Content="File" CanResize="True"/>-->
+            </ctc:DataTable>
+        </ListView.Header>
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="logger:Log">
+                <ctc:DataRow HorizontalAlignment="Left">
+                    <TextBlock Text="{x:Bind Severity, Mode=OneWay}"/>
+                    <TextBlock Text="{x:Bind Message, Mode=OneWay}"/>
+                    <!--<TextBlock Text="{x:Bind , Mode=OneWay}"/>-->
+                </ctc:DataRow>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+        <ListView.ItemContainerStyle>
+            <Style BasedOn="{StaticResource DefaultListViewItemStyle}"
+                   TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+            </Style>
+        </ListView.ItemContainerStyle>
+
+    </ListView>
+</UserControl>

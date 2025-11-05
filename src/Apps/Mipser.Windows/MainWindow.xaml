@@ -5,8 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="using:Mipser.Windows.Views.Pages"
     xmlns:shell="using:Mipser.Windows.Views.Shell"
-    xmlns:views="using:Mipser.Windows.Views"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
     mc:Ignorable="d">
 
@@ -23,21 +23,39 @@
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
-                <ColumnDefinition Width="280" MaxWidth="600" MinWidth="50"/>
+                <ColumnDefinition Width="200" MaxWidth="600" MinWidth="50"/>
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="20" MaxHeight="600" MinHeight="20"/>
+            </Grid.RowDefinitions>
 
             <!--Content View-->
-            <shell:PanelView x:Name="MainPanel" DataContext="{x:Bind ViewModel.MainPanelViewModel, Mode=OneWay}" Margin="0,0,7,0"/>
+            <shell:PanelView x:Name="MainPanel" DataContext="{x:Bind ViewModel.MainPanelViewModel, Mode=OneWay}" Margin="0,0,7,7"/>
 
-            <ctc:GridSplitter Grid.Column="1"
+            <!-- Error List -->
+            <pages:ErrorList Grid.Row="1"/>
+            
+            <!--Explorer-->
+            <pages:Explorer Grid.Column="1" Grid.RowSpan="2"/>
+            
+            <!-- Row Splitter-->
+            <ctc:GridSplitter Grid.Row="1"
+                              VerticalAlignment="Top"
+                              ResizeBehavior="BasedOnAlignment">
+                <ctc:GridSplitter.RenderTransform>
+                    <TranslateTransform Y="-7"/>
+                </ctc:GridSplitter.RenderTransform>
+            </ctc:GridSplitter>
+
+            <!-- Column Splitter -->
+            <ctc:GridSplitter Grid.Column="1" Grid.RowSpan="2"
                               HorizontalAlignment="Left"
                               ResizeBehavior="BasedOnAlignment">
                 <ctc:GridSplitter.RenderTransform>
                     <TranslateTransform X="-7"/>
                 </ctc:GridSplitter.RenderTransform>
             </ctc:GridSplitter>
-            
-            <shell:Explorer Grid.Column="1"/>
         </Grid>
     </Grid>
 </Window>

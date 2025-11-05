@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:views="using:Mipser.Windows.Views"
+    xmlns:pages="using:Mipser.Windows.Views.Pages"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
     xmlns:vmv="using:Mipser.ViewModels.Pages"
     xmlns:vmva="using:Mipser.ViewModels.Pages.Abstract"
@@ -17,12 +17,12 @@
         <selectors:PageTemplateSelector x:Key="PageTemplateSelector">
             <selectors:PageTemplateSelector.CheatSheetPageTemplate>
                 <DataTemplate x:DataType="vmv:CheatSheetViewModel">
-                    <views:CheatSheet/>
+                    <pages:CheatSheet/>
                 </DataTemplate>
             </selectors:PageTemplateSelector.CheatSheetPageTemplate>
             <selectors:PageTemplateSelector.FilePageTemplate>
                 <DataTemplate x:DataType="vmv:FilePageViewModel">
-                    <views:FileViewer/>
+                    <pages:FileViewer/>
                 </DataTemplate>
             </selectors:PageTemplateSelector.FilePageTemplate>
         </selectors:PageTemplateSelector>

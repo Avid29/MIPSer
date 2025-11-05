@@ -5,7 +5,7 @@ using Microsoft.UI.Xaml.Controls;
 using Mipser.Bindables.Files;
 using Mipser.ViewModels.Pages;
 
-namespace Mipser.Windows.Views.Shell;
+namespace Mipser.Windows.Views.Pages;
 
 /// <summary>
 /// The explorer view.
