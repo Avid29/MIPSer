@@ -7,13 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
     xmlns:logger="using:MIPS.Assembler.Logging"
+    xmlns:logenum="using:MIPS.Assembler.Logging.Enum"
     mc:Ignorable="d">
 
-    <ListView ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}">
+    <ListView ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}" SelectionMode="None" IsItemClickEnabled="True">
         <ListView.Header>
             <ctc:DataTable>
                 <!-- Severity Icon -->
-                <ctc:DataColumn CanResize="True" MinWidth="36" MaxWidth="36"/>
+                <ctc:DataColumn CanResize="True" MinWidth="50" MaxWidth="50"/>
                 <ctc:DataColumn x:Uid="MessageDC" Content="Message"
                                 CanResize="True" MinWidth="200"/>
                 <!--<ctc:DataColumn x:Uid="FileDC" Content="File" CanResize="True"/>-->
@@ -22,8 +23,22 @@
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="logger:Log">
                 <ctc:DataRow HorizontalAlignment="Left">
-                    <TextBlock Text="{x:Bind Severity, Mode=OneWay}"/>
-                    <TextBlock Text="{x:Bind Message, Mode=OneWay}"/>
+                    <ctc:SwitchPresenter TargetType="logenum:Severity" Value="{x:Bind Severity, Mode=OneWay}">
+                        <ctc:Case Value="Error">
+                            <ImageIcon Width="16" Source="/Assets/Icons/Severity/Error.svg"/>
+                        </ctc:Case>
+                        <ctc:Case Value="Warning">
+                            <ImageIcon Width="16" Source="/Assets/Icons/Severity/Warning.svg"/>
+                        </ctc:Case>
+                        <ctc:Case Value="Message">
+                            <ImageIcon Width="16" Source="/Assets/Icons/Severity/Message.svg"/>
+                        </ctc:Case>
+                    </ctc:SwitchPresenter>
+                    <RichTextBlock>
+                        <Paragraph>
+                            <Run Text="{x:Bind Message, Mode=OneWay}"/>
+                        </Paragraph>
+                    </RichTextBlock>
                     <!--<TextBlock Text="{x:Bind , Mode=OneWay}"/>-->
                 </ctc:DataRow>
             </DataTemplate>
@@ -31,6 +46,7 @@
         <ListView.ItemContainerStyle>
             <Style BasedOn="{StaticResource DefaultListViewItemStyle}"
                    TargetType="ListViewItem">
+                <Setter Property="Padding" Value="0" />
                 <Setter Property="HorizontalContentAlignment" Value="Left" />
             </Style>
         </ListView.ItemContainerStyle>
