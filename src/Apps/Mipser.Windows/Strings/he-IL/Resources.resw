@@ -123,6 +123,30 @@
   <data name="FileMBI.Title" xml:space="preserve">
     <value>קבוץ</value>
   </data>
+  <data name="OpenMFI.Text" xml:space="preserve">
+    <value>פתח</value>
+  </data>
+  <data name="OpenFolderMFI.Text" xml:space="preserve">
+    <value>פתח תיקייה</value>
+  </data>
+  <data name="NewFileMFI.Text" xml:space="preserve">
+    <value>קובץ חדש</value>
+  </data>
+  <data name="SaveMFI.Text" xml:space="preserve">
+    <value>שמור</value>
+  </data>
+  <data name="SaveAllMFI.Text" xml:space="preserve">
+    <value>שמור הכל</value>
+  </data>
+  <data name="CloseFileMFI.Text" xml:space="preserve">
+    <value>סגור קובץ</value>
+  </data>
+  <data name="UndoMFI.Text" xml:space="preserve">
+    <value>בטל פעולה</value>
+  </data>
+  <data name="RedoMFI.Text" xml:space="preserve">
+    <value>בצע שוב</value>
+  </data>
   <data name="CutMFI.Text" xml:space="preserve">
     <value>גזור</value>
   </data>
@@ -131,30 +155,6 @@
   </data>
   <data name="PasteMFI.Text" xml:space="preserve">
     <value>הדבק</value>
-  </data>
-  <data name="RedoMFI.Text" xml:space="preserve">
-    <value>בצע שוב</value>
-  </data>
-  <data name="UndoMFI.Text" xml:space="preserve">
-    <value>בטל פעולה</value>
-  </data>
-  <data name="CloseFileMFI.Text" xml:space="preserve">
-    <value>סגור קובץ</value>
-  </data>
-  <data name="SaveAllMFI.Text" xml:space="preserve">
-    <value>שמור הכל</value>
-  </data>
-  <data name="SaveMFI.Text" xml:space="preserve">
-    <value>שמור</value>
-  </data>
-  <data name="NewFileMFI.Text" xml:space="preserve">
-    <value>קובץ חדש</value>
-  </data>
-  <data name="OpenFolderMFI.Text" xml:space="preserve">
-    <value>פתח תיקייה</value>
-  </data>
-  <data name="OpenMFI.Text" xml:space="preserve">
-    <value>פתח</value>
   </data>
   <data name="OpenFileMFI.Text" xml:space="preserve">
     <value>פתח קובץ</value>
@@ -204,14 +204,14 @@
   <data name="System" xml:space="preserve">
     <value>מערכת</value>
   </data>
-  <data name="Usage_shift" xml:space="preserve">
-    <value>הזזה</value>
+  <data name="Usage_offset" xml:space="preserve">
+    <value>היסט</value>
   </data>
   <data name="Usage_address" xml:space="preserve">
     <value>כתובת</value>
   </data>
-  <data name="Usage_offset" xml:space="preserve">
-    <value>היסט</value>
+  <data name="Usage_shift" xml:space="preserve">
+    <value>הזזה</value>
   </data>
   <data name="Usage_immediate" xml:space="preserve">
     <value>מיידי</value>
@@ -251,5 +251,15 @@
   </data>
   <data name="Conditional Move" xml:space="preserve">
     <value>העברה מותנית</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="BuildMBI.Title" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="AssembleProjectMFI.Text" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
+  </data>
+  <data name="AssembleFileMFI.Text" type="System.Resources.ResXNullRef, System.Windows.Forms">
+    <value />
   </data>
 </root>

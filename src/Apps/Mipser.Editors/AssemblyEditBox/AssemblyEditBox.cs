@@ -2,7 +2,7 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using System.Runtime.InteropServices;
+using MIPS.Assembler.Models.Instructions;
 using WinUIEditor;
 
 namespace Mipser.Editors.AssemblyEditBox;
@@ -35,5 +35,8 @@ public partial class AssemblyEditBox : Control
         this.Loaded += AssemblyEditBox_Loaded;
 
         _codeEditor.Editor.SetText(Text);
+
+        var table = new InstructionTable(MIPS.Models.Instructions.Enums.MipsVersion.MipsIII);
+        SetupKeywords(table.GetInstructions());
     }
 }

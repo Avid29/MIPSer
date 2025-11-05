@@ -252,4 +252,13 @@
   <data name="Conditional Move" xml:space="preserve">
     <value>Conditional Move</value>
   </data>
+  <data name="BuildMBI.Title" xml:space="preserve">
+    <value>Build</value>
+  </data>
+  <data name="AssembleProjectMFI.Text" xml:space="preserve">
+    <value>Assemble Project</value>
+  </data>
+  <data name="AssembleFileMFI.Text" xml:space="preserve">
+    <value>Assemble File</value>
+  </data>
 </root>

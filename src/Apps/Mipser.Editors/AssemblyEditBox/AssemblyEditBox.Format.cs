@@ -4,6 +4,8 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.WinUI.Helpers;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Models;
+using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using System.Collections.Generic;
@@ -16,6 +18,8 @@ namespace Mipser.Editors.AssemblyEditBox;
 
 public partial class AssemblyEditBox
 {
+    private HashSet<string>? Instructions = null;
+
     private bool @lock = false;
 
     /// <summary>
@@ -93,6 +97,9 @@ public partial class AssemblyEditBox
         {
             var style = token.Type switch
             {
+                TokenType.Instruction when Instructions is not null =>
+                    Instructions.Contains(token.Source) ? InstructionStyleIndex : InvalidInstructionStyleIndex,
+
                 TokenType.Instruction => InstructionStyleIndex,
                 TokenType.Register => RegisterStyleIndex,
                 TokenType.Immediate => ImmediateStyleIndex,
@@ -124,6 +131,7 @@ public partial class AssemblyEditBox
     private const int CommaStyleIndex = 7;
     private const int StringStyleIndex = 8;
     private const int CommentStyleIndex = 9;
+    private const int InvalidInstructionStyleIndex = 10;
 
     private void SetupHighlighting()
     {
@@ -139,6 +147,7 @@ public partial class AssemblyEditBox
         editor.StyleSetFore(CommaStyleIndex, ToInt("#77A7FD".ToColor()));
         editor.StyleSetFore(StringStyleIndex, ToInt("#FFC47A".ToColor()));
         editor.StyleSetFore(CommentStyleIndex, ToInt("#9B88FC".ToColor()));
+        editor.StyleSetFore(InvalidInstructionStyleIndex, ToInt("#67995c".ToColor()));
 
         UpdateSyntaxHighlighting();
     }
@@ -152,6 +161,17 @@ public partial class AssemblyEditBox
         Guard.IsNotNull(_codeEditor);
 
         //_codeEditor.Editor.
+    }
+
+    private void SetupKeywords(InstructionMetadata[] instructions)
+    {
+        Instructions = [];
+
+        foreach (var instr in instructions)
+        {
+            // TODO: Handle formatting instructions
+            Instructions.Add(instr.Name);
+        }
     }
 
     private int ToInt(Color color) => color.R | color.G << 8 | color.B << 16;
