@@ -17,14 +17,14 @@ namespace Mipser.ViewModels.Pages;
 public class ExplorerViewModel : PageViewModel
 {
     private readonly IMessenger _messenger;
-    private readonly IFileSystemService _fileService;
+    private readonly IFileService _fileService;
 
     private BindableFolder? _rootFolder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExplorerViewModel"/> class.
     /// </summary>
-    public ExplorerViewModel(IMessenger messenger, IFileSystemService filesService)
+    public ExplorerViewModel(IMessenger messenger, IFileService filesService)
     {
         _messenger = messenger;
         _fileService = filesService;
@@ -63,13 +63,10 @@ public class ExplorerViewModel : PageViewModel
 
     private async Task PickAndOpenFolderAsync()
     {
-        var folder = await _fileService.PickFolderAsync();
-        if (folder is null)
+        RootFolder = await _fileService.PickFolderAsync();
+        if (RootFolder is null)
             return;
 
-        RootFolder = new BindableFolder(folder);
         await RootFolder.LoadChildrenAsync();
-        
-        OnPropertyChanged(nameof(RootFolder));
     }
 }

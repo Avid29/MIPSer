@@ -19,7 +19,7 @@ namespace Mipser.Services.ProjectService;
 public class BuildService
 {
     private readonly IMessenger _messenger;
-    private readonly FileService _fileService;
+    private readonly IFileService _fileService;
 
     private CancellationTokenSource? _resetToken;
     private BuildStatus _buildStatus;
@@ -27,7 +27,7 @@ public class BuildService
     /// <summary>
     /// Initializes a new instance of the <see cref="BuildService"/> class.
     /// </summary>
-    public BuildService(IMessenger messenger, FileService fileService)
+    public BuildService(IMessenger messenger, IFileService fileService)
     {
         _messenger = messenger;
         _fileService = fileService;

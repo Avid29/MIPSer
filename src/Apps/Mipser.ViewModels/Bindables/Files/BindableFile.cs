@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using Mipser.Bindables.Files.Abstract;
+using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using System.IO;
 using System.Threading.Tasks;
@@ -19,22 +20,17 @@ public class BindableFile : BindableFilesItemBase
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFile"/> class.
     /// </summary>
-    private BindableFile()
+    internal BindableFile(FileService fileService) : base(fileService)
     {
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFile"/> class.
     /// </summary>
-    public BindableFile(IFile file)
+    internal BindableFile(FileService fileService, IFile file) : base(fileService)
     {
         _file = file;
     }
-
-    /// <summary>
-    /// Gets an anonymous bindable file.
-    /// </summary>
-    public static BindableFile Anonymous => new();
 
     /// <summary>
     /// Gets if the file exists in storage, or just in memory.

@@ -15,14 +15,14 @@ public partial class MainViewModel : ObservableRecipient
 {
     private readonly IMessenger _messenger;
     private readonly BuildService _buildService;
-    private readonly FileService _fileService;
+    private readonly IFileService _fileService;
 
     private PanelViewModel? _focusPanel;
     
     /// <summary>
     /// Initializes a new instance of the <see cref="MainViewModel"/> class.
     /// </summary>
-    public MainViewModel(IMessenger messenger, BuildService buildService, FileService filesService)
+    public MainViewModel(IMessenger messenger, BuildService buildService, IFileService filesService)
     {
         _messenger = messenger;
         _buildService = buildService;

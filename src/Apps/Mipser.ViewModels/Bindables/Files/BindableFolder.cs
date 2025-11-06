@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using Mipser.Bindables.Files.Abstract;
+using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -21,7 +22,7 @@ public class BindableFolder : BindableFilesItemBase
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFolder"/> class.
     /// </summary>
-    public BindableFolder(IFolder folder)
+    public BindableFolder(FileService fileService, IFolder folder) : base(fileService)
     {
         _folder = folder;
 
@@ -60,14 +61,15 @@ public class BindableFolder : BindableFilesItemBase
         {
             return x switch
             {
-                IFile file => new BindableFile(file),
-                IFolder folder => new BindableFolder(folder),
+                IFile file => FileService.GetOrAddTrackedFile(file),
+                IFolder folder => FileService.GetFolder(folder),
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<BindableFilesItemBase>(),
             };
         });
 
         ChildrenNotCalculated = false;
 
+        Children.Clear();
         foreach (var item in children)
         {
             Children.Add(item);

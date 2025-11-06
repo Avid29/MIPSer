@@ -90,7 +90,7 @@ public partial class MainViewModel
     private void OpenFile(BindableFile? file)
     {
         // Create anonymous file if needed
-        file ??= BindableFile.Anonymous;
+        file ??= _fileService.GetAnonymousFile();
 
         // Create page view model
         var page = Ioc.Default.GetRequiredService<FilePageViewModel>();

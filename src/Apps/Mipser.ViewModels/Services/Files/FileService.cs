@@ -11,12 +11,12 @@ namespace Mipser.Services.Files;
 /// <summary>
 /// A wrapper for the <see cref="IFileSystemService"/> which also tracks open files.
 /// </summary>
-public class FileService
+public class FileService : IFileService
 {
     // TODO: Untracking out of use files
 
-    private IFileSystemService _fileSystemService;
-    private Dictionary<string, BindableFile> _openFiles;
+    private readonly IFileSystemService _fileSystemService;
+    private readonly Dictionary<string, BindableFile> _openFiles;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FileService"/> class.
@@ -27,11 +27,14 @@ public class FileService
 
         _openFiles = [];
     }
-
-    /// <summary>
-    /// Gets a file from a path.
-    /// </summary>
-    /// <param name="path">The path of the file.</param>
+    
+    /// <inheritdoc/>
+    public BindableFile GetAnonymousFile()
+    {
+        return new BindableFile(this);
+    }
+    
+    /// <inheritdoc/>
     public async Task<BindableFile?> GetFileAsync(string path)
     {
         // Get storage file
@@ -41,11 +44,8 @@ public class FileService
 
         return GetOrAddTrackedFile(file);
     }
-
-    /// <summary>
-    /// Opens a file picker to select an <see cref="IFile"/>.
-    /// </summary>
-    /// <returns>The selected <see cref="IFile"/>.</returns>
+    
+    /// <inheritdoc/>
     public async Task<BindableFile?> PickFileAsyc()
     {
         var file = await _fileSystemService.PickFileAsync();
@@ -54,8 +54,24 @@ public class FileService
 
         return GetOrAddTrackedFile(file);
     }
+    
+    /// <inheritdoc/>
+    public async Task<BindableFolder?> PickFolderAsync()
+    {
+        var folder = await _fileSystemService.PickFolderAsync();
+        if (folder is null)
+            return null;
 
-    private BindableFile GetOrAddTrackedFile(IFile file)
+        return GetFolder(folder);
+    }
+
+    internal BindableFolder GetFolder(IFolder folder)
+    {
+        // TODO: Track folders
+        return new BindableFolder(this, folder);
+    }
+
+    internal BindableFile GetOrAddTrackedFile(IFile file)
     {
         // Check if the file is already tracked, 
         // and retrieve it if so.
@@ -64,7 +80,7 @@ public class FileService
             return _openFiles[key];
 
         // Create and track new bindable
-        var bindable = new BindableFile(file);
+        var bindable = new BindableFile(this, file);
         _openFiles.Add(key, bindable);
         return bindable;
     }

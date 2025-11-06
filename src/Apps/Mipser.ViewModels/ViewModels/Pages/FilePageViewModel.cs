@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using MIPS.Assembler;
 using Mipser.Bindables.Files;
 using Mipser.ViewModels.Pages.Abstract;
@@ -21,7 +22,6 @@ namespace Mipser.ViewModels.Pages
         /// </summary>
         public FilePageViewModel()
         {
-            File = BindableFile.Anonymous;
         }
 
         /// <inheritdoc/>

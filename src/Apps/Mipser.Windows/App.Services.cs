@@ -26,7 +26,7 @@ public partial class App
             .AddSingleton<IFileSystemService, FileSystemService>()
 
             // Dependent Services
-            .AddSingleton<FileService>()
+            .AddSingleton<IFileService, FileService>()
             .AddSingleton<BuildService>()
 
             // ViewModels
