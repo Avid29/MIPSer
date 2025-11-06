@@ -4,14 +4,12 @@ using CommunityToolkit.Diagnostics;
 using CommunityToolkit.WinUI.Helpers;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Enums;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+using System.Text;
 using Windows.UI;
 
 namespace Mipser.Editors.AssemblyEditBox;
@@ -75,23 +73,27 @@ public partial class AssemblyEditBox
                 break;
 
             // TODO: Check if the line has been updated
-            FormatLine(pos, line);
-            pos += line.Length + 2;
+            FormatLine(pos, line, out var lineLength);
+            pos += lineLength + 2;
         }
 
         @lock = false;
     }
 
-    private void FormatLine(int lineStart, string line)
+    private void FormatLine(int lineStart, string line, out int lineLength)
     {
         Guard.IsNotNull(_codeEditor);
         var editor = _codeEditor.Editor;
 
+        // We need to convert everything to utf8 sizing
+        lineLength = Encoding.UTF8.GetByteCount(line);
+
         // Clear the line to white
         editor.StartStyling(lineStart, 0);
-        editor.SetStyling(line.Length, 0);
+        editor.SetStyling(lineLength, 0);
 
         // Tokenize the line
+        int pos = lineStart;
         var tokenized = Tokenizer.TokenizeLine(line, mode: TokenizerMode.IDE);
         foreach (var token in tokenized.Tokens)
         {
@@ -117,8 +119,11 @@ public partial class AssemblyEditBox
                 _ => 0,
             };
 
-            editor.StartStyling(lineStart + token.Location.Index, 0);
-            editor.SetStyling(token.Source.Length, style);
+            // Set style and advance position
+            var tokenLength = Encoding.UTF8.GetByteCount(token.Source);
+            editor.StartStyling(pos, 0);
+            editor.SetStyling(tokenLength, style);
+            pos += tokenLength;
         }
     }
 

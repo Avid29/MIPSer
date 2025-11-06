@@ -16,7 +16,7 @@ public enum TokenType
     String,
 
     LabelDeclaration,
-    // TODO: Consider making the label splitter (':') a separate token type
+    LabelMarker,
     Reference,          // This could be either a label or a macro
 
     OpenParenthesis,

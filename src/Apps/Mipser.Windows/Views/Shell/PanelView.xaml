@@ -17,7 +17,7 @@
         <selectors:PageTemplateSelector x:Key="PageTemplateSelector">
             <selectors:PageTemplateSelector.CheatSheetPageTemplate>
                 <DataTemplate x:DataType="vmv:CheatSheetViewModel">
-                    <pages:CheatSheet DataContext="{x:Bind}"/>
+                    <pages:CheatSheet ViewModel="{x:Bind}"/>
                 </DataTemplate>
             </selectors:PageTemplateSelector.CheatSheetPageTemplate>
             <selectors:PageTemplateSelector.FilePageTemplate>

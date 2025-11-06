@@ -141,8 +141,7 @@ public class Tokenizer
             TokenizerState.ArgBegin => ParseFromBegin(c, false),
 
             // Instructions, labels, macros, etc. at beginning of line
-            TokenizerState.NewLineText => ParseNewLineText(c, false),
-            TokenizerState.NewLineTextWait => ParseNewLineText(c, true),
+            TokenizerState.NewLineText => ParseNewLineText(c),
 
             // Registers
             TokenizerState.Register => ParseFromRegister(c),
@@ -190,7 +189,7 @@ public class Tokenizer
         {
             // Digits aren't actually valid here, but we're gonna defer that error for now
             // to get a better error message down the line.
-            return HandleCharacter(c, TokenType.Reference, TokenizerState.NewLineText);
+            return HandleCharacter(c, TokenType.Instruction, TokenizerState.NewLineText);
         }
         else
         {
@@ -223,6 +222,7 @@ public class Tokenizer
             '[' => HandleCharacter(c, TokenType.OpenBracket),
             ']' => HandleCharacter(c, TokenType.CloseBracket),
             ',' => HandleCharacter(c, TokenType.Comma),
+            ':' => HandleCharacter(c, TokenType.LabelMarker),
             '=' => HandleCharacter(c, TokenType.Assign),
 
             '.' => newLine && HandleCharacter(c, TokenType.Directive, TokenizerState.Directive),
@@ -241,19 +241,13 @@ public class Tokenizer
         };
     }
 
-    private bool ParseNewLineText(char c, bool wait)
+    private bool ParseNewLineText(char c)
     {
-        // Enter waiting mode
-        if (char.IsWhiteSpace(c) && c is not '\n')
-        {
-            _state = TokenizerState.NewLineTextWait;
-            return true;
-        }
-
         // Text is a label declaration.
         if (c is ':')
         {
-            return HandleCharacter(c, TokenType.LabelDeclaration, TokenizerState.LineBegin);
+            _tokenType = TokenType.LabelDeclaration;
+            return CompleteAndContinue(c);
         }
 
         // Text is a marco declaration.
@@ -263,18 +257,22 @@ public class Tokenizer
             return CompleteAndContinue(c);
         }
 
-        // We're in waiting mode, we can't keep adding to the token.
-        // It must be an instruction.
-        if (wait || c is '\n')
+        // Finish line
+        if (c is '\n')
         {
-            _tokenType = TokenType.Instruction;
+            return CompleteAndContinue(c, TokenizerState.LineBegin);
+        }
+
+        // Finish token and enter normal cycle
+        if (char.IsWhiteSpace(c))
+        {
             return CompleteAndContinue(c);
         }
 
         // There's a lot of characters that aren't valid here,
         // but we're gonna let them be part of the token and just drop 
-        // more understandable error later.
-        return HandleCharacter(c, null, TokenizerState.NewLineText);
+        // a more understandable error later.
+        return HandleCharacter(c, TokenType.Instruction, TokenizerState.NewLineText);
     }
 
     private bool ParseFromRegister(char c)
