@@ -14,21 +14,27 @@ public partial class FileItemTemplateSelector : DataTemplateSelector
     /// <summary>
     /// Gets the <see cref="DataTemplate"/> for a <see cref="BindableFile"/>.
     /// </summary>
-    public DataTemplate? BindableFileTemplate { get; set; }
+    public DataTemplate? FileTemplate { get; set; }
 
     /// <summary>
     /// Gets the <see cref="DataTemplate"/> for a <see cref="BindableFolder"/>.
     /// </summary>
-    public DataTemplate? BindableFolderTemplate { get; set; }
+    public DataTemplate? FolderTemplate { get; set; }
+    
+    /// <inheritdoc/>
+    protected override DataTemplate? SelectTemplateCore(object item)
+    {
+        return item switch
+        {
+            BindableFile => FileTemplate,
+            BindableFolder => FolderTemplate,
+            _ => null,
+        };
+    }
 
     /// <inheritdoc/>
     protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container)
     {
-        return item switch
-        {
-            BindableFile => BindableFileTemplate,
-            BindableFolder => BindableFolderTemplate,
-            _ => null,
-        };
+        return base.SelectTemplateCore(item);
     }
 }

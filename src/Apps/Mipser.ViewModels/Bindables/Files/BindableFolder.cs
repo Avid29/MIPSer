@@ -27,7 +27,7 @@ public class BindableFolder : BindableFilesItemBase
         _folder = folder;
 
         _items = [];
-        ChildrenNotCalculated = true;
+        ChildrenNotLoaded = true;
     }
 
     /// <summary>
@@ -40,9 +40,9 @@ public class BindableFolder : BindableFilesItemBase
     }
 
     /// <summary>
-    /// Gets a value indicating whether or not the children have been calculated.
+    /// Gets a value indicating whether or not the children have been loaded.
     /// </summary>
-    public bool ChildrenNotCalculated
+    public bool ChildrenNotLoaded
     {
         get => _childrenNotCalculated;
         set => SetProperty(ref _childrenNotCalculated, value);
@@ -54,7 +54,7 @@ public class BindableFolder : BindableFilesItemBase
     /// <summary>
     /// Loads the node's children.
     /// </summary>
-    public async Task LoadChildrenAsync()
+    public async Task LoadChildrenAsync(bool recursive = false)
     {
         var items = await _folder.GetItemsAsync();
         var children = items.Select(x =>
@@ -67,12 +67,16 @@ public class BindableFolder : BindableFilesItemBase
             };
         });
 
-        ChildrenNotCalculated = false;
+        ChildrenNotLoaded = false;
 
         Children.Clear();
         foreach (var item in children)
         {
             Children.Add(item);
+
+            // Recursively load children if recursing
+            if (recursive && item is BindableFolder folder)
+                await folder.LoadChildrenAsync(recursive);
         }
     }
 }

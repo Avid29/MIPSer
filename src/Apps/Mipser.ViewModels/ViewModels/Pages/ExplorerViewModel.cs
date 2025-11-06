@@ -6,7 +6,7 @@ using Mipser.Bindables.Files.Abstract;
 using Mipser.Messages.Files;
 using Mipser.Services.Files;
 using Mipser.ViewModels.Pages.Abstract;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Mipser.ViewModels.Pages;
@@ -45,7 +45,7 @@ public class ExplorerViewModel : PageViewModel
         {
             if (SetProperty(ref _rootFolder, value))
             {
-                OnPropertyChanged(nameof(RootNodes));
+                OnPropertyChanged(nameof(RootNode));
             }
         }
     }
@@ -53,7 +53,7 @@ public class ExplorerViewModel : PageViewModel
     /// <summary>
     /// Gets the list of root nodes.
     /// </summary>
-    public ObservableCollection<BindableFilesItemBase>? RootNodes => RootFolder?.Children;
+    public IEnumerable<BindableFilesItemBase?> RootNode => [RootFolder];
 
     /// <inheritdoc/>
     protected override void OnActivated()
@@ -68,5 +68,6 @@ public class ExplorerViewModel : PageViewModel
             return;
 
         await RootFolder.LoadChildrenAsync();
+        OnPropertyChanged(nameof(RootNode));
     }
 }

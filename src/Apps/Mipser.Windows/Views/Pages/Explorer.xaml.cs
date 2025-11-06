@@ -1,8 +1,12 @@
 // Adam Dernis 2024
 
+using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Input;
 using Mipser.Bindables.Files;
+using Mipser.Messages.Navigation;
 using Mipser.ViewModels.Pages;
 
 namespace Mipser.Windows.Views.Pages;
@@ -23,11 +27,19 @@ public sealed partial class Explorer : UserControl
 
     private ExplorerViewModel ViewModel => (ExplorerViewModel)DataContext;
 
+    private void TreeViewItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+    {
+        if (sender is not TreeViewItem tvi || tvi.DataContext is not BindableFile file)
+            return;
+
+        Ioc.Default.GetRequiredService<IMessenger>().Send(new FileOpenRequestMessage(file));
+    }
+
     private async void TreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)
     {
-        if (args.Item is BindableFolder folder && folder.ChildrenNotCalculated)
-        {
-            await folder.LoadChildrenAsync();
-        }
+        if (args.Item is not BindableFolder folder || !folder.ChildrenNotLoaded)
+            return;
+
+        await folder.LoadChildrenAsync();
     }
 }

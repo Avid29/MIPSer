@@ -6,40 +6,31 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:selector="using:Mipser.Windows.Selectors"
-    xmlns:filedata="using:Mipser.Bindables.Files"
+    xmlns:files="using:Mipser.Bindables.Files"
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <DataTemplate x:Key="FileTemplate" x:DataType="filedata:BindableFile">
-            <TreeViewItem AutomationProperties.Name="{x:Bind Name, Mode=OneWay}">
-                <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
-            </TreeViewItem>
+        <DataTemplate x:Key="FileTemplate" x:DataType="files:BindableFile">
+            <TreeViewItem Content="{x:Bind Name, Mode=OneWay}"
+                          AutomationProperties.Name="{x:Bind Name, Mode=OneWay}"
+                          DoubleTapped="TreeViewItem_DoubleTapped"/>
         </DataTemplate>
 
-        <DataTemplate x:Key="FolderTemplate" x:DataType="filedata:BindableFolder">
-            <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneWay}"
-                          HasUnrealizedChildren="{x:Bind ChildrenNotCalculated, Mode=OneWay}"
-                          AutomationProperties.Name="{x:Bind Name, Mode=OneWay}">
-                <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
-            </TreeViewItem>
+        <DataTemplate x:Key="FolderTemplate" x:DataType="files:BindableFolder">
+            <TreeViewItem Content="{x:Bind Name, Mode=OneWay}"
+                          ItemsSource="{x:Bind Children, Mode=OneWay}"
+                          HasUnrealizedChildren="{x:Bind ChildrenNotLoaded, Mode=OneWay}"
+                          AutomationProperties.Name="{x:Bind Name, Mode=OneWay}"/>
         </DataTemplate>
 
-        <selector:FileItemTemplateSelector
-            x:Key="FileItemSelector"
-            BindableFileTemplate="{StaticResource FileTemplate}"
-            BindableFolderTemplate="{StaticResource FolderTemplate}"/>
+        <selector:FileItemTemplateSelector x:Key="FileItemTemplateSelector"
+                                           FileTemplate="{StaticResource FileTemplate}"
+                                           FolderTemplate="{StaticResource FolderTemplate}"/>
     </UserControl.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-
-        <TextBlock Text="{x:Bind ViewModel.RootFolder.Name, Mode=OneWay}"/>
-
-        <TreeView ItemsSource="{x:Bind ViewModel.RootFolder.Children, Mode=OneWay}" ItemTemplateSelector="{StaticResource FileItemSelector}"
-                  Grid.Row="1" CanDragItems="False" AllowDrop="False" Expanding="TreeView_Expanding"/>
-
+        <TreeView ItemsSource="{x:Bind ViewModel.RootNode, Mode=OneWay}"
+                  ItemTemplateSelector="{StaticResource FileItemTemplateSelector}"
+                  Expanding="TreeView_Expanding"/>
     </Grid>
 </UserControl>
