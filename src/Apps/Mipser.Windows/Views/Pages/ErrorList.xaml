@@ -53,11 +53,6 @@
                             <ImageIcon Height="12" Source="/Assets/Icons/Severity/Message.svg"/>
                         </ctc:Case>
                     </ctc:SwitchPresenter>
-                    <!--<RichTextBlock FontSize="12" Margin="8,0">
-                        <Paragraph>
-                            <Run Text="{x:Bind Message, Mode=OneWay}"/>
-                        </Paragraph>
-                    </RichTextBlock>-->
                     <TextBlock Text="{x:Bind Message, Mode=OneWay}" Margin="8,0" FontSize="12"/>
                     <TextBlock Text="{x:Bind File, Mode=OneWay}" Margin="8,0" FontSize="12"/>
                     <TextBlock Text="{x:Bind Line, Mode=OneWay}" Margin="8,0" FontSize="12"/>

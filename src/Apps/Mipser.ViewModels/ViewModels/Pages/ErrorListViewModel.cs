@@ -34,7 +34,7 @@ public class ErrorListViewModel : PageViewModel
     /// <inheritdoc/>
     protected override void OnActivated()
     {
-        _messenger.Register<ErrorListViewModel, AssembleFileRequestMessage>(this, (r, _) => r.HandleAssembly());
+        _messenger.Register<ErrorListViewModel, BuildFinishedMessage>(this, (r, m) => r.UpdateLog(m));
     }
 
     /// <inheritdoc/>
@@ -45,20 +45,10 @@ public class ErrorListViewModel : PageViewModel
     /// </summary>
     public ObservableCollection<Log> Messages { get; }
 
-    private async void HandleAssembly()
+    private void UpdateLog(BuildFinishedMessage message)
     {
-        var currentFile = Ioc.Default.GetRequiredService<MainViewModel>().CurrentFilePage?.File;
-        if (currentFile is null)
-            return;
-
-        var stream = await currentFile.GetStreamAsync();
-        if (stream is null)
-            return;
-
-        var assembly = await Assembler.AssembleAsync(stream, currentFile.Name, new AssemblerConfig());
-
         Messages.Clear();
-        foreach(var log in assembly.Logs)
+        foreach(var log in message.Logs)
             Messages.Add(log);
     }
 }

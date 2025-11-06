@@ -3,6 +3,7 @@
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Bindables.Files;
+using Mipser.Messages.Build;
 using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
 using Mipser.Messages.Pages;
@@ -17,8 +18,23 @@ public partial class MainViewModel
     /// <inheritdoc/>
     protected override void OnActivated()
     {
+        RegisterBuildMessages();
         RegisterFileMessages();
         RegisterNavigationMessages();
+    }
+
+    private void RegisterBuildMessages()
+    {
+        _messenger.Register<MainViewModel, AssembleFileRequestMessage>(this, async (r, _) =>
+        {
+            // Get current file if possible, return if not
+            var file = r.CurrentFilePage?.File;
+            if (file is null)
+                return;
+
+            // Build the current file
+            await _buildService.AssembleFileAsync(file);
+        });
     }
 
     private void RegisterFileMessages()
@@ -27,6 +43,7 @@ public partial class MainViewModel
         _messenger.Register<MainViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFileAsync());
         _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, (r, m) => r.FocusedPanel?.ClosePage(m.Page));
         _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, (r, m) => r.CurrentFilePage?.Save());
+
     }
 
     private void RegisterNavigationMessages()

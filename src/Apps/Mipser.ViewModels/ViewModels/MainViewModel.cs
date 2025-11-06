@@ -3,6 +3,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Services.Files;
+using Mipser.Services.ProjectService;
 using Mipser.ViewModels.Pages;
 
 namespace Mipser.ViewModels;
@@ -13,6 +14,7 @@ namespace Mipser.ViewModels;
 public partial class MainViewModel : ObservableRecipient
 {
     private readonly IMessenger _messenger;
+    private readonly BuildService _buildService;
     private readonly FileService _fileService;
 
     private PanelViewModel? _focusPanel;
@@ -20,10 +22,12 @@ public partial class MainViewModel : ObservableRecipient
     /// <summary>
     /// Initializes a new instance of the <see cref="MainViewModel"/> class.
     /// </summary>
-    public MainViewModel(IMessenger messenger, FileService filesService)
+    public MainViewModel(IMessenger messenger, BuildService buildService, FileService filesService)
     {
         _messenger = messenger;
+        _buildService = buildService;
         _fileService = filesService;
+
         IsActive = true;
     }
 

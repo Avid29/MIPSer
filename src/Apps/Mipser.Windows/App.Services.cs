@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Mipser.Services.Files;
 using Mipser.Services.Localization;
+using Mipser.Services.ProjectService;
 using Mipser.ViewModels;
 using Mipser.ViewModels.Pages;
 using Mipser.Windows.Services.FileSystem;
@@ -19,13 +20,14 @@ public partial class App
         // Register services
         return new ServiceCollection()
 
-            // System Services
+            // Basic Services
             .AddSingleton<IMessenger, WeakReferenceMessenger>()
             .AddSingleton<ILocalizationService, LocalizationService>()
             .AddSingleton<IFileSystemService, FileSystemService>()
-            .AddSingleton<FileService>()
 
-            // App Services
+            // Dependent Services
+            .AddSingleton<FileService>()
+            .AddSingleton<BuildService>()
 
             // ViewModels
             .AddSingleton<MainViewModel>()
