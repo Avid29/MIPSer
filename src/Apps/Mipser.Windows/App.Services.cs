@@ -7,6 +7,7 @@ using Mipser.Services.Localization;
 using Mipser.Services.ProjectService;
 using Mipser.ViewModels;
 using Mipser.ViewModels.Pages;
+using Mipser.Windows.Services.Cache;
 using Mipser.Windows.Services.FileSystem;
 using Mipser.Windows.Services.Localization;
 using System;
@@ -24,6 +25,7 @@ public partial class App
             .AddSingleton<IMessenger, WeakReferenceMessenger>()
             .AddSingleton<ILocalizationService, LocalizationService>()
             .AddSingleton<IFileSystemService, FileSystemService>()
+            .AddSingleton<ICacheService, CacheService>()
 
             // Dependent Services
             .AddSingleton<IFileService, FileService>()

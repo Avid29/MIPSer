@@ -62,7 +62,7 @@ public class BindableFolder : BindableFilesItemBase
             return x switch
             {
                 IFile file => FileService.GetOrAddTrackedFile(file),
-                IFolder folder => FileService.GetFolder(folder),
+                IFolder folder => FileService.GetOrAddTrackedFolder(folder),
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<BindableFilesItemBase>(),
             };
         });

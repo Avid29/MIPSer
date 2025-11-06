@@ -17,17 +17,15 @@ namespace Mipser.ViewModels.Pages;
 public class ExplorerViewModel : PageViewModel
 {
     private readonly IMessenger _messenger;
-    private readonly IFileService _fileService;
 
     private BindableFolder? _rootFolder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExplorerViewModel"/> class.
     /// </summary>
-    public ExplorerViewModel(IMessenger messenger, IFileService filesService)
+    public ExplorerViewModel(IMessenger messenger)
     {
         _messenger = messenger;
-        _fileService = filesService;
 
         IsActive = true;
     }
@@ -44,9 +42,7 @@ public class ExplorerViewModel : PageViewModel
         set
         {
             if (SetProperty(ref _rootFolder, value))
-            {
                 OnPropertyChanged(nameof(RootNode));
-            }
         }
     }
 
@@ -58,16 +54,6 @@ public class ExplorerViewModel : PageViewModel
     /// <inheritdoc/>
     protected override void OnActivated()
     {
-        _messenger.Register<ExplorerViewModel, FolderPickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFolderAsync());
-    }
-
-    private async Task PickAndOpenFolderAsync()
-    {
-        RootFolder = await _fileService.PickFolderAsync();
-        if (RootFolder is null)
-            return;
-
-        await RootFolder.LoadChildrenAsync();
-        OnPropertyChanged(nameof(RootNode));
+        _messenger.Register<ExplorerViewModel, FolderOpenedMessage>(this, (r, m) => _ = r.RootFolder = m.Folder);
     }
 }

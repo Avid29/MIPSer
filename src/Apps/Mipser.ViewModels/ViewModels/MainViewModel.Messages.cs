@@ -42,8 +42,9 @@ public partial class MainViewModel
         _messenger.Register<MainViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.CreateNewFile());
         _messenger.Register<MainViewModel, FileOpenRequestMessage>(this, (r, m) => r.OpenFile(m.File));
         _messenger.Register<MainViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFileAsync());
-        _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, (r, m) => r.FocusedPanel?.ClosePage(m.Page));
         _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, (r, m) => r.CurrentFilePage?.Save());
+        _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, (r, m) => r.FocusedPanel?.ClosePage(m.Page));
+        _messenger.Register<MainViewModel, FolderPickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFolderAsync());
 
     }
 
@@ -87,6 +88,19 @@ public partial class MainViewModel
         
         OpenFile(file);
     }
+    
+    /// <summary>
+    /// Picks and opens a folder.
+    /// </summary>
+    public async Task PickAndOpenFolderAsync()
+    {
+        // Select the folder to open
+        var folder = await _fileService.PickFolderAsync();
+        if (folder is null)
+            return;
+
+        OpenFolder(folder);
+    }
 
     private void OpenFile(BindableFile? file)
     {
@@ -99,5 +113,13 @@ public partial class MainViewModel
 
         // Open the page
         FocusedPanel?.OpenPage(page);
+    }
+
+    private void OpenFolder(BindableFolder folder)
+    {
+        // TODO: Move to ProjectService
+
+        _ = _cacheService.CacheAsync("OpenFolder", folder.Path);
+        _messenger.Send(new FolderOpenedMessage(folder));
     }
 }

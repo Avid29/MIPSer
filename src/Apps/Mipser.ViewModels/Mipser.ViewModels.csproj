@@ -32,4 +32,8 @@
     <ProjectReference Include="..\..\MIPS.Linker\MIPS.Linker.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Messages\Project\" />
+  </ItemGroup>
+
 </Project>

@@ -35,4 +35,9 @@ public abstract class BindableFilesItemBase : ObservableObject
     /// Gets the name of the file.
     /// </summary>
     public string Name => Item?.Name ?? Ioc.Default.GetRequiredService<ILocalizationService>()["NewFile"];
+
+    /// <summary>
+    /// Gets the file's path.
+    /// </summary>
+    public string? Path => Item?.Path;
 }

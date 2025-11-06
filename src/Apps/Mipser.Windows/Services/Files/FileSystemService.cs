@@ -28,6 +28,19 @@ public class FileSystemService : IFileSystemService
             return null;
         }
     }
+    
+    /// <inheritdoc/>
+    public async Task<IFolder?> GetFolderAsync(string path)
+    {
+        try
+        {
+            var folder = await StorageFolder.GetFolderFromPathAsync(path);
+            return new Folder(folder);
+        } catch
+        {
+            return null;
+        }
+    }
 
     /// <inheritdoc/>
     public async Task<IFile?> PickFileAsync()

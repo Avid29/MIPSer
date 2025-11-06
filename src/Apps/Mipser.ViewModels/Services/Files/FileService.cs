@@ -46,6 +46,16 @@ public class FileService : IFileService
     }
     
     /// <inheritdoc/>
+    public async Task<BindableFolder?> GetFolderAsync(string path)
+    {
+        var folder = await _fileSystemService.GetFolderAsync(path);
+        if (folder is null)
+            return null;
+
+        return GetOrAddTrackedFolder(folder);
+    }
+
+    /// <inheritdoc/>
     public async Task<BindableFile?> PickFileAsyc()
     {
         var file = await _fileSystemService.PickFileAsync();
@@ -62,10 +72,10 @@ public class FileService : IFileService
         if (folder is null)
             return null;
 
-        return GetFolder(folder);
+        return GetOrAddTrackedFolder(folder);
     }
 
-    internal BindableFolder GetFolder(IFolder folder)
+    internal BindableFolder GetOrAddTrackedFolder(IFolder folder)
     {
         // TODO: Track folders
         return new BindableFolder(this, folder);

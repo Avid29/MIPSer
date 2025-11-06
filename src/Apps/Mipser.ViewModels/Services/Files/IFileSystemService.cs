@@ -13,8 +13,12 @@ public interface IFileSystemService
     /// <summary>
     /// Attempts to get a file.
     /// </summary>
-    /// <param name="path">The path of the file</param>
     Task<IFile?> GetFileAsync(string path);
+
+    /// <summary>
+    /// Attempts to get a folder.
+    /// </summary>
+    Task<IFolder?> GetFolderAsync(string path);
 
     /// <summary>
     /// Attempts to pick a folder to open.
