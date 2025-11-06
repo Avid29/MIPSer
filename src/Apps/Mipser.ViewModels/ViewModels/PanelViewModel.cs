@@ -31,8 +31,19 @@ public class PanelViewModel : ObservableObject
     public PageViewModel? CurrentPage
     {
         get => _currentPage;
-        set => SetProperty(ref _currentPage, value);
+        set
+        {
+            if (SetProperty(ref _currentPage, value))
+            {
+                OnPropertyChanged(nameof(IsPageOpen));
+            }
+        }
     }
+
+    /// <summary>
+    /// Gets a value indicating whether or not a page is open.
+    /// </summary>
+    public bool IsPageOpen => CurrentPage is not null;
 
     /// <summary>
     /// Gets an <see cref="ObservableCollection{T}"/> of open files.

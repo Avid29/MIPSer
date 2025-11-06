@@ -27,7 +27,7 @@ public partial class WindowViewModel : ObservableRecipient
         SaveFileCommand = new RelayCommand(SaveFile);
         PickAndOpenFileCommand = new RelayCommand(PickAndOpenFile);
         PickAndOpenFolderCommand = new RelayCommand(PickAndOpenFolder);
-        CloseFileCommand = new RelayCommand(CloseFile);
+        ClosePageCommand = new RelayCommand(ClosePage);
         AssembleFileCommand = new RelayCommand(AssembleFile);
         OpenCheatSheetCommand = new RelayCommand(OpenCheatSheet);
 

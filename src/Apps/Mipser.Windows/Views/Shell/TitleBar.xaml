@@ -18,7 +18,8 @@
             
             <!--  File  -->
             <MenuBarItem x:Uid="FileMBI" Title="File">
-                <MenuFlyoutItem x:Uid="NewFileMFI" Text="New File" Command="{x:Bind ViewModel.CreateNewFileCommand, Mode=OneWay}">
+                <MenuFlyoutItem x:Uid="NewFileMFI" Text="New File"
+                                Command="{x:Bind ViewModel.CreateNewFileCommand, Mode=OneWay}">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE130;" />
                     </MenuFlyoutItem.Icon>
@@ -27,19 +28,23 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSubItem x:Uid="OpenMFI" Text="Open">
-                    <MenuFlyoutItem x:Uid="OpenFileMFI" Icon="OpenFile" Text="Open File" Command="{x:Bind ViewModel.PickAndOpenFileCommand, Mode=OneWay}">
+                    <MenuFlyoutItem x:Uid="OpenFileMFI" Icon="OpenFile" Text="Open File"
+                                    Command="{x:Bind ViewModel.PickAndOpenFileCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control" Key="O"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
-                    <MenuFlyoutItem x:Uid="OpenFolderMFI" Icon="OpenLocal" Text="Open Folder" Command="{x:Bind ViewModel.PickAndOpenFolderCommand, Mode=OneWay}">
+                    <MenuFlyoutItem x:Uid="OpenFolderMFI" Icon="OpenLocal" Text="Open Folder"
+                                    Command="{x:Bind ViewModel.PickAndOpenFolderCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control,Shift" Key="O"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                 </MenuFlyoutSubItem>
                 <MenuFlyoutSeparator/>
-                <MenuFlyoutItem x:Uid="SaveMFI" Icon="Save" Text="Save" Command="{x:Bind ViewModel.SaveFileCommand, Mode=OneWay}">
+                <MenuFlyoutItem x:Uid="SaveMFI" Icon="Save" Text="Save"
+                                Command="{x:Bind ViewModel.SaveFileCommand, Mode=OneWay}"
+                                IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanSave, FallbackValue=False, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Control" Key="S"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
@@ -53,7 +58,9 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
-                <MenuFlyoutItem x:Uid="CloseFileMFI" Text="Close File" Command="{x:Bind ViewModel.CloseFileCommand, Mode=OneWay}">
+                <MenuFlyoutItem x:Uid="CloseFileMFI" Text="Close File"
+                                Command="{x:Bind ViewModel.ClosePageCommand, Mode=OneWay}"
+                                IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.IsPageOpen, FallbackValue=False, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Control" Key="W"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
@@ -119,7 +126,8 @@
                         <KeyboardAccelerator Modifiers="Control,Shift" Key="B"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="AssembleFileMFI" Text="Assemble File" Command="{x:Bind ViewModel.AssembleFileCommand, Mode=OneWay}">
+                <MenuFlyoutItem x:Uid="AssembleFileMFI" Text="Assemble File"
+                                Command="{x:Bind ViewModel.AssembleFileCommand, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Menu" Key="F5"/>
                         <KeyboardAccelerator Modifiers="Control,Menu" Key="B"/>
@@ -129,7 +137,8 @@
             
             <!--  Help  -->
             <MenuBarItem x:Uid="HelpMBI" Title="Help">
-                <MenuFlyoutItem x:Uid="CheatSheetMFI" Text="Show Cheatsheet" Command="{x:Bind ViewModel.OpenCheatSheetCommand, Mode=OneWay}"/>
+                <MenuFlyoutItem x:Uid="CheatSheetMFI" Text="Show Cheatsheet"
+                                Command="{x:Bind ViewModel.OpenCheatSheetCommand, Mode=OneWay}"/>
                 <MenuFlyoutItem x:Uid="AboutMFI" Text="About Mipser" IsEnabled="False">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE946;" />

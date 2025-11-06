@@ -1,7 +1,6 @@
 // Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.ViewModels;
 

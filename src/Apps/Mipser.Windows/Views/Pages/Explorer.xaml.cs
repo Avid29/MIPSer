@@ -3,6 +3,7 @@
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Mipser.Bindables.Files;
@@ -27,6 +28,21 @@ public sealed partial class Explorer : UserControl
 
     private ExplorerViewModel ViewModel => (ExplorerViewModel)DataContext;
 
+    private void TreeViewItem_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is not TreeViewItem tvi)
+            return;
+
+        var node = TreeViewRoot.NodeFromContainer(tvi);
+        if (node is null)
+            return;
+
+        if (node.Depth is 0)
+        {
+            TreeViewRoot.Expand(node);
+        }
+    }
+
     private void TreeViewItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
     {
         if (sender is not TreeViewItem tvi || tvi.DataContext is not BindableFile file)
@@ -40,6 +56,8 @@ public sealed partial class Explorer : UserControl
         if (args.Item is not BindableFolder folder || !folder.ChildrenNotLoaded)
             return;
 
+        // Load children and ensure expansion
         await folder.LoadChildrenAsync();
+        args.Node.IsExpanded = true;
     }
 }

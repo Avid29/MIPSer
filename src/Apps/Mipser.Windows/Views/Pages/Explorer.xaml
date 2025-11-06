@@ -20,6 +20,7 @@
             <TreeViewItem Content="{x:Bind Name, Mode=OneWay}"
                           ItemsSource="{x:Bind Children, Mode=OneWay}"
                           HasUnrealizedChildren="{x:Bind ChildrenNotLoaded, Mode=OneWay}"
+                          Loaded="TreeViewItem_Loaded"
                           AutomationProperties.Name="{x:Bind Name, Mode=OneWay}"/>
         </DataTemplate>
 
@@ -29,7 +30,8 @@
     </UserControl.Resources>
 
     <Grid>
-        <TreeView ItemsSource="{x:Bind ViewModel.RootNode, Mode=OneWay}"
+        <TreeView x:Name="TreeViewRoot"
+                  ItemsSource="{x:Bind ViewModel.RootNode, Mode=OneWay}"
                   ItemTemplateSelector="{StaticResource FileItemTemplateSelector}"
                   Expanding="TreeView_Expanding"/>
     </Grid>

@@ -36,6 +36,9 @@ public class FilePageViewModel : PageViewModel
             return name;
         }
     }
+    
+    /// <inheritdoc/>
+    public override bool CanSave => true;
 
     /// <summary>
     /// Gets the bindable file for this page.

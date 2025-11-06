@@ -13,5 +13,10 @@ namespace Mipser.ViewModels.Pages.Abstract
         /// Gets or sets the title of the page.
         /// </summary>
         public abstract string Title { get; }
+
+        /// <summary>
+        /// Gets or sets if the page can be saved.
+        /// </summary>
+        public virtual bool CanSave { get; }
     }
 }

@@ -28,12 +28,11 @@ public partial class MainViewModel
         _messenger.Register<MainViewModel, AssembleFileRequestMessage>(this, async (r, _) =>
         {
             // Get current file if possible, return if not
-            var file = r.CurrentFilePage?.File;
-            if (file is null)
+            if (r.FocusedPanel?.CurrentPage is not FilePageViewModel fileViewModel || fileViewModel.File is null)
                 return;
 
             // Build the current file
-            await _buildService.AssembleFileAsync(file);
+            await _buildService.AssembleFileAsync(fileViewModel.File);
         });
     }
 
@@ -42,7 +41,7 @@ public partial class MainViewModel
         _messenger.Register<MainViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.CreateNewFile());
         _messenger.Register<MainViewModel, FileOpenRequestMessage>(this, (r, m) => r.OpenFile(m.File));
         _messenger.Register<MainViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFileAsync());
-        _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, (r, m) => r.CurrentFilePage?.Save());
+        _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, (r, m) => r.FocusedPanel?.SaveCurrentFile());
         _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, (r, m) => r.FocusedPanel?.ClosePage(m.Page));
         _messenger.Register<MainViewModel, FolderPickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFolderAsync());
 

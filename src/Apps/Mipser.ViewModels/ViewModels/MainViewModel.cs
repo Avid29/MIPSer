@@ -43,19 +43,8 @@ public partial class MainViewModel : ObservableRecipient
     public PanelViewModel? FocusedPanel
     {
         get => _focusPanel;
-        private set
-        {
-            if (SetProperty(ref _focusPanel, value))
-            {
-                OnPropertyChanging(nameof(FocusedPanel));
-            }
-        }
+        private set => SetProperty(ref _focusPanel, value);
     }
-
-    /// <summary>
-    /// Gets the currently open <see cref="FilePageViewModel"/>, or null if the current page is not a file.
-    /// </summary>
-    public FilePageViewModel? CurrentFilePage => FocusedPanel?.CurrentPage as FilePageViewModel;
 
     private async void RestoreOpenFolder()
     {

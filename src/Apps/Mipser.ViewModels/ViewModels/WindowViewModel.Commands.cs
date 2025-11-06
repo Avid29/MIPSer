@@ -32,9 +32,9 @@ public partial class WindowViewModel
     public RelayCommand PickAndOpenFolderCommand { get; }
 
     /// <summary>
-    /// Gets a command that closes the currently open file.
+    /// Gets a command that closes the currently open page.
     /// </summary>
-    public RelayCommand CloseFileCommand { get; }
+    public RelayCommand ClosePageCommand { get; }
 
     /// <summary>
     /// Gets a command that assembles the current file.
@@ -54,7 +54,7 @@ public partial class WindowViewModel
 
     private void PickAndOpenFolder() => _messenger.Send(new FolderPickAndOpenRequestMessage());
 
-    private void CloseFile() => _messenger.Send(new PageCloseRequestMessage());
+    private void ClosePage() => _messenger.Send(new PageCloseRequestMessage());
 
     private void AssembleFile() => _messenger.Send(new AssembleFileRequestMessage());
 
