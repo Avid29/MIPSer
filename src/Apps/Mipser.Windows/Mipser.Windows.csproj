@@ -20,6 +20,9 @@
     <Content Remove="Assets\Fonts\HappyMonkey-Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Views\Shell\StatusBar.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
@@ -30,7 +33,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Labs.WinUI.ColorAnalyzer" Version="0.1.251101-build.2372" />
     <PackageReference Include="CommunityToolkit.Labs.WinUI.Controls.DataTable" Version="0.1.251101-build.2372" />
+    <PackageReference Include="CommunityToolkit.Labs.WinUI.Controls.Marquee" Version="0.1.251101-build.2372" />
+    <PackageReference Include="CommunityToolkit.Labs.WinUI.Controls.OpacityMaskView" Version="0.1.251101-build.2372" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.2.250402" />
@@ -60,6 +66,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Mipser.Editors\Mipser.Editors.csproj" />
     <ProjectReference Include="..\Mipser.ViewModels\Mipser.ViewModels.csproj" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Page Update="Views\Shell\StatusBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 	
   <ItemGroup>

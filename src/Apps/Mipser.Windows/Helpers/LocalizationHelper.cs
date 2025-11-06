@@ -1,0 +1,27 @@
+﻿// Avishai Dernis 2025
+
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Mipser.Services.Localization;
+using System;
+
+namespace Mipser.Windows.Helpers;
+
+public static class LocalizationHelper
+{
+    public static string LocalizeEnum<TEnum>(TEnum value)
+        where TEnum : Enum
+    {
+        var key = $"{typeof(TEnum).Name}.{value}";
+
+        var localizationService = Ioc.Default.GetRequiredService<ILocalizationService>();
+        return localizationService[key];
+    }
+
+    public static string Localize(object value)
+    {
+        var key = $"{value.GetType().Name}_{value}";
+
+        var localizationService = Ioc.Default.GetRequiredService<ILocalizationService>();
+        return localizationService[key];
+    }
+}

@@ -1,14 +1,10 @@
 ﻿// Avishai Dernis 2025
 
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
-using MIPS.Assembler;
 using MIPS.Assembler.Logging;
-using MIPS.Assembler.Models;
 using Mipser.Messages.Build;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.ObjectModel;
-using System.Globalization;
 
 namespace Mipser.ViewModels.Pages;
 
@@ -17,7 +13,7 @@ namespace Mipser.ViewModels.Pages;
 /// </summary>
 public class ErrorListViewModel : PageViewModel
 {
-    private IMessenger _messenger;
+    private readonly IMessenger _messenger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ErrorListViewModel"/> class.

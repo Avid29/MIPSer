@@ -31,6 +31,7 @@ public partial class App
 
             // ViewModels
             .AddSingleton<MainViewModel>()
+            .AddTransient<StatusViewModel>()
             .AddTransient<WindowViewModel>()
             .AddTransient<PanelViewModel>()
             .AddTransient<FilePageViewModel>()

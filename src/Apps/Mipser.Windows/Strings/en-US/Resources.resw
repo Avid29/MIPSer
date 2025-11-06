@@ -273,4 +273,25 @@
   <data name="LineDC.Content" xml:space="preserve">
     <value>Line</value>
   </data>
+  <data name="BuildStatus_NotReady" xml:space="preserve">
+    <value>Not Ready</value>
+  </data>
+  <data name="BuildStatus_Ready" xml:space="preserve">
+    <value>Ready</value>
+  </data>
+  <data name="BuildStatus_Preparing" xml:space="preserve">
+    <value>Preparing</value>
+  </data>
+  <data name="BuildStatus_Assembling" xml:space="preserve">
+    <value>Assembling</value>
+  </data>
+  <data name="BuildStatus_Linking" xml:space="preserve">
+    <value>Linking</value>
+  </data>
+  <data name="BuildStatus_Completed" xml:space="preserve">
+    <value>Build Complete</value>
+  </data>
+  <data name="BuildStatus_Failed" xml:space="preserve">
+    <value>Build Failed</value>
+  </data>
 </root>

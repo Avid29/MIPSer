@@ -273,4 +273,25 @@
   <data name="LineDC.Content" xml:space="preserve">
     <value>שורה</value>
   </data>
+  <data name="BuildStatus_NotReady" xml:space="preserve">
+    <value>לא מוכן</value>
+  </data>
+  <data name="BuildStatus_Ready" xml:space="preserve">
+    <value>מוכן</value>
+  </data>
+  <data name="BuildStatus_Preparing" xml:space="preserve">
+    <value>מתכונן</value>
+  </data>
+  <data name="BuildStatus_Assembling" xml:space="preserve">
+    <value>מרכיב</value>
+  </data>
+  <data name="BuildStatus_Linking" xml:space="preserve">
+    <value>מקשר</value>
+  </data>
+  <data name="BuildStatus_Completed" xml:space="preserve">
+    <value>הבנייה הושלם</value>
+  </data>
+  <data name="BuildStatus_Failed" xml:space="preserve">
+    <value>הבנייה נכשלה</value>
+  </data>
 </root>

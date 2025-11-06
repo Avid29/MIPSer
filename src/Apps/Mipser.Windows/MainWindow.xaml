@@ -15,10 +15,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
 
         <!--Title Bar-->
         <shell:TitleBar DataContext="{x:Bind ViewModel, Mode=OneWay}"/>
+
+        <!--  Status Bar  -->
+        <shell:StatusBar Grid.Row="2" Grid.ColumnSpan="2"/>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -27,18 +31,18 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition Height="20" MaxHeight="600" MinHeight="20"/>
+                <RowDefinition Height="24" MaxHeight="600" MinHeight="24"/>
             </Grid.RowDefinitions>
 
-            <!--Content View-->
+            <!--  Content View  -->
             <shell:PanelView x:Name="MainPanel" DataContext="{x:Bind ViewModel.MainPanelViewModel, Mode=OneWay}" Margin="0,0,7,7"/>
 
-            <!-- Error List -->
+            <!--  Error List  -->
             <pages:ErrorList Grid.Row="1"/>
-            
-            <!--Explorer-->
+
+            <!--  Explorer  -->
             <pages:Explorer Grid.Column="1" Grid.RowSpan="2"/>
-            
+
             <!-- Row Splitter-->
             <ctc:GridSplitter Grid.Row="1"
                               VerticalAlignment="Top"
