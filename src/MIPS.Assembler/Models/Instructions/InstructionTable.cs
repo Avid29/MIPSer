@@ -86,7 +86,7 @@ public class InstructionTable : InstructionTableBase<string>
     }
 
     /// <inheritdoc/>
-    protected override void LoadInsturction(InstructionMetadata metadata)
+    protected override void LoadInstruction(InstructionMetadata metadata)
     {
         if (metadata.MIPSVersions.Contains(Version))
         {

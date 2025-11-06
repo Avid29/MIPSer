@@ -8,15 +8,15 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="a0d39b12-20cc-4cee-9b1a-59fe4a4a71c4"
-    Publisher="CN=avid2"
-    Version="0.0.1.0" />
+    Name="38062AvishaiDernis.MIPSer"
+    Publisher="CN=43D24869-0557-46C9-8B30-13C6ACFDB86B"
+    Version="0.1.51106.0" />
 
-  <mp:PhoneIdentity PhoneProductId="a0d39b12-20cc-4cee-9b1a-59fe4a4a71c4" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="e294f103-ed56-4067-bdc1-56756ead9fe8" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>Mipser.Windows</DisplayName>
-    <PublisherDisplayName>avid2</PublisherDisplayName>
+    <DisplayName>MIPSer</DisplayName>
+    <PublisherDisplayName>Avishai Dernis</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 

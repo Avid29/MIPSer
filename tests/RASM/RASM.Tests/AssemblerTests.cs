@@ -132,8 +132,9 @@ public class AssemblerTests
             return;
 
         // Load output file
-        var output = TestFilePathing.GetMatchingObjectFilePath(filename);
-        Stream result = File.Open(output, FileMode.OpenOrCreate);
+        //var output = TestFilePathing.GetMatchingObjectFilePath(filename);
+        //Stream result = File.Open(output, FileMode.OpenOrCreate);
+        Stream result = new MemoryStream();
 
         // Write the module and assert validity
         var module = assembler.CompleteModule<RasmModule>(result);

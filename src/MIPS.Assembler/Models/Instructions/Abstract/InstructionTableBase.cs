@@ -82,7 +82,7 @@ public abstract class InstructionTableBase<T>
 
             foreach (var instruction in instructions)
             {
-                LoadInsturction(instruction);
+                LoadInstruction(instruction);
             }
         }
     }
@@ -91,7 +91,7 @@ public abstract class InstructionTableBase<T>
     /// Loads an instruction into the <see cref="LookupTable"/>.
     /// </summary>
     /// <param name="metadata">The metadata of the instruction.</param>
-    protected abstract void LoadInsturction(InstructionMetadata metadata);
+    protected abstract void LoadInstruction(InstructionMetadata metadata);
 
     /// <summary>
     /// Loads an instruction into the <see cref="LookupTable"/>.

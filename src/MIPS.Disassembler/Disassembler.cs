@@ -36,9 +36,9 @@ public class Disassembler
     public InstructionTable InstructionTable { get; }
 
     /// <summary>
-    /// Disassmbles the <paramref name="instruction"/> into a string.
+    /// Disassembles the <paramref name="instruction"/> into a string.
     /// </summary>
-    /// <param name="instruction">The instruction to disassmble.</param>
+    /// <param name="instruction">The instruction to disassemble.</param>
     /// <returns>The instruction as a string.</returns>
     public string DisassembleInstruction(Instruction instruction)
     {

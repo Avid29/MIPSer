@@ -8,14 +8,14 @@ namespace MIPS.Assembler.Tokenization;
 /// <summary>
 /// A class for wrapping tokenized assembly files.
 /// </summary>
-public class TokenizedAssmebly
+public class TokenizedAssembly
 {
     private readonly List<AssemblyLine> _tokenLines;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TokenizedAssmebly"/> class.
+    /// Initializes a new instance of the <see cref="TokenizedAssembly"/> class.
     /// </summary>
-    public TokenizedAssmebly(List<AssemblyLine> tokens) => _tokenLines = tokens;
+    public TokenizedAssembly(List<AssemblyLine> tokens) => _tokenLines = tokens;
 
     /// <summary>
     /// Gets a line's token list as a span.

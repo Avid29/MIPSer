@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MIPS.Assembler.Tokenization;
@@ -17,29 +18,26 @@ namespace MIPS.Assembler.Tokenization;
 /// </summary>
 public class Tokenizer
 {
-    private readonly ILogger? _logger;
     private readonly TokenizerMode _mode;
+    private readonly StringBuilder _cache;
+    private readonly string? _filename;
 
     private TokenizerState _state;
-    private string _cache;
     private TokenType? _tokenType;
 
-    private readonly string? _filename;
     private TextLocation _location;
     private TextLocation _cacheLocation;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Tokenizer"/> class.
     /// </summary>
-    private Tokenizer(string? filename, ILogger? logger = null, TokenizerMode mode = TokenizerMode.Assembly)
+    private Tokenizer(string? filename, TokenizerMode mode = TokenizerMode.Assembly)
     {
-        _logger = logger;
-
         TokenLines = [];
-        Tokens = [];
+        LineTokens = [];
         _mode = mode;
         _state = TokenizerState.LineBegin;
-        _cache = string.Empty;
+        _cache = new();
         _tokenType = null;
         _location = new TextLocation
         {
@@ -54,13 +52,13 @@ public class Tokenizer
 
     private List<AssemblyLine> TokenLines { get; }
 
-    private List<Token> Tokens { get; set; }
+    private List<Token> LineTokens { get; set; }
 
     /// <inheritdoc/>
-    public static async Task<TokenizedAssmebly> TokenizeAsync(Stream stream, string? filename = null, ILogger? logger = null)
+    public static async Task<TokenizedAssembly> TokenizeAsync(Stream stream, string? filename = null)
     {
         using var reader = new StreamReader(stream);
-        return await TokenizeAsync(reader, filename, logger);
+        return await TokenizeAsync(reader, filename);
     }
 
     /// <summary>
@@ -68,12 +66,11 @@ public class Tokenizer
     /// </summary>
     /// <param name="reader">The stream of code.</param>
     /// <param name="filename">The filename of the stream.</param>
-    /// <param name="logger">The logger to use when tracking errors.</param>
     /// <returns>A list of tokens.</returns>
-    public static async Task<TokenizedAssmebly> TokenizeAsync(TextReader reader, string? filename = null, ILogger? logger = null)
+    public static async Task<TokenizedAssembly> TokenizeAsync(TextReader reader, string? filename = null)
     {
         // Create tokenizer
-        Tokenizer tokenizer = new(filename, logger);
+        Tokenizer tokenizer = new(filename);
 
         // Parse line by line from stream
         while (true)
@@ -85,7 +82,7 @@ public class Tokenizer
             tokenizer.ParseLine(line);
         }
 
-        return new TokenizedAssmebly(tokenizer.TokenLines);
+        return new TokenizedAssembly(tokenizer.TokenLines);
     }
 
     /// <summary>
@@ -110,7 +107,7 @@ public class Tokenizer
 
     private bool ParseLine(string line)
     {
-        Tokens = [];
+        LineTokens = [];
 
         bool status = true;
         line += '\n';
@@ -128,7 +125,7 @@ public class Tokenizer
         _location.Line++;
         _location.Column = 1;
         _cacheLocation = _location;
-        TokenLines.Add(new([..Tokens]));
+        TokenLines.Add(new([..LineTokens]));
         return status;
     }
 
@@ -334,10 +331,6 @@ public class Tokenizer
     {
         if (c is '\n')
         {
-            // TODO: Move error to assembler
-            //var expected = isChar ? "Characters" : "Strings";
-            //_logger?.Log(Severity.Error, LogId.MultiLineString, _location, $"{expected}CantWrapLines.");
-
             return HandleCharacter(c, isChar ? TokenType.Immediate : TokenType.String);
         }
 
@@ -414,7 +407,7 @@ public class Tokenizer
 
     private bool HandleCharacter(char c, TokenType? type = null, TokenizerState newState = TokenizerState.Complete)
     {
-        _cache += c;
+        _cache.Append(c);
         _tokenType = type;
 
         if (newState is TokenizerState.ArgBegin or TokenizerState.LineBegin)
@@ -453,7 +446,6 @@ public class Tokenizer
 
 
             // TODO: Ensure this cannot be reached
-            //_logger?.Log(Severity.Error, LogId.TokenizerError, _location, message, _cache);
             return false;
         }
 
@@ -461,12 +453,13 @@ public class Tokenizer
         if (_tokenType is not TokenType.Whitespace and not TokenType.Comment || _mode is TokenizerMode.BehaviorExpression or TokenizerMode.IDE)
         {
             // Create the token and add to list
-            Token token = new(_cache, _filename, _cacheLocation, _tokenType.Value);
-            Tokens?.Add(token);
+            var tokenText = _cache.ToString();
+            Token token = new(tokenText, _filename, _cacheLocation, _tokenType.Value);
+            LineTokens?.Add(token);
         }
 
         // Reset cache
-        _cache = string.Empty;
+        _cache.Clear();
         _cacheLocation = _location;
         _tokenType = null;
         _state = newState;

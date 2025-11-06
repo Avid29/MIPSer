@@ -19,11 +19,12 @@ public class InstructionTable : InstructionTableBase<(byte op, byte func, bool)>
     }
 
     /// <inheritdoc/>
-    protected override void LoadInsturction(InstructionMetadata metadata)
+    protected override void LoadInstruction(InstructionMetadata metadata)
     {
         if (metadata.MIPSVersions.Contains(Version))
         {
-            byte? funcCode = metadata.Type switch {
+            byte? funcCode = metadata.Type switch
+            {
                 InstructionType.BasicR => (byte?)metadata.FuncCode,
                 
                 InstructionType.BasicI or

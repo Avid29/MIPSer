@@ -115,7 +115,7 @@ public partial class Assembler
     public static async Task<Assembler> AssembleAsync(TextReader reader, string? filename, AssemblerConfig config)
     {
         var assembler = new Assembler(config);
-        var tokens = await Tokenizer.TokenizeAsync(reader, filename, assembler._logger);
+        var tokens = await Tokenizer.TokenizeAsync(reader, filename);
 
         // Run the alignment pass on each line
         for (int i = 1; i <= tokens.LineCount; i++)
