@@ -46,6 +46,11 @@ public class Log
     public Token[] Tokens { get; }
 
     /// <summary>
+    /// Gets the name of the file where the log occured.
+    /// </summary>
+    public string? File => Tokens[0].Filename;
+
+    /// <summary>
     /// Gets the where the log occured.
     /// </summary>
     public int Line => Tokens[0].Location.Line;

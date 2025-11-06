@@ -264,4 +264,13 @@
   <data name="MessageDC.Content" xml:space="preserve">
     <value>Message</value>
   </data>
+  <data name="AssembleOpenFilesMFI.Text" xml:space="preserve">
+    <value>Assemble Open Files</value>
+  </data>
+  <data name="FileDC.Content" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="LineDC.Content" xml:space="preserve">
+    <value>Line</value>
+  </data>
 </root>

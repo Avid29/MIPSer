@@ -44,7 +44,7 @@
                         <KeyboardAccelerator Modifiers="Control" Key="S"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="SaveAllMFI" Text="Save All">
+                <MenuFlyoutItem x:Uid="SaveAllMFI" Text="Save All" IsEnabled="False">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEA35;" />
                     </MenuFlyoutItem.Icon>
@@ -73,17 +73,17 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
-                <MenuFlyoutItem x:Uid="CutMFI" Icon="Cut" Text="Cut">
+                <MenuFlyoutItem x:Uid="CutMFI" Icon="Cut" Text="Cut" IsEnabled="False">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Control" Key="X"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="CopyMFI" Icon="Copy" Text="Copy">
+                <MenuFlyoutItem x:Uid="CopyMFI" Icon="Copy" Text="Copy" IsEnabled="False">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Control" Key="C"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="PasteMFI" Icon="Paste" Text="Paste">
+                <MenuFlyoutItem x:Uid="PasteMFI" Icon="Paste" Text="Paste" IsEnabled="False">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Control" Key="P"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
@@ -92,7 +92,7 @@
             
             <!--  View  -->
             <MenuBarItem x:Uid="ViewMBI" Title="View">
-                <MenuFlyoutItem x:Uid="ToggleFullScreenMFI" Text="Toggle Full Screen">
+                <MenuFlyoutItem x:Uid="ToggleFullScreenMFI" Text="Toggle Full Screen" IsEnabled="False">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72B;" />
                     </MenuFlyoutItem.Icon>
@@ -104,7 +104,7 @@
             
             <!--  Build  -->
             <MenuBarItem x:Uid="BuildMBI" Title="Build">
-                <MenuFlyoutItem x:Uid="AssembleProjectMFI" Text="Assemble Project">
+                <MenuFlyoutItem x:Uid="AssembleProjectMFI" Text="Assemble Project" IsEnabled="False">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEBD2;" />
                     </MenuFlyoutItem.Icon>
@@ -113,10 +113,16 @@
                         <KeyboardAccelerator Modifiers="Control" Key="B"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="AssembleFileMFI" Text="Assemble File" Command="{x:Bind ViewModel.AssembleFileCommand, Mode=OneWay}">
+                <MenuFlyoutItem x:Uid="AssembleOpenFilesMFI" Text="Assemble Open Files" IsEnabled="False">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Shift" Key="F5"/>
                         <KeyboardAccelerator Modifiers="Control,Shift" Key="B"/>
+                    </MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="AssembleFileMFI" Text="Assemble File" Command="{x:Bind ViewModel.AssembleFileCommand, Mode=OneWay}">
+                    <MenuFlyoutItem.KeyboardAccelerators>
+                        <KeyboardAccelerator Modifiers="Menu" Key="F5"/>
+                        <KeyboardAccelerator Modifiers="Control,Menu" Key="B"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
             </MenuBarItem>
@@ -124,7 +130,7 @@
             <!--  Help  -->
             <MenuBarItem x:Uid="HelpMBI" Title="Help">
                 <MenuFlyoutItem x:Uid="CheatSheetMFI" Text="Show Cheatsheet" Command="{x:Bind ViewModel.OpenCheatSheetCommand, Mode=OneWay}"/>
-                <MenuFlyoutItem x:Uid="AboutMFI" Text="About Mipser">
+                <MenuFlyoutItem x:Uid="AboutMFI" Text="About Mipser" IsEnabled="False">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE946;" />
                     </MenuFlyoutItem.Icon>

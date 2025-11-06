@@ -23,7 +23,7 @@ public partial class App : Application
 
         this.InitializeComponent();
 
-        Services.GetRequiredService<ILocalizationService>().LanguageOverride = "en-US";
+        Services.GetRequiredService<ILocalizationService>().LanguageOverride = null;
     }
 
     /// <summary>

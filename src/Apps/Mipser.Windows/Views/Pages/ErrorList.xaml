@@ -6,47 +6,69 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:behaviors="using:CommunityToolkit.WinUI.Behaviors"
     xmlns:logger="using:MIPS.Assembler.Logging"
     xmlns:logenum="using:MIPS.Assembler.Logging.Enum"
     mc:Ignorable="d">
+    
+    <UserControl.Resources>
+        <Style TargetType="ctc:DataColumn">
+            <Setter Property="CanResize" Value="True"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+        </Style>
+    </UserControl.Resources>
 
     <ListView ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}" SelectionMode="None" IsItemClickEnabled="True">
         <ListView.Header>
-            <ctc:DataTable>
-                <!-- Severity Icon -->
-                <ctc:DataColumn CanResize="True" MinWidth="50" MaxWidth="50"/>
-                <ctc:DataColumn x:Uid="MessageDC" Content="Message"
-                                CanResize="True" MinWidth="200"/>
-                <!--<ctc:DataColumn x:Uid="FileDC" Content="File" CanResize="True"/>-->
-            </ctc:DataTable>
+            <Border Padding="8,4,8,4"
+                    CornerRadius="4">
+                <!--<interactivity:Interaction.Behaviors>
+                    <behaviors:StickyHeaderBehavior/>
+                </interactivity:Interaction.Behaviors>-->
+
+                <ctc:DataTable>
+
+                    <!-- Severity Icon -->
+                    <ctc:DataColumn CanResize="False" MinWidth="24" DesiredWidth="24" MaxWidth="24"/>
+
+                    <ctc:DataColumn x:Uid="MessageDC" Content="Message" DesiredWidth="*" MinWidth="200"/>
+                    <ctc:DataColumn x:Uid="FileDC" Content="File" DesiredWidth="180" MinWidth="80"/>
+                    <ctc:DataColumn x:Uid="LineDC" Content="Line" DesiredWidth="80" MinWidth="32"/>
+                </ctc:DataTable>
+            </Border>
         </ListView.Header>
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="logger:Log">
                 <ctc:DataRow HorizontalAlignment="Left">
                     <ctc:SwitchPresenter TargetType="logenum:Severity" Value="{x:Bind Severity, Mode=OneWay}">
                         <ctc:Case Value="Error">
-                            <ImageIcon Width="16" Source="/Assets/Icons/Severity/Error.svg"/>
+                            <ImageIcon Height="12" Source="/Assets/Icons/Severity/Error.svg"/>
                         </ctc:Case>
                         <ctc:Case Value="Warning">
-                            <ImageIcon Width="16" Source="/Assets/Icons/Severity/Warning.svg"/>
+                            <ImageIcon Height="12" Source="/Assets/Icons/Severity/Warning.svg"/>
                         </ctc:Case>
                         <ctc:Case Value="Message">
-                            <ImageIcon Width="16" Source="/Assets/Icons/Severity/Message.svg"/>
+                            <ImageIcon Height="12" Source="/Assets/Icons/Severity/Message.svg"/>
                         </ctc:Case>
                     </ctc:SwitchPresenter>
-                    <RichTextBlock>
+                    <!--<RichTextBlock FontSize="12" Margin="8,0">
                         <Paragraph>
                             <Run Text="{x:Bind Message, Mode=OneWay}"/>
                         </Paragraph>
-                    </RichTextBlock>
-                    <!--<TextBlock Text="{x:Bind , Mode=OneWay}"/>-->
+                    </RichTextBlock>-->
+                    <TextBlock Text="{x:Bind Message, Mode=OneWay}" Margin="8,0" FontSize="12"/>
+                    <TextBlock Text="{x:Bind File, Mode=OneWay}" Margin="8,0" FontSize="12"/>
+                    <TextBlock Text="{x:Bind Line, Mode=OneWay}" Margin="8,0" FontSize="12"/>
                 </ctc:DataRow>
             </DataTemplate>
         </ListView.ItemTemplate>
         <ListView.ItemContainerStyle>
             <Style BasedOn="{StaticResource DefaultListViewItemStyle}"
                    TargetType="ListViewItem">
-                <Setter Property="Padding" Value="0" />
+                <Setter Property="Padding" Value="8,0" />
+                <Setter Property="MinHeight" Value="28" />
                 <Setter Property="HorizontalContentAlignment" Value="Left" />
             </Style>
         </ListView.ItemContainerStyle>

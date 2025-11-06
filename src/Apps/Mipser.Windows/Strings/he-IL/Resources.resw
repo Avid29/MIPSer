@@ -264,4 +264,13 @@
   <data name="MessageDC.Content" xml:space="preserve">
     <value>הודעה</value>
   </data>
+  <data name="AssembleOpenFilesMFI.Text" xml:space="preserve">
+    <value>הרכב קבצים פתוחים</value>
+  </data>
+  <data name="FileDC.Content" xml:space="preserve">
+    <value>קבוץ</value>
+  </data>
+  <data name="LineDC.Content" xml:space="preserve">
+    <value>שורה</value>
+  </data>
 </root>
