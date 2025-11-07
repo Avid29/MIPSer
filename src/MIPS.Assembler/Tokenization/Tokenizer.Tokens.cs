@@ -4,9 +4,7 @@ using MIPS.Assembler.Tokenization.Models;
 using MIPS.Assembler.Tokenization.Models.Enums;
 using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 
 namespace MIPS.Assembler.Tokenization;
@@ -54,121 +52,146 @@ public partial class Tokenizer
     {
         advance = 1;
 
+        // Stage 1: Trivial classifications
+        if (TrySimpleReclass(tokens[0], out var simple))
+            return simple;
+
+        // Stage 2: Multi-token merges (registers, directives, and labels)
+        if (TryMergeTokens(start, tokens, out var merged, ref advance))
+            return merged;
+        
+        // Stage 3: Check for either references or instruction names
+        if (TryInstructionOrReference(start, tokens, out var result, ref advance))
+            return result;
+
+        // Token could not be classified
+        // Return as-is
+        return tokens[0];
+    }
+
+    private static bool TrySimpleReclass(Token current, out Token? classified)
+    {
+        classified = null;
+
+        // Handle by determining a proper type
+        TokenType type = current.Type switch
+        {
+            // Handle no-change types
+            TokenType.String => TokenType.String,
+            TokenType.Whitespace => TokenType.Whitespace,
+            TokenType.Comment => TokenType.Comment,
+
+            // Handle chars
+            TokenType.Char => TokenType.Immediate,
+
+            // Handle immediates
+            _ when current.IsNumeric() => TokenType.Immediate,
+
+            // Handle operators
+            _ => current.Source switch
+            {
+                "(" => TokenType.OpenParenthesis,
+                ")" => TokenType.CloseParenthesis,
+                "[" => TokenType.OpenBracket,
+                "]" => TokenType.CloseBracket,
+                "," => TokenType.Comma,
+
+                "+" or "-" or "*" or "/" or "%" or
+                "|" or "&" or "^" or "~" => TokenType.Operator,
+
+                // Behavior mode only?
+                "!" or "<" or ">" => TokenType.Operator,
+                _ => TokenType.Unknown,
+            },
+        };
+
+        // Type not found. Return false
+        if (type is TokenType.Unknown)
+            return false;
+
+        // Type was found. Reclassify the token and return true
+        classified = ReClassify(type, current);
+        return true;
+    }
+
+    private static bool TryMergeTokens(bool start, ReadOnlySpan<Token> tokens, out Token? merged, ref int advance)
+    {
         var current = tokens[0];
-
-        // Classify operators or literals
-        var @new = ReTokenizeAsOperator(current);
-        @new ??= ReTokenizeLiterals(current);
-        if (@new is not null)
-            return @new;
-
-        // Classify meaningless tokens (comments and whitespace)
-        var meaningless = ReTokenizeMeaningless(current);
-        if (meaningless is not null)
-            return meaningless;
-
-        // Classify numerical tokens
-        if (current.IsNumeric())
-            return ReClassify(current, TokenType.Immediate);
-
-        var peek = PeekNext(tokens);
+        var peek = Peek(tokens);
 
         // Registers
-        if (!start && current.Source is "$" && peek.IsIdentifier())
-        {
-            advance = 2;
-            return Merge(TokenType.Register, current, peek);
-        }
+        bool isRegister = !start && current.Source is "$" && peek.IsIdentifier();
+        if (TryMergeIf(isRegister, tokens, TokenType.Register, out merged, ref advance))
+            return true;
 
-        // Handle macros
-        if (start && current.IsIdentifier() && peek?.Source is "=")
-        {
-            return ReClassify(current, TokenType.MacroDeclaration);
-        }
+        // Macros
+        bool isMacro = start && peek?.Source is "=";
+        if (TryMergeIf(isMacro, tokens, TokenType.MacroDeclaration, out merged, ref advance))
+            return true;
 
-        // Handle directives
-        // TODO: Check if this is good in all conditions
-        if (start && current.Source is ".")
-        {
-            advance = 2;    // null check peek?
-            return Merge(TokenType.Directive, current, peek);
-        }
+        // Directives
+        bool isDirective = start && current.Source is ".";
+        if (TryMergeIf(isDirective, tokens, TokenType.Directive, out merged, ref advance))
+            return true;
 
-        // Handle labels
-        if (start && peek?.Source is ":")
-        {
-            advance = 2;
-            return Merge(TokenType.LabelDeclaration, current, peek);
-        }
+        // Labels
+        bool isLabel = start && peek?.Source is ":";
+        if (TryMergeIf(isLabel, tokens, TokenType.LabelDeclaration, out merged, ref advance))
+            return true;
 
-        // Handle instructions
-        if (start && current.IsIdentifier())
+        merged = null;
+        return false;
+    }
+
+    private static bool TryInstructionOrReference(bool start, ReadOnlySpan<Token> tokens, out Token? result, ref int advance)
+    {
+        // Grab the current token
+        var current = tokens[0];
+        result = null;
+
+        if (!current.IsIdentifier())
+            return false;
+
+        if (start)
         {
-            var merged = ReClassify(current, TokenType.Instruction);
+            // Handle instructions
+            result = ReClassify(TokenType.Instruction, current);
 
             // Check for formatted instructions
             var span = tokens;
             do
             {
-                var peek1 = PeekNext(span);
-                var peek2 = PeekNext(span[1..]);
-                if (peek2 is not null)
-                    span = span[2..];
-
-                if (peek?.Source is not "." || !peek2.IsIdentifier())
+                var dot = Peek(span, 1);
+                var next = Peek(span, 2);
+                if (dot?.Source is not "." || !next.IsIdentifier())
                     break;
 
-                merged = Merge(TokenType.Instruction, merged, peek, peek2);
+                result = Merge(TokenType.Instruction, result, dot, next);
                 advance += 2;
+                span = span[2..];
             } while (true);
 
-            return merged;
         }
-
-        if (current.IsIdentifier())
+        else
         {
-            return ReClassify(current, TokenType.Reference);
+            // Handle references
+            result = ReClassify(TokenType.Reference, current);
         }
-
-        // Keep unknown values as unknown
-        return current;
+        return true;
     }
 
-    private static Token? ReTokenizeAsOperator(Token token)
+    private static bool TryMergeIf(bool condition, ReadOnlySpan<Token> tokens, TokenType type, out Token? merged, ref int advance)
     {
-        return token.Source switch
-        {
-            "(" => ReClassify(token, TokenType.OpenParenthesis),
-            ")" => ReClassify(token, TokenType.CloseParenthesis),
-            "[" => ReClassify(token, TokenType.OpenBracket),
-            "]" => ReClassify(token, TokenType.CloseBracket),
-            "," => ReClassify(token, TokenType.Comma),
+        merged = null;
 
-            "+" or "-" or "*" or "/" or "%" or
-            "|" or "&" or "^" or "~" => ReClassify(token, TokenType.Operator),
+        // Condition not met or tokens not found
+        if (!condition || tokens.Length < 2)
+            return false;
 
-            // Behavior mode only?
-            "!" or "<" or ">" => ReClassify(token, TokenType.Operator),
-            _ => null,
-        };
-    }
-
-    private static Token? ReTokenizeLiterals(Token token)
-    {
-        return token.Type switch
-        {
-            TokenType.String => token,
-            TokenType.Char => ReClassify(token, TokenType.Immediate),
-            _ => null
-        };
-    }
-
-    private static Token? ReTokenizeMeaningless(Token token)
-    {
-        if (token.Type is not TokenType.Comment and not TokenType.Whitespace)
-            return null;
-
-        return token;
+        // Conditions met and tokens found
+        merged = Merge(type, tokens[0], tokens[1]);
+        advance = 2;
+        return true;
     }
 
     private static Token Merge(TokenType type, Token @base, params Token?[] tokens)
@@ -188,26 +211,26 @@ public partial class Tokenizer
         };
     }
 
-    private static Token? PeekNext(ReadOnlySpan<Token> tokens)
+    private static Token? Peek(ReadOnlySpan<Token> tokens, int n = 1, bool skipWhitespace = true)
     {
         Token? token;
         do
         {
             // We've hit the end. None found
-            if (tokens.Length is <= 1)
+            if (tokens.Length <= n)
                 return null;
 
-            // Slice and grab the next token
+            // Grab the nth token and
+            // advance the slice one for the next pass
+            token = tokens[n];
             tokens = tokens[1..];
 
-            token = tokens[0];
-
-        } while (token.Type is TokenType.Whitespace);
+        } while (skipWhitespace && token.Type is TokenType.Whitespace);
 
         return token;
     }
 
-    private static Token ReClassify(Token original, TokenType type)
+    private static Token ReClassify(TokenType type, Token original)
     {
         return new Token(original.Source)
         {
