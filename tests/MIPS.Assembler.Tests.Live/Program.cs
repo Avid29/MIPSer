@@ -5,7 +5,7 @@ using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tests.Live.Enums;
 using MIPS.Assembler.Tokenization;
-using MIPS.Assembler.Tokenization.Enums;
+using MIPS.Assembler.Tokenization.Models.Enums;
 using MIPS.Disassembler.Services;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;

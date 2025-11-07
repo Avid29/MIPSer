@@ -1,9 +1,9 @@
 ﻿// Adam Dernis 2024
 
-namespace MIPS.Assembler.Tokenization;
+namespace MIPS.Assembler.Tokenization.Models;
 
 using CommunityToolkit.HighPerformance;
-using MIPS.Assembler.Tokenization.Enums;
+using MIPS.Assembler.Tokenization.Models.Enums;
 using System;
 using System.Collections.Generic;
 

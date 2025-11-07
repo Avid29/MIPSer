@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Assembler.Tokenization;
-using MIPS.Assembler.Tokenization.Enums;
+using MIPS.Assembler.Tokenization.Models;
+using MIPS.Assembler.Tokenization.Models.Enums;
 
 namespace System;
 

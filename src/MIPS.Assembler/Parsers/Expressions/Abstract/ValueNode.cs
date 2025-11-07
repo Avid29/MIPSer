@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Models;
 
 namespace MIPS.Assembler.Parsers.Expressions.Abstract;
 

@@ -3,7 +3,7 @@
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
-using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Models;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 

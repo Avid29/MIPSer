@@ -2,7 +2,7 @@
 
 using MIPS.Assembler.Helpers;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Models;
 using System;
 using System.Collections.Generic;
 

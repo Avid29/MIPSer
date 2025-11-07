@@ -1,9 +1,9 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Assembler.Tokenization.Enums;
+using MIPS.Assembler.Tokenization.Models.Enums;
 using System;
 
-namespace MIPS.Assembler.Tokenization;
+namespace MIPS.Assembler.Tokenization.Models;
 
 /// <summary>
 /// A line of tokenized line assembly of assembly.
@@ -99,7 +99,7 @@ public class AssemblyLine
         var head = segment[0];
         switch(head.Type)
         {   
-            case TokenType.MacroDefinition:
+            case TokenType.MacroDeclaration:
                 Macro = head;
                 Type = LineType.Macro;
                 return;

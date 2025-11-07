@@ -3,7 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Parsers.Expressions.Evaluator;
-using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Models;
 using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Parsers.Expressions.Abstract;

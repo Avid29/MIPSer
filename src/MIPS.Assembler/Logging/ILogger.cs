@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Models;
 using System;
 
 namespace MIPS.Assembler.Logging;

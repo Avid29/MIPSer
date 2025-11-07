@@ -3,8 +3,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Parsers;
-using MIPS.Assembler.Tokenization;
-using System;
+using MIPS.Assembler.Tokenization.Models;
 
 namespace MIPS.Assembler.Tests.Parsers;
 
@@ -37,7 +36,7 @@ public class StringParserTests
     private static void RunTest<T>(ParseFunc<T> func, string input, T expected, bool expectNull)
     {
         // Declare parser and attempt parsing
-        var token = new Token(input, default, default, default);
+        var token = new Token(input);
         if (!func(token, out T actual, null))
         {
             Assert.IsTrue(expectNull);

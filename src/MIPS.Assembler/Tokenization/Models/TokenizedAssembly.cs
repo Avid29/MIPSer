@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MIPS.Assembler.Tokenization;
+namespace MIPS.Assembler.Tokenization.Models;
 
 /// <summary>
 /// A class for wrapping tokenized assembly files.

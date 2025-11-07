@@ -1,22 +1,29 @@
 ﻿// Adam Dernis 2024
 
-namespace MIPS.Assembler.Tokenization.Enums;
+namespace MIPS.Assembler.Tokenization.Models.Enums;
 
 /// <summary>
-/// An enum disignating a parse token's type.
+/// An enum designating a parse token's type.
 /// </summary>
 public enum TokenType
 {
 #pragma warning disable CS1591
+    // First pass
+    Unknown,
+    String,
+    Char,
+    Comment,
+    Whitespace,
+
+    // Second pass
     Instruction,
     Register,
     Immediate,
     Directive,
     Operator,
-    String,
 
     LabelDeclaration,
-    LabelMarker,
+    MacroDeclaration,
     Reference,          // This could be either a label or a macro
 
     OpenParenthesis,
@@ -24,12 +31,7 @@ public enum TokenType
     OpenBracket,
     CloseBracket,
     Comma,
-
-    MacroDefinition,
     Assign,
-
-    Comment,
-    Whitespace,     // Used to maintain spacing in behavior mode
 
 #pragma warning restore CS1591
 }

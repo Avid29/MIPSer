@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-namespace MIPS.Assembler.Tokenization.Enums;
+namespace MIPS.Assembler.Tokenization.Models.Enums;
 
 /// <summary>
 /// The tokenizer mode determines the context in which the tokenizer operates.

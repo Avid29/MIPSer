@@ -9,14 +9,11 @@ using Microsoft.UI.Xaml.Media;
 using MIPS.Assembler.Helpers.Tables;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Tokenization;
-using MIPS.Assembler.Tokenization.Enums;
-using MIPS.Extensions;
+using MIPS.Assembler.Tokenization.Models;
+using MIPS.Assembler.Tokenization.Models.Enums;
 using MIPS.Models.Instructions.Enums;
-using MIPS.Models.Instructions.Enums.Registers;
 using Mipser.Services.Localization;
 using Mipser.Windows.Helpers;
-using System.Threading.Tasks;
-using Windows.UI.Text;
 
 namespace Mipser.Windows.Controls.CheatSheet;
 

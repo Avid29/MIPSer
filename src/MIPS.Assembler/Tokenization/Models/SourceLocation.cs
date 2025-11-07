@@ -1,11 +1,11 @@
 ﻿// Avishai Dernis 2025
 
-namespace MIPS.Assembler.Tokenization;
+namespace MIPS.Assembler.Tokenization.Models;
 
 /// <summary>
-/// A location in a text file.
+/// The location of a <see cref="Token"/> in a source file.
 /// </summary>
-public struct TextLocation
+public struct SourceLocation
 {
     /// <summary>
     /// Gets the index of the location.

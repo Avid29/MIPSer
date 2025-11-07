@@ -3,7 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Models;
 
 namespace MIPS.Assembler.Parsers;
 

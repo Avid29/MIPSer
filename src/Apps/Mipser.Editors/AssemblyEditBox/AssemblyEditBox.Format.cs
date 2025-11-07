@@ -6,7 +6,7 @@ using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Tokenization;
-using MIPS.Assembler.Tokenization.Enums;
+using MIPS.Assembler.Tokenization.Models.Enums;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;

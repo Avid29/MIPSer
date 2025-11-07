@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-namespace MIPS.Assembler.Tokenization.Enums;
+namespace MIPS.Assembler.Tokenization.Models.Enums;
 
 /// <summary>
 /// An enum for what type of declaration occurs on a line.
