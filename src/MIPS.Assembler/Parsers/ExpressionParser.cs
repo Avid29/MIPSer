@@ -162,7 +162,7 @@ public struct ExpressionParser
         if (token.Source[0] is '\'')
         {
             // Character literal
-            if (!StringParser.TryParseChar(token, out char c))
+            if (!StringParser.TryParseChar(token, out char c, _logger))
                 return false;
 
             value = c;
