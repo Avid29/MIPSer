@@ -50,6 +50,13 @@ public partial class Assembler
         // Issues are only logged on the second pass though
         if (line.Type is LineType.Directive)
             HandleDirective(line, false);
+
+        // If args is non-zero while the line type is none,
+        // random garbage is in the file.
+        if (line.Type is LineType.None && line.Args.Count is not 0)
+        {
+            _logger.Log(Severity.Error, LogId.UnexpectedToken, line.Args[0][0], "UnexpectedToken", line.Args[0][0]);
+        }
     }
 
     private void RealizationPass(AssemblyLine line)

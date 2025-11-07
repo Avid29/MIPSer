@@ -17,8 +17,8 @@ namespace RASM.Tests;
 public class AssemblerTests
 {
     private const string InvalidInstruction = "xkcd $t0, $t1, 0";
+    private const string MissingInstruction = "$s2, $t4, $t2";
     private const string InvalidLabelNum = "2point: nop";
-    private const string InvalidLabelSpecial = "te$t: nop";
     private const string ExtraArgError = "add $s0, $t0, $t2, 2";
     private const string MissingArgError = "add $s0, $t0";
     private const string NumericalRegister = "addi $s0, $16, 16";
@@ -29,11 +29,11 @@ public class AssemblerTests
     [TestMethod(nameof(InvalidInstruction))]
     public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, expected: LogId.InvalidInstructionName);
 
+    [TestMethod(nameof(MissingInstruction))]
+    public async Task MissingInstructionTest() => await RunStringTest(MissingInstruction, expected: LogId.UnexpectedToken);
+
     [TestMethod(nameof(InvalidLabelNum))]
     public async Task InvalidLabelNumTest() => await RunStringTest(InvalidLabelNum, expected: LogId.IllegalSymbolName);
-
-    [TestMethod(nameof(InvalidLabelSpecial))]
-    public async Task InvalidLabelSpecialTest() => await RunStringTest(InvalidLabelSpecial, expected: LogId.IllegalSymbolName);
 
     [TestMethod(nameof(ExtraArgError))]
     public async Task ExtraArgErrorTest() => await RunStringTest(ExtraArgError, expected: LogId.InvalidInstructionArgCount);
@@ -76,7 +76,7 @@ public class AssemblerTests
         (LogId.InvalidInstructionArgCount, 14),
         (LogId.InvalidInstructionName, 16),
         (LogId.UnparsableExpression, 19),
-        (LogId.InvalidRegisterArgument, 24), // Debateably should be an InvalidAddressOffsetArgument error
+        (LogId.InvalidRegisterArgument, 24), // Debatably should be an InvalidAddressOffsetArgument error
         (LogId.ZeroRegWriteback, 29),
         (LogId.IntegerTruncated, 30),
         (LogId.InvalidRegisterArgument, 32),

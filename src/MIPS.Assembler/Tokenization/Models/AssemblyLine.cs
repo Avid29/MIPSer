@@ -37,8 +37,8 @@ public class AssemblyLine
     /// <summary>
     /// Gets what type of declaration occurs on the line, 
     /// </summary>
-    public LineType Type {get; private set; }
-    
+    public LineType Type { get; private set; }
+
     /// <summary>
     /// Gets the tokens on the line of assembly.
     /// </summary>
@@ -80,7 +80,7 @@ public class AssemblyLine
         // If line is empty, do nothing
         if (_tokens.Length is 0)
             return;
-        
+
         // Convert the line to a segment
         ArraySegment<Token> segment = _tokens;
 
@@ -97,8 +97,8 @@ public class AssemblyLine
 
         // Handle line type
         var head = segment[0];
-        switch(head.Type)
-        {   
+        switch (head.Type)
+        {
             case TokenType.MacroDeclaration:
                 Macro = head;
                 Type = LineType.Macro;
@@ -111,8 +111,14 @@ public class AssemblyLine
                 Directive = head;
                 Type = LineType.Directive;
                 break;
+
+            // If there's nothing on this line, leave the head in args.
+            // This will help ease error detection later.
+            default:
+                Args = new AssemblyLineArgs(segment);
+                return;
         }
-        
+
         // NOTE: For Macros, the assignment token is left as part of the arg.
         // The assembler will need to verify it is present, and log if it is not.
         // However, unless proceeded by an assignment token the line should never have

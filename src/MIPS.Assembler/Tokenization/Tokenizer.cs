@@ -30,7 +30,6 @@ public partial class Tokenizer
     private Tokenizer(string? filename, TokenizerMode mode = TokenizerMode.Assembly)
     {
         TokenLines = [];
-        LineTokens = [];
         _mode = mode;
         _state = TokenizerState.TokenBegin;
         _cache = new();
@@ -46,8 +45,6 @@ public partial class Tokenizer
     }
 
     private List<AssemblyLine> TokenLines { get; }
-
-    private List<Token> LineTokens { get; set; }
 
     /// <inheritdoc/>
     public static async Task<TokenizedAssembly> TokenizeAsync(Stream stream, string? filename = null)
@@ -95,5 +92,16 @@ public partial class Tokenizer
     }
 
     private bool TokenizeLine(string line)
-        => PreTokenizeLine(line) && ReTokenizeLine(LineTokens);
+    {
+        // First pass
+        if (!PreTokenizeLine(line, out var raw))
+            return false;
+        
+        // Second pass
+        if (!ReTokenizeLine(raw, out var classified))
+            return false;
+
+        TokenLines.Add(new AssemblyLine([..classified]));
+        return true;
+    }
 }

@@ -321,4 +321,7 @@
   <data name="NoInstructionNamed" xml:space="preserve">
     <value>No instruction named '{0}'.</value>
   </data>
+  <data name="UnexpectedToken" xml:space="preserve">
+    <value>Unexpected Token '{0}'.</value>
+  </data>
 </root>

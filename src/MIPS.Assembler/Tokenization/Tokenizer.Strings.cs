@@ -1,32 +1,37 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
+using Microsoft.VisualBasic;
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Assembler.Tokenization.Models.Enums;
+using System;
+using System.Collections.Generic;
 
 namespace MIPS.Assembler.Tokenization;
 
 public partial class Tokenizer
 {
-    private bool PreTokenizeLine(string line)
+    private bool PreTokenizeLine(string line, out List<Token> raw)
     {
         // Prepare for string tokenization
         _state = TokenizerState.TokenBegin;
-        LineTokens = [];
+        raw = [];
 
         line += '\n';
 
+        // Parse the line character by character
         bool status = true;
         foreach (char c in line)
         {
-            if (!ParseNextChar(c))
+            // Parse the character and retrieve any created tokens
+            if (!ParseNextChar(c, out var tokens))
                 status = false;
-
+            
+            // Add the tokens to the collection
+            raw.AddRange(tokens);
             _location.Index++;
             _location.Column++;
         }
-
-        CompleteCacheToken();
 
         _location.Line++;
         _location.Column = 1;
@@ -34,9 +39,25 @@ public partial class Tokenizer
         return status;
     }
 
-    private bool ParseNextChar(char c)
+    private bool ParseNextChar(char c, out List<Token> tokens)
     {
-        return _state switch
+        tokens = [];
+        Token? token = null;
+
+        bool status;
+
+        // Lines always end in "\n"
+        // Use this to complete final token
+        if (c is '\n')
+        {
+            status = CompleteCacheToken(out token);
+            if (token is not null)
+                tokens = [token];
+
+            return status;
+        }
+
+        status = _state switch
         {
             // LineBegin
             TokenizerState.TokenBegin when c is '#' => AppendCharacter(c, TokenizerState.Comment),                      // Begin a comment
@@ -45,18 +66,18 @@ public partial class Tokenizer
             TokenizerState.TokenBegin when char.IsWhiteSpace(c) => AppendCharacter(c, TokenizerState.Whitespace),     // Begin whitespace
             TokenizerState.TokenBegin when char.IsLetterOrDigit(c) || c is '_'                                          // Begin an identifier
                 => AppendCharacter(c, TokenizerState.TokenBody),                                                        // or numerical
-            TokenizerState.TokenBegin => AppendAndComplete(c, TokenizerState.TokenBegin),                               // Begin an unknown token
+            TokenizerState.TokenBegin => AppendAndComplete(c, TokenizerState.TokenBegin, out token),                               // Begin an unknown token
 
             // Token Body
             TokenizerState.TokenBody when char.IsLetterOrDigit(c) || c is '_' => AppendCharacter(c),
-            TokenizerState.TokenBody => CompleteAndContinue(c),
+            TokenizerState.TokenBody => CompleteAndContinue(c, out tokens),
 
             // String Literal
-            TokenizerState.StringLiteral when c is '"' => AppendAndComplete(c, TokenizerState.TokenBegin),
+            TokenizerState.StringLiteral when c is '"' => AppendAndComplete(c, TokenizerState.TokenBegin, out token),
             TokenizerState.StringLiteral => AppendCharacter(c),
 
             // Char Literal
-            TokenizerState.CharLiteral when c is '\'' => AppendAndComplete(c, TokenizerState.TokenBegin),
+            TokenizerState.CharLiteral when c is '\'' => AppendAndComplete(c, TokenizerState.TokenBegin, out token),
             TokenizerState.CharLiteral => AppendCharacter(c),
 
             // Comments
@@ -64,17 +85,22 @@ public partial class Tokenizer
 
             // Whitespace
             TokenizerState.Whitespace when char.IsWhiteSpace(c) => AppendCharacter(c),
-            TokenizerState.Whitespace => CompleteAndContinue(c),
+            TokenizerState.Whitespace => CompleteAndContinue(c, out tokens),
 
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<bool>(nameof(_state)),
         };
+
+        if (token is not null)
+            tokens = [token];
+
+        return status;
     }
 
     private bool AppendCharacter(char c, TokenizerState? newState = null)
     {
         // Append the character to the cache
         _cache.Append(c);
-        
+
         // Update the state if needed
         if (newState is not null)
             _state = newState.Value;
@@ -82,29 +108,41 @@ public partial class Tokenizer
         return true;
     }
 
-    private bool AppendAndComplete(char c, TokenizerState newState)
+    private bool AppendAndComplete(char c, TokenizerState newState, out Token? token)
     {
         // Append the character and complete the token
         _cache.Append(c);
-        var status = CompleteCacheToken();
+        var status = CompleteCacheToken(out token);
         _state = newState;
         return status;
     }
 
-    private bool CompleteAndContinue(char c)
+    private bool CompleteAndContinue(char c, out List<Token> tokens)
     {
         // Complete the token
-        var status = CompleteCacheToken();
+        var status = CompleteCacheToken(out var token);
+        tokens = [token];
         if (!status)
+        {
             return false;
+        }
 
         // Begin the next using this character
         _state = TokenizerState.TokenBegin;
-        return ParseNextChar(c);
+        status = ParseNextChar(c, out var childTokens);
+        tokens.AddRange(childTokens);
+        return status;
     }
 
-    private bool CompleteCacheToken()
+    private bool CompleteCacheToken(out Token? token)
     {
+        var source = $"{_cache}";
+        token = null;
+
+        // Nothing to complete
+        if (string.IsNullOrEmpty(source))
+            return true;
+
         // Determine what type of token to create from the state
         var tokenType = _state switch
         {
@@ -118,13 +156,12 @@ public partial class Tokenizer
         };
 
         // Create the token and add to list
-        var token = new Token($"{_cache}")
+        token = new Token(source)
         {
             Type = tokenType,
             Filename = _filename,
             Location = _cacheLocation,
         };
-        LineTokens?.Add(token);
 
         // Reset cache
         _cache.Clear();

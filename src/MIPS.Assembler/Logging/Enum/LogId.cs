@@ -11,8 +11,8 @@ public enum LogId
 
     // General
     IllegalSymbolName,
+    UnexpectedToken,
     DuplicateSymbolDefinition,
-    TokenizerError,
     DisabledFeatureInUse,
     NotInVersion,
 

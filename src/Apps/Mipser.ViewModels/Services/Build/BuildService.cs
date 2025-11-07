@@ -53,7 +53,11 @@ public class BuildService
         // Get the file contents as a stream
         var stream = await file.GetStreamAsync();
         if (stream is null)
+        {
+            // TODO: Still reset
+            Status = BuildStatus.Failed;
             return;
+        }
 
         Status = BuildStatus.Assembling;
 

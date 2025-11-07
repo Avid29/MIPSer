@@ -13,43 +13,45 @@ namespace MIPS.Assembler.Tokenization;
 
 public partial class Tokenizer
 {
-    private bool ReTokenizeLine(List<Token> line)
+    private bool ReTokenizeLine(List<Token> raw, out List<Token> classified)
     {
         // Prepare for token retokenization
         _state = TokenizerState.LineBegin;
-        LineTokens = [];
+        classified = [];
 
         bool start = true;
         if (_mode is TokenizerMode.BehaviorExpression or TokenizerMode.Expression)
             start = false;
 
         // Reclassify each token
-        var span = CollectionsMarshal.AsSpan(line);
+        var span = CollectionsMarshal.AsSpan(raw);
         while (!span.IsEmpty)
         {
-            if (ReTokenizeFromIndex(start, span, out var advance, out var meaningful))
-            {
-                // If a meaningful token was appended,
-                // we are no longer at the start
-                start = start && !meaningful;
-
-                // Advance the appropriate number of tokens
-                span = span[advance..];
-                continue;
-            }
+            var newToken = ReTokenizeSpan(start, span, out var advance);
 
             // TODO: Handle invalid state
-            return false;
-        }
+            if (newToken is null)
+                return false;
 
-        TokenLines.Add(new([.. LineTokens]));
+            // Track if the new token is meaningful
+            bool meaningful = newToken.Type is not TokenType.Comment and not TokenType.Whitespace;
+
+            if (meaningful || _mode is TokenizerMode.IDE or TokenizerMode.BehaviorExpression)
+                classified.Add(newToken);
+
+            // If a meaningful token was appended,
+            // we are no longer at the start
+            start = start && !meaningful;
+
+            // Advance the appropriate number of tokens
+            span = span[advance..];
+        }
 
         return true;
     }
 
-    private bool ReTokenizeFromIndex(bool start, ReadOnlySpan<Token> tokens, out int advance, out bool meaningful)
+    private static Token? ReTokenizeSpan(bool start, ReadOnlySpan<Token> tokens, out int advance)
     {
-        meaningful = true;
         advance = 1;
 
         var current = tokens[0];
@@ -58,66 +60,45 @@ public partial class Tokenizer
         var @new = ReTokenizeAsOperator(current);
         @new ??= ReTokenizeLiterals(current);
         if (@new is not null)
-        {
-            LineTokens.Add(@new);
-            return true;
-        }
+            return @new;
 
         // Classify meaningless tokens (comments and whitespace)
         var meaningless = ReTokenizeMeaningless(current);
         if (meaningless is not null)
-        {
-            meaningful = false;
-            // Meaningless tokens might be added depending on the mode
-            if (_mode is TokenizerMode.IDE or TokenizerMode.BehaviorExpression)
-                LineTokens.Add(meaningless);
-            return true;
-        }
+            return meaningless;
 
         // Classify numerical tokens
         if (current.IsNumeric())
-        {
-            LineTokens.Add(ReClassify(current, TokenType.Immediate));
-            return true;
-        }
+            return ReClassify(current, TokenType.Immediate);
 
         var peek = PeekNext(tokens);
 
         // Registers
-        if (current.Source is "$" && peek.IsIdentifier())
+        if (!start && current.Source is "$" && peek.IsIdentifier())
         {
-            var merge = Merge(TokenType.Register, current, peek);
-            LineTokens.Add(merge);
             advance = 2;
-            return true;
+            return Merge(TokenType.Register, current, peek);
         }
 
         // Handle macros
         if (start && current.IsIdentifier() && peek?.Source is "=")
         {
-            var classify = ReClassify(current, TokenType.MacroDeclaration);
-            LineTokens.Add(classify);
-            return true;
+            return ReClassify(current, TokenType.MacroDeclaration);
         }
 
         // Handle directives
+        // TODO: Check if this is good in all conditions
         if (start && current.Source is ".")
         {
-            // TODO: Check if this is good in all conditions
-            var merged = Merge(TokenType.Directive, current, peek);
-            LineTokens.Add(merged);
             advance = 2;    // null check peek?
-            return true;
+            return Merge(TokenType.Directive, current, peek);
         }
 
         // Handle labels
         if (start && peek?.Source is ":")
         {
-            // TODO: Check if this is good in all conditions
-            var merged = Merge(TokenType.LabelDeclaration, current, peek);
-            LineTokens.Add(merged);
             advance = 2;
-            return true;
+            return Merge(TokenType.LabelDeclaration, current, peek);
         }
 
         // Handle instructions
@@ -141,20 +122,16 @@ public partial class Tokenizer
                 advance += 2;
             } while (true);
 
-            LineTokens.Add(merged);
-            return true;
+            return merged;
         }
 
         if (current.IsIdentifier())
         {
-            var classify = ReClassify(current, TokenType.Reference);
-            LineTokens.Add(classify);
-            return true;
+            return ReClassify(current, TokenType.Reference);
         }
 
         // Keep unknown values as unknown
-        LineTokens.Add(current);
-        return false;
+        return current;
     }
 
     private static Token? ReTokenizeAsOperator(Token token)
@@ -217,11 +194,12 @@ public partial class Tokenizer
         do
         {
             // We've hit the end. None found
-            if (tokens.Length == 1)
+            if (tokens.Length is <= 1)
                 return null;
 
             // Slice and grab the next token
             tokens = tokens[1..];
+
             token = tokens[0];
 
         } while (token.Type is TokenType.Whitespace);
