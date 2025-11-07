@@ -125,7 +125,7 @@ public partial class Tokenizer
             false when current.Source is "$" && peek.IsIdentifier() => (TokenType.Register, true),
             true when Peek(tokens, skipWhitespace: true)?.Source is "=" => (TokenType.MacroDeclaration, false),
             true when current.Source is "." => (TokenType.Directive, true),
-            true when peek?.Source is ":" => (TokenType.LabelDeclaration, false),
+            true when peek?.Source is ":" => (TokenType.LabelDeclaration, true),
             _ => (TokenType.Unknown, false),
         };
 

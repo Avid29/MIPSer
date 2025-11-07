@@ -29,19 +29,29 @@ public class FileService : IFileService
     }
     
     /// <inheritdoc/>
-    public BindableFile GetAnonymousFile()
-    {
-        return new BindableFile(this);
-    }
-    
+    public BindableFile GetAnonymousFile() => new BindableFile(this);
+
     /// <inheritdoc/>
-    public async Task<BindableFile?> GetFileAsync(string path)
+    public async Task<BindableFile?> CreateFileAsync(string path)
     {
-        // Get storage file
-        var file = await _fileSystemService.GetFileAsync(path);
+        // Create basic file
+        var file = await _fileSystemService.CreateFileAsync(path);
         if (file is null)
             return null;
 
+        // Track and return
+        return GetOrAddTrackedFile(file);
+    }
+
+    /// <inheritdoc/>
+    public async Task<BindableFile?> GetFileAsync(string path)
+    {
+        // Get basic file
+        var file = await _fileSystemService.GetFileAsync(path);
+        if (file is null)
+            return null;
+        
+        // Track and return
         return GetOrAddTrackedFile(file);
     }
     
@@ -56,7 +66,7 @@ public class FileService : IFileService
     }
 
     /// <inheritdoc/>
-    public async Task<BindableFile?> PickFileAsyc()
+    public async Task<BindableFile?> PickFileAsync()
     {
         var file = await _fileSystemService.PickFileAsync();
         if (file is null)

@@ -5,6 +5,7 @@ using Mipser.Bindables.Files.Abstract;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -50,6 +51,32 @@ public class BindableFolder : BindableFilesItemBase
 
     /// <inheritdoc/>
     protected override IFilesItem? Item => _folder;
+
+    /// <summary>
+    /// Creates a new file in the folder.
+    /// </summary>
+    /// <param name="filename">The name of the file.</param>
+    /// <returns>The file created</returns>
+    public async Task<BindableFile?> CreateFileAsync(string filename)
+    {
+        // Can't create a file in a non-existent folder
+        if (Path is null)
+            return null;
+
+        // Create file
+        var path = System.IO.Path.Combine(Path, filename);
+        var file = await FileService.CreateFileAsync(path);
+
+        // Failed
+        if (file is null)
+            return null;
+
+        // Track child if children are tracked
+        if (!ChildrenNotLoaded && !Children.Contains(file))
+            Children.Add(file);
+
+        return file;
+    }
 
     /// <summary>
     /// Loads the node's children.

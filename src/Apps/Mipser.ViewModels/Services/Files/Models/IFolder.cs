@@ -12,18 +12,15 @@ public interface IFolder : IFilesItem
     /// <summary>
     /// Gets the files and subfolders in this folder.
     /// </summary>
-    /// <returns></returns>
     Task<IFilesItem[]> GetItemsAsync();
 
     /// <summary>
     /// Gets the subfolders in this folder.
     /// </summary>
-    /// <returns></returns>
     Task<IFolder[]> GetFoldersAsync();
 
     /// <summary>
     /// Gets the files in this folder.
     /// </summary>
-    /// <returns></returns>
     Task<IFile[]> GetFilesAsync();
 }

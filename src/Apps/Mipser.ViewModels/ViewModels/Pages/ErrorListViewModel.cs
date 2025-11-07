@@ -43,7 +43,14 @@ public class ErrorListViewModel : PageViewModel
 
     private void UpdateLog(BuildFinishedMessage message)
     {
+        // Clear old logs
         Messages.Clear();
+
+        // No logs to display 
+        if (message.Logs is null)
+            return;
+
+        // Display logs
         foreach(var log in message.Logs)
             Messages.Add(log);
     }

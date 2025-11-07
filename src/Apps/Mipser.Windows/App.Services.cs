@@ -2,9 +2,10 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
+using Mipser.Services.Build;
 using Mipser.Services.Files;
 using Mipser.Services.Localization;
-using Mipser.Services.ProjectService;
+using Mipser.Services.Project;
 using Mipser.ViewModels;
 using Mipser.ViewModels.Pages;
 using Mipser.ViewModels.Pages.App;
@@ -30,6 +31,7 @@ public partial class App
 
             // Dependent Services
             .AddSingleton<IFileService, FileService>()
+            .AddSingleton<IProjectService, ProjectService>()
             .AddSingleton<BuildService>()
 
             // Page ViewModels

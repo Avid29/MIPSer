@@ -53,12 +53,23 @@ public class BindableFile : BindableFilesItemBase
     /// <summary>
     /// Gets a <see cref="Stream"/> for reading the file contents.
     /// </summary>
-    public async Task<Stream?> GetStreamAsync()
+    public async Task<Stream?> GetReadStreamAsync()
     {
         if (_file is null)
             return null;
 
         return await _file.OpenStreamForReadAsync();
+    }
+
+    /// <summary>
+    /// Gets a <see cref="Stream"/> for writing the file contents.
+    /// </summary>
+    public async Task<Stream?> GetWriteStreamAsync()
+    {
+        if (_file is null)
+            return null;
+
+        return await _file.OpenStreamForWriteAsync();
     }
 
     /// <summary>

@@ -16,6 +16,12 @@ public interface IFileService
     public BindableFile GetAnonymousFile();
 
     /// <summary>
+    /// Creates a file.
+    /// </summary>
+    /// <param name="path">The name of the file.</param>
+    public Task<BindableFile?> CreateFileAsync(string path);
+
+    /// <summary>
     /// Gets a file from a path.
     /// </summary>
     /// <param name="path">The path of the file.</param>
@@ -31,7 +37,7 @@ public interface IFileService
     /// Opens a file picker to select an <see cref="BindableFile"/>.
     /// </summary>
     /// <returns>The selected <see cref="BindableFile"/>.</returns>
-    public Task<BindableFile?> PickFileAsyc();
+    public Task<BindableFile?> PickFileAsync();
 
     /// <summary>
     /// Opens a file picker to select an <see cref="BindableFolder"/>.

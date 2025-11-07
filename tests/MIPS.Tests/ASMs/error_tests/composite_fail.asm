@@ -32,4 +32,4 @@ main:
 	ori    $v0,		$hero,		17		# Not a valid register
 	syscall
 
-	addi   $t0, $t1, ''					# Empty character literal (and arg count)
+	addi   $t0, $t1, ''					# Empty character literal

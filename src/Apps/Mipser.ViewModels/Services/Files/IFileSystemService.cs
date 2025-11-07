@@ -11,6 +11,11 @@ namespace Mipser.Services.Files;
 public interface IFileSystemService
 {
     /// <summary>
+    /// Attempts to create a file.
+    /// </summary>
+    Task<IFile?> CreateFileAsync(string path);
+
+    /// <summary>
     /// Attempts to get a file.
     /// </summary>
     Task<IFile?> GetFileAsync(string path);

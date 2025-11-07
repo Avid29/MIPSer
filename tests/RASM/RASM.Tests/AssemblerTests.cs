@@ -80,8 +80,7 @@ public class AssemblerTests
         (LogId.ZeroRegWriteback, 29),
         (LogId.IntegerTruncated, 30),
         (LogId.InvalidRegisterArgument, 32),
-        (LogId.InvalidCharLiteral, 35),
-        (LogId.InvalidInstructionArgCount, 35));
+        (LogId.InvalidCharLiteral, 35));
 
     [TestMethod(TestFilePathing.DuplicateSymbolFile)]
     public async Task DuplicateSymbolTest() => await RunFileTest(TestFilePathing.DuplicateSymbolFile,

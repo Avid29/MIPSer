@@ -8,7 +8,6 @@ using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
 using Mipser.Messages.Pages;
 using Mipser.ViewModels.Pages;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mipser.ViewModels;
@@ -63,7 +62,7 @@ public partial class MainViewModel
     public async Task PickAndOpenFileAsync()
     {
         // Select the file to open
-        var file = await _fileService.PickFileAsyc();
+        var file = await _fileService.PickFileAsync();
         if (file is null)
             return;
         
@@ -80,7 +79,7 @@ public partial class MainViewModel
         if (folder is null)
             return;
 
-        OpenFolder(folder);
+         _projectService.OpenFolder(folder);
     }
 
     private void OpenFile(BindableFile? file)
@@ -94,13 +93,5 @@ public partial class MainViewModel
 
         // Open the page
         FocusedPanel?.OpenPage(page);
-    }
-
-    private void OpenFolder(BindableFolder folder)
-    {
-        // TODO: Move to ProjectService
-
-        _ = _cacheService.CacheAsync("OpenFolder", folder.Path);
-        _messenger.Send(new FolderOpenedMessage(folder));
     }
 }
