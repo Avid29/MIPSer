@@ -22,9 +22,9 @@ namespace MIPS.Assembler;
 //     This assembler works in two passes.
 //
 //     Pass 1 - Alignment Pass:
-//      - Track all labels and marcos
+//      - Track all labels and macros
 //      - Assess instruction size
-//        - All acutal instructions are bytes
+//        - Real instructions are 4 bytes
 //        - Pseudo instructions have a real instruction count
 //      - Allocate memory
 //        - Note: Memory will be assigned as well where possible,
@@ -32,7 +32,7 @@ namespace MIPS.Assembler;
 //
 //     Pass 2 - Realization Pass:
 //      - Assemble instructions
-//      - Assign memory
+//      - Initialize allocated memory
 //
 
 /// <summary>
@@ -64,7 +64,7 @@ public partial class Assembler
     public AssemblerContext Context { get; }
 
     /// <summary>
-    /// Gets the assembler's configuation.
+    /// Gets the assembler's configuration.
     /// </summary>
     public AssemblerConfig Config { get; }
 
@@ -141,40 +141,4 @@ public partial class Assembler
     /// <returns>The module object.</returns>
     public T? CompleteModule<T>(Stream stream)
         where T : IBuildModule<T> => T.Create(_module, Config, stream);
-
-    /// <summary>
-    /// Defines a label at the current address.
-    /// </summary>
-    /// <remarks>
-    /// At this stage, the label is expected to be passed in with a tailing ':' that will be trimmed.
-    /// The method will still work if the semicolon is pre-trimmed.
-    /// </remarks>
-    /// <param name="label">The name of the symbol.</param>
-    private bool DefineLabel(Token label) => DefineSymbol(label, CurrentAddress, SymbolType.Label);
-
-    /// <summary>
-    /// Defines a symbol.
-    /// </summary>
-    /// <param name="label">The name of the symbol.</param>
-    /// <param name="address">The value of the symbol.</param>
-    /// <param name="type">The symbol type.</param>
-    /// <param name="flags">The flag info for the symbol.</param>
-    /// <returns>True if successful, false on failure.</returns>
-    private bool DefineSymbol(Token label, Address address, SymbolType type, SymbolFlags flags = 0)
-    {
-        // Ensure the symbol has a valid name
-        if (!ValidateSymbolName(label, out var name))
-            return false;
-
-        // Define the symbol or update by adding flags, address or type.
-        // NOTE: The type can only be updated if it is currently unknown
-        //       and the address can only be updated if it's undeclared/external.
-        if (!_module.TryDefineOrUpdateSymbol(name, type, address))
-        {
-            _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, label, "SymbolAlreadyDefined", name);
-            return false;
-        }
-
-        return true;
-    }
 }

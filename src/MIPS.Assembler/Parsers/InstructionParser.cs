@@ -444,7 +444,7 @@ public struct InstructionParser
         return true;
     }
 
-    private void CleanInteger(ref long value, ReadOnlySpan<Token> arg, Argument target)
+    private readonly void CleanInteger(ref long value, ReadOnlySpan<Token> arg, Argument target)
     {
         // Determine casting details for the argument
         (int bitCount, int shiftAmount, bool signed) = target switch

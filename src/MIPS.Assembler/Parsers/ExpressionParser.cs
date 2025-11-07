@@ -1,7 +1,6 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using Microsoft.VisualBasic;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
