@@ -119,24 +119,23 @@ public partial class Tokenizer
         var current = tokens[0];
         var peek = Peek(tokens);
 
-        // Registers
-        bool isRegister = !start && current.Source is "$" && peek.IsIdentifier();
-        if (TryMergeIf(isRegister, tokens, TokenType.Register, out merged, ref advance))
-            return true;
+        // Determine appropriate type
+        var type = start switch
+        {
+            false when current.Source is "$" && peek.IsIdentifier() => TokenType.Register,
+            true when peek?.Source is "=" => TokenType.MacroDeclaration,
+            true when current.Source is "." => TokenType.Directive,
+            true when peek?.Source is ":" => TokenType.LabelDeclaration,
+            _ => TokenType.Unknown,
+        };
+        
+        // Type not found
+        merged = null;
+        if (type is TokenType.Unknown)
+            return false;
 
-        // Macros
-        bool isMacro = start && peek?.Source is "=";
-        if (TryMergeIf(isMacro, tokens, TokenType.MacroDeclaration, out merged, ref advance))
-            return true;
-
-        // Directives
-        bool isDirective = start && current.Source is ".";
-        if (TryMergeIf(isDirective, tokens, TokenType.Directive, out merged, ref advance))
-            return true;
-
-        // Labels
-        bool isLabel = start && peek?.Source is ":";
-        if (TryMergeIf(isLabel, tokens, TokenType.LabelDeclaration, out merged, ref advance))
+        // Attempt to merge current and peek into the appropriate type
+        if (TryMerge(tokens, type, out merged, ref advance))
             return true;
 
         merged = null;
@@ -180,12 +179,12 @@ public partial class Tokenizer
         return true;
     }
 
-    private static bool TryMergeIf(bool condition, ReadOnlySpan<Token> tokens, TokenType type, out Token? merged, ref int advance)
+    private static bool TryMerge(ReadOnlySpan<Token> tokens, TokenType type, out Token? merged, ref int advance)
     {
         merged = null;
 
         // Condition not met or tokens not found
-        if (!condition || tokens.Length < 2)
+        if (tokens.Length < 2)
             return false;
 
         // Conditions met and tokens found
