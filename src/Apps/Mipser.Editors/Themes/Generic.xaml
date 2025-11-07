@@ -5,6 +5,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Mipser.Editors/AssemblyEditBox/AssemblyEditBox.xaml"/>
+        <ResourceDictionary Source="/Mipser.Editors/HexViewer/HexViewer.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
 </ResourceDictionary>

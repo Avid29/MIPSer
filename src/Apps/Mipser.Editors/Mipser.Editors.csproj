@@ -24,6 +24,9 @@
     <Page Update="AssemblyEditBox\AssemblyEditBox.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Update="HexEditor\HexEditor.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Themes\Generic.xaml">

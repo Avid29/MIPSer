@@ -6,7 +6,7 @@ using Mipser.Models.CheatSheet;
 
 namespace Mipser.Windows.Selectors;
 
-public partial class EncodingTemplateConverter : DataTemplateSelector
+public partial class EncodingTemplateSelector : DataTemplateSelector
 {
     protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container)
     {

@@ -7,10 +7,32 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:editor="using:WinUIEditor"
     xmlns:asmedit="using:Mipser.Editors.AssemblyEditBox"
+    xmlns:hexview="using:Mipser.Editors.HexViewer"
+    xmlns:selectors="using:Mipser.Windows.Selectors"
+    xmlns:vm="using:Mipser.ViewModels.Pages"
     mc:Ignorable="d">
 
-    <asmedit:AssemblyEditBox x:Name="AssemblyEditBox"
-                             Text="{x:Bind ViewModel.File.Contents, Mode=TwoWay}"
-                             FlowDirection="LeftToRight"/>
+    <UserControl.Resources>
+        
+        <selectors:EditorTemplateSelector x:Key="EditorTemplateSelector">
+            <selectors:EditorTemplateSelector.TextEditorTemplate>
+                <DataTemplate x:DataType="vm:FilePageViewModel">
+                    <asmedit:AssemblyEditBox Text="{x:Bind File.Contents, Mode=TwoWay}"
+                                             FlowDirection="LeftToRight"/>
+                </DataTemplate>
+            </selectors:EditorTemplateSelector.TextEditorTemplate>
+            <selectors:EditorTemplateSelector.HexEditorTemplate>
+                <DataTemplate x:DataType="vm:FilePageViewModel">
+                    <hexview:HexViewer Content="{x:Bind File.Contents, Mode=TwoWay}"/>
+                </DataTemplate>
+            </selectors:EditorTemplateSelector.HexEditorTemplate>
+        </selectors:EditorTemplateSelector>
+        
+    </UserControl.Resources>
+
+    <ContentControl Content="{x:Bind ViewModel, Mode=OneWay}"
+                    ContentTemplateSelector="{StaticResource EditorTemplateSelector}"
+                    HorizontalContentAlignment="Stretch"
+                    VerticalContentAlignment="Stretch"/>
 
 </UserControl>
