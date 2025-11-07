@@ -1,0 +1,26 @@
+﻿// Avishai Dernis 2025
+
+using Mipser.Services.Localization;
+using Mipser.ViewModels.Pages.Abstract;
+
+namespace Mipser.ViewModels.Pages.App;
+
+/// <summary>
+/// A view model for the about page.
+/// </summary>
+public class AboutPageViewModel : PageViewModel
+{
+    private ILocalizationService _localizationService;
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AboutPageViewModel"/> class.
+    /// </summary>
+    /// <param name="localizationService"></param>
+    public AboutPageViewModel(ILocalizationService localizationService)
+    {
+        _localizationService = localizationService;
+    }
+
+    /// <inheritdoc/>
+    public override string Title => _localizationService["AboutPageTitle"];
+}

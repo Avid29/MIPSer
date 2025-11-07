@@ -1,6 +1,6 @@
 // Avishai Dernis 2025
 
-using Microsoft.Extensions.DependencyInjection;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.ViewModels.Pages;
 
@@ -17,7 +17,7 @@ public sealed partial class ErrorList : UserControl
     public ErrorList()
     {
         this.InitializeComponent();
-        DataContext = App.Current.Services.GetRequiredService<ErrorListViewModel>();
+        DataContext = Ioc.Default.GetRequiredService<ErrorListViewModel>();
     }
 
     private ErrorListViewModel ViewModel => (ErrorListViewModel)this.DataContext;

@@ -5,8 +5,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:apppages="using:Mipser.Windows.Views.Pages.App"
     xmlns:pages="using:Mipser.Windows.Views.Pages"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
+    xmlns:avmv="using:Mipser.ViewModels.Pages.App"
     xmlns:vmv="using:Mipser.ViewModels.Pages"
     xmlns:vmva="using:Mipser.ViewModels.Pages.Abstract"
     xmlns:selectors="using:Mipser.Windows.Selectors"
@@ -15,6 +17,11 @@
 
     <UserControl.Resources>
         <selectors:PageTemplateSelector x:Key="PageTemplateSelector">
+            <selectors:PageTemplateSelector.AboutPageTemplate>
+                <DataTemplate x:DataType="avmv:AboutPageViewModel">
+                    <apppages:AboutPage ViewModel="{x:Bind}"/>
+                </DataTemplate>
+            </selectors:PageTemplateSelector.AboutPageTemplate>
             <selectors:PageTemplateSelector.CheatSheetPageTemplate>
                 <DataTemplate x:DataType="vmv:CheatSheetViewModel">
                     <pages:CheatSheet ViewModel="{x:Bind}"/>

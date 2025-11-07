@@ -294,4 +294,10 @@
   <data name="BuildStatus_Failed" xml:space="preserve">
     <value>Build Failed</value>
   </data>
+  <data name="MIPSCheatSheetTitle" xml:space="preserve">
+    <value>MIPS Cheat Sheet</value>
+  </data>
+  <data name="AboutPageTitle" xml:space="preserve">
+    <value>About Misper</value>
+  </data>
 </root>

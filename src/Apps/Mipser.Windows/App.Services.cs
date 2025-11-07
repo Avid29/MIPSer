@@ -7,6 +7,7 @@ using Mipser.Services.Localization;
 using Mipser.Services.ProjectService;
 using Mipser.ViewModels;
 using Mipser.ViewModels.Pages;
+using Mipser.ViewModels.Pages.App;
 using Mipser.Windows.Services.Cache;
 using Mipser.Windows.Services.FileSystem;
 using Mipser.Windows.Services.Localization;
@@ -31,15 +32,20 @@ public partial class App
             .AddSingleton<IFileService, FileService>()
             .AddSingleton<BuildService>()
 
+            // Page ViewModels
+            .AddTransient<AboutPageViewModel>()
+            .AddTransient<CheatSheetViewModel>()
+            .AddTransient<FilePageViewModel>()
+
+            // Panel ViewModels
+            .AddTransient<ExplorerViewModel>()
+            .AddTransient<ErrorListViewModel>()
+
             // ViewModels
-            .AddSingleton<MainViewModel>()
             .AddTransient<StatusViewModel>()
             .AddTransient<WindowViewModel>()
             .AddTransient<PanelViewModel>()
-            .AddTransient<FilePageViewModel>()
-            .AddTransient<ExplorerViewModel>()
-            .AddTransient<CheatSheetViewModel>()
-            .AddTransient<ErrorListViewModel>()
+            .AddSingleton<MainViewModel>()
             .BuildServiceProvider();
     }
 }

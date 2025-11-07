@@ -294,4 +294,10 @@
   <data name="BuildStatus_Failed" xml:space="preserve">
     <value>הבנייה נכשלה</value>
   </data>
+  <data name="MIPSCheatSheetTitle" xml:space="preserve">
+    <value>דף עזר ל-MIPS</value>
+  </data>
+  <data name="AboutPageTitle" xml:space="preserve">
+    <value>אודות Mipser</value>
+  </data>
 </root>

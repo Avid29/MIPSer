@@ -22,11 +22,15 @@ namespace Mipser.ViewModels.Pages;
 /// </summary>
 public class CheatSheetViewModel : PageViewModel
 {
+    private ILocalizationService _localizationService;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="CheatSheetViewModel"/> class.
     /// </summary>
-    public CheatSheetViewModel()
+    public CheatSheetViewModel(ILocalizationService localizationService)
     {
+        _localizationService = localizationService;
+
         // TODO: Load the instruction metadata from a service.
         var table = new InstructionTable(MipsVersion.MipsIII);
         var instructions = table.GetInstructions(false);
@@ -47,7 +51,7 @@ public class CheatSheetViewModel : PageViewModel
     }
     
     /// <inheritdoc/>
-    public override string Title => "MIPS Cheatsheet"; // TODO: Localization
+    public override string Title => _localizationService["MIPSCheatSheetTitle"];
 
     private static IEnumerable<EncodingPattern>? LoadEncodingPatterns(string filename)
     {

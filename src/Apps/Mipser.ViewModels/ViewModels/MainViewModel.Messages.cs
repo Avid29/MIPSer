@@ -50,24 +50,6 @@ public partial class MainViewModel
     private void RegisterNavigationMessages()
     {
         _messenger.Register<MainViewModel, PanelFocusChangedMessage>(this, (r, m) => r.FocusedPanel = m.FocusedPanel);
-        _messenger.Register<MainViewModel, OpenCheatSheetRequestMessage>(this, (r, m) => r.NavigateToCheatSheet());
-    }
-
-    private void NavigateToCheatSheet(bool open = true)
-    {
-        // Check if the cheat sheet is already open, and open it if not.
-        var page = FocusedPanel?.OpenPages.FirstOrDefault(p => p is CheatSheetViewModel);
-        if (page is null && open)
-        {
-            page = Ioc.Default.GetRequiredService<CheatSheetViewModel>();
-            FocusedPanel?.OpenPages.Add(page);
-        }
-
-        // Navigate to the cheat sheet.
-        if (FocusedPanel is not null)
-        {
-            FocusedPanel.CurrentPage = page;
-        }
     }
 
     /// <summary>

@@ -2,7 +2,6 @@
 
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
@@ -23,7 +22,7 @@ public sealed partial class Explorer : UserControl
     public Explorer()
     {
         this.InitializeComponent();
-        DataContext = App.Current.Services.GetRequiredService<ExplorerViewModel>();
+        DataContext = Ioc.Default.GetRequiredService<ExplorerViewModel>();
     }
 
     private ExplorerViewModel ViewModel => (ExplorerViewModel)DataContext;

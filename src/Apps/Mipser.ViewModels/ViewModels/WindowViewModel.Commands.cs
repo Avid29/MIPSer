@@ -6,6 +6,8 @@ using Mipser.Messages.Build;
 using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
 using Mipser.Messages.Pages;
+using Mipser.ViewModels.Pages;
+using Mipser.ViewModels.Pages.App;
 
 namespace Mipser.ViewModels;
 
@@ -42,7 +44,12 @@ public partial class WindowViewModel
     public RelayCommand AssembleFileCommand { get; }
 
     /// <summary>
-    /// Gets a command that closes the currently open file.
+    /// Gets a command that opens the about page.
+    /// </summary>
+    public RelayCommand OpenAboutCommand { get; }
+
+    /// <summary>
+    /// Gets a command that opens the cheat sheet.
     /// </summary>
     public RelayCommand OpenCheatSheetCommand { get; }
 
@@ -58,5 +65,7 @@ public partial class WindowViewModel
 
     private void AssembleFile() => _messenger.Send(new AssembleFileRequestMessage());
 
-    private void OpenCheatSheet() => _messenger.Send(new OpenCheatSheetRequestMessage());
+    private void OpenAbout() => MainViewModel.GoToPageByType<AboutPageViewModel>();
+
+    private void OpenCheatSheet() => MainViewModel.GoToPageByType<CheatSheetViewModel>();
 }
