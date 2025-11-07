@@ -59,7 +59,7 @@ public partial class Tokenizer
         // Stage 2: Multi-token merges (registers, directives, and labels)
         if (TryMergeTokens(start, tokens, out var merged, ref advance))
             return merged;
-        
+
         // Stage 3: Check for either references or instruction names
         if (TryInstructionOrReference(start, tokens, out var result, ref advance))
             return result;
@@ -120,26 +120,29 @@ public partial class Tokenizer
         var peek = Peek(tokens);
 
         // Determine appropriate type
-        var type = start switch
+        (var type, bool merge) = start switch
         {
-            false when current.Source is "$" && peek.IsIdentifier() => TokenType.Register,
-            true when peek?.Source is "=" => TokenType.MacroDeclaration,
-            true when current.Source is "." => TokenType.Directive,
-            true when peek?.Source is ":" => TokenType.LabelDeclaration,
-            _ => TokenType.Unknown,
+            false when current.Source is "$" && peek.IsIdentifier() => (TokenType.Register, true),
+            true when Peek(tokens, skipWhitespace: true)?.Source is "=" => (TokenType.MacroDeclaration, false),
+            true when current.Source is "." => (TokenType.Directive, true),
+            true when peek?.Source is ":" => (TokenType.LabelDeclaration, false),
+            _ => (TokenType.Unknown, false),
         };
-        
+
         // Type not found
         merged = null;
         if (type is TokenType.Unknown)
             return false;
 
-        // Attempt to merge current and peek into the appropriate type
-        if (TryMerge(tokens, type, out merged, ref advance))
+        // Type found, and it doesn't need to merge
+        if (!merge)
+        {
+            merged = ReClassify(type, current);
             return true;
+        }
 
-        merged = null;
-        return false;
+        // Attempt to merge current and peek into the appropriate type
+        return TryMerge(tokens, type, out merged, ref advance); 
     }
 
     private static bool TryInstructionOrReference(bool start, ReadOnlySpan<Token> tokens, out Token? result, ref int advance)
@@ -210,7 +213,7 @@ public partial class Tokenizer
         };
     }
 
-    private static Token? Peek(ReadOnlySpan<Token> tokens, int n = 1, bool skipWhitespace = true)
+    private static Token? Peek(ReadOnlySpan<Token> tokens, int n = 1, bool skipWhitespace = false)
     {
         Token? token;
         do
