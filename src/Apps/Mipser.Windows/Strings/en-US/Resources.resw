@@ -315,4 +315,13 @@
   <data name="AppLanguageSC.Description" xml:space="preserve">
     <value>Set the app's display language. (Requires a restart to take effect).</value>
   </data>
+  <data name="Manifest/AppDisplayName" xml:space="preserve">
+    <value>MIPSer</value>
+  </data>
+  <data name="Manifest/PublisherDisplayName" xml:space="preserve">
+    <value>Avishai Dernis</value>
+  </data>
+  <data name="Manifest/Description" xml:space="preserve">
+    <value>MIPSer is an IDE, Assembler, and Interpreter for the MIPS assembly language and architecture.</value>
+  </data>
 </root>

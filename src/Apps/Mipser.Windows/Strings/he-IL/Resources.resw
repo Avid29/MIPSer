@@ -315,4 +315,13 @@
   <data name="AppLanguageSC.Description" xml:space="preserve">
     <value>הגדר את שפת התצוגה של היישום. (נדרשת הפעלה מחדש כדי שהשינוי ייכנס לתוקף.)</value>
   </data>
+  <data name="Manifest/AppDisplayName" xml:space="preserve">
+    <value>מיפסר</value>
+  </data>
+  <data name="Manifest/PublisherDisplayName" xml:space="preserve">
+    <value> אבישי דרניס</value>
+  </data>
+  <data name="Manifest/Description" xml:space="preserve">
+    <value>מיפסר הוא סביבת פיתוח משולבת, מרכיב, ומפרש עבור שפת ההרכבה וארכיטקורת MIPS.</value>
+  </data>
 </root>
