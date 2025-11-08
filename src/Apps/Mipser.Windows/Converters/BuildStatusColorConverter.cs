@@ -16,19 +16,19 @@ namespace Mipser.Windows.Converters;
 public partial class BuildStatusColorConverter : DependencyObject, IValueConverter
 {
     public static readonly DependencyProperty NotReadyProperty =
-        DependencyProperty.RegisterAttached(nameof(NotReady), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
+        DependencyProperty.Register(nameof(NotReady), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
     
     public static readonly DependencyProperty ReadyProperty =
-        DependencyProperty.RegisterAttached(nameof(Ready), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
+        DependencyProperty.Register(nameof(Ready), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
     
     public static readonly DependencyProperty RunningProperty =
-        DependencyProperty.RegisterAttached(nameof(Running), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
+        DependencyProperty.Register(nameof(Running), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
     
     public static readonly DependencyProperty DoneProperty =
-        DependencyProperty.RegisterAttached(nameof(Done), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
+        DependencyProperty.Register(nameof(Done), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
     
     public static readonly DependencyProperty FailedProperty =
-        DependencyProperty.RegisterAttached(nameof(Failed), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
+        DependencyProperty.Register(nameof(Failed), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
     
     public Color NotReady
     {

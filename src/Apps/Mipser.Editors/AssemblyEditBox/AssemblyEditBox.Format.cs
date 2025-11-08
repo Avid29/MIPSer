@@ -91,7 +91,7 @@ public partial class AssemblyEditBox
         // Clear the line to white
         editor.StartStyling(lineStart, 0);
         editor.SetStyling(lineLength, 0);
-
+        
         // Tokenize the line
         int pos = lineStart;
         var tokenized = Tokenizer.TokenizeLine(line, mode: TokenizerMode.IDE);
@@ -109,10 +109,11 @@ public partial class AssemblyEditBox
                 TokenType.Reference or
                 TokenType.LabelDeclaration => ReferenceStyleIndex,
 
+                TokenType.OpenParenthesis or TokenType.CloseParenthesis or
+                TokenType.OpenBracket or TokenType.CloseBracket or TokenType.Comma or 
                 TokenType.Operator => OperatorStyleIndex,
 
                 TokenType.Directive => DirectiveStyleIndex,
-                TokenType.Comma => CommaStyleIndex,
                 TokenType.String => StringStyleIndex,
                 TokenType.Comment => CommentStyleIndex,
 
@@ -133,28 +134,29 @@ public partial class AssemblyEditBox
     private const int ReferenceStyleIndex = 4;
     private const int OperatorStyleIndex = 5;
     private const int DirectiveStyleIndex = 6;
-    private const int CommaStyleIndex = 7;
-    private const int StringStyleIndex = 8;
-    private const int CommentStyleIndex = 9;
+    private const int StringStyleIndex = 7;
+    private const int CommentStyleIndex = 8;
+    private const int MacroStyleIndex = 9;
     private const int InvalidInstructionStyleIndex = 10;
+    //private const int InvalidRegisterStyleIndex = 11;
+    //private const int InvalidReferenceStyleIndex = 11;
 
     private void SetupHighlighting()
     {
-        Guard.IsNotNull(_codeEditor);
+        if (_codeEditor is null)
+            return;
+
         var editor = _codeEditor.Editor;
 
-        editor.StyleSetFore(InstructionStyleIndex, ToInt("#A7FA95".ToColor()));
-        editor.StyleSetFore(RegisterStyleIndex, ToInt("#FE8482".ToColor()));
-        editor.StyleSetFore(ImmediateStyleIndex, ToInt("#F8FC8B".ToColor()));
-        editor.StyleSetFore(ReferenceStyleIndex, ToInt("#73EEFD".ToColor()));
-        editor.StyleSetFore(OperatorStyleIndex, ToInt("#77A7FD".ToColor()));
-        editor.StyleSetFore(DirectiveStyleIndex, ToInt("#FA9EF6".ToColor()));
-        editor.StyleSetFore(CommaStyleIndex, ToInt("#77A7FD".ToColor()));
-        editor.StyleSetFore(StringStyleIndex, ToInt("#FFC47A".ToColor()));
-        editor.StyleSetFore(CommentStyleIndex, ToInt("#9B88FC".ToColor()));
-        editor.StyleSetFore(InvalidInstructionStyleIndex, ToInt("#67995c".ToColor()));
-
-        UpdateSyntaxHighlighting();
+        editor.StyleSetFore(InstructionStyleIndex, ToInt(SyntaxHighlightingTheme.InstructionHighlightColor));
+        editor.StyleSetFore(RegisterStyleIndex, ToInt(SyntaxHighlightingTheme.RegisterHighlightColor));
+        editor.StyleSetFore(ImmediateStyleIndex, ToInt(SyntaxHighlightingTheme.ImmediateHighlightColor));
+        editor.StyleSetFore(ReferenceStyleIndex, ToInt(SyntaxHighlightingTheme.ReferenceHighlightColor));
+        editor.StyleSetFore(OperatorStyleIndex, ToInt(SyntaxHighlightingTheme.OperatorHighlightColor));
+        editor.StyleSetFore(DirectiveStyleIndex, ToInt(SyntaxHighlightingTheme.DirectiveHighlightColor));
+        editor.StyleSetFore(StringStyleIndex, ToInt(SyntaxHighlightingTheme.StringHighlightColor));
+        editor.StyleSetFore(CommentStyleIndex, ToInt(SyntaxHighlightingTheme.CommentHighlightColor));
+        editor.StyleSetFore(InvalidInstructionStyleIndex, ToInt(SyntaxHighlightingTheme.InvalidInstructionHighlightColor));
     }
 
     private const int ErrorIndicatorIndex = 8;

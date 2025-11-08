@@ -13,11 +13,15 @@ public partial class AssemblyEditBox
     public static readonly DependencyProperty TextProperty =
         DependencyProperty.Register(nameof(Text), typeof(string), typeof(AssemblyEditBox), new PropertyMetadata(string.Empty, OnTextChanged));
 
-    ///// <summary>
-    ///// A <see cref="DependencyProperty"/> for the <see cref="SelectedRange"/> property.
-    ///// </summary>
-    //public static readonly DependencyProperty SelectionRangeProperty =
-    //    DependencyProperty.Register(nameof(SelectedRange), typeof(Range), typeof(AssemblyEditBox), new PropertyMetadata(new Range(0, 0)));
+    /// <summary>
+    /// A <see cref="DependencyProperty"/> for the <see cref="Text"/> property.
+    /// </summary>
+    public static readonly DependencyProperty SyntaxHighlightingThemeProperty =
+        DependencyProperty.Register(
+            nameof(SyntaxHighlightingTheme),
+            typeof(AssemblySyntaxHighlightingTheme),
+            typeof(AssemblyEditBox),
+            new PropertyMetadata(AssemblySyntaxHighlightingTheme.Default, OnThemeChanged));
 
     /// <summary>
     /// Gets or sets the text contained in the editbox.
@@ -25,35 +29,35 @@ public partial class AssemblyEditBox
     public string Text
     {
         get => (string)GetValue(TextProperty);
-        set
-        {
-            if (Text == value)
-                return;
-
-            // Do not use the setter internally.
-            // That causes unneccesary looping
-
-            SetValue(TextProperty, value);
-            _codeEditor?.Editor.SetText(value);
-        }
+        set => SetValue(TextProperty, value);
     }
 
-    ///// <summary>
-    ///// Gets or sets the selected range.
-    ///// </summary>
-    //public Range SelectedRange
-    //{
-    //    get => (Range)GetValue(SelectionRangeProperty);
-    //    set => SetValue(SelectionRangeProperty, value);
-    //}
+    /// <summary>
+    /// Gets or sets the text contained in the editbox.
+    /// </summary>
+    public AssemblySyntaxHighlightingTheme SyntaxHighlightingTheme
+    {
+        get => (AssemblySyntaxHighlightingTheme)GetValue(SyntaxHighlightingThemeProperty);
+        set => SetValue(SyntaxHighlightingThemeProperty, value);
+    }
 
     private void UpdateTextProperty(string value) => SetValue(TextProperty, value);
+
+    private static void OnThemeChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)
+    {
+        if (d is not AssemblyEditBox asmBox)
+            return;
+
+        asmBox.SetupHighlighting();
+        asmBox.UpdateSyntaxHighlighting();
+    }
 
     private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)
     {
         if (d is not AssemblyEditBox asmBox)
             return;
 
+        asmBox._codeEditor?.Editor.SetText(asmBox.Text);
         asmBox.TextChanged?.Invoke(d, EventArgs.Empty);
     }
 }

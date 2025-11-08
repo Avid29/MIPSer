@@ -13,12 +13,25 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        
+
         <selectors:EditorTemplateSelector x:Key="EditorTemplateSelector">
             <selectors:EditorTemplateSelector.TextEditorTemplate>
                 <DataTemplate x:DataType="vm:FilePageViewModel">
                     <asmedit:AssemblyEditBox Text="{x:Bind File.Contents, Mode=TwoWay}"
-                                             FlowDirection="LeftToRight"/>
+                                             FlowDirection="LeftToRight">
+                        <asmedit:AssemblyEditBox.SyntaxHighlightingTheme>
+                            <asmedit:AssemblySyntaxHighlightingTheme InstructionHighlightColor="{ThemeResource InstructionHighlightColor}"
+                                                                     RegisterHighlightColor="{ThemeResource RegisterHighlightColor}"
+                                                                     ImmediateHighlightColor="{ThemeResource ImmediateHighlightColor}"
+                                                                     ReferenceHighlightColor="{ThemeResource ReferenceHighlightColor}"
+                                                                     OperatorHighlightColor="{ThemeResource OperatorHighlightColor}"
+                                                                     DirectiveHighlightColor="{ThemeResource DirectiveHighlightColor}"
+                                                                     StringHighlightColor="{ThemeResource StringHighlightColor}"
+                                                                     CommentHighlightColor="{ThemeResource CommentHighlightColor}"
+                                                                     MacroHighlightColor="{ThemeResource MacroHighlightColor}"
+                                                                     InvalidInstructionHighlightColor="{ThemeResource InvalidInstructionHighlightColor}"/>
+                        </asmedit:AssemblyEditBox.SyntaxHighlightingTheme>
+                    </asmedit:AssemblyEditBox>
                 </DataTemplate>
             </selectors:EditorTemplateSelector.TextEditorTemplate>
             <selectors:EditorTemplateSelector.HexEditorTemplate>
@@ -27,7 +40,7 @@
                 </DataTemplate>
             </selectors:EditorTemplateSelector.HexEditorTemplate>
         </selectors:EditorTemplateSelector>
-        
+
     </UserControl.Resources>
 
     <ContentControl Content="{x:Bind ViewModel, Mode=OneWay}"
