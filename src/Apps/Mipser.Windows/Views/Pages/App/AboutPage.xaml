@@ -8,14 +8,34 @@
     mc:Ignorable="d">
     
     <ScrollViewer Padding="16">
-        <StackPanel MaxWidth="800" HorizontalAlignment="Center">
-            <RichTextBlock FontSize="16" HorizontalAlignment="Left" IsTextSelectionEnabled="False">
-                <Paragraph>
-                    <Bold>TODO:</Bold>
-                    <Run>Make an about page.</Run>
-                </Paragraph>
-            </RichTextBlock>
-        </StackPanel>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1240"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="LeftGutter.Width" Value="0.5*"/>
+                        <Setter Target="RightGutter.Width" Value="0.5*"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftGutter" Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="RightGutter" Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel x:Name="RootPanel" Grid.Column="1">
+                <StackPanel.ChildrenTransitions>
+                    <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
+                    <RepositionThemeTransition IsStaggeringEnabled="False" />
+                </StackPanel.ChildrenTransitions>
+
+                <Image Source="/Assets/AppIcons/WideLogo.svg"/>
+            </StackPanel>
+        </Grid>
     </ScrollViewer>
     
 </UserControl>
