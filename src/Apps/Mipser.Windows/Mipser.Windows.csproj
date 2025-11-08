@@ -18,8 +18,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Assets\Fonts\HappyMonkey-Regular.ttf" />
+    <Content Remove="Assets\SmallTile.scale-100.png" />
+    <Content Remove="Assets\SmallTile.scale-125.png" />
+    <Content Remove="Assets\SmallTile.scale-150.png" />
+    <Content Remove="Assets\SmallTile.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Assets\SmallTile.scale-400.png" />
     <None Remove="Views\Shell\StatusBar.xaml" />
   </ItemGroup>
   <ItemGroup>
