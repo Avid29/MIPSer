@@ -139,8 +139,11 @@
             <MenuBarItem x:Uid="HelpMBI" Title="Help">
                 <MenuFlyoutItem x:Uid="CheatSheetMFI" Text="Show Cheatsheet"
                                 Command="{x:Bind ViewModel.OpenCheatSheetCommand, Mode=OneWay}"/>
+                <MenuFlyoutItem x:Uid="SettingsMFI" Text="MIPSer Settings"
+                                Command="{x:Bind ViewModel.OpenSettingsCommand, Mode=OneWay}"/>
                 <MenuFlyoutItem x:Uid="AboutMFI" Text="About Mipser"
-                                Command="{x:Bind ViewModel.OpenAboutCommand, Mode=OneWay}">
+                                Command="{x:Bind ViewModel.OpenAboutCommand, Mode=OneWay}"
+                                IsEnabled="False">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE946;" />
                     </MenuFlyoutItem.Icon>

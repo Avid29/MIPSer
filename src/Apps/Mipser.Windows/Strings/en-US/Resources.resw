@@ -300,4 +300,19 @@
   <data name="AboutPageTitle" xml:space="preserve">
     <value>About Misper</value>
   </data>
+  <data name="UseSystemLanguage" xml:space="preserve">
+    <value>Use System Language</value>
+  </data>
+  <data name="SettingsMFI.Text" xml:space="preserve">
+    <value>MIPSer Settings</value>
+  </data>
+  <data name="SettingsPageTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="AppLanguageSC.Header" xml:space="preserve">
+    <value>App Language</value>
+  </data>
+  <data name="AppLanguageSC.Description" xml:space="preserve">
+    <value>Set the app's display language. (Requires a restart to take effect).</value>
+  </data>
 </root>

@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Messages.Build;
 using Mipser.Messages.Files;
-using Mipser.Messages.Navigation;
 using Mipser.Messages.Pages;
 using Mipser.ViewModels.Pages;
 using Mipser.ViewModels.Pages.App;
@@ -47,11 +46,16 @@ public partial class WindowViewModel
     /// Gets a command that opens the about page.
     /// </summary>
     public RelayCommand OpenAboutCommand { get; }
-
     /// <summary>
     /// Gets a command that opens the cheat sheet.
     /// </summary>
     public RelayCommand OpenCheatSheetCommand { get; }
+
+    /// <summary>
+    /// Gets a command that opens the settings page.
+    /// </summary>
+    public RelayCommand OpenSettingsCommand { get; }
+
 
     private void CreateNewFile() => _messenger.Send(new FileCreateNewRequestMessage());
 
@@ -68,4 +72,6 @@ public partial class WindowViewModel
     private void OpenAbout() => MainViewModel.GoToPageByType<AboutPageViewModel>();
 
     private void OpenCheatSheet() => MainViewModel.GoToPageByType<CheatSheetViewModel>();
+
+    private void OpenSettings() => MainViewModel.GoToPageByType<SettingsPageViewModel>();
 }

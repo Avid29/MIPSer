@@ -7,6 +7,7 @@ using Mipser.Services.Localization;
 using Mipser.ViewModels;
 using System;
 using System.Runtime.InteropServices;
+using Windows.Storage;
 
 namespace Mipser.Windows;
 

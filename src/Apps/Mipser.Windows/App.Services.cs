@@ -6,12 +6,14 @@ using Mipser.Services.Build;
 using Mipser.Services.Files;
 using Mipser.Services.Localization;
 using Mipser.Services.Project;
+using Mipser.Services.Settings;
 using Mipser.ViewModels;
 using Mipser.ViewModels.Pages;
 using Mipser.ViewModels.Pages.App;
 using Mipser.Windows.Services.Cache;
 using Mipser.Windows.Services.FileSystem;
 using Mipser.Windows.Services.Localization;
+using Mipser.Windows.Services.Settings;
 using System;
 
 namespace Mipser.Windows;
@@ -30,6 +32,7 @@ public partial class App
             .AddSingleton<ICacheService, CacheService>()
 
             // Dependent Services
+            .AddSingleton<ISettingsService, SettingsService>()
             .AddSingleton<IFileService, FileService>()
             .AddSingleton<IProjectService, ProjectService>()
             .AddSingleton<BuildService>()
@@ -38,6 +41,7 @@ public partial class App
             .AddTransient<AboutPageViewModel>()
             .AddTransient<CheatSheetViewModel>()
             .AddTransient<FilePageViewModel>()
+            .AddTransient<SettingsPageViewModel>()
 
             // Panel ViewModels
             .AddTransient<ExplorerViewModel>()

@@ -32,6 +32,11 @@
                     <pages:FileViewer ViewModel="{x:Bind}"/>
                 </DataTemplate>
             </selectors:PageTemplateSelector.FilePageTemplate>
+            <selectors:PageTemplateSelector.SettingsPageTemplate>
+                <DataTemplate x:DataType="avmv:SettingsPageViewModel">
+                    <apppages:SettingsPage ViewModel="{x:Bind}"/>
+                </DataTemplate>
+            </selectors:PageTemplateSelector.SettingsPageTemplate>
         </selectors:PageTemplateSelector>
     </UserControl.Resources>
 

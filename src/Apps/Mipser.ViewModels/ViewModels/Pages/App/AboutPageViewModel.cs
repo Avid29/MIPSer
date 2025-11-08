@@ -15,7 +15,6 @@ public class AboutPageViewModel : PageViewModel
     /// <summary>
     /// Initializes a new instance of the <see cref="AboutPageViewModel"/> class.
     /// </summary>
-    /// <param name="localizationService"></param>
     public AboutPageViewModel(ILocalizationService localizationService)
     {
         _localizationService = localizationService;

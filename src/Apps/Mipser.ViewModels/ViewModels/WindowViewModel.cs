@@ -33,6 +33,7 @@ public partial class WindowViewModel : ObservableRecipient
 
         OpenAboutCommand = new RelayCommand(OpenAbout);
         OpenCheatSheetCommand = new RelayCommand(OpenCheatSheet);
+        OpenSettingsCommand = new RelayCommand(OpenSettings);
 
         IsActive = true;
 

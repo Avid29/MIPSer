@@ -1,9 +1,9 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Mvvm.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Mipser.Services.Localization;
+using Mipser.Services.Settings;
 
 namespace Mipser.Windows;
 
@@ -21,9 +21,12 @@ public partial class App : Application
         Services = ConfigureServices();
         Ioc.Default.ConfigureServices(Services);
 
-        this.InitializeComponent();
+        // Apply language override from settings
+        var localizationService = Ioc.Default.GetRequiredService<ILocalizationService>();
+        var settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+        localizationService.LanguageOverride = settingsService.Local.GetValue<string>("LanguageOverride");
 
-        Services.GetRequiredService<ILocalizationService>().LanguageOverride = null;
+        this.InitializeComponent();
     }
 
     /// <summary>

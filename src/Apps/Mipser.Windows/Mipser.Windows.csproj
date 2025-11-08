@@ -13,9 +13,9 @@
 	<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
 	<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Controls\FileEditor.xaml.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Controls\FileEditor.xaml.cs" />
+	</ItemGroup>
   <ItemGroup>
     <Content Remove="Assets\Fonts\HappyMonkey-Regular.ttf" />
     <Content Remove="Assets\SmallTile.scale-100.png" />
@@ -24,8 +24,8 @@
     <Content Remove="Assets\SmallTile.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Assets\SmallTile.scale-400.png" />
-    <None Remove="Views\Shell\StatusBar.xaml" />
+	  <None Remove="Assets\SmallTile.scale-400.png" />
+	  <None Remove="Views\Shell\StatusBar.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +36,7 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Converters" Version="8.2.250402" />
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
@@ -132,9 +133,6 @@
     <Page Update="Views\Shell\TitleBar.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Pages\App\" />
   </ItemGroup>
 
 </Project>
