@@ -10,24 +10,44 @@
     mc:Ignorable="d">
 
     <ScrollViewer Padding="16">
-        <StackPanel MaxWidth="800" HorizontalAlignment="Center">
-            <!--<StackPanel.ChildrenTransitions>
-                <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
-                <RepositionThemeTransition IsStaggeringEnabled="False" />
-            </StackPanel.ChildrenTransitions>-->
-            
-            <ctc:SettingsCard x:Uid="AppLanguageSC"
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1240"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="LeftGutter.Width" Value="0.5*"/>
+                        <Setter Target="RightGutter.Width" Value="0.5*"/>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="LeftGutter" Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="RightGutter" Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel x:Name="RootPanel" Grid.Column="1">
+                <StackPanel.ChildrenTransitions>
+                    <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
+                    <RepositionThemeTransition IsStaggeringEnabled="False" />
+                </StackPanel.ChildrenTransitions>
+
+                <ctc:SettingsCard x:Uid="AppLanguageSC"
                               Header="App Language"
                               Description="Set the app's display language. (Requires a restart to take effect).">
-                <ComboBox SelectedItem="{x:Bind ViewModel.Language, Mode=TwoWay}"
+                    <ComboBox SelectedItem="{x:Bind ViewModel.Language, Mode=TwoWay}"
                           ItemsSource="{x:Bind ViewModel.LanguageOptions, Mode=OneWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate x:DataType="x:String">
-                            <TextBlock Text="{x:Bind local:SettingsPage.LanguageDisplayName((x:String)), Mode=OneWay}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-            </ctc:SettingsCard>
-        </StackPanel>
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <TextBlock Text="{x:Bind local:SettingsPage.LanguageDisplayName((x:String)), Mode=OneWay}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </ctc:SettingsCard>
+            </StackPanel>
+        </Grid>
     </ScrollViewer>
 </UserControl>
