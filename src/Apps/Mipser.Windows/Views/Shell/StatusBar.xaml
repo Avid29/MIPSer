@@ -11,24 +11,23 @@
     xmlns:convert="using:Mipser.Windows.Converters"
     xmlns:helpers="using:Mipser.Windows.Helpers"
     mc:Ignorable="d">
-    
+
     <UserControl.Resources>
         <convert:BuildStatusColorConverter x:Key="BuildStatusColorConverter"
-                                           NotReady="#747F8D"
-                                           Ready="#1f4d7a"
-                                           Running="#966003"
-                                           Done="#297050"
-                                           Failed="#950404"/>
+                                           NotReady="{ThemeResource NotReadyStatusBarBackgroundColor}"
+                                           Ready="{ThemeResource ReadyStatusBarBackgroundColor}"
+                                           Running="{ThemeResource RunningStatusBarBackgroundColor}"
+                                           Done="{ThemeResource DoneStatusBarBackgroundColor}"
+                                           Failed="{ThemeResource FailedStatusBarBackgroundColor}"/>
     </UserControl.Resources>
 
     <Grid Padding="8,0,8,4">
         <Grid.Background>
             <SolidColorBrush x:Name="BackgroundBrush" Color="{x:Bind ViewModel.BuildStatus, Converter={StaticResource BuildStatusColorConverter}, Mode=OneWay}"/>
         </Grid.Background>
-        
+
         <TextBlock Text="{x:Bind helpers:LocalizationHelper.Localize(ViewModel.BuildStatus), Mode=OneWay}"
                    cth:ContrastHelper.Opponent="{x:Bind BackgroundBrush.Color, Mode=OneWay}"
                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
-        
     </Grid>
 </UserControl>

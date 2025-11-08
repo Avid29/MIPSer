@@ -7,6 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:Mipser.Windows.Views.Pages.App"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
+    xmlns:helpers="using:Mipser.Windows.Helpers"
+    xmlns:senums="using:Mipser.Services.Settings.Enums"
     mc:Ignorable="d">
 
     <ScrollViewer Padding="16">
@@ -23,6 +25,7 @@
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
+        
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="LeftGutter" Width="auto"/>
@@ -30,15 +33,38 @@
                 <ColumnDefinition x:Name="RightGutter" Width="auto"/>
             </Grid.ColumnDefinitions>
             <StackPanel x:Name="RootPanel" Grid.Column="1">
-                <StackPanel.ChildrenTransitions>
+                <!--<StackPanel.ChildrenTransitions>
                     <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
                     <RepositionThemeTransition IsStaggeringEnabled="False" />
-                </StackPanel.ChildrenTransitions>
+                </StackPanel.ChildrenTransitions>-->
 
+                <!--Theme Settings-->
+                <TextBlock x:Uid="ThemeSettingsHeaderTB"
+                           Text="Theme Settings"
+                           Margin="0,0,0,4"/>
+                
+                <ctc:SettingsCard x:Uid="AppThemeSC"
+                              Header="Theme"
+                              Description="Change the app's theme.">
+                    <ComboBox SelectedItem="{x:Bind ViewModel.AppTheme, Mode=TwoWay}"
+                          ItemsSource="{x:Bind ViewModel.AppThemeOptions, Mode=OneWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="senums:Theme">
+                                <TextBlock Text="{x:Bind helpers:LocalizationHelper.Localize((senums:Theme)), Mode=OneWay}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </ctc:SettingsCard>
+
+                <!--Localization Settings-->
+                <TextBlock x:Uid="LocalizationSettingsHeaderTB"
+                           Text="Localization Settings"
+                           Margin="0,32,0,4"/>
+                
                 <ctc:SettingsCard x:Uid="AppLanguageSC"
                               Header="App Language"
                               Description="Set the app's display language. (Requires a restart to take effect).">
-                    <ComboBox SelectedItem="{x:Bind ViewModel.Language, Mode=TwoWay}"
+                    <ComboBox SelectedItem="{x:Bind ViewModel.LanguageOverride, Mode=TwoWay}"
                           ItemsSource="{x:Bind ViewModel.LanguageOptions, Mode=OneWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate x:DataType="x:String">

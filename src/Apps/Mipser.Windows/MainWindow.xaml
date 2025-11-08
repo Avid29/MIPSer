@@ -10,56 +10,59 @@
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
     mc:Ignorable="d">
 
-    <Grid Background="{StaticResource PrimaryBackground}">
-
+    <Grid Background="{ThemeResource PrimaryBackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
+            <RowDefinition Height="24" MaxHeight="600" MinHeight="24"/>
             <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="280" MaxWidth="600" MinWidth="50"/>
+        </Grid.ColumnDefinitions>
 
         <!--Title Bar-->
         <shell:TitleBar DataContext="{x:Bind ViewModel, Mode=OneWay}"/>
 
         <!--  Status Bar  -->
-        <shell:StatusBar Grid.Row="2" Grid.ColumnSpan="2"/>
+        <shell:StatusBar Grid.Row="3"
+                         Grid.ColumnSpan="2"/>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="280" MaxWidth="600" MinWidth="50"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="24" MaxHeight="600" MinHeight="24"/>
-            </Grid.RowDefinitions>
+        <!--  Content View  -->
+        <shell:PanelView x:Name="MainPanel"
+                         Margin="0,0,0,7"
+                         Grid.Row="1"
+                         DataContext="{x:Bind ViewModel.MainPanelViewModel, Mode=OneWay}"/>
 
-            <!--  Content View  -->
-            <shell:PanelView x:Name="MainPanel" DataContext="{x:Bind ViewModel.MainPanelViewModel, Mode=OneWay}" Margin="0,0,7,7"/>
+        <!--  Error List  -->
+        <pages:ErrorList Grid.Row="2"/>
 
-            <!--  Error List  -->
-            <pages:ErrorList Grid.Row="1"/>
+        <!--  Explorer  -->
+        <Border Background="{ThemeResource SideBarBackgroundBrush}"
+                Grid.Column="1"
+                Grid.RowSpan="3"/>
+        <pages:Explorer Grid.Column="1"
+                        Grid.Row="1"
+                        Grid.RowSpan="2"/>
 
-            <!--  Explorer  -->
-            <pages:Explorer Grid.Column="1" Grid.RowSpan="2"/>
+        <!-- Row Splitter-->
+        <ctc:GridSplitter Grid.Row="2"
+                          VerticalAlignment="Top"
+                          ResizeBehavior="BasedOnAlignment">
+            <ctc:GridSplitter.RenderTransform>
+                <TranslateTransform Y="-7"/>
+            </ctc:GridSplitter.RenderTransform>
+        </ctc:GridSplitter>
 
-            <!-- Row Splitter-->
-            <ctc:GridSplitter Grid.Row="1"
-                              VerticalAlignment="Top"
-                              ResizeBehavior="BasedOnAlignment">
-                <ctc:GridSplitter.RenderTransform>
-                    <TranslateTransform Y="-7"/>
-                </ctc:GridSplitter.RenderTransform>
-            </ctc:GridSplitter>
-
-            <!-- Column Splitter -->
-            <ctc:GridSplitter Grid.Column="1" Grid.RowSpan="2"
-                              HorizontalAlignment="Left"
-                              ResizeBehavior="BasedOnAlignment">
-                <ctc:GridSplitter.RenderTransform>
-                    <TranslateTransform X="-7"/>
-                </ctc:GridSplitter.RenderTransform>
-            </ctc:GridSplitter>
-        </Grid>
+        <!-- Column Splitter -->
+        <ctc:GridSplitter Grid.Column="1"
+                          Grid.RowSpan="3"
+                          HorizontalAlignment="Left"
+                          ResizeBehavior="BasedOnAlignment">
+            <ctc:GridSplitter.RenderTransform>
+                <TranslateTransform X="-7"/>
+            </ctc:GridSplitter.RenderTransform>
+        </ctc:GridSplitter>
     </Grid>
 </Window>

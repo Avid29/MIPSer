@@ -40,8 +40,23 @@
         </selectors:PageTemplateSelector>
     </UserControl.Resources>
 
-    <TabView SelectedItem="{x:Bind ViewModel.CurrentPage, Mode=TwoWay}" TabItemsSource="{x:Bind ViewModel.OpenPages, Mode=OneWay}"
-             TabCloseRequested="TabView_TabCloseRequested" IsAddTabButtonVisible="False" VerticalAlignment="Stretch">
+    <TabView SelectedItem="{x:Bind ViewModel.CurrentPage, Mode=TwoWay}"
+             TabItemsSource="{x:Bind ViewModel.OpenPages, Mode=OneWay}"
+             TabCloseRequested="TabView_TabCloseRequested"
+             IsAddTabButtonVisible="False"
+             VerticalAlignment="Stretch">
+        <TabView.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.ThemeDictionaries>
+                    <ResourceDictionary x:Key="Dark">
+                        <AcrylicBrush x:Key="TabViewBackground" TintColor="#FF131215" TintOpacity="0.8"/>
+                    </ResourceDictionary>
+                    <ResourceDictionary x:Key="Light">
+                        <AcrylicBrush x:Key="TabViewBackground" TintColor="#FFFFFFFF" TintOpacity="0.8"/>
+                    </ResourceDictionary>
+                </ResourceDictionary.ThemeDictionaries>
+            </ResourceDictionary>
+        </TabView.Resources>
         <TabView.TabItemTemplate>
             <DataTemplate x:DataType="vmva:PageViewModel">
                 <!--* for unsaved and italics for anonymous-->

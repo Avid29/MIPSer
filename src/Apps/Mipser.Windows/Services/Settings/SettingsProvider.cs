@@ -41,7 +41,7 @@ public class SettingsProvider : ISettingsProvider
     public bool TryGetValue<T>(string key, out T? value)
     {
         bool status = _storage.TryGetValue(key, out var raw);
-        value = (T?)raw;
+        value = (T?)(raw ?? default(T));
         return status;
     }
 

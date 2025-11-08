@@ -8,14 +8,16 @@
     mc:Ignorable="d">
 
     <!--Title Bar-->
-    <Grid Padding="2">
+    <Grid Background="{ThemeResource TitleBarBackgroundBrush}" Padding="2">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
             <ColumnDefinition/>
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
+        
+        <Border x:Name="AppTitleBar" Grid.ColumnSpan="3" Background="Transparent"/>
+        
         <MenuBar Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left">
-            
             <!--  File  -->
             <MenuBarItem x:Uid="FileMBI" Title="File">
                 <MenuFlyoutItem x:Uid="NewFileMFI" Text="New File"
@@ -149,7 +151,5 @@
                 </MenuFlyoutItem>
             </MenuBarItem>
         </MenuBar>
-
-        <Border x:Name="AppTitleBar" Grid.Column="1" Height="24" Background="Transparent"/>
     </Grid>
 </UserControl>

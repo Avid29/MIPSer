@@ -1,5 +1,7 @@
 ﻿// Avishai Dernis 2025
 
+using Microsoft.UI;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
 using Mipser.Models.Enums;
@@ -11,8 +13,54 @@ namespace Mipser.Windows.Converters;
 /// <summary>
 /// A converter that converts an <see cref="BuildSt"/> into a <see cref="Color"/>.
 /// </summary>
-public partial class BuildStatusColorConverter : IValueConverter
+public partial class BuildStatusColorConverter : DependencyObject, IValueConverter
 {
+    public static readonly DependencyProperty NotReadyProperty =
+        DependencyProperty.RegisterAttached(nameof(NotReady), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
+    
+    public static readonly DependencyProperty ReadyProperty =
+        DependencyProperty.RegisterAttached(nameof(Ready), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
+    
+    public static readonly DependencyProperty RunningProperty =
+        DependencyProperty.RegisterAttached(nameof(Running), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
+    
+    public static readonly DependencyProperty DoneProperty =
+        DependencyProperty.RegisterAttached(nameof(Done), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
+    
+    public static readonly DependencyProperty FailedProperty =
+        DependencyProperty.RegisterAttached(nameof(Failed), typeof(Color), typeof(BuildStatusColorConverter), new PropertyMetadata(Colors.Transparent));
+    
+    public Color NotReady
+    {
+        get => (Color)GetValue(NotReadyProperty);
+        set => SetValue(NotReadyProperty, value);
+    }
+
+    public Color Ready
+    {
+        get => (Color)GetValue(ReadyProperty);
+        set => SetValue(ReadyProperty, value);
+    }
+
+    public Color Running
+    {
+        get => (Color)GetValue(RunningProperty);
+        set => SetValue(RunningProperty, value);
+    }
+
+    public Color Done
+    {
+        get => (Color)GetValue(DoneProperty);
+        set => SetValue(DoneProperty, value);
+    }
+
+    public Color Failed
+    {
+        get => (Color)GetValue(FailedProperty);
+        set => SetValue(FailedProperty, value);
+    }
+
+    /// <inheritdoc/>
     public object? Convert(object? value, Type targetType, object parameter, string language)
     {
         if (value is null)
@@ -36,18 +84,7 @@ public partial class BuildStatusColorConverter : IValueConverter
             _ => NotReady,
         };
     }
-    public object? ConvertBack(object value, Type targetType, object parameter, string language)
-    {
-        return null;
-    }
-
-    public Color? NotReady { get; set; }
-
-    public Color? Ready { get; set; }
-
-    public Color? Running { get; set; }
-
-    public Color? Done { get; set; }
-
-    public Color? Failed { get; set; }
+    
+    /// <inheritdoc/>
+    public object? ConvertBack(object value, Type targetType, object parameter, string language) => null;
 }

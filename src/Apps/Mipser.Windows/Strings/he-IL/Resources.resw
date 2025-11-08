@@ -324,4 +324,25 @@
   <data name="Manifest/Description" xml:space="preserve">
     <value>מיפסר הוא סביבת פיתוח משולבת, מרכיב, ומפרש עבור שפת ההרכבה וארכיטקורת MIPS.</value>
   </data>
+  <data name="Theme_Default" xml:space="preserve">
+    <value>אוטומטי</value>
+  </data>
+  <data name="Theme_Dark" xml:space="preserve">
+    <value>ככה</value>
+  </data>
+  <data name="Theme_Light" xml:space="preserve">
+    <value>בהיר</value>
+  </data>
+  <data name="ThemeSettingsHeaderTB.Text" xml:space="preserve">
+    <value>הגדרות נושא</value>
+  </data>
+  <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">
+    <value>הגדרות שפה</value>
+  </data>
+  <data name="AppThemeSC.Header" xml:space="preserve">
+    <value>נושא</value>
+  </data>
+  <data name="AppThemeSC.Description" xml:space="preserve">
+    <value>שנה את הנושא של היישום.</value>
+  </data>
 </root>

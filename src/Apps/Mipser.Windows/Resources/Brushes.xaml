@@ -5,13 +5,37 @@
 
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Dark">
-            <SolidColorBrush x:Key="PrimaryBackground" Color="#FF131215"/>
+
+            <SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="#FF131215"/>
+            <AcrylicBrush x:Key="TitleBarBackgroundBrush" TintColor="#FF131215" TintOpacity="0.8"/>
+            <AcrylicBrush x:Key="SideBarBackgroundBrush" TintColor="#FF131215" TintOpacity="0.5"/>
+
+            <!--<Color x:Key="NotReadyStatusBarBackgroundColor">#747F8D</Color>
+            <Color x:Key="ReadyStatusBarBackgroundColor">#1f4d7a</Color>
+            <Color x:Key="RunningStatusBarBackgroundColor">#966003</Color>
+            <Color x:Key="DoneStatusBarBackgroundColor">#297050</Color>
+            <Color x:Key="FailedStatusBarBackgroundColor">#950404</Color>-->
+
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
-            <SolidColorBrush x:Key="PrimaryBackground" Color="#FFFFFF"/>
+
+            <SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="#FFFFFFFF"/>
+            <AcrylicBrush x:Key="TitleBarBackgroundBrush" TintColor="#FFFFFFFF" TintOpacity="0.8"/>
+            <AcrylicBrush x:Key="SideBarBackgroundBrush" TintColor="#FFFFFFFF" TintOpacity="0.5"/>
+
+            <!--<Color x:Key="NotReadyStatusBarBackgroundColor">#747F8D</Color>
+            <Color x:Key="ReadyStatusBarBackgroundColor">#85b3e0</Color>
+            <Color x:Key="RunningStatusBarBackgroundColor">#fcc669</Color>
+            <Color x:Key="DoneStatusBarBackgroundColor">#8fd6b6</Color>
+            <Color x:Key="FailedStatusBarBackgroundColor">#fb6a6a</Color>-->
+
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
-    
-    
-    
+
+    <Color x:Key="NotReadyStatusBarBackgroundColor">#747F8D</Color>
+    <Color x:Key="ReadyStatusBarBackgroundColor">#1f4d7a</Color>
+    <Color x:Key="RunningStatusBarBackgroundColor">#966003</Color>
+    <Color x:Key="DoneStatusBarBackgroundColor">#297050</Color>
+    <Color x:Key="FailedStatusBarBackgroundColor">#950404</Color>
+
 </ResourceDictionary>
