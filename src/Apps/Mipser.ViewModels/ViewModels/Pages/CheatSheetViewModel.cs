@@ -74,7 +74,7 @@ public class CheatSheetViewModel : PageViewModel
             if (pattern.Name is null)
                 continue;
 
-            pattern.Name = _localizationService[$"CheatSheet/{pattern.Name}"];
+            pattern.Name = _localizationService[$"/CheatSheet/EncodingPattern/{pattern.Name}"];
         }
 
         return patterns;
@@ -102,7 +102,7 @@ public class CheatSheetViewModel : PageViewModel
             pair => pair.instruction,
             instruction => instruction.Identifier,
             (pair, instruction) => (pair.GroupName, instruction));
-        var groups = pairs.GroupBy(x => _localizationService[x.GroupName], x => x.instruction);
+        var groups = pairs.GroupBy(x => _localizationService[$"/CheatSheet/InstructionGroup/{x.GroupName}"], x => x.instruction);
 
         return groups;
     }

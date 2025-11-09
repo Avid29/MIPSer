@@ -16,9 +16,10 @@
             <VisualStateGroup>
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="1480"/>
+                        <AdaptiveTrigger MinWindowWidth="1280"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
+                        <Setter Target="RootPanel.MaxWidth" Value="2000"/>
                         <Setter Target="LeftGutter.Width" Value="0.5*"/>
                         <Setter Target="RightGutter.Width" Value="0.5*"/>
                     </VisualState.Setters>
@@ -32,13 +33,12 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition x:Name="RightGutter" Width="auto"/>
             </Grid.ColumnDefinitions>
-            <StackPanel x:Name="RootPanel" Grid.Column="1">
+            <StackPanel x:Name="RootPanel" Grid.Column="1" MaxWidth="800">
                 <StackPanel.ChildrenTransitions>
                     <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
-                    <RepositionThemeTransition IsStaggeringEnabled="False" />
                 </StackPanel.ChildrenTransitions>
 
-                <!--Theme Settings-->
+                <!--  Theme Settings  -->
                 <TextBlock x:Uid="ThemeSettingsHeaderTB"
                            Text="Theme Settings"
                            Margin="0,0,0,4"/>
@@ -56,7 +56,7 @@
                     </ComboBox>
                 </ctc:SettingsCard>
 
-                <!--Localization Settings-->
+                <!--  Localization Settings  -->
                 <TextBlock x:Uid="LocalizationSettingsHeaderTB"
                            Text="Localization Settings"
                            Margin="0,32,0,4"/>
@@ -73,6 +73,31 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </ctc:SettingsCard>
+
+                <!--  About  -->
+                <TextBlock x:Uid="AboutHeaderTB"
+                           Text="About"
+                           Margin="0,32,0,4"/>
+                <ctc:SettingsExpander x:Uid="AboutSE"
+                                      Header="MIPSer"
+                                      Description="© Avishai Dernis">
+                    <ctc:SettingsExpander.HeaderIcon>
+                        <ImageIcon Source="/Assets/AppIconSources/Small88x88.png"/>
+                    </ctc:SettingsExpander.HeaderIcon>
+                    <ctc:SettingsExpander.Content>
+                        <TextBlock Text="{x:Bind ViewModel.AppVersion, Mode=OneWay}"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   IsTextSelectionEnabled="True"/>
+                    </ctc:SettingsExpander.Content>
+                    <ctc:SettingsExpander.Items>
+                        <ctc:SettingsCard HorizontalContentAlignment="Left"
+                                          ContentAlignment="Left">
+                            <StackPanel Margin="-24,0,0,0">
+                                <HyperlinkButton Content="View on GitHub"/>
+                            </StackPanel>
+                        </ctc:SettingsCard>
+                    </ctc:SettingsExpander.Items>
+                </ctc:SettingsExpander>
             </StackPanel>
         </Grid>
     </ScrollViewer>

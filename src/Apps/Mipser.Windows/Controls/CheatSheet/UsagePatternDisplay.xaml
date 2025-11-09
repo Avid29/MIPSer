@@ -17,6 +17,6 @@
         
         <RichTextBlock x:Name="NameTextBlock"/>
         <RichTextBlock x:Name="UsagePatternTextBlock" Grid.Column="1"/>
-        <RichTextBlock x:Name="BehaviorTextBlock" TextWrapping="WrapWholeWords" Grid.Column="2"/>
+        <RichTextBlock x:Name="BehaviorTextBlock" TextWrapping="WrapWholeWords" TextReadingOrder="UseFlowDirection" Grid.Column="2"/>
     </Grid>
 </UserControl>

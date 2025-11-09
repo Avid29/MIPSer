@@ -195,7 +195,7 @@ public sealed partial class UsagePatternDisplay : UserControl
             Argument.Immediate or Argument.Offset or Argument.Address or
             Argument.Shift or Argument.FullImmediate => new Run
             {
-                Text = localizer[$"Usage_{ArgumentTable.GetArgPatternString(arg)}"],
+                Text = localizer[$"/CheatSheet/Usage/{ArgumentTable.GetArgPatternString(arg)}"],
                 Foreground = ArgumentBrushPalette?.ImmediateValueBrush,
             },
             Argument.AddressBase => new Span
@@ -204,7 +204,7 @@ public sealed partial class UsagePatternDisplay : UserControl
                 {
                     new Run
                     {
-                        Text = localizer[$"Usage_{ArgumentTable.GetArgPatternString(Argument.Offset)}"],
+                        Text = localizer[$"/CheatSheet/Usage/{ArgumentTable.GetArgPatternString(Argument.Offset)}"],
                         Foreground = ArgumentBrushPalette?.ImmediateValueBrush,
                     },
                     new Run { Text = "(" },

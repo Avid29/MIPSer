@@ -205,16 +205,16 @@
         <StackPanel HorizontalAlignment="Stretch" Margin="48,16" Spacing="4">
             <StackPanel.ChildrenTransitions>
                 <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
-                <RepositionThemeTransition IsStaggeringEnabled="False" />
             </StackPanel.ChildrenTransitions>
-            <TextBlock x:Uid="InstructionUsageTablesTB"
+            <TextBlock x:Uid="/CheatSheet/InstructionUsageTablesTB"
                        Text="Instruction Usage Tables"
                        FontFamily="{StaticResource HappyMonkey}"
                        Margin="0,4"/>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
-                    <TextBlock x:Uid="CommonInstructionsTB"
+                    <TextBlock x:Uid="/CheatSheet/CommonInstructionsTB"
                                Text="Common Instructions"
+                               TextTrimming="CharacterEllipsis"
                                FontFamily="{StaticResource HappyMonkey}"
                                Margin="8,0"/>
                 </Expander.Header>
@@ -228,8 +228,9 @@
             </Expander>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
-                    <TextBlock x:Uid="CoProc0InstructionsTB"
+                    <TextBlock x:Uid="/CheatSheet/CoProc0InstructionsTB"
                                Text="CoProcessor0 Instructions"
+                               TextTrimming="CharacterEllipsis"
                                FontFamily="{StaticResource HappyMonkey}"
                                Margin="8,0"/>
                 </Expander.Header>
@@ -242,8 +243,9 @@
             </Expander>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
-                    <TextBlock x:Uid="FloatInstructionsTB"
+                    <TextBlock x:Uid="/CheatSheet/FloatInstructionsTB"
                                Text="Floating-Point Instructions"
+                               TextTrimming="CharacterEllipsis"
                                FontFamily="{StaticResource HappyMonkey}"
                                Margin="8,0"/>
                 </Expander.Header>
@@ -256,8 +258,9 @@
             </Expander>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
-                    <TextBlock x:Uid="SpecializedInstructionsTB"
+                    <TextBlock x:Uid="/CheatSheet/SpecializedInstructionsTB"
                                Text="Specialized Instructions"
+                               TextTrimming="CharacterEllipsis"
                                FontFamily="{StaticResource HappyMonkey}"
                                Margin="8,0"/>
                 </Expander.Header>
@@ -269,13 +272,13 @@
                 </ListView>
             </Expander>
 
-            <TextBlock x:Uid="InstructionEncodingPatternsTB"
+            <TextBlock x:Uid="/CheatSheet/InstructionEncodingPatternsTB"
                        Text="Instruction Encoding Patterns"
                        FontFamily="{StaticResource HappyMonkey}"
                        Margin="0,12,0,4"/>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
-                    <TextBlock x:Uid="PrimaryInstructionTypePatternsTB"
+                    <TextBlock x:Uid="/CheatSheet/PrimaryInstructionTypePatternsTB"
                                Text="Primary Instruction Types Encoding Patterns"
                                FontFamily="{StaticResource HappyMonkey}"
                                TextTrimming="CharacterEllipsis"
@@ -287,7 +290,7 @@
             </Expander>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
-                    <TextBlock x:Uid="CoProc0InstructionTypePatternsTB"
+                    <TextBlock x:Uid="/CheatSheet/CoProc0InstructionTypePatternsTB"
                                Text="CoProcessor0 Instruction Types Encoding Patterns"
                                FontFamily="{StaticResource HappyMonkey}"
                                TextTrimming="CharacterEllipsis"
@@ -299,7 +302,7 @@
             </Expander>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
-                    <TextBlock x:Uid="CoProc1InstructionTypePatternsTB"
+                    <TextBlock x:Uid="/CheatSheet/CoProc1InstructionTypePatternsTB"
                                Text="Floating-Point CoProcessor Instruction Types Encoding Patterns"
                                FontFamily="{StaticResource HappyMonkey}"
                                TextTrimming="CharacterEllipsis"
@@ -311,7 +314,7 @@
             </Expander>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
-                    <TextBlock x:Uid="UniqueInstructionPatternsTB"
+                    <TextBlock x:Uid="/CheatSheet/UniqueInstructionPatternsTB"
                                Text="Unique Instruction Encoding Patterns"
                                FontFamily="{StaticResource HappyMonkey}"
                                TextTrimming="CharacterEllipsis"
@@ -322,13 +325,13 @@
                                Margin="24,0"/>
             </Expander>
 
-            <TextBlock x:Uid="EncodingTablesTB"
+            <TextBlock x:Uid="/CheatSheet/EncodingTablesTB"
                        Text="Encoding Tables"
                        FontFamily="{StaticResource HappyMonkey}"
                        Margin="0,12,0,4"/>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
-                    <TextBlock x:Uid="GeneralPurposeRegisterEncodingTB"
+                    <TextBlock x:Uid="/CheatSheet/GeneralPurposeRegisterEncodingTB"
                                Text="General Purpose Register Encoding"
                                FontFamily="{StaticResource HappyMonkey}"
                                TextTrimming="CharacterEllipsis"

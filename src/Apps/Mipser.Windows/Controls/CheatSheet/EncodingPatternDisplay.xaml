@@ -113,7 +113,7 @@
         </selector:EncodingTemplateSelector>
     </UserControl.Resources>
     
-    <Grid HorizontalAlignment="Stretch">
+    <Grid HorizontalAlignment="Stretch" FlowDirection="LeftToRight">
         <Border CornerRadius="2" BorderThickness="2" BorderBrush="Black" Background="Black"
                 Height="27" VerticalAlignment="Top" Margin="0,17,0,0"/>
         <Grid x:Name="Container" Margin="1,0,0,0"/>

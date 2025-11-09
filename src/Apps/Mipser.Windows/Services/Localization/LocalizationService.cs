@@ -28,6 +28,9 @@ public class LocalizationService : ILocalizationService
 
     /// <inheritdoc/>
     public string this[string key] => Loader.GetString(key);
+    
+    /// <inheritdoc/>
+    public string this[string key, params object[] args] => string.Format(this[key], args);
 
     /// <inheritdoc/>
     public bool IsRightToLeftLanguage

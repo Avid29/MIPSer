@@ -16,8 +16,8 @@
   <mp:PhoneIdentity PhoneProductId="e294f103-ed56-4067-bdc1-56756ead9fe8" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>ms-resource:Manifest/AppDisplayName</DisplayName>
-    <PublisherDisplayName>ms-resource:Manifest/PublisherDisplayName</PublisherDisplayName>
+    <DisplayName>ms-resource:/Manifest/AppDisplayName</DisplayName>
+    <PublisherDisplayName>ms-resource:/Manifest/PublisherDisplayName</PublisherDisplayName>
     <Logo>Assets\AppIcons\StoreLogo.png</Logo>
   </Properties>
 
@@ -35,9 +35,9 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$" uap18:TrustLevel="appContainer">
       <uap:VisualElements
-        DisplayName="ms-resource:Manifest/AppDisplayName"
+        DisplayName="ms-resource:/Manifest/AppDisplayName"
         Square150x150Logo="Assets\AppIcons\Square150x150Logo.png"
-        Square44x44Logo="Assets\AppIcons\Square44x44Logo.png" Description="ms-resource:Manifest/Description" BackgroundColor="transparent">
+        Square44x44Logo="Assets\AppIcons\Square44x44Logo.png" Description="ms-resource:/Manifest/Description" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\AppIcons\Wide310x150Logo.png"  Square71x71Logo="Assets\AppIcons\SmallTile.png" ShortName="ms-resource:Manifest/AppDisplayName">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="square150x150Logo"/>

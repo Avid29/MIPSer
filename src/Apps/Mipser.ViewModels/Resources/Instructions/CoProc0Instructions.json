@@ -22,7 +22,7 @@
       ]
     },
     {
-      "name": "Translation Lookaside Buffer",
+      "name": "TLB",
       "instructions": [
         "tlbp:0",
         "tlbr:0",

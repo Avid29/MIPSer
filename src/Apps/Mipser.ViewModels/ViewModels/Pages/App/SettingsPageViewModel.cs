@@ -3,6 +3,7 @@
 using Mipser.Services.Localization;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
+using Mipser.Services.Versioning;
 using Mipser.ViewModels.Pages.Abstract;
 using System;
 using System.Collections.Generic;
@@ -17,14 +18,16 @@ public class SettingsPageViewModel : PageViewModel
 {
     private readonly ILocalizationService _localizationService;
     private readonly ISettingsService _settingsService;
+    private readonly IVersioningService _versioningService;
     
     /// <summary>
     /// Initializes a new instance of the <see cref="SettingsPageViewModel"/> class.
     /// </summary>
-    public SettingsPageViewModel(ILocalizationService localizationService, ISettingsService settingsService)
+    public SettingsPageViewModel(ILocalizationService localizationService, ISettingsService settingsService, IVersioningService versioningService)
     {
         _localizationService = localizationService;
         _settingsService = settingsService;
+        _versioningService = versioningService;
     }
     
     /// <inheritdoc/>
@@ -60,4 +63,13 @@ public class SettingsPageViewModel : PageViewModel
     /// "system" is a sentinel value since null and empty cannot be used in a ComboBox.
     /// </remarks>
     public IEnumerable<string> LanguageOptions => _localizationService.AvailableLanguages.Prepend("system");
+
+    /// <summary>
+    /// Gets the app's version.
+    /// </summary>
+    public string AppVersion =>
+        _localizationService["VersionFormat",
+            _versioningService.AppVersion.MajorVersion,
+            _versioningService.AppVersion.MinorVersion,
+            _versioningService.AppVersion.Revision];
 }

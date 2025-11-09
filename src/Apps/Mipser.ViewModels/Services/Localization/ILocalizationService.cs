@@ -17,6 +17,14 @@ public interface ILocalizationService
     string this[string key] { get; }
 
     /// <summary>
+    /// Gets the localized <see langword="string"/> for a given resource.
+    /// </summary>
+    /// <param name="key">The key of the resource.</param>
+    /// <param name="args">The arguments to use when formatting the string.</param>
+    /// <returns>Localized <see langword="string"/> if valid, otherwise returns an empty <see langword="string"/>.</returns>
+    string this[string key, params object[] args] { get; }
+
+    /// <summary>
     /// Gets or sets the app's language override.
     /// </summary>
     string? LanguageOverride { get; set; }

@@ -2,7 +2,7 @@
   "name": "Common",
   "groups": [
     {
-      "name": "Arithmetic (Signed)",
+      "name": "SignedArithmetic",
       "instructions": [
         "add:3",
         "addi:3",
@@ -18,7 +18,7 @@
       ]
     },
     {
-      "name": "Arithmetic (Unsigned)",
+      "name": "UnsignedArithmetic",
       "instructions": [
         "addu:3",
         "addiu:3",
