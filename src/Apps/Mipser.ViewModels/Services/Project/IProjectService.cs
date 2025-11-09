@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using Mipser.Bindables.Files;
+using System.Threading.Tasks;
 
 namespace Mipser.Services.Project;
 
@@ -18,4 +19,9 @@ public interface IProjectService
     /// Opens a folder as the new project folder.
     /// </summary>
     public void OpenFolder(BindableFolder folder);
+
+    /// <summary>
+    /// Gets the object folder.
+    /// </summary>
+    public Task<BindableFolder?> GetObjectFolderAsync();
 }

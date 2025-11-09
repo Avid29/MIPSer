@@ -16,6 +16,7 @@ namespace Mipser.Windows.Services.FileSystem;
 /// </summary>
 public class FileSystemService : IFileSystemService
 {
+    /// <inheritdoc/>
     public async Task<IFile?> CreateFileAsync(string path)
     {
         try
@@ -28,6 +29,26 @@ public class FileSystemService : IFileSystemService
             var folder = await StorageFolder.GetFolderFromPathAsync(folderPath);
             var file = await folder.CreateFileAsync(fileName);
             return new File(file);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+    
+    /// <inheritdoc/>
+    public async Task<IFolder?> CreateFolderAsync(string path)
+    {
+        try
+        {
+            // Split the path
+            var folderPath = System.IO.Path.GetDirectoryName(path);
+            var fileName = System.IO.Path.GetFileName(path);
+
+            // Create the file in the parent folder.
+            var parent = await StorageFolder.GetFolderFromPathAsync(folderPath);
+            var folder = await parent.CreateFolderAsync(fileName);
+            return new Folder(folder);
         }
         catch
         {

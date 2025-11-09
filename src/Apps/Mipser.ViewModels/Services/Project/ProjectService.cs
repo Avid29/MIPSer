@@ -6,6 +6,7 @@ using Mipser.Messages.Files;
 using Mipser.Services.Build;
 using Mipser.Services.Files;
 using Mipser.Windows.Services.Cache;
+using System.Threading.Tasks;
 
 namespace Mipser.Services.Project;
 
@@ -18,6 +19,8 @@ public class ProjectService : IProjectService
     private readonly ICacheService _cacheService;
     private readonly IFileService _fileService;
     
+    private BindableFolder? _objFolder;
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ProjectService"/> class.
     /// </summary>
@@ -27,7 +30,7 @@ public class ProjectService : IProjectService
         _cacheService = cacheService;
         _fileService = fileService;
 
-        RestoreOpenFolder();
+        _ = RestoreOpenFolder();
     }
     
     /// <inheritdoc/>
@@ -36,17 +39,36 @@ public class ProjectService : IProjectService
     /// <inheritdoc/>
     public void OpenFolder(BindableFolder folder)
     {
+        // Clear the cached obj folder
+        _objFolder = null;
+
         // Change the root folder
-        // Send a message notifying the change
         ProjectRootFolder = folder;
+
+        // Send a message notifying the change
         _messenger.Send(new FolderOpenedMessage(folder));
 
         // Cache the open folder.
         _ = _cacheService.CacheAsync("OpenFolder", folder.Path);
+    }
+    
+    /// <inheritdoc/>
+    public async Task<BindableFolder?> GetObjectFolderAsync()
+    {
+        if (_objFolder is not null)
+            return _objFolder;
 
+        if (ProjectRootFolder is null)
+            return null;
+
+        var objFolder = await ProjectRootFolder.OpenFolderAsync("obj");
+        objFolder ??= await ProjectRootFolder.CreateFolderAsync("obj");
+
+        _objFolder = objFolder;
+        return objFolder;
     }
 
-    private async void RestoreOpenFolder()
+    private async Task RestoreOpenFolder()
     {
         // Retrieve path from cache
         var openFolderPath = await _cacheService.RetrieveCacheAsync("OpenFolder");

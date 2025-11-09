@@ -2,7 +2,6 @@
 
 using Mipser.Bindables.Files;
 using Mipser.Services.Files.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,6 +15,7 @@ public class FileService : IFileService
     // TODO: Untracking out of use files
 
     private readonly IFileSystemService _fileSystemService;
+    private readonly Dictionary<string, BindableFolder> _openFolders;
     private readonly Dictionary<string, BindableFile> _openFiles;
 
     /// <summary>
@@ -25,6 +25,7 @@ public class FileService : IFileService
     {
         _fileSystemService = fileSystemService;
 
+        _openFolders = [];
         _openFiles = [];
     }
     
@@ -41,6 +42,18 @@ public class FileService : IFileService
 
         // Track and return
         return GetOrAddTrackedFile(file);
+    }
+    
+    /// <inheritdoc/>
+    public async Task<BindableFolder?> CreateFolderAsync(string path)
+    {
+        // Create basic folder
+        var folder = await _fileSystemService.CreateFolderAsync(path);
+        if (folder is null)
+            return null;
+
+        // Track and return
+        return GetOrAddTrackedFolder(folder);
     }
 
     /// <inheritdoc/>
@@ -87,8 +100,16 @@ public class FileService : IFileService
 
     internal BindableFolder GetOrAddTrackedFolder(IFolder folder)
     {
-        // TODO: Track folders
-        return new BindableFolder(this, folder);
+        // Check if the file is already tracked, 
+        // and retrieve it if so.
+        var key = folder.Path;
+        if (_openFolders.TryGetValue(key, out BindableFolder? value))
+            return value;
+
+        // Create and track new bindable
+        var bindable = new BindableFolder(this, folder);
+        _openFolders.Add(key, bindable);
+        return bindable;
     }
 
     internal BindableFile GetOrAddTrackedFile(IFile file)
@@ -96,8 +117,8 @@ public class FileService : IFileService
         // Check if the file is already tracked, 
         // and retrieve it if so.
         var key = file.Path;
-        if (_openFiles.ContainsKey(key))
-            return _openFiles[key];
+        if (_openFiles.TryGetValue(key, out BindableFile? value))
+            return value;
 
         // Create and track new bindable
         var bindable = new BindableFile(this, file);

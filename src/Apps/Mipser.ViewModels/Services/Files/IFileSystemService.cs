@@ -16,6 +16,11 @@ public interface IFileSystemService
     Task<IFile?> CreateFileAsync(string path);
 
     /// <summary>
+    /// Attempts to create a folder.
+    /// </summary>
+    Task<IFolder?> CreateFolderAsync(string path);
+
+    /// <summary>
     /// Attempts to get a file.
     /// </summary>
     Task<IFile?> GetFileAsync(string path);

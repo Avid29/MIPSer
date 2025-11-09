@@ -51,7 +51,7 @@ public class BuildService
         Status = BuildStatus.Assembling;
 
         // Create save file
-        var folder = _projectService.ProjectRootFolder;
+        var folder = await _projectService.GetObjectFolderAsync();
         BindableFile? saveFile = null;
         if (folder is not null)
         {

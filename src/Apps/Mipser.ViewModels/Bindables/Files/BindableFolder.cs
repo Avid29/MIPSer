@@ -55,16 +55,16 @@ public class BindableFolder : BindableFilesItemBase
     /// <summary>
     /// Creates a new file in the folder.
     /// </summary>
-    /// <param name="filename">The name of the file.</param>
+    /// <param name="name">The name of the file.</param>
     /// <returns>The file created</returns>
-    public async Task<BindableFile?> CreateFileAsync(string filename)
+    public async Task<BindableFile?> CreateFileAsync(string name)
     {
         // Can't create a file in a non-existent folder
         if (Path is null)
             return null;
 
         // Create file
-        var path = System.IO.Path.Combine(Path, filename);
+        var path = System.IO.Path.Combine(Path, name);
         var file = await FileService.CreateFileAsync(path);
 
         // Failed
@@ -76,6 +76,57 @@ public class BindableFolder : BindableFilesItemBase
             Children.Add(file);
 
         return file;
+    }
+
+    /// <summary>
+    /// Creates a new file in the folder.
+    /// </summary>
+    /// <param name="name">The name of the folder.</param>
+    /// <returns>The file created</returns>
+    public async Task<BindableFolder?> CreateFolderAsync(string name)
+    {
+        // Can't create a folder in a non-existent folder
+        if (Path is null)
+            return null;
+
+        // Create folder
+        var path = System.IO.Path.Combine(Path, name);
+        var folder = await FileService.CreateFolderAsync(path);
+
+        // Failed
+        if (folder is null)
+            return null;
+
+        // Track child if children are tracked
+        if (!ChildrenNotLoaded && !Children.Contains(folder))
+            Children.Add(folder);
+
+        return folder;
+    }
+
+    /// <summary>
+    /// Opens a child folder.
+    /// </summary>
+    /// <param name="name">The name of the folder.</param>
+    public async Task<BindableFolder?> OpenFolderAsync(string name)
+    {
+        // Can't create a folder in a non-existent folder
+        if (Path is null)
+            return null;
+
+        // Open folder
+        var path = System.IO.Path.Combine(Path, name);
+        var folder = await FileService.GetFolderAsync(path);
+
+        // Failed
+        if (folder is null)
+            return null;
+
+        // Track child if children are tracked
+        if (!ChildrenNotLoaded && !Children.Contains(folder))
+            Children.Add(folder);
+
+        return folder;
     }
 
     /// <summary>

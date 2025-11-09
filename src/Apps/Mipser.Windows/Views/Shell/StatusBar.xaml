@@ -21,7 +21,7 @@
                                            Failed="{ThemeResource FailedStatusBarBackgroundColor}"/>
     </UserControl.Resources>
 
-    <Grid Padding="8,0,8,4">
+    <Grid Padding="8,0,8,2">
         <Grid.Background>
             <SolidColorBrush x:Name="BackgroundBrush" Color="{x:Bind ViewModel.BuildStatus, Converter={StaticResource BuildStatusColorConverter}, Mode=OneWay}"/>
         </Grid.Background>

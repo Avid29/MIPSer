@@ -6,6 +6,7 @@ using Mipser.Services.Build;
 using Mipser.Services.Files;
 using Mipser.Services.Project;
 using Mipser.Windows.Services.Cache;
+using System.Threading.Tasks;
 
 namespace Mipser.ViewModels;
 
@@ -34,7 +35,7 @@ public partial class MainViewModel : ObservableRecipient
         _cacheService = cacheService;
 
         // Restore open folder from cache
-        RestoreOpenFolder();
+        _ = RestoreOpenFolder();
 
         IsActive = true;
     }
@@ -48,7 +49,7 @@ public partial class MainViewModel : ObservableRecipient
         private set => SetProperty(ref _focusPanel, value);
     }
 
-    private async void RestoreOpenFolder()
+    private async Task RestoreOpenFolder()
     {
         // Retrieve path from cache
         var openFolderPath = await _cacheService.RetrieveCacheAsync("OpenFolder");

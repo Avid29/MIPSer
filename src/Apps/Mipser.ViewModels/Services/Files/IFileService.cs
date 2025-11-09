@@ -22,6 +22,12 @@ public interface IFileService
     public Task<BindableFile?> CreateFileAsync(string path);
 
     /// <summary>
+    /// Creates a folder.
+    /// </summary>
+    /// <param name="path">The name of the folder.</param>
+    public Task<BindableFolder?> CreateFolderAsync(string path);
+
+    /// <summary>
     /// Gets a file from a path.
     /// </summary>
     /// <param name="path">The path of the file.</param>
