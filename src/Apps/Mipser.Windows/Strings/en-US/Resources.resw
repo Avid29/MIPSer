@@ -345,4 +345,13 @@
   <data name="AppThemeSC.Description" xml:space="preserve">
     <value>Change the app's theme.</value>
   </data>
+  <data name="SearchFilesASB.PlaceholderText" xml:space="preserve">
+    <value>Search Files</value>
+  </data>
+  <data name="WIPTitleTB.Text" xml:space="preserve">
+    <value>We're Not Ready Yet...</value>
+  </data>
+  <data name="WIPDescriptionTB.Text" xml:space="preserve">
+    <value>We're working on handling this file type, but it's not ready yet.</value>
+  </data>
 </root>

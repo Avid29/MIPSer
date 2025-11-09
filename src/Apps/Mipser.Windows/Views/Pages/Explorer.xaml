@@ -35,12 +35,23 @@
         <selector:FileItemTemplateSelector x:Key="FileItemTemplateSelector"
                                            FileTemplate="{StaticResource FileTemplate}"
                                            FolderTemplate="{StaticResource FolderTemplate}"/>
+        
     </UserControl.Resources>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <AutoSuggestBox x:Uid="SearchFilesASB"
+                        PlaceholderText="Search Files"
+                        Margin="16,0,16,12"
+                        IsEnabled="False"/>
         <TreeView x:Name="TreeViewRoot"
                   ItemsSource="{x:Bind ViewModel.RootNode, Mode=OneWay}"
                   ItemTemplateSelector="{StaticResource FileItemTemplateSelector}"
-                  Expanding="TreeView_Expanding"/>
+                  Expanding="TreeView_Expanding"
+                  Grid.Row="1"/>
     </Grid>
 </UserControl>

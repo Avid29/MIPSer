@@ -345,4 +345,13 @@
   <data name="AppThemeSC.Description" xml:space="preserve">
     <value>שנה את הנושא של היישום.</value>
   </data>
+  <data name="SearchFilesASB.PlaceholderText" xml:space="preserve">
+    <value>מחפש קבצים</value>
+  </data>
+  <data name="WIPTitleTB.Text" xml:space="preserve">
+    <value>אנו עוד לא מוכנים...</value>
+  </data>
+  <data name="WIPDescriptionTB.Text" xml:space="preserve">
+    <value>אנחנו עובדים על טיפול בסוג קובץ זה, אבל זה עדיין לא מוכן.</value>
+  </data>
 </root>

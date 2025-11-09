@@ -14,7 +14,56 @@
 
     <UserControl.Resources>
 
-        <selectors:EditorTemplateSelector x:Key="EditorTemplateSelector">
+        <DataTemplate x:Key="WIPFileTemplate">
+            <UserControl>
+                <Grid VerticalAlignment="Top"
+                  HorizontalAlignment="Left"
+                  Margin="36,64">
+                    <VisualStateManager.VisualStateGroups>
+                        <VisualStateGroup>
+                            <VisualState>
+                                <VisualState.StateTriggers>
+                                    <AdaptiveTrigger MinWindowWidth="1240"/>
+                                </VisualState.StateTriggers>
+                                <VisualState.Setters>
+                                    <Setter Target="TrafficCone.Height" Value="160"/>
+                                    <Setter Target="WIPTitle.FontSize" Value="32"/>
+                                    <Setter Target="WIPDescription.FontSize" Value="20"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateManager.VisualStateGroups>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Image x:Name="TrafficCone"
+                       Source="/Assets/Icons/TrafficCone.svg"
+                       Height="100"
+                       VerticalAlignment="Center"/>
+
+                    <StackPanel VerticalAlignment="Top"
+                            Margin="0,24"
+                            Grid.Column="1">
+                        <TextBlock x:Uid="WIPTitleTB"
+                               x:Name="WIPTitle"
+                               Text="We're Not Ready Yet..."
+                               FontSize="22"
+                               TextWrapping="WrapWholeWords"/>
+                        <TextBlock x:Uid="WIPDescriptionTB"
+                               x:Name="WIPDescription"
+                               Text="We're working on handling this file type, but it's not ready yet."
+                               FontSize="12"
+                               Opacity=".8"
+                               TextWrapping="WrapWholeWords"/>
+                    </StackPanel>
+                </Grid>
+            </UserControl>
+        </DataTemplate>
+
+        <selectors:EditorTemplateSelector x:Key="EditorTemplateSelector"
+                                          HexEditorTemplate="{StaticResource WIPFileTemplate}">
             <selectors:EditorTemplateSelector.TextEditorTemplate>
                 <DataTemplate x:DataType="vm:FilePageViewModel">
                     <asmedit:AssemblyEditBox Text="{x:Bind File.Contents, Mode=TwoWay}"
@@ -34,11 +83,6 @@
                     </asmedit:AssemblyEditBox>
                 </DataTemplate>
             </selectors:EditorTemplateSelector.TextEditorTemplate>
-            <selectors:EditorTemplateSelector.HexEditorTemplate>
-                <DataTemplate x:DataType="vm:FilePageViewModel">
-                    <hexview:HexViewer Content="{x:Bind File.Contents, Mode=TwoWay}"/>
-                </DataTemplate>
-            </selectors:EditorTemplateSelector.HexEditorTemplate>
         </selectors:EditorTemplateSelector>
 
     </UserControl.Resources>

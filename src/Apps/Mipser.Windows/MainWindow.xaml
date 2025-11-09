@@ -14,7 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
-            <RowDefinition Height="24" MaxHeight="600" MinHeight="24"/>
+            <RowDefinition Height="24" MaxHeight="600" MinHeight="28"/>
             <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -31,7 +31,7 @@
 
         <!--  Content View  -->
         <shell:PanelView x:Name="MainPanel"
-                         Margin="0,0,0,7"
+                         Margin="0,0,0,14"
                          Grid.Row="1"
                          DataContext="{x:Bind ViewModel.MainPanelViewModel, Mode=OneWay}"/>
 
@@ -44,14 +44,15 @@
                 Grid.RowSpan="3"/>
         <pages:Explorer Grid.Column="1"
                         Grid.Row="1"
-                        Grid.RowSpan="2"/>
+                        Grid.RowSpan="2"
+                        Margin="10,0,0,0"/>
 
         <!-- Row Splitter-->
-        <ctc:GridSplitter Grid.Row="2"
-                          VerticalAlignment="Top"
+        <ctc:GridSplitter Grid.Row="1"
+                          VerticalAlignment="Bottom"
                           ResizeBehavior="BasedOnAlignment">
             <ctc:GridSplitter.RenderTransform>
-                <TranslateTransform Y="-7"/>
+                <TranslateTransform Y="0"/>
             </ctc:GridSplitter.RenderTransform>
         </ctc:GridSplitter>
 
@@ -61,7 +62,7 @@
                           HorizontalAlignment="Left"
                           ResizeBehavior="BasedOnAlignment">
             <ctc:GridSplitter.RenderTransform>
-                <TranslateTransform X="-7"/>
+                <TranslateTransform X="0"/>
             </ctc:GridSplitter.RenderTransform>
         </ctc:GridSplitter>
     </Grid>
