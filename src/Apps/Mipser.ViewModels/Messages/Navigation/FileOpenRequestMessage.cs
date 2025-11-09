@@ -18,7 +18,7 @@ public class FileOpenRequestMessage
     }
 
     /// <summary>
-    /// The file to open.
+    /// Gets the file to open.
     /// </summary>
     public BindableFile File { get; }
 }

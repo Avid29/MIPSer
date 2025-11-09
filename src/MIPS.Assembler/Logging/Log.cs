@@ -3,6 +3,7 @@
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Tokenization.Models;
 using System;
+using System.IO;
 
 namespace MIPS.Assembler.Logging;
 
@@ -46,12 +47,17 @@ public class Log
     public Token[] Tokens { get; }
 
     /// <summary>
-    /// Gets the name of the file where the log occured.
+    /// Gets the name or path of the file where the log occurred.
     /// </summary>
-    public string? File => Tokens[0].Filename;
+    public string? File => Tokens[0].FilePath;
 
     /// <summary>
-    /// Gets the where the log occured.
+    /// Gets the name of the file where the log occurred.
+    /// </summary>
+    public string? FileName => Path.GetFileName(File);
+
+    /// <summary>
+    /// Gets the where the log occurred.
     /// </summary>
     public int Line => Tokens[0].Location.Line;
 

@@ -122,19 +122,14 @@
                         <KeyboardAccelerator Modifiers="Control" Key="B"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="/TitleBar/AssembleOpenFilesMFI" Text="Assemble Open Files" IsEnabled="False">
-                    <MenuFlyoutItem.KeyboardAccelerators>
-                        <KeyboardAccelerator Modifiers="Shift" Key="F5"/>
-                        <KeyboardAccelerator Modifiers="Control,Shift" Key="B"/>
-                    </MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="/TitleBar/AssembleOpenFilesMFI" Text="Assemble Open Files" IsEnabled="False"/>
                 <MenuFlyoutItem x:Uid="/TitleBar/AssembleFileMFI"
                                 Text="Assemble File"
                                 IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanAssemble, FallbackValue=False, Mode=OneWay}"
                                 Command="{x:Bind ViewModel.AssembleFileCommand, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
-                        <KeyboardAccelerator Modifiers="Menu" Key="F5"/>
-                        <KeyboardAccelerator Modifiers="Control,Menu" Key="B"/>
+                        <KeyboardAccelerator Modifiers="Shift" Key="F5"/>
+                        <KeyboardAccelerator Modifiers="Control,Shift" Key="B"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
             </MenuBarItem>

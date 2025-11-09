@@ -81,7 +81,7 @@ public class BuildService
             return null;
 
         // Assemble the file
-        var assembler = await Assembler.AssembleAsync(stream, file.Name, config);
+        var assembler = await Assembler.AssembleAsync(stream, file.Path, config);
 
         // Return if no save file is provided
         if (saveLocation is null)

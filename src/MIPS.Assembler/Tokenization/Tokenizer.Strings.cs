@@ -157,7 +157,7 @@ public partial class Tokenizer
         token = new Token(source)
         {
             Type = tokenType,
-            Filename = _filename,
+            FilePath = _filename,
             Location = _cacheLocation,
         };
 

@@ -1,7 +1,10 @@
 // Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml.Controls;
+using MIPS.Assembler.Logging;
+using Mipser.Messages.Navigation;
 using Mipser.ViewModels.Pages;
 
 namespace Mipser.Windows.Views.Pages;
@@ -21,4 +24,13 @@ public sealed partial class ErrorList : UserControl
     }
 
     private ErrorListViewModel ViewModel => (ErrorListViewModel)this.DataContext;
+
+    private void ListView_ItemClick(object sender, ItemClickEventArgs e)
+    {
+        if (e.ClickedItem is not Log log)
+            return;
+
+        var messenger = Ioc.Default.GetRequiredService<IMessenger>();
+        messenger.Send(new NavigateToTokenRequestMessage(log.Tokens[0]));
+    }
 }

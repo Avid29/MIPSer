@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
+using MIPS.Assembler.Tokenization.Models;
 using Mipser.Bindables.Files;
 using Mipser.Messages.Build;
 using Mipser.Messages.Files;
@@ -43,12 +44,12 @@ public partial class MainViewModel
         _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, (r, m) => r.FocusedPanel?.SaveCurrentFile());
         _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, (r, m) => r.FocusedPanel?.ClosePage(m.Page));
         _messenger.Register<MainViewModel, FolderPickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFolderAsync());
-
     }
 
     private void RegisterNavigationMessages()
     {
         _messenger.Register<MainViewModel, PanelFocusChangedMessage>(this, (r, m) => r.FocusedPanel = m.FocusedPanel);
+        _messenger.Register<MainViewModel, NavigateToTokenRequestMessage>(this, (r, m) => _ = r.NavigateToToken(m.Target));
     }
 
     /// <summary>
@@ -93,5 +94,23 @@ public partial class MainViewModel
 
         // Open the page
         FocusedPanel?.OpenPage(page);
+    }
+
+    private async Task NavigateToToken(Token token)
+    {
+        // Get the file path
+        var path = token.FilePath;
+        if (path is null)
+            return;
+
+        // Get the file
+        var file = await _fileService.GetFileAsync(path);
+        if (file is null)
+            return;
+        
+        // Open the file
+        OpenFile(file);
+
+        // TODO: Navigate to token
     }
 }

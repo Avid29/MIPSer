@@ -20,7 +20,10 @@
         </Style>
     </UserControl.Resources>
 
-    <ListView ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}" SelectionMode="None" IsItemClickEnabled="True">
+    <ListView ItemsSource="{x:Bind ViewModel.Messages, Mode=OneWay}"
+              SelectionMode="None"
+              ItemClick="ListView_ItemClick"
+              IsItemClickEnabled="True">
         <ListView.Header>
             <Border Padding="8,4,8,4"
                     CornerRadius="4">
@@ -54,7 +57,7 @@
                         </ctc:Case>
                     </ctc:SwitchPresenter>
                     <TextBlock Text="{x:Bind Message, Mode=OneWay}" Margin="8,0" FontSize="12"/>
-                    <TextBlock Text="{x:Bind File, Mode=OneWay}" Margin="8,0" FontSize="12"/>
+                    <TextBlock Text="{x:Bind FileName, Mode=OneWay}" Margin="8,0" FontSize="12"/>
                     <TextBlock Text="{x:Bind Line, Mode=OneWay}" Margin="8,0" FontSize="12"/>
                 </ctc:DataRow>
             </DataTemplate>

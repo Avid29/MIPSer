@@ -208,7 +208,7 @@ public partial class Tokenizer
         return new Token($"{source}")
         {
             Type = type,
-            Filename = @base.Filename,
+            FilePath = @base.FilePath,
             Location = @base.Location,
         };
     }
@@ -236,7 +236,7 @@ public partial class Tokenizer
     {
         return new Token(original.Source)
         {
-            Filename = original.Filename,
+            FilePath = original.FilePath,
             Location = original.Location,
             Type = type
         };

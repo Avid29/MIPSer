@@ -24,9 +24,9 @@ public class Token
     public string Source { get; init; }
 
     /// <summary>
-    /// Gets the token's filename.
+    /// Gets the token's file path.
     /// </summary>
-    public string? Filename { get; init; }
+    public string? FilePath { get; init; }
 
     /// <summary>
     /// Gets the token's location.
