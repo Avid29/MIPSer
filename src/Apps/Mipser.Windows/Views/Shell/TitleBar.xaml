@@ -143,7 +143,11 @@
                                 Command="{x:Bind ViewModel.OpenCheatSheetCommand, Mode=OneWay}"/>
                 <MenuFlyoutSeparator/>
                 <MenuFlyoutItem x:Uid="SettingsMFI" Text="MIPSer Settings"
-                                Command="{x:Bind ViewModel.OpenSettingsCommand, Mode=OneWay}"/>
+                                Command="{x:Bind ViewModel.OpenSettingsCommand, Mode=OneWay}">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
                 <MenuFlyoutItem x:Uid="AboutMFI" Text="About Mipser"
                                 Command="{x:Bind ViewModel.OpenAboutCommand, Mode=OneWay}">
                     <MenuFlyoutItem.Icon>

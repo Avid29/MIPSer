@@ -1,6 +1,6 @@
 [
   {
-    "name": "SYSCALL / BREAK / SDBBP",
+    "name": "SyscallBreakSdbbp",
     "sections": [
       {
         "name": "OP Code",
@@ -23,7 +23,7 @@
     ]
   },
   {
-    "name": "SYNC",
+    "name": "Sync",
     "sections": [
       {
         "name": "OP Code",
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "name": "CACHE / PREF",
+    "name": "CachePref",
     "sections": [
       {
         "name": "OP Code",
@@ -84,7 +84,7 @@
     ]
   },
   {
-    "name": "Execution Hazard Barrier",
+    "name": "ExecutionHazardBarrier",
     "sections": [
       {
         "name": "OP Code",

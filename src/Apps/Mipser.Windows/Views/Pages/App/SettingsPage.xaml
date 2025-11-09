@@ -33,10 +33,10 @@
                 <ColumnDefinition x:Name="RightGutter" Width="auto"/>
             </Grid.ColumnDefinitions>
             <StackPanel x:Name="RootPanel" Grid.Column="1">
-                <!--<StackPanel.ChildrenTransitions>
+                <StackPanel.ChildrenTransitions>
                     <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
                     <RepositionThemeTransition IsStaggeringEnabled="False" />
-                </StackPanel.ChildrenTransitions>-->
+                </StackPanel.ChildrenTransitions>
 
                 <!--Theme Settings-->
                 <TextBlock x:Uid="ThemeSettingsHeaderTB"

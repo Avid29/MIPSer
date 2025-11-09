@@ -13,7 +13,6 @@
     xmlns:helper="using:Mipser.Windows.Helpers"
     xmlns:cheat="using:Mipser.Windows.Controls.CheatSheet"
     xmlns:tables="using:MIPS.Assembler.Helpers.Tables"
-    FlowDirection="LeftToRight"
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
 
@@ -29,7 +28,7 @@
                     <SolidColorBrush x:Key="CheatSheetPanelBackgroundBrush" Color="#FFFFFF"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
-            
+
             <FontFamily x:Key="HappyMonkey">ms-appx:///Assets/Fonts/HappyMonkey-Regular.ttf#Happy Monkey</FontFamily>
 
             <SolidColorBrush x:Key="HeaderForeground" Color="#8C8C8C"/>
@@ -141,7 +140,7 @@
                 <StackPanel>
                     <TextBlock Text="{x:Bind Name}" Foreground="{StaticResource HeaderForeground}" Margin="0,2" FontFamily="{StaticResource HappyMonkey}"/>
                     <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind}" SectionBrushPalette="{StaticResource SectionBrushPalette}"
-                                              FontFamily="{StaticResource HappyMonkey}"/>
+                                                  FontFamily="{StaticResource HappyMonkey}"/>
                 </StackPanel>
             </DataTemplate>
 
@@ -164,7 +163,7 @@
 
             <Style TargetType="ListViewHeaderItem">
                 <Setter Property="MinHeight" Value="0"/>
-                <Setter Property="Padding" Value="8,4,8,0"/>
+                <Setter Property="Padding" Value="8,8,8,0"/>
                 <Setter Property="Margin" Value="0"/>
                 <Setter Property="Template">
                     <Setter.Value>
@@ -187,177 +186,158 @@
                 <Setter Property="FlowDirection" Value="LeftToRight"/>
             </Style>
 
-            <CollectionViewSource
-            x:Name="CommonInstructionsViewSource"
-            IsSourceGrouped="True"
-            Source="{x:Bind ViewModel.CommonInstructions, Mode=OneWay}" />
-            <CollectionViewSource
-            x:Name="FloatInstructionsViewSource"
-            IsSourceGrouped="True"
-            Source="{x:Bind ViewModel.FloatInstructions, Mode=OneWay}" />
-            <CollectionViewSource
-            x:Name="CoProc0InstructionsViewSource"
-            IsSourceGrouped="True"
-            Source="{x:Bind ViewModel.CoProc0Instructions, Mode=OneWay}" />
-            <CollectionViewSource
-            x:Name="SpecializedInstructionsViewSource"
-            IsSourceGrouped="True"
-            Source="{x:Bind ViewModel.Specialized0Instructions, Mode=OneWay}" />
-
+            <CollectionViewSource x:Name="CommonInstructionsViewSource"
+                                  IsSourceGrouped="True"
+                                  Source="{x:Bind ViewModel.CommonInstructions, Mode=OneWay}" />
+            <CollectionViewSource x:Name="FloatInstructionsViewSource"
+                                  IsSourceGrouped="True"
+                                  Source="{x:Bind ViewModel.FloatInstructions, Mode=OneWay}" />
+            <CollectionViewSource x:Name="CoProc0InstructionsViewSource"
+                                  IsSourceGrouped="True"
+                                  Source="{x:Bind ViewModel.CoProc0Instructions, Mode=OneWay}" />
+            <CollectionViewSource x:Name="SpecializedInstructionsViewSource"
+                                  IsSourceGrouped="True"
+                                  Source="{x:Bind ViewModel.Specialized0Instructions, Mode=OneWay}" />
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollMode="Enabled" HorizontalScrollMode="Enabled" ZoomMode="Enabled"
-                  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible"
-                  Background="{ThemeResource CheatSheetBackgroundBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Grid Padding="500">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="696"/>
-                <ColumnDefinition Width="696"/>
-                <ColumnDefinition Width="696"/>
-                <ColumnDefinition Width="696"/>
-                <ColumnDefinition Width="1000"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-
-            <!--Common Instructions-->
-            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White">
-                <StackPanel>
-                    <TextBlock x:Uid="CommonInstructionsTB" Text="Common Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>
-                    <ListView ItemsSource="{x:Bind CommonInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
-                              ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsVerticalRailEnabled="False"
+    <ScrollViewer>
+        <StackPanel HorizontalAlignment="Stretch" Margin="48,16" Spacing="4">
+            <StackPanel.ChildrenTransitions>
+                <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
+                <RepositionThemeTransition IsStaggeringEnabled="False" />
+            </StackPanel.ChildrenTransitions>
+            <TextBlock x:Uid="InstructionUsageTablesTB"
+                       Text="Instruction Usage Tables"
+                       FontFamily="{StaticResource HappyMonkey}"
+                       Margin="0,4"/>
+            <Expander HorizontalAlignment="Stretch">
+                <Expander.Header>
+                    <TextBlock x:Uid="CommonInstructionsTB"
+                               Text="Common Instructions"
+                               FontFamily="{StaticResource HappyMonkey}"
+                               Margin="8,0"/>
+                </Expander.Header>
+                <ListView ItemsSource="{x:Bind CommonInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
+                          ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsVerticalRailEnabled="False"
+                          ItemTemplate="{StaticResource InstructionEntryTemplate}">
+                    <ListView.GroupStyle>
+                        <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
+                    </ListView.GroupStyle>
+                </ListView>
+            </Expander>
+            <Expander HorizontalAlignment="Stretch">
+                <Expander.Header>
+                    <TextBlock x:Uid="CoProc0InstructionsTB"
+                               Text="CoProcessor0 Instructions"
+                               FontFamily="{StaticResource HappyMonkey}"
+                               Margin="8,0"/>
+                </Expander.Header>
+                <ListView ItemsSource="{x:Bind CoProc0InstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
                               ItemTemplate="{StaticResource InstructionEntryTemplate}">
-                        <ListView.GroupStyle>
-                            <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
-                        </ListView.GroupStyle>
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel HorizontalAlignment="Left"
-                                            Padding="8"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                    </ListView>
-                </StackPanel>
-            </Border>
-
-            <StackPanel Grid.Column="1">
-                <!--Common Encoding-->
-                <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
-                        Grid.Column="1">
-                    <StackPanel>
-                        <TextBlock x:Uid="PrimaryInstructionTypePatternsTB" Text="Primary Instruction Types Encoding Patterns" FontFamily="{StaticResource HappyMonkey}"/>
-                        <ItemsRepeater ItemsSource="{x:Bind ViewModel.PrimaryEncodingPatterns, Mode=OneWay}" Margin="16,0" ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
-
-                    </StackPanel>
-                </Border>
-
-                <!--Register Encoding-->
-                <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color1}">
-                    <StackPanel>
-                        <TextBlock x:Uid="GeneralPurposeRegisterEncodingTB" Text="General Purpose Register Encoding" FontFamily="{StaticResource HappyMonkey}"/>
-                        <cheat:EncodingTableDisplay x:Name="RegisterEncodingTable" Rows="8" Columns="4"
-                                                    FontFamily="{StaticResource HappyMonkey}" HorizontalAlignment="Center"
-                                                    CellTemplate="{StaticResource RegisterEncodingCellTemplate}"/>
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-
-            <!--Floating-Point Instructions-->
-            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
-                    Grid.Column="2">
-                <StackPanel>
-                    <TextBlock x:Uid="FloatInstructionsTB" Text="Floating-Point Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>
-                    <ListView ItemsSource="{x:Bind FloatInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
-                              ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsVerticalRailEnabled="False"
+                    <ListView.GroupStyle>
+                        <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
+                    </ListView.GroupStyle>
+                </ListView>
+            </Expander>
+            <Expander HorizontalAlignment="Stretch">
+                <Expander.Header>
+                    <TextBlock x:Uid="FloatInstructionsTB"
+                               Text="Floating-Point Instructions"
+                               FontFamily="{StaticResource HappyMonkey}"
+                               Margin="8,0"/>
+                </Expander.Header>
+                <ListView ItemsSource="{x:Bind FloatInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
                               ItemTemplate="{StaticResource InstructionEntryTemplate}">
-                        <ListView.GroupStyle>
-                            <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
-                        </ListView.GroupStyle>
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel HorizontalAlignment="Left"
-                                            Padding="8"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                    </ListView>
-                </StackPanel>
-            </Border>
-
-            <!--Floating-Point Encoding-->
-            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
-                    Grid.Column="3">
-                <StackPanel>
-                    <TextBlock x:Uid="PrimaryInstructionTypePatternsTB" Text="Primary Instruction Types Encoding Patterns" FontFamily="{StaticResource HappyMonkey}"/>
-                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.CoProcessor1Patterns, Mode=OneWay}" Margin="16,0" ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
-
-                </StackPanel>
-            </Border>
-
-            <!--CoProcessor0 Instructions-->
-            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
-                    Grid.Row="1">
-                <StackPanel>
-                    <TextBlock x:Uid="CoProc0InstructionsTB" Text="CoProcessor0 Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>
-                    <ListView ItemsSource="{x:Bind CoProc0InstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
-                              ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsVerticalRailEnabled="False"
+                    <ListView.GroupStyle>
+                        <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
+                    </ListView.GroupStyle>
+                </ListView>
+            </Expander>
+            <Expander HorizontalAlignment="Stretch">
+                <Expander.Header>
+                    <TextBlock x:Uid="SpecializedInstructionsTB"
+                               Text="Specialized Instructions"
+                               FontFamily="{StaticResource HappyMonkey}"
+                               Margin="8,0"/>
+                </Expander.Header>
+                <ListView ItemsSource="{x:Bind SpecializedInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
                               ItemTemplate="{StaticResource InstructionEntryTemplate}">
-                        <ListView.GroupStyle>
-                            <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
-                        </ListView.GroupStyle>
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel HorizontalAlignment="Left"
-                                            Padding="8"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                    </ListView>
-                </StackPanel>
-            </Border>
+                    <ListView.GroupStyle>
+                        <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
+                    </ListView.GroupStyle>
+                </ListView>
+            </Expander>
 
-            <!--CoProcessor0 Encoding-->
-            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
-                    Grid.Row="1" Grid.Column="1" >
-                <StackPanel>
-                    <TextBlock x:Uid="PrimaryInstructionTypePatternsTB" Text="CoProcessor0 Instruction Types Encoding Patterns" FontFamily="{StaticResource HappyMonkey}"/>
-                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.CoProcessor0Patterns, Mode=OneWay}" Margin="16,0"
-                                   ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
-                </StackPanel>
-            </Border>
+            <TextBlock x:Uid="InstructionEncodingPatternsTB"
+                       Text="Instruction Encoding Patterns"
+                       FontFamily="{StaticResource HappyMonkey}"
+                       Margin="0,12,0,4"/>
+            <Expander HorizontalAlignment="Stretch">
+                <Expander.Header>
+                    <TextBlock x:Uid="PrimaryInstructionTypePatternsTB"
+                               Text="Primary Instruction Types Encoding Patterns"
+                               FontFamily="{StaticResource HappyMonkey}"
+                               TextTrimming="CharacterEllipsis"
+                               Margin="8,0" />
+                </Expander.Header>
+                <ItemsRepeater ItemsSource="{x:Bind ViewModel.PrimaryEncodingPatterns, Mode=OneWay}"
+                               ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"
+                               Margin="24,0"/>
+            </Expander>
+            <Expander HorizontalAlignment="Stretch">
+                <Expander.Header>
+                    <TextBlock x:Uid="CoProc0InstructionTypePatternsTB"
+                               Text="CoProcessor0 Instruction Types Encoding Patterns"
+                               FontFamily="{StaticResource HappyMonkey}"
+                               TextTrimming="CharacterEllipsis"
+                               Margin="8,0" />
+                </Expander.Header>
+                <ItemsRepeater ItemsSource="{x:Bind ViewModel.CoProcessor0Patterns, Mode=OneWay}"
+                               ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"
+                               Margin="24,0"/>
+            </Expander>
+            <Expander HorizontalAlignment="Stretch">
+                <Expander.Header>
+                    <TextBlock x:Uid="CoProc1InstructionTypePatternsTB"
+                               Text="Floating-Point CoProcessor Instruction Types Encoding Patterns"
+                               FontFamily="{StaticResource HappyMonkey}"
+                               TextTrimming="CharacterEllipsis"
+                               Margin="8,0"/>
+                </Expander.Header>
+                <ItemsRepeater ItemsSource="{x:Bind ViewModel.CoProcessor1Patterns, Mode=OneWay}"
+                               ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"
+                               Margin="24,0"/>
+            </Expander>
+            <Expander HorizontalAlignment="Stretch">
+                <Expander.Header>
+                    <TextBlock x:Uid="UniqueInstructionPatternsTB"
+                               Text="Unique Instruction Encoding Patterns"
+                               FontFamily="{StaticResource HappyMonkey}"
+                               TextTrimming="CharacterEllipsis"
+                               Margin="8,0"/>
+                </Expander.Header>
+                <ItemsRepeater ItemsSource="{x:Bind ViewModel.UniquePatterns, Mode=OneWay}"
+                               ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"
+                               Margin="24,0"/>
+            </Expander>
 
-            <!--Specialized Instructions-->
-            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
-                    Grid.Row="1" Grid.Column="2">
-                <StackPanel>
-                    <TextBlock x:Uid="SpecializedInstructionsTB" Text="Specialized Instructions" Margin="8,0" FontFamily="{StaticResource HappyMonkey}"/>
-                    <ListView ItemsSource="{x:Bind SpecializedInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
-                              ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsVerticalRailEnabled="False"
-                              ItemTemplate="{StaticResource InstructionEntryTemplate}">
-                        <ListView.GroupStyle>
-                            <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
-                        </ListView.GroupStyle>
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel HorizontalAlignment="Left"
-                                            Padding="8"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                    </ListView>
-                </StackPanel>
-            </Border>
-
-            <!--Unique Encoding-->
-            <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
-                    Grid.Row="1" Grid.Column="3" >
-                <StackPanel>
-                    <TextBlock x:Uid="UniqueInstructionPatternsTB" Text="Unique Instruction Encoding Patterns" FontFamily="{StaticResource HappyMonkey}"/>
-                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.UniquePatterns, Mode=OneWay}" Margin="16,0"
-                                   ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
-                </StackPanel>
-            </Border>
-
-        </Grid>
+            <TextBlock x:Uid="EncodingTablesTB"
+                       Text="Encoding Tables"
+                       FontFamily="{StaticResource HappyMonkey}"
+                       Margin="0,12,0,4"/>
+            <Expander HorizontalAlignment="Stretch">
+                <Expander.Header>
+                    <TextBlock x:Uid="GeneralPurposeRegisterEncodingTB"
+                               Text="General Purpose Register Encoding"
+                               FontFamily="{StaticResource HappyMonkey}"
+                               TextTrimming="CharacterEllipsis"
+                               Margin="8,0" />
+                </Expander.Header>
+                <cheat:EncodingTableDisplay x:Name="RegisterEncodingTable" Rows="8" Columns="4"
+                            FontFamily="{StaticResource HappyMonkey}" HorizontalAlignment="Center"
+                            CellTemplate="{StaticResource RegisterEncodingCellTemplate}"/>
+            </Expander>
+        </StackPanel>
     </ScrollViewer>
 </UserControl>

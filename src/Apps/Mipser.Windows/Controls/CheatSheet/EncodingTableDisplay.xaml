@@ -20,6 +20,6 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <Grid x:Name="TableGrid"/>
+    <Grid x:Name="TableGrid" FlowDirection="LeftToRight"/>
 
 </UserControl>

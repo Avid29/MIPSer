@@ -1,6 +1,6 @@
 [
   {
-    "name": "Floating Point Instructions",
+    "name": "FloatingPointInstructions",
     "sections": [
       {
         "name": "OP Code",
@@ -48,7 +48,7 @@
     ]
   },
   {
-    "name": "CoProcessor1 Move Instructions",
+    "name": "CoProc1MoveInstructions",
     "sections": [
       {
         "name": "OP Code",
@@ -90,7 +90,7 @@
     ]
   },
   {
-    "name": "CoProcessor1X Instructions",
+    "name": "CoProc1XInstructions",
     "sections": [
       {
         "name": "OP Code",

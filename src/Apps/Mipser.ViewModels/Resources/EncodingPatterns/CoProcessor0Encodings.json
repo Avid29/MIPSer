@@ -1,6 +1,6 @@
 [
   {
-    "name": "C0 Instructions",
+    "name": "C0Instructions",
     "sections": [
       {
         "name": "OP Code",
@@ -24,7 +24,7 @@
     ]
   },
   {
-    "name": "CoProcessor1 Move Instructions",
+    "name": "CoProc0MoveInstructions",
     "sections": [
       {
         "name": "OP Code",

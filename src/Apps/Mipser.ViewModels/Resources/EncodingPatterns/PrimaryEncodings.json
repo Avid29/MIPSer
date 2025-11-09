@@ -1,6 +1,6 @@
 [
   {
-    "name": "Register (R) Type Instructions",
+    "name": "RTypeInstructions",
     "sections": [
       {
         "name": "OP Code",
@@ -41,7 +41,7 @@
     ]
   },
   {
-    "name": "Immediate (I) Type Instructions",
+    "name": "ITypeInstructions",
     "sections": [
       {
         "name": "OP Code",
@@ -70,7 +70,7 @@
     ]
   },
   {
-    "name": "Jump (J) Type Instructions",
+    "name": "JTypeInstructions",
     "sections": [
       {
         "name": "OP Code",
@@ -87,7 +87,7 @@
     ]
   },
   {
-    "name": "Branch/Trap (B) Type Instructions",
+    "name": "BTypeInstructions",
     "sections": [
       {
         "name": "OP Code",

@@ -53,24 +53,34 @@ public class CheatSheetViewModel : PageViewModel
     /// <inheritdoc/>
     public override string Title => _localizationService["MIPSCheatSheetTitle"];
 
-    private static IEnumerable<EncodingPattern>? LoadEncodingPatterns(string filename)
+    private IEnumerable<EncodingPattern>? LoadEncodingPatterns(string filename)
     {
+        // Get resources
         var assembly = Assembly.GetExecutingAssembly();
         var resources = assembly.GetManifestResourceNames();
         var resource = resources.First(x => x.EndsWith(filename));
-        
         using Stream? stream = assembly.GetManifestResourceStream(resource);
         if (stream is null)
             return null;
 
+        // Deserialize patterns
         var patterns = JsonSerializer.Deserialize<EncodingPattern[]>(stream);
         if (patterns is null)
             return null;
 
+        // Localize
+        foreach (var pattern in patterns)
+        {
+            if (pattern.Name is null)
+                continue;
+
+            pattern.Name = _localizationService[$"CheatSheet/{pattern.Name}"];
+        }
+
         return patterns;
     }
 
-    private static IEnumerable<IGrouping<string, InstructionMetadata>>? LoadInstructionSet(string filename, InstructionMetadata[] instructions)
+    private IEnumerable<IGrouping<string, InstructionMetadata>>? LoadInstructionSet(string filename, InstructionMetadata[] instructions)
     {
         // Load groupings
         var assembly = Assembly.GetExecutingAssembly();
@@ -85,9 +95,6 @@ public class CheatSheetViewModel : PageViewModel
         if (collection is null)
             return null;
 
-        // Grab localization service
-        var localize = Ioc.Default.GetRequiredService<ILocalizationService>();
-
         // Create the grouped collection
         var simplePairs = collection.Groups.SelectMany(
             group => group.Instructions.Select(instruction => (group.GroupName, instruction)));
@@ -95,7 +102,7 @@ public class CheatSheetViewModel : PageViewModel
             pair => pair.instruction,
             instruction => instruction.Identifier,
             (pair, instruction) => (pair.GroupName, instruction));
-        var groups = pairs.GroupBy(x => localize[x.GroupName], x => x.instruction);
+        var groups = pairs.GroupBy(x => _localizationService[x.GroupName], x => x.instruction);
 
         return groups;
     }
