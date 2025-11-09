@@ -57,7 +57,23 @@ public partial class AssemblyEditBox
         if (d is not AssemblyEditBox asmBox)
             return;
 
-        asmBox._codeEditor?.Editor.SetText(asmBox.Text);
-        asmBox.TextChanged?.Invoke(d, EventArgs.Empty);
+        asmBox.UpdateText();
+    }
+
+    private void UpdateText()
+    {
+        // Retrieve the editor
+        var editor = _codeEditor?.Editor;
+        if (editor is null)
+            return;
+
+        // Get current text, and check if it matches
+        var text = editor.GetText(editor.Length);
+        if (Text == text)
+            return;
+
+        // The text was not already update to date. Update it
+        editor.SetText(Text);
+        TextChanged?.Invoke(this, EventArgs.Empty);
     }
 }
