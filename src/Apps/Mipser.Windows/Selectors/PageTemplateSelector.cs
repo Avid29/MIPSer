@@ -29,7 +29,7 @@ public partial class PageTemplateSelector : DataTemplateSelector
     /// </summary>
     public DataTemplate? SettingsPageTemplate { get; set; }
 
-    protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container)
+    protected override DataTemplate? SelectTemplateCore(object item)
     {
         return item switch
         {
@@ -40,4 +40,6 @@ public partial class PageTemplateSelector : DataTemplateSelector
             _ => null,
         };
     }
+
+    protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container) => this.SelectTemplateCore(item);
 }

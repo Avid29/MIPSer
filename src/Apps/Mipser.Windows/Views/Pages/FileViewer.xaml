@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<UserControl
+<apages:PageControl
     x:Class="Mipser.Windows.Views.Pages.FileViewer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -10,9 +10,10 @@
     xmlns:hexview="using:Mipser.Editors.HexViewer"
     xmlns:selectors="using:Mipser.Windows.Selectors"
     xmlns:vm="using:Mipser.ViewModels.Pages"
+    xmlns:apages="using:Mipser.Windows.Views.Pages.Abstract"
     mc:Ignorable="d">
 
-    <UserControl.Resources>
+    <apages:PageControl.Resources>
 
         <DataTemplate x:Key="WIPFileTemplate">
             <UserControl>
@@ -85,11 +86,11 @@
             </selectors:EditorTemplateSelector.TextEditorTemplate>
         </selectors:EditorTemplateSelector>
 
-    </UserControl.Resources>
+    </apages:PageControl.Resources>
 
     <ContentControl Content="{x:Bind ViewModel, Mode=OneWay}"
                     ContentTemplateSelector="{StaticResource EditorTemplateSelector}"
                     HorizontalContentAlignment="Stretch"
                     VerticalContentAlignment="Stretch"/>
 
-</UserControl>
+</apages:PageControl>

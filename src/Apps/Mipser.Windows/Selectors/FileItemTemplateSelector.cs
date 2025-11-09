@@ -33,8 +33,5 @@ public partial class FileItemTemplateSelector : DataTemplateSelector
     }
 
     /// <inheritdoc/>
-    protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container)
-    {
-        return base.SelectTemplateCore(item);
-    }
+    protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container) => base.SelectTemplateCore(item);
 }

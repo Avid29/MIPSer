@@ -19,22 +19,30 @@
         <selectors:PageTemplateSelector x:Key="PageTemplateSelector">
             <selectors:PageTemplateSelector.AboutPageTemplate>
                 <DataTemplate x:DataType="avmv:AboutPageViewModel">
-                    <apppages:AboutPage ViewModel="{x:Bind}"/>
+                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                        <apppages:AboutPage ViewModel="{x:Bind Mode=OneWay}"/>
+                    </TabViewItem>
                 </DataTemplate>
             </selectors:PageTemplateSelector.AboutPageTemplate>
             <selectors:PageTemplateSelector.CheatSheetPageTemplate>
                 <DataTemplate x:DataType="vmv:CheatSheetViewModel">
-                    <pages:CheatSheet ViewModel="{x:Bind}"/>
+                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                        <pages:CheatSheet ViewModel="{x:Bind Mode=OneWay}"/>
+                    </TabViewItem>
                 </DataTemplate>
             </selectors:PageTemplateSelector.CheatSheetPageTemplate>
             <selectors:PageTemplateSelector.FilePageTemplate>
                 <DataTemplate x:DataType="vmv:FilePageViewModel">
-                    <pages:FileViewer ViewModel="{x:Bind}"/>
+                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                        <pages:FileViewer ViewModel="{x:Bind Mode=OneWay}"/>
+                    </TabViewItem>
                 </DataTemplate>
             </selectors:PageTemplateSelector.FilePageTemplate>
             <selectors:PageTemplateSelector.SettingsPageTemplate>
                 <DataTemplate x:DataType="avmv:SettingsPageViewModel">
-                    <apppages:SettingsPage ViewModel="{x:Bind}"/>
+                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                        <apppages:SettingsPage ViewModel="{x:Bind Mode=OneWay}"/>
+                    </TabViewItem>
                 </DataTemplate>
             </selectors:PageTemplateSelector.SettingsPageTemplate>
         </selectors:PageTemplateSelector>
@@ -42,6 +50,7 @@
 
     <TabView SelectedItem="{x:Bind ViewModel.CurrentPage, Mode=TwoWay}"
              TabItemsSource="{x:Bind ViewModel.OpenPages, Mode=OneWay}"
+             TabItemTemplateSelector="{StaticResource PageTemplateSelector}"
              TabCloseRequested="TabView_TabCloseRequested"
              IsAddTabButtonVisible="False"
              VerticalAlignment="Stretch">
@@ -57,21 +66,5 @@
                 </ResourceDictionary.ThemeDictionaries>
             </ResourceDictionary>
         </TabView.Resources>
-        <TabView.TabItemTemplate>
-            <DataTemplate x:DataType="vmva:PageViewModel">
-                <!--* for unsaved and italics for anonymous-->
-                <TabViewItem Header="{x:Bind Title, Mode=OneWay}"
-                             Content="{x:Bind (vmva:PageViewModel), Mode=OneWay}"
-                             ContentTemplateSelector="{StaticResource PageTemplateSelector}">
-                    <!-- TODO: Sometimes, before the TabView "warms up", the templating will fail.-->
-                    <!-- Ask Michael or Arlo what they think sometime.-->
-                    <TabViewItem.HeaderTemplate>
-                        <DataTemplate x:DataType="x:String">
-                            <TextBlock Text="{x:Bind Mode=OneWay}"/>
-                        </DataTemplate>
-                    </TabViewItem.HeaderTemplate>
-                </TabViewItem>
-            </DataTemplate>
-        </TabView.TabItemTemplate>
     </TabView>
 </UserControl>
