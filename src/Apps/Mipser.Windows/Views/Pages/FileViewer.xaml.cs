@@ -1,7 +1,10 @@
 // Avishai Dernis 2025
 
+using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using MIPS.Assembler.Tokenization.Models;
+using Mipser.Editors.AssemblyEditBox;
 using Mipser.ViewModels.Pages;
 
 namespace Mipser.Windows.Views.Pages;
@@ -35,10 +38,27 @@ public sealed partial class FileViewer : UserControl
         {
             SetValue(ViewModelProperty, value);
             UpdateBindings();
+            UpdateEvents();
         }
     }
 
-    public void UpdateBindings()
+    private void UpdateEvents()
+    {
+        ViewModel.NavigateToTokenEvent += ViewModel_NavigateToTokenEvent;
+    }
+
+    private void ViewModel_NavigateToTokenEvent(object? sender, SourceLocation e)
+    {
+        // Find editbox
+        var editBox = this.FindDescendant<AssemblyEditBox>();
+        if (editBox is null)
+            return;
+
+        // Navigate to location
+        editBox.NavigateToLocation(e);
+    }
+
+    private void UpdateBindings()
     {
         this.Bindings.Update();
     }

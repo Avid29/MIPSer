@@ -84,7 +84,7 @@ public partial class MainViewModel
         _projectService.OpenFolder(folder);
     }
 
-    private void OpenFile(BindableFile? file, bool reopen = false)
+    private FilePageViewModel OpenFile(BindableFile? file, bool reopen = false)
     {
         // Create anonymous file if needed
         file ??= _fileService.GetAnonymousFile();
@@ -107,6 +107,7 @@ public partial class MainViewModel
 
         // Open the page
         FocusedPanel?.OpenPage(page);
+        return page;
     }
 
     private async Task NavigateToToken(Token token)
@@ -122,8 +123,9 @@ public partial class MainViewModel
             return;
 
         // Open the file
-        OpenFile(file);
+        var page = OpenFile(file);
 
-        // TODO: Navigate to token
+        // Navigate to the token
+        page.NavigateToToken(token);
     }
 }

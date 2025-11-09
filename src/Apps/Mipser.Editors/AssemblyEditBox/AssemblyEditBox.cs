@@ -3,6 +3,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using MIPS.Assembler.Models.Instructions;
+using MIPS.Assembler.Tokenization.Models;
 using WinUIEditor;
 
 namespace Mipser.Editors.AssemblyEditBox;
@@ -38,5 +39,20 @@ public partial class AssemblyEditBox : Control
 
         var table = new InstructionTable(MIPS.Models.Instructions.Enums.MipsVersion.MipsIII);
         SetupKeywords(table.GetInstructions());
+    }
+
+    /// <summary>
+    /// Navigates to a <see cref="SourceLocation"/>.
+    /// </summary>
+    /// <param name="location">The position to navigate to.</param>
+    public void NavigateToLocation(SourceLocation location)
+    {
+        // Get the editor
+        var editor = _codeEditor?.Editor;
+        if (editor is null)
+            return;
+
+        // Go to line
+        editor.GotoLine(location.Line - 1);
     }
 }

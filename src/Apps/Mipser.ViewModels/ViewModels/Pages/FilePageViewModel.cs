@@ -1,8 +1,10 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Assembler.Tokenization.Models;
 using Mipser.Bindables.Files;
 using Mipser.ViewModels.Pages.Abstract;
+using System;
 using System.ComponentModel;
 
 namespace Mipser.ViewModels.Pages;
@@ -12,6 +14,11 @@ namespace Mipser.ViewModels.Pages;
 /// </summary>
 public class FilePageViewModel : PageViewModel
 {
+    /// <summary>
+    /// An event invoked requesting to navigate to a token.
+    /// </summary>
+    public event EventHandler<SourceLocation>? NavigateToTokenEvent;
+
     private BindableFile? _file;
 
     /// <summary>
@@ -64,6 +71,12 @@ public class FilePageViewModel : PageViewModel
         await File.SaveAsync();
         OnPropertyChanged(Title);
     }
+
+    /// <summary>
+    /// Requests to navigate to a token.
+    /// </summary>
+    /// <param name="token">The token to navigate to.</param>
+    public void NavigateToToken(Token token) => NavigateToTokenEvent?.Invoke(this, token.Location);
 
     private async void SetFile(BindableFile? file)
     {
