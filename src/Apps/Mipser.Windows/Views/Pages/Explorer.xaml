@@ -11,17 +11,25 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="FileTemplate" x:DataType="files:BindableFile">
-            <TreeViewItem Content="{x:Bind Name, Mode=OneWay}"
-                          AutomationProperties.Name="{x:Bind Name, Mode=OneWay}"
-                          DoubleTapped="TreeViewItem_DoubleTapped"/>
+            <TreeViewItem AutomationProperties.Name="{x:Bind Name, Mode=OneWay}"
+                          DoubleTapped="TreeViewItem_DoubleTapped">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <ImageIcon Source="/Assets/Icons/Files/File.svg" Height="20"/>
+                    <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+                </StackPanel>
+            </TreeViewItem>
         </DataTemplate>
 
         <DataTemplate x:Key="FolderTemplate" x:DataType="files:BindableFolder">
-            <TreeViewItem Content="{x:Bind Name, Mode=OneWay}"
-                          ItemsSource="{x:Bind Children, Mode=OneWay}"
+            <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneWay}"
                           HasUnrealizedChildren="{x:Bind ChildrenNotLoaded, Mode=OneWay}"
                           Loaded="TreeViewItem_Loaded"
-                          AutomationProperties.Name="{x:Bind Name, Mode=OneWay}"/>
+                          AutomationProperties.Name="{x:Bind Name, Mode=OneWay}">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <ImageIcon Source="/Assets/Icons/Files/Folder.svg" Height="20"/>
+                    <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+                </StackPanel>
+            </TreeViewItem>
         </DataTemplate>
 
         <selector:FileItemTemplateSelector x:Key="FileItemTemplateSelector"
