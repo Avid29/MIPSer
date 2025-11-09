@@ -16,68 +16,79 @@
     FlowDirection="LeftToRight"
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
-    
+
     <UserControl.Resources>
-        <FontFamily x:Key="HappyMonkey">ms-appx:///Assets/Fonts/HappyMonkey-Regular.ttf#Happy Monkey</FontFamily>
-        
-        <SolidColorBrush x:Key="PrimaryBackground" Color="#1A1A1A"/>
-        <SolidColorBrush x:Key="HeaderForeground" Color="#8C8C8C"/>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="CheatSheetBackgroundBrush" Color="#101010"/>
+                    <SolidColorBrush x:Key="CheatSheetPanelBackgroundBrush" Color="#1A1A1A"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="CheatSheetBackgroundBrush" Color="#E5E5E5"/>
+                    <SolidColorBrush x:Key="CheatSheetPanelBackgroundBrush" Color="#FFFFFF"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            
+            <FontFamily x:Key="HappyMonkey">ms-appx:///Assets/Fonts/HappyMonkey-Regular.ttf#Happy Monkey</FontFamily>
 
-        <!--Colors-->
-        <Color x:Key="Color1">#FE8482</Color>
-        <Color x:Key="Color2">#FFC47A</Color>
-        <Color x:Key="Color3">#F8FC8B</Color>
-        <Color x:Key="Color4">#A7FA95</Color>
-        <Color x:Key="Color5">#73EEFD</Color>
-        <Color x:Key="Color6">#77A7FD</Color>
-        <Color x:Key="Color7">#9B88FC</Color>
-        <Color x:Key="Color8">#FA9EF6</Color>
-        
-        <!--Instruction Types-->
-        <SolidColorBrush x:Key="RInst" Color="{StaticResource Color1}"/>
-        <SolidColorBrush x:Key="R2Inst" Color="{StaticResource Color2}"/>
-        <SolidColorBrush x:Key="IInst" Color="{StaticResource Color5}"/>
-        <SolidColorBrush x:Key="JInst" Color="{StaticResource Color4}"/>
-        <SolidColorBrush x:Key="RegImmInst" Color="{StaticResource Color8}"/>
-        <SolidColorBrush x:Key="CoProc0Inst" Color="{StaticResource Color3}"/>
-        <SolidColorBrush x:Key="CoProc1Inst" Color="{StaticResource Color3}"/>
-        <SolidColorBrush x:Key="CoProc1XInst" Color="{StaticResource Color7}"/>
-        <SolidColorBrush x:Key="CoProcIInst" Color="{StaticResource Color6}"/>
-        
-        <!--Argument Types-->
-        <SolidColorBrush x:Key="GPRArg" Color="{StaticResource Color1}"/>
-        <SolidColorBrush x:Key="CPRArg" Color="{StaticResource Color2}"/>
-        <SolidColorBrush x:Key="ImmArg" Color="{StaticResource Color3}"/>
-        <SolidColorBrush x:Key="FormatArg" Color="{StaticResource Color8}"/>
-        <SolidColorBrush x:Key="MiscArg" Color="{StaticResource Color7}"/>
-        
-        <!--Sections Types-->
-        <SolidColorBrush x:Key="OpCodeSection" Color="{StaticResource Color4}"/>
-        <SolidColorBrush x:Key="FuncCodeSection" Color="{StaticResource Color5}"/>
-        <SolidColorBrush x:Key="RegFuncCodeSection" Color="{StaticResource Color8}"/>
-        <SolidColorBrush x:Key="GPRSection" Color="{StaticResource Color1}"/>
-        <SolidColorBrush x:Key="CPRSection" Color="{StaticResource Color2}"/>
-        <SolidColorBrush x:Key="ImmSection" Color="{StaticResource Color3}"/>
-        <SolidColorBrush x:Key="FormatSection" Color="{StaticResource Color7}"/>
-        
-        <!--Register Encoding Types-->
-        <SolidColorBrush x:Key="SavedRegister" Color="{StaticResource Color5}"/>
-        <SolidColorBrush x:Key="TempRegister" Color="{StaticResource Color1}"/>
-        <SolidColorBrush x:Key="ArgRegister" Color="{StaticResource Color8}"/>
-        <SolidColorBrush x:Key="ReturnValueRegister" Color="{StaticResource Color4}"/>
-        <SolidColorBrush x:Key="ReturnAddressRegister" Color="{StaticResource Color2}"/>
-        <SolidColorBrush x:Key="EnvironmentRegister" Color="{StaticResource Color6}"/>
-        <SolidColorBrush x:Key="KernelRegister" Color="{StaticResource Color3}"/>
-        <SolidColorBrush x:Key="OtherRegister" Color="{StaticResource Color7}"/>
-        
-        <LinearGradientBrush x:Key="GeneralOrCoRegisterSection" StartPoint="0.5,0" EndPoint="0.5,1">
-            <GradientStopCollection>
-                <GradientStop Color="{StaticResource Color1}" Offset="0"/>
-                <GradientStop Color="{StaticResource Color2}" Offset="1"/>
-            </GradientStopCollection>
-        </LinearGradientBrush>
+            <SolidColorBrush x:Key="HeaderForeground" Color="#8C8C8C"/>
 
-        <helper:InstructionTypeBrushPalette x:Key="InstructionBrushPalette"
+            <!--Colors-->
+            <Color x:Key="Color1">#FE8482</Color>
+            <Color x:Key="Color2">#FFC47A</Color>
+            <Color x:Key="Color3">#F8FC8B</Color>
+            <Color x:Key="Color4">#A7FA95</Color>
+            <Color x:Key="Color5">#73EEFD</Color>
+            <Color x:Key="Color6">#77A7FD</Color>
+            <Color x:Key="Color7">#9B88FC</Color>
+            <Color x:Key="Color8">#FA9EF6</Color>
+
+            <!--Instruction Types-->
+            <SolidColorBrush x:Key="RInst" Color="{StaticResource Color1}"/>
+            <SolidColorBrush x:Key="R2Inst" Color="{StaticResource Color2}"/>
+            <SolidColorBrush x:Key="IInst" Color="{StaticResource Color5}"/>
+            <SolidColorBrush x:Key="JInst" Color="{StaticResource Color4}"/>
+            <SolidColorBrush x:Key="RegImmInst" Color="{StaticResource Color8}"/>
+            <SolidColorBrush x:Key="CoProc0Inst" Color="{StaticResource Color3}"/>
+            <SolidColorBrush x:Key="CoProc1Inst" Color="{StaticResource Color3}"/>
+            <SolidColorBrush x:Key="CoProc1XInst" Color="{StaticResource Color7}"/>
+            <SolidColorBrush x:Key="CoProcIInst" Color="{StaticResource Color6}"/>
+
+            <!--Argument Types-->
+            <SolidColorBrush x:Key="GPRArg" Color="{StaticResource Color1}"/>
+            <SolidColorBrush x:Key="CPRArg" Color="{StaticResource Color2}"/>
+            <SolidColorBrush x:Key="ImmArg" Color="{StaticResource Color3}"/>
+            <SolidColorBrush x:Key="FormatArg" Color="{StaticResource Color8}"/>
+            <SolidColorBrush x:Key="MiscArg" Color="{StaticResource Color7}"/>
+
+            <!--Sections Types-->
+            <SolidColorBrush x:Key="OpCodeSection" Color="{StaticResource Color4}"/>
+            <SolidColorBrush x:Key="FuncCodeSection" Color="{StaticResource Color5}"/>
+            <SolidColorBrush x:Key="RegFuncCodeSection" Color="{StaticResource Color8}"/>
+            <SolidColorBrush x:Key="GPRSection" Color="{StaticResource Color1}"/>
+            <SolidColorBrush x:Key="CPRSection" Color="{StaticResource Color2}"/>
+            <SolidColorBrush x:Key="ImmSection" Color="{StaticResource Color3}"/>
+            <SolidColorBrush x:Key="FormatSection" Color="{StaticResource Color7}"/>
+
+            <!--Register Encoding Types-->
+            <SolidColorBrush x:Key="SavedRegister" Color="{StaticResource Color5}"/>
+            <SolidColorBrush x:Key="TempRegister" Color="{StaticResource Color1}"/>
+            <SolidColorBrush x:Key="ArgRegister" Color="{StaticResource Color8}"/>
+            <SolidColorBrush x:Key="ReturnValueRegister" Color="{StaticResource Color4}"/>
+            <SolidColorBrush x:Key="ReturnAddressRegister" Color="{StaticResource Color2}"/>
+            <SolidColorBrush x:Key="EnvironmentRegister" Color="{StaticResource Color6}"/>
+            <SolidColorBrush x:Key="KernelRegister" Color="{StaticResource Color3}"/>
+            <SolidColorBrush x:Key="OtherRegister" Color="{StaticResource Color7}"/>
+
+            <LinearGradientBrush x:Key="GeneralOrCoRegisterSection" StartPoint="0.5,0" EndPoint="0.5,1">
+                <GradientStopCollection>
+                    <GradientStop Color="{StaticResource Color1}" Offset="0"/>
+                    <GradientStop Color="{StaticResource Color2}" Offset="1"/>
+                </GradientStopCollection>
+            </LinearGradientBrush>
+
+            <helper:InstructionTypeBrushPalette x:Key="InstructionBrushPalette"
                                             RType="{StaticResource RInst}"
                                             R2Type="{StaticResource R2Inst}"
                                             IType="{StaticResource IInst}"
@@ -86,14 +97,14 @@
                                             CoProcessor0="{StaticResource CoProc0Inst}"
                                             CoProcessor1="{StaticResource CoProc1Inst}"/>
 
-        <helper:ArgumentBrushPalette x:Key="ArgumentBrushPalette"
+            <helper:ArgumentBrushPalette x:Key="ArgumentBrushPalette"
                                      GPRegisterBrush="{StaticResource GPRArg}"
                                      CPRegisterBrush="{StaticResource CPRArg}"
                                      ImmediateValueBrush="{StaticResource ImmArg}"
                                      FormatBrush="{StaticResource FormatArg}"
                                      MiscArgBrush="{StaticResource MiscArg}"/>
 
-        <helper:EncodingPatternSectionBrushPalette x:Key="SectionBrushPalette"
+            <helper:EncodingPatternSectionBrushPalette x:Key="SectionBrushPalette"
                                                    OpCodeBrush="{StaticResource OpCodeSection}"
                                                    FuncCodeBrush="{StaticResource FuncCodeSection}"
                                                    RegisterFuncCodeBrush="{StaticResource RegFuncCodeSection}"
@@ -102,8 +113,8 @@
                                                    ImmediateValueBrush="{StaticResource ImmSection}"
                                                    FormatBrush="{StaticResource FormatSection}"
                                                    GeneralOrCoRegisterBrush="{StaticResource GeneralOrCoRegisterSection}"/>
-        
-        <convert:RegisterEncodingColorConverter x:Key="RegisterEncodingColorConverter"
+
+            <convert:RegisterEncodingColorConverter x:Key="RegisterEncodingColorConverter"
                                                 SavedBrush="{StaticResource SavedRegister}"
                                                 TempBrush="{StaticResource TempRegister}"
                                                 ArgBrush="{StaticResource ArgRegister}"
@@ -112,91 +123,93 @@
                                                 EnvironmentBrush="{StaticResource EnvironmentRegister}"
                                                 KernelBrush="{StaticResource KernelRegister}"
                                                 OtherBrush="{StaticResource OtherRegister}"/>
-        
-        <DataTemplate x:Key="InstructionGroupHeaderTemplate" x:DataType="collections:IReadOnlyObservableGroup">
-            <TextBlock
+
+            <DataTemplate x:Key="InstructionGroupHeaderTemplate" x:DataType="collections:IReadOnlyObservableGroup">
+                <TextBlock
                 FontSize="16" FontFamily="{StaticResource HappyMonkey}"
                 Foreground="{ThemeResource HeaderForeground}"
                 Text="{x:Bind Key}" />
-        </DataTemplate>
-        
-        <DataTemplate x:Key="InstructionEntryTemplate" x:DataType="data:InstructionMetadata">
-            <cheat:UsagePatternDisplay Metadata="{x:Bind}" FontSize="14" FontFamily="Cascadia Code"
+            </DataTemplate>
+
+            <DataTemplate x:Key="InstructionEntryTemplate" x:DataType="data:InstructionMetadata">
+                <cheat:UsagePatternDisplay Metadata="{x:Bind}" FontSize="14" FontFamily="Cascadia Code"
                                           InstructionBrushPalette="{StaticResource InstructionBrushPalette}"
                                           ArgumentBrushPalette="{StaticResource ArgumentBrushPalette}"/>
-        </DataTemplate>
-        
-        <DataTemplate x:Key="EncodingPatternDisplayTemplate" x:DataType="models:EncodingPattern">
-            <StackPanel>
-                <TextBlock Text="{x:Bind Name}" Foreground="{StaticResource HeaderForeground}" Margin="0,2" FontFamily="{StaticResource HappyMonkey}"/>
-                <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind}" SectionBrushPalette="{StaticResource SectionBrushPalette}"
+            </DataTemplate>
+
+            <DataTemplate x:Key="EncodingPatternDisplayTemplate" x:DataType="models:EncodingPattern">
+                <StackPanel>
+                    <TextBlock Text="{x:Bind Name}" Foreground="{StaticResource HeaderForeground}" Margin="0,2" FontFamily="{StaticResource HappyMonkey}"/>
+                    <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind}" SectionBrushPalette="{StaticResource SectionBrushPalette}"
                                               FontFamily="{StaticResource HappyMonkey}"/>
-            </StackPanel>
-        </DataTemplate>
-        
-        <DataTemplate x:Key="RegisterEncodingCellTemplate" x:DataType="reg:GPRegister">
-            <Border Background="{x:Bind (reg:GPRegister), Converter={StaticResource RegisterEncodingColorConverter}}"
+                </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="RegisterEncodingCellTemplate" x:DataType="reg:GPRegister">
+                <Border Background="{x:Bind (reg:GPRegister), Converter={StaticResource RegisterEncodingColorConverter}}"
                     CornerRadius="4" Margin="1">
-                <TextBlock Text="{x:Bind tables:RegistersTable.GetRegisterString((reg:GPRegister), reg:RegisterSet.GeneralPurpose)}" Foreground="Black"
+                    <TextBlock Text="{x:Bind tables:RegistersTable.GetRegisterString((reg:GPRegister), reg:RegisterSet.GeneralPurpose)}" Foreground="Black"
                            HorizontalAlignment="Center" VerticalAlignment="Center"
                            FontFamily="{StaticResource HappyMonkey}" FontSize="18"/>
-            </Border>
-        </DataTemplate>
+                </Border>
+            </DataTemplate>
 
-        <Style x:Key="SectionBorderStyle" TargetType="Border">
-            <Setter Property="Margin" Value="8"/>
-            <Setter Property="Padding" Value="10,8"/>
-            <Setter Property="BorderThickness" Value="2"/>
-            <Setter Property="CornerRadius" Value="8"/>
-        </Style>
-        
-        <Style TargetType="ListViewHeaderItem">
-            <Setter Property="MinHeight" Value="0"/>
-            <Setter Property="Padding" Value="8,4,8,0"/>
-            <Setter Property="Margin" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListViewHeaderItem">
-                        <ContentPresenter x:Name="ContentPresenter"
+            <Style x:Key="SectionBorderStyle" TargetType="Border">
+                <Setter Property="Margin" Value="8"/>
+                <Setter Property="Padding" Value="10,8"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="CornerRadius" Value="8"/>
+                <Setter Property="Background" Value="{ThemeResource CheatSheetPanelBackgroundBrush}"/>
+            </Style>
+
+            <Style TargetType="ListViewHeaderItem">
+                <Setter Property="MinHeight" Value="0"/>
+                <Setter Property="Padding" Value="8,4,8,0"/>
+                <Setter Property="Margin" Value="0"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListViewHeaderItem">
+                            <ContentPresenter x:Name="ContentPresenter"
                                           Margin="{TemplateBinding Padding}"
                                           Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
                                           ContentTransitions="{TemplateBinding ContentTransitions}"
                                           HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        <Style TargetType="ListViewItem">
-            <Setter Property="MinHeight" Value="0"/>
-            <Setter Property="Padding" Value="8,1"/>
-            <Setter Property="FlowDirection" Value="LeftToRight"/>
-        </Style>
-        
-        <CollectionViewSource
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="ListViewItem">
+                <Setter Property="MinHeight" Value="0"/>
+                <Setter Property="Padding" Value="8,1"/>
+                <Setter Property="FlowDirection" Value="LeftToRight"/>
+            </Style>
+
+            <CollectionViewSource
             x:Name="CommonInstructionsViewSource"
             IsSourceGrouped="True"
             Source="{x:Bind ViewModel.CommonInstructions, Mode=OneWay}" />
-        <CollectionViewSource
+            <CollectionViewSource
             x:Name="FloatInstructionsViewSource"
             IsSourceGrouped="True"
             Source="{x:Bind ViewModel.FloatInstructions, Mode=OneWay}" />
-        <CollectionViewSource
+            <CollectionViewSource
             x:Name="CoProc0InstructionsViewSource"
             IsSourceGrouped="True"
             Source="{x:Bind ViewModel.CoProc0Instructions, Mode=OneWay}" />
-        <CollectionViewSource
+            <CollectionViewSource
             x:Name="SpecializedInstructionsViewSource"
             IsSourceGrouped="True"
             Source="{x:Bind ViewModel.Specialized0Instructions, Mode=OneWay}" />
-        
+
+        </ResourceDictionary>
     </UserControl.Resources>
-    
+
     <ScrollViewer VerticalScrollMode="Enabled" HorizontalScrollMode="Enabled" ZoomMode="Enabled"
                   VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible"
-                  Background="{StaticResource PrimaryBackground}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                  Background="{ThemeResource CheatSheetBackgroundBrush}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid Padding="500">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="696"/>
@@ -209,7 +222,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            
+
             <!--Common Instructions-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White">
                 <StackPanel>
@@ -229,7 +242,7 @@
                     </ListView>
                 </StackPanel>
             </Border>
-            
+
             <StackPanel Grid.Column="1">
                 <!--Common Encoding-->
                 <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
@@ -240,7 +253,7 @@
 
                     </StackPanel>
                 </Border>
-                
+
                 <!--Register Encoding-->
                 <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color1}">
                     <StackPanel>
@@ -251,7 +264,7 @@
                     </StackPanel>
                 </Border>
             </StackPanel>
-            
+
             <!--Floating-Point Instructions-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
                     Grid.Column="2">
@@ -272,7 +285,7 @@
                     </ListView>
                 </StackPanel>
             </Border>
-            
+
             <!--Floating-Point Encoding-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
                     Grid.Column="3">
@@ -282,7 +295,7 @@
 
                 </StackPanel>
             </Border>
-            
+
             <!--CoProcessor0 Instructions-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
                     Grid.Row="1">
@@ -303,7 +316,7 @@
                     </ListView>
                 </StackPanel>
             </Border>
-            
+
             <!--CoProcessor0 Encoding-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
                     Grid.Row="1" Grid.Column="1" >
@@ -313,7 +326,7 @@
                                    ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
                 </StackPanel>
             </Border>
-            
+
             <!--Specialized Instructions-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="White"
                     Grid.Row="1" Grid.Column="2">
@@ -334,7 +347,7 @@
                     </ListView>
                 </StackPanel>
             </Border>
-            
+
             <!--Unique Encoding-->
             <Border Style="{StaticResource SectionBorderStyle}" BorderBrush="{StaticResource Color3}"
                     Grid.Row="1" Grid.Column="3" >
@@ -344,7 +357,7 @@
                                    ItemTemplate="{StaticResource EncodingPatternDisplayTemplate}"/>
                 </StackPanel>
             </Border>
-            
+
         </Grid>
     </ScrollViewer>
 </UserControl>
