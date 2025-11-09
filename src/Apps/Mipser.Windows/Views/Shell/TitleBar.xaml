@@ -128,7 +128,9 @@
                         <KeyboardAccelerator Modifiers="Control,Shift" Key="B"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="/TitleBar/AssembleFileMFI" Text="Assemble File"
+                <MenuFlyoutItem x:Uid="/TitleBar/AssembleFileMFI"
+                                Text="Assemble File"
+                                IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanAssemble, FallbackValue=False, Mode=OneWay}"
                                 Command="{x:Bind ViewModel.AssembleFileCommand, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Menu" Key="F5"/>

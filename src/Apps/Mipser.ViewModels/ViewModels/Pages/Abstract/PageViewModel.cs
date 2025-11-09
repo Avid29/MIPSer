@@ -17,6 +17,11 @@ namespace Mipser.ViewModels.Pages.Abstract
         /// <summary>
         /// Gets or sets if the page can be saved.
         /// </summary>
-        public virtual bool CanSave { get; }
+        public virtual bool CanSave => false;
+
+        /// <summary>
+        /// Gets or sets if the page can be assembled.
+        /// </summary>
+        public virtual bool CanAssemble => false;
     }
 }

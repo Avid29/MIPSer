@@ -39,6 +39,9 @@ public class FilePageViewModel : PageViewModel
     
     /// <inheritdoc/>
     public override bool CanSave => true;
+    
+    /// <inheritdoc/>
+    public override bool CanAssemble => true; // TODO: Check file type
 
     /// <summary>
     /// Gets the bindable file for this page.
