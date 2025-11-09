@@ -124,10 +124,10 @@
                                                 OtherBrush="{StaticResource OtherRegister}"/>
 
             <DataTemplate x:Key="InstructionGroupHeaderTemplate" x:DataType="collections:IReadOnlyObservableGroup">
-                <TextBlock
-                FontSize="16" FontFamily="{StaticResource HappyMonkey}"
-                Foreground="{ThemeResource HeaderForeground}"
-                Text="{x:Bind Key}" />
+                <TextBlock Text="{x:Bind Key}"
+                           Foreground="{ThemeResource HeaderForeground}"
+                           FontFamily="{StaticResource HappyMonkey}"
+                           FontSize="16" />
             </DataTemplate>
 
             <DataTemplate x:Key="InstructionEntryTemplate" x:DataType="data:InstructionMetadata">
@@ -138,18 +138,26 @@
 
             <DataTemplate x:Key="EncodingPatternDisplayTemplate" x:DataType="models:EncodingPattern">
                 <StackPanel>
-                    <TextBlock Text="{x:Bind Name}" Foreground="{StaticResource HeaderForeground}" Margin="0,2" FontFamily="{StaticResource HappyMonkey}"/>
-                    <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind}" SectionBrushPalette="{StaticResource SectionBrushPalette}"
-                                                  FontFamily="{StaticResource HappyMonkey}"/>
+                    <TextBlock Text="{x:Bind Name}"
+                               Foreground="{StaticResource HeaderForeground}"
+                               FontFamily="{StaticResource HappyMonkey}"
+                               Margin="0,2" />
+                    <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind}"
+                                                  FontFamily="{StaticResource HappyMonkey}"
+                                                  SectionBrushPalette="{StaticResource SectionBrushPalette}"/>
                 </StackPanel>
             </DataTemplate>
 
             <DataTemplate x:Key="RegisterEncodingCellTemplate" x:DataType="reg:GPRegister">
                 <Border Background="{x:Bind (reg:GPRegister), Converter={StaticResource RegisterEncodingColorConverter}}"
-                    CornerRadius="4" Margin="1">
-                    <TextBlock Text="{x:Bind tables:RegistersTable.GetRegisterString((reg:GPRegister), reg:RegisterSet.GeneralPurpose)}" Foreground="Black"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"
-                           FontFamily="{StaticResource HappyMonkey}" FontSize="18"/>
+                        CornerRadius="4"
+                        Margin="1">
+                    <TextBlock Text="{x:Bind tables:RegistersTable.GetRegisterString((reg:GPRegister), reg:RegisterSet.GeneralPurpose)}"
+                               FontFamily="{StaticResource HappyMonkey}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Foreground="Black"
+                               FontSize="18"/>
                 </Border>
             </DataTemplate>
 
@@ -169,12 +177,12 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="ListViewHeaderItem">
                             <ContentPresenter x:Name="ContentPresenter"
-                                          Margin="{TemplateBinding Padding}"
-                                          Content="{TemplateBinding Content}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          ContentTransitions="{TemplateBinding ContentTransitions}"
-                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                              Margin="{TemplateBinding Padding}"
+                                              Content="{TemplateBinding Content}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              ContentTransitions="{TemplateBinding ContentTransitions}"
+                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
@@ -208,19 +216,19 @@
             </StackPanel.ChildrenTransitions>
             <TextBlock x:Uid="/CheatSheet/InstructionUsageTablesTB"
                        Text="Instruction Usage Tables"
-                       FontFamily="{StaticResource HappyMonkey}"
                        Margin="0,4"/>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
                     <TextBlock x:Uid="/CheatSheet/CommonInstructionsTB"
                                Text="Common Instructions"
                                TextTrimming="CharacterEllipsis"
-                               FontFamily="{StaticResource HappyMonkey}"
                                Margin="8,0"/>
                 </Expander.Header>
-                <ListView ItemsSource="{x:Bind CommonInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
-                          ScrollViewer.IsHorizontalRailEnabled="False" ScrollViewer.IsVerticalRailEnabled="False"
-                          ItemTemplate="{StaticResource InstructionEntryTemplate}">
+                <ListView ItemsSource="{x:Bind CommonInstructionsViewSource.View, Mode=OneWay}"
+                          ItemTemplate="{StaticResource InstructionEntryTemplate}"
+                          ScrollViewer.IsHorizontalRailEnabled="False"
+                          ScrollViewer.IsVerticalRailEnabled="False"
+                          SelectionMode="None">
                     <ListView.GroupStyle>
                         <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
                     </ListView.GroupStyle>
@@ -231,7 +239,6 @@
                     <TextBlock x:Uid="/CheatSheet/CoProc0InstructionsTB"
                                Text="CoProcessor0 Instructions"
                                TextTrimming="CharacterEllipsis"
-                               FontFamily="{StaticResource HappyMonkey}"
                                Margin="8,0"/>
                 </Expander.Header>
                 <ListView ItemsSource="{x:Bind CoProc0InstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
@@ -246,13 +253,14 @@
                     <TextBlock x:Uid="/CheatSheet/FloatInstructionsTB"
                                Text="Floating-Point Instructions"
                                TextTrimming="CharacterEllipsis"
-                               FontFamily="{StaticResource HappyMonkey}"
                                Margin="8,0"/>
                 </Expander.Header>
-                <ListView ItemsSource="{x:Bind FloatInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
-                              ItemTemplate="{StaticResource InstructionEntryTemplate}">
+                <ListView ItemsSource="{x:Bind FloatInstructionsViewSource.View, Mode=OneWay}"
+                          ItemTemplate="{StaticResource InstructionEntryTemplate}"
+                          SelectionMode="None">
                     <ListView.GroupStyle>
-                        <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
+                        <GroupStyle HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"
+                                    HidesIfEmpty="True" />
                     </ListView.GroupStyle>
                 </ListView>
             </Expander>
@@ -261,11 +269,11 @@
                     <TextBlock x:Uid="/CheatSheet/SpecializedInstructionsTB"
                                Text="Specialized Instructions"
                                TextTrimming="CharacterEllipsis"
-                               FontFamily="{StaticResource HappyMonkey}"
                                Margin="8,0"/>
                 </Expander.Header>
-                <ListView ItemsSource="{x:Bind SpecializedInstructionsViewSource.View, Mode=OneWay}" SelectionMode="None"
-                              ItemTemplate="{StaticResource InstructionEntryTemplate}">
+                <ListView ItemsSource="{x:Bind SpecializedInstructionsViewSource.View, Mode=OneWay}"
+                          ItemTemplate="{StaticResource InstructionEntryTemplate}"
+                          SelectionMode="None">
                     <ListView.GroupStyle>
                         <GroupStyle HidesIfEmpty="True" HeaderTemplate="{StaticResource InstructionGroupHeaderTemplate}"/>
                     </ListView.GroupStyle>
@@ -274,13 +282,11 @@
 
             <TextBlock x:Uid="/CheatSheet/InstructionEncodingPatternsTB"
                        Text="Instruction Encoding Patterns"
-                       FontFamily="{StaticResource HappyMonkey}"
                        Margin="0,12,0,4"/>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
                     <TextBlock x:Uid="/CheatSheet/PrimaryInstructionTypePatternsTB"
                                Text="Primary Instruction Types Encoding Patterns"
-                               FontFamily="{StaticResource HappyMonkey}"
                                TextTrimming="CharacterEllipsis"
                                Margin="8,0" />
                 </Expander.Header>
@@ -292,7 +298,6 @@
                 <Expander.Header>
                     <TextBlock x:Uid="/CheatSheet/CoProc0InstructionTypePatternsTB"
                                Text="CoProcessor0 Instruction Types Encoding Patterns"
-                               FontFamily="{StaticResource HappyMonkey}"
                                TextTrimming="CharacterEllipsis"
                                Margin="8,0" />
                 </Expander.Header>
@@ -304,7 +309,6 @@
                 <Expander.Header>
                     <TextBlock x:Uid="/CheatSheet/CoProc1InstructionTypePatternsTB"
                                Text="Floating-Point CoProcessor Instruction Types Encoding Patterns"
-                               FontFamily="{StaticResource HappyMonkey}"
                                TextTrimming="CharacterEllipsis"
                                Margin="8,0"/>
                 </Expander.Header>
@@ -316,7 +320,6 @@
                 <Expander.Header>
                     <TextBlock x:Uid="/CheatSheet/UniqueInstructionPatternsTB"
                                Text="Unique Instruction Encoding Patterns"
-                               FontFamily="{StaticResource HappyMonkey}"
                                TextTrimming="CharacterEllipsis"
                                Margin="8,0"/>
                 </Expander.Header>
@@ -327,19 +330,19 @@
 
             <TextBlock x:Uid="/CheatSheet/EncodingTablesTB"
                        Text="Encoding Tables"
-                       FontFamily="{StaticResource HappyMonkey}"
                        Margin="0,12,0,4"/>
             <Expander HorizontalAlignment="Stretch">
                 <Expander.Header>
                     <TextBlock x:Uid="/CheatSheet/GeneralPurposeRegisterEncodingTB"
                                Text="General Purpose Register Encoding"
-                               FontFamily="{StaticResource HappyMonkey}"
                                TextTrimming="CharacterEllipsis"
                                Margin="8,0" />
                 </Expander.Header>
-                <cheat:EncodingTableDisplay x:Name="RegisterEncodingTable" Rows="8" Columns="4"
-                            FontFamily="{StaticResource HappyMonkey}" HorizontalAlignment="Center"
-                            CellTemplate="{StaticResource RegisterEncodingCellTemplate}"/>
+                <cheat:EncodingTableDisplay x:Name="RegisterEncodingTable"
+                                            CellTemplate="{StaticResource RegisterEncodingCellTemplate}"
+                                            FontFamily="{StaticResource HappyMonkey}"
+                                            HorizontalAlignment="Center"
+                                            Rows="8" Columns="4"/>
             </Expander>
         </StackPanel>
     </ScrollViewer>
