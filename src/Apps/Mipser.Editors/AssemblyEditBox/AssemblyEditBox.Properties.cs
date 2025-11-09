@@ -49,6 +49,7 @@ public partial class AssemblyEditBox
             return;
 
         asmBox.SetupHighlighting();
+        asmBox.SetupIndicators();
         asmBox.UpdateSyntaxHighlighting();
     }
 

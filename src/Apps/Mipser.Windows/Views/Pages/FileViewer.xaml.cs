@@ -3,6 +3,7 @@
 using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using MIPS.Assembler.Logging;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Editors.AssemblyEditBox;
 using Mipser.ViewModels.Pages;
@@ -45,6 +46,17 @@ public sealed partial class FileViewer : UserControl
     private void UpdateEvents()
     {
         ViewModel.NavigateToTokenEvent += ViewModel_NavigateToTokenEvent;
+        ViewModel.AssembledEvent += ViewModel_AssembledEvent;
+    }
+
+    private void ViewModel_AssembledEvent(object? sender, System.Collections.Generic.IReadOnlyList<Log> e)
+    {
+        // Find editbox
+        var editBox = this.FindDescendant<AssemblyEditBox>();
+        if (editBox is null)
+            return;
+
+        //editBox.ApplyLogHighlights(e);
     }
 
     private void ViewModel_NavigateToTokenEvent(object? sender, SourceLocation e)

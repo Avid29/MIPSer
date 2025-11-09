@@ -22,9 +22,8 @@ public partial class AssemblyEditBox
 
         Guard.IsNotNull(_codeEditor);
 
-        _codeEditor.Editor.Modified += Editor_Modified;
-        _codeEditor.DefaultColorsChanged += CodeEditor_SyntaxHighlightingApplied;
-        _codeEditor.SyntaxHighlightingApplied += CodeEditor_SyntaxHighlightingApplied;
+        _codeEditor.Editor.Modified += Editor_Modified;_codeEditor.SyntaxHighlightingApplied += CodeEditor_SyntaxHighlightingApplied;
+        
         _codeEditor.Editor.StyleNeeded += Editor_StyleNeeded;
 
         _codeEditor.HighlightingLanguage = "asm";

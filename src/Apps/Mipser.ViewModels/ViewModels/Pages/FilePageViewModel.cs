@@ -1,10 +1,14 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.Messaging;
+using MIPS.Assembler.Logging;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Bindables.Files;
+using Mipser.Messages.Build;
 using Mipser.ViewModels.Pages.Abstract;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Mipser.ViewModels.Pages;
@@ -14,18 +18,28 @@ namespace Mipser.ViewModels.Pages;
 /// </summary>
 public class FilePageViewModel : PageViewModel
 {
+    private readonly IMessenger _messenger;
+
     /// <summary>
     /// An event invoked requesting to navigate to a token.
     /// </summary>
     public event EventHandler<SourceLocation>? NavigateToTokenEvent;
+
+    /// <summary>
+    /// An event invoked when the file is assembled.
+    /// </summary>
+    public event EventHandler<IReadOnlyList<Log>>? AssembledEvent;
 
     private BindableFile? _file;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FilePageViewModel"/> class.
     /// </summary>
-    public FilePageViewModel()
+    public FilePageViewModel(IMessenger messenger)
     {
+        _messenger = messenger;
+
+        IsActive = true;
     }
 
     /// <inheritdoc/>
@@ -57,6 +71,12 @@ public class FilePageViewModel : PageViewModel
     {
         get => _file;
         set => SetFile(value);
+    }
+
+    /// <inheritdoc/>
+    protected override void OnActivated()
+    {
+        _messenger.Register<FilePageViewModel, BuildFinishedMessage>(this, (r, m) => r.OnBuildFinished(m.Logs));
     }
 
     /// <summary>
@@ -102,5 +122,13 @@ public class FilePageViewModel : PageViewModel
         {
             OnPropertyChanged(nameof(Title));
         }
+    }
+
+    private void OnBuildFinished(IReadOnlyList<Log>? logs)
+    {
+        if (logs is null)
+            return;
+
+        AssembledEvent?.Invoke(this, logs);
     }
 }

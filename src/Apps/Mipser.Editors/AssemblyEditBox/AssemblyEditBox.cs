@@ -31,14 +31,22 @@ public partial class AssemblyEditBox : Control
     {
         base.OnApplyTemplate();
 
+        // Setup template parts
         _codeEditor = (CodeEditorControl)GetTemplateChild(CodeEditorPartName);
 
+        // Setup events
         this.Loaded += AssemblyEditBox_Loaded;
 
-        _codeEditor.Editor.SetText(Text);
-
+        // Setup keywords
         var table = new InstructionTable(MIPS.Models.Instructions.Enums.MipsVersion.MipsIII);
         SetupKeywords(table.GetInstructions());
+
+        // Setup styling
+        SetupHighlighting();
+        SetupIndicators();
+        
+        // Apply the current text
+        UpdateText();
     }
 
     /// <summary>

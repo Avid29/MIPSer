@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.WinUI.Helpers;
+using Microsoft.UI;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Instructions;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Windows.UI;
+using WinUIEditor;
 
 namespace Mipser.Editors.AssemblyEditBox;
 
@@ -25,20 +27,21 @@ public partial class AssemblyEditBox
     /// </summary>
     public void ApplyLogHighlights(IReadOnlyList<Log> logs)
     {
-        if (_codeEditor is null)
+        var editor = _codeEditor?.Editor;
+        if (editor is null)
             return;
 
         // Clear underlines
         for (int i = ErrorIndicatorIndex; i <= MessageIndicatorIndex; i++)
         {
-            _codeEditor.Editor.IndicatorCurrent = i;
-            _codeEditor.Editor.IndicatorClearRange(0, -1);
+            editor.IndicatorCurrent = i;
+            editor.IndicatorClearRange(0, editor.Length);
         }
 
         foreach (var log in logs)
         {
             // Underline range
-            _codeEditor.Editor.IndicatorCurrent = log.Severity switch
+            editor.IndicatorCurrent = log.Severity switch
             {
                 Severity.Message => MessageIndicatorIndex,
                 Severity.Warning => WarningIndicatorIndex,
@@ -46,7 +49,7 @@ public partial class AssemblyEditBox
                 _ => ErrorIndicatorIndex,
             };
 
-            _codeEditor.Editor.IndicatorFillRange(log.Start, log.End);
+            editor.IndicatorFillRange(log.Start, log.End);
         }
     }
 
@@ -165,9 +168,22 @@ public partial class AssemblyEditBox
 
     private void SetupIndicators()
     {
-        Guard.IsNotNull(_codeEditor);
+        if (_codeEditor is null)
+            return;
 
-        //_codeEditor.Editor.
+        var editor = _codeEditor.Editor;
+
+        editor.IndicSetUnder(ErrorIndicatorIndex, true);
+        editor.IndicSetStyle(ErrorIndicatorIndex, IndicatorStyle.Squiggle);
+        editor.IndicSetFore(ErrorIndicatorIndex, ToInt(Colors.Red));
+        
+        editor.IndicSetUnder(WarningIndicatorIndex, true);
+        editor.IndicSetStyle(WarningIndicatorIndex, IndicatorStyle.Diagonal);
+        editor.IndicSetFore(WarningIndicatorIndex, ToInt(Colors.Orange));
+        
+        editor.IndicSetUnder(MessageIndicatorIndex, true);
+        editor.IndicSetStyle(MessageIndicatorIndex, IndicatorStyle.Plain);
+        editor.IndicSetFore(MessageIndicatorIndex, ToInt(Colors.Blue));
     }
 
     private void SetupKeywords(InstructionMetadata[] instructions)
