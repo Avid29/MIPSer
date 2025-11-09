@@ -42,12 +42,21 @@ public sealed partial class Explorer : UserControl
         }
     }
 
-    private void TreeViewItem_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+    private void FileDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
     {
         if (sender is not TreeViewItem tvi || tvi.DataContext is not BindableFile file)
             return;
 
         Ioc.Default.GetRequiredService<IMessenger>().Send(new FileOpenRequestMessage(file));
+    }
+
+    private void FolderDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+    {
+        if (sender is not TreeViewItem tvi)
+            return;
+
+        // Toggle expansion
+        tvi.IsExpanded = !tvi.IsExpanded;
     }
 
     private async void TreeView_Expanding(TreeView sender, TreeViewExpandingEventArgs args)

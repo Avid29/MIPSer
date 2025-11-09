@@ -10,7 +10,6 @@
     xmlns:hexview="using:Mipser.Editors.HexViewer"
     xmlns:selectors="using:Mipser.Windows.Selectors"
     xmlns:vm="using:Mipser.ViewModels.Pages"
-    xmlns:apages="using:Mipser.Windows.Views.Pages.Abstract"
     mc:Ignorable="d">
 
     <UserControl.Resources>
