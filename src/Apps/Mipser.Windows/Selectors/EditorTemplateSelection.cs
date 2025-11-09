@@ -18,8 +18,9 @@ public partial class EditorTemplateSelector : DataTemplateSelector
     /// Gets the <see cref="DataTemplate"/> for a hex editor.
     /// </summary>
     public DataTemplate? HexEditorTemplate { get; set; }
-
-    protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container)
+    
+    /// <inheritdoc/>
+    protected override DataTemplate? SelectTemplateCore(object item)
     {
         if (item is not FilePageViewModel filePage)
             return null;
@@ -39,4 +40,7 @@ public partial class EditorTemplateSelector : DataTemplateSelector
             _ => TextEditorTemplate,
         };
     }
+
+    /// <inheritdoc/>
+    protected override DataTemplate? SelectTemplateCore(object item, DependencyObject container) => this.SelectTemplateCore(item);
 }
