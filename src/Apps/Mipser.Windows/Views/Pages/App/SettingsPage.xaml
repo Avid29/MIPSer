@@ -39,11 +39,11 @@
                 </StackPanel.ChildrenTransitions>
 
                 <!--  Theme Settings  -->
-                <TextBlock x:Uid="ThemeSettingsHeaderTB"
+                <TextBlock x:Uid="/Settings/ThemeSettingsHeaderTB"
                            Text="Theme Settings"
                            Margin="0,0,0,4"/>
                 
-                <ctc:SettingsCard x:Uid="AppThemeSC"
+                <ctc:SettingsCard x:Uid="/Settings/AppThemeSC"
                               Header="Theme"
                               Description="Change the app's theme.">
                     <ComboBox SelectedItem="{x:Bind ViewModel.AppTheme, Mode=TwoWay}"
@@ -57,11 +57,11 @@
                 </ctc:SettingsCard>
 
                 <!--  Localization Settings  -->
-                <TextBlock x:Uid="LocalizationSettingsHeaderTB"
+                <TextBlock x:Uid="/Settings/LocalizationSettingsHeaderTB"
                            Text="Localization Settings"
                            Margin="0,32,0,4"/>
                 
-                <ctc:SettingsCard x:Uid="AppLanguageSC"
+                <ctc:SettingsCard x:Uid="/Settings/AppLanguageSC"
                               Header="App Language"
                               Description="Set the app's display language. (Requires a restart to take effect).">
                     <ComboBox SelectedItem="{x:Bind ViewModel.LanguageOverride, Mode=TwoWay}"
@@ -75,10 +75,10 @@
                 </ctc:SettingsCard>
 
                 <!--  About  -->
-                <TextBlock x:Uid="AboutHeaderTB"
+                <TextBlock x:Uid="/Settings/AboutHeaderTB"
                            Text="About"
                            Margin="0,32,0,4"/>
-                <ctc:SettingsExpander x:Uid="AboutSE"
+                <ctc:SettingsExpander x:Uid="/Settings/AboutSE"
                                       Header="MIPSer"
                                       Description="© Avishai Dernis">
                     <ctc:SettingsExpander.HeaderIcon>

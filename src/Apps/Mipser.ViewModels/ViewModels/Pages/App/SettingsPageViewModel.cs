@@ -68,7 +68,7 @@ public class SettingsPageViewModel : PageViewModel
     /// Gets the app's version.
     /// </summary>
     public string AppVersion =>
-        _localizationService["VersionFormat",
+        _localizationService["/Settings/VersionFormat",
             _versioningService.AppVersion.MajorVersion,
             _versioningService.AppVersion.MinorVersion,
             _versioningService.AppVersion.Revision];

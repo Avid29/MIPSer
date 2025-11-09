@@ -117,89 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EditMBI.Title" xml:space="preserve">
-    <value>ערוך</value>
-  </data>
-  <data name="FileMBI.Title" xml:space="preserve">
-    <value>קבוץ</value>
-  </data>
-  <data name="OpenMFI.Text" xml:space="preserve">
-    <value>פתח</value>
-  </data>
-  <data name="OpenFolderMFI.Text" xml:space="preserve">
-    <value>פתח תיקייה</value>
-  </data>
-  <data name="NewFileMFI.Text" xml:space="preserve">
-    <value>קובץ חדש</value>
-  </data>
-  <data name="SaveMFI.Text" xml:space="preserve">
-    <value>שמור</value>
-  </data>
-  <data name="SaveAllMFI.Text" xml:space="preserve">
-    <value>שמור הכל</value>
-  </data>
-  <data name="CloseFileMFI.Text" xml:space="preserve">
-    <value>סגור קובץ</value>
-  </data>
-  <data name="UndoMFI.Text" xml:space="preserve">
-    <value>בטל פעולה</value>
-  </data>
-  <data name="RedoMFI.Text" xml:space="preserve">
-    <value>בצע שוב</value>
-  </data>
-  <data name="CutMFI.Text" xml:space="preserve">
-    <value>גזור</value>
-  </data>
-  <data name="CopyMFI.Text" xml:space="preserve">
-    <value>העתק</value>
-  </data>
-  <data name="PasteMFI.Text" xml:space="preserve">
-    <value>הדבק</value>
-  </data>
-  <data name="OpenFileMFI.Text" xml:space="preserve">
-    <value>פתח קובץ</value>
-  </data>
   <data name="NewFile" xml:space="preserve">
     <value>קובץ חדש</value>
   </data>
-  <data name="HelpMBI.Title" xml:space="preserve">
-    <value>עזרה</value>
-  </data>
-  <data name="ViewMBI.Title" xml:space="preserve">
-    <value>הצג</value>
-  </data>
-  <data name="ToggleFullScreenMFI.Text" xml:space="preserve">
-    <value>הפעלה/כיבוי מסך מלא</value>
-  </data>
-  <data name="CheatSheetMFI.Text" xml:space="preserve">
-    <value>הצג גיליון רמאות</value>
-  </data>
-  <data name="AboutMFI.Text" xml:space="preserve">
-    <value>אודות MIPSer</value>
-  </data>
-  <data name="System" xml:space="preserve">
-    <value>מערכת</value>
-  </data>
-  <data name="Interrupts" xml:space="preserve">
-    <value>פסיקות</value>
-  </data>
-  <data name="Debug" xml:space="preserve">
-    <value>ניפוי שגיאות</value>
-  </data>
-  <data name="BuildMBI.Title" xml:space="preserve">
-    <value>בנייה</value>
-  </data>
-  <data name="AssembleProjectMFI.Text" xml:space="preserve">
-    <value>הרכב פרויקט</value>
-  </data>
-  <data name="AssembleFileMFI.Text" xml:space="preserve">
-    <value>הרכב קובץ</value>
-  </data>
   <data name="MessageDC.Content" xml:space="preserve">
     <value>הודעה</value>
-  </data>
-  <data name="AssembleOpenFilesMFI.Text" xml:space="preserve">
-    <value>הרכב קבצים פתוחים</value>
   </data>
   <data name="FileDC.Content" xml:space="preserve">
     <value>קבוץ</value>
@@ -234,20 +156,8 @@
   <data name="AboutPageTitle" xml:space="preserve">
     <value>אודות MIPSer</value>
   </data>
-  <data name="UseSystemLanguage" xml:space="preserve">
-    <value>שימוש בשפת המערכת</value>
-  </data>
-  <data name="SettingsMFI.Text" xml:space="preserve">
-    <value>הגדרות MIPSer</value>
-  </data>
   <data name="SettingsPageTitle" xml:space="preserve">
     <value>הגדרות</value>
-  </data>
-  <data name="AppLanguageSC.Header" xml:space="preserve">
-    <value>שפת האפליקציה</value>
-  </data>
-  <data name="AppLanguageSC.Description" xml:space="preserve">
-    <value>הגדר את שפת התצוגה של היישום. (נדרשת הפעלה מחדש כדי שהשינוי ייכנס לתוקף.)</value>
   </data>
   <data name="Theme_Default" xml:space="preserve">
     <value>אוטומטי</value>
@@ -258,17 +168,8 @@
   <data name="Theme_Light" xml:space="preserve">
     <value>בהיר</value>
   </data>
-  <data name="ThemeSettingsHeaderTB.Text" xml:space="preserve">
-    <value>הגדרות נושא</value>
-  </data>
   <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">
     <value>הגדרות שפה</value>
-  </data>
-  <data name="AppThemeSC.Header" xml:space="preserve">
-    <value>נושא</value>
-  </data>
-  <data name="AppThemeSC.Description" xml:space="preserve">
-    <value>שנה את הנושא של היישום.</value>
   </data>
   <data name="SearchFilesASB.PlaceholderText" xml:space="preserve">
     <value>מחפש קבצים</value>
@@ -279,13 +180,7 @@
   <data name="WIPDescriptionTB.Text" xml:space="preserve">
     <value>אנחנו עובדים על טיפול בסוג קובץ זה, אבל זה עדיין לא מוכן.</value>
   </data>
-  <data name="VersionFormat" xml:space="preserve">
-    <value>{0}.{1}.{2}</value>
-  </data>
   <data name="AboutHeaderTB.Text" xml:space="preserve">
     <value>אודות</value>
-  </data>
-  <data name="AboutSE.Header" xml:space="preserve">
-    <value>אודות MIPSer</value>
   </data>
 </root>

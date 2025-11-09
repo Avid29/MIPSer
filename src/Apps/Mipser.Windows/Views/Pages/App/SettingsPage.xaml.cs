@@ -32,7 +32,7 @@ public sealed partial class SettingsPage : UserControl
         if (code is "system")
         {
             var localization = Ioc.Default.GetRequiredService<ILocalizationService>();
-            return localization["UseSystemLanguage"];
+            return localization["/Settings/UseSystemLanguage"];
         }
 
         var target = new CultureInfo(code);

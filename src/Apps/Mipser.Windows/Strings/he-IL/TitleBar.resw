@@ -117,70 +117,76 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NewFile" xml:space="preserve">
-    <value>New File</value>
+  <data name="AboutMFI.Text" xml:space="preserve">
+    <value>אודות MIPSer</value>
   </data>
-  <data name="MessageDC.Content" xml:space="preserve">
-    <value>Message</value>
+  <data name="AssembleFileMFI.Text" xml:space="preserve">
+    <value>הרכב קובץ</value>
   </data>
-  <data name="FileDC.Content" xml:space="preserve">
-    <value>File</value>
+  <data name="AssembleOpenFilesMFI.Text" xml:space="preserve">
+    <value>הרכב קבצים פתוחים</value>
   </data>
-  <data name="LineDC.Content" xml:space="preserve">
-    <value>Line</value>
+  <data name="AssembleProjectMFI.Text" xml:space="preserve">
+    <value>הרכב פרויקט</value>
   </data>
-  <data name="BuildStatus_NotReady" xml:space="preserve">
-    <value>Not Ready</value>
+  <data name="BuildMBI.Title" xml:space="preserve">
+    <value>בנייה</value>
   </data>
-  <data name="BuildStatus_Ready" xml:space="preserve">
-    <value>Ready</value>
+  <data name="CheatSheetMFI.Text" xml:space="preserve">
+    <value>הצג גיליון רמאות</value>
   </data>
-  <data name="BuildStatus_Preparing" xml:space="preserve">
-    <value>Preparing</value>
+  <data name="CloseFileMFI.Text" xml:space="preserve">
+    <value>סגור קובץ</value>
   </data>
-  <data name="BuildStatus_Assembling" xml:space="preserve">
-    <value>Assembling</value>
+  <data name="CopyMFI.Text" xml:space="preserve">
+    <value>העתק</value>
   </data>
-  <data name="BuildStatus_Linking" xml:space="preserve">
-    <value>Linking</value>
+  <data name="CutMFI.Text" xml:space="preserve">
+    <value>גזור</value>
   </data>
-  <data name="BuildStatus_Completed" xml:space="preserve">
-    <value>Build Complete</value>
+  <data name="EditMBI.Title" xml:space="preserve">
+    <value>ערוך</value>
   </data>
-  <data name="BuildStatus_Failed" xml:space="preserve">
-    <value>Build Failed</value>
+  <data name="FileMBI.Title" xml:space="preserve">
+    <value>קבוץ</value>
   </data>
-  <data name="MIPSCheatSheetTitle" xml:space="preserve">
-    <value>MIPS Cheat Sheet</value>
+  <data name="HelpMBI.Title" xml:space="preserve">
+    <value>עזרה</value>
   </data>
-  <data name="AboutPageTitle" xml:space="preserve">
-    <value>About MIPSer</value>
+  <data name="NewFileMFI.Text" xml:space="preserve">
+    <value>קובץ חדש</value>
   </data>
-  <data name="SettingsPageTitle" xml:space="preserve">
-    <value>Settings</value>
+  <data name="OpenFileMFI.Text" xml:space="preserve">
+    <value>פתח קובץ</value>
   </data>
-  <data name="Theme_Default" xml:space="preserve">
-    <value>Default</value>
+  <data name="OpenFolderMFI.Text" xml:space="preserve">
+    <value>פתח תיקייה</value>
   </data>
-  <data name="Theme_Dark" xml:space="preserve">
-    <value>Dark</value>
+  <data name="OpenMFSI.Text" xml:space="preserve">
+    <value>פתח</value>
   </data>
-  <data name="Theme_Light" xml:space="preserve">
-    <value>Light</value>
+  <data name="PasteMFI.Text" xml:space="preserve">
+    <value>הדבק</value>
   </data>
-  <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">
-    <value>Language Settings</value>
+  <data name="RedoMFI.Text" xml:space="preserve">
+    <value>בצע שוב</value>
   </data>
-  <data name="SearchFilesASB.PlaceholderText" xml:space="preserve">
-    <value>Search Files</value>
+  <data name="SaveAllMFI.Text" xml:space="preserve">
+    <value>שמור הכל</value>
   </data>
-  <data name="WIPTitleTB.Text" xml:space="preserve">
-    <value>We're Not Ready Yet...</value>
+  <data name="SaveMFI.Text" xml:space="preserve">
+    <value>שמור</value>
   </data>
-  <data name="WIPDescriptionTB.Text" xml:space="preserve">
-    <value>We're working on handling this file type, but it's not ready yet.</value>
+  <data name="SettingsMFI.Text" xml:space="preserve">
+    <value>הגדרות MIPSer</value>
   </data>
-  <data name="AboutHeaderTB.Text" xml:space="preserve">
-    <value>About</value>
+  <data name="ToggleFullScreenMFI.Text" xml:space="preserve">
+    <value>הפעלה/כיבוי מסך מלא</value>
+  </data>
+  <data name="UndoMFI.Text" xml:space="preserve">
+    <value>בטל פעולה</value>
+  </data>
+  <data name="ViewMBI.Title" xml:space="preserve">
+    <value>הצג</value>
   </data>
 </root>
