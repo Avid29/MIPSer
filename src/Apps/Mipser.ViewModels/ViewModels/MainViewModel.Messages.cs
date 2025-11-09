@@ -9,6 +9,7 @@ using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
 using Mipser.Messages.Pages;
 using Mipser.ViewModels.Pages;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mipser.ViewModels;
@@ -66,10 +67,10 @@ public partial class MainViewModel
         var file = await _fileService.PickFileAsync();
         if (file is null)
             return;
-        
+
         OpenFile(file);
     }
-    
+
     /// <summary>
     /// Picks and opens a folder.
     /// </summary>
@@ -80,17 +81,29 @@ public partial class MainViewModel
         if (folder is null)
             return;
 
-         _projectService.OpenFolder(folder);
+        _projectService.OpenFolder(folder);
     }
 
-    private void OpenFile(BindableFile? file)
+    private void OpenFile(BindableFile? file, bool reopen = false)
     {
         // Create anonymous file if needed
         file ??= _fileService.GetAnonymousFile();
 
-        // Create page view model
-        var page = Ioc.Default.GetRequiredService<FilePageViewModel>();
-        page.File = file;
+        // Check for existing page
+        FilePageViewModel? page = null;
+        if (!reopen)
+        {
+            page = FocusedPanel?.OpenPages.
+                OfType<FilePageViewModel>()
+                .FirstOrDefault(x => x.File == file);
+        }
+
+        // Create page view model if needed
+        if (page is null)
+        {
+            page = Ioc.Default.GetRequiredService<FilePageViewModel>();
+            page.File = file;
+        }
 
         // Open the page
         FocusedPanel?.OpenPage(page);
@@ -107,7 +120,7 @@ public partial class MainViewModel
         var file = await _fileService.GetFileAsync(path);
         if (file is null)
             return;
-        
+
         // Open the file
         OpenFile(file);
 

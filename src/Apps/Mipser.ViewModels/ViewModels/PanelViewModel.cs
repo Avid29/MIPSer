@@ -69,7 +69,10 @@ public class PanelViewModel : ObservableObject
     /// </summary>
     public void OpenPage(PageViewModel page)
     {
-        OpenPages.Add(page);
+        // Open the page if needed
+        if (!OpenPages.Contains(page))
+            OpenPages.Add(page);
+
         CurrentPage = page;
     }
 
