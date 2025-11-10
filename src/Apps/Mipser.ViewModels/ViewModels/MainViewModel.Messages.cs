@@ -26,14 +26,14 @@ public partial class MainViewModel
 
     private void RegisterBuildMessages()
     {
-        _messenger.Register<MainViewModel, AssembleFileRequestMessage>(this, async (r, _) =>
+        _messenger.Register<MainViewModel, AssembleFilesRequestMessage>(this, async (r, m) =>
         {
             // Get current file if possible, return if not
-            if (r.FocusedPanel?.CurrentPage is not FilePageViewModel fileViewModel || fileViewModel.File is null)
+            if (m.Files is null)
                 return;
 
-            // Build the current file
-            await _buildService.AssembleFileAsync(fileViewModel.File);
+            // Build the file
+            await _buildService.AssembleFilesAsync(m.Files);
         });
     }
 

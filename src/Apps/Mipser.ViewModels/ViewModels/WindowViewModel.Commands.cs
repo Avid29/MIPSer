@@ -67,7 +67,19 @@ public partial class WindowViewModel
 
     private void ClosePage() => _messenger.Send(new PageCloseRequestMessage());
 
-    private void AssembleFile() => _messenger.Send(new AssembleFileRequestMessage());
+    private void AssembleFile()
+    {
+        // Get the current page, and ensure it's a file page
+        if (MainViewModel.FocusedPanel?.CurrentPage is not FilePageViewModel page)
+            return;
+
+        // Check if the file is null
+        if (page.File is null)
+            return;
+
+        // Request to assemble the file
+        _messenger.Send(new AssembleFilesRequestMessage([page.File]));
+    }
 
     private void OpenAbout() => MainViewModel.GoToPageByType<AboutPageViewModel>();
 

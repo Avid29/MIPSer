@@ -76,7 +76,7 @@ public class FilePageViewModel : PageViewModel
     /// <inheritdoc/>
     protected override void OnActivated()
     {
-        _messenger.Register<FilePageViewModel, BuildFinishedMessage>(this, (r, m) => r.OnBuildFinished(m.Logs));
+        _messenger.Register<FilePageViewModel, FileAssembledMessage>(this, (r, m) => r.OnBuildFinished(m.AssemblyFile, m.Logs));
     }
 
     /// <summary>
@@ -124,8 +124,13 @@ public class FilePageViewModel : PageViewModel
         }
     }
 
-    private void OnBuildFinished(IReadOnlyList<ILog>? logs)
+    private void OnBuildFinished(string file, IReadOnlyList<ILog>? logs)
     {
+        // Ensure the file matches
+        if (file == _file?.Path)
+            return;
+
+        // Ensure the logs aren't null
         if (logs is null)
             return;
 

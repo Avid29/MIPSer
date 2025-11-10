@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using MIPS.Assembler;
+using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models;
 using Mipser.Bindables.Files;
 using Mipser.Messages.Build;
@@ -10,6 +11,7 @@ using Mipser.Services.Project;
 using RASM.Modules;
 using RASM.Modules.Config;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,8 +43,8 @@ public class BuildService
     /// <summary>
     /// Assembles a file.
     /// </summary>
-    /// <param name="file">The file to assemble.</param>
-    public async Task AssembleFileAsync(BindableFile file)
+    /// <param name="files">The file to assemble.</param>
+    public async Task AssembleFilesAsync(BindableFile[] files)
     {
         // Run pre-build checks
         if (!PreBuildChecks())
@@ -50,22 +52,45 @@ public class BuildService
 
         Status = BuildStatus.Assembling;
 
-        // Create save file
+        // Get save folder
         var folder = await _projectService.GetObjectFolderAsync();
-        BindableFile? saveFile = null;
-        if (folder is not null)
+
+        // Culminate results
+        bool failed = false;
+        var logs = new List<ILog>();
+
+        // Assemble each file
+        foreach (var file in files)
         {
-            var saveFilename = Path.GetFileNameWithoutExtension(file.Name) + ".obj";
-            saveFile = await folder.CreateFileAsync(saveFilename);
+            if (file?.Path is null)
+                continue;
+
+            // Get save file
+            BindableFile? saveFile = null;
+            if (folder is not null)
+            {
+                var saveFilename = Path.GetFileNameWithoutExtension(file.Name) + ".obj";
+                saveFile = await folder.CreateFileAsync(saveFilename);
+            }
+
+            // Assemble the file
+            var assembler = await AssembleFileAsync(file, null, saveFile);
+            if (assembler is null)
+                continue; // TODO: Handle file loading errors
+
+            // Update the status and log
+            var assemblerFailed = assembler?.Failed ?? false;
+            failed = failed || (assembler?.Failed ?? false);
+            Status = failed ? BuildStatus.Failing : BuildStatus.Assembling;
+            if (assembler?.Logs is not null)
+                logs.AddRange(assembler.Logs);
+
+            _messenger.Send(new FileAssembledMessage(file.Path, saveFile?.Path, assemblerFailed, assembler?.Logs));
         }
 
-        // Assemble the file
-        var assembler = await AssembleFileAsync(file, null, saveFile);
-
         // Send a message with the build results.
-        bool failed = assembler?.Failed ?? false;
         Status = failed ? BuildStatus.Failed : BuildStatus.Completed;
-        _messenger.Send(new BuildFinishedMessage(failed, assembler?.Logs));
+        _messenger.Send(new BuildFinishedMessage(failed, logs));
 
         // Clear status after some time
         await WaitAndClearStatus();
@@ -130,8 +155,15 @@ public class BuildService
         get => _buildStatus;
         set
         {
+            // Update value and cache old value
+            var old = _buildStatus;
             _buildStatus = value;
-            _messenger.Send(new BuildStatusMessage(value));
+
+            // Check if the value actually changed.
+            if (old != value)
+            {
+                _messenger.Send(new BuildStatusMessage(value));
+            }
         }
     }
 

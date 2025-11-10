@@ -13,6 +13,7 @@ public enum BuildStatus
     Ready,
     Preparing,
     Assembling,
+    Failing,        // Still assembling, but we know it failed
     Linking,
     Completed,
     Failed,

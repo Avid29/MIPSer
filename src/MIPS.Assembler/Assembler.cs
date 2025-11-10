@@ -2,17 +2,15 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
-using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Assembler.Tokenization;
-using MIPS.Assembler.Tokenization.Models;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
-using MIPS.Models.Modules.Tables.Enums;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MIPS.Assembler;
@@ -85,7 +83,7 @@ public partial class Assembler
     /// <summary>
     /// Gets the assembler's logs.
     /// </summary>
-    public IReadOnlyList<ILog> Logs => _logger.Logs;
+    public IReadOnlyList<AssemblerLog> Logs => _logger.Logs.OfType<AssemblerLog>().ToList();
 
     /// <summary>
     /// Gets whether or not the assembler failed to assemble a valid module.
