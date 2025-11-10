@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Assembler.Logging;
+using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
@@ -42,7 +43,7 @@ public class Linker
             if (module is null)
             {
                 // TODO: Linker errors
-                //linker._logger.Log(Severity.Error, LogId.FailedToLoadModule, "FailedToLoadModule");
+                linker._logger.Log(Severity.Error, LogCode.FailedToLoadModule, m.Name, "FailedToLoadModule");
                 continue;
             }
 

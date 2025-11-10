@@ -31,7 +31,7 @@ public class Logger : ILogger
     public bool Failed { get; private set; }
     
     /// <inheritdoc/>
-    public void Log(Severity severity, LogCode code, string file, string messageKey, params object[] args)
+    public void Log(Severity severity, LogCode code, string? file, string messageKey, params object[] args)
     {
         throw new NotImplementedException();
     }

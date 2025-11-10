@@ -15,6 +15,17 @@ namespace ELF.Modules;
 /// </summary>
 public class ElfModule : IBuildModule<ElfModule>
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ElfModule"/> class.
+    /// </summary>
+    public ElfModule(string name)
+    {
+        Name = name;
+    }
+
+    /// <inheritdoc/>
+    public string? Name { get; }
+
     /// <inheritdoc/>
     public unsafe static ElfModule? Create(ModuleConstructor constructor, AssemblerConfig config, Stream? stream = null)
     {
@@ -58,7 +69,7 @@ public class ElfModule : IBuildModule<ElfModule>
     }
     
     /// <inheritdoc/>
-    public static ElfModule? Load(Stream stream)
+    public static ElfModule? Load(string name, Stream stream)
     {
         throw new NotImplementedException();
     }

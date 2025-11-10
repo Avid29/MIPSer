@@ -23,5 +23,5 @@ public interface IBuildModule<TSelf> : IBuildModule
     /// Loads a module from a stream.
     /// </summary>
     /// <returns>The module contained in the stream.</returns>
-    public static abstract TSelf? Load(Stream stream);
+    public static abstract TSelf? Load(string name, Stream stream);
 }

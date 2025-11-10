@@ -8,6 +8,11 @@ namespace MIPS.Assembler.Models.Modules.Interfaces;
 public interface IBuildModule
 {
     /// <summary>
+    /// Gets the name of the <see cref="IBuildModule"/>.
+    /// </summary>
+    public string? Name { get; }
+
+    /// <summary>
     /// Abstracts the module into a <see cref="ModuleConstructor"/> for modification or linking.
     /// </summary>
     /// <param name="config">The configuration settings.</param>

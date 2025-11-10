@@ -21,6 +21,9 @@ public class ElfModule : IBuildModule<ElfModule>, IExecutableModule
     {
         _elfFile = elfFile;
     }
+    
+    /// <inheritdoc/>
+    public string Name => throw new System.NotImplementedException();
 
     /// <inheritdoc/>
     public Stream Contents => throw new System.NotImplementedException();
@@ -56,11 +59,11 @@ public class ElfModule : IBuildModule<ElfModule>, IExecutableModule
         }
 
         file.Write(stream);
-        return Load(stream);
+        return Load(constructor.Name, stream);
     }
 
     /// <inheritdoc/>
-    public static ElfModule? Load(Stream stream)
+    public static ElfModule? Load(string? name, Stream stream)
     {
         var elfFile = ElfFile.Read(stream);
         return new ElfModule(elfFile);

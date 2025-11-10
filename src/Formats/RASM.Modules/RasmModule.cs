@@ -28,8 +28,9 @@ public class RasmModule : IBuildModule<RasmModule>, IExecutableModule
     /// <summary>
     /// Initializes a new instance of the <see cref="RasmModule"/> class.
     /// </summary>
-    public RasmModule(Header header, Stream source)
+    public RasmModule(string? name, Header header, Stream source)
     {
+        Name = name;
         Header = header;
         _source = source;
     }
@@ -44,6 +45,9 @@ public class RasmModule : IBuildModule<RasmModule>, IExecutableModule
 
     /// <inheritdoc/>
     public Stream Contents => _source;
+    
+    /// <inheritdoc/>
+    public string? Name { get; }
 
     /// <inheritdoc/>
     public static RasmModule? Create(ModuleConstructor constructor, AssemblerConfig config, Stream? stream = null)
@@ -162,16 +166,16 @@ public class RasmModule : IBuildModule<RasmModule>, IExecutableModule
         // Reset position, flush, and load
         stream.Position = 0;
         stream.Flush();
-        return Load(stream);
+        return Load(constructor.Name, stream);
     }
 
     /// <inheritdoc/>
-    public static RasmModule? Load(Stream stream)
+    public static RasmModule? Load(string? name, Stream stream)
     {
         if (!Header.TryRead(stream, out var header))
             return null;
 
-        return new RasmModule(header, stream);
+        return new RasmModule(name, header, stream);
     }
 
     /// <inheritdoc/>

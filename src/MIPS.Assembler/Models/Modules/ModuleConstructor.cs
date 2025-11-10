@@ -54,6 +54,11 @@ public partial class ModuleConstructor
     }
 
     /// <summary>
+    /// Gets the module name.
+    /// </summary>
+    public string? Name { get; } 
+
+    /// <summary>
     /// Gets the text (text) stream.
     /// </summary>
     public Stream Text => GetSectionStream(Section.Text);

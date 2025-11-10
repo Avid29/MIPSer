@@ -17,8 +17,9 @@ public class RawModule : IBuildModule<RawModule>, IExecutableModule
     /// <summary>
     /// Initializes a new instance of the <see cref="RawModule"/> class.
     /// </summary>
-    public RawModule(Stream source)
+    public RawModule(string? name, Stream source)
     {
+        Name = name;
         _source = source;
     }
     
@@ -27,6 +28,9 @@ public class RawModule : IBuildModule<RawModule>, IExecutableModule
     
     /// <inheritdoc/>
     public uint EntryAddress => 0;
+    
+    /// <inheritdoc/>
+    public string? Name { get; }
 
     /// <inheritdoc/>
     public static RawModule? Create(ModuleConstructor constructor, AssemblerConfig config, Stream? stream = null)
@@ -38,13 +42,13 @@ public class RawModule : IBuildModule<RawModule>, IExecutableModule
         foreach(var section in constructor.Sections)
             section.Stream.CopyTo(stream);
 
-        return Load(stream);
+        return Load(constructor.Name, stream);
     }
     
     /// <inheritdoc/>
-    public static RawModule? Load(Stream stream)
+    public static RawModule? Load(string? name, Stream stream)
     {
-        return new RawModule(stream);
+        return new RawModule(name, stream);
     }
     
     /// <inheritdoc/>
