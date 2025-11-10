@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Tokenization.Models;
 
 namespace MIPS.Assembler.Logging;
 
@@ -35,7 +36,7 @@ public interface ILog
     public string? FilePath { get; }
 
     /// <summary>
-    /// Gets the line where in the file where the log occurred.
+    /// Gets the location where the log occurred.
     /// </summary>
-    public int? Line { get; }
+    public SourceLocation? Location { get; }
 }

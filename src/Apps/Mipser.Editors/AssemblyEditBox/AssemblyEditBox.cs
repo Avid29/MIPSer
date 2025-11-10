@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Tokenization.Models;
+using System.Collections.Generic;
 using WinUIEditor;
 
 namespace Mipser.Editors.AssemblyEditBox;
@@ -16,6 +17,12 @@ public partial class AssemblyEditBox : Control
 {
     private const string CodeEditorPartName = "CodeEditor";
 
+    /// <remarks>
+    /// The text is in UTF8, while the tokenizer output <see cref="SourceLocation"/> is in UTF16.
+    /// We make this conversion during syntax highlighting. Track the results for log highlights.
+    /// </remarks>
+    private readonly Dictionary<int, SourceLocation> _locationMapper;
+
     private CodeEditorControl? _codeEditor;
 
     /// <summary>
@@ -23,6 +30,8 @@ public partial class AssemblyEditBox : Control
     /// </summary>
     public AssemblyEditBox()
     {
+        _locationMapper = [];
+
         DefaultStyleKey = typeof(AssemblyEditBox);
     }
 
@@ -53,7 +62,7 @@ public partial class AssemblyEditBox : Control
     /// Navigates to a <see cref="SourceLocation"/>.
     /// </summary>
     /// <param name="location">The position to navigate to.</param>
-    public void NavigateToLocation(SourceLocation location)
+    public void NavigateToToken(SourceLocation location)
     {
         // Get the editor
         var editor = _codeEditor?.Editor;

@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml.Controls;
 using MIPS.Assembler.Logging;
+using MIPS.Assembler.Tokenization.Models;
 using Mipser.Messages.Navigation;
 using Mipser.ViewModels.Pages;
 
@@ -24,6 +25,18 @@ public sealed partial class ErrorList : UserControl
     }
 
     private ErrorListViewModel ViewModel => (ErrorListViewModel)this.DataContext;
+
+    private static string DisplayLine(SourceLocation? location)
+    {
+        // The location is null. Display nothing
+        if (location is null)
+        {
+            return string.Empty;
+        }
+
+        // Get the line
+        return $"{location.Value.Line}";
+    }
 
     private void ListView_ItemClick(object sender, ItemClickEventArgs e)
     {

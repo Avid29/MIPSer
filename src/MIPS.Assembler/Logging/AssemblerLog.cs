@@ -43,25 +43,8 @@ public class AssemblerLog : ILog
     public Token[] Tokens { get; }
     
     /// <inheritdoc/>
-    public int Line => Tokens[0].Location.Line;
-
-    /// <summary>
-    /// Gets the starting index of the log.
-    /// </summary>
-    public int Start => Tokens[0].Location.Index;
-    
-    /// <summary>
-    /// Gets the ending index of the log.
-    /// </summary>
-    public int End
-    {
-        get
-        {
-            var last = Tokens[^1];
-            return last.Location.Index + last.Source.Length;
-        }
-    }
+    public SourceLocation Location => Tokens[0].Location;
     
     /// <inheritdoc/>
-    int? ILog.Line => Line;
+    SourceLocation? ILog.Location => Location;
 }

@@ -50,14 +50,14 @@ public sealed partial class FileViewer : UserControl
         ViewModel.AssembledEvent += ViewModel_AssembledEvent;
     }
 
-    private void ViewModel_AssembledEvent(object? sender, IReadOnlyList<ILog> e)
+    private void ViewModel_AssembledEvent(object? sender, IReadOnlyList<AssemblerLog> e)
     {
         // Find editbox
         var editBox = this.FindDescendant<AssemblyEditBox>();
         if (editBox is null)
             return;
 
-        //editBox.ApplyLogHighlights(e);
+        editBox.ApplyLogHighlights(e);
     }
 
     private void ViewModel_NavigateToTokenEvent(object? sender, SourceLocation e)
@@ -68,7 +68,7 @@ public sealed partial class FileViewer : UserControl
             return;
 
         // Navigate to location
-        editBox.NavigateToLocation(e);
+        editBox.NavigateToToken(e);
     }
 
     private void UpdateBindings()

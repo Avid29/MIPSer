@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Tokenization.Models;
 using System.IO;
 
 namespace MIPS.Assembler.Logging;
@@ -37,5 +38,5 @@ public class LinkerLog : ILog
     public string? FilePath { get; }
     
     /// <inheritdoc/>
-    public int? Line => null;
+    public SourceLocation? Location => null;
 }

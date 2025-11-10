@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:Mipser.Windows.Views.Pages"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:behaviors="using:CommunityToolkit.WinUI.Behaviors"
@@ -57,7 +58,7 @@
                     </ctc:SwitchPresenter>
                     <TextBlock Text="{x:Bind Message, Mode=OneWay}" Margin="8,0" FontSize="12"/>
                     <TextBlock Text="{x:Bind FileName, Mode=OneWay}" Margin="8,0" FontSize="12"/>
-                    <TextBlock Text="{x:Bind Line, Mode=OneWay}" Margin="8,0" FontSize="12"/>
+                    <TextBlock Text="{x:Bind local:ErrorList.DisplayLine(Location), Mode=OneWay}" Margin="8,0" FontSize="12"/>
                 </ctc:DataRow>
             </DataTemplate>
         </ListView.ItemTemplate>

@@ -28,7 +28,7 @@ public class FilePageViewModel : PageViewModel
     /// <summary>
     /// An event invoked when the file is assembled.
     /// </summary>
-    public event EventHandler<IReadOnlyList<ILog>>? AssembledEvent;
+    public event EventHandler<IReadOnlyList<AssemblerLog>>? AssembledEvent;
 
     private BindableFile? _file;
 
@@ -124,10 +124,10 @@ public class FilePageViewModel : PageViewModel
         }
     }
 
-    private void OnBuildFinished(string file, IReadOnlyList<ILog>? logs)
+    private void OnBuildFinished(string file, IReadOnlyList<AssemblerLog>? logs)
     {
         // Ensure the file matches
-        if (file == _file?.Path)
+        if (file != _file?.Path)
             return;
 
         // Ensure the logs aren't null

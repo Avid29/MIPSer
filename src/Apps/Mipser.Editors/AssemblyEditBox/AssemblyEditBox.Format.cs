@@ -7,10 +7,12 @@ using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Tokenization;
+using MIPS.Assembler.Tokenization.Models;
 using MIPS.Assembler.Tokenization.Models.Enums;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Windows.Devices.PointOfService;
 using Windows.UI;
 using WinUIEditor;
 
@@ -40,16 +42,32 @@ public partial class AssemblyEditBox
 
         foreach (var log in logs)
         {
-            // Underline range
+            // Get the token's start location in utf8
+            if (!_locationMapper.TryGetValue(log.Location.Index, out var utf8Location))
+                continue;
+
+            // Get the token's string
+            var highlightString = new StringBuilder();
+            foreach (var token in log.Tokens)
+            {
+                highlightString.Append(token.Source);
+            }
+
+            // Find the start and length, using the string's length
+            var tokenLength = Encoding.UTF8.GetByteCount($"{highlightString}");
+            var start = utf8Location.Index;
+            
+            // Select the indictor
             editor.IndicatorCurrent = log.Severity switch
             {
-                Severity.Message => MessageIndicatorIndex,
-                Severity.Warning => WarningIndicatorIndex,
                 Severity.Error => ErrorIndicatorIndex,
+                Severity.Warning => WarningIndicatorIndex,
+                Severity.Message => MessageIndicatorIndex,
                 _ => ErrorIndicatorIndex,
             };
 
-            editor.IndicatorFillRange(log.Start, log.End);
+            // Apply the indicator
+            editor.IndicatorFillRange(start, tokenLength);
         }
     }
 
@@ -64,11 +82,16 @@ public partial class AssemblyEditBox
         // Clear the style
         editor.StartStyling(0, 0);
         editor.SetStyling(editor.Length, 0);
+        
+        // Clear token mappings
+        _locationMapper.Clear();
 
         // Format line by line
         var text = editor.GetText(editor.Length);
         var reader = new StringReader(text);
-        int pos = 0;
+        var utf16Pos = new SourceLocation();
+        var utf8Pos = new SourceLocation();
+
         while (true)
         {
             var line = reader.ReadLine();
@@ -76,30 +99,33 @@ public partial class AssemblyEditBox
                 break;
 
             // TODO: Check if the line has been updated
-            FormatLine(pos, line, out var lineLength);
-            pos += lineLength + 2;
+            FormatLine(ref utf16Pos, ref utf8Pos, line);
+            utf8Pos = utf8Pos.NextLine(2);
+            utf16Pos = utf16Pos.NextLine();
         }
 
         @lock = false;
     }
 
-    private void FormatLine(int lineStart, string line, out int lineLength)
+    private void FormatLine(ref SourceLocation utf16Pos, ref SourceLocation utf8Pos, string line)
     {
         Guard.IsNotNull(_codeEditor);
         var editor = _codeEditor.Editor;
 
         // We need to convert everything to utf8 sizing
-        lineLength = Encoding.UTF8.GetByteCount(line);
+        var lineLength = Encoding.UTF8.GetByteCount(line);
 
         // Clear the line to white
-        editor.StartStyling(lineStart, 0);
+        editor.StartStyling(utf8Pos.Index, 0);
         editor.SetStyling(lineLength, 0);
         
         // Tokenize the line
-        int pos = lineStart;
         var tokenized = Tokenizer.TokenizeLine(line, mode: TokenizerMode.IDE);
         foreach (var token in tokenized.Tokens)
         {
+            // Log token position in location mapper.
+            _locationMapper.Add(utf16Pos.Index, utf8Pos);
+
             var style = token.Type switch
             {
                 TokenType.Instruction when Instructions is not null =>
@@ -123,11 +149,12 @@ public partial class AssemblyEditBox
                 _ => 0,
             };
 
-            // Set style and advance position
+            // Set style and advance utf8/utf16 positions
             var tokenLength = Encoding.UTF8.GetByteCount(token.Source);
-            editor.StartStyling(pos, 0);
+            editor.StartStyling(utf8Pos.Index, 0);
             editor.SetStyling(tokenLength, style);
-            pos += tokenLength;
+            utf16Pos += tokenLength;
+            utf8Pos += tokenLength;
         }
     }
 
@@ -173,17 +200,19 @@ public partial class AssemblyEditBox
 
         var editor = _codeEditor.Editor;
 
-        editor.IndicSetUnder(ErrorIndicatorIndex, true);
-        editor.IndicSetStyle(ErrorIndicatorIndex, IndicatorStyle.Squiggle);
+        //editor.IndicSetStyle(ErrorIndicatorIndex, IndicatorStyle.Squiggle);
+        editor.IndicSetStyle(ErrorIndicatorIndex, IndicatorStyle.SquigglePixmap);
         editor.IndicSetFore(ErrorIndicatorIndex, ToInt(Colors.Red));
+        editor.IndicSetUnder(ErrorIndicatorIndex, true);
         
-        editor.IndicSetUnder(WarningIndicatorIndex, true);
-        editor.IndicSetStyle(WarningIndicatorIndex, IndicatorStyle.Diagonal);
+        //editor.IndicSetStyle(WarningIndicatorIndex, IndicatorStyle.Diagonal);
+        editor.IndicSetStyle(WarningIndicatorIndex, IndicatorStyle.SquigglePixmap);
         editor.IndicSetFore(WarningIndicatorIndex, ToInt(Colors.Orange));
+        editor.IndicSetUnder(WarningIndicatorIndex, true);
         
-        editor.IndicSetUnder(MessageIndicatorIndex, true);
         editor.IndicSetStyle(MessageIndicatorIndex, IndicatorStyle.Plain);
         editor.IndicSetFore(MessageIndicatorIndex, ToInt(Colors.Blue));
+        editor.IndicSetUnder(MessageIndicatorIndex, true);
     }
 
     private void SetupKeywords(InstructionMetadata[] instructions)

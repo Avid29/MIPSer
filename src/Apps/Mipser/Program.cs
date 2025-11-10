@@ -80,7 +80,7 @@ public class Program
                 };
 
                 // TODO: Improved message
-                Console.WriteLine($"{log.Severity} on line {log.Line}: {log.Message}");
+                Console.WriteLine($"{log.Severity} on line {log.Location.Line}: {log.Message}");
             }
 
             Console.ResetColor();
