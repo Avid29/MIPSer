@@ -27,12 +27,16 @@ public static class RegistersTable
         register = GPRegister.Zero;
         set = RegisterSet.Numbered;
         
-        // Trime the '$' prefix
+        // Trim the '$' prefix
         if (name.StartsWith('$'))
             name = name[1..];
 
+        // Check for empty register
+        if (name.Length == 0)
+            return false;
+
         // Check for float register
-        // TODO: Checking "fp" explcitly is a bit of a hack, but it works (at least for now).
+        // TODO: Checking "fp" explicitly is a bit of a hack, but it works (at least for now).
         if (name[0] == 'f' && name != "fp")
         {
             // Assign set as floating point then fall-through to numerical
@@ -41,7 +45,7 @@ public static class RegistersTable
             name = name[1..];
         }
 
-        // Check for numberical register
+        // Check for numerical register
         if (byte.TryParse(name, out var num))
         {
             // Lowest register enum to highest register enum

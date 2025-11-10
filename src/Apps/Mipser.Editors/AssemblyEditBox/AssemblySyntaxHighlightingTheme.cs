@@ -103,10 +103,38 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
             new PropertyMetadata(Colors.Transparent));
 
     /// <summary>
+    /// A <see cref="DependencyProperty"/> for the <see cref="ErrorUnderlineColor"/> property.
+    /// </summary>
+    public static readonly DependencyProperty ErrorUnderlineColorProperty =
+        DependencyProperty.Register(nameof(ErrorUnderlineColor),
+            typeof(Color),
+            typeof(AssemblySyntaxHighlightingTheme),
+            new PropertyMetadata(Colors.Transparent));
+
+    /// <summary>
+    /// A <see cref="DependencyProperty"/> for the <see cref="WarningUnderlineColor"/> property.
+    /// </summary>
+    public static readonly DependencyProperty WarningUnderlineColorProperty =
+        DependencyProperty.Register(nameof(WarningUnderlineColor),
+            typeof(Color),
+            typeof(AssemblySyntaxHighlightingTheme),
+            new PropertyMetadata(Colors.Transparent));
+
+    /// <summary>
+    /// A <see cref="DependencyProperty"/> for the <see cref="MessageUnderlineColor"/> property.
+    /// </summary>
+    public static readonly DependencyProperty MessageUnderlineColorProperty =
+        DependencyProperty.Register(nameof(MessageUnderlineColor),
+            typeof(Color),
+            typeof(AssemblySyntaxHighlightingTheme),
+            new PropertyMetadata(Colors.Transparent));
+
+    /// <summary>
     /// Gets the default <see cref="AssemblySyntaxHighlightingTheme"/>.
     /// </summary>
     public static AssemblySyntaxHighlightingTheme Default => new()
     {
+        // Syntax Highlight Colors
         InstructionHighlightColor = "#A7FA95".ToColor(),
         RegisterHighlightColor = "#FE8482".ToColor(),
         ImmediateHighlightColor = "#F8FC8B".ToColor(),
@@ -117,6 +145,11 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
         CommentHighlightColor = "#9B88FC".ToColor(),
         MacroHighlightColor = "#BF472F".ToColor(),
         InvalidInstructionHighlightColor = "#67995c".ToColor(),
+
+        // Indicator Colors
+        ErrorUnderlineColor = "#FF0000".ToColor(),
+        WarningUnderlineColor = "#FFAA00".ToColor(),
+        MessageUnderlineColor = "#00AAFF".ToColor(),
     };
 
     /// <summary>
@@ -207,5 +240,32 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
     {
         get => (Color)GetValue(InvalidInstructionHighlightColorProperty);
         set => SetValue(InvalidInstructionHighlightColorProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the color to use for underlining errors.
+    /// </summary>
+    public Color ErrorUnderlineColor
+    {
+        get => (Color)GetValue(ErrorUnderlineColorProperty);
+        set => SetValue(ErrorUnderlineColorProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the color to use for underlining warnings.
+    /// </summary>
+    public Color WarningUnderlineColor
+    {
+        get => (Color)GetValue(WarningUnderlineColorProperty);
+        set => SetValue(WarningUnderlineColorProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the color to use for underlining messages.
+    /// </summary>
+    public Color MessageUnderlineColor
+    {
+        get => (Color)GetValue(MessageUnderlineColorProperty);
+        set => SetValue(MessageUnderlineColorProperty, value);
     }
 }

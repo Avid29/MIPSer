@@ -1,8 +1,6 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
-using CommunityToolkit.WinUI.Helpers;
-using Microsoft.UI;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Instructions;
@@ -12,7 +10,6 @@ using MIPS.Assembler.Tokenization.Models.Enums;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Windows.Devices.PointOfService;
 using Windows.UI;
 using WinUIEditor;
 
@@ -54,7 +51,7 @@ public partial class AssemblyEditBox
             }
 
             // Find the start and length, using the string's length
-            var tokenLength = Encoding.UTF8.GetByteCount($"{highlightString}");
+            var tokenLength = GetEncodingSize($"{highlightString}");
             var start = utf8Location.Index;
             
             // Select the indictor
@@ -70,7 +67,7 @@ public partial class AssemblyEditBox
             editor.IndicatorFillRange(start, tokenLength);
         }
     }
-
+    
     private void UpdateSyntaxHighlighting()
     {
         if (@lock || _codeEditor is null)
@@ -101,7 +98,7 @@ public partial class AssemblyEditBox
             // TODO: Check if the line has been updated
             FormatLine(ref utf16Pos, ref utf8Pos, line);
             utf8Pos = utf8Pos.NextLine(2);
-            utf16Pos = utf16Pos.NextLine();
+            utf16Pos = utf16Pos.NextLine(1);
         }
 
         @lock = false;
@@ -113,7 +110,7 @@ public partial class AssemblyEditBox
         var editor = _codeEditor.Editor;
 
         // We need to convert everything to utf8 sizing
-        var lineLength = Encoding.UTF8.GetByteCount(line);
+        var lineLength = GetEncodingSize(line);
 
         // Clear the line to white
         editor.StartStyling(utf8Pos.Index, 0);
@@ -150,7 +147,8 @@ public partial class AssemblyEditBox
             };
 
             // Set style and advance utf8/utf16 positions
-            var tokenLength = Encoding.UTF8.GetByteCount(token.Source);
+            //var tokenLength = Encoding.UTF8.GetByteCount(token.Source);
+            var tokenLength = GetEncodingSize(token.Source);
             editor.StartStyling(utf8Pos.Index, 0);
             editor.SetStyling(tokenLength, style);
             utf16Pos += tokenLength;
@@ -202,16 +200,16 @@ public partial class AssemblyEditBox
 
         //editor.IndicSetStyle(ErrorIndicatorIndex, IndicatorStyle.Squiggle);
         editor.IndicSetStyle(ErrorIndicatorIndex, IndicatorStyle.SquigglePixmap);
-        editor.IndicSetFore(ErrorIndicatorIndex, ToInt(Colors.Red));
+        editor.IndicSetFore(ErrorIndicatorIndex, ToInt(SyntaxHighlightingTheme.ErrorUnderlineColor));
         editor.IndicSetUnder(ErrorIndicatorIndex, true);
         
         //editor.IndicSetStyle(WarningIndicatorIndex, IndicatorStyle.Diagonal);
         editor.IndicSetStyle(WarningIndicatorIndex, IndicatorStyle.SquigglePixmap);
-        editor.IndicSetFore(WarningIndicatorIndex, ToInt(Colors.Orange));
+        editor.IndicSetFore(WarningIndicatorIndex, ToInt(SyntaxHighlightingTheme.WarningUnderlineColor));
         editor.IndicSetUnder(WarningIndicatorIndex, true);
         
         editor.IndicSetStyle(MessageIndicatorIndex, IndicatorStyle.Plain);
-        editor.IndicSetFore(MessageIndicatorIndex, ToInt(Colors.Blue));
+        editor.IndicSetFore(MessageIndicatorIndex, ToInt(SyntaxHighlightingTheme.MessageUnderlineColor));
         editor.IndicSetUnder(MessageIndicatorIndex, true);
     }
 
@@ -225,6 +223,9 @@ public partial class AssemblyEditBox
             Instructions.Add(instr.Name);
         }
     }
+    
+    private int GetEncodingSize(string original)
+        => Encoding.UTF8.GetByteCount(original);
 
     private int ToInt(Color color) => color.R | color.G << 8 | color.B << 16;
 }

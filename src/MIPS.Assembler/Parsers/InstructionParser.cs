@@ -94,7 +94,7 @@ public struct InstructionParser
             TryParseArg(arg, pattern[i], out reference);
         }
 
-        // It's a psuedo instruction.
+        // It's a pseudo instruction.
         // Create a pseudo-instruction and return with reference
         // as parsed instruction.
         if (_meta.IsPseudoInstruction)
@@ -124,7 +124,8 @@ public struct InstructionParser
         // TODO: Check on pseudo-instructions
         if (instruction.GetWritebackRegister() is GPRegister.Zero && name != "nop")
         {
-            _logger?.Log(Severity.Message, LogCode.ZeroRegWriteback, line.Tokens, "ZeroRegisterWriteback");
+            var writebackArg = line.Args[0]; // TODO: Is this true for move operations? Double check
+            _logger?.Log(Severity.Message, LogCode.ZeroRegWriteback, writebackArg, "ZeroRegisterWriteback");
         }
 
         parsedInstruction = new ParsedInstruction(instruction, reference);
@@ -182,7 +183,7 @@ public struct InstructionParser
         // Check that the float format is supported valid with the instruction, if applicable
         if (_meta.FloatFormats is not null && !_meta.FloatFormats.Contains(_format))
         {
-            // TODO: Should float format be a seperate token?
+            // TODO: Should float format be a separate token?
             _logger?.Log(Severity.Error, LogCode.InvalidFloatFormat, line.Instruction, $"DoesNotSupportFormat{_format}", name);
             return false;
         }
@@ -336,7 +337,7 @@ public struct InstructionParser
                         return false;
                     }
 
-                    // Adjust realtive to current position
+                    // Adjust relative to current position
                     value -= @base.Value;
                 }
 

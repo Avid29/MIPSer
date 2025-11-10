@@ -27,12 +27,10 @@ public partial class Tokenizer
             
             // Add the tokens to the collection
             raw.AddRange(tokens);
-            _location.Index++;
-            _location.Column++;
+            _location += 1;
         }
 
-        _location.Line++;
-        _location.Column = 1;
+        _location = _location.NextLine(0);
         _cacheLocation = _location;
         return status;
     }
@@ -61,10 +59,10 @@ public partial class Tokenizer
             TokenizerState.TokenBegin when c is '#' => AppendCharacter(c, TokenizerState.Comment),                      // Begin a comment
             TokenizerState.TokenBegin when c is '"' => AppendCharacter(c, TokenizerState.StringLiteral),                // Begin a string
             TokenizerState.TokenBegin when c is '\'' => AppendCharacter(c, TokenizerState.CharLiteral),                 // Begin a char
-            TokenizerState.TokenBegin when char.IsWhiteSpace(c) => AppendCharacter(c, TokenizerState.Whitespace),     // Begin whitespace
+            TokenizerState.TokenBegin when char.IsWhiteSpace(c) => AppendCharacter(c, TokenizerState.Whitespace),       // Begin whitespace
             TokenizerState.TokenBegin when char.IsLetterOrDigit(c) || c is '_'                                          // Begin an identifier
                 => AppendCharacter(c, TokenizerState.TokenBody),                                                        // or numerical
-            TokenizerState.TokenBegin => AppendAndComplete(c, TokenizerState.TokenBegin, out token),                               // Begin an unknown token
+            TokenizerState.TokenBegin => AppendAndComplete(c, TokenizerState.TokenBegin, out token),                    // Begin an unknown token
 
             // Token Body
             TokenizerState.TokenBody when char.IsLetterOrDigit(c) || c is '_' => AppendCharacter(c),
@@ -110,7 +108,7 @@ public partial class Tokenizer
     {
         // Append the character and complete the token
         _cache.Append(c);
-        var status = CompleteCacheToken(out token);
+        var status = CompleteCacheToken(out token, true);
         _state = newState;
         return status;
     }
@@ -132,7 +130,7 @@ public partial class Tokenizer
         return status;
     }
 
-    private bool CompleteCacheToken(out Token? token)
+    private bool CompleteCacheToken(out Token? token, bool incrementedCache = false)
     {
         var source = $"{_cache}";
         token = null;
@@ -163,7 +161,7 @@ public partial class Tokenizer
 
         // Reset cache
         _cache.Clear();
-        _cacheLocation = _location;
+        _cacheLocation = incrementedCache ? _location + 1 : _location;
         return true;
     }
 }

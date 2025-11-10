@@ -25,6 +25,11 @@
             <Color x:Key="MacroHighlightColor">#BF472F</Color>
             <Color x:Key="InvalidInstructionHighlightColor">#67995C</Color>
             
+            <!--  Indicator Colors  -->
+            <Color x:Key="ErrorUnderlineColor">#FF0000</Color>
+            <Color x:Key="WarningUnderlineColor">#FFAA00</Color>
+            <Color x:Key="MessageUnderlineColor">#00AAFF</Color>
+            
             <!--  Status Bar Background Colors  -->
             <!--<Color x:Key="NotReadyStatusBarBackgroundColor">#747F8D</Color>
             <Color x:Key="ReadyStatusBarBackgroundColor">#1f4d7a</Color>
@@ -52,6 +57,11 @@
             <Color x:Key="CommentHighlightColor">#17037c</Color>
             <Color x:Key="MacroHighlightColor">#d25e46</Color>
             <Color x:Key="InvalidInstructionHighlightColor">#6b9f60</Color>
+            
+            <!--  Indicator Colors  -->
+            <Color x:Key="ErrorUnderlineColor">#FF0000</Color>
+            <Color x:Key="WarningUnderlineColor">#FFAA00</Color>
+            <Color x:Key="MessageUnderlineColor">#00AAFF</Color>
 
             <!--  Status Bar Background Colors  -->
             <!--<Color x:Key="NotReadyStatusBarBackgroundColor">#747F8D</Color>

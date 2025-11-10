@@ -33,12 +33,7 @@ public partial class Tokenizer
         _mode = mode;
         _state = TokenizerState.TokenBegin;
         _cache = new();
-        _location = new SourceLocation
-        {
-            Index = 0,
-            Line = 1,
-            Column = 1,
-        };
+        _location = new SourceLocation();
         _cacheLocation = _location;
         _filename = filename;
         _mode = mode;

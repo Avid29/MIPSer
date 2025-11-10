@@ -77,7 +77,10 @@
                                                                      StringHighlightColor="{ThemeResource StringHighlightColor}"
                                                                      CommentHighlightColor="{ThemeResource CommentHighlightColor}"
                                                                      MacroHighlightColor="{ThemeResource MacroHighlightColor}"
-                                                                     InvalidInstructionHighlightColor="{ThemeResource InvalidInstructionHighlightColor}"/>
+                                                                     InvalidInstructionHighlightColor="{ThemeResource InvalidInstructionHighlightColor}"
+                                                                     ErrorUnderlineColor="{ThemeResource ErrorUnderlineColor}"
+                                                                     WarningUnderlineColor="{ThemeResource WarningUnderlineColor}"
+                                                                     MessageUnderlineColor="{ThemeResource MessageUnderlineColor}"/>
                         </asmedit:AssemblyEditBox.SyntaxHighlightingTheme>
                     </asmedit:AssemblyEditBox>
                 </DataTemplate>

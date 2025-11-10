@@ -24,12 +24,12 @@ main:
 	lw		$a1,	4(sp)				# Not a register
 	lw		$a2,	8($sp)		
 
-	jal    1048576
+	jal		1048576
 	
-	sll    $zero,	$zero,		0		# Warning: No operation
-	sll    $t0,		$s0,		32		# Warning: Truncation
-	add    $a0,		$v0,		$zero
-	ori    $v0,		$hero,		17		# Not a valid register
+	sll		$zero,		$zero,		0		# Warning: No operation
+	sll		$t0,		$s0,		32		# Warning: Truncation
+	add		$a0,		$v0,		$zero
+	ori		$v0,		$hero,		17		# Not a valid register
 	syscall
 
-	addi   $t0, $t1, ''					# Empty character literal
+	addi	$t0, $t1, ''					# Empty character literal
