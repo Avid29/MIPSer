@@ -21,5 +21,5 @@ public interface IReferenceEntry<TSelf>
     /// Converts a <typeparamref name="TSelf"/> into a <see cref="ReferenceEntry"/>.
     /// </summary>
     /// <returns>A converted relation entry as <see cref="ReferenceEntry"/>.</returns>
-    public ReferenceEntry Convert();
+    public ReferenceEntry Convert(string name);
 }

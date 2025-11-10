@@ -24,7 +24,7 @@ public class Interpreter
 
         // Initialize memory and pc
         Load();
-        _computer.Processor.ProgramCounter = _module.EntryAdress;
+        _computer.Processor.ProgramCounter = _module.EntryAddress;
     }
 
     /// <summary>

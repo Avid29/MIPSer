@@ -1,7 +1,6 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Assembler.Logging;
-using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
@@ -27,17 +26,14 @@ public class Linker
     }
 
     /// <summary>
-    /// Gets the assembler's configuation.
+    /// Gets the assembler's configuration.
     /// </summary>
     public AssemblerConfig Config { get; }
 
     /// <summary>
     /// Links an array of object modules into a single object module.
     /// </summary>
-    /// <param name="modules"></param>
-    /// <param name="config"></param>
-    /// <returns></returns>
-    public static Linker Link(IBuildModule[] modules, AssemblerConfig config)
+    public static Linker Link(IBuildModule[] modules, AssemblerConfig config, string? entryPoint = null)
     {
         var linker = new Linker(config);
         foreach (var m in modules)
@@ -88,6 +84,7 @@ public class Linker
             // Add to tracked references
             _module.TryTrackReference(entry);
 
+            // Relocate apply relocations
             if (entry.IsRelocation)
             {
                 _module.Relocate(entry, offset);
@@ -100,7 +97,6 @@ public class Linker
             // Skip if the symbol is not defined
             if (!(@ref.Symbol is not null && _module.TryGetSymbol(@ref.Symbol, out var symbol) && symbol.IsDefined))
                 continue;
-
         }
     }
 }

@@ -173,7 +173,7 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>, IBigEndianReadWritable<Sy
     /// <remarks>
     /// <see cref="CommonEntry.Name"/> will be null.
     /// </remarks>
-    public readonly CommonEntry Convert()
+    public readonly CommonEntry Convert(string name)
     {
         // Get type
         var type = SymbolType.Macro;
@@ -182,7 +182,7 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>, IBigEndianReadWritable<Sy
 
         // Get address and initialize
         var adr = new Address(Value, Section);
-        var symbol = new CommonEntry(null!, type, adr) // Null suppress. We're going to overwrite it once we leave this method.
+        var symbol = new CommonEntry(name, type, adr) 
         {
             // Set flags
             Global = CheckFlag(SymbolFlags.Global),

@@ -17,5 +17,5 @@ public interface IExecutableModule
     /// <summary>
     /// Gets the entry address of the executable.
     /// </summary>
-    public uint EntryAdress { get; }
+    public uint EntryAddress { get; }
 }

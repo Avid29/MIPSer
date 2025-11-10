@@ -26,7 +26,7 @@ public class RawModule : IBuildModule<RawModule>, IExecutableModule
     public Stream Contents => _source;
     
     /// <inheritdoc/>
-    public uint EntryAdress => 0;
+    public uint EntryAddress => 0;
 
     /// <inheritdoc/>
     public static RawModule? Create(ModuleConstructor constructor, AssemblerConfig config, Stream? stream = null)

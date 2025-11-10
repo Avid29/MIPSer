@@ -114,7 +114,7 @@ public struct ReferenceEntry : IReferenceEntry<ReferenceEntry>, IBigEndianReadWr
     }
     
     /// <inheritdoc/>
-    public readonly CommonEntry Convert()
+    public readonly CommonEntry Convert(string name)
     {
         var adr = new Address(Address, Section);
 
@@ -134,6 +134,6 @@ public struct ReferenceEntry : IReferenceEntry<ReferenceEntry>, IBigEndianReadWr
             _ => ReferenceMethod.Add,
         };
 
-        return new CommonEntry(null, adr, type, method);
+        return new CommonEntry(name, adr, type, method);
     }
 }

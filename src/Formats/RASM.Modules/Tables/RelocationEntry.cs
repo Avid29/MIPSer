@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Models.Modules.Interfaces.Tables;
 using MIPS.Helpers;
 using MIPS.Models.Addressing;
@@ -95,8 +96,14 @@ public struct RelocationEntry : IReferenceEntry<RelocationEntry>, IBigEndianRead
     }
     
     /// <inheritdoc/>
-    public readonly CommonEntry Convert()
+    public readonly CommonEntry Convert(string? name)
     {
+        if (name is not null)
+        {
+            ThrowHelper.ThrowArgumentException(nameof(name));
+        }
+
+
         var adr = new Address(Address, Section);
 
         var type = Type switch

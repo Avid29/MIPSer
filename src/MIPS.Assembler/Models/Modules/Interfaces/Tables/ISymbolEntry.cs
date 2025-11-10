@@ -21,5 +21,5 @@ public interface ISymbolEntry<TSelf>
     /// Converts a <typeparamref name="TSelf"/> into a <see cref="SymbolEntry"/>.
     /// </summary>
     /// <returns>A converted relation entry as <see cref="SymbolEntry"/>.</returns>
-    public SymbolEntry Convert();
+    public SymbolEntry Convert(string name);
 }

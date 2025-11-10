@@ -26,7 +26,7 @@ public class ElfModule : IBuildModule<ElfModule>, IExecutableModule
     public Stream Contents => throw new System.NotImplementedException();
 
     /// <inheritdoc/>
-    public uint EntryAdress => (uint)_elfFile.EntryPointAddress;
+    public uint EntryAddress => (uint)_elfFile.EntryPointAddress;
 
     /// <inheritdoc/>
     public static ElfModule? Create(ModuleConstructor constructor, AssemblerConfig config, Stream? stream = null)

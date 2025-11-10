@@ -24,6 +24,16 @@ public struct Header
     /// <summary>
     /// Initializes a new instance of the <see cref="Header"/> struct.
     /// </summary>
+    public Header(ushort magic, ushort version, params uint[] sizes)
+    {
+        _magic = magic;
+        _version = version;
+        _sizes = sizes;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Header"/> struct.
+    /// </summary>
     public Header(ushort magic, ushort version, uint flags, uint entry, params uint[] sizes)
     {
         _magic = magic;
