@@ -39,7 +39,7 @@ public class ErrorListViewModel : PageViewModel
     /// <summary>
     /// Gets the list of errors, warnings, and messages.
     /// </summary>
-    public ObservableCollection<Log> Messages { get; }
+    public ObservableCollection<ILog> Messages { get; }
 
     private void UpdateLog(BuildFinishedMessage message)
     {

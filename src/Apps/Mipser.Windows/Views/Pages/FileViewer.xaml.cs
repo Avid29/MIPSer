@@ -7,6 +7,7 @@ using MIPS.Assembler.Logging;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Editors.AssemblyEditBox;
 using Mipser.ViewModels.Pages;
+using System.Collections.Generic;
 
 namespace Mipser.Windows.Views.Pages;
 
@@ -49,7 +50,7 @@ public sealed partial class FileViewer : UserControl
         ViewModel.AssembledEvent += ViewModel_AssembledEvent;
     }
 
-    private void ViewModel_AssembledEvent(object? sender, System.Collections.Generic.IReadOnlyList<Log> e)
+    private void ViewModel_AssembledEvent(object? sender, IReadOnlyList<ILog> e)
     {
         // Find editbox
         var editBox = this.FindDescendant<AssemblyEditBox>();

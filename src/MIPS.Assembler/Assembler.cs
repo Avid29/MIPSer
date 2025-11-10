@@ -85,7 +85,7 @@ public partial class Assembler
     /// <summary>
     /// Gets the assembler's logs.
     /// </summary>
-    public IReadOnlyList<Log> Logs => _logger.Logs;
+    public IReadOnlyList<ILog> Logs => _logger.Logs;
 
     /// <summary>
     /// Gets whether or not the assembler failed to assemble a valid module.

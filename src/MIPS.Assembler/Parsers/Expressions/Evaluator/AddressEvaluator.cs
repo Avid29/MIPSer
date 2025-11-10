@@ -32,7 +32,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         // If both address are relocatable
         if (left.IsRelocatable && right.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, node.ExpressionToken, "CantAddRelocatables");
+            _logger?.Log(Severity.Error, LogCode.InvalidExpressionOperation, node.ExpressionToken, "CantAddRelocatables");
             return false;
         }
 
@@ -169,7 +169,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
 
         if (value.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, node.ExpressionToken, $"Cant{operation}Relocatable");
+            _logger?.Log(Severity.Error, LogCode.InvalidExpressionOperation, node.ExpressionToken, $"Cant{operation}Relocatable");
             return true;
         }
         return false;

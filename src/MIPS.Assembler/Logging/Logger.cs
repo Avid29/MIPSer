@@ -13,7 +13,7 @@ namespace MIPS.Assembler.Logging;
 /// </summary>
 public class Logger : ILogger
 {
-    private readonly List<Log> _logs;
+    private readonly List<AssemblerLog> _logs;
     private readonly Localizer _localizer;
 
     /// <summary>
@@ -29,27 +29,32 @@ public class Logger : ILogger
     /// Gets a value indicating whether or not assembly failed.
     /// </summary>
     public bool Failed { get; private set; }
-
-    /// <inheritdoc/>
-    public void Log(Severity severity, LogId id, Token token, string messageKey, params object?[] args)
-        => Log(severity, id, [token], messageKey, args);
     
     /// <inheritdoc/>
-    public void Log(Severity severity, LogId id, ReadOnlySpan<Token> tokens, string messageKey, params object?[] args)
+    public void Log(Severity severity, LogCode code, string file, string messageKey, params object[] args)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc/>
+    public void Log(Severity severity, LogCode code, Token token, string messageKey, params object?[] args)
+        => Log(severity, code, [token], messageKey, args);
+    
+    /// <inheritdoc/>
+    public void Log(Severity severity, LogCode code, ReadOnlySpan<Token> tokens, string messageKey, params object?[] args)
     {
         var localizedMessage = _localizer[messageKey];
         var formattedMessage = string.Format(localizedMessage, args);
 
-        var log = new Log(id, formattedMessage, severity, tokens.ToArray());
+        var log = new AssemblerLog(severity, code, formattedMessage, tokens.ToArray());
         _logs.Add(log);
 
         if (severity is Severity.Error)
             Failed = true;
     }
-    
 
     /// <summary>
     /// Gets a readonly list of logs.
     /// </summary>
-    public IReadOnlyList<Log> Logs => _logs;
+    public IReadOnlyList<ILog> Logs => _logs;
 }

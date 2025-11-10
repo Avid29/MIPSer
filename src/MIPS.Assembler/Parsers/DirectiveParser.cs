@@ -82,7 +82,7 @@ public readonly struct DirectiveParser
         string sectionName = name.Source;
         if (args.Count is not 0)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, name, "DirectiveTakesNoArguments", sectionName);
+            _logger?.Log(Severity.Error, LogCode.InvalidDirectiveArgCount, name, "DirectiveTakesNoArguments", sectionName);
             return false;
         }
 
@@ -105,7 +105,7 @@ public readonly struct DirectiveParser
         // Global requires an argument
         if (args.Count is 0)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, token, "DirectiveRequiresAnArgument", ".globl");
+            _logger?.Log(Severity.Error, LogCode.InvalidDirectiveArgCount, token, "DirectiveRequiresAnArgument", ".globl");
             return false;
         }
 
@@ -113,14 +113,14 @@ public readonly struct DirectiveParser
         if (args.Count is > 1)
         {
             // TODO: Improve token range message
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, args[1], "DirectiveTakesOneArgument", ".globl");
+            _logger?.Log(Severity.Error, LogCode.InvalidDirectiveArgCount, args[1], "DirectiveTakesOneArgument", ".globl");
             return false;
         }
 
         if (args[0].Length is not 1)
         {
             // TODO: Improve message
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, args[0], "DirectiveNonSymbolArgumentSmall", ".globl");
+            _logger?.Log(Severity.Error, LogCode.InvalidDirectiveArg, args[0], "DirectiveNonSymbolArgumentSmall", ".globl");
             return false;
         }
 
@@ -130,7 +130,7 @@ public readonly struct DirectiveParser
         // Global only takes references as an argument
         if (arg.Type is not TokenType.Reference)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, arg, "DirectiveNonSymbolArgument", ".globl", arg.Source);
+            _logger?.Log(Severity.Error, LogCode.InvalidDirectiveArg, arg, "DirectiveNonSymbolArgument", ".globl", arg.Source);
         }
 
         directive = new GlobalDirective(arg.Source);
@@ -145,14 +145,14 @@ public readonly struct DirectiveParser
         // Space and Align require an argument
         if (args.Count is 0)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, token, "DirectiveRequiresAnArgument", directiveName);
+            _logger?.Log(Severity.Error, LogCode.InvalidDirectiveArgCount, token, "DirectiveRequiresAnArgument", directiveName);
             return false;
         }
         
         // Space and Align take only one argument
         if (args.Count is > 1)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArgCount, args[1], "DirectiveTakesOneArgument", directiveName);
+            _logger?.Log(Severity.Error, LogCode.InvalidDirectiveArgCount, args[1], "DirectiveTakesOneArgument", directiveName);
             return false;
         }
 
@@ -164,7 +164,7 @@ public readonly struct DirectiveParser
         // Argument must not be relocatable
         if (result.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidDirectiveArg, args[0], "DirectiveNoRelocatableArguments", directiveName);
+            _logger?.Log(Severity.Error, LogCode.InvalidDirectiveArg, args[0], "DirectiveNoRelocatableArguments", directiveName);
             return false;
         }
 
@@ -179,11 +179,11 @@ public readonly struct DirectiveParser
             var alignMessageThreshold = _context?.Config.AlignMessageThreshold;
             if (value >= alignWarningThreshold)
             {
-                _logger?.Log(Severity.Warning, LogId.LargeAlignment, args[0], "DirectiveLargeAlignWarning", value, alignWarningThreshold);
+                _logger?.Log(Severity.Warning, LogCode.LargeAlignment, args[0], "DirectiveLargeAlignWarning", value, alignWarningThreshold);
             }
             else if (value >= alignMessageThreshold)
             {
-                _logger?.Log(Severity.Message, LogId.LargeAlignment, args[0], "DirectiveLargeAlignMessage", value, alignMessageThreshold);
+                _logger?.Log(Severity.Message, LogCode.LargeAlignment, args[0], "DirectiveLargeAlignMessage", value, alignMessageThreshold);
             }
 
             directive = new AlignDirective((int)result.Value);
@@ -193,7 +193,7 @@ public readonly struct DirectiveParser
             var spaceMessageThreshold = _context?.Config.SpaceMessageThreshold;
             if (value >= spaceMessageThreshold)
             {
-                _logger?.Log(Severity.Message, LogId.LargeSpacing, args[0], "DirectiveLargeAlignMessage", value, spaceMessageThreshold);
+                _logger?.Log(Severity.Message, LogCode.LargeSpacing, args[0], "DirectiveLargeAlignMessage", value, spaceMessageThreshold);
             }
 
             directive = new DataDirective(new byte[value]);
@@ -225,7 +225,7 @@ public readonly struct DirectiveParser
             if (result.IsRelocatable)
             {
                 // TODO: Can data be a reference to a relocatable address?
-                _logger?.Log(Severity.Error, LogId.InvalidDirectiveDataArg, args[0], "DirectiveAllocationNoRelocatableArguments", name);
+                _logger?.Log(Severity.Error, LogCode.InvalidDirectiveDataArg, args[0], "DirectiveAllocationNoRelocatableArguments", name);
                 return false;
             }
             
@@ -233,7 +233,7 @@ public readonly struct DirectiveParser
             value = T.CreateTruncating(result.Value);
             if (value != T.CreateSaturating(result.Value))
             {
-                _logger?.Log(Severity.Warning, LogId.IntegerTruncated, arg, "DirectiveAllocationTruncated",  arg.Print(), result.Value, value);
+                _logger?.Log(Severity.Warning, LogCode.IntegerTruncated, arg, "DirectiveAllocationTruncated",  arg.Print(), result.Value, value);
             }
 
             value.WriteBigEndian(bytes, pos);

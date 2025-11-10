@@ -55,7 +55,7 @@ public partial class Assembler
         // random garbage is in the file.
         if (line.Type is LineType.None && line.Args.Count is not 0)
         {
-            _logger.Log(Severity.Error, LogId.UnexpectedToken, line.Args[0][0], "UnexpectedToken", line.Args[0][0]);
+            _logger.Log(Severity.Error, LogCode.UnexpectedToken, line.Args[0][0], "UnexpectedToken", line.Args[0][0]);
         }
     }
 
@@ -95,7 +95,7 @@ public partial class Assembler
 
         if (expression.IsEmpty)
         {
-            _logger.Log(Severity.Error, LogId.MacroMissingValue, expression[0], "SymbolMissingValue", name);
+            _logger.Log(Severity.Error, LogCode.MacroMissingValue, expression[0], "SymbolMissingValue", name);
             return;
         }
         
@@ -104,7 +104,7 @@ public partial class Assembler
         
         if (address.IsRelocatable)
         {
-            _logger.Log(Severity.Error, LogId.MacroCannotBeRelocatable, expression[0], "NoRelocatableMacros");
+            _logger.Log(Severity.Error, LogCode.MacroCannotBeRelocatable, expression[0], "NoRelocatableMacros");
             return;
         }
         
@@ -126,7 +126,7 @@ public partial class Assembler
         // Check if pseudo instructions are allowed
         if (instruction.IsPseduoInstruction && !Config.AllowPseudos)
         {
-            _logger?.Log(Severity.Error, LogId.DisabledFeatureInUse, line.Tokens[0], "PseudoInstructionsDisabled");
+            _logger?.Log(Severity.Error, LogCode.DisabledFeatureInUse, line.Tokens[0], "PseudoInstructionsDisabled");
             return;
         }
 
@@ -176,7 +176,7 @@ public partial class Assembler
         name = symbol.Source.TrimEnd(':');
         if (char.IsDigit(name[0]))
         {
-            _logger?.Log(Severity.Error, LogId.IllegalSymbolName, symbol, "SymbolsCannotBeginWithDigits", name);
+            _logger?.Log(Severity.Error, LogCode.IllegalSymbolName, symbol, "SymbolsCannotBeginWithDigits", name);
             return false;
         }
 
@@ -184,7 +184,7 @@ public partial class Assembler
         {
             if (!char.IsLetterOrDigit(c))
             {
-                _logger?.Log(Severity.Error, LogId.IllegalSymbolName, symbol, "SymbolCannotContain", name, c);
+                _logger?.Log(Severity.Error, LogCode.IllegalSymbolName, symbol, "SymbolCannotContain", name, c);
                 return false;
             }
         }

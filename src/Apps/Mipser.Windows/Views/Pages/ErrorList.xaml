@@ -32,7 +32,6 @@
                 </interactivity:Interaction.Behaviors>-->
 
                 <ctc:DataTable>
-
                     <!-- Severity Icon -->
                     <ctc:DataColumn CanResize="False" MinWidth="24" DesiredWidth="24" MaxWidth="24"/>
 
@@ -43,7 +42,7 @@
             </Border>
         </ListView.Header>
         <ListView.ItemTemplate>
-            <DataTemplate x:DataType="logger:Log">
+            <DataTemplate x:DataType="logger:ILog">
                 <ctc:DataRow HorizontalAlignment="Left">
                     <ctc:SwitchPresenter TargetType="logenum:Severity" Value="{x:Bind Severity, Mode=OneWay}">
                         <ctc:Case Value="Error">

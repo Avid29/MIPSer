@@ -5,7 +5,7 @@ namespace MIPS.Assembler.Logging.Enum;
 /// <summary>
 /// An id for types of logs.
 /// </summary>
-public enum LogId
+public enum LogCode
 {
 #pragma warning disable CS1591
 

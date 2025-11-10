@@ -139,39 +139,39 @@ public class InstructionParserTests
     public void SllWarnTruncateTest()
     {
         Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 1);
-        RunTest(SllWarnTruncate, new ParsedInstruction(expected), logId:LogId.IntegerTruncated);
+        RunTest(SllWarnTruncate, new ParsedInstruction(expected), logCode:LogCode.IntegerTruncated);
     }
 
     [TestMethod(SllWarnSigned)]
     public void SllWarnSignedTest()
     {
         Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 31);
-        RunTest(SllWarnSigned, new ParsedInstruction(expected), logId:LogId.IntegerTruncated);
+        RunTest(SllWarnSigned, new ParsedInstruction(expected), logCode:LogCode.IntegerTruncated);
     }
 
     [TestMethod(JWarnTruncate)]
     public void JWarnTruncateTest()
     {
         Instruction expected = Instruction.Create(OperationCode.Jump, 0x1);
-        RunTest(JWarnTruncate, new ParsedInstruction(expected), logId:LogId.IntegerTruncated);
+        RunTest(JWarnTruncate, new ParsedInstruction(expected), logCode:LogCode.IntegerTruncated);
     }
 
     [TestMethod(XkcdFail)]
     public void XkdFailTest()
     {
-        RunTest(XkcdFail, logId: LogId.InvalidInstructionName);
+        RunTest(XkcdFail, logCode: LogCode.InvalidInstructionName);
     }
 
     [TestMethod(TooFewArgs)]
     public void TooFewArgsTest()
     {
-        RunTest(TooFewArgs, logId: LogId.InvalidInstructionArgCount);
+        RunTest(TooFewArgs, logCode: LogCode.InvalidInstructionArgCount);
     }
 
     [TestMethod(TooManyArgs)]
     public void TooManyArgsTest()
     {
-        RunTest(TooManyArgs, logId: LogId.InvalidInstructionArgCount);
+        RunTest(TooManyArgs, logCode: LogCode.InvalidInstructionArgCount);
     }
 
     [TestMethod("Generated Tests")]
@@ -242,7 +242,7 @@ public class InstructionParserTests
         }
     }
 
-    private static void RunTest(string input, ParsedInstruction? expected = null, LogId? logId = null, string? expectedSymbol = null)
+    private static void RunTest(string input, ParsedInstruction? expected = null, LogCode? logCode = null, string? expectedSymbol = null)
     {
         bool succeeds = expected is not null;
 
@@ -258,8 +258,11 @@ public class InstructionParserTests
         Assert.AreEqual(succeeds, succeeded);
         if (succeeds)
         {
-            var expectedReal = expected!.Realize();
-            var actualReal = actual!.Realize();
+            Assert.IsNotNull(expected);
+            Assert.IsNotNull(actual);
+
+            var expectedReal = expected.Realize();
+            var actualReal = actual.Realize();
 
             for (int i = 0 ; i < expectedReal.Length; i++)
             {
@@ -267,9 +270,9 @@ public class InstructionParserTests
             }
         }
 
-        if (logId.HasValue)
+        if (logCode.HasValue)
         {
-            Assert.IsTrue(logger.Logs[0].Id == logId.Value);
+            Assert.IsTrue(logger.Logs[0].Code == logCode.Value);
         }
     }
 }

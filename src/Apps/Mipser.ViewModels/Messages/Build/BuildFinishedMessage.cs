@@ -13,7 +13,7 @@ public class BuildFinishedMessage
     /// <summary>
     /// Initializes a new instance of the <see cref="BuildFinishedMessage"/> class.
     /// </summary>
-    public BuildFinishedMessage(bool failed, IReadOnlyList<Log>? log)
+    public BuildFinishedMessage(bool failed, IReadOnlyList<ILog>? log)
     {
         Failed = failed;
         Logs = log;
@@ -27,5 +27,5 @@ public class BuildFinishedMessage
     /// <summary>
     /// Gets the log events from the build.
     /// </summary>
-    public IReadOnlyList<Log>? Logs { get; }
+    public IReadOnlyList<ILog>? Logs { get; }
 }

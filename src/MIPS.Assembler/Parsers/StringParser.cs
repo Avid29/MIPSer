@@ -53,7 +53,7 @@ public ref struct StringParser
 
         if (literal.Length != 1)
         {
-            logger?.Log(Severity.Error, LogId.InvalidCharLiteral, token, "MustBeSingleCharacter");
+            logger?.Log(Severity.Error, LogCode.InvalidCharLiteral, token, "MustBeSingleCharacter");
             return false;
         }
 
@@ -83,7 +83,7 @@ public ref struct StringParser
             };
 
             // TODO: Improve message
-            _logger?.Log(Severity.Error, LogId.IncompleteString, _token, $"Expected{expected}");
+            _logger?.Log(Severity.Error, LogCode.IncompleteString, _token, $"Expected{expected}");
             return false;
         }
 
@@ -103,7 +103,7 @@ public ref struct StringParser
 
         if (_escapeState)
         {
-            _logger?.Log(Severity.Error, LogId.IncompleteEscapeSequence, _token, "IncompleteEscapeSequence");
+            _logger?.Log(Severity.Error, LogCode.IncompleteEscapeSequence, _token, "IncompleteEscapeSequence");
             return false;
         }
 
@@ -115,7 +115,7 @@ public ref struct StringParser
         switch (c)
         {
             case '"':
-                _logger?.Log(Severity.Error, LogId.UnescapedQuoteInString, _token, "UnescapedQuoteInString");
+                _logger?.Log(Severity.Error, LogCode.UnescapedQuoteInString, _token, "UnescapedQuoteInString");
                 return false;
             case '\\':
                 _escapeState = true;
@@ -146,7 +146,7 @@ public ref struct StringParser
 
         if (e == (char)0)
         {
-            _logger?.Log(Severity.Error, LogId.UnrecognizedEscapeSequence, _token, "UnrecognizedEscapeSequence", @$"\{c}");
+            _logger?.Log(Severity.Error, LogCode.UnrecognizedEscapeSequence, _token, "UnrecognizedEscapeSequence", @$"\{c}");
             return false;
         }
 

@@ -124,7 +124,7 @@ public struct InstructionParser
         // TODO: Check on pseudo-instructions
         if (instruction.GetWritebackRegister() is GPRegister.Zero && name != "nop")
         {
-            _logger?.Log(Severity.Message, LogId.ZeroRegWriteback, line.Tokens, "ZeroRegisterWriteback");
+            _logger?.Log(Severity.Message, LogCode.ZeroRegWriteback, line.Tokens, "ZeroRegisterWriteback");
         }
 
         parsedInstruction = new ParsedInstruction(instruction, reference);
@@ -145,17 +145,17 @@ public struct InstructionParser
         if (!_instructionTable.TryGetInstruction(name, out var metas, out var version))
         {
             // Select error message
-            (LogId id, string message) = version switch
+            (LogCode id, string message) = version switch
             {
                 // The instruction requires a higher MIPS version
                 not null when _context is null || version > _context?.Config.MipsVersion =>
-                    (LogId.NotInVersion, "RequiresVersion"),
+                    (LogCode.NotInVersion, "RequiresVersion"),
 
                 // The instruction is deprecated
-                not null => (LogId.NotInVersion, "RemovedInVersion"),
+                not null => (LogCode.NotInVersion, "RemovedInVersion"),
 
                 // The instruction does not exist.
-                null => (LogId.InvalidInstructionName, "NoInstructionNamed")
+                null => (LogCode.InvalidInstructionName, "NoInstructionNamed")
             };
 
             // Log the error
@@ -172,7 +172,7 @@ public struct InstructionParser
             //    ? $"Instruction '{name}' doesn't have enough arguments. Found {line.Args.Count} arguments when expecting {_meta.ArgumentPattern.Length}."
             //    : $"Instruction '{name}' has too many arguments! Found {line.Args.Count} arguments when expecting {_meta.ArgumentPattern.Length}.";
 
-            _logger?.Log(Severity.Error, LogId.InvalidInstructionArgCount, line.Instruction, "WrongArgumentCount", name, line.Args.Count);
+            _logger?.Log(Severity.Error, LogCode.InvalidInstructionArgCount, line.Instruction, "WrongArgumentCount", name, line.Args.Count);
             return false;
         }
 
@@ -183,7 +183,7 @@ public struct InstructionParser
         if (_meta.FloatFormats is not null && !_meta.FloatFormats.Contains(_format))
         {
             // TODO: Should float format be a seperate token?
-            _logger?.Log(Severity.Error, LogId.InvalidFloatFormat, line.Instruction, $"DoesNotSupportFormat{_format}", name);
+            _logger?.Log(Severity.Error, LogCode.InvalidFloatFormat, line.Instruction, $"DoesNotSupportFormat{_format}", name);
             return false;
         }
 
@@ -220,7 +220,7 @@ public struct InstructionParser
     {
         if (arg.Length is not 1)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, arg, "ArgumentNotARegister", arg.Print());
+            _logger?.Log(Severity.Error, LogCode.InvalidRegisterArgument, arg, "ArgumentNotARegister", arg.Print());
             return false;
         }
 
@@ -273,7 +273,7 @@ public struct InstructionParser
         if (!address.IsFixed && target is Argument.Shift)
         {
             // TODO: Consider tracking ref symbol token
-            _logger?.Log(Severity.Error, LogId.RelocatableReferenceInShift, arg, "Shift amount argument cannot reference relocatable symbols.");
+            _logger?.Log(Severity.Error, LogCode.RelocatableReferenceInShift, arg, "Shift amount argument cannot reference relocatable symbols.");
             return false;
         }
 
@@ -332,7 +332,7 @@ public struct InstructionParser
                     var @base = _context.CurrentAddress + 4;
                     if (@base.Section != address.Section)
                     {
-                        _logger?.Log(Severity.Error, LogId.BranchBetweenSections, arg, "CantBranchBetweenSections");
+                        _logger?.Log(Severity.Error, LogCode.BranchBetweenSections, arg, "CantBranchBetweenSections");
                         return false;
                     }
 
@@ -382,7 +382,7 @@ public struct InstructionParser
         var regStr = arg.Source;
         if (regStr[0] != '$')
         {
-            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, arg, "ArgumentNotARegister", arg);
+            _logger?.Log(Severity.Error, LogCode.InvalidRegisterArgument, arg, "ArgumentNotARegister", arg);
             return false;
         }
 
@@ -390,14 +390,14 @@ public struct InstructionParser
         if (!RegistersTable.TryGetRegister(regStr, out register, out RegisterSet parsedSet))
         {
             // Register does not exist in table
-            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, arg, "RegisterNotFound", arg);
+            _logger?.Log(Severity.Error, LogCode.InvalidRegisterArgument, arg, "RegisterNotFound", arg);
             return false;
         }
 
         // Match register set
         if (parsedSet != RegisterSet.Numbered && parsedSet != set)
         {
-            _logger?.Log(Severity.Error, LogId.InvalidRegisterArgument, arg, $"RegisterMustBeIn{set}Set", arg);
+            _logger?.Log(Severity.Error, LogCode.InvalidRegisterArgument, arg, $"RegisterMustBeIn{set}Set", arg);
             return false;
         }
 
@@ -423,7 +423,7 @@ public struct InstructionParser
         if (parIndex is -1 || closeIndex is -1)
         {
             // TODO: Improve messaging
-            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, arg, "InvalidAddressOffsetArgument", arg.Print());
+            _logger?.Log(Severity.Error, LogCode.InvalidAddressOffsetArgument, arg, "InvalidAddressOffsetArgument", arg.Print());
             return false;
         }
 
@@ -437,7 +437,7 @@ public struct InstructionParser
         if (!arg[(closeIndex+1)..].IsEmpty)
         {
             // TODO: Improve messaging
-            _logger?.Log(Severity.Error, LogId.InvalidAddressOffsetArgument, arg, "InvalidAddressOffsetArgument", arg.Print());
+            _logger?.Log(Severity.Error, LogCode.InvalidAddressOffsetArgument, arg, "InvalidAddressOffsetArgument", arg.Print());
             return false;
         }
 
@@ -464,7 +464,7 @@ public struct InstructionParser
         // Log a message if the value was truncated and/or had its sign changed
         if (cleanStatus is not CastingChanges.None)
         {
-            _logger?.Log(Severity.Warning, LogId.IntegerTruncated, arg, $"CastWarning{cleanStatus}", arg.Print(), original, value, bitCount, shiftAmount);
+            _logger?.Log(Severity.Warning, LogCode.IntegerTruncated, arg, $"CastWarning{cleanStatus}", arg.Print(), original, value, bitCount, shiftAmount);
         }
     }
 

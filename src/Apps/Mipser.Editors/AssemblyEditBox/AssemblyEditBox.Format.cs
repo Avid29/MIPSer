@@ -25,7 +25,7 @@ public partial class AssemblyEditBox
     /// <summary>
     /// Applies formatting based on a log messages.
     /// </summary>
-    public void ApplyLogHighlights(IReadOnlyList<Log> logs)
+    public void ApplyLogHighlights(IReadOnlyList<AssemblerLog> logs)
     {
         var editor = _codeEditor?.Editor;
         if (editor is null)

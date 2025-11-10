@@ -27,31 +27,31 @@ public class AssemblerTests
     private const string NotInVersion = "sync";
 
     [TestMethod(nameof(InvalidInstruction))]
-    public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, expected: LogId.InvalidInstructionName);
+    public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, expected: LogCode.InvalidInstructionName);
 
     [TestMethod(nameof(MissingInstruction))]
-    public async Task MissingInstructionTest() => await RunStringTest(MissingInstruction, expected: LogId.UnexpectedToken);
+    public async Task MissingInstructionTest() => await RunStringTest(MissingInstruction, expected: LogCode.UnexpectedToken);
 
     [TestMethod(nameof(InvalidLabelNum))]
-    public async Task InvalidLabelNumTest() => await RunStringTest(InvalidLabelNum, expected: LogId.IllegalSymbolName);
+    public async Task InvalidLabelNumTest() => await RunStringTest(InvalidLabelNum, expected: LogCode.IllegalSymbolName);
 
     [TestMethod(nameof(ExtraArgError))]
-    public async Task ExtraArgErrorTest() => await RunStringTest(ExtraArgError, expected: LogId.InvalidInstructionArgCount);
+    public async Task ExtraArgErrorTest() => await RunStringTest(ExtraArgError, expected: LogCode.InvalidInstructionArgCount);
 
     [TestMethod(nameof(MissingArgError))]
-    public async Task MissingArgErrorTest() => await RunStringTest(MissingArgError, expected: LogId.InvalidInstructionArgCount);
+    public async Task MissingArgErrorTest() => await RunStringTest(MissingArgError, expected: LogCode.InvalidInstructionArgCount);
 
     [TestMethod(nameof(NumericalRegister))]
     public async Task NumericalRegisterTest() => await RunStringTest(NumericalRegister);
 
     [TestMethod(nameof(NumericalRegisterError))]
-    public async Task NumericalRegisterErrorTest() => await RunStringTest(NumericalRegisterError, expected: LogId.InvalidRegisterArgument);
+    public async Task NumericalRegisterErrorTest() => await RunStringTest(NumericalRegisterError, expected: LogCode.InvalidRegisterArgument);
 
     [TestMethod(nameof(DisabledPseudoInstructions))]
-    public async Task DisabledPseudoInstructionsErrorTest() => await RunStringTest(DisabledPseudoInstructions, new() { AllowPseudos = false }, LogId.DisabledFeatureInUse);
+    public async Task DisabledPseudoInstructionsErrorTest() => await RunStringTest(DisabledPseudoInstructions, new() { AllowPseudos = false }, LogCode.DisabledFeatureInUse);
 
     [TestMethod(nameof(NotInVersion))]
-    public async Task NotInVersionTest() => await RunStringTest(NotInVersion, new(MipsVersion.MipsI), LogId.NotInVersion);
+    public async Task NotInVersionTest() => await RunStringTest(NotInVersion, new(MipsVersion.MipsI), LogCode.NotInVersion);
 
     [TestMethod(TestFilePathing.BranchLiteralFile)]
     public async Task BranchLiteralFileTest() => await RunFileTest(TestFilePathing.BranchLiteralFile);
@@ -73,24 +73,24 @@ public class AssemblerTests
 
     [TestMethod(TestFilePathing.CompositeFailTestFile)]
     public async Task CompositeFailTest() => await RunFileTest(TestFilePathing.CompositeFailTestFile,
-        (LogId.InvalidInstructionArgCount, 14),
-        (LogId.InvalidInstructionName, 16),
-        (LogId.UnparsableExpression, 19),
-        (LogId.InvalidRegisterArgument, 24), // Debatably should be an InvalidAddressOffsetArgument error
-        (LogId.ZeroRegWriteback, 29),
-        (LogId.IntegerTruncated, 30),
-        (LogId.InvalidRegisterArgument, 32),
-        (LogId.InvalidCharLiteral, 35));
+        (LogCode.InvalidInstructionArgCount, 14),
+        (LogCode.InvalidInstructionName, 16),
+        (LogCode.UnparsableExpression, 19),
+        (LogCode.InvalidRegisterArgument, 24), // Debatably should be an InvalidAddressOffsetArgument error
+        (LogCode.ZeroRegWriteback, 29),
+        (LogCode.IntegerTruncated, 30),
+        (LogCode.InvalidRegisterArgument, 32),
+        (LogCode.InvalidCharLiteral, 35));
 
     [TestMethod(TestFilePathing.DuplicateSymbolFile)]
     public async Task DuplicateSymbolTest() => await RunFileTest(TestFilePathing.DuplicateSymbolFile,
-        (LogId.DuplicateSymbolDefinition, 15));
+        (LogCode.DuplicateSymbolDefinition, 15));
 
     [TestMethod(TestFilePathing.SubtractAddressFile)]
     public async Task SubtractAddressTest() => await RunFileTest(TestFilePathing.SubtractAddressFile,
-        (LogId.InvalidExpressionOperation, 14));
+        (LogCode.InvalidExpressionOperation, 14));
 
-    private static async Task RunFileTest(string fileName, params (LogId, long)[] expected)
+    private static async Task RunFileTest(string fileName, params (LogCode, long)[] expected)
     {
         // Load the file
         var path = TestFilePathing.GetAssemblyFilePath(fileName);
@@ -100,14 +100,14 @@ public class AssemblerTests
         await RunTest(stream, fileName, null, expected);
     }
 
-    private static async Task RunStringTest(string str, RasmConfig? config = null, params LogId[] expected)
+    private static async Task RunStringTest(string str, RasmConfig? config = null, params LogCode[] expected)
     {
         // Wrap the test in a stream and run the test
         var stream = new MemoryStream(Encoding.Default.GetBytes(str));
         await RunTest(stream, null, config, [..expected.Select((x) => (x, 1L))]);
     }
 
-    private static async Task RunTest(Stream stream, string? filename = null, RasmConfig? config = null, params (LogId, long)[] expected)
+    private static async Task RunTest(Stream stream, string? filename = null, RasmConfig? config = null, params (LogCode, long)[] expected)
     {
         // Run assembler
         var assembler = await Assembler.AssembleAsync(stream, filename, config ?? new RasmConfig());
@@ -115,10 +115,10 @@ public class AssemblerTests
         // Find expected errors, warnings, and messages
         if (expected.Length == assembler.Logs.Count)
         {
-            foreach (var (id, line) in expected)
+            foreach (var (code, line) in expected)
             {
-                var logEntry = assembler.Logs.FirstOrDefault(x => x.Id == id && x.Line == line);
-                Assert.IsNotNull(logEntry, $"Could not find matching {id} error on line {line}");
+                var logEntry = assembler.Logs.FirstOrDefault(x => x.Code == code && x.Line == line);
+                Assert.IsNotNull(logEntry, $"Could not find matching {code} error on line {line}");
             }
         }
 

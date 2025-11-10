@@ -84,7 +84,7 @@ public struct ExpressionParser
             // Parsing failed
             if (!success)
             {
-                _logger?.Log(Severity.Error, LogId.UnparsableExpression, expression, "ExpressionParsingFailed", expression.Print());
+                _logger?.Log(Severity.Error, LogCode.UnparsableExpression, expression, "ExpressionParsingFailed", expression.Print());
                 return false;
             }
         }

@@ -27,7 +27,7 @@ public sealed partial class ErrorList : UserControl
 
     private void ListView_ItemClick(object sender, ItemClickEventArgs e)
     {
-        if (e.ClickedItem is not Log log)
+        if (e.ClickedItem is not AssemblerLog log)
             return;
 
         var messenger = Ioc.Default.GetRequiredService<IMessenger>();
