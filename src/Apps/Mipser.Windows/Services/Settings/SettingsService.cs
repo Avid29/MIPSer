@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Services.Settings;
+using Mipser.Services.Settings.Enums;
 using Windows.Storage;
 
 namespace Mipser.Windows.Services.Settings
@@ -18,8 +19,22 @@ namespace Mipser.Windows.Services.Settings
         public SettingsService(IMessenger messenger)
         {
             Local = new SettingsProvider(messenger, ApplicationData.Current.LocalSettings.Values);
+
+            EstablishDefaults();
         }
 
         public ISettingsProvider Local { get; }
+
+        private void EstablishDefaults()
+        {
+            // Theme
+            Local.SetValue("AppTheme", Theme.Default, false);
+            
+            // Editor
+            Local.SetValue("RealTimeAssembly", true, false);
+
+            // Localization
+            Local.SetValue<string?>("LanguageOverride", null, false);
+        }
     }
 }

@@ -14,6 +14,12 @@ public partial class AssemblyEditBox
         DependencyProperty.Register(nameof(Text), typeof(string), typeof(AssemblyEditBox), new PropertyMetadata(string.Empty, OnTextChanged));
 
     /// <summary>
+    /// A <see cref="DependencyProperty"/> for the <see cref="RealTimeAssembly"/> property.
+    /// </summary>
+    public static readonly DependencyProperty RealTimeAssemblyChecksProperty =
+        DependencyProperty.Register(nameof(RealTimeAssembly), typeof(bool), typeof(AssemblyEditBox), new PropertyMetadata(true, OnRTAssemblyChanged));
+
+    /// <summary>
     /// A <see cref="DependencyProperty"/> for the <see cref="Text"/> property.
     /// </summary>
     public static readonly DependencyProperty SyntaxHighlightingThemeProperty =
@@ -30,6 +36,15 @@ public partial class AssemblyEditBox
     {
         get => (string)GetValue(TextProperty);
         set => SetValue(TextProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to check assembly errors in real-time.
+    /// </summary>
+    public bool RealTimeAssembly
+    {
+        get => (bool)GetValue(RealTimeAssemblyChecksProperty);
+        set => SetValue(RealTimeAssemblyChecksProperty, value);
     }
 
     /// <summary>
@@ -59,6 +74,14 @@ public partial class AssemblyEditBox
             return;
 
         asmBox.UpdateText();
+    }
+
+    private static void OnRTAssemblyChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)
+    {
+        if (d is not AssemblyEditBox asmBox)
+            return;
+
+        asmBox.ClearLogHighlights();
     }
 
     private void UpdateText()

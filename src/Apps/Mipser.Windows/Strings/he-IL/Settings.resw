@@ -138,8 +138,17 @@
   <data name="AppThemeSC.Header" xml:space="preserve">
     <value>נושא</value>
   </data>
-  <data name="LocalizationSettingsHeaderTB" xml:space="preserve">
+  <data name="EditorSettingsHeaderTB.Text" xml:space="preserve">
+    <value>הגדרות עורך</value>
+  </data>
+  <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">
     <value>הגדרות שפה</value>
+  </data>
+  <data name="RealTimeAssemblySC.Description" xml:space="preserve">
+    <value>האם העורך צריך להרכיב את הקובץ הפתוח באופן רציף כדי להציג שגיאות בזמן אמת?</value>
+  </data>
+  <data name="RealTimeAssemblySC.Header" xml:space="preserve">
+    <value>הרכבה בזמן אמת</value>
   </data>
   <data name="ThemeSettingsHeaderTB.Text" xml:space="preserve">
     <value>הגדרות נושא</value>

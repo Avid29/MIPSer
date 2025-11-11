@@ -5,7 +5,9 @@ using CommunityToolkit.Mvvm.Messaging;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Bindables.Files;
+using Mipser.Messages;
 using Mipser.Messages.Build;
+using Mipser.Services.Settings;
 using Mipser.ViewModels.Pages.Abstract;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,7 @@ namespace Mipser.ViewModels.Pages;
 public class FilePageViewModel : PageViewModel
 {
     private readonly IMessenger _messenger;
+    private readonly ISettingsService _settingsService;
 
     /// <summary>
     /// An event invoked requesting to navigate to a token.
@@ -35,9 +38,10 @@ public class FilePageViewModel : PageViewModel
     /// <summary>
     /// Initializes a new instance of the <see cref="FilePageViewModel"/> class.
     /// </summary>
-    public FilePageViewModel(IMessenger messenger)
+    public FilePageViewModel(IMessenger messenger, ISettingsService settingsService)
     {
         _messenger = messenger;
+        _settingsService = settingsService;
 
         IsActive = true;
     }
@@ -73,10 +77,23 @@ public class FilePageViewModel : PageViewModel
         set => SetFile(value);
     }
 
+    /// <summary>
+    /// Gets whether or not the file should be assembled in real-time.
+    /// </summary>
+    public bool AssembleRealTime => _settingsService.Local.GetValue<bool>("RealTimeAssembly");
+
     /// <inheritdoc/>
     protected override void OnActivated()
     {
         _messenger.Register<FilePageViewModel, FileAssembledMessage>(this, (r, m) => r.OnBuildFinished(m.AssemblyFile, m.Logs));
+
+        _messenger.Register<FilePageViewModel, SettingChangedMessage<bool>>(this, (r, m) =>
+        {
+            if (m.Key != "RealTimeAssembly")
+                return;
+
+            OnPropertyChanged(nameof(AssembleRealTime));
+        });
     }
 
     /// <summary>

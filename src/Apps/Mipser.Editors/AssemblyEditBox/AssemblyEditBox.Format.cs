@@ -30,12 +30,7 @@ public partial class AssemblyEditBox
         if (editor is null)
             return;
 
-        // Clear underlines
-        for (int i = ErrorIndicatorIndex; i <= MessageIndicatorIndex; i++)
-        {
-            editor.IndicatorCurrent = i;
-            editor.IndicatorClearRange(0, editor.Length);
-        }
+        ClearLogHighlights();
 
         foreach (var log in logs)
         {
@@ -68,6 +63,23 @@ public partial class AssemblyEditBox
         }
     }
     
+    /// <summary>
+    /// Clears formatting based on a log messages.
+    /// </summary>
+    public void ClearLogHighlights()
+    {
+        var editor = _codeEditor?.Editor;
+        if (editor is null)
+            return;
+
+        // Clear underlines
+        for (int i = ErrorIndicatorIndex; i <= MessageIndicatorIndex; i++)
+        {
+            editor.IndicatorCurrent = i;
+            editor.IndicatorClearRange(0, editor.Length);
+        }
+    }
+
     private void UpdateSyntaxHighlighting()
     {
         if (@lock || _codeEditor is null)

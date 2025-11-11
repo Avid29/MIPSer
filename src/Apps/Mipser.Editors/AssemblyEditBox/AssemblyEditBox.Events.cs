@@ -25,9 +25,9 @@ public partial class AssemblyEditBox
 
         Guard.IsNotNull(_codeEditor);
 
-        _codeEditor.Editor.Modified += Editor_Modified;_codeEditor.SyntaxHighlightingApplied += CodeEditor_SyntaxHighlightingApplied;
-        
+        _codeEditor.Editor.Modified += Editor_Modified;
         _codeEditor.Editor.StyleNeeded += Editor_StyleNeeded;
+        _codeEditor.SyntaxHighlightingApplied += CodeEditor_SyntaxHighlightingApplied;
 
         _codeEditor.HighlightingLanguage = "asm";
     }
@@ -41,6 +41,10 @@ public partial class AssemblyEditBox
     private async void Editor_StyleNeeded(Editor sender, StyleNeededEventArgs args)
     {
         UpdateSyntaxHighlighting();
+        
+        // Skip assembling if disabled
+        if (!RealTimeAssembly)
+            return;
 
         // Run assembler and show errors
         var assembler = await Assembler.AssembleAsync(Text, null, new AssemblerConfig(MipsVersion.MipsIII));

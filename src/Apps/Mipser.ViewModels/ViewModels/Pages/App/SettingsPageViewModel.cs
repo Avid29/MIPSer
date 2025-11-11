@@ -48,6 +48,15 @@ public class SettingsPageViewModel : PageViewModel
     public IEnumerable<Theme> AppThemeOptions => Enum.GetValues<Theme>();
 
     /// <summary>
+    /// Gets or sets the real-time assembly setting option.
+    /// </summary>
+    public bool RealTimeAssembly
+    {
+        get => _settingsService.Local.GetValue<bool>(nameof(RealTimeAssembly));
+        set => _settingsService.Local.SetValue(nameof(RealTimeAssembly), value, notify: true);
+    }
+
+    /// <summary>
     /// Gets or sets the app language in settings.
     /// </summary>
     public string LanguageOverride
