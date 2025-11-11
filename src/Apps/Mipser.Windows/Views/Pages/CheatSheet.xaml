@@ -51,7 +51,6 @@
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 
-
             <!--Colors-->
             <Color x:Key="Color1Bright">#FE8482</Color>
             <Color x:Key="Color2Bright">#FFC47A</Color>
@@ -61,8 +60,6 @@
             <Color x:Key="Color6Bright">#77A7FD</Color>
             <Color x:Key="Color7Bright">#9B88FC</Color>
             <Color x:Key="Color8Bright">#FA9EF6</Color>
-
-            <FontFamily x:Key="HappyMonkey">ms-appx:///Assets/Fonts/HappyMonkey-Regular.ttf#Happy Monkey</FontFamily>
 
             <!--Instruction Types-->
             <SolidColorBrush x:Key="RInst" Color="{ThemeResource Color1}"/>

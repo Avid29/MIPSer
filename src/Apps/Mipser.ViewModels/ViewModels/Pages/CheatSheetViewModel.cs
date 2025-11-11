@@ -51,7 +51,7 @@ public class CheatSheetViewModel : PageViewModel
     }
     
     /// <inheritdoc/>
-    public override string Title => _localizationService["MIPSCheatSheetTitle"];
+    public override string Title => _localizationService["PageTitle/MIPSCheatSheet"];
 
     private IEnumerable<EncodingPattern>? LoadEncodingPatterns(string filename)
     {

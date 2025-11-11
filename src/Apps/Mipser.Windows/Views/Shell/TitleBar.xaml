@@ -137,10 +137,15 @@
             
             <!--  Help  -->
             <MenuBarItem x:Uid="/TitleBar/HelpMBI" Title="Help">
-                <MenuFlyoutItem x:Uid="/TitleBar/CheatSheetMFI" Text="Show Cheatsheet"
+                <MenuFlyoutItem x:Uid="/TitleBar/CheatSheetMFI"
+                                Text="Show Cheatsheet"
                                 Command="{x:Bind ViewModel.OpenCheatSheetCommand, Mode=OneWay}"/>
                 <MenuFlyoutSeparator/>
-                <MenuFlyoutItem x:Uid="/TitleBar/SettingsMFI" Text="MIPSer Settings"
+                <MenuFlyoutItem x:Uid="/TitleBar/WelcomeMFI"
+                                Text="Open Welcome Page"
+                                Command="{x:Bind ViewModel.OpenWelcomeCommand, Mode=OneWay}"/>
+                <MenuFlyoutItem x:Uid="/TitleBar/SettingsMFI"
+                                Text="MIPSer Settings"
                                 Command="{x:Bind ViewModel.OpenSettingsCommand, Mode=OneWay}">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE713;" />

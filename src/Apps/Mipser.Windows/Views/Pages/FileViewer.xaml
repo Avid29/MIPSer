@@ -38,24 +38,24 @@
                     </Grid.ColumnDefinitions>
 
                     <Image x:Name="TrafficCone"
-                       Source="/Assets/Icons/TrafficCone.svg"
-                       Height="100"
-                       VerticalAlignment="Center"/>
+                           Source="{ThemeResource TrafficConeIcon}"
+                           Height="100"
+                           VerticalAlignment="Center"/>
 
                     <StackPanel VerticalAlignment="Top"
-                            Margin="0,24"
-                            Grid.Column="1">
+                                Margin="0,24"
+                                Grid.Column="1">
                         <TextBlock x:Uid="WIPTitleTB"
-                               x:Name="WIPTitle"
-                               Text="We're Not Ready Yet..."
-                               FontSize="22"
-                               TextWrapping="WrapWholeWords"/>
+                                   x:Name="WIPTitle"
+                                   Text="We're Not Ready Yet..."
+                                   FontSize="22"
+                                   TextWrapping="WrapWholeWords"/>
                         <TextBlock x:Uid="WIPDescriptionTB"
-                               x:Name="WIPDescription"
-                               Text="We're working on handling this file type, but it's not ready yet."
-                               FontSize="12"
-                               Opacity=".8"
-                               TextWrapping="WrapWholeWords"/>
+                                   x:Name="WIPDescription"
+                                   Text="We're working on handling this file type, but it's not ready yet."
+                                   FontSize="12"
+                                   Opacity=".8"
+                                   TextWrapping="WrapWholeWords"/>
                     </StackPanel>
                 </Grid>
             </UserControl>

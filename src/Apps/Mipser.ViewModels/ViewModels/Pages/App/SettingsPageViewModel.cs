@@ -31,7 +31,7 @@ public class SettingsPageViewModel : PageViewModel
     }
 
     /// <inheritdoc/>
-    public override string Title => _localizationService["SettingsPageTitle"];
+    public override string Title => _localizationService["PageTitle/Settings"];
 
     /// <summary>
     /// Gets or sets the selected app theme.

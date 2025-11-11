@@ -45,6 +45,13 @@
                     </TabViewItem>
                 </DataTemplate>
             </selectors:PageTemplateSelector.SettingsPageTemplate>
+            <selectors:PageTemplateSelector.WelcomePageTemplate>
+                <DataTemplate x:DataType="avmv:WelcomePageViewModel">
+                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                        <apppages:WelcomePage ViewModel="{x:Bind Mode=OneWay}"/>
+                    </TabViewItem>
+                </DataTemplate>
+            </selectors:PageTemplateSelector.WelcomePageTemplate>
         </selectors:PageTemplateSelector>
     </UserControl.Resources>
 

@@ -56,6 +56,11 @@ public partial class WindowViewModel
     /// </summary>
     public RelayCommand OpenSettingsCommand { get; }
 
+    /// <summary>
+    /// Gets a command that opens the welcome page.
+    /// </summary>
+    public RelayCommand OpenWelcomeCommand { get; }
+
 
     private void CreateNewFile() => _messenger.Send(new FileCreateNewRequestMessage());
 
@@ -86,4 +91,6 @@ public partial class WindowViewModel
     private void OpenCheatSheet() => MainViewModel.GoToPageByType<CheatSheetViewModel>();
 
     private void OpenSettings() => MainViewModel.GoToPageByType<SettingsPageViewModel>();
+
+    private void OpenWelcome() => MainViewModel.GoToPageByType<WelcomePageViewModel>();
 }

@@ -189,4 +189,7 @@
   <data name="ViewMBI.Title" xml:space="preserve">
     <value>הצג</value>
   </data>
+  <data name="WelcomeMFI.Text" xml:space="preserve">
+    <value>פתח את דף הפתיחה</value>
+  </data>
 </root>

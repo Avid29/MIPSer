@@ -117,73 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NewFile" xml:space="preserve">
-    <value>קובץ חדש</value>
+  <data name="AlphaTB.Text" xml:space="preserve">
+    <value>אלפא</value>
   </data>
-  <data name="MessageDC.Content" xml:space="preserve">
-    <value>הודעה</value>
+  <data name="GettingReadyDescriptionTB.Text" xml:space="preserve">
+    <value>זוהי גרסת אלפא שחסרות בה תכונות רבות. בקרו אותנו ב־GitHub כדי לראות מה צפוי בקרוב!</value>
   </data>
-  <data name="FileDC.Content" xml:space="preserve">
-    <value>קובץ</value>
+  <data name="GettingReadyTB.Text" xml:space="preserve">
+    <value>אנחנו עדיין בהכנות...</value>
   </data>
-  <data name="LineDC.Content" xml:space="preserve">
-    <value>שורה</value>
+  <data name="GitHubLinkHB.Content" xml:space="preserve">
+    <value>קישור ל־GitHub</value>
   </data>
-  <data name="BuildStatus_NotReady" xml:space="preserve">
-    <value>לא מוכן</value>
-  </data>
-  <data name="BuildStatus_Ready" xml:space="preserve">
-    <value>מוכן</value>
-  </data>
-  <data name="BuildStatus_Preparing" xml:space="preserve">
-    <value>מתכונן</value>
-  </data>
-  <data name="BuildStatus_Assembling" xml:space="preserve">
-    <value>מרכיב</value>
-  </data>
-  <data name="BuildStatus_Linking" xml:space="preserve">
-    <value>מקשר</value>
-  </data>
-  <data name="BuildStatus_Completed" xml:space="preserve">
-    <value>הבנייה הושלם</value>
-  </data>
-  <data name="BuildStatus_Failed" xml:space="preserve">
-    <value>הבנייה נכשלה</value>
-  </data>
-  <data name="PageTitle/MIPSCheatSheet" xml:space="preserve">
-    <value>דף עזר ל-MIPS</value>
-  </data>
-  <data name="PageTitle/About" xml:space="preserve">
-    <value>אודות MIPSer</value>
-  </data>
-  <data name="PageTitle/Settings" xml:space="preserve">
-    <value>הגדרות</value>
-  </data>
-  <data name="Theme_Default" xml:space="preserve">
-    <value>אוטומטי</value>
-  </data>
-  <data name="Theme_Dark" xml:space="preserve">
-    <value>ככה</value>
-  </data>
-  <data name="Theme_Light" xml:space="preserve">
-    <value>בהיר</value>
-  </data>
-  <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">
-    <value>הגדרות שפה</value>
-  </data>
-  <data name="SearchFilesASB.PlaceholderText" xml:space="preserve">
-    <value>מחפש קבצים</value>
-  </data>
-  <data name="WIPTitleTB.Text" xml:space="preserve">
-    <value>אנו עוד לא מוכנים...</value>
-  </data>
-  <data name="WIPDescriptionTB.Text" xml:space="preserve">
-    <value>אנחנו עובדים על טיפול בסוג קובץ זה, אבל זה עדיין לא מוכן.</value>
-  </data>
-  <data name="AboutHeaderTB.Text" xml:space="preserve">
-    <value>אודות</value>
-  </data>
-  <data name="PageTitle/Welcome" xml:space="preserve">
-    <value>ברוכים הבאים</value>
+  <data name="WelcomeToMipserTB.Text" xml:space="preserve">
+    <value>ברוכים הבאים ל-MIPSer</value>
   </data>
 </root>

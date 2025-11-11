@@ -8,15 +8,15 @@ namespace Mipser.Windows.Views.Pages.App;
 /// <summary>
 /// A viewer for files.
 /// </summary>
-public sealed partial class AboutPage : UserControl
+public sealed partial class WelcomePage : UserControl
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="AboutPage"/> class.
+    /// Initializes a new instance of the <see cref="WelcomePage"/> class.
     /// </summary>
-    public AboutPage()
+    public WelcomePage()
     {
         this.InitializeComponent();
     }
 
-    public AboutPageViewModel? ViewModel { get; set; }
+    public WelcomePageViewModel? ViewModel { get; set; }
 }

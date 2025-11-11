@@ -6,20 +6,20 @@ using Mipser.ViewModels.Pages.Abstract;
 namespace Mipser.ViewModels.Pages.App;
 
 /// <summary>
-/// A view model for the about page.
+/// A view model for the welcome page.
 /// </summary>
-public class AboutPageViewModel : PageViewModel
+public class WelcomePageViewModel : PageViewModel
 {
     private ILocalizationService _localizationService;
     
     /// <summary>
-    /// Initializes a new instance of the <see cref="AboutPageViewModel"/> class.
+    /// Initializes a new instance of the <see cref="WelcomePageViewModel"/> class.
     /// </summary>
-    public AboutPageViewModel(ILocalizationService localizationService)
+    public WelcomePageViewModel(ILocalizationService localizationService)
     {
         _localizationService = localizationService;
     }
 
     /// <inheritdoc/>
-    public override string Title => _localizationService["PageTitle/About"];
+    public override string Title => _localizationService["PageTitle/Welcome"];
 }

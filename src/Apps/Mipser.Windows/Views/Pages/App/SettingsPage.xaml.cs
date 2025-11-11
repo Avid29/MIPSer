@@ -14,7 +14,7 @@ namespace Mipser.Windows.Views.Pages.App;
 public sealed partial class SettingsPage : UserControl
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="FileViewer"/> class.
+    /// Initializes a new instance of the <see cref="SettingsPage"/> class.
     /// </summary>
     public SettingsPage()
     {

@@ -34,11 +34,15 @@ public partial class WindowViewModel : ObservableRecipient
         OpenAboutCommand = new RelayCommand(OpenAbout);
         OpenCheatSheetCommand = new RelayCommand(OpenCheatSheet);
         OpenSettingsCommand = new RelayCommand(OpenSettings);
+        OpenWelcomeCommand = new RelayCommand(OpenWelcome);
 
         IsActive = true;
 
         // Notify that the main panel is focused on startup
         _messenger.Send(new PanelFocusChangedMessage(MainPanelViewModel));
+
+        // Open welcome page
+        OpenWelcome();
     }
 
     /// <summary>

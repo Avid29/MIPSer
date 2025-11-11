@@ -45,6 +45,7 @@ public partial class App
             .AddTransient<CheatSheetViewModel>()
             .AddTransient<FilePageViewModel>()
             .AddTransient<SettingsPageViewModel>()
+            .AddTransient<WelcomePageViewModel>()
 
             // Panel ViewModels
             .AddTransient<ExplorerViewModel>()

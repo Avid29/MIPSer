@@ -11,7 +11,7 @@
     xmlns:senums="using:Mipser.Services.Settings.Enums"
     mc:Ignorable="d">
 
-    <ScrollViewer Padding="16">
+    <ScrollViewer>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
@@ -27,7 +27,7 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         
-        <Grid>
+        <Grid Margin="16">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="LeftGutter" Width="auto"/>
                 <ColumnDefinition Width="*"/>

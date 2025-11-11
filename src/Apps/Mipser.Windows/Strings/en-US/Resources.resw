@@ -150,13 +150,13 @@
   <data name="BuildStatus_Failed" xml:space="preserve">
     <value>Build Failed</value>
   </data>
-  <data name="MIPSCheatSheetTitle" xml:space="preserve">
+  <data name="PageTitle/MIPSCheatSheet" xml:space="preserve">
     <value>MIPS Cheat Sheet</value>
   </data>
-  <data name="AboutPageTitle" xml:space="preserve">
+  <data name="PageTitle/About" xml:space="preserve">
     <value>About MIPSer</value>
   </data>
-  <data name="SettingsPageTitle" xml:space="preserve">
+  <data name="PageTitle/Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
   <data name="Theme_Default" xml:space="preserve">
@@ -182,5 +182,8 @@
   </data>
   <data name="AboutHeaderTB.Text" xml:space="preserve">
     <value>About</value>
+  </data>
+  <data name="PageTitle/Welcome" xml:space="preserve">
+    <value>Welcome</value>
   </data>
 </root>

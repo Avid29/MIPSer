@@ -189,4 +189,7 @@
   <data name="ViewMBI.Title" xml:space="preserve">
     <value>View</value>
   </data>
+  <data name="WelcomeMFI.Text" xml:space="preserve">
+    <value>Open Welcome Page</value>
+  </data>
 </root>

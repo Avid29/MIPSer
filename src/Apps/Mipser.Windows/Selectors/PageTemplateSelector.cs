@@ -29,6 +29,11 @@ public partial class PageTemplateSelector : DataTemplateSelector
     /// </summary>
     public DataTemplate? SettingsPageTemplate { get; set; }
 
+    /// <summary>
+    /// Gets the <see cref="DataTemplate"/> for a <see cref="WelcomePageViewModel"/>."/>
+    /// </summary>
+    public DataTemplate? WelcomePageTemplate { get; set; }
+
     protected override DataTemplate? SelectTemplateCore(object item)
     {
         return item switch
@@ -37,6 +42,7 @@ public partial class PageTemplateSelector : DataTemplateSelector
             CheatSheetViewModel => CheatSheetPageTemplate,
             FilePageViewModel => FilePageTemplate,
             SettingsPageViewModel => SettingsPageTemplate,
+            WelcomePageViewModel => WelcomePageTemplate,
             _ => null,
         };
     }
