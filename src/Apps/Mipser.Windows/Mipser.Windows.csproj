@@ -13,20 +13,6 @@
 	<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
 	<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
   </PropertyGroup>
-	<ItemGroup>
-		<Compile Remove="Controls\FileEditor.xaml.cs" />
-	</ItemGroup>
-  <ItemGroup>
-    <Content Remove="Assets\Fonts\HappyMonkey-Regular.ttf" />
-    <Content Remove="Assets\SmallTile.scale-100.png" />
-    <Content Remove="Assets\SmallTile.scale-125.png" />
-    <Content Remove="Assets\SmallTile.scale-150.png" />
-    <Content Remove="Assets\SmallTile.scale-200.png" />
-  </ItemGroup>
-  <ItemGroup>
-	  <None Remove="Assets\SmallTile.scale-400.png" />
-	  <None Remove="Views\Shell\StatusBar.xaml" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Labs.WinUI.ColorAnalyzer" Version="0.1.251101-build.2372" />
