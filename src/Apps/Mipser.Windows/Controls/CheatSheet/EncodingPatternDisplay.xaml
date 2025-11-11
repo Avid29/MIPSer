@@ -32,7 +32,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="18"/>
                             <RowDefinition/>
-                            <RowDefinition Height="18"/>
+                            <RowDefinition Height="22"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="{x:Bind BitRangeEnd}" Margin="4,0" Grid.Row="0"
                                    HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -62,7 +62,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="18"/>
                             <RowDefinition/>
-                            <RowDefinition Height="18"/>
+                            <RowDefinition Height="22"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="{x:Bind BitRangeEnd}"  Grid.Row="0"
                                    HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -114,8 +114,8 @@
     </UserControl.Resources>
     
     <Grid HorizontalAlignment="Stretch" FlowDirection="LeftToRight">
-        <Border CornerRadius="2" BorderThickness="2" BorderBrush="Black" Background="Black"
-                Height="27" VerticalAlignment="Top" Margin="0,17,0,0"/>
+        <Border CornerRadius="4" BorderThickness="2" BorderBrush="Black" Background="Black"
+                Height="28" VerticalAlignment="Top" Margin="0,16,0,0"/>
         <Grid x:Name="Container" Margin="1,0,0,0"/>
     </Grid>
 </UserControl>

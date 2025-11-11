@@ -22,68 +22,89 @@
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="CheatSheetBackgroundBrush" Color="#101010"/>
                     <SolidColorBrush x:Key="CheatSheetPanelBackgroundBrush" Color="#1A1A1A"/>
+                    <SolidColorBrush x:Key="HeaderForegroundBrush" Color="#A6A6A6"/>
+
+                    <!--Colors-->
+                    <Color x:Key="Color1">#FE8482</Color>
+                    <Color x:Key="Color2">#FFC47A</Color>
+                    <Color x:Key="Color3">#F8FC8B</Color>
+                    <Color x:Key="Color4">#A7FA95</Color>
+                    <Color x:Key="Color5">#73EEFD</Color>
+                    <Color x:Key="Color6">#77A7FD</Color>
+                    <Color x:Key="Color7">#9B88FC</Color>
+                    <Color x:Key="Color8">#FA9EF6</Color>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="CheatSheetBackgroundBrush" Color="#E5E5E5"/>
                     <SolidColorBrush x:Key="CheatSheetPanelBackgroundBrush" Color="#FFFFFF"/>
+                    <SolidColorBrush x:Key="HeaderForegroundBrush" Color="#595959"/>
+
+                    <!--Colors-->
+                    <Color x:Key="Color1">#7e0301</Color>
+                    <Color x:Key="Color2">#804600</Color>
+                    <Color x:Key="Color3">#909504</Color>
+                    <Color x:Key="Color4">#166105</Color>
+                    <Color x:Key="Color5">#028597</Color>
+                    <Color x:Key="Color6">#022d7e</Color>
+                    <Color x:Key="Color7">#17037c</Color>
+                    <Color x:Key="Color8">#61055c</Color>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
 
-            <FontFamily x:Key="HappyMonkey">ms-appx:///Assets/Fonts/HappyMonkey-Regular.ttf#Happy Monkey</FontFamily>
-
-            <SolidColorBrush x:Key="HeaderForeground" Color="#8C8C8C"/>
 
             <!--Colors-->
-            <Color x:Key="Color1">#FE8482</Color>
-            <Color x:Key="Color2">#FFC47A</Color>
-            <Color x:Key="Color3">#F8FC8B</Color>
-            <Color x:Key="Color4">#A7FA95</Color>
-            <Color x:Key="Color5">#73EEFD</Color>
-            <Color x:Key="Color6">#77A7FD</Color>
-            <Color x:Key="Color7">#9B88FC</Color>
-            <Color x:Key="Color8">#FA9EF6</Color>
+            <Color x:Key="Color1Bright">#FE8482</Color>
+            <Color x:Key="Color2Bright">#FFC47A</Color>
+            <Color x:Key="Color3Bright">#F8FC8B</Color>
+            <Color x:Key="Color4Bright">#A7FA95</Color>
+            <Color x:Key="Color5Bright">#73EEFD</Color>
+            <Color x:Key="Color6Bright">#77A7FD</Color>
+            <Color x:Key="Color7Bright">#9B88FC</Color>
+            <Color x:Key="Color8Bright">#FA9EF6</Color>
+
+            <FontFamily x:Key="HappyMonkey">ms-appx:///Assets/Fonts/HappyMonkey-Regular.ttf#Happy Monkey</FontFamily>
 
             <!--Instruction Types-->
-            <SolidColorBrush x:Key="RInst" Color="{StaticResource Color1}"/>
-            <SolidColorBrush x:Key="R2Inst" Color="{StaticResource Color2}"/>
-            <SolidColorBrush x:Key="IInst" Color="{StaticResource Color5}"/>
-            <SolidColorBrush x:Key="JInst" Color="{StaticResource Color4}"/>
-            <SolidColorBrush x:Key="RegImmInst" Color="{StaticResource Color8}"/>
-            <SolidColorBrush x:Key="CoProc0Inst" Color="{StaticResource Color3}"/>
-            <SolidColorBrush x:Key="CoProc1Inst" Color="{StaticResource Color3}"/>
-            <SolidColorBrush x:Key="CoProc1XInst" Color="{StaticResource Color7}"/>
-            <SolidColorBrush x:Key="CoProcIInst" Color="{StaticResource Color6}"/>
+            <SolidColorBrush x:Key="RInst" Color="{ThemeResource Color1}"/>
+            <SolidColorBrush x:Key="R2Inst" Color="{ThemeResource Color2}"/>
+            <SolidColorBrush x:Key="IInst" Color="{ThemeResource Color5}"/>
+            <SolidColorBrush x:Key="JInst" Color="{ThemeResource Color4}"/>
+            <SolidColorBrush x:Key="RegImmInst" Color="{ThemeResource Color8}"/>
+            <SolidColorBrush x:Key="CoProc0Inst" Color="{ThemeResource Color3}"/>
+            <SolidColorBrush x:Key="CoProc1Inst" Color="{ThemeResource Color3}"/>
+            <SolidColorBrush x:Key="CoProc1XInst" Color="{ThemeResource Color7}"/>
+            <SolidColorBrush x:Key="CoProcIInst" Color="{ThemeResource Color6}"/>
 
             <!--Argument Types-->
-            <SolidColorBrush x:Key="GPRArg" Color="{StaticResource Color1}"/>
-            <SolidColorBrush x:Key="CPRArg" Color="{StaticResource Color2}"/>
-            <SolidColorBrush x:Key="ImmArg" Color="{StaticResource Color3}"/>
-            <SolidColorBrush x:Key="FormatArg" Color="{StaticResource Color8}"/>
-            <SolidColorBrush x:Key="MiscArg" Color="{StaticResource Color7}"/>
+            <SolidColorBrush x:Key="GPRArg" Color="{ThemeResource Color1}"/>
+            <SolidColorBrush x:Key="CPRArg" Color="{ThemeResource Color2}"/>
+            <SolidColorBrush x:Key="ImmArg" Color="{ThemeResource Color3}"/>
+            <SolidColorBrush x:Key="FormatArg" Color="{ThemeResource Color8}"/>
+            <SolidColorBrush x:Key="MiscArg" Color="{ThemeResource Color7}"/>
 
             <!--Sections Types-->
-            <SolidColorBrush x:Key="OpCodeSection" Color="{StaticResource Color4}"/>
-            <SolidColorBrush x:Key="FuncCodeSection" Color="{StaticResource Color5}"/>
-            <SolidColorBrush x:Key="RegFuncCodeSection" Color="{StaticResource Color8}"/>
-            <SolidColorBrush x:Key="GPRSection" Color="{StaticResource Color1}"/>
-            <SolidColorBrush x:Key="CPRSection" Color="{StaticResource Color2}"/>
-            <SolidColorBrush x:Key="ImmSection" Color="{StaticResource Color3}"/>
-            <SolidColorBrush x:Key="FormatSection" Color="{StaticResource Color7}"/>
+            <SolidColorBrush x:Key="OpCodeSection" Color="{ThemeResource Color4Bright}"/>
+            <SolidColorBrush x:Key="FuncCodeSection" Color="{ThemeResource Color5Bright}"/>
+            <SolidColorBrush x:Key="RegFuncCodeSection" Color="{ThemeResource Color8Bright}"/>
+            <SolidColorBrush x:Key="GPRSection" Color="{ThemeResource Color1Bright}"/>
+            <SolidColorBrush x:Key="CPRSection" Color="{ThemeResource Color2Bright}"/>
+            <SolidColorBrush x:Key="ImmSection" Color="{ThemeResource Color3Bright}"/>
+            <SolidColorBrush x:Key="FormatSection" Color="{ThemeResource Color7Bright}"/>
 
             <!--Register Encoding Types-->
-            <SolidColorBrush x:Key="SavedRegister" Color="{StaticResource Color5}"/>
-            <SolidColorBrush x:Key="TempRegister" Color="{StaticResource Color1}"/>
-            <SolidColorBrush x:Key="ArgRegister" Color="{StaticResource Color8}"/>
-            <SolidColorBrush x:Key="ReturnValueRegister" Color="{StaticResource Color4}"/>
-            <SolidColorBrush x:Key="ReturnAddressRegister" Color="{StaticResource Color2}"/>
-            <SolidColorBrush x:Key="EnvironmentRegister" Color="{StaticResource Color6}"/>
-            <SolidColorBrush x:Key="KernelRegister" Color="{StaticResource Color3}"/>
-            <SolidColorBrush x:Key="OtherRegister" Color="{StaticResource Color7}"/>
+            <SolidColorBrush x:Key="SavedRegister" Color="{ThemeResource Color5}"/>
+            <SolidColorBrush x:Key="TempRegister" Color="{ThemeResource Color1}"/>
+            <SolidColorBrush x:Key="ArgRegister" Color="{ThemeResource Color8}"/>
+            <SolidColorBrush x:Key="ReturnValueRegister" Color="{ThemeResource Color4}"/>
+            <SolidColorBrush x:Key="ReturnAddressRegister" Color="{ThemeResource Color2}"/>
+            <SolidColorBrush x:Key="EnvironmentRegister" Color="{ThemeResource Color6}"/>
+            <SolidColorBrush x:Key="KernelRegister" Color="{ThemeResource Color3}"/>
+            <SolidColorBrush x:Key="OtherRegister" Color="{ThemeResource Color7}"/>
 
             <LinearGradientBrush x:Key="GeneralOrCoRegisterSection" StartPoint="0.5,0" EndPoint="0.5,1">
                 <GradientStopCollection>
-                    <GradientStop Color="{StaticResource Color1}" Offset="0"/>
-                    <GradientStop Color="{StaticResource Color2}" Offset="1"/>
+                    <GradientStop Color="{ThemeResource Color1Bright}" Offset="0"/>
+                    <GradientStop Color="{ThemeResource Color2Bright}" Offset="1"/>
                 </GradientStopCollection>
             </LinearGradientBrush>
 
@@ -125,7 +146,7 @@
 
             <DataTemplate x:Key="InstructionGroupHeaderTemplate" x:DataType="collections:IReadOnlyObservableGroup">
                 <TextBlock Text="{x:Bind Key}"
-                           Foreground="{ThemeResource HeaderForeground}"
+                           Foreground="{ThemeResource HeaderForegroundBrush}"
                            FontFamily="{StaticResource HappyMonkey}"
                            FontSize="16" />
             </DataTemplate>
@@ -139,7 +160,7 @@
             <DataTemplate x:Key="EncodingPatternDisplayTemplate" x:DataType="models:EncodingPattern">
                 <StackPanel>
                     <TextBlock Text="{x:Bind Name}"
-                               Foreground="{StaticResource HeaderForeground}"
+                               Foreground="{ThemeResource HeaderForegroundBrush}"
                                FontFamily="{StaticResource HappyMonkey}"
                                Margin="0,2" />
                     <cheat:EncodingPatternDisplay EncodingPattern="{x:Bind}"
