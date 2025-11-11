@@ -8,10 +8,12 @@ using Mipser.Bindables.Files;
 using Mipser.Messages.Build;
 using Mipser.Models.Enums;
 using Mipser.Services.Project;
+using Mipser.Services.Settings;
 using RASM.Modules;
 using RASM.Modules.Config;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +26,7 @@ namespace Mipser.Services.Build;
 public class BuildService
 {
     private readonly IMessenger _messenger;
+    private readonly ISettingsService _settingsService;
     private readonly IProjectService _projectService;
 
     private CancellationTokenSource? _resetToken;
@@ -32,9 +35,10 @@ public class BuildService
     /// <summary>
     /// Initializes a new instance of the <see cref="BuildService"/> class.
     /// </summary>
-    public BuildService(IMessenger messenger, IProjectService projectService)
+    public BuildService(IMessenger messenger, ISettingsService settingsService, IProjectService projectService)
     {
         _messenger = messenger;
+        _settingsService = settingsService;
         _projectService = projectService;
 
         _buildStatus = BuildStatus.Ready;
@@ -73,8 +77,22 @@ public class BuildService
                 saveFile = await folder.CreateFileAsync(saveFilename);
             }
 
+            // Override the current language
+            var lang = _settingsService.Local.GetValue<string>("AssemblerLanguageOverride");
+            var restore = CultureInfo.CurrentUICulture;
+            if (lang is not null)
+            {
+                var newCulture = CultureInfo.GetCultureInfo(lang);
+                CultureInfo.CurrentUICulture = newCulture ?? restore;
+            }
+
             // Assemble the file
             var assembler = await AssembleFileAsync(file, null, saveFile);
+            
+            // Restore the original language
+            CultureInfo.CurrentUICulture = restore;
+
+            // Check the assembler result
             if (assembler is null)
                 continue; // TODO: Handle file loading errors
 

@@ -35,6 +35,7 @@ namespace Mipser.Windows.Services.Settings
 
             // Localization
             Local.SetValue<string?>("LanguageOverride", null, false);
+            Local.SetValue<string?>("AssemblerLanguageOverride", null, false);
         }
     }
 }

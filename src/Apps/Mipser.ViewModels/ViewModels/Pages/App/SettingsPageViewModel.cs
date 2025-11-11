@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using MIPS.Assembler;
 using Mipser.Services.Localization;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
@@ -7,7 +8,11 @@ using Mipser.Services.Versioning;
 using Mipser.ViewModels.Pages.Abstract;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Mipser.ViewModels.Pages.App;
 
@@ -19,7 +24,7 @@ public class SettingsPageViewModel : PageViewModel
     private readonly ILocalizationService _localizationService;
     private readonly ISettingsService _settingsService;
     private readonly IVersioningService _versioningService;
-    
+
     /// <summary>
     /// Initializes a new instance of the <see cref="SettingsPageViewModel"/> class.
     /// </summary>
@@ -29,7 +34,7 @@ public class SettingsPageViewModel : PageViewModel
         _settingsService = settingsService;
         _versioningService = versioningService;
     }
-    
+
     /// <inheritdoc/>
     public override string Title => _localizationService["SettingsPageTitle"];
 
@@ -39,7 +44,7 @@ public class SettingsPageViewModel : PageViewModel
     public Theme AppTheme
     {
         get => _settingsService.Local.GetValue<Theme>(nameof(AppTheme));
-        set => _settingsService.Local.SetValue(nameof(AppTheme), value, notify:true);
+        set => _settingsService.Local.SetValue(nameof(AppTheme), value, notify: true);
     }
 
     /// <summary>
@@ -71,7 +76,24 @@ public class SettingsPageViewModel : PageViewModel
     /// <remarks>
     /// "system" is a sentinel value since null and empty cannot be used in a ComboBox.
     /// </remarks>
-    public IEnumerable<string> LanguageOptions => _localizationService.AvailableLanguages.Prepend("system");
+    public IEnumerable<string> AppLanguageOptions => _localizationService.AvailableLanguages.Prepend("system");
+
+    /// <summary>
+    /// Gets or sets the assembler language in settings.
+    /// </summary>
+    public string AssemblerLanguageOverride
+    {
+        get => _settingsService.Local.GetValue<string>(nameof(AssemblerLanguageOverride)) ?? "app";
+        set => _settingsService.Local.SetValue(nameof(AssemblerLanguageOverride), value is "app" ? null : value);
+    }
+
+    /// <summary>
+    /// Gets the list of available languages for the assembler.
+    /// </summary>
+    /// <remarks>
+    /// "app" is a sentinel value since null and empty cannot be used in a ComboBox.
+    /// </remarks>
+    public IEnumerable<string> AssemblerLanguageOptions => ["app", "en-US", "he-IL"]; // TODO: Retrieve programmatically
 
     /// <summary>
     /// Gets the app's version.

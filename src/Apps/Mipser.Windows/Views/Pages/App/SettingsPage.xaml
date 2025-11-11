@@ -76,7 +76,20 @@
                               Header="App Language"
                               Description="Set the app's display language. (Requires a restart to take effect).">
                     <ComboBox SelectedItem="{x:Bind ViewModel.LanguageOverride, Mode=TwoWay}"
-                          ItemsSource="{x:Bind ViewModel.LanguageOptions, Mode=OneWay}">
+                          ItemsSource="{x:Bind ViewModel.AppLanguageOptions, Mode=OneWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <TextBlock Text="{x:Bind local:SettingsPage.LanguageDisplayName((x:String)), Mode=OneWay}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </ctc:SettingsCard>
+                
+                <ctc:SettingsCard x:Uid="/Settings/AssemblerLanguageSC"
+                              Header="Assembler Language"
+                              Description="Set the language used by for assembler log information.">
+                    <ComboBox SelectedItem="{x:Bind ViewModel.AssemblerLanguageOverride, Mode=TwoWay}"
+                          ItemsSource="{x:Bind ViewModel.AssemblerLanguageOptions, Mode=OneWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate x:DataType="x:String">
                                 <TextBlock Text="{x:Bind local:SettingsPage.LanguageDisplayName((x:String)), Mode=OneWay}"/>

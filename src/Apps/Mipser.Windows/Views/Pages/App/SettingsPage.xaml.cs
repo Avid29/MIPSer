@@ -28,11 +28,14 @@ public sealed partial class SettingsPage : UserControl
         if (code is null)
             return null;
 
-        // "system" is a sentinel value since null and empty cannot be used in a ComboBox
-        if (code is "system")
+        // "system" and "app" are sentinel values since null and empty cannot be used in a ComboBox
+        var localization = Ioc.Default.GetRequiredService<ILocalizationService>();
+        switch (code)
         {
-            var localization = Ioc.Default.GetRequiredService<ILocalizationService>();
-            return localization["/Settings/UseSystemLanguage"];
+            case "system":
+                return localization["/Settings/UseSystemLanguage"];
+            case "app":
+                return localization["/Settings/UseAppLanguage"];
         }
 
         var target = new CultureInfo(code);
@@ -43,7 +46,6 @@ public sealed partial class SettingsPage : UserControl
         if (nativeName == displayName)
             return nativeName;
 
-        // 
         return $"{nativeName} - {displayName}";
     }
 }
