@@ -1,4 +1,4 @@
-﻿# Adam Dernis 2024
+# Adam Dernis 2024
 
 # Features:
 # ------------------
@@ -28,7 +28,7 @@ main:
 	
 	sll		$zero,		$zero,		0		# Warning: No operation
 	sll		$t0,		$s0,		32		# Warning: Truncation
-	add		$a0,		$v0,		$zero
+	add		,		    $v0,		$zero   # Empty Argument
 	ori		$v0,		$hero,		17		# Not a valid register
 	syscall
 

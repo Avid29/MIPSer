@@ -6,6 +6,7 @@ using MIPS.Assembler.Models.Directives;
 using MIPS.Assembler.Models.Directives.Abstract;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MIPS.Assembler.Tests.Parsers;

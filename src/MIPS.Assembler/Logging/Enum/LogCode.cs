@@ -22,6 +22,7 @@ public enum LogCode
 
     // Instruction parser 
     InvalidInstructionName,
+    InvalidInstructionArg,
     InvalidInstructionArgCount,
     InvalidRegisterArgument,
     InvalidAddressOffsetArgument,

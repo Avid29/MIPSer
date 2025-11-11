@@ -324,4 +324,7 @@
   <data name="UnexpectedToken" xml:space="preserve">
     <value>Unexpected Token '{0}'.</value>
   </data>
+  <data name="EmptyArgument" xml:space="preserve">
+    <value>Argument is empty.</value>
+  </data>
 </root>

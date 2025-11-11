@@ -79,6 +79,7 @@ public class AssemblerTests
         (LogCode.InvalidRegisterArgument, 24), // Debatably should be an InvalidAddressOffsetArgument error
         (LogCode.ZeroRegWriteback, 29),
         (LogCode.IntegerTruncated, 30),
+        (LogCode.InvalidInstructionArg, 31),
         (LogCode.InvalidRegisterArgument, 32),
         (LogCode.InvalidCharLiteral, 35));
 

@@ -38,15 +38,18 @@ public static class TokenSpanExtensions
     /// </summary>
     /// <param name="line">The line to scan.</param>
     /// <param name="type">The type of the token to find.</param>
+    /// <param name="token">The toke found.</param>
     /// <returns>The index of the first token of the <paramref name="type"/>, or -1 if none is found.</returns>
-    public static int FindNext(this ReadOnlySpan<Token> line, TokenType type)
+    public static int FindNext(this ReadOnlySpan<Token> line, TokenType type, out Token? token)
     {
         for (int i = 0; i < line.Length; i++)
         {
-            if (line[i].Type == type)
+            token = line[i];
+            if (token.Type == type)
                 return i;
         }
 
+        token = null;
         return -1;
     }
 

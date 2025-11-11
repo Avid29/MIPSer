@@ -22,6 +22,7 @@ using MIPS.Models.Modules.Tables.Enums;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Xml;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -91,7 +92,17 @@ public struct InstructionParser
         {
             // Split out next arg
             var arg = line.Args[i];
-            TryParseArg(arg, pattern[i], out reference);
+
+            // Empty argument
+            if (arg.Tokens.Length is 0)
+            {
+                var reportToken = arg.ProceedingComma ?? arg.PrecedingComma;
+                Guard.IsNotNull(reportToken);
+                _logger?.Log(Severity.Error, LogCode.InvalidInstructionArg, reportToken, "EmptyArgument");
+                continue;
+            }
+
+            TryParseArg(arg.Tokens, pattern[i], out reference);
         }
 
         // It's a pseudo instruction.
@@ -124,8 +135,14 @@ public struct InstructionParser
         // TODO: Check on pseudo-instructions
         if (instruction.GetWritebackRegister() is GPRegister.Zero && name != "nop")
         {
-            var writebackArg = line.Args[0]; // TODO: Is this true for move operations? Double check
-            _logger?.Log(Severity.Message, LogCode.ZeroRegWriteback, writebackArg, "ZeroRegisterWriteback");
+            // Only log if the token can be parsed, and is not 0 for other reasons
+            // TODO: Is this true for move operations? Double check
+            var writebackArg = line.Args[0].Tokens;
+            if (writebackArg.Length is 1 && TryParseRegister(writebackArg[0], out var reg) && reg is GPRegister.Zero)
+            {
+                _logger?.Log(Severity.Message, LogCode.ZeroRegWriteback, writebackArg, "ZeroRegisterWriteback");
+            }
+
         }
 
         parsedInstruction = new ParsedInstruction(instruction, reference);
@@ -419,8 +436,8 @@ public struct InstructionParser
         register = [];
 
         // Find matched parenthesis start and end
-        var parIndex = arg.FindNext(TokenType.OpenParenthesis);
-        var closeIndex = arg.FindNext(TokenType.CloseParenthesis);
+        var parIndex = arg.FindNext(TokenType.OpenParenthesis, out _);
+        var closeIndex = arg.FindNext(TokenType.CloseParenthesis, out _);
         if (parIndex is -1 || closeIndex is -1)
         {
             // TODO: Improve messaging
@@ -432,10 +449,10 @@ public struct InstructionParser
         offset = arg[..parIndex];
 
         // Register is everything between the parenthesis
-        register = arg[(parIndex+1)..closeIndex];
+        register = arg[(parIndex + 1)..closeIndex];
 
         // Ensure there's no content following the parenthesis.
-        if (!arg[(closeIndex+1)..].IsEmpty)
+        if (!arg[(closeIndex + 1)..].IsEmpty)
         {
             // TODO: Improve messaging
             _logger?.Log(Severity.Error, LogCode.InvalidAddressOffsetArgument, arg, "InvalidAddressOffsetArgument", arg.Print());

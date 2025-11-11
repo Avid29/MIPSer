@@ -2,6 +2,9 @@
 
 using CommunityToolkit.Diagnostics;
 using Microsoft.UI.Xaml;
+using MIPS.Assembler;
+using MIPS.Assembler.Models;
+using MIPS.Models.Instructions.Enums;
 using System;
 using WinUIEditor;
 
@@ -35,9 +38,13 @@ public partial class AssemblyEditBox
         UpdateTextProperty(text);
     }
 
-    private void Editor_StyleNeeded(Editor sender, StyleNeededEventArgs args)
+    private async void Editor_StyleNeeded(Editor sender, StyleNeededEventArgs args)
     {
         UpdateSyntaxHighlighting();
+
+        // Run assembler and show errors
+        var assembler = await Assembler.AssembleAsync(Text, null, new AssemblerConfig(MipsVersion.MipsIII));
+        ApplyLogHighlights(assembler.Logs);
     }
 
     private void CodeEditor_SyntaxHighlightingApplied(object? sender, ElementTheme e)

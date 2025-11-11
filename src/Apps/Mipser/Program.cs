@@ -79,8 +79,10 @@ public class Program
                     _ => ConsoleColor.White,
                 };
 
+
                 // TODO: Improved message
-                Console.WriteLine($"{log.Severity} on line {log.Location.Line}: {log.Message}");
+                var message = $"{log.Severity} on line {log.Location.Line}: {log.Message}";
+                Console.WriteLine(message);
             }
 
             Console.ResetColor();

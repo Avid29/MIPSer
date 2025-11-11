@@ -324,4 +324,7 @@
   <data name="UnexpectedToken" xml:space="preserve">
     <value>אסימון בלתי צפוי ‎'{0}'‎.</value>
   </data>
+  <data name="EmptyArgument" xml:space="preserve">
+    <value>הארגומנט ריק.</value>
+  </data>
 </root>

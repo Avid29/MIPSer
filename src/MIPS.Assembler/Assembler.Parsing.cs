@@ -55,7 +55,7 @@ public partial class Assembler
         // random garbage is in the file.
         if (line.Type is LineType.None && line.Args.Count is not 0)
         {
-            _logger.Log(Severity.Error, LogCode.UnexpectedToken, line.Args[0][0], "UnexpectedToken", line.Args[0][0]);
+            _logger.Log(Severity.Error, LogCode.UnexpectedToken, line.Args[0].Tokens[0], "UnexpectedToken", line.Args[0].Tokens[0]);
         }
     }
 
@@ -85,7 +85,7 @@ public partial class Assembler
 
         // Grab name and expression
         var name = line.Macro;
-        var expression = line.Args[0];
+        var expression = line.Args[0].Tokens;
         expression = expression.TrimType(TokenType.Assign, out var trimmed);
 
         // Ensure the name is not null, and that an assignment
