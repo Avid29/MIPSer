@@ -21,6 +21,7 @@
             <!--  File  -->
             <MenuBarItem x:Uid="/TitleBar/FileMBI" Title="File">
                 <MenuFlyoutItem x:Uid="/TitleBar/NewFileMFI" Text="New File"
+                                IsEnabled="False"
                                 Command="{x:Bind ViewModel.CreateNewFileCommand, Mode=OneWay}">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE130;" />

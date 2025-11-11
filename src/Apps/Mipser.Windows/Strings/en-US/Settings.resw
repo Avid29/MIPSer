@@ -168,4 +168,7 @@
   <data name="VersionFormat" xml:space="preserve">
     <value>{0}.{1}.{2}</value>
   </data>
+  <data name="ViewOnGitHubHB.Content" xml:space="preserve">
+    <value>View on GitHub</value>
+  </data>
 </root>

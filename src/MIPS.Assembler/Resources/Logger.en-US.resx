@@ -184,16 +184,16 @@
     <value>Character literal cannot be empty.</value>
   </data>
   <data name="IncompleteReference" xml:space="preserve">
-    <value>Incomplete symbol reference '{0}'</value>
+    <value>Incomplete symbol reference '{0}'.</value>
   </data>
   <data name="IncompleteToken" xml:space="preserve">
-    <value>Incomplete token '{0}'</value>
+    <value>Incomplete token '{0}'.</value>
   </data>
   <data name="IncompleteRegister" xml:space="preserve">
-    <value>Incomplete register name '{0}'</value>
+    <value>Incomplete register name '{0}'.</value>
   </data>
   <data name="IncompleteImmediate" xml:space="preserve">
-    <value>Incomplete immediate value '{0}'</value>
+    <value>Incomplete immediate value '{0}'.</value>
   </data>
   <data name="CantAddRelocatables" xml:space="preserve">
     <value>Cannot sum two relocatable symbols.</value>

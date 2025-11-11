@@ -12,9 +12,10 @@ While the MIPSer IDE is a WinUI 3 project, and therefore only available on Windo
 
 # Translation
 
-MIPSer supports localization for both the IDE and the Assembler (each available seperately).
+MIPSer supports localization for both the IDE and the Assembler. Assembler localization is integrated directly into the assembler, and is therefore available in the console as-well-as the MIPSer IDE app.
 
 Current languages:
+
 | Language | IDE Support | Assembler Support |
 | -------- | ----------- | ----------------- |
 | English  | Yes         | Yes               |

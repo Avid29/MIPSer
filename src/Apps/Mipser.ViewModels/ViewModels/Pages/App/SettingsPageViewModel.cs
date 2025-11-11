@@ -1,6 +1,5 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Assembler;
 using Mipser.Services.Localization;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
@@ -8,11 +7,7 @@ using Mipser.Services.Versioning;
 using Mipser.ViewModels.Pages.Abstract;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace Mipser.ViewModels.Pages.App;
 
