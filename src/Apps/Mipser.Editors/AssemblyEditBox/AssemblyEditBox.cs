@@ -69,7 +69,12 @@ public partial class AssemblyEditBox : Control
         if (editor is null)
             return;
 
-        // Go to line
-        editor.GotoLine(location.Line - 1);
+        // Attempt to get mapped location
+        if(!_locationMapper.TryGetValue(location.Index, out var mappedLocation))
+            return;
+
+        // Go to position, and focus the keyboard
+        editor.GotoPos(mappedLocation.Index);
+        _codeEditor?.Focus(FocusState.Keyboard);
     }
 }
