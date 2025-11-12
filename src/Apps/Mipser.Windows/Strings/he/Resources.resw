@@ -186,4 +186,16 @@
   <data name="PageTitle/Welcome" xml:space="preserve">
     <value>ברוכים הבאים</value>
   </data>
+  <data name="AnnotationThreshold_Never" xml:space="preserve">
+    <value>לעולם לא</value>
+  </data>
+  <data name="AnnotationThreshold_Errors" xml:space="preserve">
+    <value>שגיאות בלבד</value>
+  </data>
+  <data name="AnnotationThreshold_Warnings" xml:space="preserve">
+    <value>אזהרות ושגיאות</value>
+  </data>
+  <data name="AnnotationThreshold_Always" xml:space="preserve">
+    <value>תמיד</value>
+  </data>
 </root>

@@ -67,6 +67,7 @@
                 <DataTemplate x:DataType="vm:FilePageViewModel">
                     <asmedit:AssemblyEditBox Text="{x:Bind File.Contents, Mode=TwoWay}"
                                              RealTimeAssembly="{x:Bind AssembleRealTime, Mode=OneWay}"
+                                             AnnotationThreshold="{x:Bind AnnotationThreshold, Mode=OneWay}"
                                              FlowDirection="LeftToRight">
                         <asmedit:AssemblyEditBox.SyntaxHighlightingTheme>
                             <asmedit:AssemblySyntaxHighlightingTheme InstructionHighlightColor="{ThemeResource InstructionHighlightColor}"

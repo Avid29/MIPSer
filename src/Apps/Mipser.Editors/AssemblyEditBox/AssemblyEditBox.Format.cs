@@ -30,7 +30,9 @@ public partial class AssemblyEditBox
         if (editor is null)
             return;
 
+        // Clear indicators and annotations
         ClearLogHighlights();
+        editor.AnnotationClearAll();
 
         foreach (var log in logs)
         {
@@ -48,7 +50,7 @@ public partial class AssemblyEditBox
             // Find the start and length, using the string's length
             var tokenLength = GetEncodingSize($"{highlightString}");
             var start = utf8Location.Index;
-            
+
             // Select the indictor
             editor.IndicatorCurrent = log.Severity switch
             {
@@ -60,9 +62,28 @@ public partial class AssemblyEditBox
 
             // Apply the indicator
             editor.IndicatorFillRange(start, tokenLength);
+
+            // Don't add annotations for messages
+            if (!MeetsThreshold(log.Severity))
+                continue;
+
+            // Apply annotation
+            var annotationStyle = log.Severity switch
+            {
+                Severity.Error => ErrorAnnotationStyleIndex,
+                Severity.Warning => WarningAnnotationStyleIndex,
+                Severity.Message => MessageAnnotationStyleIndex,
+                _ => ErrorAnnotationStyleIndex,
+            };
+
+            var line = utf8Location.Line - 1;
+            editor.AnnotationSetStyle(line, annotationStyle);
+            editor.AnnotationSetText(line, log.Message);
         }
+
+        editor.AnnotationVisible = AnnotationVisible.Boxed;
     }
-    
+
     /// <summary>
     /// Clears formatting based on a log messages.
     /// </summary>
@@ -91,7 +112,7 @@ public partial class AssemblyEditBox
         // Clear the style
         editor.StartStyling(0, 0);
         editor.SetStyling(editor.Length, 0);
-        
+
         // Clear token mappings
         _locationMapper.Clear();
 
@@ -127,7 +148,7 @@ public partial class AssemblyEditBox
         // Clear the line to white
         editor.StartStyling(utf8Pos.Index, 0);
         editor.SetStyling(lineLength, 0);
-        
+
         // Tokenize the line
         var tokenized = Tokenizer.TokenizeLine(line, mode: TokenizerMode.IDE);
 
@@ -150,7 +171,7 @@ public partial class AssemblyEditBox
                 TokenType.LabelDeclaration => ReferenceStyleIndex,
 
                 TokenType.OpenParenthesis or TokenType.CloseParenthesis or
-                TokenType.OpenBracket or TokenType.CloseBracket or TokenType.Comma or 
+                TokenType.OpenBracket or TokenType.CloseBracket or TokenType.Comma or
                 TokenType.Operator => OperatorStyleIndex,
 
                 TokenType.Directive => DirectiveStyleIndex,
@@ -185,7 +206,12 @@ public partial class AssemblyEditBox
     private const int MacroStyleIndex = 9;
     private const int InvalidInstructionStyleIndex = 10;
     //private const int InvalidRegisterStyleIndex = 11;
-    //private const int InvalidReferenceStyleIndex = 11;
+    //private const int InvalidReferenceStyleIndex = 12;
+    
+    // 14 is reserved for the line indicators
+    private const int ErrorAnnotationStyleIndex = 17;
+    private const int WarningAnnotationStyleIndex = 18;
+    private const int MessageAnnotationStyleIndex = 19;
 
     private void SetupHighlighting()
     {
@@ -203,6 +229,10 @@ public partial class AssemblyEditBox
         editor.StyleSetFore(StringStyleIndex, ToInt(SyntaxHighlightingTheme.StringHighlightColor));
         editor.StyleSetFore(CommentStyleIndex, ToInt(SyntaxHighlightingTheme.CommentHighlightColor));
         editor.StyleSetFore(InvalidInstructionStyleIndex, ToInt(SyntaxHighlightingTheme.InvalidInstructionHighlightColor));
+
+        editor.StyleSetFore(ErrorAnnotationStyleIndex, ToInt(SyntaxHighlightingTheme.ErrorUnderlineColor));
+        editor.StyleSetFore(WarningAnnotationStyleIndex, ToInt(SyntaxHighlightingTheme.WarningUnderlineColor));
+        editor.StyleSetFore(MessageAnnotationStyleIndex, ToInt(SyntaxHighlightingTheme.MessageUnderlineColor));
     }
 
     private const int ErrorIndicatorIndex = 8;
@@ -220,12 +250,12 @@ public partial class AssemblyEditBox
         editor.IndicSetStyle(ErrorIndicatorIndex, IndicatorStyle.SquigglePixmap);
         editor.IndicSetFore(ErrorIndicatorIndex, ToInt(SyntaxHighlightingTheme.ErrorUnderlineColor));
         editor.IndicSetUnder(ErrorIndicatorIndex, true);
-        
+
         //editor.IndicSetStyle(WarningIndicatorIndex, IndicatorStyle.Diagonal);
         editor.IndicSetStyle(WarningIndicatorIndex, IndicatorStyle.SquigglePixmap);
         editor.IndicSetFore(WarningIndicatorIndex, ToInt(SyntaxHighlightingTheme.WarningUnderlineColor));
         editor.IndicSetUnder(WarningIndicatorIndex, true);
-        
+
         editor.IndicSetStyle(MessageIndicatorIndex, IndicatorStyle.Plain);
         editor.IndicSetFore(MessageIndicatorIndex, ToInt(SyntaxHighlightingTheme.MessageUnderlineColor));
         editor.IndicSetUnder(MessageIndicatorIndex, true);
@@ -241,9 +271,15 @@ public partial class AssemblyEditBox
             Instructions.Add(instr.Name);
         }
     }
-    
+
     private int GetEncodingSize(string original)
         => Encoding.UTF8.GetByteCount(original);
 
     private int ToInt(Color color) => color.R | color.G << 8 | color.B << 16;
+
+    private bool MeetsThreshold(Severity severity)
+    {
+        // The severity value is the threshold -1
+        return (int)severity < (int)AnnotationThreshold;
+    }
 }

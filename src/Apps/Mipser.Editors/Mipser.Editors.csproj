@@ -19,6 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\MIPS.Assembler\MIPS.Assembler.csproj" />
+    <ProjectReference Include="..\Mipser.ViewModels\Mipser.ViewModels.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="AssemblyEditBox\AssemblyEditBox.xaml">

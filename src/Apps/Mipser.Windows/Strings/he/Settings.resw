@@ -126,6 +126,12 @@
   <data name="AboutSE.Header" xml:space="preserve">
     <value>אודות MIPSer</value>
   </data>
+  <data name="AnnotationThresholdSC.Description" xml:space="preserve">
+    <value>מתי על העורך להציג הודעות יומן כהערות מתחת ליומן.</value>
+  </data>
+  <data name="AnnotationThresholdSC.Header" xml:space="preserve">
+    <value>סף הערות</value>
+  </data>
   <data name="AppLanguageSC.Description" xml:space="preserve">
     <value>בחר את שפת התצוגה של היישום. (נדרשת הפעלה מחדש כדי שהשינוי ייכנס לתוקף.)</value>
   </data>

@@ -126,6 +126,12 @@
   <data name="AboutSE.Header" xml:space="preserve">
     <value>About MIPSer</value>
   </data>
+  <data name="AnnotationThresholdSC.Description" xml:space="preserve">
+    <value>When should the editor show log messages as an annotation below the log.</value>
+  </data>
+  <data name="AnnotationThresholdSC.Header" xml:space="preserve">
+    <value>Annotations Threshold</value>
+  </data>
   <data name="AppLanguageSC.Description" xml:space="preserve">
     <value>Set the app's display language. (Requires a restart to take effect).</value>
   </data>

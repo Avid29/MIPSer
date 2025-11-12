@@ -186,4 +186,16 @@
   <data name="PageTitle/Welcome" xml:space="preserve">
     <value>Welcome</value>
   </data>
+  <data name="AnnotationThreshold_Never" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="AnnotationThreshold_Errors" xml:space="preserve">
+    <value>Only Errors</value>
+  </data>
+  <data name="AnnotationThreshold_Warnings" xml:space="preserve">
+    <value>Warnings and Errors</value>
+  </data>
+  <data name="AnnotationThreshold_Always" xml:space="preserve">
+    <value>Always</value>
+  </data>
 </root>

@@ -57,6 +57,20 @@ public class SettingsPageViewModel : PageViewModel
     }
 
     /// <summary>
+    /// Gets or sets the real-time assembly setting option.
+    /// </summary>
+    public AnnotationThreshold AnnotationThreshold
+    {
+        get => _settingsService.Local.GetValue<AnnotationThreshold>(nameof(AnnotationThreshold));
+        set => _settingsService.Local.SetValue(nameof(AnnotationThreshold), value, notify: true);
+    }
+
+    /// <summary>
+    /// Gets the list of available annotation threshold options.
+    /// </summary>
+    public IEnumerable<AnnotationThreshold> AnnotationThresholdOptions => Enum.GetValues<AnnotationThreshold>();
+
+    /// <summary>
     /// Gets or sets the app language in settings.
     /// </summary>
     public string LanguageOverride

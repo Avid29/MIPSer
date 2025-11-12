@@ -67,6 +67,20 @@
                     <ToggleSwitch IsOn="{x:Bind ViewModel.RealTimeAssembly, Mode=TwoWay}"/>
                 </ctc:SettingsCard>
 
+                <ctc:SettingsCard x:Uid="/Settings/AnnotationThresholdSC"
+                                  Header="Annotations Threshold"
+                                  Description="When should the editor show log messages as an annotation below the log."
+                                  IsEnabled="{x:Bind ViewModel.RealTimeAssembly}">
+                    <ComboBox SelectedItem="{x:Bind ViewModel.AnnotationThreshold, Mode=TwoWay}"
+                          ItemsSource="{x:Bind ViewModel.AnnotationThresholdOptions, Mode=OneWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="senums:AnnotationThreshold">
+                                <TextBlock Text="{x:Bind helpers:LocalizationHelper.Localize((senums:AnnotationThreshold)), Mode=OneWay}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </ctc:SettingsCard>
+
                 <!--  Localization Settings  -->
                 <TextBlock x:Uid="/Settings/LocalizationSettingsHeaderTB"
                            Text="Localization Settings"

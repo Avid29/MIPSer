@@ -32,6 +32,7 @@ namespace Mipser.Windows.Services.Settings
             
             // Editor
             Local.SetValue("RealTimeAssembly", true, false);
+            Local.SetValue("AnnotationThreshold", AnnotationThreshold.Errors, false);
 
             // Localization
             Local.SetValue<string?>("LanguageOverride", null, false);

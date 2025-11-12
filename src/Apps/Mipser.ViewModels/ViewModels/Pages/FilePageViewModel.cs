@@ -8,6 +8,7 @@ using Mipser.Bindables.Files;
 using Mipser.Messages;
 using Mipser.Messages.Build;
 using Mipser.Services.Settings;
+using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages.Abstract;
 using System;
 using System.Collections.Generic;
@@ -81,6 +82,12 @@ public class FilePageViewModel : PageViewModel
     /// Gets whether or not the file should be assembled in real-time.
     /// </summary>
     public bool AssembleRealTime => _settingsService.Local.GetValue<bool>("RealTimeAssembly");
+    
+
+    /// <summary>
+    /// Gets the threshold for showing logs as annotations.
+    /// </summary>
+    public AnnotationThreshold AnnotationThreshold => _settingsService.Local.GetValue<AnnotationThreshold>("AnnotationThreshold");
 
     /// <inheritdoc/>
     protected override void OnActivated()
@@ -93,6 +100,13 @@ public class FilePageViewModel : PageViewModel
                 return;
 
             OnPropertyChanged(nameof(AssembleRealTime));
+        });
+        _messenger.Register<FilePageViewModel, SettingChangedMessage<AnnotationThreshold>>(this, (r, m) =>
+        {
+            if (m.Key != "AnnotationThreshold")
+                return;
+
+            OnPropertyChanged(nameof(AnnotationThreshold));
         });
     }
 

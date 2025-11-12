@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using Microsoft.UI.Xaml;
+using Mipser.Services.Settings.Enums;
 using System;
 
 namespace Mipser.Editors.AssemblyEditBox;
@@ -18,6 +19,12 @@ public partial class AssemblyEditBox
     /// </summary>
     public static readonly DependencyProperty RealTimeAssemblyChecksProperty =
         DependencyProperty.Register(nameof(RealTimeAssembly), typeof(bool), typeof(AssemblyEditBox), new PropertyMetadata(true, OnRTAssemblyChanged));
+
+    /// <summary>
+    /// A <see cref="DependencyProperty"/> for the <see cref="RealTimeAssembly"/> property.
+    /// </summary>
+    public static readonly DependencyProperty AnnotationThresholdProperty =
+        DependencyProperty.Register(nameof(AnnotationThreshold), typeof(AnnotationThreshold), typeof(AssemblyEditBox), new PropertyMetadata(AnnotationThreshold.Errors, OnLogAnnotationsChanged));
 
     /// <summary>
     /// A <see cref="DependencyProperty"/> for the <see cref="Text"/> property.
@@ -45,6 +52,15 @@ public partial class AssemblyEditBox
     {
         get => (bool)GetValue(RealTimeAssemblyChecksProperty);
         set => SetValue(RealTimeAssemblyChecksProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether or not to show log annotations below indicators.
+    /// </summary>
+    public AnnotationThreshold AnnotationThreshold
+    {
+        get => (AnnotationThreshold)GetValue(AnnotationThresholdProperty);
+        set => SetValue(AnnotationThresholdProperty, value);
     }
 
     /// <summary>
@@ -82,6 +98,14 @@ public partial class AssemblyEditBox
             return;
 
         asmBox.ClearLogHighlights();
+    }
+    
+    private static void OnLogAnnotationsChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
+    {
+        if (d is not AssemblyEditBox asmBox)
+            return;
+
+        asmBox._codeEditor?.Editor.AnnotationClearAll();
     }
 
     private void UpdateText()
