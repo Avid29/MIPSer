@@ -46,6 +46,7 @@ public partial class WindowViewModel
     /// Gets a command that opens the about page.
     /// </summary>
     public RelayCommand OpenAboutCommand { get; }
+
     /// <summary>
     /// Gets a command that opens the cheat sheet.
     /// </summary>
@@ -60,7 +61,6 @@ public partial class WindowViewModel
     /// Gets a command that opens the welcome page.
     /// </summary>
     public RelayCommand OpenWelcomeCommand { get; }
-
 
     private void CreateNewFile() => _messenger.Send(new FileCreateNewRequestMessage());
 

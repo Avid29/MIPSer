@@ -7,6 +7,7 @@ using MIPS.Assembler.Tokenization.Models;
 using Mipser.Bindables.Files;
 using Mipser.Messages;
 using Mipser.Messages.Build;
+using Mipser.Messages.Editor.Enums;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages.Abstract;
@@ -33,6 +34,11 @@ public class FilePageViewModel : PageViewModel
     /// An event invoked when the file is assembled.
     /// </summary>
     public event EventHandler<IReadOnlyList<AssemblerLog>>? AssembledEvent;
+
+    /// <summary>
+    /// An event invoked when an editor operation is requested.
+    /// </summary>
+    public event EventHandler<EditorOperation>? EditorOperationRequested;
 
     private BindableFile? _file;
 
@@ -128,6 +134,12 @@ public class FilePageViewModel : PageViewModel
     /// </summary>
     /// <param name="token">The token to navigate to.</param>
     public void NavigateToToken(Token token) => NavigateToTokenEvent?.Invoke(this, token.Location);
+
+    /// <summary>
+    /// Requests an editor operation.
+    /// </summary>
+    /// <param name="operation">The editor operation requested.</param>
+    public void ApplyOperation(EditorOperation operation) => EditorOperationRequested?.Invoke(this, operation);
 
     private async void SetFile(BindableFile? file)
     {

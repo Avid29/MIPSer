@@ -5,6 +5,8 @@ using CommunityToolkit.Mvvm.Messaging;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Bindables.Files;
 using Mipser.Messages.Build;
+using Mipser.Messages.Editor;
+using Mipser.Messages.Editor.Enums;
 using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
 using Mipser.Messages.Pages;
@@ -19,9 +21,25 @@ public partial class MainViewModel
     /// <inheritdoc/>
     protected override void OnActivated()
     {
-        RegisterBuildMessages();
         RegisterFileMessages();
+        RegisterEditMessages();
+        RegisterBuildMessages();
         RegisterNavigationMessages();
+    }
+
+    private void RegisterFileMessages()
+    {
+        _messenger.Register<MainViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.CreateNewFile());
+        _messenger.Register<MainViewModel, FileOpenRequestMessage>(this, (r, m) => r.OpenFile(m.File));
+        _messenger.Register<MainViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFileAsync());
+        _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, (r, m) => r.FocusedPanel?.SaveCurrentFile());
+        _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, (r, m) => r.FocusedPanel?.ClosePage(m.Page));
+        _messenger.Register<MainViewModel, FolderPickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFolderAsync());
+    }
+
+    private void RegisterEditMessages()
+    {
+        _messenger.Register<MainViewModel, EditorOperationRequestMessage>(this, (r, m) => r.ApplyEditorOperation(m.Operation));
     }
 
     private void RegisterBuildMessages()
@@ -35,16 +53,6 @@ public partial class MainViewModel
             // Build the file
             await _buildService.AssembleFilesAsync(m.Files);
         });
-    }
-
-    private void RegisterFileMessages()
-    {
-        _messenger.Register<MainViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.CreateNewFile());
-        _messenger.Register<MainViewModel, FileOpenRequestMessage>(this, (r, m) => r.OpenFile(m.File));
-        _messenger.Register<MainViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFileAsync());
-        _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, (r, m) => r.FocusedPanel?.SaveCurrentFile());
-        _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, (r, m) => r.FocusedPanel?.ClosePage(m.Page));
-        _messenger.Register<MainViewModel, FolderPickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFolderAsync());
     }
 
     private void RegisterNavigationMessages()
@@ -127,5 +135,13 @@ public partial class MainViewModel
 
         // Navigate to the token
         page.NavigateToToken(token);
+    }
+
+    private void ApplyEditorOperation(EditorOperation operation)
+    {
+        if (FocusedPanel?.CurrentPage is not FilePageViewModel filePage)
+            return;
+
+        filePage.ApplyOperation(operation);
     }
 }

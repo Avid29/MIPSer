@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Controls;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Editors.AssemblyEditBox;
+using Mipser.Messages.Editor.Enums;
 using Mipser.ViewModels.Pages;
 using System.Collections.Generic;
 
@@ -47,6 +48,7 @@ public sealed partial class FileViewer : UserControl
     private void UpdateEvents()
     {
         ViewModel.NavigateToTokenEvent += ViewModel_NavigateToTokenEvent;
+        ViewModel.EditorOperationRequested += ViewModel_EditorOperationRequested;
         ViewModel.AssembledEvent += ViewModel_AssembledEvent;
     }
 
@@ -69,6 +71,16 @@ public sealed partial class FileViewer : UserControl
 
         // Navigate to location
         editBox.NavigateToToken(e);
+    }
+
+    private void ViewModel_EditorOperationRequested(object? sender, EditorOperation e)
+    {
+        // Find editbox
+        var editBox = this.FindDescendant<AssemblyEditBox>();
+        if (editBox is null)
+            return;
+
+        editBox.ApplyOperation(e);
     }
 
     private void UpdateBindings()

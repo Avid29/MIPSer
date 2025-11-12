@@ -36,6 +36,10 @@ public partial class WindowViewModel : ObservableRecipient
         OpenSettingsCommand = new RelayCommand(OpenSettings);
         OpenWelcomeCommand = new RelayCommand(OpenWelcome);
 
+        DuplicateCommand = new RelayCommand(Duplicate);
+        TransposeUpCommand = new RelayCommand(TransposeUp);
+        TransposeDownCommand = new RelayCommand(TransposeDown);
+
         IsActive = true;
 
         // Notify that the main panel is focused on startup

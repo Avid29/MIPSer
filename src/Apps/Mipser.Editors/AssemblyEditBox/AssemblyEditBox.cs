@@ -4,6 +4,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Tokenization.Models;
+using Mipser.Messages.Editor.Enums;
+using System;
 using System.Collections.Generic;
 using WinUIEditor;
 
@@ -77,5 +79,24 @@ public partial class AssemblyEditBox : Control
         editor.EnsureVisible(location.Line - 1);
         editor.GotoPos(mappedLocation.Index);
         _codeEditor?.Focus(FocusState.Keyboard);
+    }
+
+    /// <summary>
+    /// Applies an editor operation.
+    /// </summary>
+    /// <param name="operation"></param>
+    public void ApplyOperation(EditorOperation operation)
+    {
+        // Get the editor
+        var editor = _codeEditor?.Editor;
+        if (editor is null)
+            return;
+
+        switch (operation)
+        {
+            case EditorOperation.Duplicate:
+                editor.LineDuplicate();
+                break;
+        }
     }
 }
