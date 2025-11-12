@@ -74,6 +74,7 @@ public partial class AssemblyEditBox : Control
             return;
 
         // Go to position, and focus the keyboard
+        editor.EnsureVisible(location.Line - 1);
         editor.GotoPos(mappedLocation.Index);
         _codeEditor?.Focus(FocusState.Keyboard);
     }
