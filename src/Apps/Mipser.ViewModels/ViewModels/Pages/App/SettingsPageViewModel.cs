@@ -53,7 +53,11 @@ public class SettingsPageViewModel : PageViewModel
     public bool RealTimeAssembly
     {
         get => _settingsService.Local.GetValue<bool>(nameof(RealTimeAssembly));
-        set => _settingsService.Local.SetValue(nameof(RealTimeAssembly), value, notify: true);
+        set
+        {
+            _settingsService.Local.SetValue(nameof(RealTimeAssembly), value, notify: true);
+            OnPropertyChanged(nameof(RealTimeAssembly));
+        }
     }
 
     /// <summary>
@@ -102,7 +106,7 @@ public class SettingsPageViewModel : PageViewModel
     /// <remarks>
     /// "app" is a sentinel value since null and empty cannot be used in a ComboBox.
     /// </remarks>
-    public IEnumerable<string> AssemblerLanguageOptions => ["app", "en-US", "he-IL"]; // TODO: Retrieve programmatically
+    public IEnumerable<string> AssemblerLanguageOptions => ["app", "en", "he"]; // TODO: Retrieve programmatically
 
     /// <summary>
     /// Gets the app's version.

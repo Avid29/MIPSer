@@ -139,10 +139,10 @@
     <value>שפת האפליקציה</value>
   </data>
   <data name="AppThemeSC.Description" xml:space="preserve">
-    <value>שנה את הנושא של היישום.</value>
+    <value>שנה את הצבעים המופעים של היישום.</value>
   </data>
   <data name="AppThemeSC.Header" xml:space="preserve">
-    <value>נושא</value>
+    <value>בחרית מצב</value>
   </data>
   <data name="AssemblerLanguageSC.Description" xml:space="preserve">
     <value>בחר את השפה המשמשת ליומן האסמבלר.</value>

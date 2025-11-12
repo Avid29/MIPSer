@@ -50,6 +50,8 @@
 		<AppxBundlePlatforms>x64|arm64</AppxBundlePlatforms>
 		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 		<PackageCertificateThumbprint>3C27F89D4FC0DDE41BB77C54D790A32DAD4330F7</PackageCertificateThumbprint>
+		<NeutralLanguage>en-US</NeutralLanguage>
+		<DefaultLanguage>en</DefaultLanguage>
 	</PropertyGroup>
 	
   <!-- 

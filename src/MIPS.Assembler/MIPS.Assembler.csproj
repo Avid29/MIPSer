@@ -28,17 +28,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\Logger.en-US.Designer.cs">
+    <Compile Update="Resources\Logger.en.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Logger.en-US.resx</DependentUpon>
+      <DependentUpon>Logger.en.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Logger.en-US.resx">
+    <EmbeddedResource Update="Resources\Logger.en.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Logger.en-US.Designer.cs</LastGenOutput>
+      <LastGenOutput>Logger.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

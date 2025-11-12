@@ -47,7 +47,7 @@
                               Header="Theme"
                               Description="Change the app's theme.">
                     <ComboBox SelectedItem="{x:Bind ViewModel.AppTheme, Mode=TwoWay}"
-                          ItemsSource="{x:Bind ViewModel.AppThemeOptions, Mode=OneWay}">
+                              ItemsSource="{x:Bind ViewModel.AppThemeOptions, Mode=OneWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate x:DataType="senums:Theme">
                                 <TextBlock Text="{x:Bind helpers:LocalizationHelper.Localize((senums:Theme)), Mode=OneWay}"/>
@@ -70,9 +70,9 @@
                 <ctc:SettingsCard x:Uid="/Settings/AnnotationThresholdSC"
                                   Header="Annotations Threshold"
                                   Description="When should the editor show log messages as an annotation below the log."
-                                  IsEnabled="{x:Bind ViewModel.RealTimeAssembly}">
+                                  IsEnabled="{x:Bind ViewModel.RealTimeAssembly, Mode=OneWay}">
                     <ComboBox SelectedItem="{x:Bind ViewModel.AnnotationThreshold, Mode=TwoWay}"
-                          ItemsSource="{x:Bind ViewModel.AnnotationThresholdOptions, Mode=OneWay}">
+                              ItemsSource="{x:Bind ViewModel.AnnotationThresholdOptions, Mode=OneWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate x:DataType="senums:AnnotationThreshold">
                                 <TextBlock Text="{x:Bind helpers:LocalizationHelper.Localize((senums:AnnotationThreshold)), Mode=OneWay}"/>
@@ -90,7 +90,7 @@
                               Header="App Language"
                               Description="Set the app's display language. (Requires a restart to take effect).">
                     <ComboBox SelectedItem="{x:Bind ViewModel.LanguageOverride, Mode=TwoWay}"
-                          ItemsSource="{x:Bind ViewModel.AppLanguageOptions, Mode=OneWay}">
+                              ItemsSource="{x:Bind ViewModel.AppLanguageOptions, Mode=OneWay}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate x:DataType="x:String">
                                 <TextBlock Text="{x:Bind local:SettingsPage.LanguageDisplayName((x:String)), Mode=OneWay}"/>
