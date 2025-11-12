@@ -209,7 +209,7 @@ public partial class AssemblyEditBox
         string? currentLabel;
         while(foldLabels.TryPeek(out currentLabel))
         {
-            if (labelText.StartsWith(currentLabel))
+            if (labelText.StartsWith($"{currentLabel}_"))
                 break;
 
             foldLabels.Pop();
