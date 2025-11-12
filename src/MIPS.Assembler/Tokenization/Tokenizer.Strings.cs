@@ -117,7 +117,7 @@ public partial class Tokenizer
     {
         // Complete the token
         var status = CompleteCacheToken(out var token);
-        tokens = [token];
+        tokens = token is not null ? [token] : [];
         if (!status)
         {
             return false;
