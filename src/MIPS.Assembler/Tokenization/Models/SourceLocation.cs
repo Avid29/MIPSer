@@ -25,6 +25,9 @@ public struct SourceLocation
     /// <summary>
     /// Gets the row of the location file.
     /// </summary>
+    /// <remarks>
+    /// The line is 1 indexed.
+    /// </remarks>
     public int Line { get; set; }
 
     /// <summary>

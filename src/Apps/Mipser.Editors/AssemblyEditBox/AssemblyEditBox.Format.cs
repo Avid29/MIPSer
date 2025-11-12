@@ -130,6 +130,8 @@ public partial class AssemblyEditBox
         
         // Tokenize the line
         var tokenized = Tokenizer.TokenizeLine(line, mode: TokenizerMode.IDE);
+
+        // Apply Syntax Highlighting for each token
         foreach (var token in tokenized.Tokens)
         {
             // Log token position in location mapper.
@@ -166,6 +168,10 @@ public partial class AssemblyEditBox
             utf16Pos += tokenLength;
             utf8Pos += tokenLength;
         }
+
+        // Set fold level
+        FoldLevel foldLevel = tokenized.Label is not null ? FoldLevel.HeaderFlag : (FoldLevel)1;
+        editor.SetFoldLevel(utf8Pos.Line - 1, foldLevel);
     }
 
     private const int InstructionStyleIndex = 1;
