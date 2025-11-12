@@ -201,7 +201,7 @@ public partial class AssemblyEditBox
         // No adjustments to make
         if (label is null)
         {
-            return (FoldLevel)foldLabels.Count;
+            return (FoldLevel)foldLabels.Count | FoldLevel.Base;
         }
 
         var labelText = label.Source.TrimEnd(':');
@@ -209,7 +209,7 @@ public partial class AssemblyEditBox
         string? currentLabel;
         while(foldLabels.TryPeek(out currentLabel))
         {
-            if (labelText.StartsWith(currentLabel.TrimEnd(':')))
+            if (labelText.StartsWith(currentLabel))
                 break;
 
             foldLabels.Pop();
@@ -219,12 +219,12 @@ public partial class AssemblyEditBox
         if (!string.IsNullOrEmpty(currentLabel) && labelText == $"{currentLabel}_end")
         {
             foldLabels.Pop();
-            return (FoldLevel)foldLabels.Count + 1;
+            return (FoldLevel)foldLabels.Count + 1 | FoldLevel.Base;
         }
 
         // Push child label
         foldLabels.Push(labelText);
-        return (FoldLevel)(foldLabels.Count-1) | FoldLevel.HeaderFlag;
+        return (FoldLevel)(foldLabels.Count-1) | FoldLevel.HeaderFlag | FoldLevel.Base;
     }
 
     private const int InstructionStyleIndex = 1;
