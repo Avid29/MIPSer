@@ -182,7 +182,7 @@ public partial class Assembler
 
         foreach (char c in name)
         {
-            if (!char.IsLetterOrDigit(c))
+            if (!char.IsLetterOrDigit(c) && c is not '_')
             {
                 _logger?.Log(Severity.Error, LogCode.IllegalSymbolName, symbol, "SymbolCannotContain", name, c);
                 return false;

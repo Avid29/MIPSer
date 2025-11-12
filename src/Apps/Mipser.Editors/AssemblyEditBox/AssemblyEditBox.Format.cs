@@ -122,6 +122,7 @@ public partial class AssemblyEditBox
         var utf16Pos = new SourceLocation();
         var utf8Pos = new SourceLocation();
 
+        Stack<string> foldLabels = new();
         while (true)
         {
             var line = reader.ReadLine();
@@ -129,7 +130,7 @@ public partial class AssemblyEditBox
                 break;
 
             // TODO: Check if the line has been updated
-            FormatLine(ref utf16Pos, ref utf8Pos, line);
+            FormatLine(ref utf16Pos, ref utf8Pos, line, foldLabels);
             utf8Pos = utf8Pos.NextLine(2);
             utf16Pos = utf16Pos.NextLine(1);
         }
@@ -137,7 +138,7 @@ public partial class AssemblyEditBox
         @lock = false;
     }
 
-    private void FormatLine(ref SourceLocation utf16Pos, ref SourceLocation utf8Pos, string line)
+    private void FormatLine(ref SourceLocation utf16Pos, ref SourceLocation utf8Pos, string line, Stack<string> foldLabels)
     {
         Guard.IsNotNull(_codeEditor);
         var editor = _codeEditor.Editor;
@@ -190,9 +191,40 @@ public partial class AssemblyEditBox
             utf8Pos += tokenLength;
         }
 
-        // Set fold level
-        FoldLevel foldLevel = tokenized.Label is not null ? FoldLevel.HeaderFlag : (FoldLevel)1;
+        // Adjust fold level based on the line's label
+        var foldLevel = GetAndAdjustLabelDepth(tokenized.Label, foldLabels);
         editor.SetFoldLevel(utf8Pos.Line - 1, foldLevel);
+    }
+
+    private static FoldLevel GetAndAdjustLabelDepth(Token? label, Stack<string> foldLabels)
+    {
+        // No adjustments to make
+        if (label is null)
+        {
+            return (FoldLevel)foldLabels.Count;
+        }
+
+        var labelText = label.Source.TrimEnd(':');
+
+        string? currentLabel;
+        while(foldLabels.TryPeek(out currentLabel))
+        {
+            if (labelText.StartsWith(currentLabel.TrimEnd(':')))
+                break;
+
+            foldLabels.Pop();
+        }
+
+        // Pop the label to end it
+        if (!string.IsNullOrEmpty(currentLabel) && labelText == $"{currentLabel}_end")
+        {
+            foldLabels.Pop();
+            return (FoldLevel)foldLabels.Count + 1;
+        }
+
+        // Push child label
+        foldLabels.Push(labelText);
+        return (FoldLevel)(foldLabels.Count-1) | FoldLevel.HeaderFlag;
     }
 
     private const int InstructionStyleIndex = 1;

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
 	  <RootNamespace>MIPS.Assembler</RootNamespace>
-	  <DefaultLanguage>en-US</DefaultLanguage>
+	  <DefaultLanguage>en</DefaultLanguage>
   </PropertyGroup>
 
   <ItemGroup>

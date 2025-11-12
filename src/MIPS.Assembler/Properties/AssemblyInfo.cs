@@ -8,4 +8,4 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("MIPS.Assembler.Tests.Live")]
 
 [assembly: ResourceLocation("Resources")]
-[assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
+[assembly: NeutralResourcesLanguage("en", UltimateResourceFallbackLocation.Satellite)]

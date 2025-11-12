@@ -12,19 +12,28 @@ public partial class AssemblyEditBox
     /// A <see cref="DependencyProperty"/> for the <see cref="Text"/> property.
     /// </summary>
     public static readonly DependencyProperty TextProperty =
-        DependencyProperty.Register(nameof(Text), typeof(string), typeof(AssemblyEditBox), new PropertyMetadata(string.Empty, OnTextChanged));
+        DependencyProperty.Register(nameof(Text),
+            typeof(string), 
+            typeof(AssemblyEditBox),
+            new PropertyMetadata(string.Empty, OnTextChanged));
 
     /// <summary>
     /// A <see cref="DependencyProperty"/> for the <see cref="RealTimeAssembly"/> property.
     /// </summary>
     public static readonly DependencyProperty RealTimeAssemblyChecksProperty =
-        DependencyProperty.Register(nameof(RealTimeAssembly), typeof(bool), typeof(AssemblyEditBox), new PropertyMetadata(true, OnRTAssemblyChanged));
+        DependencyProperty.Register(nameof(RealTimeAssembly),
+            typeof(bool),
+            typeof(AssemblyEditBox),
+            new PropertyMetadata(true, OnRTAssemblyChanged));
 
     /// <summary>
     /// A <see cref="DependencyProperty"/> for the <see cref="RealTimeAssembly"/> property.
     /// </summary>
     public static readonly DependencyProperty AnnotationThresholdProperty =
-        DependencyProperty.Register(nameof(AnnotationThreshold), typeof(AnnotationThreshold), typeof(AssemblyEditBox), new PropertyMetadata(AnnotationThreshold.Errors, OnLogAnnotationsChanged));
+        DependencyProperty.Register(nameof(AnnotationThreshold),
+            typeof(AnnotationThreshold),
+            typeof(AssemblyEditBox),
+            new PropertyMetadata(AnnotationThreshold.Errors, OnLogAnnotationsChanged));
 
     /// <summary>
     /// A <see cref="DependencyProperty"/> for the <see cref="Text"/> property.
