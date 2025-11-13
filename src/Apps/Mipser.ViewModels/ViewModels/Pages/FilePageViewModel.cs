@@ -70,6 +70,9 @@ public class FilePageViewModel : PageViewModel
     }
     
     /// <inheritdoc/>
+    public override bool CanTextEdit => true;
+    
+    /// <inheritdoc/>
     public override bool CanSave => true;
     
     /// <inheritdoc/>

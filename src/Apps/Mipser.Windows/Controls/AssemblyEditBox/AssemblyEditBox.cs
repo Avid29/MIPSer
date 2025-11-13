@@ -45,6 +45,7 @@ public partial class AssemblyEditBox : Control
         // Setup template parts
         _codeEditor = (CodeEditorControl)GetTemplateChild(CodeEditorPartName);
 
+
         // Setup events
         this.Loaded += AssemblyEditBox_Loaded;
 
@@ -52,7 +53,8 @@ public partial class AssemblyEditBox : Control
         var table = new InstructionTable(MIPS.Models.Instructions.Enums.MipsVersion.MipsIII);
         SetupKeywords(table.GetInstructions());
 
-        // Setup styling
+        // Setup key-binds and styling
+        SetupKeybinds();
         SetupHighlighting();
         SetupIndicators();
         
@@ -92,11 +94,41 @@ public partial class AssemblyEditBox : Control
         if (editor is null)
             return;
 
-        switch (operation)
+        Action? action = operation switch
         {
-            case EditorOperation.Duplicate:
-                editor.LineDuplicate();
-                break;
-        }
+            EditorOperation.Cut => editor.SelectionEmpty ? editor.LineCut : editor.Cut,
+            EditorOperation.Copy => editor.CopyAllowLine,
+            EditorOperation.Paste => editor.Paste,
+            EditorOperation.Duplicate => editor.SelectionEmpty ? editor.LineDuplicate : editor.SelectionDuplicate,
+            _ => null,
+        };
+
+        if (action is null)
+            return;
+
+        // Perform the action
+        action();
     }
+
+    private void SetupKeybinds()
+    {
+        var editor = _codeEditor?.Editor;
+        if (editor is null)
+            return;
+
+        // Clear built-in commands that will be handled through commands
+        editor.ClearCmdKey(KeyDef('X', KeyMod.Ctrl));
+        editor.ClearCmdKey(KeyDef('C', KeyMod.Ctrl));
+        editor.ClearCmdKey(KeyDef('P', KeyMod.Ctrl));
+        editor.ClearCmdKey(KeyDef('D', KeyMod.Ctrl));
+        editor.ClearCmdKey(KeyDef(Keys.Up, KeyMod.Alt));
+        editor.ClearCmdKey(KeyDef(Keys.Down, KeyMod.Alt));
+    }
+
+    private int KeyDef(char key, KeyMod mod)
+    {
+        return key + ((byte)key << 16);
+    }
+
+    private int KeyDef(Keys key, KeyMod mod) => KeyDef((char)key, mod);
 }

@@ -15,6 +15,11 @@ namespace Mipser.ViewModels.Pages.Abstract
         public abstract string Title { get; }
 
         /// <summary>
+        /// Gets or sets if the page can be edited as text.
+        /// </summary>
+        public virtual bool CanTextEdit => false;
+
+        /// <summary>
         /// Gets or sets if the page can be saved.
         /// </summary>
         public virtual bool CanSave => false;

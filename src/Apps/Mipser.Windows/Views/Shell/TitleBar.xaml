@@ -83,42 +83,51 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
-                <MenuFlyoutItem x:Uid="/TitleBar/CutMFI" Icon="Cut" Text="Cut" IsEnabled="False">
+                <MenuFlyoutItem x:Uid="/TitleBar/CutMFI" Icon="Cut" Text="Cut"
+                                Command="{x:Bind ViewModel.CutCommand, Mode=OneWay}"
+                                IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Control" Key="X"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="/TitleBar/CopyMFI" Icon="Copy" Text="Copy" IsEnabled="False">
+                <MenuFlyoutItem x:Uid="/TitleBar/CopyMFI" Icon="Copy" Text="Copy"
+                                Command="{x:Bind ViewModel.CopyCommand, Mode=OneWay}"
+                                IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Control" Key="C"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="/TitleBar/PasteMFI" Icon="Paste" Text="Paste" IsEnabled="False">
+                <MenuFlyoutItem x:Uid="/TitleBar/PasteMFI" Icon="Paste" Text="Paste"
+                                Command="{x:Bind ViewModel.PasteCommand, Mode=OneWay}"
+                                IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Control" Key="P"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutItem x:Uid="/TitleBar/DuplicateMFI" Icon="Copy" Text="Duplicate"
-                                Command="{x:Bind ViewModel.DuplicateCommand, Mode=OneWay}">
+                                Command="{x:Bind ViewModel.DuplicateCommand, Mode=OneWay}"
+                                IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Modifiers="Control" Key="D"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <!--<MenuFlyoutSeparator/>
+                <MenuFlyoutSeparator/>
                 <MenuFlyoutSubItem x:Uid="/TitleBar/EditorAdvancedMFSI" Text="Advanced">
                     <MenuFlyoutItem x:Uid="/TitleBar/MovedLineUpMFI" Text="Move Line Up"
-                                    Command="{x:Bind ViewModel.TransposeUpCommand, Mode=OneWay}">
+                                    Command="{x:Bind ViewModel.TransposeUpCommand, Mode=OneWay}"
+                                    IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Menu" Key="Up"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                     <MenuFlyoutItem x:Uid="/TitleBar/MovedLineDownMFI" Text="Move Line Down"
-                                    Command="{x:Bind ViewModel.TransposeDownCommand, Mode=OneWay}">
+                                    Command="{x:Bind ViewModel.TransposeDownCommand, Mode=OneWay}"
+                                    IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Menu" Key="Down"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
-                </MenuFlyoutSubItem>-->
+                </MenuFlyoutSubItem>
             </MenuBarItem>
             
             <!--  View  -->

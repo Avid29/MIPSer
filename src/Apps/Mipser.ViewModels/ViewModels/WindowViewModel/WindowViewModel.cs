@@ -36,6 +36,9 @@ public partial class WindowViewModel : ObservableRecipient
         OpenSettingsCommand = new RelayCommand(OpenSettings);
         OpenWelcomeCommand = new RelayCommand(OpenWelcome);
 
+        CutCommand = new RelayCommand(Cut);
+        CopyCommand = new RelayCommand(Copy);
+        PasteCommand = new RelayCommand(Paste);
         DuplicateCommand = new RelayCommand(Duplicate);
         TransposeUpCommand = new RelayCommand(TransposeUp);
         TransposeDownCommand = new RelayCommand(TransposeDown);
