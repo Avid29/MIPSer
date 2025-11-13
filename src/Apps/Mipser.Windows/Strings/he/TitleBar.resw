@@ -144,14 +144,26 @@
   <data name="CutMFI.Text" xml:space="preserve">
     <value>גזור</value>
   </data>
+  <data name="DuplicateMFI.Text" xml:space="preserve">
+    <value>שכפל</value>
+  </data>
   <data name="EditMBI.Title" xml:space="preserve">
     <value>ערוך</value>
+  </data>
+  <data name="EditorAdvancedMFSI.Text" xml:space="preserve">
+    <value>מתקדם</value>
   </data>
   <data name="FileMBI.Title" xml:space="preserve">
     <value>קובץ</value>
   </data>
   <data name="HelpMBI.Title" xml:space="preserve">
     <value>עזרה</value>
+  </data>
+  <data name="MoveLineDownMFI.Text" xml:space="preserve">
+    <value>הזז שורה מטה</value>
+  </data>
+  <data name="MoveLineUpMFI.Text" xml:space="preserve">
+    <value>הזז שורה מעלה</value>
   </data>
   <data name="NewFileMFI.Text" xml:space="preserve">
     <value>קובץ חדש</value>
@@ -176,6 +188,9 @@
   </data>
   <data name="SaveMFI.Text" xml:space="preserve">
     <value>שמור</value>
+  </data>
+  <data name="SelectAllMFI.Text" xml:space="preserve">
+    <value>בחר הכול</value>
   </data>
   <data name="SettingsMFI.Text" xml:space="preserve">
     <value>הגדרות MIPSer</value>

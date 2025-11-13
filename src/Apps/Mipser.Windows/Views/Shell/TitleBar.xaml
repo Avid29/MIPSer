@@ -126,14 +126,14 @@
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
                 <MenuFlyoutSubItem x:Uid="/TitleBar/EditorAdvancedMFSI" Text="Advanced">
-                    <MenuFlyoutItem x:Uid="/TitleBar/MovedLineUpMFI" Text="Move Line Up"
+                    <MenuFlyoutItem x:Uid="/TitleBar/MoveLineUpMFI" Text="Move Line Up"
                                     Command="{x:Bind ViewModel.TransposeUpCommand, Mode=OneWay}"
                                     IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Menu" Key="Up"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
-                    <MenuFlyoutItem x:Uid="/TitleBar/MovedLineDownMFI" Text="Move Line Down"
+                    <MenuFlyoutItem x:Uid="/TitleBar/MoveLineDownMFI" Text="Move Line Down"
                                     Command="{x:Bind ViewModel.TransposeDownCommand, Mode=OneWay}"
                                     IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>

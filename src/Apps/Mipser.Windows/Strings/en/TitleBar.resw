@@ -144,14 +144,26 @@
   <data name="CutMFI.Text" xml:space="preserve">
     <value>Cut</value>
   </data>
+  <data name="DuplicateMFI.Text" xml:space="preserve">
+    <value>Duplicate</value>
+  </data>
   <data name="EditMBI.Title" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="EditorAdvancedMFSI.Text" xml:space="preserve">
+    <value>Advanced</value>
   </data>
   <data name="FileMBI.Title" xml:space="preserve">
     <value>File</value>
   </data>
   <data name="HelpMBI.Title" xml:space="preserve">
     <value>Help</value>
+  </data>
+  <data name="MoveLineDownMFI.Text" xml:space="preserve">
+    <value>Shift Line Down</value>
+  </data>
+  <data name="MoveLineUpMFI.Text" xml:space="preserve">
+    <value>Shift Line Up</value>
   </data>
   <data name="NewFileMFI.Text" xml:space="preserve">
     <value>New File</value>
@@ -176,6 +188,9 @@
   </data>
   <data name="SaveMFI.Text" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="SelectAllMFI.Text" xml:space="preserve">
+    <value>Select All</value>
   </data>
   <data name="SettingsMFI.Text" xml:space="preserve">
     <value>MIPSer Settings</value>
