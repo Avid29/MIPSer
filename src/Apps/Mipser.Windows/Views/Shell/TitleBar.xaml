@@ -121,7 +121,7 @@
                                 Command="{x:Bind ViewModel.SelectAllCommand, Mode=OneWay}"
                                 IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
-                        <KeyboardAccelerator Modifiers="Control" Key="D"/>
+                        <KeyboardAccelerator Modifiers="Control" Key="A"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
