@@ -46,10 +46,10 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         
-        <AutoSuggestBox x:Uid="SearchFilesASB"
+        <!--<AutoSuggestBox x:Uid="SearchFilesASB"
                         PlaceholderText="Search Files"
                         Margin="16,0,16,12"
-                        IsEnabled="False"/>
+                        IsEnabled="False"/>-->
         <TreeView x:Name="TreeViewRoot"
                   ItemsSource="{x:Bind ViewModel.RootNode, Mode=OneWay}"
                   ItemTemplateSelector="{StaticResource FileItemTemplateSelector}"
