@@ -6,7 +6,6 @@ using MIPS.Tests.Helpers;
 using RASM.Modules;
 using RASM.Modules.Config;
 using System.IO;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace RASM.Tests;
@@ -24,14 +23,11 @@ public class LinkerTests
         Stream refStream = File.Open(refPath, FileMode.Open);
 
         var config = new RasmConfig();
-        var defAssembler = await Assembler.AssembleAsync(defStream, "def", config);
-        var refAssembler = await Assembler.AssembleAsync(refStream, "ref", config);
+        var defResult = await Assembler.AssembleAsync<RasmModule, RasmConfig>(defStream, "def", config);
+        var refResult = await Assembler.AssembleAsync<RasmModule, RasmConfig>(refStream, "ref", config);
 
-        defStream = new MemoryStream();
-        refStream = new MemoryStream();
-
-        var defModule = defAssembler.CompleteModule<RasmModule>(defStream);
-        var refModule = refAssembler.CompleteModule<RasmModule>(refStream);
+        var defModule = defResult.ObjectModule;
+        var refModule = refResult.ObjectModule;
 
         Assert.IsNotNull(defModule);
         Assert.IsNotNull(refModule);

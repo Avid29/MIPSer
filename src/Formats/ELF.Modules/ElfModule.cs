@@ -13,7 +13,7 @@ namespace ELF.Modules;
 /// <summary>
 /// A fully assembled object module in ELF format
 /// </summary>
-public class ElfModule : IBuildModule<ElfModule>
+public class ElfModule : IBuildModule<ElfModule, ElfConfig>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ElfModule"/> class.
@@ -27,28 +27,21 @@ public class ElfModule : IBuildModule<ElfModule>
     public string? Name { get; }
 
     /// <inheritdoc/>
-    public unsafe static ElfModule? Create(ModuleConstructor constructor, AssemblerConfig config, Stream? stream = null)
+    public unsafe static ElfModule? Create(ModuleConstructor constructor, ElfConfig config, Stream? stream = null)
     {
         stream ??= new MemoryStream();
 
-        // Verify 
-        if (config is not ElfConfig elfConfig)
-        {
-            ThrowHelper.ThrowArgumentException(nameof(config), $"{config} must be an {nameof(ElfConfig)}.");
-            return null;
-        }
-
         // Ensure 32-bit class
         // TODO: Support creating 64-bit elf.
-        if (elfConfig.ElfIdentity.Class is not Class.Bit32)
+        if (config.ElfIdentity.Class is not Class.Bit32)
         {
-            ThrowHelper.ThrowArgumentException(nameof(elfConfig.ElfIdentity.Class), $"Configuration class must be 32bit for MIPS.");
+            ThrowHelper.ThrowArgumentException(nameof(config.ElfIdentity.Class), $"Configuration class must be 32bit for MIPS.");
         }
 
         // Allocate space for header
         var header = new Header<uint>()
         {
-            Identity = elfConfig.ElfIdentity,
+            Identity = config.ElfIdentity,
             HeaderSize = (ushort)sizeof(Header<uint>),
         };
         header.TryWrite(stream);
@@ -67,7 +60,7 @@ public class ElfModule : IBuildModule<ElfModule>
 
         throw new NotImplementedException();
     }
-    
+
     /// <inheritdoc/>
     public static ElfModule? Load(string name, Stream stream)
     {

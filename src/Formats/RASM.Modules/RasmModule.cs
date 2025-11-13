@@ -19,7 +19,7 @@ namespace RASM.Modules;
 /// <summary>
 /// A fully assembled object module in RASM format.
 /// </summary>
-public class RasmModule : IBuildModule<RasmModule>, IExecutableModule
+public class RasmModule : IBuildModule<RasmModule, RasmConfig>, IExecutableModule
 {
     private const int SECTION_COUNT = 6;
 
@@ -50,15 +50,9 @@ public class RasmModule : IBuildModule<RasmModule>, IExecutableModule
     public string? Name { get; }
 
     /// <inheritdoc/>
-    public static RasmModule? Create(ModuleConstructor constructor, AssemblerConfig config, Stream? stream = null)
+    public static RasmModule? Create(ModuleConstructor constructor, RasmConfig config, Stream? stream = null)
     {
         stream ??= new MemoryStream();
-
-        if (config is not RasmConfig rasmConfig)
-        {
-            ThrowHelper.ThrowArgumentException(nameof(config), $"{config} must be a {nameof(RasmConfig)}.");
-            return null;
-        }
 
         // TODO: Flags and entry point properly
         // TODO: Construct string list.
@@ -75,7 +69,7 @@ public class RasmModule : IBuildModule<RasmModule>, IExecutableModule
             0, 0, 0, 0
         };
 
-        var header = new Header(rasmConfig.MagicNumber, rasmConfig.VersionNumber, 0, 0, sizes);
+        var header = new Header(config.MagicNumber, config.VersionNumber, 0, 0, sizes);
         header.TryWrite(stream);
 
         // Append segments to stream

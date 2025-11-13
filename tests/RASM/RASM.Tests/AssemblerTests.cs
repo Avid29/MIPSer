@@ -110,15 +110,19 @@ public class AssemblerTests
 
     private static async Task RunTest(Stream stream, string? filename = null, RasmConfig? config = null, params (LogCode, long)[] expected)
     {
+        // Load output file
+        //var output = TestFilePathing.GetMatchingObjectFilePath(filename);
+        //Stream result = File.Open(output, FileMode.OpenOrCreate);
+
         // Run assembler
-        var assembler = await Assembler.AssembleAsync(stream, filename, config ?? new RasmConfig());
+        var result = await Assembler.AssembleAsync<RasmModule, RasmConfig>(stream, filename, config ?? new RasmConfig());
 
         // Find expected errors, warnings, and messages
-        if (expected.Length == assembler.Logs.Count)
+        if (expected.Length == result.Logs.Count)
         {
             foreach (var (code, line) in expected)
             {
-                var logEntry = assembler.Logs.FirstOrDefault(x => x.Code == code && x.Location.Line == line);
+                var logEntry = result.Logs.FirstOrDefault(x => x.Code == code && x.Location.Line == line);
                 Assert.IsNotNull(logEntry, $"Could not find matching {code} error on line {line}");
             }
         }
@@ -128,18 +132,10 @@ public class AssemblerTests
             return;
 
         // Assembly failed. No expected output
-        if (assembler.Failed)
+        if (result.Failed)
             return;
 
-        // Load output file
-        //var output = TestFilePathing.GetMatchingObjectFilePath(filename);
-        //Stream result = File.Open(output, FileMode.OpenOrCreate);
-        Stream result = new MemoryStream();
-
         // Write the module and assert validity
-        var module = assembler.CompleteModule<RasmModule>(result);
-        Assert.IsNotNull(module);
-
-        var constructor = module.Abstract(config ?? new RasmConfig());
+        var constructor = result.ObjectModule?.Abstract(config ?? new RasmConfig());
     }
 }

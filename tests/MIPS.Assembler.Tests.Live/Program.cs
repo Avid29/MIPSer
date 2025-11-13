@@ -63,12 +63,11 @@ public class Program()
     private async Task<bool> TestLine(string line)
     {
         var stream = new MemoryStream(Encoding.Default.GetBytes(line));
-        var assembler = await Assembler.AssembleAsync(stream, null, new RasmConfig());
+        var outStream = new MemoryStream();
 
-        stream = new MemoryStream();
-        assembler.CompleteModule<RasmModule>(stream);
+        var result = await Assembler.AssembleAsync<RasmModule, RasmConfig>(stream, null, new RasmConfig(), outStream);
 
-        if (!assembler.Failed)
+        if (!result.Failed)
         {
             Console.Write("\nBinary: ");
             uint inst = 0;
@@ -96,7 +95,7 @@ public class Program()
         }
 
         Console.WriteLine();
-        foreach (var error in assembler.Logs)
+        foreach (var error in result.Logs)
         {
             (string message, ConsoleColor color) = error.Severity switch 
             {
@@ -112,7 +111,7 @@ public class Program()
         }
 
         Console.WriteLine("\n");
-        return !assembler.Failed;
+        return !result.Failed;
     }
 
     private bool TestExpression(string line)

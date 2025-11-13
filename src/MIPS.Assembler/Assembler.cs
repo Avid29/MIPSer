@@ -11,6 +11,7 @@ using MIPS.Models.Addressing.Enums;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace MIPS.Assembler;
@@ -59,12 +60,12 @@ public partial class Assembler
     /// <summary>
     /// Gets the assembler context for this assembler instance.
     /// </summary>
-    public AssemblerContext Context { get; }
+    internal AssemblerContext Context { get; }
 
     /// <summary>
     /// Gets the assembler's configuration.
     /// </summary>
-    public AssemblerConfig Config { get; }
+    internal AssemblerConfig Config { get; }
 
     /// <summary>
     /// Gets the current address.
@@ -89,29 +90,11 @@ public partial class Assembler
     /// Gets whether or not the assembler failed to assemble a valid module.
     /// </summary>
     public bool Failed => _logger.Failed;
-    
-    /// <summary>
-    /// Assembles an object module from a stream of assembly.
-    /// </summary>
-    public static async Task<Assembler> AssembleAsync(string str, string? filename, AssemblerConfig config)
-    {
-        using var reader = new StringReader(str);
-        return await AssembleAsync(reader, filename, config);
-    }
-    
-    /// <summary>
-    /// Assembles an object module from a stream of assembly.
-    /// </summary>
-    public static async Task<Assembler> AssembleAsync(Stream stream, string? filename, AssemblerConfig config)
-    {
-        using var reader = new StreamReader(stream);
-        return await AssembleAsync(reader, filename, config);
-    }
 
     /// <summary>
     /// Assembles an object module from a stream of assembly.
     /// </summary>
-    public static async Task<Assembler> AssembleAsync(TextReader reader, string? filename, AssemblerConfig config)
+    private static async Task<Assembler> AssembleAsync(TextReader reader, string? filename, AssemblerConfig config)
     {
         var assembler = new Assembler(config);
         var tokens = await Tokenizer.TokenizeAsync(reader, filename);
@@ -130,13 +113,4 @@ public partial class Assembler
 
         return assembler;
     }
-
-    /// <summary>
-    /// Writes the assembled module to a module stream of the provided format.
-    /// </summary>
-    /// <typeparam name="T">The format of module to write.</typeparam>
-    /// <param name="stream">The stream to write the module to.</param>
-    /// <returns>The module object.</returns>
-    public T? CompleteModule<T>(Stream stream)
-        where T : IBuildModule<T> => T.Create(_module, Config, stream);
 }

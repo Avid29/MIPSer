@@ -90,23 +90,23 @@ public class BuildService
             }
 
             // Assemble the file
-            var assembler = await AssembleFileAsync(file, null, saveFile);
+            var result = await AssembleFileAsync(file, null, saveFile);
             
             // Restore the original language
             CultureInfo.CurrentUICulture = restore;
 
             // Check the assembler result
-            if (assembler is null)
+            if (result is null)
                 continue; // TODO: Handle file loading errors
 
             // Update the status and log
-            var assemblerFailed = assembler?.Failed ?? false;
-            failed = failed || (assembler?.Failed ?? false);
+            var assemblerFailed = result?.Failed ?? false;
+            failed = failed || (result?.Failed ?? false);
             Status = failed ? BuildStatus.Failing : BuildStatus.Assembling;
-            if (assembler?.Logs is not null)
-                logs.AddRange(assembler.Logs);
+            if (result?.Logs is not null)
+                logs.AddRange(result.Logs);
 
-            _messenger.Send(new FileAssembledMessage(file.Path, saveFile?.Path, assemblerFailed, assembler?.Logs));
+            _messenger.Send(new FileAssembledMessage(file.Path, saveFile?.Path, assemblerFailed, result?.Logs));
         }
 
         // Send a message with the build results.
@@ -117,7 +117,7 @@ public class BuildService
         await WaitAndClearStatus();
     }
 
-    private static async Task<Assembler?> AssembleFileAsync(BindableFile file, AssemblerConfig? config, BindableFile? saveLocation = null)
+    private static async Task<AssemblyResult?> AssembleFileAsync(BindableFile file, RasmConfig? config, BindableFile? saveLocation = null)
     {
         config ??= new RasmConfig();
 
@@ -126,21 +126,15 @@ public class BuildService
         if (stream is null)
             return null;
 
+        // Open save location stream
+        Stream? saveStream = null;
+        if (saveLocation is not null)
+        {
+            saveStream = await saveLocation.GetWriteStreamAsync();
+        }
+
         // Assemble the file
-        var assembler = await Assembler.AssembleAsync(stream, file.Path, config);
-
-        // Return if no save file is provided
-        if (saveLocation is null)
-            return assembler;
-
-        // Open save file for 
-        stream = await saveLocation.GetWriteStreamAsync();
-        if (stream is null)
-            return null;
-
-        // TODO: Support other module formats
-        assembler.CompleteModule<RasmModule>(stream);
-        return assembler;
+        return await Assembler.AssembleAsync<RasmModule, RasmConfig>(stream, file.Path, config, saveStream);
     }
 
     private bool PreBuildChecks()

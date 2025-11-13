@@ -13,7 +13,7 @@ namespace ObjectFiles;
 /// <summary>
 /// An object module in ELF format.
 /// </summary>
-public class ElfModule : IBuildModule<ElfModule>, IExecutableModule
+public class ElfModule : IBuildModule<ElfModule, AssemblerConfig>, IExecutableModule
 {
     private readonly ElfFile _elfFile;
 

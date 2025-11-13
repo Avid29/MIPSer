@@ -18,18 +18,17 @@ public class InterpreterTests
         var path = TestFilePathing.GetAssemblyFilePath("sample_tests/test1.asm");
         var stream = File.Open(path, FileMode.Open);
 
-        // Run assembler
-        var assembler = await Assembler.Assembler.AssembleAsync(stream, path, new AssemblerConfig());
-
         // Load output file
         var output = TestFilePathing.GetMatchingObjectFilePath(path);
-        Stream result = File.Open(output, FileMode.OpenOrCreate);
+        Stream outStream = File.Open(output, FileMode.OpenOrCreate);
+
+        // Run assembler
+        var result = await Assembler.Assembler.AssembleAsync<RawModule, AssemblerConfig>(stream, path, new AssemblerConfig(), outStream);
 
         // Write the module and assert validity
-        var module = assembler.CompleteModule<RawModule>(result);
-        Assert.IsNotNull(module);
+        Assert.IsNotNull(result.ObjectModule);
 
-        var interpreter = new Interpreter(module);
+        var interpreter = new Interpreter(result.ObjectModule);
         interpreter.StepInstruction();
         interpreter.StepInstruction();
         interpreter.StepInstruction();
