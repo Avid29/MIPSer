@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Formats\RASM.Modules\RASM.Modules.csproj" />
     <ProjectReference Include="..\..\..\src\MIPS.Assembler\MIPS.Assembler.csproj" />
+    <ProjectReference Include="..\..\..\src\MIPS.Linker\MIPS.Linker.csproj" />
     <ProjectReference Include="..\..\..\src\MIPS\MIPS.csproj" />
     <ProjectReference Include="..\..\MIPS.Assembler.Tests\MIPS.Assembler.Tests.csproj" />
     <ProjectReference Include="..\..\MIPS.Tests\MIPS.Tests.csproj" />

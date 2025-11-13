@@ -21,4 +21,8 @@
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ASMs\link_tests\" />
+  </ItemGroup>
+
 </Project>
