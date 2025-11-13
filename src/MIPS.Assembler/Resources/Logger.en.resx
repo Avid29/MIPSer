@@ -327,4 +327,10 @@
   <data name="EmptyArgument" xml:space="preserve">
     <value>Argument is empty.</value>
   </data>
+  <data name="IncompleteString" xml:space="preserve">
+    <value>Incomplete string.</value>
+  </data>
+  <data name="IncompleteChar" xml:space="preserve">
+    <value>Incomplete character immediate.</value>
+  </data>
 </root>

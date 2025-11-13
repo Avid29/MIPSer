@@ -256,7 +256,7 @@ public readonly struct DirectiveParser
 
             // TODO: Evaluate expressions
             // Parse string statement to string literal
-            if (!StringParser.TryParseString(arg[0], out var value))
+            if (!StringParser.TryParseString(arg[0], out var value, _logger))
                 return false;
 
             // Copy to byte list

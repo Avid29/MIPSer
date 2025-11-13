@@ -327,4 +327,10 @@
   <data name="EmptyArgument" xml:space="preserve">
     <value>הארגומנט ריק.</value>
   </data>
+  <data name="IncompleteString" xml:space="preserve">
+    <value>אינה שלמה מחרוזת.</value>
+  </data>
+  <data name="IncompleteChar" xml:space="preserve">
+    <value>אינו שלם תו מיידי.</value>
+  </data>
 </root>

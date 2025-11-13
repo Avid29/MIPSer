@@ -162,13 +162,13 @@ public partial class AssemblyEditBox : Control
         editor.AssignCmdKey(KeyDef(Keys.Up), (int)ScintillaMessage.LineUp);
         editor.AssignCmdKey(KeyDef(Keys.Up, KeyMod.Shift), (int)ScintillaMessage.LineUpExtend);
         editor.AssignCmdKey(KeyDef(Keys.Up, KeyMod.Ctrl), (int)ScintillaMessage.LineScrollUp);
-        editor.AssignCmdKey(KeyDef(Keys.Up, KeyMod.Shift | KeyMod.Alt), (int)ScintillaMessage.LineUpRectExtend); // TODO: Make command?
+        editor.AssignCmdKey(KeyDef(Keys.Up, KeyMod.Ctrl | KeyMod.Shift), (int)ScintillaMessage.LineUpRectExtend); // TODO: Make command?
 
         // Line left keys
         editor.AssignCmdKey(KeyDef(Keys.Left), (int)ScintillaMessage.CharLeft);
         editor.AssignCmdKey(KeyDef(Keys.Left, KeyMod.Shift), (int)ScintillaMessage.CharLeftExtend);
         editor.AssignCmdKey(KeyDef(Keys.Left, KeyMod.Ctrl), (int)ScintillaMessage.WordLeft);
-        editor.AssignCmdKey(KeyDef(Keys.Left, KeyMod.Shift | KeyMod.Alt), (int)ScintillaMessage.WordLeftExtend);
+        editor.AssignCmdKey(KeyDef(Keys.Left, KeyMod.Ctrl | KeyMod.Shift), (int)ScintillaMessage.WordLeftExtend);
 
         // Line right keys
         editor.AssignCmdKey(KeyDef(Keys.Right), (int)ScintillaMessage.CharRight);

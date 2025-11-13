@@ -73,7 +73,7 @@ public ref struct StringParser
             return false;
 
         // Ensure string begins and ends with quotes
-        if (input[0] != wrap || input[^1] != wrap)
+        if (input[0] != wrap || input[^1] != wrap || input.Length is 1)
         {
             string expected = wrap switch
             {
@@ -83,7 +83,7 @@ public ref struct StringParser
             };
 
             // TODO: Improve message
-            _logger?.Log(Severity.Error, LogCode.IncompleteString, _token, $"Expected{expected}");
+            _logger?.Log(Severity.Error, LogCode.IncompleteString, _token, $"Incomplete{expected}");
             return false;
         }
 
