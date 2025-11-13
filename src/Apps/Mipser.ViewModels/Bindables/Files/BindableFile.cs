@@ -3,6 +3,7 @@
 using Mipser.Bindables.Files.Abstract;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ public class BindableFile : BindableFilesItemBase
     /// </summary>
     internal BindableFile(FileService fileService) : base(fileService)
     {
+        Children = [];
     }
 
     /// <summary>
@@ -30,6 +32,7 @@ public class BindableFile : BindableFilesItemBase
     internal BindableFile(FileService fileService, IFile file) : base(fileService)
     {
         _file = file;
+        Children = [];
     }
 
     /// <summary>
@@ -84,10 +87,21 @@ public class BindableFile : BindableFilesItemBase
     /// <inheritdoc/>
     protected override IFilesItem? Item => _file;
 
+    /// <inheritdoc/>
+    /// <remarks>
+    /// This usually means 
+    /// </remarks>
+    public override ObservableCollection<BindableFilesItemBase> Children { get; }
+
     /// <summary>
     /// Saves the file contents.
     /// </summary>
     public async Task SaveAsync() => await SaveContent();
+
+    internal void TrackAsChild(BindableFilesItemBase child)
+    {
+        Children.Add(child);
+    }
 
     /// <summary>
     /// Loads the files content.

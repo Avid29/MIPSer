@@ -17,7 +17,6 @@ namespace Mipser.Bindables.Files;
 public class BindableFolder : BindableFilesItemBase
 {
     private readonly IFolder _folder;
-    private ObservableCollection<BindableFilesItemBase> _items;
     private bool _childrenNotCalculated;
 
     /// <summary>
@@ -27,18 +26,14 @@ public class BindableFolder : BindableFilesItemBase
     {
         _folder = folder;
 
-        _items = [];
+        Children = [];
         ChildrenNotLoaded = true;
     }
 
     /// <summary>
     /// Gets the folder's children.
     /// </summary>
-    public ObservableCollection<BindableFilesItemBase> Children
-    {
-        get => _items;
-        set => SetProperty(ref _items, value);
-    }
+    public override ObservableCollection<BindableFilesItemBase> Children { get; }
 
     /// <summary>
     /// Gets a value indicating whether or not the children have been loaded.
@@ -73,7 +68,7 @@ public class BindableFolder : BindableFilesItemBase
 
         // Track child if children are tracked
         if (!ChildrenNotLoaded && !Children.Contains(file))
-            Children.Add(file);
+            TrackChild(file);
 
         return file;
     }
@@ -148,13 +143,26 @@ public class BindableFolder : BindableFilesItemBase
         ChildrenNotLoaded = false;
 
         Children.Clear();
-        foreach (var item in children)
+        foreach (var item in children.OrderBy(x => x.Name.EndsWith(".obj")))
         {
-            Children.Add(item);
+            TrackChild(item);
 
             // Recursively load children if recursing
             if (recursive && item is BindableFolder folder)
                 await folder.LoadChildrenAsync(recursive);
         }
+    }
+
+    internal void TrackChild(BindableFilesItemBase item)
+    {
+        var nameAsAsm = $"{System.IO.Path.GetFileNameWithoutExtension(item.Name)}.asm";
+        var parentAsm = Children.OfType<BindableFile>().FirstOrDefault(x => x.Name == nameAsAsm);
+        if (parentAsm is not null)
+        {
+            parentAsm.TrackAsChild(item);
+            return;
+        }
+
+        Children.Add(item);
     }
 }

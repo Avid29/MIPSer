@@ -7,6 +7,8 @@ using MIPS.Assembler.Models;
 using Mipser.Bindables.Files;
 using Mipser.Messages.Build;
 using Mipser.Models.Enums;
+using Mipser.Services.Files;
+using Mipser.Services.Files.Models;
 using Mipser.Services.Project;
 using Mipser.Services.Settings;
 using RASM.Modules;
@@ -28,6 +30,7 @@ public class BuildService
     private readonly IMessenger _messenger;
     private readonly ISettingsService _settingsService;
     private readonly IProjectService _projectService;
+    private readonly IFileService _fileService;
 
     private CancellationTokenSource? _resetToken;
     private BuildStatus _buildStatus;
@@ -35,11 +38,12 @@ public class BuildService
     /// <summary>
     /// Initializes a new instance of the <see cref="BuildService"/> class.
     /// </summary>
-    public BuildService(IMessenger messenger, ISettingsService settingsService, IProjectService projectService)
+    public BuildService(IMessenger messenger, ISettingsService settingsService, IProjectService projectService, IFileService fileService)
     {
         _messenger = messenger;
         _settingsService = settingsService;
         _projectService = projectService;
+        _fileService = fileService;
 
         _buildStatus = BuildStatus.Ready;
     }
@@ -56,9 +60,6 @@ public class BuildService
 
         Status = BuildStatus.Assembling;
 
-        // Get save folder
-        var folder = await _projectService.GetObjectFolderAsync();
-
         // Culminate results
         bool failed = false;
         var logs = new List<ILog>();
@@ -71,6 +72,8 @@ public class BuildService
 
             // Get save file
             BindableFile? saveFile = null;
+            var folderPath = Path.GetDirectoryName(file.Path) ?? string.Empty;
+            var folder = await _fileService.GetFolderAsync(folderPath);
             if (folder is not null)
             {
                 var saveFilename = Path.GetFileNameWithoutExtension(file.Name) + ".obj";

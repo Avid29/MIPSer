@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using Mipser.Services.Localization;
+using System.Collections.ObjectModel;
 
 namespace Mipser.Bindables.Files.Abstract;
 
@@ -40,4 +41,9 @@ public abstract class BindableFilesItemBase : ObservableObject
     /// Gets the file's path.
     /// </summary>
     public string? Path => Item?.Path;
+
+    /// <summary>
+    /// Gets the child items.
+    /// </summary>
+    public abstract ObservableCollection<BindableFilesItemBase> Children { get; }
 }

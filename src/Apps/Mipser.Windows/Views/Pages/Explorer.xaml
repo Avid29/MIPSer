@@ -12,6 +12,7 @@
     <UserControl.Resources>
         <DataTemplate x:Key="FileTemplate" x:DataType="files:BindableFile">
             <TreeViewItem AutomationProperties.Name="{x:Bind Name, Mode=OneWay}"
+                          ItemsSource="{x:Bind Children, Mode=OneWay}"
                           DoubleTapped="FileDoubleTapped">
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <ImageIcon Source="/Assets/Icons/Files/File.svg" Height="20"/>
