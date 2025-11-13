@@ -5,7 +5,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Tokenization.Models;
-using Mipser.Editors.AssemblyEditBox;
+using Mipser.Windows.Controls.AssemblyEditBox;
 using Mipser.Messages.Editor.Enums;
 using Mipser.ViewModels.Pages;
 using System.Collections.Generic;

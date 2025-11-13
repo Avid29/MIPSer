@@ -5,7 +5,7 @@ using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Windows.UI;
 
-namespace Mipser.Editors.AssemblyEditBox;
+namespace Mipser.Windows.Controls.AssemblyEditBox;
 
 /// <summary>
 /// A collection of colors to use for syntax highlighting.

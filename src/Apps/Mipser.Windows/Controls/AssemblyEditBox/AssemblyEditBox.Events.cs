@@ -8,7 +8,7 @@ using MIPS.Models.Instructions.Enums;
 using System;
 using WinUIEditor;
 
-namespace Mipser.Editors.AssemblyEditBox;
+namespace Mipser.Windows.Controls.AssemblyEditBox;
 
 public partial class AssemblyEditBox
 {

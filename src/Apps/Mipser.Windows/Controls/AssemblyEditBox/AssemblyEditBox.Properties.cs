@@ -4,7 +4,7 @@ using Microsoft.UI.Xaml;
 using Mipser.Services.Settings.Enums;
 using System;
 
-namespace Mipser.Editors.AssemblyEditBox;
+namespace Mipser.Windows.Controls.AssemblyEditBox;
 
 public partial class AssemblyEditBox
 {

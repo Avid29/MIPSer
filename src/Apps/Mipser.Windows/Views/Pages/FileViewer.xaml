@@ -6,7 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:editor="using:WinUIEditor"
-    xmlns:asmedit="using:Mipser.Editors.AssemblyEditBox"
+    xmlns:asmedit="using:Mipser.Windows.Controls.AssemblyEditBox"
     xmlns:hexview="using:Mipser.Editors.HexViewer"
     xmlns:selectors="using:Mipser.Windows.Selectors"
     xmlns:vm="using:Mipser.ViewModels.Pages"
