@@ -47,8 +47,15 @@ public partial class AssemblyEditBox
             return;
 
         // Run assembler and show errors
-        var assembler = await Assembler.AssembleAsync(Text, null, new AssemblerConfig(MipsVersion.MipsIII));
-        ApplyLogHighlights(assembler.Logs);
+        try
+        {
+            var result = await Assembler.AssembleAsync(Text, null, new AssemblerConfig(MipsVersion.MipsIII));
+            ApplyLogHighlights(result.Logs);
+        }
+        catch (Exception)
+        {
+            // TODO: Notify exception occured
+        }
     }
 
     private void CodeEditor_SyntaxHighlightingApplied(object? sender, ElementTheme e)
