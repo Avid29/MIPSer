@@ -94,12 +94,26 @@ public partial class AssemblyEditBox : Control
         if (editor is null)
             return;
 
+        // Select or construct action
         Action? action = operation switch
         {
+            EditorOperation.Undo => editor.Undo,
+            EditorOperation.Redo => editor.Redo,
             EditorOperation.Cut => editor.SelectionEmpty ? editor.LineCut : editor.Cut,
             EditorOperation.Copy => editor.CopyAllowLine,
             EditorOperation.Paste => editor.Paste,
             EditorOperation.Duplicate => editor.SelectionEmpty ? editor.LineDuplicate : editor.SelectionDuplicate,
+            EditorOperation.SelectAll => editor.SelectAll,
+            EditorOperation.TransposeUp => () =>
+            {
+                editor.LineTranspose();
+                editor.LineUp();
+            },
+            EditorOperation.TransposeDown => () =>
+            {
+                editor.LineDown();
+                editor.LineTranspose();
+            },
             _ => null,
         };
 
@@ -116,19 +130,57 @@ public partial class AssemblyEditBox : Control
         if (editor is null)
             return;
 
-        // Clear built-in commands that will be handled through commands
-        editor.ClearCmdKey(KeyDef('X', KeyMod.Ctrl));
-        editor.ClearCmdKey(KeyDef('C', KeyMod.Ctrl));
-        editor.ClearCmdKey(KeyDef('P', KeyMod.Ctrl));
-        editor.ClearCmdKey(KeyDef('D', KeyMod.Ctrl));
-        editor.ClearCmdKey(KeyDef(Keys.Up, KeyMod.Alt));
-        editor.ClearCmdKey(KeyDef(Keys.Down, KeyMod.Alt));
+        // Clear all built-in commands and restore only desired ones
+        // This must be done to prevent undesired key captures.
+        editor.ClearAllCmdKeys();
+
+        // Tab
+        editor.AssignCmdKey(KeyDef(Keys.Tab), (int)ScintillaMessage.Tab);
+        editor.AssignCmdKey(KeyDef(Keys.Tab, KeyMod.Shift), (int)ScintillaMessage.BackTab);
+
+        // New line
+        editor.AssignCmdKey(KeyDef(Keys.Return), (int)ScintillaMessage.NewLine);
+        editor.AssignCmdKey(KeyDef(Keys.Return, KeyMod.Shift), (int)ScintillaMessage.NewLine);
+
+        // Backspace/Delete
+        editor.AssignCmdKey(KeyDef(Keys.Back), (int)ScintillaMessage.DeleteBack);
+        editor.AssignCmdKey(KeyDef(Keys.Back, KeyMod.Ctrl), (int)ScintillaMessage.DelWordLeft);
+        editor.AssignCmdKey(KeyDef(Keys.Delete), (int)ScintillaMessage.Clear);
+        editor.AssignCmdKey(KeyDef(Keys.Delete, KeyMod.Ctrl), (int)ScintillaMessage.DelWordRight);
+
+        // Zoom
+        editor.AssignCmdKey(KeyDef(Keys.Add, KeyMod.Ctrl), (int)ScintillaMessage.ZoomIn);
+        editor.AssignCmdKey(KeyDef(Keys.Subtract, KeyMod.Ctrl), (int)ScintillaMessage.ZoomOut);
+
+        // Line down keys
+        editor.AssignCmdKey(KeyDef(Keys.Down), (int)ScintillaMessage.LineDown);
+        editor.AssignCmdKey(KeyDef(Keys.Down, KeyMod.Shift), (int)ScintillaMessage.LineDownExtend);
+        editor.AssignCmdKey(KeyDef(Keys.Down, KeyMod.Ctrl), (int)ScintillaMessage.LineScrollDown);
+        editor.AssignCmdKey(KeyDef(Keys.Down, KeyMod.Shift | KeyMod.Alt), (int)ScintillaMessage.LineDownRectExtend); // TODO: Make command?
+
+        // Line up keys
+        editor.AssignCmdKey(KeyDef(Keys.Up), (int)ScintillaMessage.LineUp);
+        editor.AssignCmdKey(KeyDef(Keys.Up, KeyMod.Shift), (int)ScintillaMessage.LineUpExtend);
+        editor.AssignCmdKey(KeyDef(Keys.Up, KeyMod.Ctrl), (int)ScintillaMessage.LineScrollUp);
+        editor.AssignCmdKey(KeyDef(Keys.Up, KeyMod.Shift | KeyMod.Alt), (int)ScintillaMessage.LineUpRectExtend); // TODO: Make command?
+
+        // Line left keys
+        editor.AssignCmdKey(KeyDef(Keys.Left), (int)ScintillaMessage.CharLeft);
+        editor.AssignCmdKey(KeyDef(Keys.Left, KeyMod.Shift), (int)ScintillaMessage.CharLeftExtend);
+        editor.AssignCmdKey(KeyDef(Keys.Left, KeyMod.Ctrl), (int)ScintillaMessage.WordLeft);
+        editor.AssignCmdKey(KeyDef(Keys.Left, KeyMod.Shift | KeyMod.Alt), (int)ScintillaMessage.WordLeftExtend);
+
+        // Line right keys
+        editor.AssignCmdKey(KeyDef(Keys.Right), (int)ScintillaMessage.CharRight);
+        editor.AssignCmdKey(KeyDef(Keys.Right, KeyMod.Shift), (int)ScintillaMessage.CharRightExtend);
+        editor.AssignCmdKey(KeyDef(Keys.Right, KeyMod.Ctrl), (int)ScintillaMessage.WordRight);
+        editor.AssignCmdKey(KeyDef(Keys.Right, KeyMod.Shift | KeyMod.Alt), (int)ScintillaMessage.WordRightExtend);
     }
 
-    private int KeyDef(char key, KeyMod mod)
+    private int KeyDef(char key, KeyMod mod = KeyMod.Norm)
     {
-        return key + ((byte)key << 16);
+        return key + ((byte)mod << 16);
     }
 
-    private int KeyDef(Keys key, KeyMod mod) => KeyDef((char)key, mod);
+    private int KeyDef(Keys key, KeyMod mod = KeyMod.Norm) => KeyDef((char)key, mod);
 }

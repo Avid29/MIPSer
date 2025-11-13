@@ -39,17 +39,24 @@ public sealed partial class FileViewer : UserControl
         get => (FilePageViewModel)GetValue(ViewModelProperty);
         set
         {
+            UpdateEvents(value, ViewModel);
             SetValue(ViewModelProperty, value);
             UpdateBindings();
-            UpdateEvents();
         }
     }
 
-    private void UpdateEvents()
+    private void UpdateEvents(FilePageViewModel newVM, FilePageViewModel? oldVM)
     {
-        ViewModel.NavigateToTokenEvent += ViewModel_NavigateToTokenEvent;
-        ViewModel.EditorOperationRequested += ViewModel_EditorOperationRequested;
-        ViewModel.AssembledEvent += ViewModel_AssembledEvent;
+        if (oldVM is not null)
+        {
+            oldVM.NavigateToTokenEvent -= ViewModel_NavigateToTokenEvent;
+            oldVM.EditorOperationRequested -= ViewModel_EditorOperationRequested;
+            oldVM.AssembledEvent -= ViewModel_AssembledEvent;
+        }
+
+        newVM.NavigateToTokenEvent += ViewModel_NavigateToTokenEvent;
+        newVM.EditorOperationRequested += ViewModel_EditorOperationRequested;
+        newVM.AssembledEvent += ViewModel_AssembledEvent;
     }
 
     private void ViewModel_AssembledEvent(object? sender, IReadOnlyList<AssemblerLog> e)

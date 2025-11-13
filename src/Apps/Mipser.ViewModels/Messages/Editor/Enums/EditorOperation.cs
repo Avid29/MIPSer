@@ -8,10 +8,13 @@ namespace Mipser.Messages.Editor.Enums;
 public enum EditorOperation
 {
 #pragma warning disable CS1591
+    Undo,
+    Redo,
     Cut,
     Copy,
     Paste,
     Duplicate,
+    SelectAll,
     TransposeUp,
     TransposeDown,
 #pragma warning restore CS1591
