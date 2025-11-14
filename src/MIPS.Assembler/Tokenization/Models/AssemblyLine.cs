@@ -102,7 +102,7 @@ public class AssemblyLine
             case TokenType.MacroDeclaration:
                 Macro = head;
                 Type = LineType.Macro;
-                return;
+                break;
             case TokenType.Instruction:
                 Instruction = head;
                 Type = LineType.Instruction;
