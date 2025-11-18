@@ -14,6 +14,7 @@ using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables;
 using System;
 using System.Buffers;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 
@@ -26,13 +27,15 @@ public ref struct ExpressionParser
 {
     private readonly ILogger? _logger;
     private readonly AssemblerContext? _context;
-    private readonly ReadOnlySpan<Token> _tokens;
 
-    private ExpressionParser(ReadOnlySpan<Token> tokens, AssemblerContext? context, ILogger? logger)
+    private SymbolEntry? _reference; 
+
+    private ExpressionParser(AssemblerContext? context, ILogger? logger)
     {
-        _tokens = tokens;
         _logger = logger;
         _context = context;
+
+        _reference = null;
     }
 
     /// <summary>
@@ -40,17 +43,17 @@ public ref struct ExpressionParser
     /// </summary>
     /// <param name="expression"></param>
     /// <param name="result"></param>
-    /// <param name="relSymbol"></param>
+    /// <param name="reference"></param>
     /// <param name="context"></param>
     /// <param name="logger"></param>
     /// <returns></returns>
-    public static bool TryParse(ReadOnlySpan<Token> expression, out Address result, out SymbolEntry? relSymbol, AssemblerContext? context = null, ILogger? logger = null)
+    public static bool TryParse(ReadOnlySpan<Token> expression, out Address result, out SymbolEntry? reference, AssemblerContext? context = null, ILogger? logger = null)
     {
         result = default;
-        relSymbol = null;
+        reference = null;
 
         // Parse expression tree
-        var parser = new ExpressionParser(expression, context, logger);
+        var parser = new ExpressionParser(context, logger);
         var node = parser.ParsePrecedence(ref expression, 0);
 
         if (node is null)
@@ -70,6 +73,7 @@ public ref struct ExpressionParser
         if (!node.TryEvaluate(eval, out result))
             return false;
 
+        reference = parser._reference;
         return true;
     }
 
@@ -183,6 +187,13 @@ public ref struct ExpressionParser
         if (_context is null || !_context.TryGetSymbol(token.Source, out var symbol))
             return false;
 
+        if (_reference is not null)
+        {
+            // TODO: Log
+            return false;
+        }
+
+        _reference = symbol;
         result = new SymbolNode(token, symbol);
         return true;
     }

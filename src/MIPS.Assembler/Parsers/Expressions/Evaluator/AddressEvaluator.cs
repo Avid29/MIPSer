@@ -112,7 +112,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryAnd(BinaryOperNode node, Address left, Address right, out Address result)
+    public readonly bool TryAnd(BinaryOperNode node, Address left, Address right, out Address result)
     {
         result = default;
         
@@ -125,7 +125,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryOr(BinaryOperNode node, Address left, Address right, out Address result)
+    public readonly bool TryOr(BinaryOperNode node, Address left, Address right, out Address result)
     {
         result = default;
         
@@ -138,7 +138,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
 
     /// <inheritdoc/>
-    public bool TryXor(BinaryOperNode node, Address left, Address right, out Address result)
+    public readonly bool TryXor(BinaryOperNode node, Address left, Address right, out Address result)
     {
         result = default;
 
@@ -151,7 +151,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
     }
     
     /// <inheritdoc/>
-    public bool TryNot(UnaryOperNode node, Address value, out Address result)
+    public readonly bool TryNot(UnaryOperNode node, Address value, out Address result)
     {
         result = default;
 
@@ -163,7 +163,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         return true;
     }
 
-    private bool CheckRelocatable(ExpNode? node, Address value, string operation)
+    private readonly bool CheckRelocatable(ExpNode? node, Address value, string operation)
     {
         Guard.IsNotNull(node);
 
@@ -175,7 +175,7 @@ public readonly struct AddressEvaluator : IEvaluator<Address>
         return false;
     }
 
-    private bool CheckRelocatable(BinaryOperNode node, Address left, Address right, string operation)
+    private readonly bool CheckRelocatable(BinaryOperNode node, Address left, Address right, string operation)
     {
         return CheckRelocatable(node.LeftChild, left, operation) || CheckRelocatable(node.RightChild, right, operation);
     }

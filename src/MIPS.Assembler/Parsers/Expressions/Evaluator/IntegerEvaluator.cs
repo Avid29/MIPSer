@@ -1,7 +1,5 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Assembler.Parsers.Expressions.Abstract;
-
 namespace MIPS.Assembler.Parsers.Expressions.Evaluator;
 
 /// <summary>
