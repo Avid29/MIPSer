@@ -22,10 +22,11 @@ public interface ILogger
     /// <param name="file">The file where the log occurred.</param>
     /// <param name="messageKey">The log resource key for the log message.</param>
     /// <param name="args">The arguments to format the message with.</param>
-    public void Log(Severity severity, LogCode code, string file, string messageKey, params object[] args);
+    /// <returns>False if the severity is an error. True otherwise.</returns>
+    public bool Log(Severity severity, LogCode code, string file, string messageKey, params object[] args);
 
     /// <inheritdoc cref="Log(Severity, LogCode, ReadOnlySpan{Token}, string, object?[])"/>
-    void Log(Severity severity, LogCode code, Token token, string messageKey, params object?[] args);
+    bool Log(Severity severity, LogCode code, Token token, string messageKey, params object?[] args);
 
     /// <summary>
     /// Creates a new log.
@@ -38,5 +39,5 @@ public interface ILogger
     /// <param name="tokens">The token(s) where the log occurred.</param>
     /// <param name="messageKey">The log resource key for the log message.</param>
     /// <param name="args">The arguments to format the message with.</param>
-    void Log(Severity severity, LogCode code, ReadOnlySpan<Token> tokens, string messageKey, params object?[] args);
+    bool Log(Severity severity, LogCode code, ReadOnlySpan<Token> tokens, string messageKey, params object?[] args);
 }

@@ -13,12 +13,8 @@ using MIPS.Assembler.Tokenization.Models.Enums;
 using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables;
 using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Principal;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -35,7 +31,7 @@ public readonly ref struct ExpressionParser
     {
         _logger = logger;
         _context = context;
-        _references = new List<SymbolEntry>();
+        _references = [];
     }
 
     /// <summary>
@@ -56,15 +52,14 @@ public readonly ref struct ExpressionParser
         var parser = new ExpressionParser(context, logger);
         var node = parser.ParsePrecedence(ref expression, 0);
 
+        // Expression tree could not be parsed
+        // Error already logged
         if (node is null)
-        {
-            // TODO: Log
             return false;
-        }
 
         if (!expression.IsEmpty)
         {
-            // TODO: Log
+            logger?.Log(Severity.Error, LogCode.UnexpectedToken, expression, "UnexpectedTokenAfterCompletedExpression", expression[0]);
             return false;
         }
 
@@ -87,34 +82,31 @@ public readonly ref struct ExpressionParser
         if (token is null)
             return null;
 
-        var leftNode = NullDenotation(ref tokens, token);
-        if (leftNode is null)
-        {
-            // TODO: Log
-            return null;
-        }
+        var node = NullDenotation(ref tokens, token);
 
-        while(!tokens.IsEmpty && tokens[0].Type is TokenType.Operator &&
+        // Left node could not be parsed.
+        // Error already logged
+        if (node is null)
+            return null;
+
+        while (!tokens.IsEmpty && tokens[0].Type is TokenType.Operator &&
             TryGetBinaryOperator(tokens[0].Source, out var op) &&
             TryGetBindingPowers(op, out var leftBindingPower, out var rightBindingPower) &&
             leftBindingPower >= minBindingPower)
         {
+            // Consume operator token
             var opToken = tokens.Next();
-            if (opToken is null)
-            {
-                // TODO: Log
-                return null;
-            }
+            Guard.IsNotNull(opToken);
 
-            leftNode = LeftDenotation(ref tokens, leftNode, opToken, rightBindingPower);
-            if (leftNode is null)
-            {
-                // TODO: Log
+            node = LeftDenotation(ref tokens, node, opToken, op, rightBindingPower);
+
+            // Left node could not be parsed.
+            // Error already logged
+            if (node is null)
                 return null;
-            }
         }
 
-        return leftNode;
+        return node;
     }
 
     private ExpNode? NullDenotation(ref ReadOnlySpan<Token> tokens, Token token)
@@ -135,7 +127,6 @@ public readonly ref struct ExpressionParser
 
         if (!success)
         {
-            // TODO: Log
             return null;
         }
 
@@ -151,7 +142,7 @@ public readonly ref struct ExpressionParser
         {
             // Character literal
             if (!StringParser.TryParseChar(token, out char c, _logger))
-                return false;
+                return _logger?.Log(Severity.Error, LogCode.UnparsableExpression, token, "UnparsableImmediate", token) ?? false;
 
             value = c;
         }
@@ -173,12 +164,12 @@ public readonly ref struct ExpressionParser
             }
             catch
             {
-                return false;
+                return _logger?.Log(Severity.Error, LogCode.UnparsableExpression, token, "UnparsableImmediate", token) ?? false;
             }
         }
         else if (!long.TryParse(token.Source, out value))
         {
-            return false;
+            return _logger?.Log(Severity.Error, LogCode.UnparsableExpression, token, "UnparsableImmediate", token) ?? false;
         }
 
         result = new AddressNode(token, value);
@@ -190,7 +181,7 @@ public readonly ref struct ExpressionParser
         result = null;
 
         if (_context is null || !_context.TryGetSymbol(token.Source, out var symbol))
-            return false;
+            return _logger?.Log(Severity.Error, LogCode.UndeclaredSymbolReferenced, token, "UndeclaredSymbolReferenced", token) ?? false;
 
         _references.Add(symbol);
         result = new SymbolNode(token, symbol);
@@ -202,17 +193,16 @@ public readonly ref struct ExpressionParser
         result = null;
 
         var inner = ParsePrecedence(ref tokens, 0);
+
+        // Child node could not be parsed.
+        // Error already logged
         if (inner is null)
-        {
-            // TODO: Log
-            return false; 
-        }
+            return false;
 
         // Check for a closing parenthesis
         if (tokens.IsEmpty || tokens[0].Type != TokenType.CloseParenthesis)
         {
-            // TODO: Log
-            return false;
+            return _logger?.Log(Severity.Error, LogCode.UnparsableExpression, token, "ExpectedClosingParenthesis") ?? false;
         }
 
         // Consume the closing parenthesis
@@ -221,29 +211,35 @@ public readonly ref struct ExpressionParser
         return true;
     }
 
-    private bool TryParseUnaryOperator(ref ReadOnlySpan<Token> tokens, Token token, Operation op, out ExpNode? result)
+    private bool TryParseUnaryOperator(ref ReadOnlySpan<Token> tokens, Token opToken, Operation op, out ExpNode? result)
     {
         result = null;
 
         if (!TryGetBindingPower(op, out var bindingPower))
             return false;
 
-        var right = ParsePrecedence(ref tokens, bindingPower);
-        if (right is null)
+        if (tokens.IsEmpty)
+        {
+            _logger?.Log(Severity.Error, LogCode.UnparsableExpression, opToken, "MissingOperand", opToken);
+            return false;
+        }
+
+        var child = ParsePrecedence(ref tokens, bindingPower);
+        if (child is null)
             return false;
 
-        result = new UnaryOperNode(token, op)
+        result = new UnaryOperNode(opToken, op)
         {
-            Child = right
+            Child = child
         };
         return true;
     }
 
-    private BinaryOperNode? LeftDenotation(ref ReadOnlySpan<Token> tokens, ExpNode left, Token opToken, int rightBindingPower)
+    private BinaryOperNode? LeftDenotation(ref ReadOnlySpan<Token> tokens, ExpNode left, Token opToken, Operation op, int rightBindingPower)
     {
-        if (!TryGetBinaryOperator(opToken.Source, out Operation op))
+        if (tokens.IsEmpty)
         {
-            // TOOD: Log
+            _logger?.Log(Severity.Error, LogCode.UnparsableExpression, opToken, "MissingOperand", opToken);
             return null;
         }
 

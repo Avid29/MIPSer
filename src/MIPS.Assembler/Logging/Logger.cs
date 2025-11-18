@@ -31,17 +31,17 @@ public class Logger : ILogger
     public bool Failed { get; private set; }
     
     /// <inheritdoc/>
-    public void Log(Severity severity, LogCode code, string? file, string messageKey, params object[] args)
+    public bool Log(Severity severity, LogCode code, string? file, string messageKey, params object[] args)
     {
         throw new NotImplementedException();
     }
 
     /// <inheritdoc/>
-    public void Log(Severity severity, LogCode code, Token token, string messageKey, params object?[] args)
+    public bool Log(Severity severity, LogCode code, Token token, string messageKey, params object?[] args)
         => Log(severity, code, [token], messageKey, args);
     
     /// <inheritdoc/>
-    public void Log(Severity severity, LogCode code, ReadOnlySpan<Token> tokens, string messageKey, params object?[] args)
+    public bool Log(Severity severity, LogCode code, ReadOnlySpan<Token> tokens, string messageKey, params object?[] args)
     {
         var localizedMessage = _localizer[messageKey];
         var formattedMessage = string.Format(localizedMessage, args);
@@ -51,6 +51,8 @@ public class Logger : ILogger
 
         if (severity is Severity.Error)
             Failed = true;
+
+        return severity is not Severity.Error;
     }
 
     /// <summary>

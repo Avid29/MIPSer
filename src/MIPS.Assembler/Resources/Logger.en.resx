@@ -322,7 +322,7 @@
     <value>No instruction named '{0}'.</value>
   </data>
   <data name="UnexpectedToken" xml:space="preserve">
-    <value>Unexpected Token '{0}'.</value>
+    <value>Unexpected token '{0}'.</value>
   </data>
   <data name="EmptyArgument" xml:space="preserve">
     <value>Argument is empty.</value>
@@ -332,5 +332,20 @@
   </data>
   <data name="IncompleteChar" xml:space="preserve">
     <value>Incomplete character immediate.</value>
+  </data>
+  <data name="UnexpectedTokenAfterCompletedExpression" xml:space="preserve">
+    <value>Unexpected token '{0}' after completed expression.</value>
+  </data>
+  <data name="UnparsableImmediate" xml:space="preserve">
+    <value>Unparsable immediate token '{0}'.</value>
+  </data>
+  <data name="ExpectedClosingParenthesis" xml:space="preserve">
+    <value>Expected ')'.</value>
+  </data>
+  <data name="UndeclaredSymbolReferenced" xml:space="preserve">
+    <value>Symbol '{0}' does not exist.</value>
+  </data>
+  <data name="MissingOperand" xml:space="preserve">
+    <value>Expected operand following '{0}' operator.</value>
   </data>
 </root>

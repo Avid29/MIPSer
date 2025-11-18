@@ -35,6 +35,7 @@ public enum LogCode
     // Expression parser
     UnparsableExpression,
     InvalidExpressionOperation,
+    UndeclaredSymbolReferenced,
 
     // Directive parser
     InvalidDirectiveDataArg,

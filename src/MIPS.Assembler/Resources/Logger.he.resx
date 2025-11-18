@@ -187,7 +187,7 @@
     <value>הפניה לסימבול ‎'{0}'‎ אינה שלמה.</value>
   </data>
   <data name="IncompleteToken" xml:space="preserve">
-    <value>אסימון ‎'{0}'‎ אינו שלם.</value>
+    <value>טוקן ‎'{0}'‎ אינו שלם.</value>
   </data>
   <data name="IncompleteRegister" xml:space="preserve">
     <value>שם האוגר ‎'{0}'‎ אינו שלם.</value>
@@ -322,7 +322,7 @@
     <value>אין הוראה בשם '{0}'.</value>
   </data>
   <data name="UnexpectedToken" xml:space="preserve">
-    <value>אסימון בלתי צפוי ‎'{0}'‎.</value>
+    <value>טוקן בלתי צפוי ‎'{0}'‎.</value>
   </data>
   <data name="EmptyArgument" xml:space="preserve">
     <value>הארגומנט ריק.</value>
@@ -332,5 +332,20 @@
   </data>
   <data name="IncompleteChar" xml:space="preserve">
     <value>אינו שלם תו מיידי.</value>
+  </data>
+  <data name="UnexpectedTokenAfterCompletedExpression" xml:space="preserve">
+    <value>טוקן לא צפוי '{0}' לאחר ביטוי שהושלם.</value>
+  </data>
+  <data name="UnparsableImmediate" xml:space="preserve">
+    <value>טוקן מיידי '{0}' שלא ניתן לנתח.</value>
+  </data>
+  <data name="ExpectedClosingParenthesis" xml:space="preserve">
+    <value>נדרש ')'.</value>
+  </data>
+  <data name="UndeclaredSymbolReferenced" xml:space="preserve">
+    <value>הסמל '{0}' לא קיים.</value>
+  </data>
+  <data name="MissingOperand" xml:space="preserve">
+    <value>נדרש אופראנד אחרי האופרטור '{0}'.</value>
   </data>
 </root>
