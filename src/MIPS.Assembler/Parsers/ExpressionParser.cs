@@ -59,7 +59,7 @@ public readonly ref struct ExpressionParser
 
         if (!expression.IsEmpty)
         {
-            logger?.Log(Severity.Error, LogCode.UnexpectedToken, expression, "UnexpectedTokenAfterCompletedExpression", expression[0]);
+            logger?.Log(Severity.Error, LogCode.UnexpectedToken, expression, "UnexpectedToken", expression[0]);
             return false;
         }
 

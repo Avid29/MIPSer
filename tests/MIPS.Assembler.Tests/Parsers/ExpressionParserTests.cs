@@ -15,117 +15,47 @@ namespace MIPS.Assembler.Tests.Parsers;
 [TestClass]
 public class ExpressionParserTests
 {
-    private const string Self = "10";
-    private const string NegativeSelf = "-10";
-    private const string Add = "10 + 10";
-    private const string Subtract = "25 - 10";
-    private const string Multiply = "4 * 4";
-    private const string Divide = "8 / 2";
-    private const string Mod = "8 % 3";
-    private const string And = "9 & 3";
-    private const string Or = "9 | 3";
-    private const string Xor = "9 ^ 3";
-    private const string Not = "~10";
+    [DataTestMethod]
+    [DataRow("10", 10)]
+    [DataRow("-10", -10)]
+    [DataRow("10 + 10", 10 + 10)]
+    [DataRow("25 - 10", 25 - 10)]
+    [DataRow("4 * 4", 4 * 4)]
+    [DataRow("8 / 2", 8 / 2)]
+    [DataRow("8 % 3", 8 % 3)]
+    [DataRow("9 & 3", 9 & 3)]
+    [DataRow("9 | 3", 9 | 3)]
+    [DataRow("9 ^ 3", 9 ^ 3)]
+    [DataRow("~10", ~10)]
+    [DataRow("10 * -10", 10 * -10)]
+    [DataRow("0b1010", 0b1010)]
+    [DataRow("0o12", 10)]   // C# Doesn't support oct
+    [DataRow("0xa", 0xa)]
+    [DataRow("4 * 2 + 2", 4 * 2 + 2)]
+    [DataRow("4 + 2 * 2", 4 + 2 * 2)]
+    [DataRow("(4 + 2) * 2", (4 + 2) * 2)]
+    [DataRow("'a'", 'a')]
+    [DataRow(@"'\n'", '\n')]
+    [DataRow("'a' + 10", 'a' + 10)]
+    public void ExpressionSuccessTests(string input, int expected, params (string name, Address addr)[] macros)
+    => RunTest(input, expected);
 
-    private const string BOpUOp = "10 * -10";
-    private const string UOpBOp = "-*10";
-    private const string DoubleValue = "10 10";
-
-    private const string Binary = "0b1010";
-    private const string Oct = "0o12";
-    private const string Hex = "0xa";
-    private const string BadBinary = "0b102";
-
-    private const string OrderOfOps1 = "4 * 2 + 2";
-    private const string OrderOfOps2 = "4 + 2 * 2";
-    private const string ParenthesisTest1 = "(4 + 2) * 2";
-
-    private const string Char = "'a'";
-    private const string EscapeChar = @"'\n'";
-    private const string AddChar = "'a' + 10";
-    private const string LongChar = "'abc'";
-    private const string BadEscapeChar = @"'\x'";
+    [DataTestMethod]
+    [DataRow("+")]
+    [DataRow("*10")]
+    [DataRow("10-")]
+    [DataRow("-*10")]
+    [DataRow("10 10")]
+    [DataRow("0b102")]
+    [DataRow("4 + 2) * 2")]
+    [DataRow("(4 + 2 * 2")]
+    [DataRow("'abc'")]
+    [DataRow(@"'\x'")]
+    public void ExpressionFailureTests(string input)
+        => RunTest(input);
 
     private const string Macro = "macro + 10";
     private const string MacroFail = "macro + macro";
-
-    [TestMethod(Self)]
-    public void SelfTest() => RunTest(Self, 10);
-
-    [TestMethod(NegativeSelf)]
-    public void NegativeSelfTest() => RunTest(NegativeSelf, -10);
-
-    [TestMethod(Add)]
-    public void AddTest() => RunTest(Add, 10 + 10);
-
-    [TestMethod(Subtract)]
-    public void SubtractTest() => RunTest(Subtract, 25 - 10);
-
-    [TestMethod(Multiply)]
-    public void MultiplyTest() => RunTest(Multiply, 4 * 4);
-
-    [TestMethod(Divide)]
-    public void DivideTest() => RunTest(Divide, 8 / 2);
-
-    [TestMethod(Mod)]
-    public void ModTest() => RunTest(Mod, 8 % 3);
-
-    [TestMethod(And)]
-    public void AndTest() => RunTest(And, 9 & 3);
-
-    [TestMethod(Or)]
-    public void OrTest() => RunTest(Or, 9 | 3);
-
-    [TestMethod(Xor)]
-    public void XorTest() => RunTest(Xor, 9 ^ 3);
-
-    [TestMethod(Not)]
-    public void NotTest() => RunTest(Not, ~10);
-
-    [TestMethod(BOpUOp)]
-    public void BOpUOpTest() => RunTest(BOpUOp, 10 * -10);
-
-    [TestMethod(UOpBOp)]
-    public void UOpBOpTest() => RunTest(UOpBOp);
-
-    [TestMethod(DoubleValue)]
-    public void DoubleValueTest() => RunTest(DoubleValue);
-
-    [TestMethod(Binary)]
-    public void BinaryTest() => RunTest(Binary, 0b1010);
-    
-    [TestMethod(BadBinary)]
-    public void BadBinaryTest() => RunTest(BadBinary);
-
-    [TestMethod(Oct)]
-    public void OctTest() => RunTest(Oct, 10); // C# doesn't support oct...
-
-    [TestMethod(Hex)]
-    public void HexTest() => RunTest(Hex, 0xa);
-
-    [TestMethod(OrderOfOps1)]
-    public void OrderOfOps1Test() => RunTest(OrderOfOps1, 4 * 2 + 2);
-
-    [TestMethod(OrderOfOps2)]
-    public void OrderOfOps2Test() => RunTest(OrderOfOps2, 4 + 2 * 2);
-
-    [TestMethod(ParenthesisTest1)]
-    public void Parenthesis1Test() => RunTest(ParenthesisTest1, (4 + 2) * 2);
-
-    [TestMethod(Char)]
-    public void CharTest() => RunTest(Char, 'a');
-
-    [TestMethod(EscapeChar)]
-    public void EscapeCharTest() => RunTest(EscapeChar, '\n');
-
-    [TestMethod(AddChar)]
-    public void AddCharTest() => RunTest(AddChar, 'a' + 10);
-
-    [TestMethod(LongChar)]
-    public void LongCharTest() => RunTest(LongChar);
-
-    [TestMethod(BadEscapeChar)]
-    public void BadEscapeCharTest() => RunTest(BadEscapeChar);
 
     [TestMethod(Macro)]
     public void MarcoTest() => RunTest(Macro, 10 + 10, ("macro", new Address(10, Section.Text)));
