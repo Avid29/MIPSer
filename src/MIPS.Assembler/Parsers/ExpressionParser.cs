@@ -16,26 +16,26 @@ using System;
 using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Principal;
 
 namespace MIPS.Assembler.Parsers;
 
 /// <summary>
 /// Parses expressions
 /// </summary>
-public ref struct ExpressionParser
+public readonly ref struct ExpressionParser
 {
     private readonly ILogger? _logger;
     private readonly AssemblerContext? _context;
-
-    private SymbolEntry? _reference; 
+    private readonly List<SymbolEntry> _references; 
 
     private ExpressionParser(AssemblerContext? context, ILogger? logger)
     {
         _logger = logger;
         _context = context;
-
-        _reference = null;
+        _references = new List<SymbolEntry>();
     }
 
     /// <summary>
@@ -73,7 +73,10 @@ public ref struct ExpressionParser
         if (!node.TryEvaluate(eval, out result))
             return false;
 
-        reference = parser._reference;
+        // Grab reference
+        if (parser._references.Count is not 0)
+            reference = parser._references[0];
+
         return true;
     }
 
@@ -91,7 +94,7 @@ public ref struct ExpressionParser
             return null;
         }
 
-        while(!tokens.IsEmpty &&
+        while(!tokens.IsEmpty && tokens[0].Type is TokenType.Operator &&
             TryGetBinaryOperator(tokens[0].Source, out var op) &&
             TryGetBindingPowers(op, out var leftBindingPower, out var rightBindingPower) &&
             leftBindingPower >= minBindingPower)
@@ -122,9 +125,11 @@ public ref struct ExpressionParser
         {
             TokenType.Immediate => TryParseImmediate(token, out result),
             TokenType.Reference => TryParseReference(token, out result),
+            TokenType.OpenParenthesis => TryParseParenthesis(ref tokens, token, out result),
+
             TokenType.Operator when TryGetUnaryOperator(token.Source, out var op)
                 => TryParseUnaryOperator(ref tokens, token, op, out result),
-            // TODO: Handle parenthesis
+
             _ => false,
         };
 
@@ -187,14 +192,32 @@ public ref struct ExpressionParser
         if (_context is null || !_context.TryGetSymbol(token.Source, out var symbol))
             return false;
 
-        if (_reference is not null)
+        _references.Add(symbol);
+        result = new SymbolNode(token, symbol);
+        return true;
+    }
+
+    private bool TryParseParenthesis(ref ReadOnlySpan<Token> tokens, Token token, [NotNullWhen(true)] out ExpNode? result)
+    {
+        result = null;
+
+        var inner = ParsePrecedence(ref tokens, 0);
+        if (inner is null)
+        {
+            // TODO: Log
+            return false; 
+        }
+
+        // Check for a closing parenthesis
+        if (tokens.IsEmpty || tokens[0].Type != TokenType.CloseParenthesis)
         {
             // TODO: Log
             return false;
         }
 
-        _reference = symbol;
-        result = new SymbolNode(token, symbol);
+        // Consume the closing parenthesis
+        tokens.Next();
+        result = inner;
         return true;
     }
 
@@ -262,7 +285,6 @@ public ref struct ExpressionParser
             "^" => Operation.Xor,
             "<<" => Operation.LeftShift,
             ">>" => Operation.RightShift,
-            "~" => Operation.Not, // Accept "Binary not"
             _ => (Operation)(-1),
         };
 
@@ -300,8 +322,6 @@ public ref struct ExpressionParser
             Operation.LeftShift or
             Operation.RightShift => (45, 46),
             
-            // TODO: "Binary not"
-
             // Unary operations
             Operation.UnaryPlus => (80, -1),
             Operation.Negation => (80, -1),

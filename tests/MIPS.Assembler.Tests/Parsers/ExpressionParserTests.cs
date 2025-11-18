@@ -38,6 +38,7 @@ public class ExpressionParserTests
 
     private const string OrderOfOps1 = "4 * 2 + 2";
     private const string OrderOfOps2 = "4 + 2 * 2";
+    private const string ParenthesisTest1 = "(4 + 2) * 2";
 
     private const string Char = "'a'";
     private const string EscapeChar = @"'\n'";
@@ -107,6 +108,9 @@ public class ExpressionParserTests
 
     [TestMethod(OrderOfOps2)]
     public void OrderOfOps2Test() => RunTest(OrderOfOps2, 4 + 2 * 2);
+
+    [TestMethod(ParenthesisTest1)]
+    public void Parenthesis1Test() => RunTest(ParenthesisTest1, (4 + 2) * 2);
 
     [TestMethod(Char)]
     public void CharTest() => RunTest(Char, 'a');
