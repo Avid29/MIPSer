@@ -14,9 +14,6 @@ namespace MIPS.Assembler.Parsers.Expressions;
 /// </summary>
 public class BinaryOperNode : OperNode
 {
-    private ExpNode? _left;
-    private ExpNode? _right;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="BinaryOperNode"/> class.
     /// </summary>
@@ -27,20 +24,12 @@ public class BinaryOperNode : OperNode
     /// <summary>
     /// Gets or sets the left hand child of the <see cref="BinaryOperNode"/>.
     /// </summary>
-    public ExpNode? LeftChild
-    {
-        get => _left;
-        set => SetChild(ref _left, value);
-    }
+    public required ExpNode LeftChild { get; init; }
 
     /// <summary>
     /// Gets or sets the right hand child of the <see cref="BinaryOperNode"/>.
     /// </summary>
-    public ExpNode? RightChild
-    {
-        get => _right;
-        set => SetChild(ref _right, value);
-    }
+    public required ExpNode RightChild { get; init; }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -51,35 +40,15 @@ public class BinaryOperNode : OperNode
         get
         {
             // Check if types match and children aren't null
-            if (LeftChild?.Type == RightChild?.Type)
+            if (LeftChild.Type == RightChild.Type)
             {
                 // Return matched type, or invalid if match was null.
-                return LeftChild?.Type ?? ExpressionType.Invalid;
+                return LeftChild.Type;
             }
 
             // Types don't match, it's an invalid expression
             return ExpressionType.Invalid;
         }
-    }
-    
-    /// <inheritdoc/>
-    public override bool TryAddChild(ExpNode node)
-    {
-        // We can only add to the right child, left is always filled first
-        if (RightChild is not null)
-            return false;
-
-        RightChild = node;
-        return true;
-    }
-    
-    /// <inheritdoc/>
-    public override bool TryInsertNode(BinaryOperNode node)
-    {
-        // Insert the binary operator between this operator and its right child
-        node.LeftChild = RightChild;
-        RightChild = node;
-        return true;
     }
 
     /// <inheritdoc/>

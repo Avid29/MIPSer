@@ -2,9 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Expressions.Enums;
-using MIPS.Assembler.Parsers.Expressions.Evaluator;
 using MIPS.Assembler.Tokenization.Models;
-using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Parsers.Expressions.Abstract;
 
@@ -48,34 +46,4 @@ public abstract class OperNode : ExpNode
         Operation.Not => 1,
         _ => ThrowHelper.ThrowArgumentException<int>("Cannot assess priority of invalid operation.")
     };
-
-    /// <summary>
-    /// Attempts to add a child node to this operator.
-    /// </summary>
-    /// <returns>Whether or not a child could be added to the opertator node.</returns>
-    public abstract bool TryAddChild(ExpNode node);
-
-    /// <summary>
-    /// Attempts to insert a <see cref="BinaryOperNode"/> above this node in the tree.
-    /// </summary>
-    /// <param name="node">The node to insert.</param>
-    /// <returns></returns>
-    public abstract bool TryInsertNode(BinaryOperNode node);
-
-    /// <summary>
-    /// Gets or sets a child node, updating its parent accordingly.
-    /// </summary>
-    protected void SetChild(ref ExpNode? child, ExpNode? value)
-    {
-        // Clear current child's parent
-        if (child is not null)
-            child.Parent = null;
-
-        // Assign new child's parent
-        if (value is not null)
-            value.Parent = this;
-
-        // Assign new child
-        child = value;
-    }
 }

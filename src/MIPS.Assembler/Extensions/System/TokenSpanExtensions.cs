@@ -2,6 +2,7 @@
 
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Assembler.Tokenization.Models.Enums;
+using System.Diagnostics;
 
 namespace System;
 
@@ -31,6 +32,21 @@ public static class TokenSpanExtensions
         }
 
         return line;
+    }
+
+    /// <summary>
+    /// Grabs the first token of the span <paramref name="tokens"/>, then slices the span.
+    /// </summary>
+    /// <param name="tokens">A ref to the span to increment</param>
+    /// <returns>The first token popped of the span, or null if empty.</returns>
+    public static Token? Next(this ref ReadOnlySpan<Token> tokens)
+    {
+        if (tokens.Length is 0)
+            return null;
+
+        var token = tokens[0];
+        tokens = tokens[1..];
+        return token;
     }
 
     /// <summary>

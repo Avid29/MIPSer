@@ -282,10 +282,9 @@ public struct InstructionParser
     private bool TryParseExpressionArg(ReadOnlySpan<Token> arg, Argument target, out ReferenceEntry? relocation)
     {
         relocation = null;
-        var parser = new ExpressionParser(_context, _logger);
 
         // Attempt to parse expression
-        if (!parser.TryParse(arg, out var address, out SymbolEntry? refSymbol))
+        if (!ExpressionParser.TryParse(arg, out var address, out SymbolEntry? refSymbol, _context, _logger))
             return false;
 
         if (!address.IsFixed && target is Argument.Shift)

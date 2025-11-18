@@ -129,8 +129,6 @@ public class ExpressionParserTests
     [TestMethod(MacroFail)]
     public void MarcoFailTest() => RunTest(MacroFail, null, ("macro", new Address(10, Section.Text)));
 
-    private static void RunTest(string input, long? expected = null) => RunTest(new ExpressionParser(), input, expected);
-
     private static void RunTest(string input, long? expected = null, params (string name, Address addr)[] macros)
     {
         // NOTE: This assumes symbol realization is not implemented!
@@ -141,14 +139,13 @@ public class ExpressionParserTests
         }
 
         var context = new AssemblerContext(obj);
-        var parser = new ExpressionParser(context);
-        RunTest(parser, input, expected);
+        RunTest(input, expected, context);
     }
 
-    private static void RunTest(ExpressionParser parser, string input, long? expected = null)
+    private static void RunTest(string input, long? expected = null, AssemblerContext? context = null)
     {
         var line = Tokenizer.TokenizeLine(input, nameof(RunTest), TokenizerMode.Expression);
-        bool success = parser.TryParse(line.Tokens, out var actual, out _);
+        bool success = ExpressionParser.TryParse(line.Tokens, out var actual, out _, context);
         Assert.AreEqual(success, expected.HasValue);
         if (expected.HasValue)
         {

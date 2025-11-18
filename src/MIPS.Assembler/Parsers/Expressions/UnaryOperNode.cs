@@ -14,7 +14,6 @@ namespace MIPS.Assembler.Parsers.Expressions;
 /// </summary>
 public class UnaryOperNode : OperNode
 {
-    private ExpNode? _child;
     /// <summary>
     /// Initializes a new instance of the <see cref="UnaryOperNode"/> class.
     /// </summary>
@@ -25,11 +24,7 @@ public class UnaryOperNode : OperNode
     /// <summary>
     /// Gets or sets the child of the <see cref="UnaryOperNode"/>.
     /// </summary>
-    public ExpNode? Child
-    {
-        get => _child;
-        set => SetChild(ref _child, value);
-    }
+    public required ExpNode Child { get; init; }
 
     /// <inheritdoc/>
     /// <remarks>
@@ -37,25 +32,6 @@ public class UnaryOperNode : OperNode
     /// </remarks>
     public override ExpressionType Type => Child?.Type ?? ExpressionType.Invalid;
     
-    /// <inheritdoc/>
-    public override bool TryAddChild(ExpNode node)
-    {
-        if (Child is not null)
-            return false;
-
-        Child = node;
-        return true;
-    }
-    
-    /// <inheritdoc/>
-    public override bool TryInsertNode(BinaryOperNode node)
-    {
-        // Insert the binary operator between the unary operator and its child
-        node.LeftChild = Child;
-        Child = node;
-        return true;
-    }
-
     /// <inheritdoc/>
     public override bool TryEvaluate(IEvaluator<Address> evaluator, out Address result)
     {

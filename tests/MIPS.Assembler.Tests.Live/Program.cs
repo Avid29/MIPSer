@@ -117,8 +117,7 @@ public class Program()
     private bool TestExpression(string line)
     {
         var tokens = Tokenizer.TokenizeLine(line, mode: TokenizerMode.Expression);
-        var parser = new ExpressionParser();
-        bool success = parser.TryParse(tokens.Tokens, out var result, out _);
+        bool success = ExpressionParser.TryParse(tokens.Tokens, out var result, out _);
 
         var message = success ? $"{line} evaluated to {result}" :
                                 $"{line} could not be evaluated";

@@ -81,8 +81,6 @@ public partial class Assembler
 
     private void HandleMacro(AssemblyLine line)
     {
-        var expressionParser = new ExpressionParser(Context, _logger);
-
         // Grab name and expression
         var name = line.Macro;
         var expression = line.Args[0].Tokens;
@@ -99,7 +97,7 @@ public partial class Assembler
             return;
         }
         
-        if (!expressionParser.TryParse(expression, out var address, out var _))
+        if (!ExpressionParser.TryParse(expression, out var address, out var _, Context, _logger))
             return;
         
         if (address.IsRelocatable)

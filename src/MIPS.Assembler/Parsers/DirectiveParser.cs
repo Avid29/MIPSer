@@ -157,8 +157,7 @@ public readonly struct DirectiveParser
         }
 
         // Parse argument
-        var parser = new ExpressionParser(_context, _logger);
-        if (!parser.TryParse(args[0].Tokens, out Address result, out _))
+        if (!ExpressionParser.TryParse(args[0].Tokens, out Address result, out _, _context, _logger))
             return false;
 
         // Argument must not be relocatable
@@ -218,8 +217,7 @@ public readonly struct DirectiveParser
         {
             var arg = args[i];
 
-            var parser = new ExpressionParser(_context, _logger);
-            if (!parser.TryParse(arg.Tokens, out var result, out _))
+            if (!ExpressionParser.TryParse(arg.Tokens, out var result, out _, _context, _logger))
                 return false;
 
             if (result.IsRelocatable)

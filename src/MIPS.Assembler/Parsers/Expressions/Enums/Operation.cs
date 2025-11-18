@@ -20,6 +20,8 @@ public enum Operation
     And,
     Or,
     Xor,
+    LeftShift,
+    RightShift,
 
     // Unary
     UnaryPlus,
