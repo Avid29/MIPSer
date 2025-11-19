@@ -6,6 +6,10 @@ using MIPS.Assembler.Models.Directives;
 using MIPS.Assembler.Models.Directives.Abstract;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
+using MIPS.Models.Addressing;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -18,29 +22,34 @@ public class DirectiveParserTests
 {
     private const string Global = ".globl main";
 
-    private const string Byte = ".byte 10";
-    private const string Word = ".word 10";
-    private const string Bytes = ".byte 10, 10";
-    private const string Ascii = ".ascii \"Test String\"";
-    private const string Asciiz = ".asciiz \"Test String\"";
+    public static IEnumerable<object[]> DataTests =>
+    [
+        Flatten(".byte 10", 10),
+        Flatten(".word 10", 0, 0, 0, 10),
+        Flatten(".byte 10, 10", 10, 10),
+        Flatten(".ascii \"Test String\"", Encoding.ASCII.GetBytes("Test String")),
+        Flatten(".asciiz \"Test String\"", Encoding.ASCII.GetBytes("Test String\0")),
+    ];
+
+    private static object[] Flatten(string input, params byte[] bytes)
+    {
+        var arr = new object[bytes.Length + 1];
+        arr[0] = input;
+
+        for (int i = 0; i < bytes.Length; i++)
+            arr[i + 1] = bytes[i];
+
+        return arr;
+    }
+
 
     [TestMethod(Global)]
     public void GlobalTest() => RunGlobalTest(Global, "main");
 
-    [TestMethod(Byte)]
-    public void ByteTest() => RunDataTest(Byte, 10);
-
-    [TestMethod(Word)]
-    public void WordTest() => RunDataTest(Word, 0, 0, 0, 10);
-
-    [TestMethod(Bytes)]
-    public void BytesTest() => RunDataTest(Bytes, 10, 10);
-
-    [TestMethod(Ascii)]
-    public void AsciiTest() => RunDataTest(Ascii, Encoding.ASCII.GetBytes("Test String"));
-
-    [TestMethod(Asciiz)]
-    public void AsciizTest() => RunDataTest(Asciiz, Encoding.ASCII.GetBytes("Test String\0"));
+    [DataTestMethod]
+    [DynamicData(nameof(DataTests))]
+    public void DirectiveDataTest(string input, params byte[] expected) =>
+        RunDataTest(input, expected);
 
     private static Directive ParseDirective(string input)
     {

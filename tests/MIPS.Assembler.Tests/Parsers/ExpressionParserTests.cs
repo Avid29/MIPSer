@@ -9,59 +9,63 @@ using MIPS.Assembler.Tokenization.Models.Enums;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables.Enums;
+using System.Collections.Generic;
 
 namespace MIPS.Assembler.Tests.Parsers;
 
 [TestClass]
 public class ExpressionParserTests
 {
+    public static IEnumerable<object[]> SuccessTests =>
+    [
+        ["10", 10],
+        ["-10", -10],
+        ["10", 10],
+        ["25 - 10", 25 - 10],
+        ["4 * 4", 4 * 4],
+        ["8 / 2", 8 / 2],
+        ["8 % 3", 8 % 3],
+        ["9 & 3", 9 & 3],
+        ["9 | 3", 9 | 3],
+        ["9 ^ 3", 9 ^ 3],
+        ["~10", ~10],
+        ["10 * -10", 10 * -10],
+        ["0b1010", 0b1010],
+        ["0o12", 10], // C# Doesn't support oct
+        ["0xa", 0xa],
+        ["4 * 2 + 2", 4 * 2 + 2],
+        ["4 + 2 * 2", 4 + 2 * 2],
+        ["(4 + 2) * 2", (4 + 2) * 2],
+        ["'a'", 'a'],
+        [@"'\n'", '\n'],
+        ["'a' + 10", 'a' + 10],
+        ["macro + 10", 10 + 10, ("macro", new Address(10, Section.Text))],
+    ];
+
+    public static IEnumerable<object[]> FailureTests =>
+    [
+        ["+"],
+        ["*10"],
+        ["10-"],
+        ["-*10"],
+        ["10 10"],
+        ["0b102"],
+        ["4 + 2) * 2"],
+        ["(4 + 2 * 2"],
+        ["'abc'"],
+        [@"'\x'"],
+        ["macro + macro", ("macro", new Address(10, Section.Text))],
+    ];
+
     [DataTestMethod]
-    [DataRow("10", 10)]
-    [DataRow("-10", -10)]
-    [DataRow("10 + 10", 10 + 10)]
-    [DataRow("25 - 10", 25 - 10)]
-    [DataRow("4 * 4", 4 * 4)]
-    [DataRow("8 / 2", 8 / 2)]
-    [DataRow("8 % 3", 8 % 3)]
-    [DataRow("9 & 3", 9 & 3)]
-    [DataRow("9 | 3", 9 | 3)]
-    [DataRow("9 ^ 3", 9 ^ 3)]
-    [DataRow("~10", ~10)]
-    [DataRow("10 * -10", 10 * -10)]
-    [DataRow("0b1010", 0b1010)]
-    [DataRow("0o12", 10)]   // C# Doesn't support oct
-    [DataRow("0xa", 0xa)]
-    [DataRow("4 * 2 + 2", 4 * 2 + 2)]
-    [DataRow("4 + 2 * 2", 4 + 2 * 2)]
-    [DataRow("(4 + 2) * 2", (4 + 2) * 2)]
-    [DataRow("'a'", 'a')]
-    [DataRow(@"'\n'", '\n')]
-    [DataRow("'a' + 10", 'a' + 10)]
+    [DynamicData(nameof(SuccessTests))]
     public void ExpressionSuccessTests(string input, int expected, params (string name, Address addr)[] macros)
-    => RunTest(input, expected);
+        => RunTest(input, expected, macros);
 
     [DataTestMethod]
-    [DataRow("+")]
-    [DataRow("*10")]
-    [DataRow("10-")]
-    [DataRow("-*10")]
-    [DataRow("10 10")]
-    [DataRow("0b102")]
-    [DataRow("4 + 2) * 2")]
-    [DataRow("(4 + 2 * 2")]
-    [DataRow("'abc'")]
-    [DataRow(@"'\x'")]
-    public void ExpressionFailureTests(string input)
-        => RunTest(input);
-
-    private const string Macro = "macro + 10";
-    private const string MacroFail = "macro + macro";
-
-    [TestMethod(Macro)]
-    public void MarcoTest() => RunTest(Macro, 10 + 10, ("macro", new Address(10, Section.Text)));
-
-    [TestMethod(MacroFail)]
-    public void MarcoFailTest() => RunTest(MacroFail, null, ("macro", new Address(10, Section.Text)));
+    [DynamicData(nameof(FailureTests))]
+    public void ExpressionFailureTests(string input, params (string name, Address addr)[] macros)
+        => RunTest(input, macros: macros);
 
     private static void RunTest(string input, long? expected = null, params (string name, Address addr)[] macros)
     {

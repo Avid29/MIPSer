@@ -35,14 +35,14 @@ public readonly ref struct ExpressionParser
     }
 
     /// <summary>
-    /// 
+    /// Parses a set of tokens as an expression.
     /// </summary>
-    /// <param name="expression"></param>
-    /// <param name="result"></param>
-    /// <param name="reference"></param>
-    /// <param name="context"></param>
-    /// <param name="logger"></param>
-    /// <returns></returns>
+    /// <param name="expression">The tokens to parse as an expression.</param>
+    /// <param name="result">The resulting address value from the expression.</param>
+    /// <param name="reference">The symbol referenced.</param>
+    /// <param name="context">The assembler context containing declared symbols, if desired.</param>
+    /// <param name="logger">The logger to log errors or warnings, if desired.</param>
+    /// <returns>Whether or not the expression could be parsed.</returns>
     public static bool TryParse(ReadOnlySpan<Token> expression, out Address result, out SymbolEntry? reference, AssemblerContext? context = null, ILogger? logger = null)
     {
         result = default;
