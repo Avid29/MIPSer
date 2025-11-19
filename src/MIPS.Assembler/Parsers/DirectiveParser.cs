@@ -157,7 +157,7 @@ public readonly struct DirectiveParser
         }
 
         // Parse argument
-        if (!ExpressionParser.TryParse(args[0].Tokens, out Address result, out _, _context, _logger))
+        if (!ExpressionParser.TryParse(args[0].Tokens, out var result, _context, _logger))
             return false;
 
         // Argument must not be relocatable
@@ -167,7 +167,7 @@ public readonly struct DirectiveParser
             return false;
         }
 
-        var value = result.Value;
+        var value = result.Base.Value;
 
         if (align)
         {
@@ -185,7 +185,7 @@ public readonly struct DirectiveParser
                 _logger?.Log(Severity.Message, LogCode.LargeAlignment, args[0].Tokens, "DirectiveLargeAlignMessage", value, alignMessageThreshold);
             }
 
-            directive = new AlignDirective((int)result.Value);
+            directive = new AlignDirective((int)result.Base.Value);
         }
         else
         {
@@ -217,7 +217,7 @@ public readonly struct DirectiveParser
         {
             var arg = args[i];
 
-            if (!ExpressionParser.TryParse(arg.Tokens, out var result, out _, _context, _logger))
+            if (!ExpressionParser.TryParse(arg.Tokens, out var result, _context, _logger))
                 return false;
 
             if (result.IsRelocatable)
@@ -228,10 +228,10 @@ public readonly struct DirectiveParser
             }
             
             // TODO: Double check the logic here. Does this always detect the error?
-            value = T.CreateTruncating(result.Value);
-            if (value != T.CreateSaturating(result.Value))
+            value = T.CreateTruncating(result.Base.Value);
+            if (value != T.CreateSaturating(result.Base.Value))
             {
-                _logger?.Log(Severity.Warning, LogCode.IntegerTruncated, arg.Tokens, "DirectiveAllocationTruncated",  arg.Tokens.Print(), result.Value, value);
+                _logger?.Log(Severity.Warning, LogCode.IntegerTruncated, arg.Tokens, "DirectiveAllocationTruncated",  arg.Tokens.Print(), result.Base, value);
             }
 
             value.WriteBigEndian(bytes, pos);

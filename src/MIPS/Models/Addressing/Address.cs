@@ -33,7 +33,7 @@ public struct Address
     /// <summary>
     /// Get whether or not the address is fixed and not subject to relocation.
     /// </summary>
-    public readonly bool IsFixed => Section is Section.None;
+    public readonly bool IsFixed => Section is Section.None or Section.Absolute;
 
     /// <summary>
     /// Gets whether or not the address is relocating.
@@ -52,6 +52,51 @@ public struct Address
     /// Gets the default external address.
     /// </summary>
     public static Address External => new(0, Section.External);
+
+    /// <summary>
+    /// Attempts to add two <see cref="Address"/> structs.
+    /// </summary>
+    /// <param name="left">The left operand.</param>
+    /// <param name="right">The right operand.</param>
+    /// <param name="result">The resulting address.</param>
+    /// <returns>Whether or not the addresses could be added.</returns>
+    public static bool TryAdd(Address left, Address right, out Address result)
+    {
+        result = default;
+
+        if (left.IsRelocatable && right.IsRelocatable)
+            return false;
+
+        var section = left.IsFixed ? right.Section : left.Section;
+        result = new Address(left.Value + right.Value, section);
+        return true;
+    }
+
+    /// <summary>
+    /// Attempts to subtract an <see cref="Address"/> from another.
+    /// </summary>
+    /// <param name="left">The left operand.</param>
+    /// <param name="right">The right operand.</param>
+    /// <param name="result">The resulting address.</param>
+    /// <returns>Whether or not the addresses could be added.</returns>
+    public static bool TrySubtract(Address left, Address right, out Address result)
+    {
+        result = default;
+
+        if (left.Section == right.Section)
+        {
+            var value = left.Value - right.Value;
+            result = new Address(value, Section.Absolute);
+            return true;
+        }
+
+        if (right.IsRelocatable)
+            return false;
+
+
+        result = new Address(left.Value - right.Value, left.Section);
+        return true;
+    }
 
     /// <inheritdoc/>
     public static Address operator +(Address address, long offset) => new(address.Value + offset, address.Section);

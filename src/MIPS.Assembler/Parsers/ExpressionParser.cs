@@ -7,10 +7,8 @@ using MIPS.Assembler.Models;
 using MIPS.Assembler.Parsers.Expressions;
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
-using MIPS.Assembler.Parsers.Expressions.Evaluator;
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Assembler.Tokenization.Models.Enums;
-using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables;
 using System;
 using System.Collections.Generic;
@@ -38,15 +36,13 @@ public readonly ref struct ExpressionParser
     /// Parses a set of tokens as an expression.
     /// </summary>
     /// <param name="expression">The tokens to parse as an expression.</param>
-    /// <param name="result">The resulting address value from the expression.</param>
-    /// <param name="reference">The symbol referenced.</param>
+    /// <param name="result">The expression parsing results.</param>
     /// <param name="context">The assembler context containing declared symbols, if desired.</param>
     /// <param name="logger">The logger to log errors or warnings, if desired.</param>
     /// <returns>Whether or not the expression could be parsed.</returns>
-    public static bool TryParse(ReadOnlySpan<Token> expression, out Address result, out SymbolEntry? reference, AssemblerContext? context = null, ILogger? logger = null)
+    public static bool TryParse(ReadOnlySpan<Token> expression, out ExpressionResult result, AssemblerContext? context = null, ILogger? logger = null)
     {
         result = default;
-        reference = null;
 
         // Parse expression tree
         var parser = new ExpressionParser(context, logger);
@@ -64,13 +60,9 @@ public readonly ref struct ExpressionParser
         }
 
         // Evaluate the address
-        var eval = new AddressEvaluator(logger);
+        var eval = new Evaluator(context, logger);
         if (!node.TryEvaluate(eval, out result))
             return false;
-
-        // Grab reference
-        if (parser._references.Count is not 0)
-            reference = parser._references[0];
 
         return true;
     }

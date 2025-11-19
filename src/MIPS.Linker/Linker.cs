@@ -61,7 +61,7 @@ public class Linker
         // Copy stream contents
         for (int i = 0; i < ModuleConstructor.SECTION_COUNT; i++)
         {
-            offsets[i] = module.GetStreamPosition((Section)i);
+            offsets[i] = _module.GetStreamPosition((Section)i);
             _module.Append((Section)i, module.Sections[i].Stream);
         }
         

@@ -83,11 +83,11 @@ public class ExpressionParserTests
     private static void RunTest(string input, long? expected = null, AssemblerContext? context = null)
     {
         var line = Tokenizer.TokenizeLine(input, nameof(RunTest), TokenizerMode.Expression);
-        bool success = ExpressionParser.TryParse(line.Tokens, out var actual, out _, context);
+        bool success = ExpressionParser.TryParse(line.Tokens, out var actual, context);
         Assert.AreEqual(success, expected.HasValue);
         if (expected.HasValue)
         {
-            Assert.AreEqual(expected.Value, actual.Value);
+            Assert.AreEqual(expected.Value, actual.Base.Value);
         }
     }
 }

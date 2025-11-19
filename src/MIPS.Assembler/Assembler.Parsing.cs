@@ -97,17 +97,17 @@ public partial class Assembler
             return;
         }
         
-        if (!ExpressionParser.TryParse(expression, out var address, out var _, Context, _logger))
+        if (!ExpressionParser.TryParse(expression, out var result, Context, _logger))
             return;
         
-        if (address.IsRelocatable)
+        if (result.IsRelocatable)
         {
             _logger.Log(Severity.Error, LogCode.MacroCannotBeRelocatable, expression[0], "NoRelocatableMacros");
             return;
         }
         
         // TODO: Macro flags
-        DefineSymbol(name, address, SymbolType.Macro);
+        DefineSymbol(name, result.Base, SymbolType.Macro);
     }
 
     private void HandleInstruction(AssemblyLine line)

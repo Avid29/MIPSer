@@ -284,10 +284,10 @@ public struct InstructionParser
         relocation = null;
 
         // Attempt to parse expression
-        if (!ExpressionParser.TryParse(arg, out var address, out SymbolEntry? refSymbol, _context, _logger))
+        if (!ExpressionParser.TryParse(arg, out var expResult, _context, _logger))
             return false;
 
-        if (!address.IsFixed && target is Argument.Shift)
+        if (expResult.IsRelocatable && target is Argument.Shift)
         {
             // TODO: Consider tracking ref symbol token
             _logger?.Log(Severity.Error, LogCode.RelocatableReferenceInShift, arg, "Shift amount argument cannot reference relocatable symbols.");
@@ -296,10 +296,8 @@ public struct InstructionParser
 
         // TODO: Can branches make external references?
 
-        if (!address.IsFixed && target is not Argument.Offset && _context is not null)
+        if (expResult.Reference.HasValue && target is not Argument.Offset && _context is not null)
         {
-            Guard.IsNotNull(refSymbol);
-
             var type = target switch
             {
                 Argument.Address => ReferenceType.Address,
@@ -307,21 +305,16 @@ public struct InstructionParser
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<ReferenceType>($"Argument of type '{target}' cannot reference relocatable symbols."),
             };
 
-            var method = ReferenceMethod.Relocate;
-            if (address.IsExternal)
-            {
-                // TODO: When is it replace or subtract?
-                method = ReferenceMethod.Add;
-            }
-
-            relocation = new ReferenceEntry(refSymbol.Value.Name, _context.CurrentAddress, type, method);
+            var reloc = expResult.Reference.Value;
+            reloc.Type = type;
+            relocation = reloc;
         }
 
         // NOTE: Casting might truncate the value to fit the bit size.
         // This is the desired behavior, but when logging errors this
         // should be handled explicitly and drop an assembler warning.
 
-        long value = address.Value;
+        long value = expResult.Base.Value;
 
         // Truncates the value to fit the target argument
         CleanInteger(ref value, arg, target);
@@ -342,12 +335,12 @@ public struct InstructionParser
                 _address = (uint)value;
                 return true;
             case Argument.Offset:
-                if (address.IsRelocatable)
+                if (expResult.IsRelocatable)
                 {
                     Guard.IsNotNull(_context);
 
                     var @base = _context.CurrentAddress + 4;
-                    if (@base.Section != address.Section)
+                    if (@base.Section != expResult.Base.Section)
                     {
                         _logger?.Log(Severity.Error, LogCode.BranchBetweenSections, arg, "CantBranchBetweenSections");
                         return false;

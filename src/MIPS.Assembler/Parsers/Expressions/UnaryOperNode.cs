@@ -3,7 +3,6 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
-using MIPS.Assembler.Parsers.Expressions.Evaluator;
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Models.Addressing;
 
@@ -33,12 +32,12 @@ public class UnaryOperNode : OperNode
     public override ExpressionType Type => Child?.Type ?? ExpressionType.Invalid;
     
     /// <inheritdoc/>
-    public override bool TryEvaluate(IEvaluator<Address> evaluator, out Address result)
+    public override bool TryEvaluate(Evaluator evaluator, out ExpressionResult result)
     {
         result = default;
 
         // Evaluate child first
-        if (!(Child?.TryEvaluate(evaluator, out Address child) ?? false))
+        if (!(Child?.TryEvaluate(evaluator, out var child) ?? false))
             return false;
 
         return Operation switch

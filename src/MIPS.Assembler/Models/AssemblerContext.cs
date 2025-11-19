@@ -46,7 +46,7 @@ public class AssemblerContext
     public AssemblerConfig Config => _assembler.Config;
 
     /// <inheritdoc cref="Assembler.CurrentAddress"/>
-    public Address CurrentAddress => _assembler.CurrentAddress;
+    public Address CurrentAddress => _assembler?.CurrentAddress ?? Address.External;
 
     /// <summary>
     /// Gets a table of instructions for the assemlber.

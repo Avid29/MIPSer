@@ -2,7 +2,6 @@
 
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
-using MIPS.Assembler.Parsers.Expressions.Evaluator;
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
@@ -32,9 +31,9 @@ public class AddressNode : ValueNode<Address>
     public override ExpressionType Type => ExpressionType.Integer;
 
     /// <inheritdoc/>
-    public override bool TryEvaluate(IEvaluator<Address> evaluator, out Address result)
+    public override bool TryEvaluate(Evaluator evaluator, out ExpressionResult result)
     {
-        result = Value;
+        result = new ExpressionResult(Value);
         return true;
     }
 }

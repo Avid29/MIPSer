@@ -53,6 +53,7 @@ public partial class ModuleConstructor
         Stream buffer = GetSectionStream(section);
         if (seekEnd)
         {
+            stream.Seek(0, SeekOrigin.Begin);
             buffer.Seek(0, SeekOrigin.End);
         }
 

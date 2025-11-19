@@ -2,7 +2,6 @@
 
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
-using MIPS.Assembler.Parsers.Expressions.Evaluator;
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables;
@@ -25,11 +24,13 @@ public class SymbolNode : ValueNode<SymbolEntry>
     public override ExpressionType Type => ExpressionType.Integer;
 
     /// <inheritdoc/>
-    public override bool TryEvaluate(IEvaluator<Address> evaluator, out Address result)
+    public override bool TryEvaluate(Evaluator evaluator, out ExpressionResult result)
     {
         // TODO: Handle undefined symbols
 
-        result = Value.Address;
+        var symbolName = this.ExpressionToken.Source;
+        var address = evaluator.Context?.CurrentAddress ?? Address.External;
+        result = new ExpressionResult(Value.Address, new ReferenceEntry(symbolName, address, default, default));
         return true;
     }
 }

@@ -3,9 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
-using MIPS.Assembler.Parsers.Expressions.Evaluator;
 using MIPS.Assembler.Tokenization.Models;
-using MIPS.Models.Addressing;
 
 namespace MIPS.Assembler.Parsers.Expressions;
 
@@ -52,14 +50,14 @@ public class BinaryOperNode : OperNode
     }
 
     /// <inheritdoc/>
-    public override bool TryEvaluate(IEvaluator<Address> evaluator, out Address result)
+    public override bool TryEvaluate(Evaluator evaluator, out ExpressionResult result)
     {
         result = default;
 
         // Evaluate children, and return false if either fails.
         // They log their own errors, so no need to log another.
-        if ((!(LeftChild?.TryEvaluate(evaluator, out Address left) ?? false)) ||
-            (!(RightChild?.TryEvaluate(evaluator, out Address right) ?? false)))
+        if ((!(LeftChild?.TryEvaluate(evaluator, out var left) ?? false)) ||
+            (!(RightChild?.TryEvaluate(evaluator, out var right) ?? false)))
             return false;
 
         return Operation switch
