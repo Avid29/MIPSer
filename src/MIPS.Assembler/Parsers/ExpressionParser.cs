@@ -122,7 +122,7 @@ public readonly ref struct ExpressionParser
             TokenType.Operator when TryGetUnaryOperator(token.Source, out var op)
                 => TryParseUnaryOperator(ref tokens, token, op, out result),
 
-            _ => false,
+            _ => _logger?.Log(Severity.Error, LogCode.UnexpectedToken, token, "UnexpectedToken", token) ?? false,
         };
 
         if (!success)
