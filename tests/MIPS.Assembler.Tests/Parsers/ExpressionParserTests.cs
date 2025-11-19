@@ -16,7 +16,7 @@ namespace MIPS.Assembler.Tests.Parsers;
 [TestClass]
 public class ExpressionParserTests
 {
-    public static IEnumerable<object[]> SuccessTests =>
+    public static IEnumerable<object[]> ExpressionSuccessTestsList =>
     [
         ["10", 10],
         ["-10", -10],
@@ -42,7 +42,7 @@ public class ExpressionParserTests
         ["macro + 10", 10 + 10, ("macro", new Address(10, Section.Text))],
     ];
 
-    public static IEnumerable<object[]> FailureTests =>
+    public static IEnumerable<object[]> ExpressionFailureTestsList =>
     [
         ["+"],
         ["*10"],
@@ -58,12 +58,12 @@ public class ExpressionParserTests
     ];
 
     [DataTestMethod]
-    [DynamicData(nameof(SuccessTests))]
+    [DynamicData(nameof(ExpressionSuccessTestsList))]
     public void ExpressionSuccessTests(string input, int expected, params (string name, Address addr)[] macros)
         => RunTest(input, expected, macros);
 
     [DataTestMethod]
-    [DynamicData(nameof(FailureTests))]
+    [DynamicData(nameof(ExpressionFailureTestsList))]
     public void ExpressionFailureTests(string input, params (string name, Address addr)[] macros)
         => RunTest(input, macros: macros);
 

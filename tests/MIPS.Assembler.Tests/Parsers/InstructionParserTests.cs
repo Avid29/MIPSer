@@ -8,6 +8,7 @@ using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Disassembler.Services;
+using MIPS.Models.Addressing;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
@@ -18,6 +19,7 @@ using MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 using MIPS.Services;
 using MIPS.Tests.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace MIPS.Assembler.Tests.Parsers;
@@ -25,18 +27,34 @@ namespace MIPS.Assembler.Tests.Parsers;
 [TestClass]
 public class InstructionParserTests
 {
-    private const string NOP = "nop";
-    private const string Add = "add $t0, $s0, $s1";
-    private const string Addi = "addi $t0, $s0, 100";
-    private const string Sll = "sll $t0, $s0, 3";
-    private const string LoadWord = "lw $t0, 100($s0)";
-    private const string StoreByte = "sb $t0, -100($s0)";
-    private const string Jump = "j 1000";
-    private const string JumpExpression = "j 10*10";
-    private const string DI = "di";
-    private const string DIArg = "di $t1";
-    private const string EI = "ei";
-    private const string CVT_S_D = "cvt.S.D $f4, $f8";
+    public static IEnumerable<object[]> RawInstructionSuccessTestsList { get; } =
+    [
+        Flatten("nop", Instruction.NOP),
+        Flatten("add $t0, $s0, $s1", Instruction.Create(FunctionCode.Add, GPRegister.Saved0, GPRegister.Saved1, GPRegister.Temporary0)),
+        Flatten("addi $t0, $s0, 100", Instruction.Create(OperationCode.AddImmediate, GPRegister.Saved0, GPRegister.Temporary0, (short)100)),
+        Flatten("sll $t0, $s0, 3", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 3)),
+        Flatten("lw $t0, 100($s0)", Instruction.Create(OperationCode.LoadWord, GPRegister.Saved0, GPRegister.Temporary0, (short)100)),
+        Flatten("sb $t0, -100($s0)", Instruction.Create(OperationCode.StoreByte, GPRegister.Saved0, GPRegister.Temporary0, (short)-100)),
+        Flatten("j 1000", Instruction.Create(OperationCode.Jump, 1000)),
+        Flatten("j 10*10", Instruction.Create(OperationCode.Jump, 10 * 10)),
+        Flatten("di", CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Zero, 12)),
+        Flatten("di $t1", CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Temporary1, 12)),
+        Flatten("ei", CoProc0Instruction.Create(MFMC0FuncCode.EnableInterupts, GPRegister.Zero, 12)),
+        Flatten("cvt.S.D $f4, $f8", FloatInstruction.Create(FloatFuncCode.ConvertToSingle, FloatFormat.Double, FloatRegister.F8, FloatRegister.F4)),
+    ];
+
+    public static object[] Flatten(string input, Instruction instruction)
+    {
+        var array = new object[2];
+        array[0] = input;
+        array[1] = (uint)instruction;
+        return array;
+    }
+
+    [DataTestMethod]
+    [DynamicData(nameof(RawInstructionSuccessTestsList))]
+    public void RawInstructionSuccessTests(string input, uint expected)
+        => RunTest(input, new ParsedInstruction((Instruction)expected));
 
     private const string LoadImmediate = "li $t0, 0x10001";
 
@@ -47,86 +65,6 @@ public class InstructionParserTests
     private const string XkcdFail = "xkcd $t0, $s0, $s1";
     private const string TooFewArgs = "add $t0, $s0";
     private const string TooManyArgs = "add $t0, $s0, $s1, $s1";
-
-    [TestMethod(NOP)]
-    public void NopTest() => RunTest(NOP, new ParsedInstruction(Instruction.NOP));
-
-    [TestMethod(Add)]
-    public void AddTest()
-    {
-        Instruction expected = Instruction.Create(FunctionCode.Add, GPRegister.Saved0, GPRegister.Saved1, GPRegister.Temporary0);
-        RunTest(Add, new ParsedInstruction(expected));
-    }
-
-    [TestMethod(Addi)]
-    public void AddiTest()
-    {
-        Instruction expected = Instruction.Create(OperationCode.AddImmediate, GPRegister.Saved0, GPRegister.Temporary0, (short)100);
-        RunTest(Addi, new ParsedInstruction(expected));
-    }
-
-    [TestMethod(Sll)]
-    public void SllTest()
-    {
-        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 3);
-        RunTest(Sll, new ParsedInstruction(expected));
-    }
-
-    [TestMethod(LoadWord)]
-    public void LoadWordTest()
-    {
-        Instruction expected = Instruction.Create(OperationCode.LoadWord, GPRegister.Saved0, GPRegister.Temporary0, (short)100);
-        RunTest(LoadWord, new ParsedInstruction(expected));
-    }
-
-    [TestMethod(StoreByte)]
-    public void StoreByteTest()
-    {
-        Instruction expected = Instruction.Create(OperationCode.StoreByte, GPRegister.Saved0, GPRegister.Temporary0, (short)-100);
-        RunTest(StoreByte, new ParsedInstruction(expected));
-    }
-
-    [TestMethod(Jump)]
-    public void JumpTest()
-    {
-        Instruction expected = Instruction.Create(OperationCode.Jump, 1000);
-        RunTest(Jump, new ParsedInstruction(expected));
-    }
-
-    [TestMethod(JumpExpression)]
-    public void JumpExpressionTest()
-    {
-        Instruction expected = Instruction.Create(OperationCode.Jump, 100);
-        RunTest(JumpExpression, new ParsedInstruction(expected));
-    }
-
-    [TestMethod(DI)]
-    public void DITest()
-    {
-        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Zero, 12);
-        RunTest(DI, new ParsedInstruction(expected));
-    }
-
-    [TestMethod(DIArg)]
-    public void DIArgTest()
-    {
-        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Temporary1, 12);
-        RunTest(DIArg, new ParsedInstruction(expected));
-    }
-
-    [TestMethod(EI)]
-    public void EITest()
-    {
-        Instruction expected = CoProc0Instruction.Create(MFMC0FuncCode.EnableInterupts, GPRegister.Zero, 12);
-        RunTest(EI, new ParsedInstruction(expected));
-    }
-
-    [TestMethod(CVT_S_D)]
-    public void CVT_S_DTest()
-    {
-        Instruction expected = FloatInstruction.Create(FloatFuncCode.ConvertToSingle, FloatFormat.Double, FloatRegister.F8, FloatRegister.F4);
-        RunTest(CVT_S_D, new ParsedInstruction(expected));
-    }
     
     [TestMethod(LoadImmediate)]
     public void LoadImmediateTest()
