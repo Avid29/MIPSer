@@ -43,6 +43,20 @@ public class InstructionParserTests
         Flatten("cvt.S.D $f4, $f8", FloatInstruction.Create(FloatFuncCode.ConvertToSingle, FloatFormat.Double, FloatRegister.F8, FloatRegister.F4)),
     ];
 
+    public static IEnumerable<object[]> RawInstructionFailureTestsList { get; } =
+    [
+        Flatten("xkcd $t0, $s0, $s1", LogCode.InvalidInstructionName),
+        Flatten("add $t0, $s0", LogCode.InvalidInstructionArgCount),
+        Flatten("add $t0, $s0, $s1, $s1", LogCode.InvalidInstructionArgCount),
+    ];
+
+    public static IEnumerable<object[]> RawInstructionWarningTestsList { get; } =
+    [
+        Flatten("sll $t0, $s0, 33", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 1), LogCode.IntegerTruncated),
+        Flatten("sll $t0, $s0, -1", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 31), LogCode.IntegerTruncated),
+        Flatten("j 0x1", Instruction.Create(OperationCode.Jump, 0x1), LogCode.IntegerTruncated),
+    ];
+
     public static object[] Flatten(string input, Instruction instruction)
     {
         var array = new object[2];
@@ -51,65 +65,45 @@ public class InstructionParserTests
         return array;
     }
 
+    public static object[] Flatten(string input, LogCode logCode)
+    {
+        var array = new object[2];
+        array[0] = input;
+        array[1] = logCode;
+        return array;
+    }
+
+    public static object[] Flatten(string input, Instruction instruction, LogCode logCode)
+    {
+        var array = new object[3];
+        array[0] = input;
+        array[1] = (uint)instruction;
+        array[2] = logCode;
+        return array;
+    }
+
     [DataTestMethod]
     [DynamicData(nameof(RawInstructionSuccessTestsList))]
     public void RawInstructionSuccessTests(string input, uint expected)
         => RunTest(input, new ParsedInstruction((Instruction)expected));
 
+    [DataTestMethod]
+    [DynamicData(nameof(RawInstructionFailureTestsList))]
+    public void RawInstructionFailureTests(string input, LogCode logCode)
+        => RunTest(input, logCode: logCode);
+
+    [DataTestMethod]
+    [DynamicData(nameof(RawInstructionWarningTestsList))]
+    public void RawInstructionWarningTests(string input, uint expected, LogCode logCode)
+        => RunTest(input, new ParsedInstruction((Instruction)expected), logCode);
+
     private const string LoadImmediate = "li $t0, 0x10001";
-
-    private const string SllWarnTruncate = "sll $t0, $s0, 33";
-    private const string SllWarnSigned = "sll $t0, $s0, -1";
-    private const string JWarnTruncate = "j 0x1";
-
-    private const string XkcdFail = "xkcd $t0, $s0, $s1";
-    private const string TooFewArgs = "add $t0, $s0";
-    private const string TooManyArgs = "add $t0, $s0, $s1, $s1";
     
     [TestMethod(LoadImmediate)]
     public void LoadImmediateTest()
     {
         PseudoInstruction expected = new(PseudoOp.LoadImmediate) { RT = GPRegister.Temporary0, Immediate = 0x10001 };
         RunTest(LoadImmediate, new ParsedInstruction(expected));
-    }
-
-    [TestMethod(SllWarnTruncate)]
-    public void SllWarnTruncateTest()
-    {
-        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 1);
-        RunTest(SllWarnTruncate, new ParsedInstruction(expected), logCode:LogCode.IntegerTruncated);
-    }
-
-    [TestMethod(SllWarnSigned)]
-    public void SllWarnSignedTest()
-    {
-        Instruction expected = Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 31);
-        RunTest(SllWarnSigned, new ParsedInstruction(expected), logCode:LogCode.IntegerTruncated);
-    }
-
-    [TestMethod(JWarnTruncate)]
-    public void JWarnTruncateTest()
-    {
-        Instruction expected = Instruction.Create(OperationCode.Jump, 0x1);
-        RunTest(JWarnTruncate, new ParsedInstruction(expected), logCode:LogCode.IntegerTruncated);
-    }
-
-    [TestMethod(XkcdFail)]
-    public void XkdFailTest()
-    {
-        RunTest(XkcdFail, logCode: LogCode.InvalidInstructionName);
-    }
-
-    [TestMethod(TooFewArgs)]
-    public void TooFewArgsTest()
-    {
-        RunTest(TooFewArgs, logCode: LogCode.InvalidInstructionArgCount);
-    }
-
-    [TestMethod(TooManyArgs)]
-    public void TooManyArgsTest()
-    {
-        RunTest(TooManyArgs, logCode: LogCode.InvalidInstructionArgCount);
     }
 
     [TestMethod("Generated Tests")]
