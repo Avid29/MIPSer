@@ -11,6 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		nuget.config = nuget.config
 		README.md = README.md
+		submodules\WinUIEdit\UseWinUI3.txt = submodules\WinUIEdit\UseWinUI3.txt
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{457783DF-E788-44A7-843C-76272460B7BA}"
