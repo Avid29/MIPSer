@@ -91,6 +91,33 @@ public partial class AssemblyEditBox
                 editor.LineDown();
                 editor.LineTranspose();
             },
+            EditorOperation.ExpandChildren => () => {
+                var line = editor.LineFromPosition(editor.CurrentPos);
+                line = editor.GetFoldParent(line);
+                var level = editor.GetFoldLevel(line);
+                editor.FoldChildren(line, FoldAction.Expand);
+            },
+            EditorOperation.CollapseChildren => () => {
+                var line = editor.LineFromPosition(editor.CurrentPos);
+                if ((editor.GetFoldLevel(line) & FoldLevel.HeaderFlag) is 0)
+                {
+                    line = editor.GetFoldParent(line);
+                }
+                var level = editor.GetFoldLevel(line);
+                editor.FoldChildren(line, FoldAction.Contract);
+            },
+            EditorOperation.ExpandAll => () => {
+                var line = editor.LineFromPosition(editor.CurrentPos);
+                line = editor.GetFoldParent(line);
+                var level = editor.GetFoldLevel(line);
+                editor.FoldAll(FoldAction.Expand);
+            },
+            EditorOperation.CollapseAll => () => {
+                var line = editor.LineFromPosition(editor.CurrentPos);
+                line = editor.GetFoldParent(line);
+                var level = editor.GetFoldLevel(line);
+                editor.FoldAll(FoldAction.ContractEveryLevel);
+            },
             _ => null,
         };
 

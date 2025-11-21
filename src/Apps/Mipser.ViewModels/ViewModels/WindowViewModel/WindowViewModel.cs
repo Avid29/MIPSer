@@ -43,8 +43,15 @@ public partial class WindowViewModel : ObservableRecipient
         PasteCommand = new RelayCommand(Paste);
         DuplicateCommand = new RelayCommand(Duplicate);
         SelectAllCommand = new RelayCommand(SelectAll);
+
         TransposeUpCommand = new RelayCommand(TransposeUp);
         TransposeDownCommand = new RelayCommand(TransposeDown);
+        
+        ToggleOutliningCommand = new RelayCommand(ToggleOutlining);
+        ExpandCurrentCommand = new RelayCommand(ExpandChildren);
+        CollapseCurrentCommand = new RelayCommand(CollapseChildren);
+        ExpandAllCommand = new RelayCommand(ExpandAll);
+        CollapseAllCommand = new RelayCommand(CollapseAll);
 
         IsActive = true;
 

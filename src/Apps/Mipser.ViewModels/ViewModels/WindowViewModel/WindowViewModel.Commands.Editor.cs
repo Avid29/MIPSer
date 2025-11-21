@@ -54,6 +54,31 @@ public partial class WindowViewModel
     /// </summary>
     public RelayCommand TransposeDownCommand { get; set; }
 
+    /// <summary>
+    /// Gets a command that toggles outlining in the editor.
+    /// </summary>
+    public RelayCommand ToggleOutliningCommand { get; set; }
+
+    /// <summary>
+    /// Gets a command that expands all children folds from the current line in the editor.
+    /// </summary>
+    public RelayCommand ExpandCurrentCommand { get; set; }
+
+    /// <summary>
+    /// Gets a command that collapses all children folds from the current line in the editor.
+    /// </summary>
+    public RelayCommand CollapseCurrentCommand { get; set; }
+
+    /// <summary>
+    /// Gets a command that expands all folds from the current line in the editor.
+    /// </summary>
+    public RelayCommand ExpandAllCommand { get; set; }
+
+    /// <summary>
+    /// Gets a command that collapses all folds from the current line in the editor.
+    /// </summary>
+    public RelayCommand CollapseAllCommand { get; set; }
+
     private void Undo() => _messenger.Send(new EditorOperationRequestMessage(EditorOperation.Undo));
 
     private void Redo() => _messenger.Send(new EditorOperationRequestMessage(EditorOperation.Redo));
@@ -71,4 +96,14 @@ public partial class WindowViewModel
     private void TransposeUp() => _messenger.Send(new EditorOperationRequestMessage(EditorOperation.TransposeUp));
 
     private void TransposeDown() => _messenger.Send(new EditorOperationRequestMessage(EditorOperation.TransposeDown));
+
+    private void ToggleOutlining() => _messenger.Send(new EditorOperationRequestMessage(EditorOperation.ToggleOutlining));
+
+    private void ExpandChildren() => _messenger.Send(new EditorOperationRequestMessage(EditorOperation.ExpandChildren));
+    
+    private void CollapseChildren() => _messenger.Send(new EditorOperationRequestMessage(EditorOperation.CollapseChildren));
+
+    private void ExpandAll() => _messenger.Send(new EditorOperationRequestMessage(EditorOperation.ExpandAll));
+    
+    private void CollapseAll() => _messenger.Send(new EditorOperationRequestMessage(EditorOperation.CollapseAll));
 }

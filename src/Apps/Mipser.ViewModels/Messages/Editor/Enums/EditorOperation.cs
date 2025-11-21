@@ -8,6 +8,7 @@ namespace Mipser.Messages.Editor.Enums;
 public enum EditorOperation
 {
 #pragma warning disable CS1591
+    // Basic
     Undo,
     Redo,
     Cut,
@@ -15,7 +16,17 @@ public enum EditorOperation
     Paste,
     Duplicate,
     SelectAll,
+
+    // Advanced
     TransposeUp,
     TransposeDown,
+
+    // Outlining
+    ToggleOutlining,
+    ExpandChildren,
+    CollapseChildren,
+    ExpandAll,
+    CollapseAll,
+
 #pragma warning restore CS1591
 }
