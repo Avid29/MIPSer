@@ -3,6 +3,7 @@
 using CommunityToolkit.WinUI.Helpers;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
+using Mipser.Windows.Extensions;
 using Windows.UI;
 
 namespace Mipser.Windows.Controls.AssemblyEditBox;
@@ -12,6 +13,15 @@ namespace Mipser.Windows.Controls.AssemblyEditBox;
 /// </summary>
 public class AssemblySyntaxHighlightingTheme : DependencyObject
 {
+    /// <summary>
+    /// A <see cref="DependencyProperty"/> for the <see cref="BackgroundBlendColor"/> property.
+    /// </summary>
+    public static readonly DependencyProperty BackgroundBlendColorProperty =
+        DependencyProperty.Register(nameof(BackgroundBlendColor),
+            typeof(Color),
+            typeof(AssemblySyntaxHighlightingTheme),
+            new PropertyMetadata(Colors.Transparent));
+
     /// <summary>
     /// A <see cref="DependencyProperty"/> for the <see cref="InstructionHighlightColor"/> property.
     /// </summary>
@@ -94,15 +104,6 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
             new PropertyMetadata(Colors.Transparent));
 
     /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="InvalidInstructionHighlightColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty InvalidInstructionHighlightColorProperty =
-        DependencyProperty.Register(nameof(InvalidInstructionHighlightColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
     /// A <see cref="DependencyProperty"/> for the <see cref="ErrorUnderlineColor"/> property.
     /// </summary>
     public static readonly DependencyProperty ErrorUnderlineColorProperty =
@@ -130,27 +131,13 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
             new PropertyMetadata(Colors.Transparent));
 
     /// <summary>
-    /// Gets the default <see cref="AssemblySyntaxHighlightingTheme"/>.
+    /// Gets or sets the base color to use when alpha blending a syntax highlight color.
     /// </summary>
-    public static AssemblySyntaxHighlightingTheme Default => new()
+    public Color BackgroundBlendColor
     {
-        // Syntax Highlight Colors
-        InstructionHighlightColor = "#A7FA95".ToColor(),
-        RegisterHighlightColor = "#FE8482".ToColor(),
-        ImmediateHighlightColor = "#F8FC8B".ToColor(),
-        ReferenceHighlightColor = "#73EEFD".ToColor(),
-        OperatorHighlightColor = "#77A7FD".ToColor(),
-        DirectiveHighlightColor = "#FA9EF6".ToColor(),
-        StringHighlightColor = "#FFC47A".ToColor(),
-        CommentHighlightColor = "#9B88FC".ToColor(),
-        MacroHighlightColor = "#BF472F".ToColor(),
-        InvalidInstructionHighlightColor = "#67995c".ToColor(),
-
-        // Indicator Colors
-        ErrorUnderlineColor = "#FF0000".ToColor(),
-        WarningUnderlineColor = "#FFAA00".ToColor(),
-        MessageUnderlineColor = "#00AAFF".ToColor(),
-    };
+        get => (Color)GetValue(BackgroundBlendColorProperty);
+        set => SetValue(BackgroundBlendColorProperty, value);
+    }
 
     /// <summary>
     /// Gets or sets the color to use for highlighting instruction tokens.
@@ -234,13 +221,14 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
     }
 
     /// <summary>
-    /// Gets or sets the color to use for highlighting instruction tokens for invalid instructions.
+    /// Gets the color to use for highlighting invalid instruction names.
     /// </summary>
-    public Color InvalidInstructionHighlightColor
-    {
-        get => (Color)GetValue(InvalidInstructionHighlightColorProperty);
-        set => SetValue(InvalidInstructionHighlightColorProperty, value);
-    }
+    public Color InvalidInstructionHighlightColor => ApplyBackgroundBlend(InstructionHighlightColor, 0.6);
+
+    /// <summary>
+    /// Gets the color to use for highlighting invalid references.
+    /// </summary>
+    public Color InvalidReferenceHighlightColor => ApplyBackgroundBlend(ReferenceHighlightColor, 0.6);
 
     /// <summary>
     /// Gets or sets the color to use for underlining errors.
@@ -267,5 +255,11 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
     {
         get => (Color)GetValue(MessageUnderlineColorProperty);
         set => SetValue(MessageUnderlineColorProperty, value);
+    }
+
+    private Color ApplyBackgroundBlend(Color overlay, double opacity)
+    {
+        overlay.A = (byte)(overlay.A * opacity);
+        return BackgroundBlendColor.AlphaBlend(overlay);
     }
 }

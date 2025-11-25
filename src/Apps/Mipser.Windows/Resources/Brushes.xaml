@@ -9,7 +9,8 @@
 
             <!--  Background Colors  -->
             <Color x:Key="TitleBarBackgroundColor">#222024</Color>
-            <SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="#131215"/>
+            <Color x:Key="PrimaryBackgroundColor">#131215</Color>
+            <SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="{ThemeResource PrimaryBackgroundColor}"/>
             <AcrylicBrush x:Key="TitleBarBackgroundBrush" TintColor="{ThemeResource TitleBarBackgroundColor}" TintOpacity="0.8"/>
             <AcrylicBrush x:Key="SideBarBackgroundBrush" TintColor="#161518" TintOpacity="0.5"/>
 
@@ -23,8 +24,7 @@
             <Color x:Key="StringHighlightColor">#FFC47A</Color>
             <Color x:Key="CommentHighlightColor">#9B88FC</Color>
             <Color x:Key="MacroHighlightColor">#BF472F</Color>
-            <Color x:Key="InvalidInstructionHighlightColor">#67995C</Color>
-            
+
             <!--  Indicator Colors  -->
             <Color x:Key="ErrorUnderlineColor">#FF0000</Color>
             <Color x:Key="WarningUnderlineColor">#FFAA00</Color>
@@ -42,7 +42,8 @@
 
             <!--  Background Colors  -->
             <Color x:Key="TitleBarBackgroundColor">#E0E0E0</Color>
-            <SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="#FFFFFF"/>
+            <Color x:Key="PrimaryBackgroundColor">#FFFFFF</Color>
+            <SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="{ThemeResource PrimaryBackgroundColor}"/>
             <AcrylicBrush x:Key="TitleBarBackgroundBrush" TintColor="{ThemeResource TitleBarBackgroundColor}" TintOpacity="0.8"/>
             <AcrylicBrush x:Key="SideBarBackgroundBrush" TintColor="#F0F0F0" TintOpacity="0.75"/>
 
@@ -56,8 +57,7 @@
             <Color x:Key="StringHighlightColor">#804600</Color>
             <Color x:Key="CommentHighlightColor">#17037c</Color>
             <Color x:Key="MacroHighlightColor">#d25e46</Color>
-            <Color x:Key="InvalidInstructionHighlightColor">#6b9f60</Color>
-            
+
             <!--  Indicator Colors  -->
             <Color x:Key="ErrorUnderlineColor">#FF0000</Color>
             <Color x:Key="WarningUnderlineColor">#FFAA00</Color>

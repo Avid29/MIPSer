@@ -51,6 +51,7 @@ public partial class AssemblyEditBox
         {
             var result = await Assembler.AssembleAsync(Text, null, new AssemblerConfig(MipsVersion.MipsIII));
             ApplyLogHighlights(result.Logs);
+            UpdateSymbols(result.Symbols);
         }
         catch (Exception)
         {

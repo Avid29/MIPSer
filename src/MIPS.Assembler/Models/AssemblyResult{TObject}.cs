@@ -2,6 +2,7 @@
 
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models.Modules.Interfaces;
+using MIPS.Models.Modules.Tables;
 using System.Collections.Generic;
 
 namespace MIPS.Assembler.Models;
@@ -13,14 +14,14 @@ namespace MIPS.Assembler.Models;
 public class AssemblyResult<TObject> : AssemblyResult
     where TObject : IBuildModule
 {
-    internal AssemblyResult(TObject? objectModule, bool failed, IReadOnlyList<AssemblerLog> logs)
-        : base(failed, logs)
+    internal AssemblyResult(TObject? objectModule, bool failed, IReadOnlyList<AssemblerLog> logs, IReadOnlyList<SymbolEntry> symbols)
+        : base(failed, logs, symbols)
     {
         ObjectModule = objectModule;
     }
 
     internal AssemblyResult(TObject? objectModule, AssemblyResult childResult)
-        : this(objectModule, childResult.Failed, childResult.Logs)
+        : this(objectModule, childResult.Failed, childResult.Logs, childResult.Symbols)
     {
     }
 

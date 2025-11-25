@@ -8,6 +8,7 @@ using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
+using MIPS.Models.Modules.Tables;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -84,7 +85,12 @@ public partial class Assembler
     /// <summary>
     /// Gets the assembler's logs.
     /// </summary>
-    public IReadOnlyList<AssemblerLog> Logs => _logger.Logs.OfType<AssemblerLog>().ToList();
+    public IReadOnlyList<AssemblerLog> Logs => [.._logger.Logs.OfType<AssemblerLog>()];
+
+    /// <summary>
+    /// Gets the symbols found by the assembler.
+    /// </summary>
+    public IReadOnlyList<SymbolEntry> Symbols => [.._module.Symbols.Values];
 
     /// <summary>
     /// Gets whether or not the assembler failed to assemble a valid module.

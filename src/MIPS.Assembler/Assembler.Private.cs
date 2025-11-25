@@ -6,6 +6,7 @@ using MIPS.Assembler.Tokenization.Models;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables.Enums;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace MIPS.Assembler;

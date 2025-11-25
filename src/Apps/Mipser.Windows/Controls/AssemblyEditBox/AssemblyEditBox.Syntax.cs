@@ -1,10 +1,11 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Assembler.Tokenization.Models.Enums;
+using MIPS.Models.Modules.Tables;
+using Mipser.Windows.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using WinUIEditor;
@@ -24,7 +25,7 @@ public partial class AssemblyEditBox
     private const int MacroStyleIndex = 9;
     private const int InvalidInstructionStyleIndex = 10;
     //private const int InvalidRegisterStyleIndex = 11;
-    //private const int InvalidReferenceStyleIndex = 12;
+    private const int InvalidReferenceStyleIndex = 12;
 
     // 14 is reserved for the line indicators
     private const int ErrorAnnotationStyleIndex = 17;
@@ -32,6 +33,7 @@ public partial class AssemblyEditBox
     private const int MessageAnnotationStyleIndex = 19;
 
     private HashSet<string>? Instructions = null;
+    private HashSet<string>? Symbols = null;
 
     private bool @lock = false;
 
@@ -48,7 +50,9 @@ public partial class AssemblyEditBox
         editor.StyleSetFore(DirectiveStyleIndex, ToInt(SyntaxHighlightingTheme.DirectiveHighlightColor));
         editor.StyleSetFore(StringStyleIndex, ToInt(SyntaxHighlightingTheme.StringHighlightColor));
         editor.StyleSetFore(CommentStyleIndex, ToInt(SyntaxHighlightingTheme.CommentHighlightColor));
+
         editor.StyleSetFore(InvalidInstructionStyleIndex, ToInt(SyntaxHighlightingTheme.InvalidInstructionHighlightColor));
+        editor.StyleSetFore(InvalidReferenceStyleIndex, ToInt(SyntaxHighlightingTheme.InvalidReferenceHighlightColor));
 
         editor.StyleSetFore(ErrorAnnotationStyleIndex, ToInt(SyntaxHighlightingTheme.ErrorUnderlineColor));
         editor.StyleSetFore(WarningAnnotationStyleIndex, ToInt(SyntaxHighlightingTheme.WarningUnderlineColor));
@@ -64,6 +68,14 @@ public partial class AssemblyEditBox
             // TODO: Handle formatting instructions
             Instructions.Add(instr.Name);
         }
+    }
+
+    private void UpdateSymbols(IReadOnlyList<SymbolEntry> symbols)
+    {
+        Symbols = [];
+
+        foreach(var symbol in symbols)
+            Symbols.Add(symbol.Name);
     }
 
     private void UpdateSyntaxHighlighting()
@@ -132,6 +144,9 @@ public partial class AssemblyEditBox
                 TokenType.Instruction => InstructionStyleIndex,
                 TokenType.Register => RegisterStyleIndex,
                 TokenType.Immediate => ImmediateStyleIndex,
+
+                TokenType.Reference when Symbols is not null =>
+                    Symbols.Contains(token.Source) ? ReferenceStyleIndex : InvalidReferenceStyleIndex,
 
                 TokenType.Reference or
                 TokenType.LabelDeclaration => ReferenceStyleIndex,

@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Assembler.Logging;
+using MIPS.Models.Modules.Tables;
 using System.Collections.Generic;
 
 namespace MIPS.Assembler.Models;
@@ -10,10 +11,11 @@ namespace MIPS.Assembler.Models;
 /// </summary>
 public class AssemblyResult
 {
-    internal AssemblyResult(bool failed, IReadOnlyList<AssemblerLog> logs)
+    internal AssemblyResult(bool failed, IReadOnlyList<AssemblerLog> logs, IReadOnlyList<SymbolEntry> symbols)
     {
         Failed = failed;
         Logs = logs;
+        Symbols = symbols;
     }
 
     /// <summary>
@@ -25,4 +27,9 @@ public class AssemblyResult
     /// Gets the assmembly log.
     /// </summary>
     public IReadOnlyList<AssemblerLog> Logs { get; }
+
+    /// <summary>
+    /// Gets the list of symbols
+    /// </summary>
+    public IReadOnlyList<SymbolEntry> Symbols { get;  }
 }

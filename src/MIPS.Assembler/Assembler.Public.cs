@@ -16,7 +16,7 @@ public partial class Assembler
     {
         using var reader = new StringReader(str);
         var assembler = await AssembleAsync(reader, filename, config);
-        return new AssemblyResult(assembler.Failed, assembler.Logs);
+        return new AssemblyResult(assembler.Failed, assembler.Logs, assembler.Symbols);
     }
     
     /// <summary>
@@ -29,7 +29,7 @@ public partial class Assembler
         using var reader = new StringReader(str);
         var assembler = await AssembleAsync(reader, filename, config);
         var obj = T.Create(assembler._module, config, outStream);
-        return new AssemblyResult<T>(obj, assembler.Failed, assembler.Logs);
+        return new AssemblyResult<T>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ public partial class Assembler
     {
         using var reader = new StreamReader(stream);
         var assembler = await AssembleAsync(reader, filename, config);
-        return new AssemblyResult(assembler.Failed, assembler.Logs);
+        return new AssemblyResult(assembler.Failed, assembler.Logs, assembler.Symbols);
     }
 
     /// <summary>
@@ -52,6 +52,6 @@ public partial class Assembler
         using var reader = new StreamReader(stream);
         var assembler = await AssembleAsync(reader, filename, config);
         var obj = T.Create(assembler._module, config, outStream);
-        return new AssemblyResult<T>(obj, assembler.Failed, assembler.Logs);
+        return new AssemblyResult<T>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
     }
 }

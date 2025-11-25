@@ -43,7 +43,7 @@ public partial class AssemblyEditBox
             nameof(SyntaxHighlightingTheme),
             typeof(AssemblySyntaxHighlightingTheme),
             typeof(AssemblyEditBox),
-            new PropertyMetadata(AssemblySyntaxHighlightingTheme.Default, OnThemeChanged));
+            new PropertyMetadata(new AssemblySyntaxHighlightingTheme(), OnThemeChanged));
 
     /// <summary>
     /// Gets or sets the text contained in the editbox.
