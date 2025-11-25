@@ -41,7 +41,7 @@ namespace MIPS.Assembler;
 public partial class Assembler
 {
     private readonly Logger _logger;
-    private readonly ModuleConstructor _module;
+    private readonly Module _module;
     private Section _activeSection;
 
     /// <summary>
@@ -51,7 +51,7 @@ public partial class Assembler
     {
         _logger = new Logger();
 
-        _module = new ModuleConstructor();
+        _module = new Module();
         _activeSection = Section.Text;
 
         Config = config;

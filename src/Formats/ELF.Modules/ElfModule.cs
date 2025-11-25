@@ -27,7 +27,7 @@ public class ElfModule : IBuildModule<ElfModule, ElfConfig>
     public string? Name { get; }
 
     /// <inheritdoc/>
-    public unsafe static ElfModule? Create(ModuleConstructor constructor, ElfConfig config, Stream? stream = null)
+    public unsafe static ElfModule? Create(Module constructor, ElfConfig config, Stream? stream = null)
     {
         stream ??= new MemoryStream();
 
@@ -68,7 +68,7 @@ public class ElfModule : IBuildModule<ElfModule, ElfConfig>
     }
     
     /// <inheritdoc/>
-    public ModuleConstructor? Abstract(AssemblerConfig config)
+    public Module? Abstract(AssemblerConfig config)
     {
         throw new NotImplementedException();
     }

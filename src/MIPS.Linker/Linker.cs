@@ -16,12 +16,12 @@ namespace MIPS.Linker;
 public class Linker
 {
     private readonly Logger _logger;
-    private readonly ModuleConstructor _module;
+    private readonly Module _module;
 
     private Linker(AssemblerConfig config)
     {
         _logger = new Logger();
-        _module = new ModuleConstructor();
+        _module = new Module();
 
         Config = config;
     }
@@ -53,13 +53,13 @@ public class Linker
         return linker;
     }
 
-    private void LinkModule(ModuleConstructor module)
+    private void LinkModule(Module module)
     {
         // Track the initial positions of each stream
-        var offsets = new long[ModuleConstructor.SECTION_COUNT];
+        var offsets = new long[Module.SECTION_COUNT];
 
         // Copy stream contents
-        for (int i = 0; i < ModuleConstructor.SECTION_COUNT; i++)
+        for (int i = 0; i < Module.SECTION_COUNT; i++)
         {
             offsets[i] = _module.GetStreamPosition((Section)i);
             _module.Append((Section)i, module.Sections[i].Stream);

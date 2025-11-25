@@ -50,7 +50,7 @@ public class RasmModule : IBuildModule<RasmModule, RasmConfig>, IExecutableModul
     public string? Name { get; }
 
     /// <inheritdoc/>
-    public static RasmModule? Create(ModuleConstructor constructor, RasmConfig config, Stream? stream = null)
+    public static RasmModule? Create(Module constructor, RasmConfig config, Stream? stream = null)
     {
         stream ??= new MemoryStream();
 
@@ -173,7 +173,7 @@ public class RasmModule : IBuildModule<RasmModule, RasmConfig>, IExecutableModul
     }
 
     /// <inheritdoc/>
-    public ModuleConstructor? Abstract(AssemblerConfig config)
+    public Module? Abstract(AssemblerConfig config)
     {
         if (config is not RasmConfig rasmConfig)
         {
@@ -250,7 +250,7 @@ public class RasmModule : IBuildModule<RasmModule, RasmConfig>, IExecutableModul
         }
 
         // Create constructor from the sections
-        return new ModuleConstructor(sections, referenceList, symbolTable);
+        return new Module(sections, referenceList, symbolTable);
     }
 
     private unsafe void ResetStream(bool skipHeader = true)

@@ -12,7 +12,7 @@ using System.IO;
 
 namespace MIPS.Assembler.Models.Modules;
 
-public partial class ModuleConstructor
+public partial class Module
 {
     /// <summary>
     /// Gets the current position in the text stream.

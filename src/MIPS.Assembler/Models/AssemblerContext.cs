@@ -19,12 +19,12 @@ namespace MIPS.Assembler.Models;
 public class AssemblerContext
 {
     private readonly Assembler _assembler;
-    private readonly ModuleConstructor _module;
+    private readonly Module _module;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblerContext"/> class.
     /// </summary>
-    public AssemblerContext(Assembler assembler, ModuleConstructor module)
+    public AssemblerContext(Assembler assembler, Module module)
     {
         _assembler = assembler;
         _module = module;
@@ -34,7 +34,7 @@ public class AssemblerContext
     /// <remarks>
     /// This is for testing purposes. Don't adjust behavior arround ensuring it works.
     /// </remarks>
-    internal AssemblerContext(ModuleConstructor module)
+    internal AssemblerContext(Module module)
     {
         _module = module;
 
@@ -53,6 +53,6 @@ public class AssemblerContext
     /// </summary>
     public InstructionTable InstructionTable { get; }
 
-    /// <inheritdoc cref="ModuleConstructor.TryGetSymbol(string, out SymbolEntry)"/>
+    /// <inheritdoc cref="Module.TryGetSymbol(string, out SymbolEntry)"/>
     public bool TryGetSymbol(string name, out SymbolEntry value) => _module.TryGetSymbol(name, out value);
 }

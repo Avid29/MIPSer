@@ -33,7 +33,7 @@ public class RawModule : IBuildModule<RawModule, AssemblerConfig>, IExecutableMo
     public string? Name { get; }
 
     /// <inheritdoc/>
-    public static RawModule? Create(ModuleConstructor constructor, AssemblerConfig config, Stream? stream = null)
+    public static RawModule? Create(Module constructor, AssemblerConfig config, Stream? stream = null)
     {
         stream ??= new MemoryStream();
         
@@ -52,7 +52,7 @@ public class RawModule : IBuildModule<RawModule, AssemblerConfig>, IExecutableMo
     }
     
     /// <inheritdoc/>
-    public ModuleConstructor? Abstract(AssemblerConfig config)
+    public Module? Abstract(AssemblerConfig config)
     {
         throw new NotImplementedException();
     }

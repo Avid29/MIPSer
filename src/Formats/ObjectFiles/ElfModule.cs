@@ -32,7 +32,7 @@ public class ElfModule : IBuildModule<ElfModule, AssemblerConfig>, IExecutableMo
     public uint EntryAddress => (uint)_elfFile.EntryPointAddress;
 
     /// <inheritdoc/>
-    public static ElfModule? Create(ModuleConstructor constructor, AssemblerConfig config, Stream? stream = null)
+    public static ElfModule? Create(Module constructor, AssemblerConfig config, Stream? stream = null)
     {
         stream ??= new MemoryStream();
 
@@ -70,7 +70,7 @@ public class ElfModule : IBuildModule<ElfModule, AssemblerConfig>, IExecutableMo
     }
 
     /// <inheritdoc/>
-    public ModuleConstructor? Abstract(AssemblerConfig config)
+    public Module? Abstract(AssemblerConfig config)
     {
         throw new System.NotImplementedException();
     }

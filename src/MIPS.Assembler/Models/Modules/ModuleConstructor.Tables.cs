@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace MIPS.Assembler.Models.Modules;
 
-public partial class ModuleConstructor
+public partial class Module
 {
     /// <summary>
     /// Adds a symbol to the symbol table.

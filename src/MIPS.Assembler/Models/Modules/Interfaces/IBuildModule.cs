@@ -13,9 +13,9 @@ public interface IBuildModule
     public string? Name { get; }
 
     /// <summary>
-    /// Abstracts the module into a <see cref="ModuleConstructor"/> for modification or linking.
+    /// Abstracts the module into a <see cref="Module"/> for modification or linking.
     /// </summary>
     /// <param name="config">The configuration settings.</param>
-    /// <returns>The module as a <see cref="ModuleConstructor"/>.</returns>
-    public ModuleConstructor? Abstract(AssemblerConfig config);
+    /// <returns>The module as a <see cref="Module"/>.</returns>
+    public Module? Abstract(AssemblerConfig config);
 }

@@ -6,7 +6,7 @@ using System.IO;
 namespace MIPS.Assembler.Models.Modules;
 
 /// <summary>
-/// A section in the <see cref="ModuleConstructor"/>.
+/// A section in the <see cref="Module"/>.
 /// </summary>
 public class ModuleSection
 {

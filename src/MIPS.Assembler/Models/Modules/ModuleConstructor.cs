@@ -9,9 +9,9 @@ using System.IO;
 namespace MIPS.Assembler.Models.Modules;
 
 /// <summary>
-/// An object module in construction.
+/// A modifiable object module.
 /// </summary>
-public partial class ModuleConstructor
+public partial class Module
 {
     /// <summary>
     /// The number of explicitly writable sections in an object module.
@@ -24,9 +24,9 @@ public partial class ModuleConstructor
     private readonly ModuleSection[] _sections;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ModuleConstructor"/> class.
+    /// Initializes a new instance of the <see cref="Module"/> class.
     /// </summary>
-    public ModuleConstructor()
+    public Module()
     {
         _sections = new ModuleSection[SECTION_COUNT];
         for (int i = 0; i < _sections.Length; i++)
@@ -37,9 +37,9 @@ public partial class ModuleConstructor
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ModuleConstructor"/> class.
+    /// Initializes a new instance of the <see cref="Module"/> class.
     /// </summary>
-    public ModuleConstructor(ModuleSection[] sections, List<ReferenceEntry> references, Dictionary<string, SymbolEntry> definitions)
+    public Module(ModuleSection[] sections, List<ReferenceEntry> references, Dictionary<string, SymbolEntry> definitions)
     {
         // NOTE: Is this safe? Can I just write to the back of a stream that may not be empty?
         // I think it's not only safe, but good design for linking. Investigate more though.

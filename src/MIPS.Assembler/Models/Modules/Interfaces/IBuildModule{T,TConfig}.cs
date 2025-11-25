@@ -12,13 +12,13 @@ public interface IBuildModule<TSelf, TConfig> : IBuildModule
     where TConfig : AssemblerConfig
 {
     /// <summary>
-    /// Creates a module from a <see cref="ModuleConstructor"/>.
+    /// Creates a module from a <see cref="Module"/>.
     /// </summary>
-    /// <param name="constructor">The <see cref="ModuleConstructor"/> to build from.</param>
+    /// <param name="constructor">The <see cref="Module"/> to build from.</param>
     /// <param name="config">The configuration settings.</param>
     /// <param name="stream">The stream to write the module to. A new stream will be created if null.</param>
     /// <returns>The constructed module.</returns>
-    public static abstract TSelf? Create(ModuleConstructor constructor, TConfig config, Stream? stream = null);
+    public static abstract TSelf? Create(Module constructor, TConfig config, Stream? stream = null);
     
     /// <summary>
     /// Loads a module from a stream.
