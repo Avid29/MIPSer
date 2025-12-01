@@ -1,0 +1,33 @@
+{
+  "name": "MIPSer",
+  "dark": {
+    "foreground": "#ffffff",
+    "background": "#131215",
+    "syntax_highlighting": {
+      "instruction": "#A7FA95",
+      "register": "#FE8482",
+      "immediate": "#F8FC8B",
+      "reference": "#73EEFD",
+      "operator": "#77A7FD",
+      "directive": "#FA9EF6",
+      "string": "#FFC47A",
+      "comment": "#9B88FC",
+      "macro": "#BF472F"
+    },
+    "light": {
+      "foreground": "#000000",
+      "background": "#ffffff",
+      "syntax_highlighting": {
+        "instruction": "#166105",
+        "register": "#7E0301",
+        "immediate": "#909504",
+        "reference": "#028597",
+        "operator": "#022D7E",
+        "directive": "#61055C",
+        "string": "#804600",
+        "comment": "#17037C",
+        "macro": "#D25E46"
+      }
+    }
+  }
+}

@@ -16,7 +16,7 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
     /// <summary>
     /// A <see cref="DependencyProperty"/> for the <see cref="BackgroundBlendColor"/> property.
     /// </summary>
-    public static readonly DependencyProperty BackgroundBlendColorProperty =
+    public static readonly DependencyProperty BackgroundColorProperty =
         DependencyProperty.Register(nameof(BackgroundBlendColor),
             typeof(Color),
             typeof(AssemblySyntaxHighlightingTheme),
@@ -135,8 +135,8 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
     /// </summary>
     public Color BackgroundBlendColor
     {
-        get => (Color)GetValue(BackgroundBlendColorProperty);
-        set => SetValue(BackgroundBlendColorProperty, value);
+        get => (Color)GetValue(BackgroundColorProperty);
+        set => SetValue(BackgroundColorProperty, value);
     }
 
     /// <summary>
@@ -260,6 +260,8 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
     private Color ApplyBackgroundBlend(Color overlay, double opacity)
     {
         overlay.A = (byte)(overlay.A * opacity);
-        return BackgroundBlendColor.AlphaBlend(overlay);
+        var result = BackgroundBlendColor.AlphaBlend(overlay);
+        result.A = 255;
+        return result;
     }
 }
