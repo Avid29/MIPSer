@@ -1,7 +1,7 @@
 {
   "name": "Dark Terminal",
   "theme": 1,
-  "foreground": "#ffffff",
+  "foreground": "#FFFFFF",
   "background": "#000000",
   "syntax_highlighting": {
     "instruction": "#00FF00",

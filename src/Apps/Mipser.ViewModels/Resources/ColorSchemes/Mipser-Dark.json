@@ -1,7 +1,7 @@
 {
   "name": "Mipser Dark",
   "theme": 1,
-  "foreground": "#ffffff",
+  "foreground": "#FFFFFF",
   "background": "#131215",
   "syntax_highlighting": {
     "instruction": "#A7FA95",

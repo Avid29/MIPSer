@@ -1,0 +1,17 @@
+{
+  "name": "Winter",
+  "theme": 1,
+  "foreground": "#FFFFFF",
+  "background": "#000F1F",
+  "syntax_highlighting": {
+    "instruction": "#00A0FF",
+    "register": "#80A0FF",
+    "immediate": "#A0FFFF",
+    "reference": "#00A0A0",
+    "operator": "#808080",
+    "directive": "#C080C0",
+    "string": "#A0FFA0",
+    "comment": "#FFFFFF",
+    "macro": "#C0A0FF"
+  }
+}

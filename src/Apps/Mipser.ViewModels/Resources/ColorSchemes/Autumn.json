@@ -1,0 +1,17 @@
+{
+  "name": "Autumn",
+  "theme": 1,
+  "foreground": "#FFFFFF",
+  "background": "#1F0F00",
+  "syntax_highlighting": {
+    "instruction": "#FF5000",
+    "register": "#B48C00",
+    "immediate": "#1EB400",
+    "reference": "#CC0000",
+    "operator": "#CCCCCC",
+    "directive": "#FF7EFF",
+    "string": "#D9FF00",
+    "comment": "#FFFFFF",
+    "macro": "#C0A0FF"
+  }
+}

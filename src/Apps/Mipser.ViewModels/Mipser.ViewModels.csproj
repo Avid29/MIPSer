@@ -16,6 +16,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\ColorSchemes\Mipser-Dark.json" />
     <EmbeddedResource Include="Resources\ColorSchemes\Mipser-Light.json" />
+    <EmbeddedResource Include="Resources\ColorSchemes\Autumn.json" />
+    <EmbeddedResource Include="Resources\ColorSchemes\Winter.json" />
     <EmbeddedResource Include="Resources\ColorSchemes\Terminal-Dark.json" />
     <EmbeddedResource Include="Resources\ColorSchemes\Terminal-Light.json" />
     <EmbeddedResource Include="Resources\EncodingPatterns\UniqueEncodings.json" />

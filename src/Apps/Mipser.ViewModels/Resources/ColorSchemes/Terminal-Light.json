@@ -2,7 +2,7 @@
   "name": "Light Terminal",
   "theme": 2,
   "foreground": "#000000",
-  "background": "#ffffff",
+  "background": "#FFFFFF",
   "syntax_highlighting": {
     "instruction": "#00A000",
     "register": "#FF0000",
