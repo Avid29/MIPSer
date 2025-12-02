@@ -4,12 +4,13 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.Services.Localization;
 using Mipser.ViewModels.Pages.App;
+using Mipser.ViewModels.Pages.App.Settings;
 using System.Globalization;
 
 namespace Mipser.Windows.Views.Pages.App;
 
 /// <summary>
-/// A viewer for files.
+/// The settings page.
 /// </summary>
 public sealed partial class SettingsPage : UserControl
 {

@@ -138,6 +138,9 @@
   <data name="AppLanguageSC.Header" xml:space="preserve">
     <value>App Language</value>
   </data>
+  <data name="AppSettingsTitle" xml:space="preserve">
+    <value>App Settings</value>
+  </data>
   <data name="AppThemeSC.Description" xml:space="preserve">
     <value>Change the app's theme.</value>
   </data>
@@ -150,7 +153,13 @@
   <data name="AssemblerLanguageSC.Header" xml:space="preserve">
     <value>Assembler Language</value>
   </data>
+  <data name="AssemblerSettingsTitle" xml:space="preserve">
+    <value>Assembler Settings</value>
+  </data>
   <data name="EditorSettingsHeaderTB.Text" xml:space="preserve">
+    <value>Editor Settings</value>
+  </data>
+  <data name="EditorSettingsTitle" xml:space="preserve">
     <value>Editor Settings</value>
   </data>
   <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">

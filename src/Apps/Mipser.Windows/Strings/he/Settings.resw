@@ -138,6 +138,9 @@
   <data name="AppLanguageSC.Header" xml:space="preserve">
     <value>שפת האפליקציה</value>
   </data>
+  <data name="AppSettingsTitle" xml:space="preserve">
+    <value>הגדרות אפליקציה</value>
+  </data>
   <data name="AppThemeSC.Description" xml:space="preserve">
     <value>שנה את הצבעים המופעים של היישום.</value>
   </data>
@@ -150,7 +153,13 @@
   <data name="AssemblerLanguageSC.Header" xml:space="preserve">
     <value>שפת אסמבלר</value>
   </data>
+  <data name="AssemblerSettingsTitle" xml:space="preserve">
+    <value>הגדרות אסמבלר</value>
+  </data>
   <data name="EditorSettingsHeaderTB.Text" xml:space="preserve">
+    <value>הגדרות עורך</value>
+  </data>
+  <data name="EditorSettingsTitle" xml:space="preserve">
     <value>הגדרות עורך</value>
   </data>
   <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">

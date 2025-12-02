@@ -22,6 +22,7 @@
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.250402" />
 		<PackageReference Include="CommunityToolkit.WinUI.Controls.Primitives" Version="8.2.250402" />
+		<PackageReference Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.2.250402" />
 		<PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.250402" />
 		<PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" Version="8.2.250402" />
 		<PackageReference Include="CommunityToolkit.WinUI.Converters" Version="8.2.250402" />
@@ -74,6 +75,12 @@
 		</Page>
 		<Page Update="Resources\Fonts.xaml">
 			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Views\Pages\App\SettingsPages\AppSettingsPage.xaml">
+		  <SubType>Designer</SubType>
+		</Page>
+		<Page Update="Views\Pages\App\SettingsSubPages\AssemblerSettingsSubPage.xaml">
+		  <SubType>Designer</SubType>
 		</Page>
 		<Page Update="Views\Shell\StatusBar.xaml">
 			<Generator>MSBuild:Compile</Generator>

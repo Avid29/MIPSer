@@ -8,7 +8,10 @@
     xmlns:local="using:Mipser.Windows.Views.Pages.App"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
     xmlns:helpers="using:Mipser.Windows.Helpers"
+    xmlns:selectors="using:Mipser.Windows.Selectors"
     xmlns:senums="using:Mipser.Services.Settings.Enums"
+    xmlns:subvms="using:Mipser.ViewModels.Pages.App.Settings"
+    xmlns:subs="using:Mipser.Windows.Views.Pages.App.SettingsSubPages"
     mc:Ignorable="d">
 
     <ScrollViewer>
@@ -19,126 +22,65 @@
                         <AdaptiveTrigger MinWindowWidth="1280"/>
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
-                        <Setter Target="RootPanel.MaxWidth" Value="2000"/>
+                        <Setter Target="ContentDisplay.MaxWidth" Value="2000"/>
                         <Setter Target="LeftGutter.Width" Value="0.5*"/>
                         <Setter Target="RightGutter.Width" Value="0.5*"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-        
+
         <Grid Margin="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="LeftGutter" Width="auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition x:Name="RightGutter" Width="auto"/>
             </Grid.ColumnDefinitions>
-            <StackPanel x:Name="RootPanel" Grid.Column="1" MaxWidth="800">
-                <StackPanel.ChildrenTransitions>
-                    <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
-                </StackPanel.ChildrenTransitions>
+            
+            <ctc:Segmented x:Name="SegmentedPageSelector"
+                           ItemsSource="{x:Bind ViewModel.SubPages}"
+                           HorizontalAlignment="Center"
+                           SelectedIndex="0"
+                           Grid.ColumnSpan="3"
+                           Margin="8,8,8,32">
+                <ctc:Segmented.ItemTemplate>
+                    <DataTemplate x:DataType="subvms:SettingsSubPageViewModel">
+                        <TextBlock Text="{x:Bind Title}" />
+                    </DataTemplate>
+                </ctc:Segmented.ItemTemplate>
+            </ctc:Segmented>
 
-                <!--  Theme Settings  -->
-                <TextBlock x:Uid="/Settings/ThemeSettingsHeaderTB"
-                           Text="Theme Settings"
-                           Margin="0,0,0,4"/>
-                
-                <ctc:SettingsCard x:Uid="/Settings/AppThemeSC"
-                              Header="Theme"
-                              Description="Change the app's theme.">
-                    <ComboBox SelectedItem="{x:Bind ViewModel.AppTheme, Mode=TwoWay}"
-                              ItemsSource="{x:Bind ViewModel.AppThemeOptions, Mode=OneWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate x:DataType="senums:Theme">
-                                <TextBlock Text="{x:Bind helpers:LocalizationHelper.Localize((senums:Theme)), Mode=OneWay}"/>
+            <ContentControl x:Name="ContentDisplay"
+                            Content="{x:Bind SegmentedPageSelector.SelectedItem, Mode=OneWay}"
+                            Grid.Column="1" Grid.Row="1"
+                            MaxWidth="800"
+                            HorizontalContentAlignment="Stretch">
+                <ContentControl.ContentTemplateSelector>
+                    <selectors:SettingsSubPageTemplateSelector>
+                        <selectors:SettingsSubPageTemplateSelector.AppPageTemplate>
+                            <DataTemplate x:DataType="subvms:AppSettingsViewModel">
+                                <subs:AppSettingsSubPage ViewModel="{x:Bind}"/>
                             </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </ctc:SettingsCard>
-
-                <!--  Editor Settings  -->
-                <TextBlock x:Uid="/Settings/EditorSettingsHeaderTB"
-                           Text="Editor Settings"
-                           Margin="0,16,0,4"/>
-
-                <ctc:SettingsCard x:Uid="/Settings/RealTimeAssemblySC"
-                              Header="Real-Time Assembly"
-                              Description="Should the editor continuously assemble the open file to show errors in real-time?">
-                    <ToggleSwitch IsOn="{x:Bind ViewModel.RealTimeAssembly, Mode=TwoWay}"/>
-                </ctc:SettingsCard>
-
-                <ctc:SettingsCard x:Uid="/Settings/AnnotationThresholdSC"
-                                  Header="Annotations Threshold"
-                                  Description="When should the editor show log messages as an annotation below the log."
-                                  IsEnabled="{x:Bind ViewModel.RealTimeAssembly, Mode=OneWay}">
-                    <ComboBox SelectedItem="{x:Bind ViewModel.AnnotationThreshold, Mode=TwoWay}"
-                              ItemsSource="{x:Bind ViewModel.AnnotationThresholdOptions, Mode=OneWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate x:DataType="senums:AnnotationThreshold">
-                                <TextBlock Text="{x:Bind helpers:LocalizationHelper.Localize((senums:AnnotationThreshold)), Mode=OneWay}"/>
+                        </selectors:SettingsSubPageTemplateSelector.AppPageTemplate>
+                        <selectors:SettingsSubPageTemplateSelector.AssemblerPageTemplate>
+                            <DataTemplate x:DataType="subvms:AssemblerSettingsViewModel">
+                                <subs:AssemblerSettingsSubPage ViewModel="{x:Bind}"/>
                             </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </ctc:SettingsCard>
-
-                <!--  Localization Settings  -->
-                <TextBlock x:Uid="/Settings/LocalizationSettingsHeaderTB"
-                           Text="Localization Settings"
-                           Margin="0,16,0,4"/>
-                
-                <ctc:SettingsCard x:Uid="/Settings/AppLanguageSC"
-                              Header="App Language"
-                              Description="Set the app's display language. (Requires a restart to take effect).">
-                    <ComboBox SelectedItem="{x:Bind ViewModel.LanguageOverride, Mode=TwoWay}"
-                              ItemsSource="{x:Bind ViewModel.AppLanguageOptions, Mode=OneWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate x:DataType="x:String">
-                                <TextBlock Text="{x:Bind local:SettingsPage.LanguageDisplayName((x:String)), Mode=OneWay}"/>
+                        </selectors:SettingsSubPageTemplateSelector.AssemblerPageTemplate>
+                        <selectors:SettingsSubPageTemplateSelector.EditorPageTemplate>
+                            <DataTemplate x:DataType="subvms:EditorSettingsViewModel">
+                                <subs:EditorSettingsSubPage ViewModel="{x:Bind}"/>
                             </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </ctc:SettingsCard>
-                
-                <ctc:SettingsCard x:Uid="/Settings/AssemblerLanguageSC"
-                              Header="Assembler Language"
-                              Description="Set the language used by for assembler log information.">
-                    <ComboBox SelectedItem="{x:Bind ViewModel.AssemblerLanguageOverride, Mode=TwoWay}"
-                          ItemsSource="{x:Bind ViewModel.AssemblerLanguageOptions, Mode=OneWay}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate x:DataType="x:String">
-                                <TextBlock Text="{x:Bind local:SettingsPage.LanguageDisplayName((x:String)), Mode=OneWay}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </ctc:SettingsCard>
+                        </selectors:SettingsSubPageTemplateSelector.EditorPageTemplate>
+                    </selectors:SettingsSubPageTemplateSelector>
+                </ContentControl.ContentTemplateSelector>
+            </ContentControl>
 
-                <!--  About  -->
-                <TextBlock x:Uid="/Settings/AboutHeaderTB"
-                           Text="About"
-                           Margin="0,16,0,4"/>
-                <ctc:SettingsExpander x:Uid="/Settings/AboutSE"
-                                      Header="MIPSer"
-                                      Description="© Avishai Dernis">
-                    <ctc:SettingsExpander.HeaderIcon>
-                        <ImageIcon Source="/Assets/AppIconSources/Small88x88.png"/>
-                    </ctc:SettingsExpander.HeaderIcon>
-                    <ctc:SettingsExpander.Content>
-                        <TextBlock Text="{x:Bind ViewModel.AppVersion, Mode=OneWay}"
-                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                   IsTextSelectionEnabled="True"/>
-                    </ctc:SettingsExpander.Content>
-                    <ctc:SettingsExpander.Items>
-                        <ctc:SettingsCard HorizontalContentAlignment="Left"
-                                          ContentAlignment="Left">
-                            <StackPanel Margin="-24,0,0,0">
-                                <HyperlinkButton x:Uid="/Settings/ViewOnGitHubHB"
-                                                 Content="View on GitHub"
-                                                 NavigateUri="https://github.com/Avid29/MIPSer"/>
-                            </StackPanel>
-                        </ctc:SettingsCard>
-                    </ctc:SettingsExpander.Items>
-                </ctc:SettingsExpander>
-            </StackPanel>
         </Grid>
     </ScrollViewer>
 </UserControl>

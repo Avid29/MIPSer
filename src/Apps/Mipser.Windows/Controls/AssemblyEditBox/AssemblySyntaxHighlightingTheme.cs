@@ -3,6 +3,7 @@
 using CommunityToolkit.WinUI.Helpers;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
+using Mipser.Models.EditorConfig.ColorScheme;
 using Mipser.Windows.Extensions;
 using Windows.UI;
 
@@ -131,6 +132,21 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
             new PropertyMetadata(Colors.Transparent));
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="AssemblySyntaxHighlightingTheme"/> class.
+    /// </summary>
+    public AssemblySyntaxHighlightingTheme()
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AssemblySyntaxHighlightingTheme"/> class.
+    /// </summary>
+    public AssemblySyntaxHighlightingTheme(EditorThemedColorScheme scheme)
+    {
+        LoadFromScheme(scheme);
+    }
+
+    /// <summary>
     /// Gets or sets the base color to use when alpha blending a syntax highlight color.
     /// </summary>
     public Color BackgroundBlendColor
@@ -255,6 +271,22 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
     {
         get => (Color)GetValue(MessageUnderlineColorProperty);
         set => SetValue(MessageUnderlineColorProperty, value);
+    }
+
+    public void LoadFromScheme(EditorThemedColorScheme scheme)
+    {
+        BackgroundBlendColor = scheme.Background.ToColor();
+
+        var syntax = scheme.SyntaxHighlighting;
+        InstructionHighlightColor = syntax.Instruction.ToColor();
+        RegisterHighlightColor = syntax.Register.ToColor();
+        ImmediateHighlightColor = syntax.Immediate.ToColor();
+        ReferenceHighlightColor = syntax.Reference.ToColor();
+        OperatorHighlightColor = syntax.Operator.ToColor();
+        DirectiveHighlightColor = syntax.Directive.ToColor();
+        StringHighlightColor = syntax.String.ToColor();
+        CommentHighlightColor = syntax.Comment.ToColor();
+        MacroHighlightColor = syntax.Macro.ToColor();
     }
 
     private Color ApplyBackgroundBlend(Color overlay, double opacity)
