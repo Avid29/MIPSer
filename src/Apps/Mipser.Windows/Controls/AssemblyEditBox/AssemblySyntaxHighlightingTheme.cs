@@ -155,6 +155,11 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
         CommentHighlightColor = syntax.Comment.ToColor();
         MacroHighlightColor = syntax.Macro.ToColor();
 
+        var logColors = scheme.LogColors;
+        ErrorUnderlineColor = logColors.Error.ToColor();
+        WarningUnderlineColor = logColors.Warning.ToColor();
+        MessageUnderlineColor = logColors.Message.ToColor();
+
         Updated?.Invoke(this, EventArgs.Empty);
     }
 

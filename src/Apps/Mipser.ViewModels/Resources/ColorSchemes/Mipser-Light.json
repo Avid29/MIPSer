@@ -13,5 +13,10 @@
     "string": "#804600",
     "comment": "#17037C",
     "macro": "#D25E46"
+  },
+  "log_colors": {
+    "error": "#FF0000",
+    "warning": "#FFAA00",
+    "message": "#00AAFF"
   }
 }

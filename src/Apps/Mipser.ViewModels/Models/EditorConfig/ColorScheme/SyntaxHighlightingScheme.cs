@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace Mipser.Models.EditorConfig.ColorScheme;
 
 /// <summary>
-/// A color scheme for the editor.
+/// A color scheme for editor syntax highlighting.
 /// </summary>
 public record SyntaxHighlightingScheme
 {

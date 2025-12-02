@@ -35,8 +35,14 @@ public record EditorColorScheme
     public required string Background { get; init; }
 
     /// <summary>
-    /// Gets the syntax highlighting scheme of the color scheme.
+    /// Gets the syntax highlighting colors of the color scheme.
     /// </summary>
     [JsonPropertyName("syntax_highlighting")]
     public required SyntaxHighlightingScheme SyntaxHighlighting { get; init; }
+
+    /// <summary>
+    /// Gets the log highlighting colors of the color scheme.
+    /// </summary>
+    [JsonPropertyName("log_colors")]
+    public required LogHighlightScheme LogColors { get; init; }
 }
