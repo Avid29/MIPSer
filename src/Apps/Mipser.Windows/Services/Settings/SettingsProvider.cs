@@ -5,6 +5,9 @@ using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Messages;
 using Mipser.Services.Settings;
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
+using System.Text.Json;
 using Windows.Foundation.Collections;
 
 namespace Mipser.Windows.Services.Settings;
@@ -41,12 +44,21 @@ public class SettingsProvider : ISettingsProvider
     public bool TryGetValue<T>(string key, out T? value)
     {
         bool status = _storage.TryGetValue(key, out var raw);
-        value = (T?)(raw ?? default(T));
+
+        // Attempt deserialization
+        var type = typeof(T);
+        value = type switch
+        {
+            _ when type.IsEnum || type.IsPrimitive || type == typeof(string) => (T?)(raw ?? default(T)),
+            _ when type.IsClass => (string?)raw is not null ? JsonSerializer.Deserialize<T>((string?)raw ?? string.Empty) : default,
+            _ => ThrowHelper.ThrowArgumentException<T?>(nameof(raw)),
+        };
+
         return status;
     }
 
     /// <inheritdoc/>
-    public void SetValue<T>(string key, T value, bool overwrite = true, bool notify = false)
+    public bool SetValue<T>(string key, T value, bool overwrite = true, bool notify = false)
     {
         // Attempt serialization
         var type = typeof(T);
@@ -54,6 +66,7 @@ public class SettingsProvider : ISettingsProvider
         {
             _ when type.IsEnum => Convert.ChangeType(value, Enum.GetUnderlyingType(type)),
             _ when type.IsPrimitive || type == typeof(string) => value,
+            _ when type.IsClass => JsonSerializer.Serialize(value),
             _ => ThrowHelper.ThrowArgumentException<object?>(nameof(value)),
         };
 
@@ -79,5 +92,10 @@ public class SettingsProvider : ISettingsProvider
         {
             _messenger.Send(new SettingChangedMessage<T>(key, value, old));
         }
+
+        if (value is null)
+            return false;
+
+        return !value.Equals(old);
     }
 }

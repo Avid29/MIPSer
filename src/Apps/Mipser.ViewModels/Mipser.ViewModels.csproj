@@ -6,10 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\ColorSchemes\Mipser-Dark.json" />
+    <None Remove="Resources\ColorSchemes\Mipser-Light.json" />
+    <None Remove="Resources\ColorSchemes\Terminal-Dark.json" />
+    <None Remove="Resources\ColorSchemes\Terminal-Light.json" />
     <None Remove="Resources\Instructions\CommonInstructions.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\ColorSchemes\Mipser-Dark.json" />
+    <EmbeddedResource Include="Resources\ColorSchemes\Mipser-Light.json" />
+    <EmbeddedResource Include="Resources\ColorSchemes\Terminal-Dark.json" />
+    <EmbeddedResource Include="Resources\ColorSchemes\Terminal-Light.json" />
     <EmbeddedResource Include="Resources\EncodingPatterns\UniqueEncodings.json" />
     <EmbeddedResource Include="Resources\EncodingPatterns\CoProcessor0Encodings.json" />
     <EmbeddedResource Include="Resources\EncodingPatterns\CoProcessor1Encodings.json" />

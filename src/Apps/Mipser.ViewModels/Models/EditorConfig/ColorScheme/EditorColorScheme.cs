@@ -1,11 +1,12 @@
 ﻿// Avishai Dernis 2025
 
+using Mipser.Services.Settings.Enums;
 using System.Text.Json.Serialization;
 
 namespace Mipser.Models.EditorConfig.ColorScheme;
 
 /// <summary>
-/// A color scheme for the code editor with a dark and light theme variant.
+/// A color scheme for the code editor.
 /// </summary>
 public record EditorColorScheme
 {
@@ -16,14 +17,26 @@ public record EditorColorScheme
     public required string Name { get; init; }
 
     /// <summary>
-    /// Gets the dark theme variant of the color scheme.
+    /// Gets the theme of the color scheme.
     /// </summary>
-    [JsonPropertyName("dark")]
-    public EditorThemedColorScheme? Dark { get;  }
+    [JsonPropertyName("theme")]
+    public required Theme Theme { get; set; }
 
     /// <summary>
-    /// Gets the light theme variant of the color scheme.
+    /// Gets the foreground color of the color scheme.
     /// </summary>
-    [JsonPropertyName("light")]
-    public EditorThemedColorScheme? Light { get;  }
+    [JsonPropertyName("foreground")]
+    public required string Foreground { get; init; }
+
+    /// <summary>
+    /// Gets the background color of the color scheme.
+    /// </summary>
+    [JsonPropertyName("background")]
+    public required string Background { get; init; }
+
+    /// <summary>
+    /// Gets the syntax highlighting scheme of the color scheme.
+    /// </summary>
+    [JsonPropertyName("syntax_highlighting")]
+    public required SyntaxHighlightingScheme SyntaxHighlighting { get; init; }
 }

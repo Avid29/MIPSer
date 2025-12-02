@@ -10,7 +10,8 @@
             <Setter.Value>
                 <ControlTemplate TargetType="local:AssemblyEditBox">
                     <Grid CornerRadius="{TemplateBinding CornerRadius}">
-                        <editor:CodeEditorControl x:Name="CodeEditor"/>
+                        <editor:CodeEditorControl x:Name="CodeEditor"
+                                                  Background="{TemplateBinding Background}"/>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

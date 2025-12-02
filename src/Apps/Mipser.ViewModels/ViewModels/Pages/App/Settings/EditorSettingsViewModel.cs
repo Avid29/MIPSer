@@ -1,10 +1,15 @@
 ﻿// Avishai Dernis 2025
 
+using Mipser.Models.EditorConfig.ColorScheme;
 using Mipser.Services.Localization;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text.Json;
 
 namespace Mipser.ViewModels.Pages.App.Settings;
 
@@ -23,6 +28,8 @@ public class EditorSettingsViewModel : SettingsSubPageViewModel
     {
         _localizationService = localizationService;
         _settingsService = settingsService;
+
+        EditorColorSchemeOptions = LoadEditorSchemes();
     }
 
     /// <inheritdoc/>
@@ -33,11 +40,13 @@ public class EditorSettingsViewModel : SettingsSubPageViewModel
     /// </summary>
     public bool RealTimeAssembly
     {
-        get => _settingsService.Local.GetValue<bool>(nameof(RealTimeAssembly));
+        get => _settingsService.Local.GetValue<bool>(SettingsKeys.RealTimeAssembly);
         set
         {
-            _settingsService.Local.SetValue(nameof(RealTimeAssembly), value, notify: true);
-            OnPropertyChanged(nameof(RealTimeAssembly));
+            if (_settingsService.Local.SetValue(SettingsKeys.RealTimeAssembly, value, notify: true))
+            {
+                OnPropertyChanged(nameof(RealTimeAssembly));
+            }
         }
     }
 
@@ -46,12 +55,71 @@ public class EditorSettingsViewModel : SettingsSubPageViewModel
     /// </summary>
     public AnnotationThreshold AnnotationThreshold
     {
-        get => _settingsService.Local.GetValue<AnnotationThreshold>(nameof(AnnotationThreshold));
-        set => _settingsService.Local.SetValue(nameof(AnnotationThreshold), value, notify: true);
+        get => _settingsService.Local.GetValue<AnnotationThreshold>(SettingsKeys.AnnotationThreshold);
+        set
+        {
+            if (_settingsService.Local.SetValue(SettingsKeys.AnnotationThreshold, value, notify: true))
+            {
+                OnPropertyChanged(nameof(AnnotationThreshold));
+            }
+        }
     }
 
     /// <summary>
     /// Gets the list of available annotation threshold options.
     /// </summary>
     public IEnumerable<AnnotationThreshold> AnnotationThresholdOptions => Enum.GetValues<AnnotationThreshold>();
+
+    /// <summary>
+    /// Gets or sets the editor color scheme.
+    /// </summary>
+    public EditorColorScheme? EditorColorScheme
+    {
+        get => _settingsService.Local.GetValue<EditorColorScheme>(SettingsKeys.EditorColorScheme);
+        set
+        {
+            if (_settingsService.Local.SetValue(SettingsKeys.EditorColorScheme, value, notify: true))
+            {
+                OnPropertyChanged(nameof(EditorColorScheme));
+            }
+        }
+    }
+
+    /// <summary>
+    /// Gets the list of available editor color schemes.
+    /// </summary>
+    public IReadOnlyList<EditorColorScheme> EditorColorSchemeOptions { get; }
+
+    private string CurrentTheme => _settingsService.Local.GetValue<Theme>(nameof(AppSettingsViewModel.AppTheme)) switch
+    {
+        Theme.Light => "Light",
+        Theme.Dark => "Dark",
+        _ => "Dark" // TODO: Expose active theme to ViewModel
+    };
+
+    private static List<EditorColorScheme> LoadEditorSchemes()
+    {
+        // Get resources
+        var assembly = Assembly.GetExecutingAssembly();
+        var resources = assembly.GetManifestResourceNames().Where(x => x.StartsWith("Mipser.Resources.ColorSchemes"));
+
+        // Extract editor schemes
+        var editorSchemes = new List<EditorColorScheme>();
+        foreach (var resource in resources)
+        {
+            // Load
+            using Stream? stream = assembly.GetManifestResourceStream(resource);
+            if (stream is null)
+                continue;
+
+            // Deserialize
+            var editorColorScheme = JsonSerializer.Deserialize<EditorColorScheme>(stream);
+            if (editorColorScheme is null)
+                continue;
+
+            editorSchemes.Add(editorColorScheme);
+        }
+
+        return editorSchemes;
+    }
 }

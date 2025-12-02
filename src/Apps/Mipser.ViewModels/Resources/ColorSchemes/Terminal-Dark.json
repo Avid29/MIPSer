@@ -1,0 +1,17 @@
+{
+  "name": "Dark Terminal",
+  "theme": 1,
+  "foreground": "#ffffff",
+  "background": "#000000",
+  "syntax_highlighting": {
+    "instruction": "#00FF00",
+    "register": "#FF0000",
+    "immediate": "#FFFF00",
+    "reference": "#00FFFF",
+    "operator": "#A0A0A0",
+    "directive": "#FF00FF",
+    "string": "#FF8000",
+    "comment": "#FFFFFF",
+    "macro": "#0040FF"
+  }
+}

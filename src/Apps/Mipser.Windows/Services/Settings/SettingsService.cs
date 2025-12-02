@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.UI.Xaml;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
 using Windows.Storage;
@@ -25,18 +26,27 @@ namespace Mipser.Windows.Services.Settings
 
         public ISettingsProvider Local { get; }
 
+        public Theme DefaultTheme => App.Current.RequestedTheme switch
+        {
+            ApplicationTheme.Dark => Theme.Dark,
+            ApplicationTheme.Light => Theme.Light,
+            _ => Theme.Dark,
+        };
+
         private void EstablishDefaults()
         {
-            // Theme
-            Local.SetValue("AppTheme", Theme.Default, false);
-            
-            // Editor
-            Local.SetValue("RealTimeAssembly", true, false);
-            Local.SetValue("AnnotationThreshold", AnnotationThreshold.Errors, false);
+            // App
+            Local.SetValue(SettingsKeys.AppTheme, Theme.Default, false);
+            Local.SetValue<string?>(SettingsKeys.LanguageOverride, null, false);
 
-            // Localization
-            Local.SetValue<string?>("LanguageOverride", null, false);
-            Local.SetValue<string?>("AssemblerLanguageOverride", null, false);
+            // Editor
+            Local.SetValue(SettingsKeys.RealTimeAssembly, true, false);
+            Local.SetValue(SettingsKeys.AnnotationThreshold, AnnotationThreshold.Errors, false);
+            Local.SetValue($"{SettingsKeys.EditorColorSchemeBase}-Dark", SettingsKeys.DefaultDarkColorScheme, false);
+            Local.SetValue($"{SettingsKeys.EditorColorSchemeBase}-Light", SettingsKeys.DefaultLightColorScheme, false);
+
+            // Assembler
+            Local.SetValue<string?>(SettingsKeys.AssemblerLanguageOverride, null, false);
         }
     }
 }

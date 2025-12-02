@@ -1,0 +1,17 @@
+{
+  "name": "Mipser Dark",
+  "theme": 1,
+  "foreground": "#ffffff",
+  "background": "#131215",
+  "syntax_highlighting": {
+    "instruction": "#A7FA95",
+    "register": "#FE8482",
+    "immediate": "#F8FC8B",
+    "reference": "#73EEFD",
+    "operator": "#77A7FD",
+    "directive": "#FA9EF6",
+    "string": "#FFC47A",
+    "comment": "#9B88FC",
+    "macro": "#BF472F"
+  }
+}

@@ -1,10 +1,15 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.WinUI.Helpers;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Mipser.Models.EditorConfig.ColorScheme;
+using Mipser.Services.Settings;
 using Mipser.Windows.Extensions;
+using System;
+using System.Data;
+using Windows.Globalization;
 using Windows.UI;
 
 namespace Mipser.Windows.Controls.AssemblyEditBox;
@@ -14,119 +19,13 @@ namespace Mipser.Windows.Controls.AssemblyEditBox;
 /// </summary>
 public class AssemblySyntaxHighlightingTheme : DependencyObject
 {
+    public event EventHandler? Updated;
+
     /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="BackgroundBlendColor"/> property.
+    /// A <see cref="DependencyProperty"/> for the <see cref="BackgroundColor"/> property.
     /// </summary>
     public static readonly DependencyProperty BackgroundColorProperty =
-        DependencyProperty.Register(nameof(BackgroundBlendColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="InstructionHighlightColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty InstructionHighlightColorProperty =
-        DependencyProperty.Register(nameof(InstructionHighlightColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="RegisterHighlightColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty RegisterHighlightColorProperty =
-        DependencyProperty.Register(nameof(RegisterHighlightColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="ImmediateHighlightColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty ImmediateHighlightColorProperty =
-        DependencyProperty.Register(nameof(ImmediateHighlightColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="ReferenceHighlightColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty ReferenceHighlightColorProperty =
-        DependencyProperty.Register(nameof(ReferenceHighlightColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="OperatorHighlightColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty OperatorHighlightColorProperty =
-        DependencyProperty.Register(nameof(OperatorHighlightColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="DirectiveHighlightColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty DirectiveHighlightColorProperty =
-        DependencyProperty.Register(nameof(DirectiveHighlightColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="StringHighlightColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty StringHighlightColorProperty =
-        DependencyProperty.Register(nameof(StringHighlightColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="CommentHighlightColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty CommentHighlightColorProperty =
-        DependencyProperty.Register(nameof(CommentHighlightColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="MacroHighlightColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty MacroHighlightColorProperty =
-        DependencyProperty.Register(nameof(MacroHighlightColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="ErrorUnderlineColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty ErrorUnderlineColorProperty =
-        DependencyProperty.Register(nameof(ErrorUnderlineColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="WarningUnderlineColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty WarningUnderlineColorProperty =
-        DependencyProperty.Register(nameof(WarningUnderlineColor),
-            typeof(Color),
-            typeof(AssemblySyntaxHighlightingTheme),
-            new PropertyMetadata(Colors.Transparent));
-
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="MessageUnderlineColor"/> property.
-    /// </summary>
-    public static readonly DependencyProperty MessageUnderlineColorProperty =
-        DependencyProperty.Register(nameof(MessageUnderlineColor),
+        DependencyProperty.Register(nameof(BackgroundColor),
             typeof(Color),
             typeof(AssemblySyntaxHighlightingTheme),
             new PropertyMetadata(Colors.Transparent));
@@ -134,22 +33,25 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblySyntaxHighlightingTheme"/> class.
     /// </summary>
-    public AssemblySyntaxHighlightingTheme()
+    public AssemblySyntaxHighlightingTheme() : this(CurrentScheme)
     {
     }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblySyntaxHighlightingTheme"/> class.
     /// </summary>
-    public AssemblySyntaxHighlightingTheme(EditorThemedColorScheme scheme)
+    public AssemblySyntaxHighlightingTheme(EditorColorScheme? scheme)
     {
-        LoadFromScheme(scheme);
+        if (scheme is not null)
+        {
+            LoadFromScheme(scheme);
+        }
     }
 
     /// <summary>
     /// Gets or sets the base color to use when alpha blending a syntax highlight color.
     /// </summary>
-    public Color BackgroundBlendColor
+    public Color BackgroundColor
     {
         get => (Color)GetValue(BackgroundColorProperty);
         set => SetValue(BackgroundColorProperty, value);
@@ -158,83 +60,47 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
     /// <summary>
     /// Gets or sets the color to use for highlighting instruction tokens.
     /// </summary>
-    public Color InstructionHighlightColor
-    {
-        get => (Color)GetValue(InstructionHighlightColorProperty);
-        set => SetValue(InstructionHighlightColorProperty, value);
-    }
+    public Color InstructionHighlightColor { get; private set; }
 
     /// <summary>
     /// Gets or sets the color to use for highlighting register tokens.
     /// </summary>
-    public Color RegisterHighlightColor
-    {
-        get => (Color)GetValue(RegisterHighlightColorProperty);
-        set => SetValue(RegisterHighlightColorProperty, value);
-    }
+    public Color RegisterHighlightColor { get; private set; }
 
     /// <summary>
     /// Gets or sets the color to use for highlighting immediate value tokens.
     /// </summary>
-    public Color ImmediateHighlightColor
-    {
-        get => (Color)GetValue(ImmediateHighlightColorProperty);
-        set => SetValue(ImmediateHighlightColorProperty, value);
-    }
+    public Color ImmediateHighlightColor { get; private set; }
 
     /// <summary>
     /// Gets or sets the color to use for highlighting reference tokens.
     /// </summary>
-    public Color ReferenceHighlightColor
-    {
-        get => (Color)GetValue(ReferenceHighlightColorProperty);
-        set => SetValue(ReferenceHighlightColorProperty, value);
-    }
+    public Color ReferenceHighlightColor { get; private set; }
 
     /// <summary>
     /// Gets or sets the color to use for highlighting operator tokens.
     /// </summary>
-    public Color OperatorHighlightColor
-    {
-        get => (Color)GetValue(OperatorHighlightColorProperty);
-        set => SetValue(OperatorHighlightColorProperty, value);
-    }
+    public Color OperatorHighlightColor { get; private set; }
 
     /// <summary>
     /// Gets or sets the color to use for highlighting directive tokens.
     /// </summary>
-    public Color DirectiveHighlightColor
-    {
-        get => (Color)GetValue(DirectiveHighlightColorProperty);
-        set => SetValue(DirectiveHighlightColorProperty, value);
-    }
+    public Color DirectiveHighlightColor { get; private set; }
 
     /// <summary>
     /// Gets or sets the color to use for highlighting string tokens.
     /// </summary>
-    public Color StringHighlightColor
-    {
-        get => (Color)GetValue(StringHighlightColorProperty);
-        set => SetValue(StringHighlightColorProperty, value);
-    }
+    public Color StringHighlightColor { get; private set; }
 
     /// <summary>
     /// Gets or sets the color to use for highlighting comment tokens.
     /// </summary>
-    public Color CommentHighlightColor
-    {
-        get => (Color)GetValue(CommentHighlightColorProperty);
-        set => SetValue(CommentHighlightColorProperty, value);
-    }
+    public Color CommentHighlightColor { get; private set; }
 
     /// <summary>
     /// Gets or sets the color to use for highlighting macro tokens.
     /// </summary>
-    public Color MacroHighlightColor
-    {
-        get => (Color)GetValue(MacroHighlightColorProperty);
-        set => SetValue(MacroHighlightColorProperty, value);
-    }
+    public Color MacroHighlightColor { get; private set; }
 
     /// <summary>
     /// Gets the color to use for highlighting invalid instruction names.
@@ -249,33 +115,34 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
     /// <summary>
     /// Gets or sets the color to use for underlining errors.
     /// </summary>
-    public Color ErrorUnderlineColor
-    {
-        get => (Color)GetValue(ErrorUnderlineColorProperty);
-        set => SetValue(ErrorUnderlineColorProperty, value);
-    }
+    public Color ErrorUnderlineColor { get; private set; }
 
     /// <summary>
     /// Gets or sets the color to use for underlining warnings.
     /// </summary>
-    public Color WarningUnderlineColor
-    {
-        get => (Color)GetValue(WarningUnderlineColorProperty);
-        set => SetValue(WarningUnderlineColorProperty, value);
-    }
+    public Color WarningUnderlineColor { get; private set; }
 
     /// <summary>
     /// Gets or sets the color to use for underlining messages.
     /// </summary>
-    public Color MessageUnderlineColor
+    public Color MessageUnderlineColor { get; private set; }
+
+    public static AssemblySyntaxHighlightingTheme Current => new(CurrentScheme);
+
+    private static EditorColorScheme? CurrentScheme
+        => Ioc.Default.GetRequiredService<ISettingsService>().Local.GetValue<EditorColorScheme>(SettingsKeys.EditorColorScheme);
+
+    public void ReloadFromSettings()
     {
-        get => (Color)GetValue(MessageUnderlineColorProperty);
-        set => SetValue(MessageUnderlineColorProperty, value);
+        if (CurrentScheme is null)
+            return;
+
+        LoadFromScheme(CurrentScheme);
     }
 
-    public void LoadFromScheme(EditorThemedColorScheme scheme)
+    public void LoadFromScheme(EditorColorScheme scheme)
     {
-        BackgroundBlendColor = scheme.Background.ToColor();
+        BackgroundColor = scheme.Background.ToColor();
 
         var syntax = scheme.SyntaxHighlighting;
         InstructionHighlightColor = syntax.Instruction.ToColor();
@@ -287,12 +154,14 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
         StringHighlightColor = syntax.String.ToColor();
         CommentHighlightColor = syntax.Comment.ToColor();
         MacroHighlightColor = syntax.Macro.ToColor();
+
+        Updated?.Invoke(this, EventArgs.Empty);
     }
 
     private Color ApplyBackgroundBlend(Color overlay, double opacity)
     {
         overlay.A = (byte)(overlay.A * opacity);
-        var result = BackgroundBlendColor.AlphaBlend(overlay);
+        var result = BackgroundColor.AlphaBlend(overlay);
         result.A = 255;
         return result;
     }

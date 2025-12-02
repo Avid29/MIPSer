@@ -1,6 +1,11 @@
 // Avishai Dernis 2025
 
+using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml.Controls;
+using Mipser.Messages;
+using Mipser.Models.EditorConfig.ColorScheme;
+using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages.App.Settings;
 
 namespace Mipser.Windows.Views.Pages.App.SettingsSubPages;
@@ -16,8 +21,18 @@ public sealed partial class EditorSettingsSubPage : UserControl
     public EditorSettingsSubPage()
     {
         this.InitializeComponent();
+
+        Ioc.Default.GetRequiredService<IMessenger>().Register<EditorSettingsSubPage, SettingChangedMessage<Theme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
+        Ioc.Default.GetRequiredService<IMessenger>().Register<EditorSettingsSubPage, SettingChangedMessage<EditorColorScheme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
     }
 
     public EditorSettingsViewModel? ViewModel { get; set; }
 
+    public string DemoText =
+@"# Editor Demo
+.globl foo
+
+bar:
+    addi    $s0, $t1, 10
+    j       foo";
 }

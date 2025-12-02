@@ -1,5 +1,7 @@
 ﻿// Avishai Dernis 2025
 
+using Mipser.Services.Settings.Enums;
+
 namespace Mipser.Services.Settings;
 
 /// <summary>
@@ -11,4 +13,9 @@ public interface ISettingsService
     /// Gets the <see cref="ISettingsProvider"/> for the local settings folder.
     /// </summary>
     ISettingsProvider Local { get; }
+
+    /// <summary>
+    /// Gets the default theme.
+    /// </summary>
+    Theme DefaultTheme { get;  }
 }

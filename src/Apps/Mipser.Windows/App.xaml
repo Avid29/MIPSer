@@ -8,13 +8,13 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-
-                <ResourceDictionary Source="Controls/AssemblyEditBox/AssemblyEditBox.xaml"/>
-                <ResourceDictionary Source="Controls/HexViewer/HexViewer.xaml"/>
                 
                 <ResourceDictionary Source="Resources/Brushes.xaml"/>
                 <ResourceDictionary Source="Resources/Fonts.xaml"/>
                 <ResourceDictionary Source="Resources/Styles.xaml"/>
+
+                <ResourceDictionary Source="Controls/AssemblyEditBox/AssemblyEditBox.xaml"/>
+                <ResourceDictionary Source="Controls/HexViewer/HexViewer.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

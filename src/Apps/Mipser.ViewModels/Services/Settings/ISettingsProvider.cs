@@ -1,5 +1,8 @@
 ﻿// Avishai Dernis 2025
 
+using System;
+using System.Numerics;
+
 namespace Mipser.Services.Settings;
 
 /// <summary>
@@ -33,5 +36,6 @@ public interface ISettingsProvider
     /// <param name="value">The value to assign to the setting key.</param>
     /// <param name="overwrite">Indicates whether or not to overwrite the setting, if it already exists.</param>
     /// <param name="notify">Indicates whether or not to notify the app after the setting has changed.</param>
-    void SetValue<T>(string key, T value, bool overwrite = true, bool notify = false);
+    /// <returns>Whether or not the settings value changed.</returns>
+    bool SetValue<T>(string key, T value, bool overwrite = true, bool notify = false);
 }

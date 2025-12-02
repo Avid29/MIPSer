@@ -1,0 +1,17 @@
+{
+  "name": "Light Terminal",
+  "theme": 2,
+  "foreground": "#000000",
+  "background": "#ffffff",
+  "syntax_highlighting": {
+    "instruction": "#00A000",
+    "register": "#FF0000",
+    "immediate": "#808000",
+    "reference": "#00A0A0",
+    "operator": "#404040",
+    "directive": "#C000C0",
+    "string": "#FF8000",
+    "comment": "#000000",
+    "macro": "#0000FF"
+  }
+}

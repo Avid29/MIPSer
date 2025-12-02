@@ -37,8 +37,8 @@ namespace Mipser.ViewModels.Pages.App.Settings
         /// </summary>
         public Theme AppTheme
         {
-            get => _settingsService.Local.GetValue<Theme>(nameof(AppTheme));
-            set => _settingsService.Local.SetValue(nameof(AppTheme), value, notify: true);
+            get => _settingsService.Local.GetValue<Theme>(SettingsKeys.AppTheme);
+            set => _settingsService.Local.SetValue(SettingsKeys.AppTheme, value, notify: true);
         }
 
         /// <summary>
@@ -51,8 +51,8 @@ namespace Mipser.ViewModels.Pages.App.Settings
         /// </summary>
         public string LanguageOverride
         {
-            get => _settingsService.Local.GetValue<string>(nameof(LanguageOverride)) ?? "system";
-            set => _settingsService.Local.SetValue(nameof(LanguageOverride), value is "system" ? null : value);
+            get => _settingsService.Local.GetValue<string>(SettingsKeys.LanguageOverride) ?? "system";
+            set => _settingsService.Local.SetValue(SettingsKeys.LanguageOverride, value is "system" ? null : value);
         }
 
         /// <summary>

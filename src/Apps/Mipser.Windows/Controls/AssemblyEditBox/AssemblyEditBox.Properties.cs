@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Media;
 using Mipser.Services.Settings.Enums;
 using System;
 
@@ -20,7 +21,7 @@ public partial class AssemblyEditBox
     /// <summary>
     /// A <see cref="DependencyProperty"/> for the <see cref="RealTimeAssembly"/> property.
     /// </summary>
-    public static readonly DependencyProperty RealTimeAssemblyChecksProperty =
+    public static readonly DependencyProperty RealTimeAssemblyProperty =
         DependencyProperty.Register(nameof(RealTimeAssembly),
             typeof(bool),
             typeof(AssemblyEditBox),
@@ -43,7 +44,7 @@ public partial class AssemblyEditBox
             nameof(SyntaxHighlightingTheme),
             typeof(AssemblySyntaxHighlightingTheme),
             typeof(AssemblyEditBox),
-            new PropertyMetadata(new AssemblySyntaxHighlightingTheme(), OnThemeChanged));
+            new PropertyMetadata(new AssemblySyntaxHighlightingTheme(), OnSyntaxHighlightingThemeChanged));
 
     /// <summary>
     /// Gets or sets the text contained in the editbox.
@@ -59,8 +60,8 @@ public partial class AssemblyEditBox
     /// </summary>
     public bool RealTimeAssembly
     {
-        get => (bool)GetValue(RealTimeAssemblyChecksProperty);
-        set => SetValue(RealTimeAssemblyChecksProperty, value);
+        get => (bool)GetValue(RealTimeAssemblyProperty);
+        set => SetValue(RealTimeAssemblyProperty, value);
     }
 
     /// <summary>
@@ -83,14 +84,24 @@ public partial class AssemblyEditBox
 
     private void UpdateTextProperty(string value) => SetValue(TextProperty, value);
 
-    private static void OnThemeChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)
+    private static void OnSyntaxHighlightingThemeChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)
     {
         if (d is not AssemblyEditBox asmBox)
             return;
+        
+        asmBox.OnColorSchemeUpdated();
+        asmBox.SyntaxHighlightingTheme.Updated += (_, _) => asmBox.OnColorSchemeUpdated();
 
-        asmBox.SetupHighlighting();
-        asmBox.SetupIndicators();
-        asmBox.UpdateSyntaxHighlighting();
+    }
+
+    private void OnColorSchemeUpdated()
+    {
+        // This is not great
+        Background = new SolidColorBrush(SyntaxHighlightingTheme.BackgroundColor);
+
+        SetupHighlighting();
+        SetupIndicators();
+        UpdateSyntaxHighlighting();
     }
 
     private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)

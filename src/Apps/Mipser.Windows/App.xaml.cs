@@ -36,7 +36,7 @@ public partial class App : Application
 
         // Apply language override from settings
         var localizationService = Ioc.Default.GetRequiredService<ILocalizationService>();
-        localizationService.LanguageOverride = _settingsService.Local.GetValue<string>("LanguageOverride");
+        localizationService.LanguageOverride = _settingsService.Local.GetValue<string>(SettingsKeys.LanguageOverride);
 
         // Subscribe to messages
         _messenger.Register<App, SettingChangedMessage<Theme>>(this, (r, m) => r.ApplyRequestedTheme(m.NewValue));
@@ -59,7 +59,7 @@ public partial class App : Application
 
     private void LoadRequestedTheme()
     {
-        var theme = _settingsService.Local.GetValue<Theme>("AppTheme");
+        var theme = _settingsService.Local.GetValue<Theme>(SettingsKeys.AppTheme);
         ApplyRequestedTheme(theme);
     }
 

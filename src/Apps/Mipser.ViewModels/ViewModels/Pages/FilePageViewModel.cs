@@ -90,13 +90,13 @@ public class FilePageViewModel : PageViewModel
     /// <summary>
     /// Gets whether or not the file should be assembled in real-time.
     /// </summary>
-    public bool AssembleRealTime => _settingsService.Local.GetValue<bool>("RealTimeAssembly");
+    public bool AssembleRealTime => _settingsService.Local.GetValue<bool>(SettingsKeys.RealTimeAssembly);
     
 
     /// <summary>
     /// Gets the threshold for showing logs as annotations.
     /// </summary>
-    public AnnotationThreshold AnnotationThreshold => _settingsService.Local.GetValue<AnnotationThreshold>("AnnotationThreshold");
+    public AnnotationThreshold AnnotationThreshold => _settingsService.Local.GetValue<AnnotationThreshold>(SettingsKeys.AnnotationThreshold);
 
     /// <inheritdoc/>
     protected override void OnActivated()

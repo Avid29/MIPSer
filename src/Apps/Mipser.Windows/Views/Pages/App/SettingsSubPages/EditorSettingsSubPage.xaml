@@ -9,12 +9,26 @@
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
     xmlns:helpers="using:Mipser.Windows.Helpers"
     xmlns:senums="using:Mipser.Services.Settings.Enums"
+    xmlns:clrschm="using:Mipser.Models.EditorConfig.ColorScheme"
+    xmlns:asmedit="using:Mipser.Windows.Controls.AssemblyEditBox"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <asmedit:AssemblySyntaxHighlightingTheme x:Name="SyntaxHighlighting"/>
+    </UserControl.Resources>
 
     <StackPanel>
         <StackPanel.ChildrenTransitions>
             <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
         </StackPanel.ChildrenTransitions>
+
+        <asmedit:AssemblyEditBox Text="{x:Bind DemoText}"
+                                 RealTimeAssembly="{x:Bind ViewModel.RealTimeAssembly, Mode=OneWay}"
+                                 AnnotationThreshold="{x:Bind ViewModel.AnnotationThreshold, Mode=OneWay}"
+                                 SyntaxHighlightingTheme="{StaticResource SyntaxHighlighting}"
+                                 FlowDirection="LeftToRight"
+                                 Height="200"/>
+
         <ctc:SettingsCard x:Uid="/Settings/RealTimeAssemblySC"
                               Header="Real-Time Assembly"
                               Description="Should the editor continuously assemble the open file to show errors in real-time?">
@@ -26,7 +40,7 @@
                                   Description="When should the editor show log messages as an annotation below the log."
                                   IsEnabled="{x:Bind ViewModel.RealTimeAssembly, Mode=OneWay}">
             <ComboBox SelectedItem="{x:Bind ViewModel.AnnotationThreshold, Mode=TwoWay}"
-                              ItemsSource="{x:Bind ViewModel.AnnotationThresholdOptions, Mode=OneWay}">
+                      ItemsSource="{x:Bind ViewModel.AnnotationThresholdOptions, Mode=OneWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate x:DataType="senums:AnnotationThreshold">
                         <TextBlock Text="{x:Bind helpers:LocalizationHelper.Localize((senums:AnnotationThreshold)), Mode=OneWay}"/>
@@ -34,5 +48,20 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </ctc:SettingsCard>
+
+        <ctc:SettingsExpander x:Uid="/Settings/EditorColorSchemeSE"
+                              Header="Color Scheme"
+                              Description="Fully customize the color scheme of the text editor.">
+            <ctc:SettingsExpander.Content>
+                <ComboBox SelectedItem="{x:Bind ViewModel.EditorColorScheme, Mode=TwoWay}"
+                          ItemsSource="{x:Bind ViewModel.EditorColorSchemeOptions, Mode=OneWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="clrschm:EditorColorScheme">
+                            <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </ctc:SettingsExpander.Content>
+        </ctc:SettingsExpander>
     </StackPanel>
 </UserControl>

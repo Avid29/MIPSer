@@ -31,8 +31,8 @@ public class AssemblerSettingsViewModel : SettingsSubPageViewModel
     /// </summary>
     public string AssemblerLanguageOverride
     {
-        get => _settingsService.Local.GetValue<string>(nameof(AssemblerLanguageOverride)) ?? "app";
-        set => _settingsService.Local.SetValue(nameof(AssemblerLanguageOverride), value is "app" ? null : value);
+        get => _settingsService.Local.GetValue<string>(SettingsKeys.AssemblerLanguageOverride) ?? "app";
+        set => _settingsService.Local.SetValue(SettingsKeys.AssemblerLanguageOverride, value is "app" ? null : value);
     }
 
     /// <summary>
