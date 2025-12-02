@@ -27,7 +27,8 @@
                                  AnnotationThreshold="{x:Bind ViewModel.AnnotationThreshold, Mode=OneWay}"
                                  SyntaxHighlightingTheme="{StaticResource SyntaxHighlighting}"
                                  FlowDirection="LeftToRight"
-                                 Height="200"/>
+                                 CornerRadius="4"
+                                 Height="250"/>
 
         <ctc:SettingsCard x:Uid="/Settings/RealTimeAssemblySC"
                               Header="Real-Time Assembly"
@@ -50,18 +51,25 @@
         </ctc:SettingsCard>
 
         <ctc:SettingsExpander x:Uid="/Settings/EditorColorSchemeSE"
-                              Header="Color Scheme"
-                              Description="Fully customize the color scheme of the text editor.">
-            <ctc:SettingsExpander.Content>
-                <ComboBox SelectedItem="{x:Bind ViewModel.EditorColorScheme, Mode=TwoWay}"
+                          Header="Color Scheme"
+                          Description="Fully customize the color scheme of the text editor.">
+            <ComboBox SelectedItem="{x:Bind ViewModel.EditorColorScheme, Mode=TwoWay}"
                           ItemsSource="{x:Bind ViewModel.EditorColorSchemeOptions, Mode=OneWay}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate x:DataType="clrschm:EditorColorScheme">
-                            <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
-            </ctc:SettingsExpander.Content>
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="clrschm:EditorColorScheme">
+                        <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ctc:SettingsExpander.Items>
+                <ctc:SettingsCard x:Uid="/Settings/LoadSchemeFromFileSC"
+                                  Header="Load from File"
+                                  Description="Load an editor Color Scheme from a json file.">
+                    <Button x:Uid="/Settings/SelectSchemeFileBTN"
+                        Content="Select File"
+                        Command="{x:Bind ViewModel.LoadSchemeFromFileCommand, Mode=OneWay}"/>
+                </ctc:SettingsCard>
+            </ctc:SettingsExpander.Items>
         </ctc:SettingsExpander>
     </StackPanel>
 </UserControl>

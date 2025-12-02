@@ -186,4 +186,14 @@
   <data name="ViewOnGitHubHB.Content" xml:space="preserve">
     <value>צפה ב-GitHub</value>
   </data>
+  <data name="EditorDemoText" xml:space="preserve">
+    <value># דגמת עורך
+bar:  
+    addi    $s0, 10         # שגיאה  
+    sll     $s1, $s0, 33    # אזהרה  
+    add     $zero, $s0, $s1 # הודעה  
+.data
+foo:  
+    .asciiz "זו מחרוזת!"</value>
+  </data>
 </root>

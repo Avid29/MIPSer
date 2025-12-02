@@ -118,6 +118,7 @@ public partial class AssemblyEditBox
             return;
 
         asmBox.ClearLogHighlights();
+        _ = asmBox.RunAssemblerAsync();
     }
     
     private static void OnLogAnnotationsChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
@@ -125,7 +126,8 @@ public partial class AssemblyEditBox
         if (d is not AssemblyEditBox asmBox)
             return;
 
-        asmBox._codeEditor?.Editor.AnnotationClearAll();
+        asmBox.ClearLogHighlights();
+        _ = asmBox.RunAssemblerAsync();
     }
 
     private void UpdateText()
@@ -142,6 +144,7 @@ public partial class AssemblyEditBox
 
         // The text was not already update to date. Update it
         editor.SetText(Text);
+        editor.ConvertEOLs(WinUIEditor.EndOfLine.CrLf);
         TextChanged?.Invoke(this, EventArgs.Empty);
     }
 }

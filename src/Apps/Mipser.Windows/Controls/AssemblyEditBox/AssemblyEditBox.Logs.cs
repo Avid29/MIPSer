@@ -1,9 +1,14 @@
 ﻿// Avishai Dernis 2025
 
+using MIPS.Assembler;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Models;
+using MIPS.Models.Instructions.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using WinUIEditor;
 
 namespace Mipser.Windows.Controls.AssemblyEditBox;
@@ -24,7 +29,6 @@ public partial class AssemblyEditBox
 
         // Clear indicators and annotations
         ClearLogHighlights();
-        editor.AnnotationClearAll();
 
         foreach (var log in logs)
         {
@@ -90,6 +94,28 @@ public partial class AssemblyEditBox
         {
             editor.IndicatorCurrent = i;
             editor.IndicatorClearRange(0, editor.Length);
+        }
+
+        // Clear annotations
+        editor.AnnotationClearAll();
+    }
+
+    private async Task RunAssemblerAsync()
+    {
+        // Skip assembling if disabled
+        if (!RealTimeAssembly)
+            return;
+
+        // Run assembler and show errors
+        try
+        {
+            var result = await Assembler.AssembleAsync(Text, null, new AssemblerConfig(MipsVersion.MipsIII));
+            ApplyLogHighlights(result.Logs);
+            UpdateSymbols(result.Symbols);
+        }
+        catch (Exception)
+        {
+            // TODO: Notify exception occured
         }
     }
 

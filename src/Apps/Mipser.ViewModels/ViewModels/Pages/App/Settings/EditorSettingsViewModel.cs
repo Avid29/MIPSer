@@ -1,15 +1,19 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.Mvvm.Input;
 using Mipser.Models.EditorConfig.ColorScheme;
+using Mipser.Services.Files;
 using Mipser.Services.Localization;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Mipser.ViewModels.Pages.App.Settings;
 
@@ -20,16 +24,20 @@ public class EditorSettingsViewModel : SettingsSubPageViewModel
 {
     private readonly ILocalizationService _localizationService;
     private readonly ISettingsService _settingsService;
+    private readonly IFileSystemService _fileSystemService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AppSettingsViewModel"/> class.
     /// </summary>
-    public EditorSettingsViewModel(ILocalizationService localizationService, ISettingsService settingsService)
+    public EditorSettingsViewModel(ILocalizationService localizationService, ISettingsService settingsService, IFileSystemService fileSystemService)
     {
         _localizationService = localizationService;
         _settingsService = settingsService;
+        _fileSystemService = fileSystemService;
 
-        EditorColorSchemeOptions = LoadEditorSchemes();
+        LoadSchemeFromFileCommand = new(LoadSchemeFromFile);
+
+        EditorColorSchemeOptions = new(LoadEditorSchemes());
     }
 
     /// <inheritdoc/>
@@ -88,16 +96,14 @@ public class EditorSettingsViewModel : SettingsSubPageViewModel
     /// <summary>
     /// Gets the list of available editor color schemes.
     /// </summary>
-    public IReadOnlyList<EditorColorScheme> EditorColorSchemeOptions { get; }
+    public ObservableCollection<EditorColorScheme> EditorColorSchemeOptions { get; }
 
-    private string CurrentTheme => _settingsService.Local.GetValue<Theme>(nameof(AppSettingsViewModel.AppTheme)) switch
-    {
-        Theme.Light => "Light",
-        Theme.Dark => "Dark",
-        _ => "Dark" // TODO: Expose active theme to ViewModel
-    };
+    /// <summary>
+    /// A <see cref="RelayCommand"/> which opens a file picker to load an editor color scheme from file.
+    /// </summary>
+    public AsyncRelayCommand LoadSchemeFromFileCommand { get; }
 
-    private static List<EditorColorScheme> LoadEditorSchemes()
+    private List<EditorColorScheme> LoadEditorSchemes()
     {
         // Get resources
         var assembly = Assembly.GetExecutingAssembly();
@@ -120,6 +126,35 @@ public class EditorSettingsViewModel : SettingsSubPageViewModel
             editorSchemes.Add(editorColorScheme);
         }
 
+        // Ensure current scheme is included
+        var current = EditorColorScheme;
+        if (current is not null && !editorSchemes.Any(x => x.Name == current.Name))
+            editorSchemes.Add(current);
+
         return editorSchemes;
+    }
+
+    private async Task LoadSchemeFromFile()
+    {
+        // TODO: log errors
+
+        // Attempt to pick a file
+        var file = await _fileSystemService.PickFileAsync(".json");
+        if (file is null)
+            return;
+
+        // Open file as a stream
+        var stream = await file.OpenStreamForReadAsync();
+        if (stream is null)
+            return;
+
+        // Attempt to deserialize file contents as a color scheme
+        var scheme = await JsonSerializer.DeserializeAsync<EditorColorScheme>(stream);
+        if (scheme is null)
+            return;
+
+        // Apply loaded scheme
+        EditorColorSchemeOptions.Add(scheme);
+        EditorColorScheme = scheme;
     }
 }

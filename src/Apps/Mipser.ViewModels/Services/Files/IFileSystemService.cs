@@ -40,7 +40,7 @@ public interface IFileSystemService
     /// Attempts to pick a file to open.
     /// </summary>
     /// <returns>An <see cref="IFile"/> to open, if successful.</returns>
-    Task<IFile?> PickFileAsync();
+    Task<IFile?> PickFileAsync(params string[] types);
 
     /// <summary>
     /// Attempts to pick a file to open.

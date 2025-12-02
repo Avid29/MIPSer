@@ -186,4 +186,14 @@
   <data name="ViewOnGitHubHB.Content" xml:space="preserve">
     <value>View on GitHub</value>
   </data>
+  <data name="EditorDemoText" xml:space="preserve">
+    <value># Editor Demo
+bar:  
+    addi    $s0, 10         # Error
+    sll     $s1, $s0, 33    # Warning
+    add     $zero, $s0, $s1 # Message
+.data
+foo:  
+    .asciiz "This is a string!"</value>
+  </data>
 </root>

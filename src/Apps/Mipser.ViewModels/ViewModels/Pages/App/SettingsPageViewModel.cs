@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using Mipser.Services.Files;
 using Mipser.Services.Localization;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
@@ -23,13 +24,13 @@ public class SettingsPageViewModel : PageViewModel
     /// <summary>
     /// Initializes a new instance of the <see cref="SettingsPageViewModel"/> class.
     /// </summary>
-    public SettingsPageViewModel(ILocalizationService localizationService, ISettingsService settingsService, IVersioningService versioningService)
+    public SettingsPageViewModel(ILocalizationService localizationService, ISettingsService settingsService, IFileSystemService fileSystemService, IVersioningService versioningService)
     {
         _localizationService = localizationService;
 
         SubPages = [
                 new AppSettingsViewModel(localizationService, settingsService, versioningService),
-                new EditorSettingsViewModel(localizationService, settingsService),
+                new EditorSettingsViewModel(localizationService, settingsService, fileSystemService),
                 new AssemblerSettingsViewModel(localizationService, settingsService)
             ];
     }

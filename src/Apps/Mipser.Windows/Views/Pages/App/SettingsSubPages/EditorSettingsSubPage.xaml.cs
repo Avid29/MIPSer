@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.Messages;
 using Mipser.Models.EditorConfig.ColorScheme;
+using Mipser.Services.Localization;
 using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages.App.Settings;
 
@@ -28,11 +29,5 @@ public sealed partial class EditorSettingsSubPage : UserControl
 
     public EditorSettingsViewModel? ViewModel { get; set; }
 
-    public string DemoText =
-@"# Editor Demo
-.globl foo
-
-bar:
-    addi    $s0, $t1, 10
-    j       foo";
+    public string DemoText = Ioc.Default.GetRequiredService<ILocalizationService>()["/Settings/EditorDemoText"];
 }

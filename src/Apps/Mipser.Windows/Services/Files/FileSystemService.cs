@@ -4,6 +4,8 @@ using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using Mipser.Windows.Services.FileSystem.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
@@ -83,13 +85,20 @@ public class FileSystemService : IFileSystemService
     }
 
     /// <inheritdoc/>
-    public async Task<IFile?> PickFileAsync()
+    public async Task<IFile?> PickFileAsync(params string[] types)
     {
         var picker = new FileOpenPicker
         {
-            ViewMode = PickerViewMode.List,
-            FileTypeFilter = { "*" },
+            ViewMode = PickerViewMode.List
         };
+
+        if (types.Length is 0)
+            types = ["*"];
+
+        foreach (var type in types)
+        {
+            picker.FileTypeFilter.Add(type);
+        }
 
         InitWindow(picker);
         StorageFile file = await picker.PickSingleFileAsync();
