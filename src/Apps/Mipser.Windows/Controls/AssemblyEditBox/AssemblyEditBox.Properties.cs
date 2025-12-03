@@ -88,9 +88,17 @@ public partial class AssemblyEditBox
     {
         if (d is not AssemblyEditBox asmBox)
             return;
-        
+
+        // Local handler to update colors
+        void UpdateHandled(object? sender, EventArgs e) => asmBox.OnColorSchemeUpdated();
+
+        // Unsubscribe from old value
+        if (arg.OldValue is AssemblySyntaxHighlightingTheme old)
+            old.Updated -= UpdateHandled;
+
+        // Apply new color scheme and subscribe to updates
         asmBox.OnColorSchemeUpdated();
-        asmBox.SyntaxHighlightingTheme.Updated += (_, _) => asmBox.OnColorSchemeUpdated();
+        asmBox.SyntaxHighlightingTheme.Updated += UpdateHandled;
 
     }
 
