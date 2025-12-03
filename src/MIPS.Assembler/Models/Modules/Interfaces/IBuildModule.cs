@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Models.Config;
+
 namespace MIPS.Assembler.Models.Modules.Interfaces;
 
 /// <summary>

@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Assembler.Models;
+using MIPS.Assembler.Models.Config;
 using MIPS.Tests.Helpers;
 using Raw.Modules;
 using System.IO;

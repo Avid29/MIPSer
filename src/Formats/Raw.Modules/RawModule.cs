@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2025
 
-using MIPS.Assembler.Models;
+using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Interpreter.Models.Modules;

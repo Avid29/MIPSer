@@ -1,7 +1,6 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using RASM.Modules.Config;
@@ -13,6 +12,7 @@ using RasmReference = RASM.Modules.Tables.ReferenceEntry;
 using RasmSymbol = RASM.Modules.Tables.SymbolEntry;
 using MIPS.Models.Addressing.Enums;
 using MIPS.Interpreter.Models.Modules;
+using MIPS.Assembler.Models.Config;
 
 namespace RASM.Modules;
 

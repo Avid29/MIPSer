@@ -3,8 +3,9 @@
 using MIPS.Assembler.Models.Enums;
 using MIPS.Models.Instructions.Enums;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
-namespace MIPS.Assembler.Models;
+namespace MIPS.Assembler.Models.Config;
 
 /// <summary>
 /// A class containing assembler configurations.
@@ -20,34 +21,41 @@ public class AssemblerConfig
     }
 
     /// <summary>
-    /// Gets whether or not the assembler should allow pseudo instructions.
+    /// Gets or sets the mips version to use.
     /// </summary>
-    public MipsVersion MipsVersion { get; init; }
+    [XmlElement]
+    public MipsVersion MipsVersion { get; set; }
 
     /// <summary>
     /// Gets whether the <see cref="PseudoInstructionSet"/> is a blacklist or whitelist.
     /// </summary>
-    public PseudoInstructionPermissibility PseudoInstructionPermissibility { get; init; } = PseudoInstructionPermissibility.Blacklist;
+    [XmlElement(IsNullable = true)]
+    public PseudoInstructionPermissibility? PseudoInstructionPermissibility { get; set; }
 
     /// <summary>
     /// Gets the set of pseudo instructions to use as either a black or white list.
     /// </summary>
-    public HashSet<string> PseudoInstructionSet { get; init; } = [];
+
+    [XmlElement(IsNullable = true)]
+    public HashSet<string>? PseudoInstructionSet { get; set; } = [];
 
     /// <summary>
     /// Gets the threshold alignment size where the assembler will give a message.
     /// </summary>
-    public int AlignMessageThreshold { get; init; } = 7;
+    [XmlElement(IsNullable = true)]
+    public int? AlignMessageThreshold { get; set; }
 
     /// <summary>
     /// Gets the threshold alignment size where the assembler will give a warning.
     /// </summary>
-    public int AlignWarningThreshold { get; init; } = 17;
+    [XmlElement(IsNullable = true)]
+    public int? AlignWarningThreshold { get; set; }
 
     /// <summary>
     /// Gets the threshold alignment size where the assembler will give a warning.
     /// </summary>
-    public int SpaceMessageThreshold { get; init; } = 4096;
+    [XmlElement(IsNullable = true)]
+    public int? SpaceMessageThreshold { get; set; }
 
     /// <summary>
     /// Gets the default configuration.

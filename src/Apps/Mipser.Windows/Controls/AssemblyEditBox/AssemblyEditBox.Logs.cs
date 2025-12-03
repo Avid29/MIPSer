@@ -4,6 +4,7 @@ using MIPS.Assembler;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
+using MIPS.Assembler.Models.Config;
 using MIPS.Models.Instructions.Enums;
 using System;
 using System.Collections.Generic;

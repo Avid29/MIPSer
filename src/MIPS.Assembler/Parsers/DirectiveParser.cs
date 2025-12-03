@@ -173,7 +173,7 @@ public readonly struct DirectiveParser
         {
             // Kinda unique behavior here warrants a comment.
             // Any int? comparison operator involving a null returns false, so
-            // if there's no context this never executes.
+            // if there's no context or threshold value this never executes.
             var alignWarningThreshold = _context?.Config.AlignWarningThreshold;
             var alignMessageThreshold = _context?.Config.AlignMessageThreshold;
             if (value >= alignWarningThreshold)

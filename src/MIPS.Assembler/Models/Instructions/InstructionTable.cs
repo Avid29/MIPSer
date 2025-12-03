@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Enums;
 using MIPS.Assembler.Models.Instructions.Abstract;
 using MIPS.Models.Instructions.Enums;
@@ -94,10 +95,10 @@ public class InstructionTable : InstructionTableBase<string>
     /// <inheritdoc/>
     protected override void LoadInstruction(InstructionMetadata metadata)
     {
-        if (metadata.IsPseudoInstruction)
+        if (metadata.IsPseudoInstruction && Config.PseudoInstructionPermissibility is not null)
         {
             var blacklist = Config.PseudoInstructionPermissibility is PseudoInstructionPermissibility.Blacklist;
-            var listed = Config.PseudoInstructionSet.Contains(metadata.Name);
+            var listed = Config.PseudoInstructionSet?.Contains(metadata.Name);
 
             // If blacklist and listed, ban it
             // If whitelist and not listed, also ban it

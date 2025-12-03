@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Assembler.Models;
+using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using System.IO;
 using System.Threading.Tasks;

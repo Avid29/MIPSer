@@ -2,7 +2,7 @@
 
 using ELF.Modules.Models.Headers;
 using ELF.Modules.Models.Headers.Enums;
-using MIPS.Assembler.Models;
+using MIPS.Assembler.Models.Config;
 using MIPS.Models.Instructions.Enums;
 
 namespace ELF.Modules.Config;

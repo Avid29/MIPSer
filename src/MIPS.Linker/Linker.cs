@@ -2,7 +2,7 @@
 
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Models;
+using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Models.Addressing.Enums;

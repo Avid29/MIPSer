@@ -3,8 +3,8 @@
 using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models;
+using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
-using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
@@ -12,7 +12,6 @@ using MIPS.Models.Modules.Tables;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace MIPS.Assembler;

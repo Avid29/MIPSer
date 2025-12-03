@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2025
 
 using MIPS.Assembler.Helpers.Tables;
-using MIPS.Assembler.Models;
+using MIPS.Assembler.Models.Config;
 using MIPS.Disassembler.Models.Instructions;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
