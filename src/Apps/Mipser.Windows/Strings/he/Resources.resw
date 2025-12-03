@@ -150,15 +150,6 @@
   <data name="BuildStatus_Failed" xml:space="preserve">
     <value>הבנייה נכשלה</value>
   </data>
-  <data name="PageTitle/MIPSCheatSheet" xml:space="preserve">
-    <value>דף עזר ל-MIPS</value>
-  </data>
-  <data name="PageTitle/About" xml:space="preserve">
-    <value>אודות מיפסר</value>
-  </data>
-  <data name="PageTitle/Settings" xml:space="preserve">
-    <value>הגדרות</value>
-  </data>
   <data name="Theme_Default" xml:space="preserve">
     <value>אוטומטי</value>
   </data>
@@ -183,9 +174,6 @@
   <data name="AboutHeaderTB.Text" xml:space="preserve">
     <value>אודות</value>
   </data>
-  <data name="PageTitle/Welcome" xml:space="preserve">
-    <value>ברוכים הבאים</value>
-  </data>
   <data name="AnnotationThreshold_Never" xml:space="preserve">
     <value>לעולם לא</value>
   </data>
@@ -197,5 +185,29 @@
   </data>
   <data name="AnnotationThreshold_Always" xml:space="preserve">
     <value>תמיד</value>
+  </data>
+  <data name="CreateBTN.Content" xml:space="preserve">
+    <value>צור</value>
+  </data>
+  <data name="CancelBTN.Content" xml:space="preserve">
+    <value>בטל</value>
+  </data>
+  <data name="MipsVersion_MipsI" xml:space="preserve">
+    <value>MIPS I</value>
+  </data>
+  <data name="MipsVersion_MipsII" xml:space="preserve">
+    <value>MIPS II</value>
+  </data>
+  <data name="MipsVersion_MipsIII" xml:space="preserve">
+    <value>MIPS III</value>
+  </data>
+  <data name="MipsVersion_MipsIV" xml:space="preserve">
+    <value>MIPS IV</value>
+  </data>
+  <data name="MipsVersion_MipsV" xml:space="preserve">
+    <value>MIPS V</value>
+  </data>
+  <data name="MipsVersion_MipsVI" xml:space="preserve">
+    <value>MIPS VI</value>
   </data>
 </root>

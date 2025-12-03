@@ -53,6 +53,11 @@ public partial class WindowViewModel
     public RelayCommand OpenCheatSheetCommand { get; }
 
     /// <summary>
+    /// Gets a command that opens the create project page.
+    /// </summary>
+    public RelayCommand OpenCreateProjectCommand { get; }
+
+    /// <summary>
     /// Gets a command that opens the settings page.
     /// </summary>
     public RelayCommand OpenSettingsCommand { get; }
@@ -89,6 +94,8 @@ public partial class WindowViewModel
     private void OpenAbout() => MainViewModel.GoToPageByType<AboutPageViewModel>();
 
     private void OpenCheatSheet() => MainViewModel.GoToPageByType<CheatSheetViewModel>();
+
+    private void OpenCreateProject() => MainViewModel.GoToPageByType<CreateProjectViewModel>();
 
     private void OpenSettings() => MainViewModel.GoToPageByType<SettingsPageViewModel>();
 

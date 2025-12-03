@@ -20,6 +20,11 @@ public partial class PageTemplateSelector : DataTemplateSelector
     public DataTemplate? CheatSheetPageTemplate { get; set; }
 
     /// <summary>
+    /// Gets the <see cref="DataTemplate"/> for a <see cref="CreateProjectViewModel"/>."/>
+    /// </summary>
+    public DataTemplate? CreateProjectPageTemplate { get; set; }
+
+    /// <summary>
     /// Gets the <see cref="DataTemplate"/> for a <see cref="FilePageViewModel"/>.
     /// </summary>
     public DataTemplate? FilePageTemplate { get; set; }
@@ -40,6 +45,7 @@ public partial class PageTemplateSelector : DataTemplateSelector
         {
             AboutPageViewModel => AboutPageTemplate,
             CheatSheetViewModel => CheatSheetPageTemplate,
+            CreateProjectViewModel => CreateProjectPageTemplate,
             FilePageViewModel => FilePageTemplate,
             SettingsPageViewModel => SettingsPageTemplate,
             WelcomePageViewModel => WelcomePageTemplate,

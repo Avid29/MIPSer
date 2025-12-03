@@ -1,9 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Collections;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using MIPS.Assembler.Models.Instructions;
-using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Registers;
 using Mipser.Models.CheatSheet;
 using Mipser.Services.Localization;
@@ -22,7 +20,7 @@ namespace Mipser.ViewModels.Pages;
 /// </summary>
 public class CheatSheetViewModel : PageViewModel
 {
-    private ILocalizationService _localizationService;
+    private readonly ILocalizationService _localizationService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CheatSheetViewModel"/> class.
@@ -51,7 +49,7 @@ public class CheatSheetViewModel : PageViewModel
     }
     
     /// <inheritdoc/>
-    public override string Title => _localizationService["PageTitle/MIPSCheatSheet"];
+    public override string Title => _localizationService["/PageTitles/MIPSCheatSheet"];
 
     private IEnumerable<EncodingPattern>? LoadEncodingPatterns(string filename)
     {

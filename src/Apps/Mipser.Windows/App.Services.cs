@@ -42,6 +42,7 @@ public partial class App
 
             // Page ViewModels
             .AddTransient<AboutPageViewModel>()
+            .AddTransient<CreateProjectViewModel>()
             .AddTransient<CheatSheetViewModel>()
             .AddTransient<FilePageViewModel>()
             .AddTransient<SettingsPageViewModel>()

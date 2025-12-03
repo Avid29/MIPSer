@@ -36,7 +36,7 @@ public class SettingsPageViewModel : PageViewModel
     }
 
     /// <inheritdoc/>
-    public override string Title => _localizationService["PageTitle/Settings"];
+    public override string Title => _localizationService["/PageTitles/Settings"];
 
     /// <summary>
     /// Gets the collection of settings sub-pages.

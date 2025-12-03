@@ -24,7 +24,7 @@
                 <!--  New/Open  -->
                 <MenuFlyoutSubItem x:Uid="/TitleBar/NewMFSI" Text="New">
                     <MenuFlyoutItem x:Uid="/TitleBar/NewProjectMFI" Text="New Project"
-                                    IsEnabled="False">
+                                    Command="{x:Bind ViewModel.OpenCreateProjectCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Control,Shift" Key="N"/>
                         </MenuFlyoutItem.KeyboardAccelerators>

@@ -21,5 +21,5 @@ public class AboutPageViewModel : PageViewModel
     }
 
     /// <inheritdoc/>
-    public override string Title => _localizationService["PageTitle/About"];
+    public override string Title => _localizationService["/PageTitles/About"];
 }

@@ -31,6 +31,13 @@
                     </TabViewItem>
                 </DataTemplate>
             </selectors:PageTemplateSelector.CheatSheetPageTemplate>
+            <selectors:PageTemplateSelector.CreateProjectPageTemplate>
+                <DataTemplate x:DataType="vmv:CreateProjectViewModel">
+                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                        <pages:CreateProject ViewModel="{x:Bind Mode=OneWay}"/>
+                    </TabViewItem>
+                </DataTemplate>
+            </selectors:PageTemplateSelector.CreateProjectPageTemplate>
             <selectors:PageTemplateSelector.FilePageTemplate>
                 <DataTemplate x:DataType="vmv:FilePageViewModel">
                     <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
