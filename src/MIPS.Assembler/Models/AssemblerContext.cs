@@ -28,7 +28,7 @@ public class AssemblerContext
     {
         _assembler = assembler;
         _module = module;
-        InstructionTable = new InstructionTable(assembler.Config.MipsVersion);
+        InstructionTable = new InstructionTable(assembler.Config);
     }
 
     /// <remarks>

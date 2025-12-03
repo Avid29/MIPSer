@@ -53,7 +53,7 @@ public partial class AssemblyEditBox : Control
         this.Loaded += AssemblyEditBox_Loaded;
 
         // Setup keywords
-        var table = new InstructionTable(MIPS.Models.Instructions.Enums.MipsVersion.MipsIII);
+        var table = new InstructionTable(new());
         SetupKeywords(table.GetInstructions());
 
         // Setup key-binds and styling

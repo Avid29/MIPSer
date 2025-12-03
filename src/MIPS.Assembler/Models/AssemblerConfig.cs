@@ -1,6 +1,8 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Models.Enums;
 using MIPS.Models.Instructions.Enums;
+using System.Collections.Generic;
 
 namespace MIPS.Assembler.Models;
 
@@ -23,9 +25,14 @@ public class AssemblerConfig
     public MipsVersion MipsVersion { get; init; }
 
     /// <summary>
-    /// Gets whether or not the assembler should allow pseudo instructions.
+    /// Gets whether the <see cref="PseudoInstructionSet"/> is a blacklist or whitelist.
     /// </summary>
-    public bool AllowPseudos { get; init; } = true;
+    public PseudoInstructionPermissibility PseudoInstructionPermissibility { get; init; } = PseudoInstructionPermissibility.Blacklist;
+
+    /// <summary>
+    /// Gets the set of pseudo instructions to use as either a black or white list.
+    /// </summary>
+    public HashSet<string> PseudoInstructionSet { get; init; } = [];
 
     /// <summary>
     /// Gets the threshold alignment size where the assembler will give a message.

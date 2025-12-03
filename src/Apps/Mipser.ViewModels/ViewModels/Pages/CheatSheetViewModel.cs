@@ -32,7 +32,7 @@ public class CheatSheetViewModel : PageViewModel
         _localizationService = localizationService;
 
         // TODO: Load the instruction metadata from a service.
-        var table = new InstructionTable(MipsVersion.MipsIII);
+        var table = new InstructionTable(new());
         var instructions = table.GetInstructions(false);
 
         CommonInstructions = new(LoadInstructionSet("CommonInstructions.json", instructions) ?? []);

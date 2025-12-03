@@ -22,7 +22,7 @@ public class Disassembler
     public Disassembler(AssemblerConfig config)
     {
         Config = config;
-        InstructionTable = new InstructionTable(config.MipsVersion);
+        InstructionTable = new InstructionTable(config);
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class Disassembler
             format = ((FloatInstruction)instruction).Format;
 
         var key = ((byte)instruction.OpCode, funcCode, instruction.Type is InstructionType.Float);
-        if (!InstructionTable.TryGetInstruction(key, out var metas, out _))
+        if (!InstructionTable.TryGetInstruction(key, out var metas, out _, out _))
         {
             return "Unknown instruction";
         }

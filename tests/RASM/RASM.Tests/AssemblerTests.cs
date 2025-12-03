@@ -48,7 +48,8 @@ public class AssemblerTests
     public async Task NumericalRegisterErrorTest() => await RunStringTest(NumericalRegisterError, expected: LogCode.InvalidRegisterArgument);
 
     [TestMethod(nameof(DisabledPseudoInstructions))]
-    public async Task DisabledPseudoInstructionsErrorTest() => await RunStringTest(DisabledPseudoInstructions, new() { AllowPseudos = false }, LogCode.DisabledFeatureInUse);
+    public async Task DisabledPseudoInstructionsErrorTest() =>
+        await RunStringTest(DisabledPseudoInstructions, new() { PseudoInstructionPermissibility = MIPS.Assembler.Models.Enums.PseudoInstructionPermissibility.Blacklist }, LogCode.DisabledFeatureInUse);
 
     [TestMethod(nameof(NotInVersion))]
     public async Task NotInVersionTest() => await RunStringTest(NotInVersion, new(MipsVersion.MipsI), LogCode.NotInVersion);
@@ -105,7 +106,7 @@ public class AssemblerTests
     {
         // Wrap the test in a stream and run the test
         var stream = new MemoryStream(Encoding.Default.GetBytes(str));
-        await RunTest(stream, null, config, [..expected.Select((x) => (x, 1L))]);
+        await RunTest(stream, null, config, [.. expected.Select((x) => (x, 1L))]);
     }
 
     private static async Task RunTest(Stream stream, string? filename = null, RasmConfig? config = null, params (LogCode, long)[] expected)

@@ -348,4 +348,7 @@
   <data name="MissingOperand" xml:space="preserve">
     <value>Expected operand following '{0}' operator.</value>
   </data>
+  <data name="InstructionDisabled" xml:space="preserve">
+    <value>The instruction '{0}' is disabled by the project configuration.</value>
+  </data>
 </root>

@@ -19,34 +19,37 @@ public abstract class InstructionTableBase<T>
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionTable"/> class.
     /// </summary>
-    public InstructionTableBase(MipsVersion version)
+    public InstructionTableBase(AssemblerConfig config)
     {
-        Version = version;
+        Config = config;
 
         LookupTable = [];
         Initialize();
     }
 
     /// <summary>
-    /// Gets the MIPS version of the instruction table.
+    /// Gets the config used to generate the instruction table.
     /// </summary>
-    public MipsVersion Version { get; }
+    public AssemblerConfig Config { get; }
 
     /// <summary>
     /// The table of elements in the instruction table.
     /// </summary>
     protected Dictionary<T, List<InstructionMetadata>> LookupTable { get; }
-    
+
     /// <summary>
-    /// Attempts to get an instruction by name.
+    /// Attempts to get an instruction by a key.
     /// </summary>
     /// <param name="key">The key to lookup the instruction.</param>
     /// <param name="metadatas">The metadatas of matching instructions.</param>
     /// <param name="requiredVersion">The required version to have this instruction, if there is one.</param>
+    /// <param name="banned">Indicates if the instruction was found, but is banned according the config.</param>
     /// <returns>Whether or not an instruction exists by that name</returns>
-    public virtual bool TryGetInstruction(T key, [NotNullWhen(true)] out List<InstructionMetadata>? metadatas, out MipsVersion? requiredVersion)
+    public virtual bool TryGetInstruction(T key, [NotNullWhen(true)] out List<InstructionMetadata>? metadatas, out MipsVersion? requiredVersion, out bool banned)
     {
         requiredVersion = null;
+        banned = false;
+
         if (LookupTable.TryGetValue(key, out metadatas))
             return true;
 

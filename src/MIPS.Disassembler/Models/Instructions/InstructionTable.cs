@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2025
 
+using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Models.Instructions.Abstract;
 using MIPS.Models.Instructions.Enums;
@@ -14,14 +15,14 @@ public class InstructionTable : InstructionTableBase<(byte op, byte func, bool)>
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionTable"/> class.
     /// </summary>
-    public InstructionTable(MipsVersion version) : base(version)
+    public InstructionTable(AssemblerConfig config) : base(config)
     {
     }
 
     /// <inheritdoc/>
     protected override void LoadInstruction(InstructionMetadata metadata)
     {
-        if (metadata.MIPSVersions.Contains(Version))
+        if (metadata.MIPSVersions.Contains(Config.MipsVersion))
         {
             byte? funcCode = metadata.Type switch
             {

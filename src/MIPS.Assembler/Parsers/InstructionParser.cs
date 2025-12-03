@@ -160,11 +160,14 @@ public struct InstructionParser
         if (FloatFormatTable.TryGetFloatFormat(name, out _format, out var formattedName))
             name = formattedName;
 
-        if (!_instructionTable.TryGetInstruction(name, out var metas, out var version))
+        if (!_instructionTable.TryGetInstruction(name, out var metas, out var version, out var banned))
         {
             // Select error message
             (LogCode id, string message) = version switch
             {
+                not null when banned => 
+                    (LogCode.DisabledFeatureInUse, "InstructionDisabled"),
+
                 // The instruction requires a higher MIPS version
                 not null when _context is null || version > _context?.Config.MipsVersion =>
                     (LogCode.NotInVersion, "RequiresVersion"),

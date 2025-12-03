@@ -113,7 +113,7 @@ public class InstructionParserTests
         ServiceCollection.DisassemblerService = new DisassemblerService();
         #endif
 
-        var table = new InstructionTable(MipsVersion.MipsII);
+        var table = new InstructionTable(new());
         var parser = new InstructionParser(table, null);
 
         foreach(var instruction in table.GetInstructions())
@@ -180,7 +180,7 @@ public class InstructionParserTests
 
         // Initialize parser
         var logger = new Logger();
-        var parser = new InstructionParser(new InstructionTable(MipsVersion.MipsII), logger);
+        var parser = new InstructionParser(new InstructionTable(new()), logger);
 
         // Parse instruction
         var line = Tokenizer.TokenizeLine(input, nameof(RunTest));
