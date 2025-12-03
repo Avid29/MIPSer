@@ -349,6 +349,6 @@
     <value>נדרש אופראנד אחרי האופרטור '{0}'.</value>
   </data>
   <data name="InstructionDisabled" xml:space="preserve">
-    <value>The instruction '{0}' is disabled by the project configuration.</value>
+    <value>ההוראה '{0}' הושבתה על־ידי תצורת הפרויקט.</value>
   </data>
 </root>

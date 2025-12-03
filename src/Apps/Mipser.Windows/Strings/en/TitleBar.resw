@@ -138,6 +138,15 @@
   <data name="CloseFileMFI.Text" xml:space="preserve">
     <value>Close File</value>
   </data>
+  <data name="CloseProjectMFI.Text" xml:space="preserve">
+    <value>Close Project</value>
+  </data>
+  <data name="CollapseAllMFI.Text" xml:space="preserve">
+    <value>Collapse All</value>
+  </data>
+  <data name="CollapseCurrentMFI.Text" xml:space="preserve">
+    <value>Collapse Current</value>
+  </data>
   <data name="CopyMFI.Text" xml:space="preserve">
     <value>Copy</value>
   </data>
@@ -152,6 +161,12 @@
   </data>
   <data name="EditorAdvancedMFSI.Text" xml:space="preserve">
     <value>Advanced</value>
+  </data>
+  <data name="ExpandAllMFI.Text" xml:space="preserve">
+    <value>Expand All</value>
+  </data>
+  <data name="ExpandCurrentMFI.Text" xml:space="preserve">
+    <value>Expand Current</value>
   </data>
   <data name="FileMBI.Title" xml:space="preserve">
     <value>File</value>
@@ -168,6 +183,12 @@
   <data name="NewFileMFI.Text" xml:space="preserve">
     <value>New File</value>
   </data>
+  <data name="NewMFSI.Text" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="NewProjectMFI.Text" xml:space="preserve">
+    <value>New Project</value>
+  </data>
   <data name="OpenFileMFI.Text" xml:space="preserve">
     <value>Open File</value>
   </data>
@@ -177,6 +198,12 @@
   <data name="OpenMFSI.Text" xml:space="preserve">
     <value>Open</value>
   </data>
+  <data name="OpenProjectMFI.Text" xml:space="preserve">
+    <value>Open Project</value>
+  </data>
+  <data name="OutliningMFSI.Text" xml:space="preserve">
+    <value>Outlining</value>
+  </data>
   <data name="PasteMFI.Text" xml:space="preserve">
     <value>Paste</value>
   </data>
@@ -185,6 +212,9 @@
   </data>
   <data name="SaveAllMFI.Text" xml:space="preserve">
     <value>Save All</value>
+  </data>
+  <data name="SaveCurrentFileMFI.Text" xml:space="preserve">
+    <value>Save Current File</value>
   </data>
   <data name="SaveMFI.Text" xml:space="preserve">
     <value>Save</value>

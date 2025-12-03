@@ -16,25 +16,36 @@
         </Grid.ColumnDefinitions>
         
         <Border x:Name="AppTitleBar" Grid.ColumnSpan="3" Background="Transparent"/>
-        
+
         <MenuBar Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left">
             <!--  File  -->
             <MenuBarItem x:Uid="/TitleBar/FileMBI" Title="File">
-                <MenuFlyoutItem x:Uid="/TitleBar/NewFileMFI" Text="New File"
-                                IsEnabled="False"
-                                Command="{x:Bind ViewModel.CreateNewFileCommand, Mode=OneWay}">
-                    <MenuFlyoutItem.Icon>
-                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE130;" />
-                    </MenuFlyoutItem.Icon>
-                    <MenuFlyoutItem.KeyboardAccelerators>
-                        <KeyboardAccelerator Modifiers="Control" Key="N"/>
-                    </MenuFlyoutItem.KeyboardAccelerators>
-                </MenuFlyoutItem>
-                <MenuFlyoutSubItem x:Uid="/TitleBar/OpenMFSI" Text="Open">
-                    <MenuFlyoutItem x:Uid="/TitleBar/OpenFileMFI" Icon="OpenFile" Text="Open File"
-                                    Command="{x:Bind ViewModel.PickAndOpenFileCommand, Mode=OneWay}">
+                
+                <!--  New/Open  -->
+                <MenuFlyoutSubItem x:Uid="/TitleBar/NewMFSI" Text="New">
+                    <MenuFlyoutItem x:Uid="/TitleBar/NewProjectMFI" Text="New Project"
+                                    IsEnabled="False">
                         <MenuFlyoutItem.KeyboardAccelerators>
-                            <KeyboardAccelerator Modifiers="Control" Key="O"/>
+                            <KeyboardAccelerator Modifiers="Control,Shift" Key="N"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                    <MenuFlyoutSeparator/>
+                    <MenuFlyoutItem x:Uid="/TitleBar/NewFileMFI" Text="New File"
+                                    IsEnabled="False"
+                                    Command="{x:Bind ViewModel.CreateNewFileCommand, Mode=OneWay}">
+                        <MenuFlyoutItem.Icon>
+                            <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE130;" />
+                        </MenuFlyoutItem.Icon>
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Modifiers="Control" Key="N"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
+                </MenuFlyoutSubItem>
+                <MenuFlyoutSubItem x:Uid="/TitleBar/OpenMFSI" Text="Open">
+                    <MenuFlyoutItem x:Uid="/TitleBar/OpenProjectMFI" Text="Open Project"
+                                    IsEnabled="False">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Modifiers="Control,Shift" Key="N"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                     <MenuFlyoutItem x:Uid="/TitleBar/OpenFolderMFI" Icon="OpenLocal" Text="Open Folder"
@@ -43,9 +54,20 @@
                             <KeyboardAccelerator Modifiers="Control,Shift" Key="O"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
+
+                    <MenuFlyoutSeparator/>
+
+                    <MenuFlyoutItem x:Uid="/TitleBar/OpenFileMFI" Icon="OpenFile" Text="Open File"
+                                    Command="{x:Bind ViewModel.PickAndOpenFileCommand, Mode=OneWay}">
+                        <MenuFlyoutItem.KeyboardAccelerators>
+                            <KeyboardAccelerator Modifiers="Control" Key="O"/>
+                        </MenuFlyoutItem.KeyboardAccelerators>
+                    </MenuFlyoutItem>
                 </MenuFlyoutSubItem>
                 <MenuFlyoutSeparator/>
-                <MenuFlyoutItem x:Uid="/TitleBar/SaveMFI" Icon="Save" Text="Save"
+                
+                <!--  Save  -->
+                <MenuFlyoutItem x:Uid="/TitleBar/SaveCurrentFileMFI" Icon="Save" Text="Save Current File"
                                 Command="{x:Bind ViewModel.SaveFileCommand, Mode=OneWay}"
                                 IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanSave, FallbackValue=False, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
@@ -61,6 +83,8 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
+                
+                <!--  Close  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/CloseFileMFI" Text="Close File"
                                 Command="{x:Bind ViewModel.ClosePageCommand, Mode=OneWay}"
                                 IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.IsPageOpen, FallbackValue=False, Mode=OneWay}">
@@ -68,10 +92,12 @@
                         <KeyboardAccelerator Modifiers="Control" Key="W"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="/TitleBar/CloseProjectMFI" Text="Close Project" IsEnabled="False"/>
             </MenuBarItem>
             
             <!--  Edit  -->
             <MenuBarItem x:Uid="/TitleBar/EditMBI" Title="Edit">
+                <!--  History  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/UndoMFI" Icon="Undo" Text="Undo"
                                 Command="{x:Bind ViewModel.UndoCommand, Mode=OneWay}"
                                 IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
@@ -88,6 +114,8 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
+                
+                <!--  Basic  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/CutMFI" Icon="Cut" Text="Cut"
                                 Command="{x:Bind ViewModel.CutCommand, Mode=OneWay}"
                                 IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
@@ -117,6 +145,8 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
+                
+                <!--  Select  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/SelectAllMFI" Icon="SelectAll" Text="Select All"
                                 Command="{x:Bind ViewModel.SelectAllCommand, Mode=OneWay}"
                                 IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
@@ -125,23 +155,25 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
-                <MenuFlyoutSubItem x:Uid="/TitleBar/EditorAdvancedMFSI" Text="Advanced">
-                    <MenuFlyoutItem x:Uid="/TitleBar/MoveLineUpMFI" Text="Move Line Up"
-                                    Command="{x:Bind ViewModel.TransposeUpCommand, Mode=OneWay}"
+
+                <!--  Advanced  -->
+                <MenuFlyoutSubItem x:Uid="/TitleBar/EditorAdvancedMFSI" Text="Advanced"
                                     IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
+                    <MenuFlyoutItem x:Uid="/TitleBar/MoveLineUpMFI" Text="Move Line Up"
+                                    Command="{x:Bind ViewModel.TransposeUpCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Menu" Key="Up"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                     <MenuFlyoutItem x:Uid="/TitleBar/MoveLineDownMFI" Text="Move Line Down"
-                                    Command="{x:Bind ViewModel.TransposeDownCommand, Mode=OneWay}"
-                                    IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
+                                    Command="{x:Bind ViewModel.TransposeDownCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Menu" Key="Down"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                 </MenuFlyoutSubItem>
-                <MenuFlyoutSubItem x:Uid="/TitleBar/OutliningMFSI" Text="Outlining">
+                <MenuFlyoutSubItem x:Uid="/TitleBar/OutliningMFSI" Text="Outlining"
+                                    IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
                     <!--<MenuFlyoutItem x:Uid="/TitleBar/ToggleOutliningMFI" Text="Toggle Outlining"/>-->
                     <MenuFlyoutItem x:Uid="/TitleBar/ExpandCurrentMFI" Text="Expand Current"
                                     Command="{x:Bind ViewModel.ExpandCurrentCommand, Mode=OneWay}">

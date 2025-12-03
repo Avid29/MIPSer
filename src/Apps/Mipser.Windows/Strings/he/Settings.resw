@@ -124,7 +124,7 @@
     <value>© אבישי דרניס</value>
   </data>
   <data name="AboutSE.Header" xml:space="preserve">
-    <value>אודות MIPSer</value>
+    <value>אודות מיפסר</value>
   </data>
   <data name="AnnotationThresholdSC.Description" xml:space="preserve">
     <value>מתי על העורך להציג הודעות יומן כהערות מתחת ליומן.</value>

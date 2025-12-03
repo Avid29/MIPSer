@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AboutMFI.Text" xml:space="preserve">
-    <value>אודות MIPSer</value>
+    <value>אודות מיפסר</value>
   </data>
   <data name="AssembleFileMFI.Text" xml:space="preserve">
     <value>הרכב קובץ</value>
@@ -138,6 +138,15 @@
   <data name="CloseFileMFI.Text" xml:space="preserve">
     <value>סגור קובץ</value>
   </data>
+  <data name="CloseProjectMFI.Text" xml:space="preserve">
+    <value>סגור פרויקט</value>
+  </data>
+  <data name="CollapseAllMFI.Text" xml:space="preserve">
+    <value>כווץ הכול</value>
+  </data>
+  <data name="CollapseCurrentMFI.Text" xml:space="preserve">
+    <value>כווץ את הנוכחי</value>
+  </data>
   <data name="CopyMFI.Text" xml:space="preserve">
     <value>העתק</value>
   </data>
@@ -152,6 +161,12 @@
   </data>
   <data name="EditorAdvancedMFSI.Text" xml:space="preserve">
     <value>מתקדם</value>
+  </data>
+  <data name="ExpandAllMFI.Text" xml:space="preserve">
+    <value>הרחב הכול</value>
+  </data>
+  <data name="ExpandCurrentMFI.Text" xml:space="preserve">
+    <value>הרחב את הנוכחי</value>
   </data>
   <data name="FileMBI.Title" xml:space="preserve">
     <value>קובץ</value>
@@ -168,6 +183,12 @@
   <data name="NewFileMFI.Text" xml:space="preserve">
     <value>קובץ חדש</value>
   </data>
+  <data name="NewMFSI.Text" xml:space="preserve">
+    <value>חדש</value>
+  </data>
+  <data name="NewProjectMFI.Text" xml:space="preserve">
+    <value>פרויקט חדש</value>
+  </data>
   <data name="OpenFileMFI.Text" xml:space="preserve">
     <value>פתח קובץ</value>
   </data>
@@ -176,6 +197,12 @@
   </data>
   <data name="OpenMFSI.Text" xml:space="preserve">
     <value>פתח</value>
+  </data>
+  <data name="OpenProjectMFI.Text" xml:space="preserve">
+    <value>פתח פרויקט</value>
+  </data>
+  <data name="OutliningMFSI.Text" xml:space="preserve">
+    <value>קווי מתאר</value>
   </data>
   <data name="PasteMFI.Text" xml:space="preserve">
     <value>הדבק</value>
@@ -186,6 +213,9 @@
   <data name="SaveAllMFI.Text" xml:space="preserve">
     <value>שמור הכל</value>
   </data>
+  <data name="SaveCurrentFileMFI.Text" xml:space="preserve">
+    <value>שמור את הקובץ הנוכחי</value>
+  </data>
   <data name="SaveMFI.Text" xml:space="preserve">
     <value>שמור</value>
   </data>
@@ -193,7 +223,7 @@
     <value>בחר הכול</value>
   </data>
   <data name="SettingsMFI.Text" xml:space="preserve">
-    <value>הגדרות MIPSer</value>
+    <value>הגדרות מיפסר</value>
   </data>
   <data name="ToggleFullScreenMFI.Text" xml:space="preserve">
     <value>הפעלה/כיבוי מסך מלא</value>
