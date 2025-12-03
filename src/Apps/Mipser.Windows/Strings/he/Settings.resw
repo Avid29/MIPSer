@@ -194,6 +194,21 @@ bar:
     add     $zero, $s0, $s1 # הודעה  
 .data
 foo:  
-    .asciiz "זו מחרוזת!"</value>
+    .asciiz "שלום עולם"</value>
+  </data>
+  <data name="SelectSchemeFileBTN.Content" xml:space="preserve">
+    <value>בחר קובץ</value>
+  </data>
+  <data name="LoadSchemeFromFileSC.Header" xml:space="preserve">
+    <value>טען מקובץ</value>
+  </data>
+  <data name="LoadSchemeFromFileSC.Description" xml:space="preserve">
+    <value>טען ערכת צבעים של העורך מקובץ JSON.</value>
+  </data>
+  <data name="EditorColorSchemeSE.Header" xml:space="preserve">
+    <value>ערכת צבעים</value>
+  </data>
+  <data name="EditorColorSchemeSE.Description" xml:space="preserve">
+    <value>התאם באופן מלא את ערכת הצבעים של עורך הטקסט.</value>
   </data>
 </root>

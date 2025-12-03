@@ -194,6 +194,21 @@ bar:
     add     $zero, $s0, $s1 # Message
 .data
 foo:  
-    .asciiz "This is a string!"</value>
+    .asciiz "Hello World!"</value>
+  </data>
+  <data name="SelectSchemeFileBTN.Content" xml:space="preserve">
+    <value>Select File</value>
+  </data>
+  <data name="LoadSchemeFromFileSC.Header" xml:space="preserve">
+    <value>Load from File</value>
+  </data>
+  <data name="LoadSchemeFromFileSC.Description" xml:space="preserve">
+    <value>Load an editor Color Scheme from a JSON file.</value>
+  </data>
+  <data name="EditorColorSchemeSE.Header" xml:space="preserve">
+    <value>Color Scheme</value>
+  </data>
+  <data name="EditorColorSchemeSE.Description" xml:space="preserve">
+    <value>Fully customize the color scheme of the text editor.</value>
   </data>
 </root>
