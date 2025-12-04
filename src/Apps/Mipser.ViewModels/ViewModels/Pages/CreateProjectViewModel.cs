@@ -8,6 +8,7 @@ using Mipser.Messages.Pages;
 using Mipser.Models.ProjectConfig;
 using Mipser.Services.Files;
 using Mipser.Services.Localization;
+using Mipser.Services.Project;
 using Mipser.ViewModels.Pages.Abstract;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ public class CreateProjectViewModel : PageViewModel
     private readonly IMessenger _messenger;
     private readonly ILocalizationService _localizationService;
     private readonly IFileSystemService _fileSystemService;
+    private readonly IProjectService _projectService;
 
     private string? _projectName;
     private string? _folderPath;
@@ -33,15 +35,16 @@ public class CreateProjectViewModel : PageViewModel
     /// <summary>
     /// Initializes a new instance of the <see cref="CheatSheetViewModel"/> class.
     /// </summary>
-    public CreateProjectViewModel(IMessenger messenger, ILocalizationService localizationService, IFileSystemService fileSystemService)
+    public CreateProjectViewModel(IMessenger messenger, ILocalizationService localizationService, IFileSystemService fileSystemService, IProjectService projectService)
     {
         _messenger = messenger;
         _localizationService = localizationService;
         _fileSystemService = fileSystemService;
+        _projectService = projectService;
 
         SelectFolderCommand = new(SelectFolderAsync);
         CreateProjectCommand = new(CreateProjectAsync);
-        CancelCommand = new(Cancel);
+        CancelCommand = new(ClosePage);
     }
 
     /// <inheritdoc/>
@@ -140,14 +143,17 @@ public class CreateProjectViewModel : PageViewModel
         var projectConfig = new ProjectConfig
         {
             Name = ProjectName,
-            Path = new Uri(rootFolderPath),
+            ConfigPath = projectFilePath,
             AssemblerConfig = new AssemblerConfig(MipsVersion)
         };
 
         // Write project config to the file 
-        projectConfig.Serialize(stream);
+        await projectConfig.SerializeAsync(stream);
 
-        // TODO: Open the project and close the page
+        // Open the project and close the page
+        await _projectService.OpenProjectAsync(projectConfig);
+        ClosePage();
+
         // TODO: Open the project in a new window
     }
 
@@ -160,5 +166,5 @@ public class CreateProjectViewModel : PageViewModel
         FolderPath = folder.Path;
     }
 
-    private void Cancel() => _messenger.Send(new PageCloseRequestMessage(this));
+    private void ClosePage() => _messenger.Send(new PageCloseRequestMessage(this));
 }

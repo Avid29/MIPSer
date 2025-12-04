@@ -43,7 +43,7 @@ public interface IFileService
     /// Opens a file picker to select an <see cref="BindableFile"/>.
     /// </summary>
     /// <returns>The selected <see cref="BindableFile"/>.</returns>
-    public Task<BindableFile?> PickFileAsync();
+    public Task<BindableFile?> PickFileAsync(params string[] types);
 
     /// <summary>
     /// Opens a file picker to select an <see cref="BindableFolder"/>.

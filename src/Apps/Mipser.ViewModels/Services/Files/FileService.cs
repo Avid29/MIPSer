@@ -79,9 +79,9 @@ public class FileService : IFileService
     }
 
     /// <inheritdoc/>
-    public async Task<BindableFile?> PickFileAsync()
+    public async Task<BindableFile?> PickFileAsync(params string[] types)
     {
-        var file = await _fileSystemService.PickFileAsync();
+        var file = await _fileSystemService.PickFileAsync(types);
         if (file is null)
             return null;
 

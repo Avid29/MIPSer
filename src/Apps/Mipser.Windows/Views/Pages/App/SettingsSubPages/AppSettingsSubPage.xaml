@@ -16,11 +16,12 @@
         <StackPanel.ChildrenTransitions>
             <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
         </StackPanel.ChildrenTransitions>
+        
         <ctc:SettingsCard x:Uid="/Settings/AppThemeSC"
-                              Header="Theme"
-                              Description="Change the app's theme.">
+                          Header="Theme"
+                          Description="Change the app's theme.">
             <ComboBox SelectedItem="{x:Bind ViewModel.AppTheme, Mode=TwoWay}"
-                              ItemsSource="{x:Bind ViewModel.AppThemeOptions, Mode=OneWay}">
+                      ItemsSource="{x:Bind ViewModel.AppThemeOptions, Mode=OneWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate x:DataType="senums:Theme">
                         <TextBlock Text="{x:Bind helpers:LocalizationHelper.Localize((senums:Theme)), Mode=OneWay}"/>
@@ -30,10 +31,10 @@
         </ctc:SettingsCard>
         
         <ctc:SettingsCard x:Uid="/Settings/AppLanguageSC"
-                              Header="App Language"
-                              Description="Set the app's display language. (Requires a restart to take effect).">
+                          Header="App Language"
+                          Description="Set the app's display language. (Requires a restart to take effect).">
             <ComboBox SelectedItem="{x:Bind ViewModel.LanguageOverride, Mode=TwoWay}"
-                              ItemsSource="{x:Bind ViewModel.AppLanguageOptions, Mode=OneWay}">
+                      ItemsSource="{x:Bind ViewModel.AppLanguageOptions, Mode=OneWay}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate x:DataType="x:String">
                         <TextBlock Text="{x:Bind base:SettingsPage.LanguageDisplayName((x:String)), Mode=OneWay}"/>
@@ -41,25 +42,31 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </ctc:SettingsCard>
+        
+        <ctc:SettingsCard x:Uid="/Settings/RestoreOpenProjectSC"
+                          Header="Restore Open Project/Folder"
+                          Description="Set whether or not the app should cache and restore the open the project/folder when opened.">
+            <ToggleSwitch IsOn="{x:Bind ViewModel.RestoreOpenProject, Mode=TwoWay}"/>
+        </ctc:SettingsCard>
 
         <ctc:SettingsExpander x:Uid="/Settings/AboutSE"
-                      Header="MIPSer"
-                      Description="© Avishai Dernis">
+                              Header="MIPSer"
+                              Description="© Avishai Dernis">
             <ctc:SettingsExpander.HeaderIcon>
                 <ImageIcon Source="/Assets/AppIconSources/Small88x88.png"/>
             </ctc:SettingsExpander.HeaderIcon>
             <ctc:SettingsExpander.Content>
                 <TextBlock Text="{x:Bind ViewModel.AppVersion, Mode=OneWay}"
-                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                   IsTextSelectionEnabled="True"/>
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           IsTextSelectionEnabled="True"/>
             </ctc:SettingsExpander.Content>
             <ctc:SettingsExpander.Items>
                 <ctc:SettingsCard HorizontalContentAlignment="Left"
-                          ContentAlignment="Left">
+                                  ContentAlignment="Left">
                     <StackPanel Margin="-24,0,0,0">
                         <HyperlinkButton x:Uid="/Settings/ViewOnGitHubHB"
-                                 Content="View on GitHub"
-                                 NavigateUri="https://github.com/Avid29/MIPSer"/>
+                                         Content="View on GitHub"
+                                         NavigateUri="https://github.com/Avid29/MIPSer"/>
                     </StackPanel>
                 </ctc:SettingsCard>
             </ctc:SettingsExpander.Items>

@@ -31,10 +31,8 @@ public partial class MainViewModel
     {
         _messenger.Register<MainViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.CreateNewFile());
         _messenger.Register<MainViewModel, FileOpenRequestMessage>(this, (r, m) => r.OpenFile(m.File));
-        _messenger.Register<MainViewModel, FilePickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFileAsync());
         _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, (r, m) => r.FocusedPanel?.SaveCurrentFile());
         _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, (r, m) => r.FocusedPanel?.ClosePage(m.Page));
-        _messenger.Register<MainViewModel, FolderPickAndOpenRequestMessage>(this, (r, m) => _ = r.PickAndOpenFolderAsync());
     }
 
     private void RegisterEditMessages()
@@ -90,6 +88,19 @@ public partial class MainViewModel
             return;
 
         _projectService.OpenFolder(folder);
+    }
+
+    /// <summary>
+    /// Picks and opens a folder.
+    /// </summary>
+    public async Task PickAndOpenProjectAsync()
+    {
+        // Select the project to open
+        var project = await _fileService.PickFileAsync(".mipsproj");
+        if (project?.Path is null)
+            return;
+
+        await _projectService.OpenProjectAsync(project.Path);
     }
 
     private FilePageViewModel OpenFile(BindableFile? file, bool reopen = false)

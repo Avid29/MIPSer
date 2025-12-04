@@ -23,36 +23,37 @@ public partial class WindowViewModel : ObservableRecipient
         MainViewModel = mainViewModel;
         MainPanelViewModel = panelViewModel;
 
-        CreateNewFileCommand = new RelayCommand(CreateNewFile);
-        SaveFileCommand = new RelayCommand(SaveFile);
-        PickAndOpenFileCommand = new RelayCommand(PickAndOpenFile);
-        PickAndOpenFolderCommand = new RelayCommand(PickAndOpenFolder);
-        ClosePageCommand = new RelayCommand(ClosePage);
+        CreateNewFileCommand = new(CreateNewFile);
+        SaveFileCommand = new(SaveFile);
+        PickAndOpenFileCommand = new(PickAndOpenFileAsync);
+        PickAndOpenFolderCommand = new(PickAndOpenFolderAsync);
+        PickAndOpenProjectCommand = new(PickAndOpenProjectAsync);
+        ClosePageCommand = new(ClosePage);
 
-        AssembleFileCommand = new RelayCommand(AssembleFile);
+        AssembleFileCommand = new(AssembleFile);
 
-        OpenAboutCommand = new RelayCommand(OpenAbout);
-        OpenCheatSheetCommand = new RelayCommand(OpenCheatSheet);
-        OpenCreateProjectCommand = new RelayCommand(OpenCreateProject);
-        OpenSettingsCommand = new RelayCommand(OpenSettings);
-        OpenWelcomeCommand = new RelayCommand(OpenWelcome);
+        OpenAboutCommand = new(OpenAbout);
+        OpenCheatSheetCommand = new(OpenCheatSheet);
+        OpenCreateProjectCommand = new(OpenCreateProject);
+        OpenSettingsCommand = new(OpenSettings);
+        OpenWelcomeCommand = new(OpenWelcome);
 
-        UndoCommand = new RelayCommand(Undo);
-        RedoCommand = new RelayCommand(Redo);
-        CutCommand = new RelayCommand(Cut);
-        CopyCommand = new RelayCommand(Copy);
-        PasteCommand = new RelayCommand(Paste);
-        DuplicateCommand = new RelayCommand(Duplicate);
-        SelectAllCommand = new RelayCommand(SelectAll);
+        UndoCommand = new(Undo);
+        RedoCommand = new(Redo);
+        CutCommand = new(Cut);
+        CopyCommand = new(Copy);
+        PasteCommand = new(Paste);
+        DuplicateCommand = new(Duplicate);
+        SelectAllCommand = new(SelectAll);
 
-        TransposeUpCommand = new RelayCommand(TransposeUp);
-        TransposeDownCommand = new RelayCommand(TransposeDown);
+        TransposeUpCommand = new(TransposeUp);
+        TransposeDownCommand = new(TransposeDown);
         
-        ToggleOutliningCommand = new RelayCommand(ToggleOutlining);
-        ExpandCurrentCommand = new RelayCommand(ExpandChildren);
-        CollapseCurrentCommand = new RelayCommand(CollapseChildren);
-        ExpandAllCommand = new RelayCommand(ExpandAll);
-        CollapseAllCommand = new RelayCommand(CollapseAll);
+        ToggleOutliningCommand = new(ToggleOutlining);
+        ExpandCurrentCommand = new(ExpandChildren);
+        CollapseCurrentCommand = new(CollapseChildren);
+        ExpandAllCommand = new(ExpandAll);
+        CollapseAllCommand = new(CollapseAll);
 
         IsActive = true;
 

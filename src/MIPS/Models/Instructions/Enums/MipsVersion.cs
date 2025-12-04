@@ -12,22 +12,22 @@ public enum MipsVersion : byte
 {
 #pragma warning disable CS1591
 
-    [XmlEnum(Name = "MIPS I")]
+    [XmlEnum(Name = "mips1")]
     MipsI = 1,
 
-    [XmlEnum(Name = "MIPS II")]
+    [XmlEnum(Name = "mips2")]
     MipsII = 2,
 
-    [XmlEnum(Name = "MIPS III")]
+    [XmlEnum(Name = "mips3")]
     MipsIII = 3,
 
-    [XmlEnum(Name = "MIPS IV")]
+    [XmlEnum(Name = "mips4")]
     MipsIV = 4,
 
-    [XmlEnum(Name = "MIPS V")]
+    [XmlEnum(Name = "mips5")]
     MipsV = 5,
 
-    [XmlEnum(Name = "MIPS VI")]
+    [XmlEnum(Name = "mips6")]
     MipsVI = 6, 
 
 #pragma warning restore CS1591

@@ -7,6 +7,7 @@ using Mipser.Messages.Files;
 using Mipser.Messages.Pages;
 using Mipser.ViewModels.Pages;
 using Mipser.ViewModels.Pages.App;
+using System.Threading.Tasks;
 
 namespace Mipser.ViewModels;
 
@@ -25,12 +26,17 @@ public partial class WindowViewModel
     /// <summary>
     /// Gets a command that picks and opens a file.
     /// </summary>
-    public RelayCommand PickAndOpenFileCommand { get; }
+    public AsyncRelayCommand PickAndOpenFileCommand { get; }
 
     /// <summary>
     /// Gets a command that picks and opens a folder.
     /// </summary>
-    public RelayCommand PickAndOpenFolderCommand { get; }
+    public AsyncRelayCommand PickAndOpenFolderCommand { get; }
+
+    /// <summary>
+    /// Gets a command that picks and opens a project.
+    /// </summary>
+    public AsyncRelayCommand PickAndOpenProjectCommand { get; }
 
     /// <summary>
     /// Gets a command that closes the currently open page.
@@ -71,9 +77,11 @@ public partial class WindowViewModel
 
     private void SaveFile() => _messenger.Send(new FileSaveRequestMessage());
 
-    private void PickAndOpenFile() => _messenger.Send(new FilePickAndOpenRequestMessage());
+    private async Task PickAndOpenFileAsync() => await MainViewModel.PickAndOpenFileAsync();
 
-    private void PickAndOpenFolder() => _messenger.Send(new FolderPickAndOpenRequestMessage());
+    private async Task PickAndOpenFolderAsync() => await MainViewModel.PickAndOpenFolderAsync();
+
+    private async Task PickAndOpenProjectAsync() => await MainViewModel.PickAndOpenProjectAsync();
 
     private void ClosePage() => _messenger.Send(new PageCloseRequestMessage());
 

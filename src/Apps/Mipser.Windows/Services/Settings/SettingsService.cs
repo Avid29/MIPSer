@@ -38,6 +38,7 @@ namespace Mipser.Windows.Services.Settings
             // App
             Local.SetValue(SettingsKeys.AppTheme, Theme.Default, false);
             Local.SetValue<string?>(SettingsKeys.LanguageOverride, null, false);
+            Local.SetValue(SettingsKeys.RestoreOpenProject, true, false);
 
             // Editor
             Local.SetValue(SettingsKeys.RealTimeAssembly, true, false);

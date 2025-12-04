@@ -1,8 +1,10 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Assembler.Models.Config;
+using Mipser.Services.Files.Models;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -28,10 +30,16 @@ public class ProjectConfig
     public string? Name { get; set; }
 
     /// <summary>
-    /// Gets or sets the path where the project is found.
+    /// Gets or sets the path for the config file.
     /// </summary>
     [XmlIgnore]
-    public Uri? Path { get; set; }
+    public string? ConfigPath { get; set; }
+
+    /// <summary>
+    /// Gets the path root folder path.
+    /// </summary>
+    [XmlIgnore]
+    public string? RootFolderPath => Path.GetDirectoryName(ConfigPath);
 
     /// <summary>
     /// Gets or sets the assembler configuration for the project.
@@ -42,7 +50,7 @@ public class ProjectConfig
     /// <summary>
     /// Serializes the <see cref="ProjectConfig"/>
     /// </summary>
-    public void Serialize(Stream stream)
+    public async Task SerializeAsync(Stream stream)
     {
         // Remove namespaces from serializer
         var namespaces = new XmlSerializerNamespaces();
@@ -74,5 +82,19 @@ public class ProjectConfig
 
         // Save the doc
         doc.Save(stream);
+    }
+
+    /// <summary>
+    /// Deserializes a <see cref="ProjectConfig"/>
+    /// </summary>
+    public static async Task<ProjectConfig?> DeserializeAsync(string path, Stream stream)
+    {
+        var serializer = new XmlSerializer(typeof(ProjectConfig));
+        var result = (ProjectConfig?)serializer.Deserialize(stream);
+        if (result is null)
+            return null;
+
+        result.ConfigPath = path;
+        return result;
     }
 }

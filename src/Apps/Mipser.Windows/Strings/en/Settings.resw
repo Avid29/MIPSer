@@ -211,4 +211,10 @@ foo:
   <data name="EditorColorSchemeSE.Description" xml:space="preserve">
     <value>Fully customize the color scheme of the text editor.</value>
   </data>
+  <data name="RestoreOpenProjectSC.Header" xml:space="preserve">
+    <value>Restore Open Project/Folder</value>
+  </data>
+  <data name="RestoreOpenProjectSC.Description" xml:space="preserve">
+    <value>Set whether or not the app should cache and restore the open the project/folder when opened.</value>
+  </data>
 </root>

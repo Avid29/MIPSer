@@ -211,4 +211,10 @@ foo:
   <data name="EditorColorSchemeSE.Description" xml:space="preserve">
     <value>התאם באופן מלא את ערכת הצבעים של עורך הטקסט.</value>
   </data>
+  <data name="RestoreOpenProjectSC.Header" xml:space="preserve">
+    <value>שחזר פרויקט/תיקייה פתוחים</value>
+  </data>
+  <data name="RestoreOpenProjectSC.Description" xml:space="preserve">
+    <value>קבע האם היישום ישמור במטמון וישחזר את הפרויקט/התיקיה הפתוחים בעת ההפעלה.</value>
+  </data>
 </root>

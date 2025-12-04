@@ -43,15 +43,15 @@
                 </MenuFlyoutSubItem>
                 <MenuFlyoutSubItem x:Uid="/TitleBar/OpenMFSI" Text="Open">
                     <MenuFlyoutItem x:Uid="/TitleBar/OpenProjectMFI" Text="Open Project"
-                                    IsEnabled="False">
+                                    Command="{x:Bind ViewModel.PickAndOpenProjectCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
-                            <KeyboardAccelerator Modifiers="Control,Shift" Key="N"/>
+                            <KeyboardAccelerator Modifiers="Control,Shift" Key="O"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                     <MenuFlyoutItem x:Uid="/TitleBar/OpenFolderMFI" Icon="OpenLocal" Text="Open Folder"
                                     Command="{x:Bind ViewModel.PickAndOpenFolderCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
-                            <KeyboardAccelerator Modifiers="Control,Shift" Key="O"/>
+                            <KeyboardAccelerator Modifiers="Control,Menu" Key="O"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
 

@@ -64,6 +64,15 @@ namespace Mipser.ViewModels.Pages.App.Settings
         public IEnumerable<string> AppLanguageOptions => _localizationService.AvailableLanguages.Prepend("system");
 
         /// <summary>
+        /// Gets or sets whether or not the app should restore open projects when opened.
+        /// </summary>
+        public bool RestoreOpenProject
+        {
+            get => _settingsService.Local.GetValue<bool>(SettingsKeys.RestoreOpenProject);
+            set => _settingsService.Local.SetValue(SettingsKeys.RestoreOpenProject, value);
+        }
+
+        /// <summary>
         /// Gets the app's version.
         /// </summary>
         public string AppVersion =>
