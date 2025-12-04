@@ -12,12 +12,12 @@ namespace Mipser.Bindables.Files.Abstract;
 /// <summary>
 /// A <see cref="IFilesItem"/> in the explorer.
 /// </summary>
-public abstract class BindableFilesItemBase : ObservableObject
+public abstract class BindableFileItemBase : ObservableObject
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="BindableFilesItemBase"/> class.
+    /// Initializes a new instance of the <see cref="BindableFileItemBase"/> class.
     /// </summary>
-    protected BindableFilesItemBase(FileService fileService)
+    protected BindableFileItemBase(FileService fileService)
     {
         FileService = fileService;
     }
@@ -45,5 +45,5 @@ public abstract class BindableFilesItemBase : ObservableObject
     /// <summary>
     /// Gets the child items.
     /// </summary>
-    public abstract ObservableCollection<BindableFilesItemBase> Children { get; }
+    public abstract ObservableCollection<BindableFileItemBase> Children { get; }
 }

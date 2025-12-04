@@ -1,8 +1,8 @@
 ﻿// Adam Dernis 2024
 
+using Microsoft.UI.Dispatching;
 using Mipser.Services;
 using System;
-using Windows.System;
 
 namespace Mipser.Windows.Services;
 
@@ -20,14 +20,16 @@ public class DispatcherService : IDispatcherService
     {
     }
 
-    internal void Init()
+    /// <inheritdoc/>
+    public void Init()
     {
-        _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+        // TODO: This won't work with multi-window
+        _dispatcherQueue = App.Current.Window?.DispatcherQueue;
     }
 
     /// <inheritdoc/>
     public void RunOnUIThread(Action action)
     {
-        _dispatcherQueue?.TryEnqueue(DispatcherQueuePriority.Normal, action.Invoke);
+        _dispatcherQueue?.TryEnqueue(action.Invoke);
     }
 }

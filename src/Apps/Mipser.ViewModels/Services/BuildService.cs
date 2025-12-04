@@ -8,6 +8,7 @@ using Mipser.Bindables.Files;
 using Mipser.Messages.Build;
 using Mipser.Models.Enums;
 using Mipser.Services.Files;
+using Mipser.Services.Files.Models;
 using Mipser.Services.Settings;
 using RASM.Modules;
 using RASM.Modules.Config;
@@ -28,7 +29,7 @@ public class BuildService
     private readonly IMessenger _messenger;
     private readonly ISettingsService _settingsService;
     private readonly IProjectService _projectService;
-    private readonly IFileService _fileService;
+    private readonly IFileSystemService _fileSystemService;
 
     private CancellationTokenSource? _resetToken;
     private BuildStatus _buildStatus;
@@ -36,12 +37,12 @@ public class BuildService
     /// <summary>
     /// Initializes a new instance of the <see cref="BuildService"/> class.
     /// </summary>
-    public BuildService(IMessenger messenger, ISettingsService settingsService, IProjectService projectService, IFileService fileService)
+    public BuildService(IMessenger messenger, ISettingsService settingsService, IProjectService projectService, IFileSystemService fileSystemService)
     {
         _messenger = messenger;
         _settingsService = settingsService;
         _projectService = projectService;
-        _fileService = fileService;
+        _fileSystemService = fileSystemService;
 
         _buildStatus = BuildStatus.Ready;
     }
@@ -69,13 +70,13 @@ public class BuildService
                 continue;
 
             // Get save file
-            BindableFile? saveFile = null;
-            var folderPath = Path.GetDirectoryName(file.Path) ?? string.Empty;
-            var folder = await _fileService.GetFolderAsync(folderPath);
-            if (folder is not null)
+            IFile? saveFile = null;
+            var directory = Path.GetDirectoryName(file.Path);
+            if (directory is not null)
             {
-                var saveFilename = Path.GetFileNameWithoutExtension(file.Name) + ".obj";
-                saveFile = await folder.CreateFileAsync(saveFilename);
+                var saveFileName = Path.GetFileNameWithoutExtension(file.Name) + ".obj";
+                var saveFilePath = Path.Combine(directory, saveFileName);
+                saveFile = await _fileSystemService.CreateFileAsync(saveFilePath);
             }
 
             // Override the current language
@@ -115,7 +116,7 @@ public class BuildService
         await WaitAndClearStatus();
     }
 
-    private static async Task<AssemblyResult?> AssembleFileAsync(BindableFile file, RasmConfig? config, BindableFile? saveLocation = null)
+    private static async Task<AssemblyResult?> AssembleFileAsync(BindableFile file, RasmConfig? config, IFile? saveLocation = null)
     {
         config ??= new RasmConfig();
 
@@ -128,7 +129,7 @@ public class BuildService
         Stream? saveStream = null;
         if (saveLocation is not null)
         {
-            saveStream = await saveLocation.GetWriteStreamAsync();
+            saveStream = await saveLocation.OpenStreamForWriteAsync();
         }
 
         // Assemble the file

@@ -49,7 +49,7 @@ public class ExplorerViewModel : PageViewModel
     /// <summary>
     /// Gets the list of root nodes.
     /// </summary>
-    public IEnumerable<BindableFilesItemBase?> RootNode => [RootFolder];
+    public IEnumerable<BindableFileItemBase?> RootNode => [RootFolder];
 
     /// <inheritdoc/>
     protected override void OnActivated()

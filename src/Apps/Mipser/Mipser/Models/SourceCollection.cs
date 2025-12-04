@@ -19,7 +19,10 @@ public class SourceCollection
     public SourceCollection(string rootFolder)
     {
         _files = [];
-        _watcher = new(rootFolder);
+        _watcher = new(rootFolder)
+        {
+            IncludeSubdirectories = true,
+        };
 
         RootPath = rootFolder;
 
@@ -32,6 +35,11 @@ public class SourceCollection
     /// Gets the root path of the source collection.
     /// </summary>
     public string RootPath { get; }
+
+    /// <summary>
+    /// Gets a source file.
+    /// </summary>
+    public SourceFile? this[string path] => _files.GetValueOrDefault(path);
 
     private void InitializeCollection()
     {

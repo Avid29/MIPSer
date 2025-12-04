@@ -3,6 +3,7 @@
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Mipser.Messages;
 using Mipser.Services;
@@ -54,6 +55,9 @@ public partial class App : Application
 
         // Apply theme settings
         LoadRequestedTheme();
+
+        // Initiaize dispatcher on UI thread.
+        Services.GetRequiredService<IDispatcherService>().Init();
     }
 
     private void LoadRequestedTheme()

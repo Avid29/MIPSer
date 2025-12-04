@@ -12,7 +12,7 @@ namespace Mipser.Bindables.Files;
 /// <summary>
 /// A file in the content view or explorer.
 /// </summary>
-public class BindableFile : BindableFilesItemBase
+public class BindableFile : BindableFileItemBase
 {
     private readonly IFile? _file;
     private string? _contents;
@@ -91,14 +91,14 @@ public class BindableFile : BindableFilesItemBase
     /// <remarks>
     /// This usually means 
     /// </remarks>
-    public override ObservableCollection<BindableFilesItemBase> Children { get; }
+    public override ObservableCollection<BindableFileItemBase> Children { get; }
 
     /// <summary>
     /// Saves the file contents.
     /// </summary>
     public async Task SaveAsync() => await SaveContent();
 
-    internal void TrackAsChild(BindableFilesItemBase child)
+    internal void TrackAsChild(BindableFileItemBase child)
     {
         Children.Add(child);
     }

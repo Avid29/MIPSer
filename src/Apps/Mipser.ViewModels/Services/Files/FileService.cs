@@ -1,8 +1,10 @@
 ﻿// Avishai Dernis 2025
 
 using Mipser.Bindables.Files;
+using Mipser.Bindables.Files.Abstract;
 using Mipser.Services.Files.Models;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Mipser.Services.Files;
@@ -30,31 +32,7 @@ public class FileService : IFileService
     }
     
     /// <inheritdoc/>
-    public BindableFile GetAnonymousFile() => new BindableFile(this);
-
-    /// <inheritdoc/>
-    public async Task<BindableFile?> CreateFileAsync(string path)
-    {
-        // Create basic file
-        var file = await _fileSystemService.CreateFileAsync(path);
-        if (file is null)
-            return null;
-
-        // Track and return
-        return GetOrAddTrackedFile(file);
-    }
-    
-    /// <inheritdoc/>
-    public async Task<BindableFolder?> CreateFolderAsync(string path)
-    {
-        // Create basic folder
-        var folder = await _fileSystemService.CreateFolderAsync(path);
-        if (folder is null)
-            return null;
-
-        // Track and return
-        return GetOrAddTrackedFolder(folder);
-    }
+    public BindableFile GetAnonymousFile() => new(this);
 
     /// <inheritdoc/>
     public async Task<BindableFile?> GetFileAsync(string path)
@@ -76,6 +54,16 @@ public class FileService : IFileService
             return null;
 
         return GetOrAddTrackedFolder(folder);
+    }
+
+    /// <inheritdoc/>
+    public async Task<BindableFileItemBase?> GetFileItemAsync(string path)
+    {
+        return (Path.GetFileName(path) is null) switch
+        {
+            true => await GetFolderAsync(path),
+            false => await GetFileAsync(path),
+        };
     }
 
     /// <inheritdoc/>

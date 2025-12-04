@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using Mipser.Bindables.Files;
+using Mipser.Bindables.Files.Abstract;
 using System.Threading.Tasks;
 
 namespace Mipser.Services.Files;
@@ -16,18 +17,6 @@ public interface IFileService
     public BindableFile GetAnonymousFile();
 
     /// <summary>
-    /// Creates a file.
-    /// </summary>
-    /// <param name="path">The name of the file.</param>
-    public Task<BindableFile?> CreateFileAsync(string path);
-
-    /// <summary>
-    /// Creates a folder.
-    /// </summary>
-    /// <param name="path">The name of the folder.</param>
-    public Task<BindableFolder?> CreateFolderAsync(string path);
-
-    /// <summary>
     /// Gets a file from a path.
     /// </summary>
     /// <param name="path">The path of the file.</param>
@@ -38,6 +27,12 @@ public interface IFileService
     /// </summary>
     /// <param name="path">The path of the folder.</param>
     public Task<BindableFolder?> GetFolderAsync(string path);
+
+    /// <summary>
+    /// Gets a file item from a path.
+    /// </summary>
+    /// <param name="path">The path of the file item.</param>
+    public Task<BindableFileItemBase?> GetFileItemAsync(string path);
 
     /// <summary>
     /// Opens a file picker to select an <see cref="BindableFile"/>.

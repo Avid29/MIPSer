@@ -1,7 +1,9 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Mipser.Bindables.Files.Abstract;
+using Mipser.Services;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using System.Collections.ObjectModel;
@@ -14,9 +16,10 @@ namespace Mipser.Bindables.Files;
 /// <summary>
 /// A folder in the explorer.
 /// </summary>
-public class BindableFolder : BindableFilesItemBase
+public class BindableFolder : BindableFileItemBase
 {
     private readonly IFolder _folder;
+    private FileSystemWatcher? _watcher;
     private bool _childrenNotCalculated;
 
     /// <summary>
@@ -33,7 +36,7 @@ public class BindableFolder : BindableFilesItemBase
     /// <summary>
     /// Gets the folder's children.
     /// </summary>
-    public override ObservableCollection<BindableFilesItemBase> Children { get; }
+    public override ObservableCollection<BindableFileItemBase> Children { get; }
 
     /// <summary>
     /// Gets a value indicating whether or not the children have been loaded.
@@ -48,83 +51,6 @@ public class BindableFolder : BindableFilesItemBase
     protected override IFilesItem? Item => _folder;
 
     /// <summary>
-    /// Creates a new file in the folder.
-    /// </summary>
-    /// <param name="name">The name of the file.</param>
-    /// <returns>The file created</returns>
-    public async Task<BindableFile?> CreateFileAsync(string name)
-    {
-        // Can't create a file in a non-existent folder
-        if (Path is null)
-            return null;
-
-        // Create file
-        var path = System.IO.Path.Combine(Path, name);
-        var file = await FileService.CreateFileAsync(path);
-
-        // Failed
-        if (file is null)
-            return null;
-
-        // Track child if children are tracked
-        if (!ChildrenNotLoaded && !Children.Contains(file))
-            TrackChild(file);
-
-        return file;
-    }
-
-    /// <summary>
-    /// Creates a new file in the folder.
-    /// </summary>
-    /// <param name="name">The name of the folder.</param>
-    /// <returns>The file created</returns>
-    public async Task<BindableFolder?> CreateFolderAsync(string name)
-    {
-        // Can't create a folder in a non-existent folder
-        if (Path is null)
-            return null;
-
-        // Create folder
-        var path = System.IO.Path.Combine(Path, name);
-        var folder = await FileService.CreateFolderAsync(path);
-
-        // Failed
-        if (folder is null)
-            return null;
-
-        // Track child if children are tracked
-        if (!ChildrenNotLoaded && !Children.Contains(folder))
-            Children.Add(folder);
-
-        return folder;
-    }
-
-    /// <summary>
-    /// Opens a child folder.
-    /// </summary>
-    /// <param name="name">The name of the folder.</param>
-    public async Task<BindableFolder?> OpenFolderAsync(string name)
-    {
-        // Can't create a folder in a non-existent folder
-        if (Path is null)
-            return null;
-
-        // Open folder
-        var path = System.IO.Path.Combine(Path, name);
-        var folder = await FileService.GetFolderAsync(path);
-
-        // Failed
-        if (folder is null)
-            return null;
-
-        // Track child if children are tracked
-        if (!ChildrenNotLoaded && !Children.Contains(folder))
-            Children.Add(folder);
-
-        return folder;
-    }
-
-    /// <summary>
     /// Loads the node's children.
     /// </summary>
     public async Task LoadChildrenAsync(bool recursive = false)
@@ -136,13 +62,15 @@ public class BindableFolder : BindableFilesItemBase
             {
                 IFile file => FileService.GetOrAddTrackedFile(file),
                 IFolder folder => FileService.GetOrAddTrackedFolder(folder),
-                _ => ThrowHelper.ThrowArgumentOutOfRangeException<BindableFilesItemBase>(),
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<BindableFileItemBase>(),
             };
         });
 
         ChildrenNotLoaded = false;
 
         Children.Clear();
+        SetupWatcher();
+
         foreach (var item in children.OrderBy(x => x.Name.EndsWith(".obj")))
         {
             TrackChild(item);
@@ -153,7 +81,7 @@ public class BindableFolder : BindableFilesItemBase
         }
     }
 
-    internal void TrackChild(BindableFilesItemBase item)
+    internal void TrackChild(BindableFileItemBase item)
     {
         var nameAsAsm = $"{System.IO.Path.GetFileNameWithoutExtension(item.Name)}.asm";
         var parentAsm = Children.OfType<BindableFile>().FirstOrDefault(x => x.Name == nameAsAsm);
@@ -164,5 +92,28 @@ public class BindableFolder : BindableFilesItemBase
         }
 
         Children.Add(item);
+    }
+
+    private void SetupWatcher()
+    {
+        Guard.IsNotNull(Path);
+
+        _watcher = new(Path);
+        _watcher.Created += OnChildFileItemCreated;
+        // TODO: Handle other events
+
+        _watcher.EnableRaisingEvents = true;
+    }
+
+    private async void OnChildFileItemCreated(object sender, FileSystemEventArgs e)
+    {
+        var child = await FileService.GetFileItemAsync(e.FullPath);
+        if (child is null)
+            return;
+
+        Ioc.Default.GetRequiredService<IDispatcherService>().RunOnUIThread(() =>
+        {
+            TrackChild(child);
+        });
     }
 }

@@ -40,9 +40,4 @@ public interface IProjectService
     /// Opens a project by config path.
     /// </summary>
     public Task OpenProjectAsync(string filePath, bool cacheState = true);
-
-    /// <summary>
-    /// Gets the object folder.
-    /// </summary>
-    public Task<BindableFolder?> GetObjectFolderAsync();
 }

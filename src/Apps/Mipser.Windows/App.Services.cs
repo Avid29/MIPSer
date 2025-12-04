@@ -27,6 +27,7 @@ public partial class App
             // Basic Services
             .AddSingleton<IMessenger, WeakReferenceMessenger>()
             .AddSingleton<ILocalizationService, LocalizationService>()
+            .AddSingleton<IDispatcherService, DispatcherService>()
             .AddSingleton<IFileSystemService, FileSystemService>()
             .AddSingleton<ICacheService, CacheService>()
             .AddSingleton<IVersioningService, VersioningService>()

@@ -22,8 +22,6 @@ public class ProjectService : IProjectService
     private readonly ICacheService _cacheService;
     private readonly IFileService _fileService;
 
-    private BindableFolder? _objFolder;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ProjectService"/> class.
     /// </summary>
@@ -48,9 +46,6 @@ public class ProjectService : IProjectService
     /// <inheritdoc/>
     public void OpenFolder(BindableFolder folder, bool cacheState = true)
     {
-        // Clear the cached obj folder
-        _objFolder = null;
-
         // Change the root folder
         ProjectRootFolder = folder;
 
@@ -111,22 +106,6 @@ public class ProjectService : IProjectService
 
         // Open the project
         await OpenProjectAsync(config, cacheState);
-    }
-
-    /// <inheritdoc/>
-    public async Task<BindableFolder?> GetObjectFolderAsync()
-    {
-        if (_objFolder is not null)
-            return _objFolder;
-
-        if (ProjectRootFolder is null)
-            return null;
-
-        var objFolder = await ProjectRootFolder.OpenFolderAsync("obj");
-        objFolder ??= await ProjectRootFolder.CreateFolderAsync("obj");
-
-        _objFolder = objFolder;
-        return objFolder;
     }
 
     private async Task CacheOpenProject(bool folder = false)
