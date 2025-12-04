@@ -79,6 +79,11 @@ public class FilePageViewModel : PageViewModel
     public override bool CanAssemble => true; // TODO: Check file type
 
     /// <summary>
+    /// Gets or sets whether or not the file should be viewed with the generic text editor, regardless of type.
+    /// </summary>
+    public bool ForceTextEditor { get; set; }
+
+    /// <summary>
     /// Gets the bindable file for this page.
     /// </summary>
     public BindableFile? File
@@ -91,7 +96,6 @@ public class FilePageViewModel : PageViewModel
     /// Gets whether or not the file should be assembled in real-time.
     /// </summary>
     public bool AssembleRealTime => _settingsService.Local.GetValue<bool>(SettingsKeys.RealTimeAssembly);
-    
 
     /// <summary>
     /// Gets the threshold for showing logs as annotations.

@@ -5,26 +5,17 @@ using Microsoft.UI.Xaml.Media;
 using Mipser.Services.Settings.Enums;
 using System;
 
-namespace Mipser.Windows.Controls.AssemblyEditBox;
+namespace Mipser.Windows.Controls.CodeEditor;
 
-public partial class AssemblyEditBox
+public partial class AssemblyEditor
 {
-    /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="Text"/> property.
-    /// </summary>
-    public static readonly DependencyProperty TextProperty =
-        DependencyProperty.Register(nameof(Text),
-            typeof(string), 
-            typeof(AssemblyEditBox),
-            new PropertyMetadata(string.Empty, OnTextChanged));
-
     /// <summary>
     /// A <see cref="DependencyProperty"/> for the <see cref="RealTimeAssembly"/> property.
     /// </summary>
     public static readonly DependencyProperty RealTimeAssemblyProperty =
         DependencyProperty.Register(nameof(RealTimeAssembly),
             typeof(bool),
-            typeof(AssemblyEditBox),
+            typeof(AssemblyEditor),
             new PropertyMetadata(true, OnRTAssemblyChanged));
 
     /// <summary>
@@ -33,7 +24,7 @@ public partial class AssemblyEditBox
     public static readonly DependencyProperty AnnotationThresholdProperty =
         DependencyProperty.Register(nameof(AnnotationThreshold),
             typeof(AnnotationThreshold),
-            typeof(AssemblyEditBox),
+            typeof(AssemblyEditor),
             new PropertyMetadata(AnnotationThreshold.Errors, OnLogAnnotationsChanged));
 
     /// <summary>
@@ -43,17 +34,8 @@ public partial class AssemblyEditBox
         DependencyProperty.Register(
             nameof(SyntaxHighlightingTheme),
             typeof(AssemblySyntaxHighlightingTheme),
-            typeof(AssemblyEditBox),
+            typeof(AssemblyEditor),
             new PropertyMetadata(new AssemblySyntaxHighlightingTheme(), OnSyntaxHighlightingThemeChanged));
-
-    /// <summary>
-    /// Gets or sets the text contained in the editbox.
-    /// </summary>
-    public string Text
-    {
-        get => (string)GetValue(TextProperty);
-        set => SetValue(TextProperty, value);
-    }
 
     /// <summary>
     /// Gets or sets a value indicating whether or not to check assembly errors in real-time.
@@ -86,7 +68,7 @@ public partial class AssemblyEditBox
 
     private static void OnSyntaxHighlightingThemeChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)
     {
-        if (d is not AssemblyEditBox asmBox)
+        if (d is not AssemblyEditor asmBox)
             return;
 
         // Local handler to update colors
@@ -112,17 +94,9 @@ public partial class AssemblyEditBox
         UpdateSyntaxHighlighting();
     }
 
-    private static void OnTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)
-    {
-        if (d is not AssemblyEditBox asmBox)
-            return;
-
-        asmBox.UpdateText();
-    }
-
     private static void OnRTAssemblyChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)
     {
-        if (d is not AssemblyEditBox asmBox)
+        if (d is not AssemblyEditor asmBox)
             return;
 
         asmBox.ClearLogHighlights();
@@ -131,28 +105,10 @@ public partial class AssemblyEditBox
     
     private static void OnLogAnnotationsChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
     {
-        if (d is not AssemblyEditBox asmBox)
+        if (d is not AssemblyEditor asmBox)
             return;
 
         asmBox.ClearLogHighlights();
         _ = asmBox.RunAssemblerAsync();
-    }
-
-    private void UpdateText()
-    {
-        // Retrieve the editor
-        var editor = _codeEditor?.Editor;
-        if (editor is null)
-            return;
-
-        // Get current text, and check if it matches
-        var text = editor.GetText(editor.Length);
-        if (Text == text)
-            return;
-
-        // The text was not already update to date. Update it
-        editor.SetText(Text);
-        editor.ConvertEOLs(WinUIEditor.EndOfLine.CrLf);
-        TextChanged?.Invoke(this, EventArgs.Empty);
     }
 }

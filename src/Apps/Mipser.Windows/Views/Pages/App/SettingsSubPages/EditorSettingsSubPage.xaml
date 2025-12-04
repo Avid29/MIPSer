@@ -10,11 +10,11 @@
     xmlns:helpers="using:Mipser.Windows.Helpers"
     xmlns:senums="using:Mipser.Services.Settings.Enums"
     xmlns:clrschm="using:Mipser.Models.EditorConfig.ColorScheme"
-    xmlns:asmedit="using:Mipser.Windows.Controls.AssemblyEditBox"
+    xmlns:editor="using:Mipser.Windows.Controls.CodeEditor"
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <asmedit:AssemblySyntaxHighlightingTheme x:Name="SyntaxHighlighting"/>
+        <editor:AssemblySyntaxHighlightingTheme x:Name="SyntaxHighlighting"/>
     </UserControl.Resources>
 
     <StackPanel>
@@ -22,13 +22,13 @@
             <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
         </StackPanel.ChildrenTransitions>
 
-        <asmedit:AssemblyEditBox Text="{x:Bind DemoText}"
-                                 RealTimeAssembly="{x:Bind ViewModel.RealTimeAssembly, Mode=OneWay}"
-                                 AnnotationThreshold="{x:Bind ViewModel.AnnotationThreshold, Mode=OneWay}"
-                                 SyntaxHighlightingTheme="{StaticResource SyntaxHighlighting}"
-                                 FlowDirection="LeftToRight"
-                                 CornerRadius="4"
-                                 Height="250"/>
+        <editor:AssemblyEditor Text="{x:Bind DemoText}"
+                              RealTimeAssembly="{x:Bind ViewModel.RealTimeAssembly, Mode=OneWay}"
+                              AnnotationThreshold="{x:Bind ViewModel.AnnotationThreshold, Mode=OneWay}"
+                              SyntaxHighlightingTheme="{StaticResource SyntaxHighlighting}"
+                              FlowDirection="LeftToRight"
+                              CornerRadius="4"
+                              Height="250"/>
 
         <ctc:SettingsCard x:Uid="/Settings/RealTimeAssemblySC"
                               Header="Real-Time Assembly"

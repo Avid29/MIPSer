@@ -8,11 +8,9 @@ using Mipser.Models.EditorConfig.ColorScheme;
 using Mipser.Services.Settings;
 using Mipser.Windows.Extensions;
 using System;
-using System.Data;
-using Windows.Globalization;
 using Windows.UI;
 
-namespace Mipser.Windows.Controls.AssemblyEditBox;
+namespace Mipser.Windows.Controls.CodeEditor;
 
 /// <summary>
 /// A collection of colors to use for syntax highlighting.

@@ -4,9 +4,9 @@ using Mipser.Messages.Editor.Enums;
 using System;
 using WinUIEditor;
 
-namespace Mipser.Windows.Controls.AssemblyEditBox;
+namespace Mipser.Windows.Controls.CodeEditor;
 
-public partial class AssemblyEditBox
+public partial class CodeEditor
 {
     private void SetupKeybinds()
     {
@@ -63,11 +63,10 @@ public partial class AssemblyEditBox
     /// <summary>
     /// Applies an editor operation.
     /// </summary>
-    /// <param name="operation"></param>
     public void ApplyOperation(EditorOperation operation)
     {
         // Get the editor
-        var editor = _codeEditor?.Editor;
+        var editor = ChildEditor?.Editor;
         if (editor is null)
             return;
 

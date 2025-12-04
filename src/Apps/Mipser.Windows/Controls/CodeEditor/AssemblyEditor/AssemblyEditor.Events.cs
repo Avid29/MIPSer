@@ -1,32 +1,25 @@
 ﻿// Avishai Dernis 2025
 
-using CommunityToolkit.Diagnostics;
 using Microsoft.UI.Xaml;
-using System;
 using WinUIEditor;
 
-namespace Mipser.Windows.Controls.AssemblyEditBox;
+namespace Mipser.Windows.Controls.CodeEditor;
 
-public partial class AssemblyEditBox
+public partial class AssemblyEditor
 {
-    /// <summary>
-    /// An event invoked when the <see cref="Text"/> property changes
-    /// </summary>
-    public event EventHandler? TextChanged;
-
     private void AssemblyEditBox_Loaded(object sender, RoutedEventArgs e)
     {
         // While loaded, detach the loaded event and attach unloaded event
         this.Loaded -= AssemblyEditBox_Loaded;
         this.Unloaded += AssemblyEditBox_Unloaded;
 
-        Guard.IsNotNull(_codeEditor);
+        if (!TryGetEditor(out var editor))
+            return;
 
-        _codeEditor.Editor.Modified += Editor_Modified;
-        _codeEditor.Editor.StyleNeeded += Editor_StyleNeeded;
-        _codeEditor.SyntaxHighlightingApplied += CodeEditor_SyntaxHighlightingApplied;
-
-        _codeEditor.HighlightingLanguage = "asm";
+        editor.Modified += Editor_Modified;
+        editor.StyleNeeded += Editor_StyleNeeded;
+        ChildEditor.SyntaxHighlightingApplied += CodeEditor_SyntaxHighlightingApplied;
+        ChildEditor.HighlightingLanguage = "asm";
     }
 
     private void Editor_Modified(Editor sender, ModifiedEventArgs args)

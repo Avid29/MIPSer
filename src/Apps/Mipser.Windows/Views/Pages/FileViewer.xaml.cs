@@ -10,11 +10,9 @@ using MIPS.Assembler.Tokenization.Models;
 using Mipser.Messages;
 using Mipser.Messages.Editor.Enums;
 using Mipser.Models.EditorConfig.ColorScheme;
-using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages;
-using Mipser.Windows.Controls.AssemblyEditBox;
-using Mipser.Windows.Views.Pages.App.SettingsSubPages;
+using Mipser.Windows.Controls.CodeEditor;
 using System.Collections.Generic;
 
 namespace Mipser.Windows.Views.Pages;
@@ -72,32 +70,32 @@ public sealed partial class FileViewer : UserControl
     private void ViewModel_AssembledEvent(object? sender, IReadOnlyList<AssemblerLog> e)
     {
         // Find editbox
-        var editBox = this.FindDescendant<AssemblyEditBox>();
-        if (editBox is null)
+        var asmEditor = this.FindDescendant<AssemblyEditor>();
+        if (asmEditor is null)
             return;
 
-        editBox.ApplyLogHighlights(e);
+        asmEditor.ApplyLogHighlights(e);
     }
 
     private void ViewModel_NavigateToTokenEvent(object? sender, SourceLocation e)
     {
         // Find editbox
-        var editBox = this.FindDescendant<AssemblyEditBox>();
-        if (editBox is null)
+        var asmEditor = this.FindDescendant<AssemblyEditor>();
+        if (asmEditor is null)
             return;
 
         // Navigate to location
-        editBox.NavigateToToken(e);
+        asmEditor.NavigateToToken(e);
     }
 
     private void ViewModel_EditorOperationRequested(object? sender, EditorOperation e)
     {
         // Find editbox
-        var editBox = this.FindDescendant<AssemblyEditBox>();
-        if (editBox is null)
+        var codeEditor = this.FindDescendant<CodeEditor>();
+        if (codeEditor is null)
             return;
 
-        editBox.ApplyOperation(e);
+        codeEditor.ApplyOperation(e);
     }
 
     private void UpdateBindings()

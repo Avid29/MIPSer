@@ -10,9 +10,14 @@ namespace Mipser.Windows.Selectors;
 public partial class EditorTemplateSelector : DataTemplateSelector
 {
     /// <summary>
-    /// Gets the <see cref="DataTemplate"/> for a text editor.
+    /// Gets the <see cref="DataTemplate"/> for an assembly editor.
     /// </summary>
     public DataTemplate? TextEditorTemplate { get; set; }
+
+    /// <summary>
+    /// Gets the <see cref="DataTemplate"/> for an assembly editor.
+    /// </summary>
+    public DataTemplate? AssemblyEditorTemplate { get; set; }
 
     /// <summary>
     /// Gets the <see cref="DataTemplate"/> for a hex editor.
@@ -24,6 +29,10 @@ public partial class EditorTemplateSelector : DataTemplateSelector
     {
         if (item is not FilePageViewModel filePage)
             return null;
+
+        // Use text editor if forced
+        if (filePage.ForceTextEditor)
+            return TextEditorTemplate;
 
         // Attempt to retrieve a path
         var path = filePage.File?.Path;
@@ -37,6 +46,7 @@ public partial class EditorTemplateSelector : DataTemplateSelector
         return type switch
         {
             ".obj" => HexEditorTemplate,
+            ".asm" => AssemblyEditorTemplate,
             _ => TextEditorTemplate,
         };
     }

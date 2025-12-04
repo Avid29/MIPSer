@@ -10,9 +10,9 @@ using System.Collections.Generic;
 using System.IO;
 using WinUIEditor;
 
-namespace Mipser.Windows.Controls.AssemblyEditBox;
+namespace Mipser.Windows.Controls.CodeEditor;
 
-public partial class AssemblyEditBox
+public partial class AssemblyEditor
 {
     private const int InstructionStyleIndex = 1;
     private const int RegisterStyleIndex = 2;
@@ -80,11 +80,11 @@ public partial class AssemblyEditBox
 
     private void UpdateSyntaxHighlighting()
     {
-        if (@lock || _codeEditor is null)
+        if (@lock || ChildEditor is null)
             return;
 
         @lock = true;
-        var editor = _codeEditor.Editor;
+        var editor = ChildEditor.Editor;
 
         // Clear the style
         editor.StartStyling(0, 0);

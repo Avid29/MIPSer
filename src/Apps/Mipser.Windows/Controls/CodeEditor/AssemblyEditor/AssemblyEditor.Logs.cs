@@ -12,9 +12,9 @@ using System.Text;
 using System.Threading.Tasks;
 using WinUIEditor;
 
-namespace Mipser.Windows.Controls.AssemblyEditBox;
+namespace Mipser.Windows.Controls.CodeEditor;
 
-public partial class AssemblyEditBox
+public partial class AssemblyEditor
 {
     private const int ErrorIndicatorIndex = 8;
     private const int WarningIndicatorIndex = 9;
@@ -86,7 +86,7 @@ public partial class AssemblyEditBox
     /// </summary>
     public void ClearLogHighlights()
     {
-        var editor = _codeEditor?.Editor;
+        var editor = ChildEditor?.Editor;
         if (editor is null)
             return;
 
