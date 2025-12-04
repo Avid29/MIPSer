@@ -15,7 +15,14 @@ public class AssemblerConfig
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblerConfig"/> class.
     /// </summary>
-    public AssemblerConfig(MipsVersion version = MipsVersion.MipsII)
+    public AssemblerConfig() : this(MipsVersion.MipsIII)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AssemblerConfig"/> class.
+    /// </summary>
+    public AssemblerConfig(MipsVersion version)
     {
         MipsVersion = version;
     }
@@ -29,32 +36,31 @@ public class AssemblerConfig
     /// <summary>
     /// Gets whether the <see cref="PseudoInstructionSet"/> is a blacklist or whitelist.
     /// </summary>
-    [XmlElement(IsNullable = true)]
+    [XmlElement]
     public PseudoInstructionPermissibility? PseudoInstructionPermissibility { get; set; }
 
     /// <summary>
     /// Gets the set of pseudo instructions to use as either a black or white list.
     /// </summary>
-
-    [XmlElement(IsNullable = true)]
+    [XmlElement]
     public HashSet<string>? PseudoInstructionSet { get; set; } = [];
 
     /// <summary>
     /// Gets the threshold alignment size where the assembler will give a message.
     /// </summary>
-    [XmlElement(IsNullable = true)]
+    [XmlElement]
     public int? AlignMessageThreshold { get; set; }
 
     /// <summary>
     /// Gets the threshold alignment size where the assembler will give a warning.
     /// </summary>
-    [XmlElement(IsNullable = true)]
+    [XmlElement]
     public int? AlignWarningThreshold { get; set; }
 
     /// <summary>
     /// Gets the threshold alignment size where the assembler will give a warning.
     /// </summary>
-    [XmlElement(IsNullable = true)]
+    [XmlElement]
     public int? SpaceMessageThreshold { get; set; }
 
     /// <summary>

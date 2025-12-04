@@ -2,6 +2,8 @@
 
 using MIPS.Assembler.Models.Config;
 using System;
+using System.IO;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Mipser.Models.ProjectConfig;
@@ -13,10 +15,17 @@ namespace Mipser.Models.ProjectConfig;
 public class ProjectConfig
 {
     /// <summary>
+    /// Initializes a new instance of the <see cref="ProjectConfig"/> class.
+    /// </summary>
+    public ProjectConfig()
+    {
+    }
+
+    /// <summary>
     /// Gets or sets the project name.
     /// </summary>
-    [XmlElement]
-    public required string Name { get; set; }
+    [XmlElement("ProjectName", IsNullable = false)]
+    public string? Name { get; set; }
 
     /// <summary>
     /// Gets or sets the path where the project is found.
@@ -27,6 +36,43 @@ public class ProjectConfig
     /// <summary>
     /// Gets or sets the assembler configuration for the project.
     /// </summary>
-    [XmlElement]
-    public required AssemblerConfig AssemblerConfig { get; set; }
+    [XmlElement(IsNullable = false)]
+    public AssemblerConfig? AssemblerConfig { get; set; }
+
+    /// <summary>
+    /// Serializes the <see cref="ProjectConfig"/>
+    /// </summary>
+    public void Serialize(Stream stream)
+    {
+        // Remove namespaces from serializer
+        var namespaces = new XmlSerializerNamespaces();
+        namespaces.Add(string.Empty, string.Empty);
+
+        // TODO: This can probably be optimized
+
+        // Serialize to temp stream
+        using var tempStream = new MemoryStream();
+        var serializer = new XmlSerializer(typeof(ProjectConfig));
+        serializer.Serialize(tempStream, this, namespaces);
+
+        // Load the doc to modify
+        var doc = new XmlDocument();
+        tempStream.Position = 0;
+        doc.Load(tempStream);
+
+        // Remove null fields from their parent
+        var mgr = new XmlNamespaceManager(doc.NameTable);
+        mgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        var nullFields = doc.SelectNodes("//*[@xsi:nil='true']", mgr);
+        if (nullFields is not null)
+        {
+            foreach(XmlNode field in nullFields)
+            {
+                field.ParentNode?.RemoveChild(field);
+            }
+        }
+
+        // Save the doc
+        doc.Save(stream);
+    }
 }

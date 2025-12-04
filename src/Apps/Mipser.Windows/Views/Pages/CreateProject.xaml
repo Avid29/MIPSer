@@ -55,8 +55,12 @@
         <StackPanel Spacing="4" Grid.Row="2" HorizontalAlignment="Right"
                     Orientation="Horizontal"
                     Margin="64,16">
-            <Button x:Uid="CreateBTN" Content="Create" Style="{StaticResource AccentButtonStyle}"/>
-            <Button x:Uid="CancelBTN" Content="Cancel"/>
+            <Button x:Uid="CreateBTN" Content="Create"
+                    Command="{x:Bind ViewModel.CreateProjectCommand, Mode=OneWay}"
+                    IsEnabled="{x:Bind ViewModel.ReadyToCreate, Mode=OneWay}"
+                    Style="{StaticResource AccentButtonStyle}"/>
+            <Button x:Uid="CancelBTN" Content="Cancel"
+                    Command="{x:Bind ViewModel.CancelCommand, Mode=OneWay}"/>
         </StackPanel>
     </Grid>
 </UserControl>

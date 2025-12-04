@@ -1,14 +1,18 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using MIPS.Assembler.Models.Config;
 using MIPS.Models.Instructions.Enums;
+using Mipser.Messages.Pages;
+using Mipser.Models.ProjectConfig;
 using Mipser.Services.Files;
 using Mipser.Services.Localization;
-using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages.Abstract;
 using System;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Mipser.ViewModels.Pages;
@@ -18,6 +22,7 @@ namespace Mipser.ViewModels.Pages;
 /// </summary>
 public class CreateProjectViewModel : PageViewModel
 {
+    private readonly IMessenger _messenger;
     private readonly ILocalizationService _localizationService;
     private readonly IFileSystemService _fileSystemService;
 
@@ -28,12 +33,15 @@ public class CreateProjectViewModel : PageViewModel
     /// <summary>
     /// Initializes a new instance of the <see cref="CheatSheetViewModel"/> class.
     /// </summary>
-    public CreateProjectViewModel(ILocalizationService localizationService, IFileSystemService fileSystemService)
+    public CreateProjectViewModel(IMessenger messenger, ILocalizationService localizationService, IFileSystemService fileSystemService)
     {
+        _messenger = messenger;
         _localizationService = localizationService;
         _fileSystemService = fileSystemService;
 
         SelectFolderCommand = new(SelectFolderAsync);
+        CreateProjectCommand = new(CreateProjectAsync);
+        CancelCommand = new(Cancel);
     }
 
     /// <inheritdoc/>
@@ -45,7 +53,13 @@ public class CreateProjectViewModel : PageViewModel
     public string? ProjectName
     {
         get => _projectName;
-        set => SetProperty(ref  _projectName, value);
+        set
+        {
+            if(SetProperty(ref _projectName, value))
+            {
+                OnPropertyChanged(nameof(ReadyToCreate));
+            }
+        }
     }
 
     /// <summary>
@@ -54,7 +68,13 @@ public class CreateProjectViewModel : PageViewModel
     public string? FolderPath
     {
         get => _folderPath;
-        set => SetProperty(ref  _folderPath, value);
+        set
+        {
+            if (SetProperty(ref _folderPath, value))
+            {
+                OnPropertyChanged(nameof(ReadyToCreate));
+            }
+        }
     }
 
     /// <summary>
@@ -72,9 +92,64 @@ public class CreateProjectViewModel : PageViewModel
     public IEnumerable<MipsVersion> MipsVersionOptions => Enum.GetValues<MipsVersion>();
 
     /// <summary>
+    /// Gets whether or not the project can be created.
+    /// </summary>
+    [MemberNotNullWhen(true, nameof(ProjectName), nameof(FolderPath))]
+    public bool ReadyToCreate => ProjectName is not null && FolderPath is not null;
+
+    /// <summary>
     /// Gets a command that selects a folder for the folder path.
     /// </summary>
     public AsyncRelayCommand SelectFolderCommand { get; }
+
+    /// <summary>
+    /// Gets a command that creates the project
+    /// </summary>
+    public AsyncRelayCommand CreateProjectCommand { get; }
+
+    /// <summary>
+    /// Gets a command that cancels creating a new project
+    /// </summary>
+    public RelayCommand CancelCommand { get; }
+
+    private async Task CreateProjectAsync()
+    {
+        // TODO: Notify errors
+
+        if (!ReadyToCreate)
+            return;
+
+        // Attempt to create the project root folder
+        var rootFolderPath = Path.Combine(FolderPath, ProjectName);
+        var rootFolder = await _fileSystemService.CreateFolderAsync(rootFolderPath);
+        if (rootFolder is null)
+            return;
+
+        // Attempt to create project file
+        var projectFilePath = Path.Combine(rootFolderPath, $"{ProjectName}.mipsproj");
+        var projectFile = await _fileSystemService.CreateFileAsync(projectFilePath);
+        if (projectFile is null)
+            return;
+
+        // Attempt to open the project file for writing
+        var stream = await projectFile.OpenStreamForWriteAsync();
+        if (stream is null)
+            return;
+
+        // Create the file config
+        var projectConfig = new ProjectConfig
+        {
+            Name = ProjectName,
+            Path = new Uri(rootFolderPath),
+            AssemblerConfig = new AssemblerConfig(MipsVersion)
+        };
+
+        // Write project config to the file 
+        projectConfig.Serialize(stream);
+
+        // TODO: Open the project and close the page
+        // TODO: Open the project in a new window
+    }
 
     private async Task SelectFolderAsync()
     {
@@ -84,4 +159,6 @@ public class CreateProjectViewModel : PageViewModel
 
         FolderPath = folder.Path;
     }
+
+    private void Cancel() => _messenger.Send(new PageCloseRequestMessage(this));
 }
