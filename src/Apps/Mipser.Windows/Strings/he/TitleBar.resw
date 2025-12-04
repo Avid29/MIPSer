@@ -132,8 +132,20 @@
   <data name="BuildMBI.Title" xml:space="preserve">
     <value>בנייה</value>
   </data>
+  <data name="BuildProjectMFI.Text" xml:space="preserve">
+    <value>בנה פרויקט</value>
+  </data>
   <data name="CheatSheetMFI.Text" xml:space="preserve">
     <value>הצג גיליון רמאות</value>
+  </data>
+  <data name="CleanFileMFI.Text" xml:space="preserve">
+    <value>נקה קובץ</value>
+  </data>
+  <data name="CleanOpenFilesMFI.Text" xml:space="preserve">
+    <value>נקה קבצים פתוחים</value>
+  </data>
+  <data name="CleanProjectMFI.Text" xml:space="preserve">
+    <value>נקה פרויקט</value>
   </data>
   <data name="CloseFileMFI.Text" xml:space="preserve">
     <value>סגור קובץ</value>

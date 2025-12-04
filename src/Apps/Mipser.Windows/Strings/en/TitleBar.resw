@@ -132,8 +132,20 @@
   <data name="BuildMBI.Title" xml:space="preserve">
     <value>Build</value>
   </data>
+  <data name="BuildProjectMFI.Text" xml:space="preserve">
+    <value>Build Project</value>
+  </data>
   <data name="CheatSheetMFI.Text" xml:space="preserve">
     <value>Show Cheat Sheet</value>
+  </data>
+  <data name="CleanFileMFI.Text" xml:space="preserve">
+    <value>Clean File</value>
+  </data>
+  <data name="CleanOpenFilesMFI.Text" xml:space="preserve">
+    <value>Clean Open Files</value>
+  </data>
+  <data name="CleanProjectMFI.Text" xml:space="preserve">
+    <value>Clean Project</value>
   </data>
   <data name="CloseFileMFI.Text" xml:space="preserve">
     <value>Close File</value>
