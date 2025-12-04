@@ -1,8 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Assembler.Models.Config;
-using Mipser.Services.Files.Models;
-using System;
+using RASM.Modules.Config;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
@@ -45,7 +43,7 @@ public class ProjectConfig
     /// Gets or sets the assembler configuration for the project.
     /// </summary>
     [XmlElement(IsNullable = false)]
-    public AssemblerConfig? AssemblerConfig { get; set; }
+    public RasmConfig? AssemblerConfig { get; set; } // TODO: Abstract typing
 
     /// <summary>
     /// Serializes the <see cref="ProjectConfig"/>

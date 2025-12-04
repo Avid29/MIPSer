@@ -2,7 +2,6 @@
 
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using MIPS.Assembler.Models.Config;
 using MIPS.Models.Instructions.Enums;
 using Mipser.Messages.Pages;
 using Mipser.Models.ProjectConfig;
@@ -10,6 +9,7 @@ using Mipser.Services.Files;
 using Mipser.Services.Localization;
 using Mipser.Services.Project;
 using Mipser.ViewModels.Pages.Abstract;
+using RASM.Modules.Config;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -144,7 +144,7 @@ public class CreateProjectViewModel : PageViewModel
         {
             Name = ProjectName,
             ConfigPath = projectFilePath,
-            AssemblerConfig = new AssemblerConfig(MipsVersion)
+            AssemblerConfig = new RasmConfig(MipsVersion)
         };
 
         // Write project config to the file 

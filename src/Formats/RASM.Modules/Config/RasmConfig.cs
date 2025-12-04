@@ -2,6 +2,7 @@
 
 using MIPS.Assembler.Models.Config;
 using MIPS.Models.Instructions.Enums;
+using System.Xml.Serialization;
 
 namespace RASM.Modules.Config;
 
@@ -16,17 +17,26 @@ public class RasmConfig : AssemblerBuildConfig<RasmConfig, RasmModule>
     /// <summary>
     /// Initializes a new instance of the <see cref="RasmConfig"/> class.
     /// </summary>
-    public RasmConfig(MipsVersion version = MipsVersion.MipsII) : base(version)
+    public RasmConfig() : this(MipsVersion.MipsIII)
+    {
+    }
+    
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RasmConfig"/> class.
+    /// </summary>
+    public RasmConfig(MipsVersion version) : base(version)
     {
     }
 
     /// <summary>
     /// Gets or sets the header magic value.
     /// </summary>
+    [XmlIgnore]
     public ushort MagicNumber { get; set; } = MAGIC;
 
     /// <summary>
     /// Gets or sets the header version value.
     /// </summary>
+    [XmlElement]
     public ushort VersionNumber { get; set; } = VERSION;
 }
