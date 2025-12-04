@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using Mipser.Bindables.Files;
+using Mipser.Services.Files.Models;
 
 namespace Mipser.Messages.Build;
 
@@ -12,7 +12,7 @@ public class AssembleFilesRequestMessage
     /// <summary>
     /// Initializes a new instance of the <see cref="AssembleFilesRequestMessage"/> class.
     /// </summary>
-    public AssembleFilesRequestMessage(BindableFile[] files)
+    public AssembleFilesRequestMessage(IFile[] files)
     {
         Files = files;
     }
@@ -20,5 +20,5 @@ public class AssembleFilesRequestMessage
     /// <summary>
     /// Gets the files requested to assemble.
     /// </summary>
-    public BindableFile[] Files { get; }
+    public IFile[] Files { get; }
 }

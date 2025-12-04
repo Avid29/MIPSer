@@ -51,7 +51,7 @@ public class BuildService
     /// Assembles a file.
     /// </summary>
     /// <param name="files">The file to assemble.</param>
-    public async Task AssembleFilesAsync(BindableFile[] files)
+    public async Task AssembleFilesAsync(IFile[] files)
     {
         // Run pre-build checks
         if (!PreBuildChecks())
@@ -116,12 +116,12 @@ public class BuildService
         await WaitAndClearStatus();
     }
 
-    private static async Task<AssemblyResult?> AssembleFileAsync(BindableFile file, RasmConfig? config, IFile? saveLocation = null)
+    private static async Task<AssemblyResult?> AssembleFileAsync(IFile file, RasmConfig? config, IFile? saveLocation = null)
     {
         config ??= new RasmConfig();
 
         // Get the file contents as a stream
-        var stream = await file.GetReadStreamAsync();
+        var stream = await file.OpenStreamForReadAsync();
         if (stream is null)
             return null;
 

@@ -7,12 +7,12 @@ namespace Mipser.Services.Files.Models;
 /// <summary>
 /// An interface for a folder.
 /// </summary>
-public interface IFolder : IFilesItem
+public interface IFolder : IFileItem
 {
     /// <summary>
     /// Gets the files and subfolders in this folder.
     /// </summary>
-    Task<IFilesItem[]> GetItemsAsync();
+    Task<IFileItem[]> GetItemsAsync();
 
     /// <summary>
     /// Gets the subfolders in this folder.

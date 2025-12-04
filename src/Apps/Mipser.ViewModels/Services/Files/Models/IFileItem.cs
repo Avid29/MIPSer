@@ -5,7 +5,7 @@ namespace Mipser.Services.Files.Models;
 /// <summary>
 /// An interface for a files item.
 /// </summary>
-public interface IFilesItem
+public interface IFileItem
 {
     /// <summary>
     /// Gets the name of the files item.

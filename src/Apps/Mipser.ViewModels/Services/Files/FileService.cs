@@ -57,7 +57,7 @@ public class FileService : IFileService
     }
 
     /// <inheritdoc/>
-    public async Task<BindableFileItemBase?> GetFileItemAsync(string path)
+    public async Task<BindableFileItem?> GetFileItemAsync(string path)
     {
         return (Path.GetFileName(path) is null) switch
         {

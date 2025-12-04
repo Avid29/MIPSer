@@ -10,14 +10,14 @@ using System.Collections.ObjectModel;
 namespace Mipser.Bindables.Files.Abstract;
 
 /// <summary>
-/// A <see cref="IFilesItem"/> in the explorer.
+/// A <see cref="IFileItem"/> in the explorer.
 /// </summary>
-public abstract class BindableFileItemBase : ObservableObject
+public abstract class BindableFileItem : ObservableObject
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="BindableFileItemBase"/> class.
+    /// Initializes a new instance of the <see cref="BindableFileItem"/> class.
     /// </summary>
-    protected BindableFileItemBase(FileService fileService)
+    protected BindableFileItem(FileService fileService)
     {
         FileService = fileService;
     }
@@ -28,22 +28,17 @@ public abstract class BindableFileItemBase : ObservableObject
     protected FileService FileService { get; }
 
     /// <summary>
-    /// The wrapped <see cref="IFilesItem"/>.
-    /// </summary>
-    protected abstract IFilesItem? Item { get; }
-
-    /// <summary>
     /// Gets the name of the file.
     /// </summary>
-    public string Name => Item?.Name ?? Ioc.Default.GetRequiredService<ILocalizationService>()["NewFile"];
+    public abstract string Name { get; }
 
     /// <summary>
     /// Gets the file's path.
     /// </summary>
-    public string? Path => Item?.Path;
+    public abstract string? Path { get; }
 
     /// <summary>
     /// Gets the child items.
     /// </summary>
-    public abstract ObservableCollection<BindableFileItemBase> Children { get; }
+    public abstract ObservableCollection<BindableFileItem> Children { get; }
 }

@@ -8,7 +8,7 @@ namespace Mipser.Services.Files.Models;
 /// <summary>
 /// An interface for a file.
 /// </summary>
-public interface IFile : IFilesItem
+public interface IFile : IFileItem
 {
     /// <summary>
     /// Opens a <see cref="Stream"/> for reading from the file.

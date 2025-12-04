@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using Mipser.Bindables.Files;
+using Mipser.Services.Files.Models;
 
 namespace Mipser.Messages.Files;
 
@@ -12,7 +12,7 @@ public class FolderOpenedMessage
     /// <summary>
     /// Initializes a new instance of the <see cref="FolderOpenedMessage"/> class.
     /// </summary>
-    public FolderOpenedMessage(BindableFolder folder)
+    public FolderOpenedMessage(IFolder folder)
     {
         Folder = folder;
     }
@@ -20,5 +20,5 @@ public class FolderOpenedMessage
     /// <summary>
     /// Gets the opened folder.
     /// </summary>
-    public BindableFolder Folder { get; }
+    public IFolder Folder { get; }
 }

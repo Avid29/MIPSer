@@ -5,6 +5,7 @@ using Mipser.Bindables.Files;
 using Mipser.Messages.Files;
 using Mipser.Models.ProjectConfig;
 using Mipser.Services.Files;
+using Mipser.Services.Files.Models;
 using Mipser.Services.Settings;
 using System.Threading.Tasks;
 
@@ -20,16 +21,16 @@ public class ProjectService : IProjectService
 
     private readonly IMessenger _messenger;
     private readonly ICacheService _cacheService;
-    private readonly IFileService _fileService;
+    private readonly IFileSystemService _fileSystemService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ProjectService"/> class.
     /// </summary>
-    public ProjectService(IMessenger messenger, ISettingsService settingsService, ICacheService cacheService, IFileService fileService)
+    public ProjectService(IMessenger messenger, ISettingsService settingsService, ICacheService cacheService, IFileSystemService fileSystemService)
     {
         _messenger = messenger;
         _cacheService = cacheService;
-        _fileService = fileService;
+        _fileSystemService = fileSystemService;
 
         if (settingsService.Local.GetValue<bool>(SettingsKeys.RestoreOpenProject))
         {
@@ -41,10 +42,10 @@ public class ProjectService : IProjectService
     public Project? Project { get; private set; }
 
     /// <inheritdoc/>
-    public BindableFolder? ProjectRootFolder { get; private set; }
+    public IFolder? ProjectRootFolder { get; private set; }
 
     /// <inheritdoc/>
-    public void OpenFolder(BindableFolder folder, bool cacheState = true)
+    public void OpenFolder(IFolder folder, bool cacheState = true)
     {
         // Change the root folder
         ProjectRootFolder = folder;
@@ -63,7 +64,7 @@ public class ProjectService : IProjectService
     public async Task OpenFolderAsync(string path, bool cacheState = true)
     {
         // Load the folder
-        var folder = await _fileService.GetFolderAsync(path);
+        var folder = await _fileSystemService.GetFolderAsync(path);
         if (folder is null)
             return;
 
@@ -90,12 +91,12 @@ public class ProjectService : IProjectService
     public async Task OpenProjectAsync(string path, bool cacheState = true)
     {
         // Attempt to load the file
-        var file = await _fileService.GetFileAsync(path);
+        var file = await _fileSystemService.GetFileAsync(path);
         if (file is null)
             return;
 
         // Attempt to open the file as a stream
-        var stream = await file.GetReadStreamAsync();
+        var stream = await file.OpenStreamForReadAsync();
         if (stream is null)
             return;
 

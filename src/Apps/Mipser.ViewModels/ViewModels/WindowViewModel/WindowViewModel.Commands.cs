@@ -92,11 +92,12 @@ public partial class WindowViewModel
             return;
 
         // Check if the file is null
-        if (page.File is null)
+        var file = page.File?.File;
+        if (file is null)
             return;
 
         // Request to assemble the file
-        _messenger.Send(new AssembleFilesRequestMessage([page.File]));
+        _messenger.Send(new AssembleFilesRequestMessage([file]));
     }
 
     private void OpenAbout() => MainViewModel.GoToPageByType<AboutPageViewModel>();

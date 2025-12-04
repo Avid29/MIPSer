@@ -16,9 +16,8 @@ namespace Mipser.Bindables.Files;
 /// <summary>
 /// A folder in the explorer.
 /// </summary>
-public class BindableFolder : BindableFileItemBase
+public class BindableFolder : BindableFileItem<IFolder>
 {
-    private readonly IFolder _folder;
     private FileSystemWatcher? _watcher;
     private bool _childrenNotCalculated;
 
@@ -27,7 +26,7 @@ public class BindableFolder : BindableFileItemBase
     /// </summary>
     public BindableFolder(FileService fileService, IFolder folder) : base(fileService)
     {
-        _folder = folder;
+        Folder = folder;
 
         Children = [];
         ChildrenNotLoaded = true;
@@ -36,7 +35,7 @@ public class BindableFolder : BindableFileItemBase
     /// <summary>
     /// Gets the folder's children.
     /// </summary>
-    public override ObservableCollection<BindableFileItemBase> Children { get; }
+    public override ObservableCollection<BindableFileItem> Children { get; }
 
     /// <summary>
     /// Gets a value indicating whether or not the children have been loaded.
@@ -47,22 +46,29 @@ public class BindableFolder : BindableFileItemBase
         set => SetProperty(ref _childrenNotCalculated, value);
     }
 
+    /// <summary>
+    /// Gets the wrapped <see cref="IFolder"/>.
+    /// </summary>
+    public IFolder Folder { get; init; }
+
     /// <inheritdoc/>
-    protected override IFilesItem? Item => _folder;
+    protected override IFolder? FileItem => Folder;
 
     /// <summary>
     /// Loads the node's children.
     /// </summary>
     public async Task LoadChildrenAsync(bool recursive = false)
     {
-        var items = await _folder.GetItemsAsync();
+        Guard.IsNotNull(FileItem);
+
+        var items = await FileItem.GetItemsAsync();
         var children = items.Select(x =>
         {
             return x switch
             {
                 IFile file => FileService.GetOrAddTrackedFile(file),
                 IFolder folder => FileService.GetOrAddTrackedFolder(folder),
-                _ => ThrowHelper.ThrowArgumentOutOfRangeException<BindableFileItemBase>(),
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<BindableFileItem>(),
             };
         });
 
@@ -81,7 +87,7 @@ public class BindableFolder : BindableFileItemBase
         }
     }
 
-    internal void TrackChild(BindableFileItemBase item)
+    internal void TrackChild(BindableFileItem item)
     {
         var nameAsAsm = $"{System.IO.Path.GetFileNameWithoutExtension(item.Name)}.asm";
         var parentAsm = Children.OfType<BindableFile>().FirstOrDefault(x => x.Name == nameAsAsm);

@@ -83,7 +83,7 @@ public partial class MainViewModel
     public async Task PickAndOpenFolderAsync()
     {
         // Select the folder to open
-        var folder = await _fileService.PickFolderAsync();
+        var folder = await _fileSystemService.PickFolderAsync();
         if (folder is null)
             return;
 
@@ -96,7 +96,7 @@ public partial class MainViewModel
     public async Task PickAndOpenProjectAsync()
     {
         // Select the project to open
-        var project = await _fileService.PickFileAsync(".mipsproj");
+        var project = await _fileSystemService.PickFileAsync(".mipsproj");
         if (project?.Path is null)
             return;
 

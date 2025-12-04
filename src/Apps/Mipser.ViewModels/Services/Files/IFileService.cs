@@ -32,7 +32,7 @@ public interface IFileService
     /// Gets a file item from a path.
     /// </summary>
     /// <param name="path">The path of the file item.</param>
-    public Task<BindableFileItemBase?> GetFileItemAsync(string path);
+    public Task<BindableFileItem?> GetFileItemAsync(string path);
 
     /// <summary>
     /// Opens a file picker to select an <see cref="BindableFile"/>.

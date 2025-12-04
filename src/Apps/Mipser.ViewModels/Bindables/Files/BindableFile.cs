@@ -12,9 +12,8 @@ namespace Mipser.Bindables.Files;
 /// <summary>
 /// A file in the content view or explorer.
 /// </summary>
-public class BindableFile : BindableFileItemBase
+public class BindableFile : BindableFileItem<IFile>
 {
-    private readonly IFile? _file;
     private string? _contents;
     private bool _isDirty;
 
@@ -31,14 +30,15 @@ public class BindableFile : BindableFileItemBase
     /// </summary>
     internal BindableFile(FileService fileService, IFile file) : base(fileService)
     {
-        _file = file;
+        File = file;
+
         Children = [];
     }
 
     /// <summary>
     /// Gets if the file exists in storage, or just in memory.
     /// </summary>
-    public bool IsAnonymous => Item is null;
+    public bool IsAnonymous => FileItem is null;
 
     /// <summary>
     /// Gets file contents.
@@ -54,28 +54,6 @@ public class BindableFile : BindableFileItemBase
     }
 
     /// <summary>
-    /// Gets a <see cref="Stream"/> for reading the file contents.
-    /// </summary>
-    public async Task<Stream?> GetReadStreamAsync()
-    {
-        if (_file is null)
-            return null;
-
-        return await _file.OpenStreamForReadAsync();
-    }
-
-    /// <summary>
-    /// Gets a <see cref="Stream"/> for writing the file contents.
-    /// </summary>
-    public async Task<Stream?> GetWriteStreamAsync()
-    {
-        if (_file is null)
-            return null;
-
-        return await _file.OpenStreamForWriteAsync();
-    }
-
-    /// <summary>
     /// Gets a value indicating whether the file has unsaved changes.
     /// </summary>
     public bool IsDirty
@@ -85,20 +63,25 @@ public class BindableFile : BindableFileItemBase
     }
 
     /// <inheritdoc/>
-    protected override IFilesItem? Item => _file;
-
-    /// <inheritdoc/>
     /// <remarks>
     /// This usually means 
     /// </remarks>
-    public override ObservableCollection<BindableFileItemBase> Children { get; }
+    public override ObservableCollection<BindableFileItem> Children { get; }
+
+    /// <summary>
+    /// Gets the wrapped <see cref="IFile"/>.
+    /// </summary>
+    public IFile? File { get; init; }
+
+    /// <inheritdoc/>
+    protected override IFile? FileItem => File;
 
     /// <summary>
     /// Saves the file contents.
     /// </summary>
     public async Task SaveAsync() => await SaveContent();
 
-    internal void TrackAsChild(BindableFileItemBase child)
+    internal void TrackAsChild(BindableFileItem child)
     {
         Children.Add(child);
     }
@@ -108,10 +91,10 @@ public class BindableFile : BindableFileItemBase
     /// </summary>
     public async Task LoadContent()
     {
-        if (_file is null)
+        if (FileItem is null)
             return;
 
-        await using var stream = await _file.OpenStreamForReadAsync();
+        await using var stream = await FileItem.OpenStreamForReadAsync();
         using var reader = new StreamReader(stream);
         Contents = await reader.ReadToEndAsync();
         IsDirty = false;
@@ -119,12 +102,12 @@ public class BindableFile : BindableFileItemBase
 
     private async Task SaveContent()
     {
-        if (_file is null)
+        if (FileItem is null)
             return;
 
         try
         {
-            await using var stream = await _file.OpenStreamForWriteAsync();
+            await using var stream = await FileItem.OpenStreamForWriteAsync();
             using var writer = new StreamWriter(stream);
             await writer.WriteAsync(Contents ?? string.Empty);
             stream.SetLength(stream.Position);

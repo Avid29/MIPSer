@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2025
 
-using Mipser.Bindables.Files;
 using Mipser.Models.ProjectConfig;
+using Mipser.Services.Files.Models;
 using System.Threading.Tasks;
 
 namespace Mipser.Services;
@@ -19,12 +19,12 @@ public interface IProjectService
     /// <summary>
     /// Gets the root folder of the project.
     /// </summary>
-    public BindableFolder? ProjectRootFolder { get; }
+    public IFolder? ProjectRootFolder { get; }
 
     /// <summary>
     /// Opens a folder as the new project folder.
     /// </summary>
-    public void OpenFolder(BindableFolder folder, bool cacheState = true);
+    public void OpenFolder(IFolder folder, bool cacheState = true);
 
     /// <summary>
     /// Opens a folder as the new project folder by path.

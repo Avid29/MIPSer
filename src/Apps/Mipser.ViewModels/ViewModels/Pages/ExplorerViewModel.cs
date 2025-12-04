@@ -7,7 +7,6 @@ using Mipser.Messages.Files;
 using Mipser.Services.Files;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Mipser.ViewModels.Pages;
 
@@ -17,14 +16,16 @@ namespace Mipser.ViewModels.Pages;
 public class ExplorerViewModel : PageViewModel
 {
     private readonly IMessenger _messenger;
+    private readonly IFileService _fileService;
 
     private BindableFolder? _rootFolder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExplorerViewModel"/> class.
     /// </summary>
-    public ExplorerViewModel(IMessenger messenger)
+    public ExplorerViewModel(IMessenger messenger, IFileService fileService)
     {
+        _fileService = fileService;
         _messenger = messenger;
 
         IsActive = true;
@@ -49,11 +50,11 @@ public class ExplorerViewModel : PageViewModel
     /// <summary>
     /// Gets the list of root nodes.
     /// </summary>
-    public IEnumerable<BindableFileItemBase?> RootNode => [RootFolder];
+    public IEnumerable<BindableFileItem?> RootNode => [RootFolder];
 
     /// <inheritdoc/>
     protected override void OnActivated()
     {
-        _messenger.Register<ExplorerViewModel, FolderOpenedMessage>(this, (r, m) => _ = r.RootFolder = m.Folder);
+        _messenger.Register<ExplorerViewModel, FolderOpenedMessage>(this, async (r, m) => r.RootFolder = await _fileService.GetFolderAsync(m.Folder.Path));
     }
 }
