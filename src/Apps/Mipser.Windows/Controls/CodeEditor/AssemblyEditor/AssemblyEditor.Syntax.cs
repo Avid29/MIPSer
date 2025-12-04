@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Models;
@@ -63,18 +64,15 @@ public partial class AssemblyEditor
     {
         Instructions = [];
 
-        // Setup instructions set
-        if (AssemblerConfig is not null)
-        {
-            // Get the instruction table
-            var table = new InstructionTable(AssemblerConfig);
-            var instructions = table.GetInstructions();
+        // Get the instruction table
+        var config = AssemblerConfig ?? new AssemblerConfig();
+        var table = new InstructionTable(config);
+        var instructions = table.GetInstructions();
 
-            foreach (var instr in instructions)
-            {
-                // TODO: Handle formatting instructions
-                Instructions.Add(instr.Name);
-            }
+        foreach (var instr in instructions)
+        {
+            // TODO: Handle formatting instructions
+            Instructions.Add(instr.Name);
         }
     }
 
