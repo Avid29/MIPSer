@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Collections;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Registers;
 using Mipser.Models.CheatSheet;
-using Mipser.Services.Localization;
+using Mipser.Services;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

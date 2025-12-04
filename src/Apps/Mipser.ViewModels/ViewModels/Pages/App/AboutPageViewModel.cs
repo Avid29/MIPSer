@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using Mipser.Services.Localization;
+using Mipser.Services;
 using Mipser.ViewModels.Pages.Abstract;
 
 namespace Mipser.ViewModels.Pages.App;

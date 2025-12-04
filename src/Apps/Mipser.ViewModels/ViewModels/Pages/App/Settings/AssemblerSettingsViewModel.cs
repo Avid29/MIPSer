@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using Mipser.Services.Localization;
+using Mipser.Services;
 using Mipser.Services.Settings;
 using System.Collections.Generic;
 

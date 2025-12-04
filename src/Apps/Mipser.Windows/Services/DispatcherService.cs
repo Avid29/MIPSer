@@ -1,10 +1,10 @@
 ﻿// Adam Dernis 2024
 
-using Mipser.Services.Dispatcher;
+using Mipser.Services;
 using System;
 using Windows.System;
 
-namespace Mipser.Windows.Services.Dispatcher;
+namespace Mipser.Windows.Services;
 
 /// <summary>
 /// A <see cref="IDispatcherService"/> implementation for the windows client.

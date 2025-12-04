@@ -4,7 +4,7 @@ using Mipser.Bindables.Files;
 using Mipser.Models.ProjectConfig;
 using System.Threading.Tasks;
 
-namespace Mipser.Services.Project;
+namespace Mipser.Services;
 
 /// <summary>
 /// An interface for a service that manages project layout.
@@ -12,9 +12,9 @@ namespace Mipser.Services.Project;
 public interface IProjectService
 {
     /// <summary>
-    /// Gets the project's configuration info.
+    /// Gets the open project.
     /// </summary>
-    public ProjectConfig? Config { get; }
+    public Project? Project { get; }
 
     /// <summary>
     /// Gets the root folder of the project.

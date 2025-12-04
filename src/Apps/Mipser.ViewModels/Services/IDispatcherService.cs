@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Mipser.Services.Dispatcher;
+namespace Mipser.Services;
 
 /// <summary>
 /// An interface for a dispatcher service.

@@ -2,7 +2,6 @@
 
 using MIPS.Assembler;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Models;
 using RASM.Modules;
 using RASM.Modules.Config;
 

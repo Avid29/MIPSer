@@ -2,18 +2,15 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using Mipser.Services.Build;
+using Mipser.Services;
 using Mipser.Services.Files;
-using Mipser.Services.Localization;
-using Mipser.Services.Project;
 using Mipser.Services.Settings;
 using Mipser.Services.Versioning;
 using Mipser.ViewModels;
 using Mipser.ViewModels.Pages;
 using Mipser.ViewModels.Pages.App;
-using Mipser.Windows.Services.Cache;
+using Mipser.Windows.Services;
 using Mipser.Windows.Services.FileSystem;
-using Mipser.Windows.Services.Localization;
 using Mipser.Windows.Services.Settings;
 using Mipser.Windows.Services.Versioning;
 using System;

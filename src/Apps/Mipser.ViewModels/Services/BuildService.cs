@@ -8,8 +8,6 @@ using Mipser.Bindables.Files;
 using Mipser.Messages.Build;
 using Mipser.Models.Enums;
 using Mipser.Services.Files;
-using Mipser.Services.Files.Models;
-using Mipser.Services.Project;
 using Mipser.Services.Settings;
 using RASM.Modules;
 using RASM.Modules.Config;
@@ -20,7 +18,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Mipser.Services.Build;
+namespace Mipser.Services;
 
 /// <summary>
 /// A service for managing the build status.

@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Mipser.Services.Localization;
+namespace Mipser.Services;
 
 /// <summary>
 /// An interface for a localization service

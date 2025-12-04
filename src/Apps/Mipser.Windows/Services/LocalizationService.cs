@@ -1,13 +1,13 @@
 ﻿// Adam Dernis 2024
 
-using Mipser.Services.Localization;
+using Mipser.Services;
 using System.Collections.Generic;
 using System.Globalization;
 using Windows.ApplicationModel.Resources;
 using Windows.ApplicationModel.Resources.Core;
 using Windows.Globalization;
 
-namespace Mipser.Windows.Services.Localization;
+namespace Mipser.Windows.Services;
 
 /// <summary>
 /// A service that retrieves localization details.

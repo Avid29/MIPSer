@@ -12,7 +12,7 @@ using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Assembler.Tokenization.Models.Enums;
 using MIPS.Models.Instructions.Enums;
-using Mipser.Services.Localization;
+using Mipser.Services;
 using Mipser.Windows.Helpers;
 
 namespace Mipser.Windows.Controls.CheatSheet;

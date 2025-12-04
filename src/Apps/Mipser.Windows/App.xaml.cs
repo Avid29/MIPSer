@@ -5,10 +5,9 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml;
 using Mipser.Messages;
-using Mipser.Services.Localization;
+using Mipser.Services;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
-using WinRT.Mipser_WindowsVtableClasses;
 
 namespace Mipser.Windows;
 

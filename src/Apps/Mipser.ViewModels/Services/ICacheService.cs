@@ -2,7 +2,7 @@
 
 using System.Threading.Tasks;
 
-namespace Mipser.Windows.Services.Cache;
+namespace Mipser.Services;
 
 /// <summary>
 /// An interface for a service that caches values.

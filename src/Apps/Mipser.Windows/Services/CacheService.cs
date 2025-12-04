@@ -1,12 +1,13 @@
 ﻿// Avishai Dernis 2025
 
+using Mipser.Services;
 using System;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace Mipser.Windows.Services.Cache;
+namespace Mipser.Windows.Services;
 
 /// <summary>
 /// An implementation of the <see cref="ICacheService"/>.

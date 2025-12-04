@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Messages.Build;
 using Mipser.Models.Enums;
-using Mipser.Services.Build;
+using Mipser.Services;
 
 namespace Mipser.ViewModels;
 

@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.DependencyInjection;
-using Mipser.Services.Localization;
+using Mipser.Services;
 using System;
 
 namespace Mipser.Windows.Helpers;

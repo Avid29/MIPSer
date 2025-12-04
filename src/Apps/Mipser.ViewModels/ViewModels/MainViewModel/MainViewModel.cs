@@ -2,10 +2,8 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using Mipser.Services.Build;
+using Mipser.Services;
 using Mipser.Services.Files;
-using Mipser.Services.Project;
-using Mipser.Windows.Services.Cache;
 using System.Threading.Tasks;
 
 namespace Mipser.ViewModels;

@@ -4,13 +4,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Bindables.Files;
 using Mipser.Messages.Files;
 using Mipser.Models.ProjectConfig;
-using Mipser.Services.Build;
 using Mipser.Services.Files;
 using Mipser.Services.Settings;
-using Mipser.Windows.Services.Cache;
 using System.Threading.Tasks;
 
-namespace Mipser.Services.Project;
+namespace Mipser.Services;
 
 /// <summary>
 /// An implementation of the <see cref="IProjectService"/> interface.
@@ -42,7 +40,7 @@ public class ProjectService : IProjectService
     }
 
     /// <inheritdoc/>
-    public ProjectConfig? Config { get; private set; }
+    public Project? Project { get; private set; }
 
     /// <inheritdoc/>
     public BindableFolder? ProjectRootFolder { get; private set; }
@@ -81,11 +79,11 @@ public class ProjectService : IProjectService
     /// <inheritdoc/>
     public async Task OpenProjectAsync(ProjectConfig config, bool cacheState = true)
     {
-        Config = config;
-        if (config.RootFolderPath is null)
+        Project = Project.Load(config);
+        if (Project?.Config?.RootFolderPath is null)
             return;
 
-        await OpenFolderAsync(config.RootFolderPath, false);
+        await OpenFolderAsync(Project.Config.RootFolderPath, false);
 
         if (cacheState)
         {
@@ -140,7 +138,7 @@ public class ProjectService : IProjectService
         // Cache value and key
         var (key, value) = folder switch
         {
-            false => (OpenProjectCacheKey, Config?.ConfigPath),
+            false => (OpenProjectCacheKey, Project?.Config?.ConfigPath),
             true => (OpenFolderCacheKey, ProjectRootFolder?.Path),
         };
         await _cacheService.CacheAsync(key, value);

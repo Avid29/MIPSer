@@ -2,8 +2,8 @@
 
 using CommunityToolkit.Mvvm.Input;
 using Mipser.Models.EditorConfig.ColorScheme;
+using Mipser.Services;
 using Mipser.Services.Files;
-using Mipser.Services.Localization;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
 using System;

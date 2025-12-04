@@ -5,7 +5,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.Messages;
 using Mipser.Models.EditorConfig.ColorScheme;
-using Mipser.Services.Localization;
+using Mipser.Services;
 using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages.App.Settings;
 

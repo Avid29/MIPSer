@@ -1,16 +1,12 @@
 ﻿// Avishai Dernis 2025
 
+using Mipser.Services;
 using Mipser.Services.Files;
-using Mipser.Services.Localization;
 using Mipser.Services.Settings;
-using Mipser.Services.Settings.Enums;
 using Mipser.Services.Versioning;
 using Mipser.ViewModels.Pages.Abstract;
 using Mipser.ViewModels.Pages.App.Settings;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace Mipser.ViewModels.Pages.App;
 

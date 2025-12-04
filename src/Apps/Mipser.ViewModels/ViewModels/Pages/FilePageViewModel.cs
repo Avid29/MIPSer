@@ -9,7 +9,7 @@ using Mipser.Bindables.Files;
 using Mipser.Messages;
 using Mipser.Messages.Build;
 using Mipser.Messages.Editor.Enums;
-using Mipser.Services.Project;
+using Mipser.Services;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages.Abstract;
@@ -109,7 +109,7 @@ public class FilePageViewModel : PageViewModel
     /// <summary>
     /// Gets the config to use for assembler checking.
     /// </summary>
-    public AssemblerConfig? AssemblerConfig => _projectService.Config?.AssemblerConfig;
+    public AssemblerConfig? AssemblerConfig => _projectService.Project?.Config?.AssemblerConfig;
 
     /// <inheritdoc/>
     protected override void OnActivated()
