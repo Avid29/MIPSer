@@ -8,7 +8,7 @@ namespace RASM.Modules.Config;
 /// <summary>
 /// A class containing rasm configuration info.
 /// </summary>
-public class RasmConfig : AssemblerConfig
+public class RasmConfig : AssemblerBuildConfig<RasmConfig, RasmModule>
 {
     private const ushort MAGIC = 0xFA_CE;
     private const ushort VERSION = 0x2C_C6;

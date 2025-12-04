@@ -23,14 +23,14 @@ public partial class Assembler
     /// <summary>
     /// Assembles a string.
     /// </summary>
-    public static async Task<AssemblyResult<T>> AssembleAsync<T, TConfig>(string str, string? filename, TConfig config, Stream? outStream = null)
-        where T : IBuildModule<T, TConfig>
+    public static async Task<AssemblyResult<TModule>> AssembleAsync<TModule, TConfig>(string str, string? filename, TConfig config, Stream? outStream = null)
+        where TModule : IBuildModule<TModule>
         where TConfig : AssemblerConfig
     {
         using var reader = new StringReader(str);
         var assembler = await AssembleAsync(reader, filename, config);
-        var obj = T.Create(assembler._module, config, outStream);
-        return new AssemblyResult<T>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
+        var obj = TModule.Create(assembler._module, config, outStream);
+        return new AssemblyResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
     }
 
     /// <summary>
@@ -46,13 +46,13 @@ public partial class Assembler
     /// <summary>
     /// Assembles a stream.
     /// </summary>
-    public static async Task<AssemblyResult<T>> AssembleAsync<T, TConfig>(Stream stream, string? filename, TConfig config, Stream? outStream = null)
-        where T : IBuildModule<T, TConfig>
+    public static async Task<AssemblyResult<TModule>> AssembleAsync<TModule, TConfig>(Stream stream, string? filename, TConfig config, Stream? outStream = null)
+        where TModule : IBuildModule<TModule>
         where TConfig : AssemblerConfig
     {
         using var reader = new StreamReader(stream);
         var assembler = await AssembleAsync(reader, filename, config);
-        var obj = T.Create(assembler._module, config, outStream);
-        return new AssemblyResult<T>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
+        var obj = TModule.Create(assembler._module, config, outStream);
+        return new AssemblyResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
     }
 }

@@ -10,7 +10,7 @@ namespace ELF.Modules.Config;
 /// <summary>
 /// A class containing ELF configuration info.
 /// </summary>
-public class ElfConfig : AssemblerConfig
+public class ElfConfig : AssemblerBuildConfig<ElfConfig, ElfModule>
 {
     private const uint MAGIC = 0x7F45_4C46; // 0x7C ELF
     

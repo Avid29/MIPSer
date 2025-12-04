@@ -5,7 +5,6 @@ using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MIPS.Assembler.Models;
 

@@ -10,7 +10,7 @@ namespace Raw.Modules;
 /// <summary>
 /// A raw wrapper format for a module that contains the raw binary data of the assembled program.
 /// </summary>
-public class RawModule : IBuildModule<RawModule, AssemblerConfig>, IExecutableModule
+public class RawModule : IBuildModule<RawModule>, IExecutableModule
 {
     private readonly Stream _source;
     

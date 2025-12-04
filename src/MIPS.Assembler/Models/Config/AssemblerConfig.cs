@@ -1,8 +1,11 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Assembler.Models.Enums;
+using MIPS.Assembler.Models.Modules;
+using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Models.Instructions.Enums;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace MIPS.Assembler.Models.Config;
@@ -15,7 +18,7 @@ public class AssemblerConfig
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblerConfig"/> class.
     /// </summary>
-    public AssemblerConfig() : this(MipsVersion.MipsIII)
+    public AssemblerConfig() : this(MipsVersion.MipsII)
     {
     }
 
@@ -62,9 +65,4 @@ public class AssemblerConfig
     /// </summary>
     [XmlElement]
     public int? SpaceMessageThreshold { get; set; }
-
-    /// <summary>
-    /// Gets the default configuration.
-    /// </summary>
-    public static AssemblerConfig Default => new();
 }
