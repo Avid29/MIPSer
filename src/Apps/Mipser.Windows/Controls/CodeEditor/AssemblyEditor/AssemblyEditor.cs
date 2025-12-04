@@ -46,8 +46,7 @@ public partial class AssemblyEditor : CodeEditor
         this.Loaded += AssemblyEditBox_Loaded;
 
         // Setup keywords
-        var table = new InstructionTable(new());
-        SetupKeywords(table.GetInstructions());
+        SetupKeywords();
 
         // Setup styling
         SetupHighlighting();

@@ -3,11 +3,13 @@
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Messaging;
 using MIPS.Assembler.Logging;
+using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Bindables.Files;
 using Mipser.Messages;
 using Mipser.Messages.Build;
 using Mipser.Messages.Editor.Enums;
+using Mipser.Services.Project;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages.Abstract;
@@ -24,6 +26,7 @@ public class FilePageViewModel : PageViewModel
 {
     private readonly IMessenger _messenger;
     private readonly ISettingsService _settingsService;
+    private readonly IProjectService _projectService;
 
     /// <summary>
     /// An event invoked requesting to navigate to a token.
@@ -45,10 +48,11 @@ public class FilePageViewModel : PageViewModel
     /// <summary>
     /// Initializes a new instance of the <see cref="FilePageViewModel"/> class.
     /// </summary>
-    public FilePageViewModel(IMessenger messenger, ISettingsService settingsService)
+    public FilePageViewModel(IMessenger messenger, ISettingsService settingsService, IProjectService projectService)
     {
         _messenger = messenger;
         _settingsService = settingsService;
+        _projectService = projectService;
 
         IsActive = true;
     }
@@ -102,24 +106,22 @@ public class FilePageViewModel : PageViewModel
     /// </summary>
     public AnnotationThreshold AnnotationThreshold => _settingsService.Local.GetValue<AnnotationThreshold>(SettingsKeys.AnnotationThreshold);
 
+    /// <summary>
+    /// Gets the config to use for assembler checking.
+    /// </summary>
+    public AssemblerConfig? AssemblerConfig => _projectService.Config?.AssemblerConfig;
+
     /// <inheritdoc/>
     protected override void OnActivated()
     {
         _messenger.Register<FilePageViewModel, FileAssembledMessage>(this, (r, m) => r.OnBuildFinished(m.AssemblyFile, m.Logs));
-
+        _messenger.Register<FilePageViewModel, SettingChangedMessage<AnnotationThreshold>>(this, (r, m) => OnPropertyChanged(nameof(AnnotationThreshold)));
         _messenger.Register<FilePageViewModel, SettingChangedMessage<bool>>(this, (r, m) =>
         {
-            if (m.Key != "RealTimeAssembly")
+            if (m.Key != SettingsKeys.RealTimeAssembly)
                 return;
 
             OnPropertyChanged(nameof(AssembleRealTime));
-        });
-        _messenger.Register<FilePageViewModel, SettingChangedMessage<AnnotationThreshold>>(this, (r, m) =>
-        {
-            if (m.Key != "AnnotationThreshold")
-                return;
-
-            OnPropertyChanged(nameof(AnnotationThreshold));
         });
     }
 

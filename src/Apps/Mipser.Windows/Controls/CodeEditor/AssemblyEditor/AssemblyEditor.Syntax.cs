@@ -59,14 +59,22 @@ public partial class AssemblyEditor
         editor.StyleSetFore(MessageAnnotationStyleIndex, ToInt(SyntaxHighlightingTheme.MessageUnderlineColor));
     }
 
-    private void SetupKeywords(InstructionMetadata[] instructions)
+    private void SetupKeywords()
     {
         Instructions = [];
 
-        foreach (var instr in instructions)
+        // Setup instructions set
+        if (AssemblerConfig is not null)
         {
-            // TODO: Handle formatting instructions
-            Instructions.Add(instr.Name);
+            // Get the instruction table
+            var table = new InstructionTable(AssemblerConfig);
+            var instructions = table.GetInstructions();
+
+            foreach (var instr in instructions)
+            {
+                // TODO: Handle formatting instructions
+                Instructions.Add(instr.Name);
+            }
         }
     }
 

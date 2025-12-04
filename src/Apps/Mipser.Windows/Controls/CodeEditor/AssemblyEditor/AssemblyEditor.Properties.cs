@@ -2,6 +2,7 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
+using MIPS.Assembler.Models.Config;
 using Mipser.Services.Settings.Enums;
 using System;
 
@@ -28,7 +29,7 @@ public partial class AssemblyEditor
             new PropertyMetadata(AnnotationThreshold.Errors, OnLogAnnotationsChanged));
 
     /// <summary>
-    /// A <see cref="DependencyProperty"/> for the <see cref="Text"/> property.
+    /// A <see cref="DependencyProperty"/> for the <see cref="SyntaxHighlightingTheme"/> property.
     /// </summary>
     public static readonly DependencyProperty SyntaxHighlightingThemeProperty =
         DependencyProperty.Register(
@@ -36,6 +37,16 @@ public partial class AssemblyEditor
             typeof(AssemblySyntaxHighlightingTheme),
             typeof(AssemblyEditor),
             new PropertyMetadata(new AssemblySyntaxHighlightingTheme(), OnSyntaxHighlightingThemeChanged));
+
+    /// <summary>
+    /// A <see cref="DependencyProperty"/> for the <see cref="AssemblerConfig"/> property.
+    /// </summary>
+    public static readonly DependencyProperty AssemblerConfigProperty =
+        DependencyProperty.Register(
+            nameof(AssemblerConfig),
+            typeof(AssemblerConfig),
+            typeof(AssemblyEditor),
+            new PropertyMetadata(default(AssemblerConfig), OnAssemblerConfigChanged));
 
     /// <summary>
     /// Gets or sets a value indicating whether or not to check assembly errors in real-time.
@@ -62,6 +73,15 @@ public partial class AssemblyEditor
     {
         get => (AssemblySyntaxHighlightingTheme)GetValue(SyntaxHighlightingThemeProperty);
         set => SetValue(SyntaxHighlightingThemeProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the assembler configuration to use for <see cref="RealTimeAssembly"/> checks.
+    /// </summary>
+    public AssemblerConfig? AssemblerConfig
+    {
+        get => (AssemblerConfig)GetValue(AssemblerConfigProperty);
+        set => SetValue(AssemblerConfigProperty, value);
     }
 
     private void UpdateTextProperty(string value) => SetValue(TextProperty, value);
@@ -110,5 +130,13 @@ public partial class AssemblyEditor
 
         asmBox.ClearLogHighlights();
         _ = asmBox.RunAssemblerAsync();
+    }
+
+    private static void OnAssemblerConfigChanged(DependencyObject d, DependencyPropertyChangedEventArgs args)
+    {
+        if (d is not AssemblyEditor asmBox)
+            return;
+
+        asmBox.SetupKeywords();
     }
 }

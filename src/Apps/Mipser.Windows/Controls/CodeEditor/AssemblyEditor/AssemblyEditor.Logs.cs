@@ -110,7 +110,8 @@ public partial class AssemblyEditor
         // Run assembler and show errors
         try
         {
-            var result = await Assembler.AssembleAsync(Text, null, new AssemblerConfig(MipsVersion.MipsIII));
+            var config = AssemblerConfig ?? new AssemblerConfig(MipsVersion.MipsIII);
+            var result = await Assembler.AssembleAsync(Text, null, config);
             ApplyLogHighlights(result.Logs);
             UpdateSymbols(result.Symbols);
         }

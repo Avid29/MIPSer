@@ -67,6 +67,7 @@
             <selectors:EditorTemplateSelector.AssemblyEditorTemplate>
                 <DataTemplate x:DataType="vm:FilePageViewModel">
                     <editor:AssemblyEditor Text="{x:Bind File.Contents, Mode=TwoWay}"
+                                           AssemblerConfig="{x:Bind AssemblerConfig, Mode=OneWay}"
                                            RealTimeAssembly="{x:Bind AssembleRealTime, Mode=OneWay}"
                                            AnnotationThreshold="{x:Bind AnnotationThreshold, Mode=OneWay}"
                                            SyntaxHighlightingTheme="{StaticResource SyntaxHighlighting}"
