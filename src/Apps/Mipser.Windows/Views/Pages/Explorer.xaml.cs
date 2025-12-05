@@ -1,11 +1,9 @@
 // Adam Dernis 2024
 
-using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Mipser.Bindables.Files;
-using Mipser.Messages.Navigation;
 using Mipser.Services;
 using Mipser.ViewModels.Pages;
 
@@ -47,7 +45,7 @@ public sealed partial class Explorer : UserControl
         if (sender is not TreeViewItem tvi || tvi.DataContext is not BindableFile file)
             return;
 
-        Service.Get<IMessenger>().Send(new FileOpenRequestMessage(file));
+        file.Open();
     }
 
     private void FolderDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)

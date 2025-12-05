@@ -12,7 +12,7 @@ namespace Mipser.Bindables.Files;
 /// <summary>
 /// A file in the content view or explorer.
 /// </summary>
-public class BindableFile : BindableFileItem<IFile>
+public partial class BindableFile : BindableFileItem<IFile>
 {
     private string? _contents;
     private bool _isDirty;
@@ -24,8 +24,9 @@ public class BindableFile : BindableFileItem<IFile>
     internal BindableFile(FileService fileService, IFile file) : base(fileService)
     {
         _file = file;
-
         Children = [];
+
+        OpenCommand = new(Open);
     }
 
     /// <summary>
