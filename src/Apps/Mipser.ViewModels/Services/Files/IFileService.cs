@@ -1,7 +1,6 @@
 ﻿// Avishai Dernis 2025
 
 using Mipser.Bindables.Files;
-using Mipser.Bindables.Files.Abstract;
 using System.Threading.Tasks;
 
 namespace Mipser.Services.Files;

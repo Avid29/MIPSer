@@ -6,12 +6,12 @@ using Mipser.Services.Files.Models;
 using System;
 using System.Collections.ObjectModel;
 
-namespace Mipser.Bindables.Files.Abstract;
+namespace Mipser.Bindables.Files;
 
 /// <summary>
 /// A <see cref="IFileItem"/> in the explorer.
 /// </summary>
-public abstract class BindableFileItem : ObservableObject, IDisposable
+public abstract partial class BindableFileItem : ObservableObject, IDisposable
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFileItem"/> class.
@@ -19,6 +19,9 @@ public abstract class BindableFileItem : ObservableObject, IDisposable
     protected BindableFileItem(FileService fileService)
     {
         FileService = fileService;
+
+        CopyFileNameCommand = new(CopyFileName);
+        CopyFilePathCommand = new(CopyFilePath);
     }
 
     /// <summary>
@@ -34,7 +37,7 @@ public abstract class BindableFileItem : ObservableObject, IDisposable
     /// <summary>
     /// Gets the file's path.
     /// </summary>
-    public abstract string? Path { get; }
+    public abstract string Path { get; }
 
     /// <summary>
     /// Gets the child items.

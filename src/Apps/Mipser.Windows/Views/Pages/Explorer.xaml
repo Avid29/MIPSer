@@ -61,8 +61,10 @@
                         <MenuFlyoutSeparator/>
 
                         <!--  Copy Path  -->
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyNameMFI" Text="Copy Name" IsEnabled="False"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyFullPathMFI" Text="Copy Full Path" IsEnabled="False">
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyNameMFI" Text="Copy Name"
+                                        Command="{x:Bind CopyFileNameCommand, Mode=OneWay}"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyFullPathMFI" Text="Copy Full Path"
+                                        Command="{x:Bind CopyFilePathCommand, Mode=OneWay}">
                             <MenuFlyoutItem.Icon>
                                 <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE62F;" />
                             </MenuFlyoutItem.Icon>
@@ -96,8 +98,10 @@
                         <MenuFlyoutSeparator/>
 
                         <!--  Copy Path  -->
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyNameMFI" Text="Copy Name" IsEnabled="False"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyFullPathMFI" Text="Copy Full Path" IsEnabled="False">
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyNameMFI" Text="Copy Name"
+                                        Command="{x:Bind CopyFileNameCommand, Mode=OneWay}"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyFullPathMFI" Text="Copy Full Path"
+                                        Command="{x:Bind CopyFilePathCommand, Mode=OneWay}">
                             <MenuFlyoutItem.Icon>
                                 <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE62F;" />
                             </MenuFlyoutItem.Icon>

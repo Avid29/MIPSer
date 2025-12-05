@@ -25,17 +25,18 @@ public partial class App
         return new ServiceCollection()
 
             // Basic Services
-            .AddSingleton<IMessenger, WeakReferenceMessenger>()
-            .AddSingleton<ILocalizationService, LocalizationService>()
+            .AddSingleton<ICacheService, CacheService>()
+            .AddSingleton<IClipboardService, ClipboardService>()
             .AddSingleton<IDispatcherService, DispatcherService>()
             .AddSingleton<IFileSystemService, FileSystemService>()
-            .AddSingleton<ICacheService, CacheService>()
+            .AddSingleton<ILocalizationService, LocalizationService>()
+            .AddSingleton<IMessenger, WeakReferenceMessenger>()
             .AddSingleton<IVersioningService, VersioningService>()
 
             // Dependent Services
             .AddSingleton<ISettingsService, SettingsService>()
-            .AddSingleton<IFileService, FileService>()
             .AddSingleton<IProjectService, ProjectService>()
+            .AddSingleton<IFileService, FileService>()
             .AddSingleton<BuildService>()
 
             // Page ViewModels

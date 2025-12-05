@@ -1,10 +1,9 @@
 ﻿// Adam Dernis 2024
 
-using Mipser.Services;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 
-namespace Mipser.Bindables.Files.Abstract;
+namespace Mipser.Bindables.Files;
 
 /// <summary>
 /// A <see cref="IFileItem"/> in the explorer.

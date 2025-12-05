@@ -1,8 +1,6 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using Mipser.Bindables.Files.Abstract;
 using Mipser.Services;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;

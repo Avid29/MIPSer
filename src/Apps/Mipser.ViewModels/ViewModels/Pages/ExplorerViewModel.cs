@@ -2,7 +2,6 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Bindables.Files;
-using Mipser.Bindables.Files.Abstract;
 using Mipser.Messages.Files;
 using Mipser.Services.Files;
 using Mipser.ViewModels.Pages.Abstract;
