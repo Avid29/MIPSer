@@ -56,7 +56,7 @@
                             <ImageIcon Height="12" Source="/Assets/Icons/Severity/Message.svg"/>
                         </ctc:Case>
                     </ctc:SwitchPresenter>
-                    <TextBlock Text="{x:Bind Message, Mode=OneWay}" Margin="8,0" FontSize="12"/>
+                    <TextBlock Text="{x:Bind Message, Mode=OneWay}" TextReadingOrder="UseFlowDirection" Margin="8,0" FontSize="12"/>
                     <TextBlock Text="{x:Bind FileName, Mode=OneWay}" Margin="8,0" FontSize="12"/>
                     <TextBlock Text="{x:Bind local:ErrorList.DisplayLine(Location), Mode=OneWay}" Margin="8,0" FontSize="12"/>
                 </ctc:DataRow>

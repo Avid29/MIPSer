@@ -6,7 +6,6 @@ using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Assembler.Tokenization.Models.Enums;
 using MIPS.Models.Modules.Tables;
-using Mipser.Windows.Extensions;
 using System.Collections.Generic;
 using System.IO;
 using WinUIEditor;
