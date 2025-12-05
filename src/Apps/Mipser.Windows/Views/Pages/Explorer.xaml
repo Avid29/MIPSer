@@ -5,11 +5,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:convert="using:Mipser.Windows.Converters"
     xmlns:selector="using:Mipser.Windows.Selectors"
     xmlns:files="using:Mipser.Bindables.Files"
     mc:Ignorable="d">
 
     <UserControl.Resources>
+        <convert:FileTypeIconConverter x:Key="FileTypeIconConverter"
+                                       Assembly="{StaticResource AsmFileIcon}"
+                                       Object="{StaticResource ObjFileIcon}"
+                                       Default="{StaticResource FileIcon}"/>
+
         <DataTemplate x:Key="FolderTemplate" x:DataType="files:BindableFolder">
             <TreeViewItem ItemsSource="{x:Bind Children, Mode=OneWay}"
                           HasUnrealizedChildren="{x:Bind ChildrenNotLoaded, Mode=OneWay}"
@@ -58,7 +64,7 @@
                     </MenuFlyout>
                 </TreeViewItem.ContextFlyout>
                 <StackPanel Orientation="Horizontal" Spacing="8">
-                    <ImageIcon Source="/Assets/Icons/Files/Folder.svg" Height="20"/>
+                    <ImageIcon Source="{StaticResource FolderIcon}" Height="20"/>
                     <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
                 </StackPanel>
             </TreeViewItem>
@@ -93,7 +99,7 @@
                     </MenuFlyout>
                 </TreeViewItem.ContextFlyout>
                 <StackPanel Orientation="Horizontal" Spacing="8">
-                    <ImageIcon Source="/Assets/Icons/Files/File.svg" Height="20"/>
+                    <ImageIcon Source="{x:Bind Name, Converter={StaticResource FileTypeIconConverter}, Mode=OneWay}" Height="20"/>
                     <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
                 </StackPanel>
             </TreeViewItem>

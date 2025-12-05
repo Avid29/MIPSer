@@ -47,13 +47,13 @@
                 <ctc:DataRow HorizontalAlignment="Left">
                     <ctc:SwitchPresenter TargetType="logenum:Severity" Value="{x:Bind Severity, Mode=OneWay}">
                         <ctc:Case Value="Error">
-                            <ImageIcon Height="12" Source="/Assets/Icons/Severity/Error.svg"/>
+                            <ImageIcon Height="12" Source="{StaticResource ErrorIcon}"/>
                         </ctc:Case>
                         <ctc:Case Value="Warning">
-                            <ImageIcon Height="12" Source="/Assets/Icons/Severity/Warning.svg"/>
+                            <ImageIcon Height="12" Source="{StaticResource WarningIcon}"/>
                         </ctc:Case>
                         <ctc:Case Value="Message">
-                            <ImageIcon Height="12" Source="/Assets/Icons/Severity/Message.svg"/>
+                            <ImageIcon Height="12" Source="{StaticResource MessageIcon}"/>
                         </ctc:Case>
                     </ctc:SwitchPresenter>
                     <TextBlock Text="{x:Bind Message, Mode=OneWay}" TextReadingOrder="UseFlowDirection" Margin="8,0" FontSize="12"/>

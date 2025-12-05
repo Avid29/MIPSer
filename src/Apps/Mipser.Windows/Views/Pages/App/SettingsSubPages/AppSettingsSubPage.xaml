@@ -29,7 +29,13 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </ctc:SettingsCard>
-        
+
+        <ctc:SettingsCard x:Uid="/Settings/RestoreOpenProjectSC"
+                          Header="Restore Open Project/Folder"
+                          Description="Set whether or not the app should cache and restore the open the project/folder when opened.">
+            <ToggleSwitch IsOn="{x:Bind ViewModel.RestoreOpenProject, Mode=TwoWay}"/>
+        </ctc:SettingsCard>
+
         <ctc:SettingsCard x:Uid="/Settings/AppLanguageSC"
                           Header="App Language"
                           Description="Set the app's display language. (Requires a restart to take effect).">
@@ -41,12 +47,6 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-        </ctc:SettingsCard>
-        
-        <ctc:SettingsCard x:Uid="/Settings/RestoreOpenProjectSC"
-                          Header="Restore Open Project/Folder"
-                          Description="Set whether or not the app should cache and restore the open the project/folder when opened.">
-            <ToggleSwitch IsOn="{x:Bind ViewModel.RestoreOpenProject, Mode=TwoWay}"/>
         </ctc:SettingsCard>
 
         <ctc:SettingsExpander x:Uid="/Settings/AboutSE"

@@ -3,7 +3,6 @@
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
-using Microsoft.UI.Xaml.Media;
 using Mipser.Models.Enums;
 using System;
 using Windows.UI;
@@ -11,7 +10,7 @@ using Windows.UI;
 namespace Mipser.Windows.Converters;
 
 /// <summary>
-/// A converter that converts an <see cref="BuildSt"/> into a <see cref="Color"/>.
+/// A converter that converts an <see cref="BuildStatus"/> into a <see cref="Color"/>.
 /// </summary>
 public partial class BuildStatusColorConverter : DependencyObject, IValueConverter
 {
