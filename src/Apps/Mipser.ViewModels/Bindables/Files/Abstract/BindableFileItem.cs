@@ -1,13 +1,10 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.DependencyInjection;
-using Mipser.Services;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 
 namespace Mipser.Bindables.Files.Abstract;
 

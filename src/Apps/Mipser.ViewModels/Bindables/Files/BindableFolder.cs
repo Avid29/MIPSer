@@ -20,13 +20,15 @@ public class BindableFolder : BindableFileItem<IFolder>
 {
     private FileSystemWatcher? _watcher;
     private bool _childrenNotCalculated;
+    private IFolder _folder;
+
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFolder"/> class.
     /// </summary>
     public BindableFolder(FileService fileService, IFolder folder) : base(fileService)
     {
-        Folder = folder;
+        _folder = folder;
 
         Children = [];
         ChildrenNotLoaded = true;
@@ -46,13 +48,19 @@ public class BindableFolder : BindableFileItem<IFolder>
         set => SetProperty(ref _childrenNotCalculated, value);
     }
 
-    /// <summary>
-    /// Gets the wrapped <see cref="IFolder"/>.
-    /// </summary>
-    public IFolder Folder { get; init; }
-
     /// <inheritdoc/>
-    protected override IFolder? FileItem => Folder;
+    protected internal override IFolder FileItem
+    {
+        get => _folder;
+        set
+        {
+            if (SetProperty(ref _folder, value))
+            {
+                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(Path));
+            }
+        }
+    }
 
     /// <summary>
     /// Loads the node's children.
@@ -140,33 +148,18 @@ public class BindableFolder : BindableFileItem<IFolder>
             return;
 
         // Untrack the item
-        FileService.UntrackFileItem(child);
         Service.Get<IDispatcherService>().RunOnUIThread(() =>
         {
+            FileService.UntrackFileItem(child);
             UntrackChild(child);
         });
     }
 
     private async void OnChildFileItemRenamed(object sender, RenamedEventArgs e)
     {
-        // TODO: Change BindableItem to update
-
-        // Retreive the old item
-        var oldChild = await FileService.GetFileItemAsync(e.OldFullPath);
-        if (oldChild is null)
-            return;
-
-        // Retreive the new item
-        var newChild = await FileService.GetFileItemAsync(e.FullPath);
-        if (newChild is null)
-            return;
-
-        // Untrack the old item and track the new item
-        FileService.UntrackFileItem(oldChild);
-        Service.Get<IDispatcherService>().RunOnUIThread(() =>
+        Service.Get<IDispatcherService>().RunOnUIThread(async () =>
         {
-            UntrackChild(oldChild);
-            TrackChild(newChild);
+            await FileService.RenameTrackedItemAsync(e.OldFullPath, e.FullPath);
         });
     }
 

@@ -1,10 +1,12 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.Diagnostics;
 using Mipser.Bindables.Files;
 using Mipser.Bindables.Files.Abstract;
 using Mipser.Services.Files.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
@@ -18,8 +20,7 @@ public class FileService : IFileService
 {
     // TODO: Untracking out of use files
     private readonly IFileSystemService _fileSystemService;
-    private readonly Dictionary<string, BindableFolder> _openFolders;
-    private readonly Dictionary<string, BindableFile> _openFiles;
+    private readonly Dictionary<string, BindableFileItem> _openItems;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FileService"/> class.
@@ -27,9 +28,8 @@ public class FileService : IFileService
     public FileService(IFileSystemService fileSystemService)
     {
         _fileSystemService = fileSystemService;
-
-        _openFolders = [];
-        _openFiles = [];
+        
+        _openItems = [];
     }
 
     /// <inheritdoc/>
@@ -37,7 +37,7 @@ public class FileService : IFileService
     {
         // Check if the folder is already tracked, 
         // and retrieve it if so.
-        if (_openFolders.TryGetValue(path, out BindableFolder? value))
+        if (TryGetItem(path, out BindableFolder? value))
             return value;
 
         var folder = await _fileSystemService.GetFolderAsync(path);
@@ -52,7 +52,7 @@ public class FileService : IFileService
     {
         // Check if the file is already tracked, 
         // and retrieve it if so.
-        if (_openFiles.TryGetValue(path, out BindableFile? value))
+        if (TryGetItem(path, out BindableFile? value))
             return value;
 
         // Get basic file
@@ -99,12 +99,12 @@ public class FileService : IFileService
         // Check if the folder is already tracked, 
         // and retrieve it if so.
         var key = folder.Path;
-        if (_openFolders.TryGetValue(key, out BindableFolder? value))
+        if (TryGetItem(key, out BindableFolder? value))
             return value;
 
         // Create and track new bindable
         var bindable = new BindableFolder(this, folder);
-        _openFolders.Add(folder.Path, bindable);
+        _openItems.Add(key, bindable);
         return bindable;
     }
 
@@ -113,40 +113,79 @@ public class FileService : IFileService
         // Check if the file is already tracked, 
         // and retrieve it if so.
         var key = file.Path;
-        if (_openFiles.TryGetValue(key, out BindableFile? value))
+        if (TryGetItem(key, out BindableFile? value))
             return value;
 
         // Create and track new bindable
         var bindable = new BindableFile(this, file);
-        _openFiles.Add(file.Path, bindable);
+        _openItems.Add(key, bindable);
         return bindable;
     }
 
-    internal void UntrackFolder(BindableFolder folder)
+    internal BindableFileItem TrackFileItem(IFileItem item)
     {
-        var key = folder.Path;
-        if (key is null || !_openFolders.Remove(key))
-            return;
-    }
-
-    internal void UntrackFile(BindableFile file)
-    {
-        var key = file.Path;
-        if (key is null || !_openFiles.Remove(key))
-            return;
+        return item switch
+        {
+            IFolder folder => TrackFolder(folder),
+            IFile file => TrackFileItem(file),
+            _ => ThrowHelper.ThrowArgumentException<BindableFileItem>(nameof(item)),
+        };
     }
 
     internal void UntrackFileItem(BindableFileItem item)
     {
+        var key = item.Path;
+        if (key is null || !_openItems.Remove(key))
+            return;
+    }
+
+    internal async Task RenameTrackedItemAsync(string oldPath, string newPath)
+    {
+        var item = await GetFileItemAsync(oldPath);
+        if (item is null)
+            return;
+
+        // Untrack item as-is
+        UntrackFileItem(item);
+
         switch (item)
         {
-            case BindableFile file:
-                UntrackFile(file);
-                break;
+            // Get new folder item child
             case BindableFolder folder:
-                UntrackFolder(folder);
+                var childFolder = await _fileSystemService.GetFolderAsync(newPath);
+                if (childFolder is null)
+                    return;
+
+                folder.FileItem = childFolder;
+                break;
+                
+            // Get new file item child
+            case BindableFile file:
+                var childFile = await _fileSystemService.GetFileAsync(newPath);
+                if (childFile is null)
+                    return;
+
+                file.FileItem = childFile;
                 break;
         }
+
+        // Retrack
+        _openItems.Add(newPath, item);
+    }
+
+    private bool TryGetItem<T>(string path, [NotNullWhen(true)] out T? item)
+        where T : BindableFileItem
+    {
+        item = null;
+
+        if(!_openItems.TryGetValue(path, out var value))
+            return false;
+
+        if (value is not T result)
+            return false;
+
+        item = result;
+        return true;
     }
 
     private static bool IsFile(string? path) => path is null || Path.GetFileName(path) is not null;

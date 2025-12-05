@@ -22,7 +22,7 @@ public abstract class BindableFileItem<T> : BindableFileItem
     /// <summary>
     /// The wrapped <see cref="IFileItem"/>.
     /// </summary>
-    protected abstract T? FileItem { get; }
+    protected internal abstract T FileItem { get; set; }
 
     /// <inheritdoc/>
     public override string Name => FileItem?.Name ?? Service.Get<ILocalizationService>()["NewFile"];

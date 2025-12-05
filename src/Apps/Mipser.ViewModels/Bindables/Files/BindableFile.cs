@@ -1,7 +1,6 @@
 ﻿// Adam Dernis 2024
 
 using Mipser.Bindables.Files.Abstract;
-using Mipser.Models;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using System.Collections.ObjectModel;
@@ -17,14 +16,14 @@ public class BindableFile : BindableFileItem<IFile>
 {
     private string? _contents;
     private bool _isDirty;
-
+    private IFile _file;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFile"/> class.
     /// </summary>
     internal BindableFile(FileService fileService, IFile file) : base(fileService)
     {
-        File = file;
+        _file = file;
 
         Children = [];
     }
@@ -56,11 +55,6 @@ public class BindableFile : BindableFileItem<IFile>
     /// </summary>
     public bool IsAnonymous => FileItem is null;
 
-    /// <summary>
-    /// Gets the wrapped <see cref="IFile"/>.
-    /// </summary>
-    public IFile File { get; init; }
-
     /// <inheritdoc/>
     /// <remarks>
     /// This usually means 
@@ -68,7 +62,18 @@ public class BindableFile : BindableFileItem<IFile>
     public override ObservableCollection<BindableFileItem> Children { get; }
 
     /// <inheritdoc/>
-    protected override IFile FileItem => File;
+    protected internal override IFile FileItem
+    {
+        get => _file;
+        set
+        {
+            if (SetProperty(ref _file, value))
+            {
+                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(Path));
+            }
+        }
+    }
 
     /// <summary>
     /// Saves the file contents.
