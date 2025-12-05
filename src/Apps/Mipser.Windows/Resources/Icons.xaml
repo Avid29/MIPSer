@@ -20,6 +20,9 @@
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
+    <!--  App  -->
+    <ImageSource x:Key="AppIconSmall">ms-appx:///Assets/AppIconSources/Small88x88.png</ImageSource>
+
     <!--  Logs  -->
     <ImageSource x:Key="ErrorIcon">ms-appx:///Assets/Icons/Severity/Error.svg</ImageSource>
     <ImageSource x:Key="WarningIcon">ms-appx:///Assets/Icons/Severity/Warning.svg</ImageSource>

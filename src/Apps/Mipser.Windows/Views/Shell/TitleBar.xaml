@@ -8,16 +8,18 @@
     mc:Ignorable="d">
 
     <!--Title Bar-->
-    <Grid Background="{ThemeResource TitleBarBackgroundBrush}" Padding="2">
+    <Grid Background="{ThemeResource TitleBarBackgroundBrush}" Padding="4,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"/>
-            <ColumnDefinition/>
             <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        
+
         <Border x:Name="AppTitleBar" Grid.ColumnSpan="3" Background="Transparent"/>
 
-        <MenuBar Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <ImageIcon Source="{StaticResource AppIconSmall}" Height="20" VerticalAlignment="Center" Margin="8,4,8,0"/>
+
+        <MenuBar Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
             <!--  File  -->
             <MenuBarItem x:Uid="/TitleBar/FileMBI" Title="File">
                 

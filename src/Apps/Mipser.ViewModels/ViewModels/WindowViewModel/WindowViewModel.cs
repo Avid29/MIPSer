@@ -21,7 +21,7 @@ public partial class WindowViewModel : ObservableRecipient
     {
         _messenger = messenger;
         MainViewModel = mainViewModel;
-        MainPanelViewModel = panelViewModel;
+        PanelViewModel = panelViewModel;
 
         CreateNewFileCommand = new(CreateNewFile);
         SaveFileCommand = new(SaveFile);
@@ -57,11 +57,9 @@ public partial class WindowViewModel : ObservableRecipient
 
         IsActive = true;
 
-        // Notify that the main panel is focused on startup
-        _messenger.Send(new PanelFocusChangedMessage(MainPanelViewModel));
+        // Focus the panel when the window is created.
+        _messenger.Send(new PanelFocusChangedMessage(PanelViewModel));
 
-        // Open welcome page
-        OpenWelcome();
     }
 
     /// <summary>
@@ -70,7 +68,7 @@ public partial class WindowViewModel : ObservableRecipient
     public MainViewModel MainViewModel { get; }
 
     /// <summary>
-    /// Gets the <see cref="PanelViewModel"/> for the main panel in the window.
+    /// Gets the <see cref="ViewModels.PanelViewModel"/> for the panel in the window.
     /// </summary>
-    public PanelViewModel MainPanelViewModel { get; }
+    public PanelViewModel PanelViewModel { get; }
 }

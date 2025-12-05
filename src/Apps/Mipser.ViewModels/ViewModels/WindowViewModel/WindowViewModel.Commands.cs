@@ -108,5 +108,8 @@ public partial class WindowViewModel
 
     private void OpenSettings() => MainViewModel.GoToPageByType<SettingsPageViewModel>();
 
-    private void OpenWelcome() => MainViewModel.GoToPageByType<WelcomePageViewModel>();
+    /// <summary>
+    /// Open the welcome page.
+    /// </summary>
+    public void OpenWelcome() => MainViewModel.GoToPageByType<WelcomePageViewModel>();
 }

@@ -8,6 +8,7 @@ using Mipser.Messages.Navigation;
 using Mipser.Services;
 using Mipser.ViewModels;
 using Mipser.ViewModels.Pages.Abstract;
+using Mipser.Windows.Helpers;
 
 namespace Mipser.Windows.Views.Shell;
 
@@ -39,5 +40,20 @@ public sealed partial class PanelView : UserControl
     private void UserControl_GotFocus(object sender, RoutedEventArgs e)
     {
         Service.Get<IMessenger>().Send(new PanelFocusChangedMessage(ViewModel));
+    }
+
+    private void TabView_TabDroppedOutside(TabView sender, TabViewTabDroppedOutsideEventArgs args)
+    {
+        if (args.Item is not PageViewModel page)
+            return;
+
+        // Get current window and create new window
+        var currentWindow = WindowHelper.GetWindowForElement(sender);
+        var newWindow = WindowHelper.CreateWindow<PanelWindow>();
+        newWindow.Activate();
+
+        // Close the page on the current window and open on the new window
+        currentWindow?.ViewModel.PanelViewModel.ClosePage(page);
+        newWindow.ViewModel.PanelViewModel.OpenPage(page);
     }
 }

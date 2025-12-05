@@ -66,6 +66,8 @@
              TabItemsSource="{x:Bind ViewModel.OpenPages, Mode=OneWay}"
              TabItemTemplateSelector="{StaticResource PageTemplateSelector}"
              TabCloseRequested="TabView_TabCloseRequested"
+             TabDroppedOutside="TabView_TabDroppedOutside"
+             TabWidthMode="SizeToContent"
              IsAddTabButtonVisible="False"
              VerticalAlignment="Stretch">
         <TabView.Resources>

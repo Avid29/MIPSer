@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Window
+<local:MipserWindow
     x:Class="Mipser.Windows.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:Mipser.Windows"
     xmlns:pages="using:Mipser.Windows.Views.Pages"
     xmlns:shell="using:Mipser.Windows.Views.Shell"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
@@ -33,7 +34,7 @@
         <shell:PanelView x:Name="MainPanel"
                          Margin="0,0,0,14"
                          Grid.Row="1"
-                         DataContext="{x:Bind ViewModel.MainPanelViewModel, Mode=OneWay}"/>
+                         DataContext="{x:Bind ViewModel.PanelViewModel, Mode=OneWay}"/>
 
         <!--  Error List  -->
         <pages:ErrorList Grid.Row="2"/>
@@ -66,4 +67,4 @@
             </ctc:GridSplitter.RenderTransform>
         </ctc:GridSplitter>
     </Grid>
-</Window>
+</local:MipserWindow>

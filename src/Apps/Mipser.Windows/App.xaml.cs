@@ -9,6 +9,7 @@ using Mipser.Messages;
 using Mipser.Services;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
+using Mipser.Windows.Helpers;
 
 namespace Mipser.Windows;
 
@@ -50,7 +51,7 @@ public partial class App : Application
     /// <param name="args">Details about the launch request and process.</param>
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
-        Window = new MainWindow();
+        Window = WindowHelper.CreateWindow<MainWindow>();
         Window.Activate();
 
         // Apply theme settings

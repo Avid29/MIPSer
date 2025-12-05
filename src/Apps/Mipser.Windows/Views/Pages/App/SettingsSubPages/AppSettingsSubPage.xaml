@@ -53,7 +53,7 @@
                               Header="MIPSer"
                               Description="© Avishai Dernis">
             <ctc:SettingsExpander.HeaderIcon>
-                <ImageIcon Source="/Assets/AppIconSources/Small88x88.png"/>
+                <ImageIcon Source="{StaticResource AppIconSmall}"/>
             </ctc:SettingsExpander.HeaderIcon>
             <ctc:SettingsExpander.Content>
                 <TextBlock Text="{x:Bind ViewModel.AppVersion, Mode=OneWay}"
