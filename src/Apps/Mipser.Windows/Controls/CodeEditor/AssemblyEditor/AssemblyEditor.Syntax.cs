@@ -170,11 +170,12 @@ public partial class AssemblyEditor
 
             // Set style and advance utf8/utf16 positions
             //var tokenLength = Encoding.UTF8.GetByteCount(token.Source);
-            var tokenLength = GetEncodingSize(token.Source);
+            var tokenLengthUtf8 = GetEncodingSize(token.Source);
+            var tokenLengthUtf16 = token.Source.Length;
             editor.StartStyling(utf8Pos.Index, 0);
-            editor.SetStyling(tokenLength, style);
-            utf16Pos += tokenLength;
-            utf8Pos += tokenLength;
+            editor.SetStyling(tokenLengthUtf8, style);
+            utf8Pos += tokenLengthUtf8;
+            utf16Pos += tokenLengthUtf16;
         }
 
         // Adjust fold level based on the line's label
