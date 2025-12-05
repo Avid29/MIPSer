@@ -1,11 +1,11 @@
 // Avishai Dernis 2025
 
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml.Controls;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Messages.Navigation;
+using Mipser.Services;
 using Mipser.ViewModels.Pages;
 
 namespace Mipser.Windows.Views.Pages;
@@ -21,7 +21,7 @@ public sealed partial class ErrorList : UserControl
     public ErrorList()
     {
         this.InitializeComponent();
-        DataContext = Ioc.Default.GetRequiredService<ErrorListViewModel>();
+        DataContext = Service.Get<ErrorListViewModel>();
     }
 
     private ErrorListViewModel ViewModel => (ErrorListViewModel)this.DataContext;
@@ -43,7 +43,7 @@ public sealed partial class ErrorList : UserControl
         if (e.ClickedItem is not AssemblerLog log)
             return;
 
-        var messenger = Ioc.Default.GetRequiredService<IMessenger>();
+        var messenger = Service.Get<IMessenger>();
         messenger.Send(new NavigateToTokenRequestMessage(log.Tokens[0]));
     }
 }

@@ -25,7 +25,7 @@ public sealed partial class MainWindow : Window
         ViewModel = App.Current.Services.GetRequiredService<WindowViewModel>();
 
         // Set the app flow direction
-        var localization = Ioc.Default.GetRequiredService<ILocalizationService>();
+        var localization = Service.Get<ILocalizationService>();
         if (localization.IsRightToLeftLanguage && Content is FrameworkElement fe)
         {
             // Set app content flow direction to RTL

@@ -66,8 +66,8 @@ public class BindableFolder : BindableFileItem<IFolder>
         {
             return x switch
             {
-                IFile file => FileService.GetOrAddTrackedFile(file),
-                IFolder folder => FileService.GetOrAddTrackedFolder(folder),
+                IFile file => FileService.TrackFile(file),
+                IFolder folder => FileService.TrackFolder(folder),
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<BindableFileItem>(),
             };
         });
@@ -100,12 +100,19 @@ public class BindableFolder : BindableFileItem<IFolder>
         Children.Add(item);
     }
 
+    internal void UntrackChild(BindableFileItem item)
+    {
+        Children.Remove(item);
+    }
+
     private void SetupWatcher()
     {
         Guard.IsNotNull(Path);
 
         _watcher = new(Path);
         _watcher.Created += OnChildFileItemCreated;
+        _watcher.Deleted += OnChildFileItemDeleted;
+        _watcher.Renamed += OnChildFileItemRenamed;
         // TODO: Handle other events
 
         _watcher.EnableRaisingEvents = true;
@@ -113,13 +120,63 @@ public class BindableFolder : BindableFileItem<IFolder>
 
     private async void OnChildFileItemCreated(object sender, FileSystemEventArgs e)
     {
+        // Retrieve/track the item
         var child = await FileService.GetFileItemAsync(e.FullPath);
         if (child is null)
             return;
 
-        Ioc.Default.GetRequiredService<IDispatcherService>().RunOnUIThread(() =>
+        // Track as child
+        Service.Get<IDispatcherService>().RunOnUIThread(() =>
         {
             TrackChild(child);
         });
+    }
+
+    private async void OnChildFileItemDeleted(object sender, FileSystemEventArgs e)
+    {
+        // Retrieve the item
+        var child = await FileService.GetFileItemAsync(e.FullPath);
+        if (child is null)
+            return;
+
+        // Untrack the item
+        FileService.UntrackFileItem(child);
+        Service.Get<IDispatcherService>().RunOnUIThread(() =>
+        {
+            UntrackChild(child);
+        });
+    }
+
+    private async void OnChildFileItemRenamed(object sender, RenamedEventArgs e)
+    {
+        // TODO: Change BindableItem to update
+
+        // Retreive the old item
+        var oldChild = await FileService.GetFileItemAsync(e.OldFullPath);
+        if (oldChild is null)
+            return;
+
+        // Retreive the new item
+        var newChild = await FileService.GetFileItemAsync(e.FullPath);
+        if (newChild is null)
+            return;
+
+        // Untrack the old item and track the new item
+        FileService.UntrackFileItem(oldChild);
+        Service.Get<IDispatcherService>().RunOnUIThread(() =>
+        {
+            UntrackChild(oldChild);
+            TrackChild(newChild);
+        });
+    }
+
+    /// <inheritdoc/>
+    public override void Dispose()
+    {
+        if (_watcher is null)
+            return;
+
+        _watcher.Created -= OnChildFileItemCreated;
+        _watcher.Deleted -= OnChildFileItemDeleted;
     }
 }

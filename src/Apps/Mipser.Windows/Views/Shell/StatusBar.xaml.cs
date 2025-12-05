@@ -1,7 +1,7 @@
 // Avishai Dernis 2025
 
-using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
+using Mipser.Services;
 using Mipser.ViewModels;
 
 namespace Mipser.Windows.Views.Shell;
@@ -15,7 +15,7 @@ public sealed partial class StatusBar : UserControl
     {
         this.InitializeComponent();
 
-        this.DataContext = Ioc.Default.GetRequiredService<StatusViewModel>();
+        this.DataContext = Service.Get<StatusViewModel>();
     }
 
     private StatusViewModel ViewModel => (StatusViewModel)DataContext;

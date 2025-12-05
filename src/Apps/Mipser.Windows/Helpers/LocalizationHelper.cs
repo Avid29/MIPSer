@@ -13,7 +13,7 @@ public static class LocalizationHelper
     {
         var key = $"{typeof(TEnum).Name}.{value}";
 
-        var localizationService = Ioc.Default.GetRequiredService<ILocalizationService>();
+        var localizationService = Service.Get<ILocalizationService>();
         return localizationService[key];
     }
 
@@ -21,7 +21,7 @@ public static class LocalizationHelper
     {
         var key = $"{value.GetType().Name}_{value}";
 
-        var localizationService = Ioc.Default.GetRequiredService<ILocalizationService>();
+        var localizationService = Service.Get<ILocalizationService>();
         return localizationService[key];
     }
 }

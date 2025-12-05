@@ -1,6 +1,5 @@
 ﻿// Adam Dernis 2024
 
-using CommunityToolkit.Mvvm.DependencyInjection;
 using Mipser.Services;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
@@ -26,7 +25,7 @@ public abstract class BindableFileItem<T> : BindableFileItem
     protected abstract T? FileItem { get; }
 
     /// <inheritdoc/>
-    public override string Name => FileItem?.Name ?? Ioc.Default.GetRequiredService<ILocalizationService>()["NewFile"];
+    public override string Name => FileItem?.Name ?? Service.Get<ILocalizationService>()["NewFile"];
 
     /// <inheritdoc/>
     public override string? Path => FileItem?.Path;

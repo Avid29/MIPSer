@@ -1,11 +1,11 @@
 // Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.Messages.Navigation;
+using Mipser.Services;
 using Mipser.ViewModels;
 using Mipser.ViewModels.Pages.Abstract;
 
@@ -23,7 +23,7 @@ public sealed partial class PanelView : UserControl
     {
         this.InitializeComponent();
 
-        this.DataContext = Ioc.Default.GetRequiredService<PanelViewModel>();
+        this.DataContext = Service.Get<PanelViewModel>();
     }
 
     private PanelViewModel ViewModel => (PanelViewModel)DataContext;
@@ -38,7 +38,6 @@ public sealed partial class PanelView : UserControl
 
     private void UserControl_GotFocus(object sender, RoutedEventArgs e)
     {
-        Ioc.Default.GetRequiredService<IMessenger>().Send(new PanelFocusChangedMessage(ViewModel));
+        Service.Get<IMessenger>().Send(new PanelFocusChangedMessage(ViewModel));
     }
-
 }

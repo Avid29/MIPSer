@@ -12,11 +12,6 @@ namespace Mipser.Services.Files;
 public interface IFileService
 {
     /// <summary>
-    /// Gets an anonymous file.
-    /// </summary>
-    public BindableFile GetAnonymousFile();
-
-    /// <summary>
     /// Gets a file from a path.
     /// </summary>
     /// <param name="path">The path of the file.</param>

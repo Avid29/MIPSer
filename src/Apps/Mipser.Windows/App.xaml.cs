@@ -31,11 +31,11 @@ public partial class App : Application
         Ioc.Default.ConfigureServices(Services);
 
         // Track necessary services
-        _messenger = Ioc.Default.GetRequiredService<IMessenger>();
-        _settingsService = Ioc.Default.GetRequiredService<ISettingsService>();
+        _messenger = Service.Get<IMessenger>();
+        _settingsService = Service.Get<ISettingsService>();
 
         // Apply language override from settings
-        var localizationService = Ioc.Default.GetRequiredService<ILocalizationService>();
+        var localizationService = Service.Get<ILocalizationService>();
         localizationService.LanguageOverride = _settingsService.Local.GetValue<string>(SettingsKeys.LanguageOverride);
 
         // Subscribe to messages

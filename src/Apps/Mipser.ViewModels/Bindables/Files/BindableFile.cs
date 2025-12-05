@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using Mipser.Bindables.Files.Abstract;
+using Mipser.Models;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using System.Collections.ObjectModel;
@@ -17,13 +18,6 @@ public class BindableFile : BindableFileItem<IFile>
     private string? _contents;
     private bool _isDirty;
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="BindableFile"/> class.
-    /// </summary>
-    internal BindableFile(FileService fileService) : base(fileService)
-    {
-        Children = [];
-    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFile"/> class.
@@ -34,11 +28,6 @@ public class BindableFile : BindableFileItem<IFile>
 
         Children = [];
     }
-
-    /// <summary>
-    /// Gets if the file exists in storage, or just in memory.
-    /// </summary>
-    public bool IsAnonymous => FileItem is null;
 
     /// <summary>
     /// Gets file contents.
@@ -62,19 +51,24 @@ public class BindableFile : BindableFileItem<IFile>
         private set => SetProperty(ref _isDirty, value);
     }
 
+    /// <summary>
+    /// Gets if the file exists in storage, or just in memory.
+    /// </summary>
+    public bool IsAnonymous => FileItem is null;
+
+    /// <summary>
+    /// Gets the wrapped <see cref="IFile"/>.
+    /// </summary>
+    public IFile File { get; init; }
+
     /// <inheritdoc/>
     /// <remarks>
     /// This usually means 
     /// </remarks>
     public override ObservableCollection<BindableFileItem> Children { get; }
 
-    /// <summary>
-    /// Gets the wrapped <see cref="IFile"/>.
-    /// </summary>
-    public IFile? File { get; init; }
-
     /// <inheritdoc/>
-    protected override IFile? FileItem => File;
+    protected override IFile FileItem => File;
 
     /// <summary>
     /// Saves the file contents.
@@ -118,5 +112,10 @@ public class BindableFile : BindableFileItem<IFile>
             return;
         }
         IsDirty = false;
+    }
+
+    /// <inheritdoc/>
+    public override void Dispose()
+    {
     }
 }

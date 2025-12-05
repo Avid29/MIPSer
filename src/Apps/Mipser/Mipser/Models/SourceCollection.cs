@@ -92,7 +92,14 @@ public class SourceCollection
 
     private void OnFileRenamed(object sender, RenamedEventArgs e)
     {
-        // TODO: Handle rename
+        // Remove source file from current key
+        _files.Remove(e.OldFullPath, out var file);
+        if (file is null)
+            return;
+
+        // Update and retrack
+        file.FullPath = e.FullPath;
+        Track(file);
     }
 
     private void OnFileDeleted(object sender, FileSystemEventArgs e)

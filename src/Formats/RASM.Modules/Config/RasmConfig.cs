@@ -37,6 +37,6 @@ public class RasmConfig : AssemblerBuildConfig<RasmConfig, RasmModule>
     /// <summary>
     /// Gets or sets the header version value.
     /// </summary>
-    [XmlElement]
+    [XmlElement("RasmVersion")]
     public ushort VersionNumber { get; set; } = VERSION;
 }

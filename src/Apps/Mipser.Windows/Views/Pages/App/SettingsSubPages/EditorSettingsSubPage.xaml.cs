@@ -23,11 +23,11 @@ public sealed partial class EditorSettingsSubPage : UserControl
     {
         this.InitializeComponent();
 
-        Ioc.Default.GetRequiredService<IMessenger>().Register<EditorSettingsSubPage, SettingChangedMessage<Theme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
-        Ioc.Default.GetRequiredService<IMessenger>().Register<EditorSettingsSubPage, SettingChangedMessage<EditorColorScheme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
+        Service.Get<IMessenger>().Register<EditorSettingsSubPage, SettingChangedMessage<Theme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
+        Service.Get<IMessenger>().Register<EditorSettingsSubPage, SettingChangedMessage<EditorColorScheme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
     }
 
     public EditorSettingsViewModel? ViewModel { get; set; }
 
-    public string DemoText = Ioc.Default.GetRequiredService<ILocalizationService>()["/Settings/EditorDemoText"];
+    public string DemoText = Service.Get<ILocalizationService>()["/Settings/EditorDemoText"];
 }

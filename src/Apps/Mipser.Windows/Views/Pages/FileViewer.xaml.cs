@@ -1,6 +1,5 @@
 // Avishai Dernis 2025
 
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml;
@@ -10,6 +9,7 @@ using MIPS.Assembler.Tokenization.Models;
 using Mipser.Messages;
 using Mipser.Messages.Editor.Enums;
 using Mipser.Models.EditorConfig.ColorScheme;
+using Mipser.Services;
 using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages;
 using Mipser.Windows.Controls.CodeEditor;
@@ -35,8 +35,8 @@ public sealed partial class FileViewer : UserControl
     {
         this.InitializeComponent();
 
-        Ioc.Default.GetRequiredService<IMessenger>().Register<FileViewer, SettingChangedMessage<Theme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
-        Ioc.Default.GetRequiredService<IMessenger>().Register<FileViewer, SettingChangedMessage<EditorColorScheme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
+        Service.Get<IMessenger>().Register<FileViewer, SettingChangedMessage<Theme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
+        Service.Get<IMessenger>().Register<FileViewer, SettingChangedMessage<EditorColorScheme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
     }
 
     /// <summary>

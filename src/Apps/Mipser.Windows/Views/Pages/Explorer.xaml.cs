@@ -1,12 +1,12 @@
 // Adam Dernis 2024
 
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Mipser.Bindables.Files;
 using Mipser.Messages.Navigation;
+using Mipser.Services;
 using Mipser.ViewModels.Pages;
 
 namespace Mipser.Windows.Views.Pages;
@@ -22,7 +22,7 @@ public sealed partial class Explorer : UserControl
     public Explorer()
     {
         this.InitializeComponent();
-        DataContext = Ioc.Default.GetRequiredService<ExplorerViewModel>();
+        DataContext = Service.Get<ExplorerViewModel>();
     }
 
     private ExplorerViewModel ViewModel => (ExplorerViewModel)DataContext;
@@ -47,7 +47,7 @@ public sealed partial class Explorer : UserControl
         if (sender is not TreeViewItem tvi || tvi.DataContext is not BindableFile file)
             return;
 
-        Ioc.Default.GetRequiredService<IMessenger>().Send(new FileOpenRequestMessage(file));
+        Service.Get<IMessenger>().Send(new FileOpenRequestMessage(file));
     }
 
     private void FolderDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)

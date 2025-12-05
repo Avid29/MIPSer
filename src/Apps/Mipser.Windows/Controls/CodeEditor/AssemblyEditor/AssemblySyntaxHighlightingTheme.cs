@@ -1,10 +1,10 @@
 ﻿// Avishai Dernis 2025
 
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.WinUI.Helpers;
 using Microsoft.UI;
 using Microsoft.UI.Xaml;
 using Mipser.Models.EditorConfig.ColorScheme;
+using Mipser.Services;
 using Mipser.Services.Settings;
 using Mipser.Windows.Extensions;
 using System;
@@ -128,7 +128,7 @@ public class AssemblySyntaxHighlightingTheme : DependencyObject
     public static AssemblySyntaxHighlightingTheme Current => new(CurrentScheme);
 
     private static EditorColorScheme? CurrentScheme
-        => Ioc.Default.GetRequiredService<ISettingsService>().Local.GetValue<EditorColorScheme>(SettingsKeys.EditorColorScheme);
+        => Service.Get<ISettingsService>().Local.GetValue<EditorColorScheme>(SettingsKeys.EditorColorScheme);
 
     public void ReloadFromSettings()
     {

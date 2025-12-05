@@ -51,7 +51,7 @@ public static class SettingsKeys
         }
     }
 
-    private static ISettingsService SettingsService => Ioc.Default.GetRequiredService<ISettingsService>();
+    private static ISettingsService SettingsService => Service.Get<ISettingsService>();
 
     private static EditorColorScheme? LoadEditorColorScheme(string resource)
     {

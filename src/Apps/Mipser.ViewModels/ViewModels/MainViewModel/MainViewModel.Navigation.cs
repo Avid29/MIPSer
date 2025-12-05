@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using CommunityToolkit.Mvvm.DependencyInjection;
+using Mipser.Services;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Linq;
 
@@ -19,7 +19,7 @@ public partial class MainViewModel
         var page = FocusedPanel?.OpenPages.FirstOrDefault(p => p is T);
         if (page is null && open)
         {
-            page = Ioc.Default.GetRequiredService<T>();
+            page = Service.Get<T>();
             FocusedPanel?.OpenPages.Add(page);
         }
 

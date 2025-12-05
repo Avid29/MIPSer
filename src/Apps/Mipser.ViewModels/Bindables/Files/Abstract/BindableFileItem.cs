@@ -5,14 +5,16 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Mipser.Services;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
+using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Mipser.Bindables.Files.Abstract;
 
 /// <summary>
 /// A <see cref="IFileItem"/> in the explorer.
 /// </summary>
-public abstract class BindableFileItem : ObservableObject
+public abstract class BindableFileItem : ObservableObject, IDisposable
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFileItem"/> class.
@@ -41,4 +43,7 @@ public abstract class BindableFileItem : ObservableObject
     /// Gets the child items.
     /// </summary>
     public abstract ObservableCollection<BindableFileItem> Children { get; }
+
+    /// <inheritdoc/>
+    public abstract void Dispose();
 }

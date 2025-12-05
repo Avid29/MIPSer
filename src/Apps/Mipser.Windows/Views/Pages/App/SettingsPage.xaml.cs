@@ -29,7 +29,7 @@ public sealed partial class SettingsPage : UserControl
             return null;
 
         // "system" and "app" are sentinel values since null and empty cannot be used in a ComboBox
-        var localization = Ioc.Default.GetRequiredService<ILocalizationService>();
+        var localization = Service.Get<ILocalizationService>();
         switch (code)
         {
             case "system":

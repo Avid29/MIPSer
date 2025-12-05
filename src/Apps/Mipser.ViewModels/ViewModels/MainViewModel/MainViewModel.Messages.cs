@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
+using MIPS.Assembler.Models.Directives.Abstract;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Bindables.Files;
 using Mipser.Messages.Build;
@@ -10,7 +11,10 @@ using Mipser.Messages.Editor.Enums;
 using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
 using Mipser.Messages.Pages;
+using Mipser.Services;
 using Mipser.ViewModels.Pages;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -105,8 +109,11 @@ public partial class MainViewModel
 
     private FilePageViewModel OpenFile(BindableFile? file, bool reopen = false)
     {
-        // Create anonymous file if needed
-        file ??= _fileService.GetAnonymousFile();
+        // Create new file if needed
+        if (file is null)
+        {
+            // TODO: Create file with generic name
+        }
 
         // Check for existing page
         FilePageViewModel? page = null;
@@ -120,7 +127,7 @@ public partial class MainViewModel
         // Create page view model if needed
         if (page is null)
         {
-            page = Ioc.Default.GetRequiredService<FilePageViewModel>();
+            page = Service.Get<FilePageViewModel>();
             page.File = file;
         }
 

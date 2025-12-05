@@ -29,7 +29,7 @@ public class SourceFile
     /// <summary>
     /// Gets the full path of the file.
     /// </summary>
-    public string FullPath { get; set; }
+    public string FullPath { get; internal set; }
 
     /// <summary>
     /// Gets the <see cref="SourceCollection"/> the file belongs to.
