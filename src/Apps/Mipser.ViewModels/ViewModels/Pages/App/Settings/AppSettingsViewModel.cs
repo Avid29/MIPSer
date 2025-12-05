@@ -4,6 +4,7 @@ using Mipser.Services;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
 using Mipser.Services.Versioning;
+using Mipser.Services.Versioning.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -80,5 +81,15 @@ namespace Mipser.ViewModels.Pages.App.Settings
                 _versioningService.AppVersion.MajorVersion,
                 _versioningService.AppVersion.MinorVersion,
                 _versioningService.AppVersion.Revision];
+
+        /// <summary>
+        /// Gets the build's git version info.
+        /// </summary>
+        public GitVersionInfo GitInfo => _versioningService.GitVersionInfo;
+
+        /// <summary>
+        /// Gets a link to the build's commit on github.
+        /// </summary>
+        public string CommitGitHubLink => $"https://github.com/Avid29/MIPSer/tree/{GitInfo.Sha}";
     }
 }

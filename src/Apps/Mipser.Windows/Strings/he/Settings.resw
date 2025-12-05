@@ -183,7 +183,7 @@
   <data name="VersionFormat" xml:space="preserve">
     <value>{0}.{1}.{2}</value>
   </data>
-  <data name="ViewOnGitHubHB.Content" xml:space="preserve">
+  <data name="ViewOnGitHubTB.Text" xml:space="preserve">
     <value>צפה ב-GitHub</value>
   </data>
   <data name="EditorDemoText" xml:space="preserve">

@@ -5,10 +5,18 @@
 
     <ResourceDictionary.ThemeDictionaries>
         <ResourceDictionary x:Key="Dark">
+            <!--  App  -->
             <ImageSource x:Key="TrafficConeIcon">ms-appx:///Assets/Icons/TrafficCone-Dark.svg</ImageSource>
+
+            <!--  Services  -->
+            <ImageSource x:Key="GitHubIcon">ms-appx:///Assets/Icons/Services/GitHub-Dark.svg</ImageSource>
         </ResourceDictionary>
         <ResourceDictionary x:Key="Light">
+            <!--  App  -->
             <ImageSource x:Key="TrafficConeIcon">ms-appx:///Assets/Icons/TrafficCone-Light.svg</ImageSource>
+
+            <!--  Services  -->
+            <ImageSource x:Key="GitHubIcon">ms-appx:///Assets/Icons/Services/GitHub-Light.svg</ImageSource>
         </ResourceDictionary>
     </ResourceDictionary.ThemeDictionaries>
 
@@ -23,4 +31,6 @@
     <ImageSource x:Key="AsmFileIcon">ms-appx:///Assets/Icons/Files/asm.svg</ImageSource>
     <ImageSource x:Key="ObjFileIcon">ms-appx:///Assets/Icons/Files/obj.svg</ImageSource>
 
+    <!--  Services  -->
+    <ImageSource x:Key="GitServiceIcon">ms-appx:///Assets/Icons/Services/Git.svg</ImageSource>
 </ResourceDictionary>

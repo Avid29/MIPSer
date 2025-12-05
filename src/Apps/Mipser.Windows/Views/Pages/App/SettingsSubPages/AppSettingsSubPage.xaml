@@ -63,10 +63,26 @@
             <ctc:SettingsExpander.Items>
                 <ctc:SettingsCard HorizontalContentAlignment="Left"
                                   ContentAlignment="Left">
-                    <StackPanel Margin="-24,0,0,0">
-                        <HyperlinkButton x:Uid="/Settings/ViewOnGitHubHB"
-                                         Content="View on GitHub"
-                                         NavigateUri="https://github.com/Avid29/MIPSer"/>
+                    <StackPanel Margin="-24,0,0,0" Orientation="Horizontal" Spacing="8">
+                        <HyperlinkButton NavigateUri="https://github.com/Avid29/MIPSer">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <ImageIcon Source="{ThemeResource GitHubIcon}" Height="20"/>
+                                <TextBlock x:Uid="/Settings/ViewOnGitHubTB" Text="View on GitHub"/>
+                            </StackPanel>
+                        </HyperlinkButton>
+
+                        <HyperlinkButton NavigateUri="{x:Bind ViewModel.CommitGitHubLink, Mode=OneWay}">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <ImageIcon Source="{StaticResource GitServiceIcon}" Height="20"/>
+                                <RichTextBlock IsTextSelectionEnabled="False">
+                                    <Paragraph>
+                                        <Run Text="{x:Bind ViewModel.GitInfo.Branch}"/>
+                                        <Run Text="/"/>
+                                        <Run Text="{x:Bind ViewModel.GitInfo.Commit}"/>
+                                    </Paragraph>
+                                </RichTextBlock>
+                            </StackPanel>
+                        </HyperlinkButton>
                     </StackPanel>
                 </ctc:SettingsCard>
             </ctc:SettingsExpander.Items>

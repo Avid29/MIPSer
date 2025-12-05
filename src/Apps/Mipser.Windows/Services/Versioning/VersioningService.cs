@@ -2,6 +2,7 @@
 
 using Mipser.Services.Versioning;
 using Mipser.Services.Versioning.Models;
+using System;
 using Windows.ApplicationModel;
 
 namespace Mipser.Windows.Services.Versioning;
@@ -26,8 +27,10 @@ public class VersioningService : IVersioningService
 
         GitVersionInfo = new GitVersionInfo
         {
-            Branch = ThisAssembly.Git.Branch,
             Commit = ThisAssembly.Git.Commit,
+            Branch = ThisAssembly.Git.Branch,
+            Sha = ThisAssembly.Git.Sha,
+            CommitDate = DateTime.Parse(ThisAssembly.Git.CommitDate),
         };
     }
 
