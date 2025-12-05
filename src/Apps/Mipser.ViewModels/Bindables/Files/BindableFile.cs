@@ -91,9 +91,6 @@ public partial class BindableFile : BindableFileItem<IFile>
     /// </summary>
     public async Task LoadContent()
     {
-        if (FileItem is null)
-            return;
-
         await using var stream = await FileItem.OpenStreamForReadAsync();
         using var reader = new StreamReader(stream);
         Contents = await reader.ReadToEndAsync();
@@ -102,9 +99,6 @@ public partial class BindableFile : BindableFileItem<IFile>
 
     private async Task SaveContent()
     {
-        if (FileItem is null)
-            return;
-
         try
         {
             await using var stream = await FileItem.OpenStreamForWriteAsync();
@@ -117,6 +111,7 @@ public partial class BindableFile : BindableFileItem<IFile>
             // Ignore errors for now
             return;
         }
+
         IsDirty = false;
     }
 

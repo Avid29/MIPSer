@@ -45,13 +45,19 @@
                         <MenuFlyoutSeparator/>
                         
                         <!--  Open  -->
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/OpenInFileExplorerMFI" Text="Open in File Explorer" IsEnabled="False">
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/OpenInFileExplorerMFI" Text="Open in File Explorer"
+                                        Command="{x:Bind OpenInExplorerCommand, Mode=OneWay}">
                             <MenuFlyoutItem.Icon>
                                 <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xED25;" />
                             </MenuFlyoutItem.Icon>
                         </MenuFlyoutItem>
                         <!--<MenuFlyoutItem x:Uid="/Explorer/Flyout/OpenInTerminal" Text="Open in Terminal" IsEnabled="False"/>-->
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/OpenInWindowsTerminal" Text="Open in Windows Terminal" IsEnabled="False"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/OpenInWindowsTerminal" Text="Open in Windows Terminal"
+                                        Command="{x:Bind OpenInWindowsTerminalCommand, Mode=OneWay}">
+                            <MenuFlyoutItem.Icon>
+                                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE756;" />
+                            </MenuFlyoutItem.Icon>
+                        </MenuFlyoutItem>
                         <MenuFlyoutSeparator/>
 
                         <!--  Copy Path  -->

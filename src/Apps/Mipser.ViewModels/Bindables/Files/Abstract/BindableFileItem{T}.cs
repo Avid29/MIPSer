@@ -25,8 +25,8 @@ public abstract class BindableFileItem<T> : BindableFileItem
     protected internal abstract T FileItem { get; set; }
 
     /// <inheritdoc/>
-    public override string Name => FileItem?.Name ?? Service.Get<ILocalizationService>()["NewFile"];
+    public override string Name => FileItem.Name;
 
     /// <inheritdoc/>
-    public override string? Path => FileItem?.Path;
+    public override string Path => FileItem.Path;
 }

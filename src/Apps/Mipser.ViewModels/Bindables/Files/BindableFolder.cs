@@ -16,7 +16,7 @@ namespace Mipser.Bindables.Files;
 /// <summary>
 /// A folder in the explorer.
 /// </summary>
-public class BindableFolder : BindableFileItem<IFolder>
+public partial class BindableFolder : BindableFileItem<IFolder>
 {
     private FileSystemWatcher? _watcher;
     private bool _childrenNotCalculated;
@@ -32,6 +32,9 @@ public class BindableFolder : BindableFileItem<IFolder>
 
         Children = [];
         ChildrenNotLoaded = true;
+
+        OpenInExplorerCommand = new(OpenInExplorer);
+        OpenInWindowsTerminalCommand = new(OpenInWindowsTerminal);
     }
 
     /// <summary>
