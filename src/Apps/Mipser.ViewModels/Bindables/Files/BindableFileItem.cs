@@ -22,6 +22,7 @@ public abstract partial class BindableFileItem : ObservableObject, IDisposable
 
         CopyFileNameCommand = new(CopyFileName);
         CopyFilePathCommand = new(CopyFilePath);
+        DeleteCommand = new(DeleteAsync);
     }
 
     /// <summary>

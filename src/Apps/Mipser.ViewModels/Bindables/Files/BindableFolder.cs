@@ -4,6 +4,7 @@ using CommunityToolkit.Diagnostics;
 using Mipser.Services;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Mipser.Bindables.Files;
 /// </summary>
 public partial class BindableFolder : BindableFileItem<IFolder>
 {
+    private readonly Dictionary<BindableFileItem, BindableFile> _virtualParents;
     private FileSystemWatcher? _watcher;
     private bool _childrenNotCalculated;
     private IFolder _folder;
@@ -26,6 +28,8 @@ public partial class BindableFolder : BindableFileItem<IFolder>
     /// </summary>
     public BindableFolder(FileService fileService, IFolder folder) : base(fileService)
     {
+        _virtualParents = [];
+
         _folder = folder;
 
         Children = [];
@@ -103,6 +107,7 @@ public partial class BindableFolder : BindableFileItem<IFolder>
         if (parentAsm is not null)
         {
             parentAsm.TrackAsChild(item);
+            _virtualParents.Add(item, parentAsm);
             return;
         }
 
@@ -111,7 +116,14 @@ public partial class BindableFolder : BindableFileItem<IFolder>
 
     internal void UntrackChild(BindableFileItem item)
     {
-        Children.Remove(item);
+        if (item is BindableFile file && _virtualParents.ContainsKey(file))
+        {
+            _virtualParents[file].UntrackChild(item);
+        }
+        else
+        {
+            Children.Remove(item);
+        }
     }
 
     private void SetupWatcher()

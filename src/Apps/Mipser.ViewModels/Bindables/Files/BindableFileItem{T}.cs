@@ -1,7 +1,9 @@
 ﻿// Adam Dernis 2024
 
+using Mipser.Services;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
+using System.Threading.Tasks;
 
 namespace Mipser.Bindables.Files;
 
@@ -28,4 +30,7 @@ public abstract class BindableFileItem<T> : BindableFileItem
 
     /// <inheritdoc/>
     public override string Path => FileItem.Path;
+
+    /// <inheritdoc/>
+    public override async Task DeleteAsync() => await Service.Get<IFileSystemService>().DeleteFileItemAsync(FileItem);
 }

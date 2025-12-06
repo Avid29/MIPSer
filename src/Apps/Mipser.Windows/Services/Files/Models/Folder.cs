@@ -59,4 +59,7 @@ public class Folder : IFolder
         var files = await _storageFolder.GetFilesAsync();
         return files.Select(x => (IFile)new File(x)).ToArray();
     }
+
+    /// <inheritdoc/>
+    public async Task DeleteAsync() => await _storageFolder.DeleteAsync();
 }

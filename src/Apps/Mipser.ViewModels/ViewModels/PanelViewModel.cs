@@ -101,13 +101,13 @@ public class PanelViewModel : ObservableObject
 
         if (confirm)
         {
-            var title = _localizationService["UnsavedChangesTitle", page.Title];
-            var desc = _localizationService["UnsavedChangesDescription"];
+            var title = _localizationService["/Popups/UnsavedChangesTitle", page.Title];
+            var desc = _localizationService["/Popups/UnsavedChangesDescription"];
             var popup = new PopupDetails(title, desc)
             {
-                PrimaryButtonText = _localizationService["Save"],
-                SecondaryButtonText = _localizationService["DontSave"],
-                CloseButtonText = _localizationService["Cancel"],
+                PrimaryButtonText = _localizationService["/Popups/Save"],
+                SecondaryButtonText = _localizationService["/Popups/DontSave"],
+                CloseButtonText = _localizationService["/Popups/Cancel"],
             };
 
             confirmation = await _popupService.ShowPopAsync(popup);

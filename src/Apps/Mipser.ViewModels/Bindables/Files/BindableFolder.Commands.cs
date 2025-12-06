@@ -26,5 +26,4 @@ public partial class BindableFolder
     /// Open the windows terminal to the folder.
     /// </summary>
     public void OpenInWindowsTerminal() => Process.Start("wt.exe", $"-d \"{Path}\"");
-
 }

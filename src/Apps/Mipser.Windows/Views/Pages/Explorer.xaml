@@ -40,7 +40,8 @@
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/CutMFI" Text="Cut" Icon="Cut" IsEnabled="False"/>
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyMFI" Text="Copy" Icon="Copy" IsEnabled="False"/>
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/PasteMFI" Text="Paste" Icon="Paste" IsEnabled="False"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/DeleteMFI" Text="Delete" Icon="Delete" IsEnabled="False"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/DeleteMFI" Text="Delete" Icon="Delete"
+                                        Command="{x:Bind DeleteCommand, Mode=OneWay}"/>
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/RenameMFI" Text="Rename" Icon="Rename" IsEnabled="False"/>
                         <MenuFlyoutSeparator/>
                         
@@ -93,7 +94,8 @@
                         <!--  Modify  -->
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/CutMFI" Text="Cut" Icon="Cut" IsEnabled="False"/>
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyMFI" Text="Copy" Icon="Copy" IsEnabled="False"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/DeleteMFI" Text="Delete" Icon="Delete" IsEnabled="False"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/DeleteMFI" Text="Delete" Icon="Delete"
+                                        Command="{x:Bind DeleteCommand, Mode=OneWay}"/>
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/RenameMFI" Text="Rename" Icon="Rename" IsEnabled="False"/>
                         <MenuFlyoutSeparator/>
 

@@ -1,6 +1,9 @@
 ﻿// Adam Dernis 2024
 
 using Mipser.Services.Files.Models;
+using Mipser.Services.Popup;
+using Mipser.Services.Popup.Enums;
+using Mipser.Services.Popup.Models;
 using System.Threading.Tasks;
 
 namespace Mipser.Services.Files;
@@ -19,7 +22,6 @@ public interface IFileSystemService
     /// Attempts to create a folder.
     /// </summary>
     Task<IFolder?> CreateFolderAsync(string path);
-
     /// <summary>
     /// Attempts to get a file.
     /// </summary>
@@ -29,6 +31,14 @@ public interface IFileSystemService
     /// Attempts to get a folder.
     /// </summary>
     Task<IFolder?> GetFolderAsync(string path);
+
+    /// <summary>
+    /// Attempts to delete a <see cref="IFileItem"/>.
+    /// </summary>
+    /// <param name="item">The <see cref="IFileItem"/> to delete.</param>
+    /// <param name="confirm">Whether or not to show a confirmation popup before deletion.</param>
+    /// <returns>Whether or not the item was deleted.</returns>
+    public Task<bool> DeleteFileItemAsync(IFileItem item, bool confirm = true);
 
     /// <summary>
     /// Attempts to pick a folder to open.

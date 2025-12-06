@@ -51,6 +51,11 @@ public partial class BindableFile : BindableFileItem<IFile>
         Children.Add(child);
     }
 
+    internal void UntrackChild(BindableFileItem child)
+    {
+        Children.Remove(child);
+    }
+
     /// <inheritdoc/>
     public override void Dispose()
     {

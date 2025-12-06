@@ -30,13 +30,13 @@ public partial class App
             .AddSingleton<ICacheService, CacheService>()
             .AddSingleton<IClipboardService, ClipboardService>()
             .AddSingleton<IDispatcherService, DispatcherService>()
-            .AddSingleton<IFileSystemService, FileSystemService>()
             .AddSingleton<ILocalizationService, LocalizationService>()
             .AddSingleton<IMessenger, WeakReferenceMessenger>()
             .AddSingleton<IPopupService, PopupService>()
             .AddSingleton<IVersioningService, VersioningService>()
 
             // Dependent Services
+            .AddSingleton<IFileSystemService, FileSystemService>()
             .AddSingleton<ISettingsService, SettingsService>()
             .AddSingleton<IProjectService, ProjectService>()
             .AddSingleton<IFileService, FileService>()

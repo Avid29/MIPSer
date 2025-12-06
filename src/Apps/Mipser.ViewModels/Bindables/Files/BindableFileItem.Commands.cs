@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Mvvm.Input;
 using Mipser.Services;
+using System.Threading.Tasks;
 
 namespace Mipser.Bindables.Files;
 
@@ -18,6 +19,11 @@ public partial class BindableFileItem
     public RelayCommand CopyFilePathCommand { get; }
 
     /// <summary>
+    /// Gets a command to delete the file.
+    /// </summary>
+    public AsyncRelayCommand DeleteCommand { get; }
+
+    /// <summary>
     /// Copies the file name to the clipboard.
     /// </summary>
     public void CopyFileName() => Service.Get<IClipboardService>().Copy(Name);
@@ -26,4 +32,9 @@ public partial class BindableFileItem
     /// Copies the file's path to the clipboard.
     /// </summary>
     public void CopyFilePath() => Service.Get<IClipboardService>().Copy(Path);
+
+    /// <summary>
+    /// Deletes the file item.
+    /// </summary>
+    public abstract Task DeleteAsync();
 }
