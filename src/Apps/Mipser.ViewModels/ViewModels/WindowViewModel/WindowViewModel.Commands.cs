@@ -41,7 +41,12 @@ public partial class WindowViewModel
     /// <summary>
     /// Gets a command that closes the currently open page.
     /// </summary>
-    public RelayCommand ClosePageCommand { get; }
+    public AsyncRelayCommand ClosePageCommand { get; }
+
+    /// <summary>
+    /// Gets a command that closes the currently open project.
+    /// </summary>
+    public AsyncRelayCommand CloseProjectCommand { get; }
 
     /// <summary>
     /// Gets a command that assembles the current file.
@@ -83,7 +88,16 @@ public partial class WindowViewModel
 
     private async Task PickAndOpenProjectAsync() => await MainViewModel.PickAndOpenProjectAsync();
 
-    private void ClosePage() => _messenger.Send(new PageCloseRequestMessage());
+    private async Task ClosePageAsync()
+    {
+        var panel = MainViewModel.FocusedPanel;
+        if (panel is null)
+            return;
+
+        await panel.ClosePageAsync(null);
+    }
+
+    private async Task CloseProjectAsync() => await _projectService.CloseProjectAsync();
 
     private void AssembleFile()
     {

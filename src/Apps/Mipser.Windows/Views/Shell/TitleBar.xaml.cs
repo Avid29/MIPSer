@@ -36,4 +36,6 @@ public sealed partial class TitleBar : UserControl
         window.ExtendsContentIntoTitleBar = true;
         window.SetTitleBar(AppTitleBar);
     }
+
+    public static bool IsNotNull(object? obj) => obj is not null;
 }

@@ -4,6 +4,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Messages.Navigation;
+using Mipser.Services;
+using Mipser.Services.Popup;
 
 namespace Mipser.ViewModels;
 
@@ -13,13 +15,16 @@ namespace Mipser.ViewModels;
 public partial class WindowViewModel : ObservableRecipient
 {
     private readonly IMessenger _messenger;
+    private readonly IProjectService _projectService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WindowViewModel"/> class.
     /// </summary>
-    public WindowViewModel(MainViewModel mainViewModel, PanelViewModel panelViewModel, IMessenger messenger)
+    public WindowViewModel(IMessenger messenger, IProjectService projectService, MainViewModel mainViewModel, PanelViewModel panelViewModel)
     {
         _messenger = messenger;
+        _projectService = projectService;
+
         MainViewModel = mainViewModel;
         PanelViewModel = panelViewModel;
 
@@ -28,7 +33,8 @@ public partial class WindowViewModel : ObservableRecipient
         PickAndOpenFileCommand = new(PickAndOpenFileAsync);
         PickAndOpenFolderCommand = new(PickAndOpenFolderAsync);
         PickAndOpenProjectCommand = new(PickAndOpenProjectAsync);
-        ClosePageCommand = new(ClosePage);
+        ClosePageCommand = new(ClosePageAsync);
+        CloseProjectCommand = new(CloseProjectAsync);
 
         AssembleFileCommand = new(AssembleFile);
 

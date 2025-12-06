@@ -51,8 +51,8 @@ public partial class App
             .AddTransient<WelcomePageViewModel>()
 
             // Panel ViewModels
-            .AddTransient<ExplorerViewModel>()
-            .AddTransient<ErrorListViewModel>()
+            .AddSingleton<ExplorerViewModel>()
+            .AddSingleton<ErrorListViewModel>()
 
             // ViewModels
             .AddTransient<StatusViewModel>()

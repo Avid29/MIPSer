@@ -45,7 +45,7 @@ public class ProjectService : IProjectService
     public IFolder? ProjectRootFolder { get; private set; }
 
     /// <inheritdoc/>
-    public void OpenFolder(IFolder folder, bool cacheState = true)
+    public void OpenFolder(IFolder? folder, bool cacheState = true)
     {
         // Change the root folder
         ProjectRootFolder = folder;
@@ -56,7 +56,7 @@ public class ProjectService : IProjectService
         // Update the state.
         if (cacheState)
         {
-            _ = CacheOpenProject(true);
+            _ = CacheOpenProjectAsync(true);
         }
     }
 
@@ -83,7 +83,7 @@ public class ProjectService : IProjectService
 
         if (cacheState)
         {
-            await CacheOpenProject();
+            await CacheOpenProjectAsync();
         }
     }
 
@@ -109,11 +109,19 @@ public class ProjectService : IProjectService
         await OpenProjectAsync(config, cacheState);
     }
 
-    private async Task CacheOpenProject(bool folder = false)
+    /// <inheritdoc/>
+    public async Task CloseProjectAsync()
+    {
+        Project = null;
+        OpenFolder(null, false);
+
+        await ClearOpenCacheAsync();
+    }
+
+    private async Task CacheOpenProjectAsync(bool folder = false)
     {
         // Clear current cache
-        await _cacheService.DeleteCacheAsync(OpenProjectCacheKey);
-        await _cacheService.DeleteCacheAsync(OpenFolderCacheKey);
+        await ClearOpenCacheAsync();
 
         // Cache value and key
         var (key, value) = folder switch
@@ -122,6 +130,12 @@ public class ProjectService : IProjectService
             true => (OpenFolderCacheKey, ProjectRootFolder?.Path),
         };
         await _cacheService.CacheAsync(key, value);
+    }
+
+    private async Task ClearOpenCacheAsync()
+    {
+        await _cacheService.DeleteCacheAsync(OpenProjectCacheKey);
+        await _cacheService.DeleteCacheAsync(OpenFolderCacheKey);
     }
 
     private async Task RestoreOpenProject()
@@ -144,4 +158,5 @@ public class ProjectService : IProjectService
             return;
         }
     }
+
 }

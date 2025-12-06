@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Services;
 using Mipser.Services.Files;
-using System.Threading.Tasks;
+using Mipser.ViewModels.Pages;
 
 namespace Mipser.ViewModels;
 
@@ -18,24 +18,21 @@ public partial class MainViewModel : ObservableRecipient
     private readonly BuildService _buildService;
     private readonly IFileService _fileService;
     private readonly IFileSystemService _fileSystemService;
-    private readonly ICacheService _cacheService;
 
     private PanelViewModel? _focusPanel;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainViewModel"/> class.
     /// </summary>
-    public MainViewModel(IMessenger messenger, IProjectService projectService, BuildService buildService, IFileService fileService, IFileSystemService fileSystemService, ICacheService cacheService)
+    public MainViewModel(IMessenger messenger, IProjectService projectService, BuildService buildService, IFileService fileService, IFileSystemService fileSystemService, ExplorerViewModel explorerViewModel)
     {
         _messenger = messenger;
         _projectService = projectService;
         _buildService = buildService;
         _fileService = fileService;
         _fileSystemService = fileSystemService;
-        _cacheService = cacheService;
 
-        // Restore open folder from cache
-        _ = RestoreOpenFolder();
+        ExplorerViewModel = explorerViewModel;
 
         IsActive = true;
     }
@@ -49,19 +46,8 @@ public partial class MainViewModel : ObservableRecipient
         private set => SetProperty(ref _focusPanel, value);
     }
 
-    private async Task RestoreOpenFolder()
-    {
-        // Retrieve path from cache
-        var openFolderPath = await _cacheService.RetrieveCacheAsync("OpenFolder");
-        if (openFolderPath is null)
-            return;
-
-        // Retrieve folder
-        var folder = await _fileSystemService.GetFolderAsync(openFolderPath);
-        if (folder is null)
-            return;
-
-        // Open the folder
-        _projectService.OpenFolder(folder);
-    }
+    /// <summary>
+    /// Gets the <see cref="ExplorerViewModel"/>.
+    /// </summary>
+    public ExplorerViewModel ExplorerViewModel { get; }
 }

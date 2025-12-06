@@ -54,6 +54,16 @@ public class ExplorerViewModel : PageViewModel
     /// <inheritdoc/>
     protected override void OnActivated()
     {
-        _messenger.Register<ExplorerViewModel, FolderOpenedMessage>(this, async (r, m) => r.RootFolder = await _fileService.GetFolderAsync(m.Folder.Path));
+        _messenger.Register<ExplorerViewModel, FolderOpenedMessage>(this, async (r, m) =>
+        {
+            var folder = m.Folder;
+            if (folder is null)
+            {
+                RootFolder = null;
+                return;
+            }
+
+            r.RootFolder = await _fileService.GetFolderAsync(folder.Path);
+        });
     }
 }
