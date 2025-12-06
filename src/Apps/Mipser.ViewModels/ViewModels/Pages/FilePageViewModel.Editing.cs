@@ -51,7 +51,7 @@ public partial class FilePageViewModel
     /// <summary>
     /// Saves changes to the file.
     /// </summary>
-    public async Task SaveAsync()
+    public override async Task SaveAsync()
     {
         // TODO: Save as dialog for anonymous files.
         if (File is null)

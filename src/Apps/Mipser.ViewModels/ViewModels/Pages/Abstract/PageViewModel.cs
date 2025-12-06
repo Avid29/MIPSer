@@ -1,6 +1,9 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+using System.Threading.Tasks;
 
 namespace Mipser.ViewModels.Pages.Abstract
 {
@@ -33,5 +36,14 @@ namespace Mipser.ViewModels.Pages.Abstract
         /// Gets or sets if the page can be assembled.
         /// </summary>
         public virtual bool CanAssemble => false;
+
+        /// <summary>
+        /// Saves changes for an editable page.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Will be thrown if <see cref="CanSave"/> is false.</exception>
+        public virtual async Task SaveAsync()
+        {
+            ThrowHelper.ThrowInvalidOperationException();
+        }
     }
 }

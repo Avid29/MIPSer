@@ -66,10 +66,10 @@ public class PanelViewModel : ObservableObject
     /// </remarks>
     public async Task SaveCurrentFileAsync()
     {
-        if (CurrentPage is not FilePageViewModel filePage)
+        if (CurrentPage is null || !CurrentPage.CanSave)
             return;
 
-        await filePage.SaveAsync();
+        await CurrentPage.SaveAsync();
     }
 
     /// <summary>
@@ -118,17 +118,12 @@ public class PanelViewModel : ObservableObject
         if (confirmation is PopupResult.Closed)
             return;
 
-        switch (confirmation)
-        {
-            case PopupResult.Primary:
-                // TODO: Save changes
-                break;
-            case PopupResult.Secondary:
-                // TODO: Discard changes
-                break;
-        }
-
+        // We can now close the page
         ClosePage(page);
+
+        // Save changes if save was selected
+        if (confirmation is PopupResult.Primary)
+            await page.SaveAsync();
     }
 
     /// <summary>
