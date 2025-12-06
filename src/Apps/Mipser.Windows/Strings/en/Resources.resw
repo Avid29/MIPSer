@@ -210,4 +210,19 @@
   <data name="MipsVersion_MipsVI" xml:space="preserve">
     <value>MIPS VI</value>
   </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>{0} contains unsaved changes</value>
+  </data>
+  <data name="UnsavedChangesDescription" xml:space="preserve">
+    <value>Would you like to save the changes before closing the file?</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="DontSave" xml:space="preserve">
+    <value>Don't Save</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

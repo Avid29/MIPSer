@@ -29,12 +29,12 @@ public sealed partial class PanelView : UserControl
 
     private PanelViewModel ViewModel => (PanelViewModel)DataContext;
 
-    private void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
+    private async void TabView_TabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
     {
-        if (args.Item is not PageViewModel)
-            ThrowHelper.ThrowInvalidDataException();
+        if (args.Item is not PageViewModel page)
+            return;
 
-        ViewModel.OpenPages.Remove((PageViewModel)args.Item);
+        await ViewModel.ClosePageAsync(page);
     }
 
     private void UserControl_GotFocus(object sender, RoutedEventArgs e)
@@ -42,7 +42,7 @@ public sealed partial class PanelView : UserControl
         Service.Get<IMessenger>().Send(new PanelFocusChangedMessage(ViewModel));
     }
 
-    private void TabView_TabDroppedOutside(TabView sender, TabViewTabDroppedOutsideEventArgs args)
+    private async void TabView_TabDroppedOutside(TabView sender, TabViewTabDroppedOutsideEventArgs args)
     {
         if (args.Item is not PageViewModel page)
             return;

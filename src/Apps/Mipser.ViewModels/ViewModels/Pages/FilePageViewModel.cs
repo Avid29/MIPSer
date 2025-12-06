@@ -58,26 +58,16 @@ public class FilePageViewModel : PageViewModel
     }
 
     /// <inheritdoc/>
-    public override string Title
-    {
-        get
-        {
-            Guard.IsNotNull(File);
-
-            // Get name and append astrics if dirty
-            var name = File.Name;
-            if (File.IsDirty)
-                name += " *";
-
-            return name;
-        }
-    }
+    public override string Title => File?.Name ?? string.Empty;
     
     /// <inheritdoc/>
     public override bool CanTextEdit => true;
     
     /// <inheritdoc/>
     public override bool CanSave => true;
+
+    /// <inheritdoc/>
+    public override bool IsDirty => File?.IsDirty ?? false;
     
     /// <inheritdoc/>
     public override bool CanAssemble => true; // TODO: Check file type
@@ -170,10 +160,8 @@ public class FilePageViewModel : PageViewModel
 
     private void OnFileUpdate(object? sender, PropertyChangedEventArgs args)
     {
-        if (args.PropertyName == nameof(BindableFile.Name) || args.PropertyName == nameof(BindableFile.IsDirty))
-        {
-            OnPropertyChanged(nameof(Title));
-        }
+        OnPropertyChanged(nameof(Title));
+        OnPropertyChanged(nameof(IsDirty));
     }
 
     private void OnBuildFinished(string file, IReadOnlyList<AssemblerLog>? logs)

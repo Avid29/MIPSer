@@ -210,4 +210,19 @@
   <data name="MipsVersion_MipsVI" xml:space="preserve">
     <value>MIPS VI</value>
   </data>
+  <data name="UnsavedChangesTitle" xml:space="preserve">
+    <value>ל-{0} יש שינויים שלא נשמרו</value>
+  </data>
+  <data name="UnsavedChangesDescription" xml:space="preserve">
+    <value>האם ברצונך לשמור את השינויים לפני סגירת הקובץ?</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>שמור</value>
+  </data>
+  <data name="DontSave" xml:space="preserve">
+    <value>אל תשמור</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>בטל</value>
+  </data>
 </root>

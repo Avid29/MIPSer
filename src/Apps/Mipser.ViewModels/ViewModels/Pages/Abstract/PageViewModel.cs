@@ -25,6 +25,11 @@ namespace Mipser.ViewModels.Pages.Abstract
         public virtual bool CanSave => false;
 
         /// <summary>
+        /// Gets or sets if the page contains unsaved content.
+        /// </summary>
+        public virtual bool IsDirty => false;
+
+        /// <summary>
         /// Gets or sets if the page can be assembled.
         /// </summary>
         public virtual bool CanAssemble => false;

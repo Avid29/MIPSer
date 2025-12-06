@@ -40,7 +40,13 @@
             </selectors:PageTemplateSelector.CreateProjectPageTemplate>
             <selectors:PageTemplateSelector.FilePageTemplate>
                 <DataTemplate x:DataType="vmv:FilePageViewModel">
-                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                    <TabViewItem>
+                        <TabViewItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Bind Title, Mode=OneWay}"/>
+                                <TextBlock Visibility="{x:Bind IsDirty, Mode=OneWay}" Text="*"/>
+                            </StackPanel>
+                        </TabViewItem.Header>
                         <pages:FileViewer ViewModel="{x:Bind Mode=OneWay}"/>
                     </TabViewItem>
                 </DataTemplate>

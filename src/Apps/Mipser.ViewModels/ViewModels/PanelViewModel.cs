@@ -1,8 +1,10 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using Mipser.Bindables.Files;
-using Mipser.Services.Files;
+using Mipser.Services;
+using Mipser.Services.Popup;
+using Mipser.Services.Popup.Enums;
+using Mipser.Services.Popup.Models;
 using Mipser.ViewModels.Pages;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.ObjectModel;
@@ -15,13 +17,19 @@ namespace Mipser.ViewModels;
 /// </summary>
 public class PanelViewModel : ObservableObject
 {
+    private readonly ILocalizationService _localizationService;
+    private readonly IPopupService _popupService;
+
     private PageViewModel? _currentPage;
      
     /// <summary>
     /// Initializes a new instance of the <see cref="PanelViewModel"/> class.
     /// </summary>
-    public PanelViewModel()
+    public PanelViewModel(ILocalizationService localizationService, IPopupService popupService)
     {
+        _localizationService = localizationService;
+        _popupService = popupService;
+
         OpenPages = [];
     }
 
@@ -74,6 +82,53 @@ public class PanelViewModel : ObservableObject
             OpenPages.Add(page);
 
         CurrentPage = page;
+    }
+
+    /// <summary>
+    /// Closes a page.
+    /// </summary>
+    /// <remarks>
+    /// Does not save the file.
+    /// </remarks>
+    public async Task ClosePageAsync(PageViewModel? page, bool confirmIfDirty = true)
+    {
+        page ??= CurrentPage;
+        if (page is null)
+            return;
+
+        bool confirm = confirmIfDirty && page.IsDirty;
+        var confirmation = PopupResult.Secondary;
+
+        if (confirm)
+        {
+            var title = _localizationService["UnsavedChangesTitle", page.Title];
+            var desc = _localizationService["UnsavedChangesDescription"];
+            var popup = new PopupDetails(title, desc)
+            {
+                PrimaryButtonText = _localizationService["Save"],
+                SecondaryButtonText = _localizationService["DontSave"],
+                CloseButtonText = _localizationService["Cancel"],
+            };
+
+            confirmation = await _popupService.ShowPopAsync(popup);
+        }
+
+
+        // Cancel operation if popup ignored
+        if (confirmation is PopupResult.Closed)
+            return;
+
+        switch (confirmation)
+        {
+            case PopupResult.Primary:
+                // TODO: Save changes
+                break;
+            case PopupResult.Secondary:
+                // TODO: Discard changes
+                break;
+        }
+
+        ClosePage(page);
     }
 
     /// <summary>

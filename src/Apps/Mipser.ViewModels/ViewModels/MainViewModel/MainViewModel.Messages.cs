@@ -1,8 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
-using MIPS.Assembler.Models.Directives.Abstract;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Bindables.Files;
 using Mipser.Messages.Build;
@@ -13,8 +11,6 @@ using Mipser.Messages.Navigation;
 using Mipser.Messages.Pages;
 using Mipser.Services;
 using Mipser.ViewModels.Pages;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -36,7 +32,14 @@ public partial class MainViewModel
         _messenger.Register<MainViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.CreateNewFile());
         _messenger.Register<MainViewModel, FileOpenRequestMessage>(this, (r, m) => r.OpenFile(m.File));
         _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, (r, m) => r.FocusedPanel?.SaveCurrentFile());
-        _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, (r, m) => r.FocusedPanel?.ClosePage(m.Page));
+        _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, async (r, m) =>
+        {
+            var panel = r.FocusedPanel;
+            if (panel is null)
+                return;
+
+            await panel.ClosePageAsync(m.Page);
+        });
     }
 
     private void RegisterEditMessages()

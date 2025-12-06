@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Mipser.Services;
 using Mipser.Services.Files;
+using Mipser.Services.Popup;
 using Mipser.Services.Settings;
 using Mipser.Services.Versioning;
 using Mipser.ViewModels;
@@ -11,6 +12,7 @@ using Mipser.ViewModels.Pages;
 using Mipser.ViewModels.Pages.App;
 using Mipser.Windows.Services;
 using Mipser.Windows.Services.FileSystem;
+using Mipser.Windows.Services.Popup;
 using Mipser.Windows.Services.Settings;
 using Mipser.Windows.Services.Versioning;
 using System;
@@ -31,6 +33,7 @@ public partial class App
             .AddSingleton<IFileSystemService, FileSystemService>()
             .AddSingleton<ILocalizationService, LocalizationService>()
             .AddSingleton<IMessenger, WeakReferenceMessenger>()
+            .AddSingleton<IPopupService, PopupService>()
             .AddSingleton<IVersioningService, VersioningService>()
 
             // Dependent Services
