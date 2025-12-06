@@ -31,7 +31,14 @@ public partial class MainViewModel
     {
         _messenger.Register<MainViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.CreateNewFile());
         _messenger.Register<MainViewModel, FileOpenRequestMessage>(this, (r, m) => r.OpenFile(m.File));
-        _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, (r, m) => r.FocusedPanel?.SaveCurrentFile());
+        _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, async (r, m) =>
+        {
+            var panel = r.FocusedPanel;
+            if (panel is null)
+                return;
+
+            await panel.SaveCurrentFileAsync();
+        });
         _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, async (r, m) =>
         {
             var panel = r.FocusedPanel;

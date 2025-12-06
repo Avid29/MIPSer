@@ -66,7 +66,7 @@
                                           HexEditorTemplate="{StaticResource WIPFileTemplate}">
             <selectors:EditorTemplateSelector.AssemblyEditorTemplate>
                 <DataTemplate x:DataType="vm:FilePageViewModel">
-                    <editor:AssemblyEditor Text="{x:Bind File.Contents, Mode=TwoWay}"
+                    <editor:AssemblyEditor Text="{x:Bind Content, Mode=TwoWay}"
                                            AssemblerConfig="{x:Bind AssemblerConfig, Mode=OneWay}"
                                            RealTimeAssembly="{x:Bind AssembleRealTime, Mode=OneWay}"
                                            AnnotationThreshold="{x:Bind AnnotationThreshold, Mode=OneWay}"
@@ -76,7 +76,7 @@
             </selectors:EditorTemplateSelector.AssemblyEditorTemplate>
             <selectors:EditorTemplateSelector.TextEditorTemplate>
                 <DataTemplate x:DataType="vm:FilePageViewModel">
-                    <editor:CodeEditor Text="{x:Bind File.Contents, Mode=TwoWay}"
+                    <editor:CodeEditor Text="{x:Bind Content, Mode=TwoWay}"
                                        FlowDirection="LeftToRight"/>
                 </DataTemplate>
             </selectors:EditorTemplateSelector.TextEditorTemplate>

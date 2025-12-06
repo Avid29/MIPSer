@@ -13,8 +13,6 @@ namespace Mipser.Bindables.Files;
 /// </summary>
 public partial class BindableFile : BindableFileItem<IFile>
 {
-    private string? _contents;
-    private bool _isDirty;
     private IFile _file;
 
     /// <summary>
@@ -27,33 +25,6 @@ public partial class BindableFile : BindableFileItem<IFile>
 
         OpenCommand = new(Open);
     }
-
-    /// <summary>
-    /// Gets file contents.
-    /// </summary>
-    public string? Contents
-    {
-        get => _contents;
-        set
-        {
-            SetProperty(ref _contents, value);
-            IsDirty = true;
-        }
-    }
-
-    /// <summary>
-    /// Gets a value indicating whether the file has unsaved changes.
-    /// </summary>
-    public bool IsDirty
-    {
-        get => _isDirty;
-        private set => SetProperty(ref _isDirty, value);
-    }
-
-    /// <summary>
-    /// Gets if the file exists in storage, or just in memory.
-    /// </summary>
-    public bool IsAnonymous => FileItem is null;
 
     /// <inheritdoc/>
     /// <remarks>
@@ -75,43 +46,9 @@ public partial class BindableFile : BindableFileItem<IFile>
         }
     }
 
-    /// <summary>
-    /// Saves the file contents.
-    /// </summary>
-    public async Task SaveAsync() => await SaveContent();
-
     internal void TrackAsChild(BindableFileItem child)
     {
         Children.Add(child);
-    }
-
-    /// <summary>
-    /// Loads the files content.
-    /// </summary>
-    public async Task LoadContent()
-    {
-        await using var stream = await FileItem.OpenStreamForReadAsync();
-        using var reader = new StreamReader(stream);
-        Contents = await reader.ReadToEndAsync();
-        IsDirty = false;
-    }
-
-    private async Task SaveContent()
-    {
-        try
-        {
-            await using var stream = await FileItem.OpenStreamForWriteAsync();
-            using var writer = new StreamWriter(stream);
-            await writer.WriteAsync(Contents ?? string.Empty);
-            stream.SetLength(stream.Position);
-        }
-        catch
-        {
-            // Ignore errors for now
-            return;
-        }
-
-        IsDirty = false;
     }
 
     /// <inheritdoc/>

@@ -64,12 +64,12 @@ public class PanelViewModel : ObservableObject
     /// <remarks>
     /// Does nothing if the current page is not a file.
     /// </remarks>
-    public void SaveCurrentFile()
+    public async Task SaveCurrentFileAsync()
     {
         if (CurrentPage is not FilePageViewModel filePage)
             return;
 
-        filePage.Save();
+        await filePage.SaveAsync();
     }
 
     /// <summary>
