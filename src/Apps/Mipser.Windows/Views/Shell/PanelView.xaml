@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:Mipser.Windows.Views.Shell"
     xmlns:apppages="using:Mipser.Windows.Views.Pages.App"
     xmlns:pages="using:Mipser.Windows.Views.Pages"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
@@ -16,51 +17,52 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
+        <DataTemplate x:Key="PageHeaderTemplate" x:DataType="vmva:PageViewModel">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{x:Bind Title, Mode=OneWay}" FontStyle="{x:Bind local:PanelView.UseItalics(IsDirty), Mode=OneWay}"/>
+                <TextBlock Text="*" Visibility="{x:Bind IsDirty, Mode=OneWay}" FontStyle="Italic"/>
+            </StackPanel>
+        </DataTemplate>
+        
         <selectors:PageTemplateSelector x:Key="PageTemplateSelector">
             <selectors:PageTemplateSelector.AboutPageTemplate>
                 <DataTemplate x:DataType="avmv:AboutPageViewModel">
-                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                    <TabViewItem HeaderTemplate="{StaticResource PageHeaderTemplate}">
                         <apppages:AboutPage ViewModel="{x:Bind Mode=OneWay}"/>
                     </TabViewItem>
                 </DataTemplate>
             </selectors:PageTemplateSelector.AboutPageTemplate>
             <selectors:PageTemplateSelector.CheatSheetPageTemplate>
                 <DataTemplate x:DataType="vmv:CheatSheetViewModel">
-                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                    <TabViewItem HeaderTemplate="{StaticResource PageHeaderTemplate}">
                         <pages:CheatSheet ViewModel="{x:Bind Mode=OneWay}"/>
                     </TabViewItem>
                 </DataTemplate>
             </selectors:PageTemplateSelector.CheatSheetPageTemplate>
             <selectors:PageTemplateSelector.CreateProjectPageTemplate>
                 <DataTemplate x:DataType="vmv:CreateProjectViewModel">
-                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                    <TabViewItem HeaderTemplate="{StaticResource PageHeaderTemplate}">
                         <pages:CreateProject ViewModel="{x:Bind Mode=OneWay}"/>
                     </TabViewItem>
                 </DataTemplate>
             </selectors:PageTemplateSelector.CreateProjectPageTemplate>
             <selectors:PageTemplateSelector.FilePageTemplate>
                 <DataTemplate x:DataType="vmv:FilePageViewModel">
-                    <TabViewItem>
-                        <TabViewItem.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{x:Bind Title, Mode=OneWay}"/>
-                                <TextBlock Visibility="{x:Bind IsDirty, Mode=OneWay}" Text="*"/>
-                            </StackPanel>
-                        </TabViewItem.Header>
+                    <TabViewItem HeaderTemplate="{StaticResource PageHeaderTemplate}">
                         <pages:FileViewer ViewModel="{x:Bind Mode=OneWay}"/>
                     </TabViewItem>
                 </DataTemplate>
             </selectors:PageTemplateSelector.FilePageTemplate>
             <selectors:PageTemplateSelector.SettingsPageTemplate>
                 <DataTemplate x:DataType="avmv:SettingsPageViewModel">
-                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                    <TabViewItem HeaderTemplate="{StaticResource PageHeaderTemplate}">
                         <apppages:SettingsPage ViewModel="{x:Bind Mode=OneWay}"/>
                     </TabViewItem>
                 </DataTemplate>
             </selectors:PageTemplateSelector.SettingsPageTemplate>
             <selectors:PageTemplateSelector.WelcomePageTemplate>
                 <DataTemplate x:DataType="avmv:WelcomePageViewModel">
-                    <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                    <TabViewItem HeaderTemplate="{StaticResource PageHeaderTemplate}">
                         <apppages:WelcomePage ViewModel="{x:Bind Mode=OneWay}"/>
                     </TabViewItem>
                 </DataTemplate>

@@ -1,6 +1,5 @@
 // Adam Dernis 2024
 
-using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -9,6 +8,7 @@ using Mipser.Services;
 using Mipser.ViewModels;
 using Mipser.ViewModels.Pages.Abstract;
 using Mipser.Windows.Helpers;
+using Windows.UI.Text;
 
 namespace Mipser.Windows.Views.Shell;
 
@@ -56,4 +56,6 @@ public sealed partial class PanelView : UserControl
         currentWindow?.ViewModel.PanelViewModel.ClosePage(page);
         newWindow.ViewModel.PanelViewModel.OpenPage(page);
     }
+
+    private static FontStyle UseItalics(bool state) => state ? FontStyle.Italic : FontStyle.Normal;
 }
