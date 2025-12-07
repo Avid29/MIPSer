@@ -16,14 +16,16 @@ public partial class WindowViewModel : ObservableRecipient
 {
     private readonly IMessenger _messenger;
     private readonly IProjectService _projectService;
+    private readonly BuildService _buildService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WindowViewModel"/> class.
     /// </summary>
-    public WindowViewModel(IMessenger messenger, IProjectService projectService, MainViewModel mainViewModel, PanelViewModel panelViewModel)
+    public WindowViewModel(IMessenger messenger, IProjectService projectService, BuildService buildService, MainViewModel mainViewModel, PanelViewModel panelViewModel)
     {
         _messenger = messenger;
         _projectService = projectService;
+        _buildService = buildService;
 
         MainViewModel = mainViewModel;
         PanelViewModel = panelViewModel;
@@ -36,7 +38,8 @@ public partial class WindowViewModel : ObservableRecipient
         ClosePageCommand = new(ClosePageAsync);
         CloseProjectCommand = new(CloseProjectAsync);
 
-        AssembleFileCommand = new(AssembleFile);
+        BuildProjectCommand = new(BuildProjectAsync);
+        AssembleFileCommand = new(AssembleFileAsync);
 
         OpenAboutCommand = new(OpenAbout);
         OpenCheatSheetCommand = new(OpenCheatSheet);

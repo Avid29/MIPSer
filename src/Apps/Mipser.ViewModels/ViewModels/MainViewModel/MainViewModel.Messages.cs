@@ -23,7 +23,6 @@ public partial class MainViewModel
     {
         RegisterFileMessages();
         RegisterEditMessages();
-        RegisterBuildMessages();
         RegisterNavigationMessages();
     }
 
@@ -52,19 +51,6 @@ public partial class MainViewModel
     private void RegisterEditMessages()
     {
         _messenger.Register<MainViewModel, EditorOperationRequestMessage>(this, (r, m) => r.ApplyEditorOperation(m.Operation));
-    }
-
-    private void RegisterBuildMessages()
-    {
-        _messenger.Register<MainViewModel, AssembleFilesRequestMessage>(this, async (r, m) =>
-        {
-            // Get current file if possible, return if not
-            if (m.Files is null)
-                return;
-
-            // Build the file
-            await _buildService.AssembleFilesAsync(m.Files);
-        });
     }
 
     private void RegisterNavigationMessages()

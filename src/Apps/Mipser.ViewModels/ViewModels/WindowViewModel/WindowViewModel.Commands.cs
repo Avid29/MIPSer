@@ -14,46 +14,6 @@ namespace Mipser.ViewModels;
 public partial class WindowViewModel
 {
     /// <summary>
-    /// Gets a command that creates and opens an anonymous file.
-    /// </summary>
-    public RelayCommand CreateNewFileCommand { get; }
-
-    /// <summary>
-    /// Gets the command that saves the current file.
-    /// </summary>
-    public RelayCommand SaveFileCommand { get; }
-
-    /// <summary>
-    /// Gets a command that picks and opens a file.
-    /// </summary>
-    public AsyncRelayCommand PickAndOpenFileCommand { get; }
-
-    /// <summary>
-    /// Gets a command that picks and opens a folder.
-    /// </summary>
-    public AsyncRelayCommand PickAndOpenFolderCommand { get; }
-
-    /// <summary>
-    /// Gets a command that picks and opens a project.
-    /// </summary>
-    public AsyncRelayCommand PickAndOpenProjectCommand { get; }
-
-    /// <summary>
-    /// Gets a command that closes the currently open page.
-    /// </summary>
-    public AsyncRelayCommand ClosePageCommand { get; }
-
-    /// <summary>
-    /// Gets a command that closes the currently open project.
-    /// </summary>
-    public AsyncRelayCommand CloseProjectCommand { get; }
-
-    /// <summary>
-    /// Gets a command that assembles the current file.
-    /// </summary>
-    public RelayCommand AssembleFileCommand { get; }
-
-    /// <summary>
     /// Gets a command that opens the about page.
     /// </summary>
     public RelayCommand OpenAboutCommand { get; }
@@ -77,42 +37,6 @@ public partial class WindowViewModel
     /// Gets a command that opens the welcome page.
     /// </summary>
     public RelayCommand OpenWelcomeCommand { get; }
-
-    private void CreateNewFile() => _messenger.Send(new FileCreateNewRequestMessage());
-
-    private void SaveFile() => _messenger.Send(new FileSaveRequestMessage());
-
-    private async Task PickAndOpenFileAsync() => await MainViewModel.PickAndOpenFileAsync();
-
-    private async Task PickAndOpenFolderAsync() => await MainViewModel.PickAndOpenFolderAsync();
-
-    private async Task PickAndOpenProjectAsync() => await MainViewModel.PickAndOpenProjectAsync();
-
-    private async Task ClosePageAsync()
-    {
-        var panel = MainViewModel.FocusedPanel;
-        if (panel is null)
-            return;
-
-        await panel.ClosePageAsync(null);
-    }
-
-    private async Task CloseProjectAsync() => await _projectService.CloseProjectAsync();
-
-    private void AssembleFile()
-    {
-        // Get the current page, and ensure it's a file page
-        if (MainViewModel.FocusedPanel?.CurrentPage is not FilePageViewModel page)
-            return;
-
-        // Check if the file is null
-        var file = page.File?.SourceFile;
-        if (file is null)
-            return;
-
-        // Request to assemble the file
-        _messenger.Send(new AssembleFilesRequestMessage([file]));
-    }
 
     private void OpenAbout() => MainViewModel.GoToPageByType<AboutPageViewModel>();
 

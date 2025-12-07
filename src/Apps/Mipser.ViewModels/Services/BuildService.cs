@@ -47,6 +47,14 @@ public class BuildService
     }
 
     /// <summary>
+    /// Builds the project.
+    /// </summary>
+    public async Task BuildProjectAsync()
+    {
+        // TODO: Handle build project
+    }
+
+    /// <summary>
     /// Assembles a file.
     /// </summary>
     /// <param name="files">The file to assemble.</param>

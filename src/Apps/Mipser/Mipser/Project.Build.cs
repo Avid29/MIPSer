@@ -15,9 +15,19 @@ public partial class Project
     /// <summary>
     /// Builds the project.
     /// </summary>
-    public async Task<AssemblyResult?> BuildAsync()
+    /// <param name="rebuild">If false, skip files which are not dirty.</param>
+    public async Task<AssemblyResult?> BuildAsync(bool rebuild = false)
     {
-        // TODO: Assemble dirty files
+        AssemblyResult? result = null;
+        foreach(var file in SourceFiles)
+        {
+            // TODO: Mix AssemblyResult
+
+            result = await AssembleFileAsync(file);
+
+            if (result?.Failed is true)
+                return result;
+        }
 
         // TODO: Link
 

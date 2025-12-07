@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -8,7 +9,7 @@ namespace Mipser.Models.Files;
 /// <summary>
 /// A collection of source files in a project.
 /// </summary>
-public class SourceCollection : ProjectItem
+public class SourceCollection : ProjectItem, IEnumerable<SourceFile>
 {
     private readonly Dictionary<string, SourceFile> _files;
     private readonly FileSystemWatcher _watcher;
@@ -110,5 +111,13 @@ public class SourceCollection : ProjectItem
     private void Track(SourceFile file)
     {
         _files.TryAdd(file.FullPath, file);
+    }
+
+    /// <inheritdoc/>
+    public IEnumerator<SourceFile> GetEnumerator() => _files.Values.GetEnumerator();
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
