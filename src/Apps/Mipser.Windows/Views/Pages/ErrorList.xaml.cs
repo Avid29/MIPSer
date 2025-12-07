@@ -40,7 +40,7 @@ public sealed partial class ErrorList : UserControl
 
     private void ListView_ItemClick(object sender, ItemClickEventArgs e)
     {
-        if (e.ClickedItem is not AssemblerLog log)
+        if (e.ClickedItem is not AssemblerLogEntry log)
             return;
 
         var messenger = Service.Get<IMessenger>();

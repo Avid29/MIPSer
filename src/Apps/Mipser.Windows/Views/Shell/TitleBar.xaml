@@ -222,27 +222,25 @@
             
             <!--  Build  -->
             <MenuBarItem x:Uid="/TitleBar/BuildMBI" Title="Build">
-                <MenuFlyoutItem x:Uid="/TitleBar/BuildProjectMFI" Text="Build Project" IsEnabled="False">
+                <!-- Build/Rebuild -->
+                <MenuFlyoutItem x:Uid="/TitleBar/BuildProjectMFI" Text="Build Project"
+                                Command="{x:Bind ViewModel.BuildProjectCommand, Mode=OneWay}">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEBD2;" />
                     </MenuFlyoutItem.Icon>
-                    <!--TODO: Change Ctrl+B/F5 to build once projects are fully supported-->
-                    <!--<MenuFlyoutItem.KeyboardAccelerators>
-                        <KeyboardAccelerator Key="F5"/>
-                        <KeyboardAccelerator Modifiers="Control" Key="B"/>
-                    </MenuFlyoutItem.KeyboardAccelerators>-->
-                </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="/TitleBar/RebuildProjectMFI" Text="Rebuild Project" IsEnabled="False"/>
-                <MenuFlyoutSeparator/>
-                <MenuFlyoutItem x:Uid="/TitleBar/AssembleProjectMFI" Text="Assemble Project" IsEnabled="False">
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Key="F5"/>
                         <KeyboardAccelerator Modifiers="Control" Key="B"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="/TitleBar/RebuildProjectMFI" Text="Rebuild Project"
+                                Command="{x:Bind ViewModel.RebuildProjectCommand, Mode=OneWay}"/>
+                <MenuFlyoutSeparator/>
+                
+                <!--  Assemble  -->
+                <MenuFlyoutItem x:Uid="/TitleBar/AssembleProjectMFI" Text="Assemble Project" IsEnabled="False"/>
                 <MenuFlyoutItem x:Uid="/TitleBar/AssembleOpenFilesMFI" Text="Assemble Open Files" IsEnabled="False"/>
-                <MenuFlyoutItem x:Uid="/TitleBar/AssembleFileMFI"
-                                Text="Assemble File"
+                <MenuFlyoutItem x:Uid="/TitleBar/AssembleFileMFI" Text="Assemble File"
                                 IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanAssemble, FallbackValue=False, Mode=OneWay}"
                                 Command="{x:Bind ViewModel.AssembleFileCommand, Mode=OneWay}">
                     <MenuFlyoutItem.KeyboardAccelerators>
@@ -251,6 +249,8 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
+                
+                <!--  Clean  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/CleanProjectMFI" Text="Clean Project" IsEnabled="False"/>
                 <MenuFlyoutItem x:Uid="/TitleBar/CleanOpenFilesMFI" Text="Clean Open Files" IsEnabled="False"/>
                 <MenuFlyoutItem x:Uid="/TitleBar/CleanFileMFI" Text="Clean File" IsEnabled="False"/>

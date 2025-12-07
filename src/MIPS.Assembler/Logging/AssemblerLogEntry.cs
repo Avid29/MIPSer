@@ -9,12 +9,12 @@ namespace MIPS.Assembler.Logging;
 /// <summary>
 /// An <see cref="ILog"/> that occurred in the assembler stage.
 /// </summary>
-public class AssemblerLog : ILog
+public class AssemblerLogEntry : ILog
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="AssemblerLog"/> class.
+    /// Initializes a new instance of the <see cref="AssemblerLogEntry"/> class.
     /// </summary>
-    internal AssemblerLog(Severity severity, LogCode code, string message, Token[] tokens)
+    internal AssemblerLogEntry(Severity severity, LogCode code, string message, Token[] tokens)
     {
         Code = code;
         Severity = severity;

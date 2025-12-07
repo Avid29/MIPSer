@@ -16,6 +16,7 @@ public class StatusViewModel : ObservableRecipient
     private readonly IMessenger _messenger;
 
     private BuildStatus _buildStatus;
+    private string? _statusMessage;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="StatusViewModel"/> class.
@@ -25,6 +26,7 @@ public class StatusViewModel : ObservableRecipient
         _messenger = messenger;
 
         BuildStatus = buildService.Status;
+        StatusMessage = string.Empty;
 
         IsActive = true;
     }
@@ -32,7 +34,11 @@ public class StatusViewModel : ObservableRecipient
     /// <inheritdoc/>
     protected override void OnActivated()
     {
-        _messenger.Register<StatusViewModel, BuildStatusMessage>(this, (r, m) => r.BuildStatus = m.Status);
+        _messenger.Register<StatusViewModel, BuildStatusMessage>(this, (r, m) =>
+        {
+            r.BuildStatus = m.Status;
+            r.StatusMessage = m.Message;
+        });
     }
 
     /// <summary>
@@ -42,5 +48,14 @@ public class StatusViewModel : ObservableRecipient
     {
         get => _buildStatus;
         private set => SetProperty(ref _buildStatus, value);
+    }
+
+    /// <summary>
+    /// Gets the build status message.
+    /// </summary>
+    public string? StatusMessage
+    {
+        get => _statusMessage;
+        private set => SetProperty(ref _statusMessage, value);
     }
 }

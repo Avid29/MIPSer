@@ -119,6 +119,7 @@ public partial class BindableFolder : BindableFileItem<IFolder>
         if (item is BindableFile file && _virtualParents.ContainsKey(file))
         {
             _virtualParents[file].UntrackChild(item);
+            _virtualParents.Remove(file);
         }
         else
         {

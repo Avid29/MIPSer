@@ -20,13 +20,23 @@ public partial class WindowViewModel
     public AsyncRelayCommand BuildProjectCommand { get; }
 
     /// <summary>
+    /// Gets a command that builds the project.
+    /// </summary>
+    public AsyncRelayCommand RebuildProjectCommand { get; }
+
+    /// <summary>
     /// Gets a command that assembles the current file.
     /// </summary>
     public AsyncRelayCommand AssembleFileCommand { get; }
 
     private async Task BuildProjectAsync()
     {
-        
+        await _buildService.BuildProjectAsync();
+    }
+
+    private async Task RebuildProjectAsync()
+    {
+        await _buildService.BuildProjectAsync(true);
     }
 
     private async Task AssembleFileAsync()

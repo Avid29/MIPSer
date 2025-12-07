@@ -9,9 +9,9 @@ namespace MIPS.Assembler.Models;
 /// <summary>
 /// A class containing the results of an assembler run.
 /// </summary>
-public class AssemblyResult
+public class AssemblerResult
 {
-    internal AssemblyResult(bool failed, IReadOnlyList<AssemblerLog> logs, IReadOnlyList<SymbolEntry> symbols)
+    internal AssemblerResult(bool failed, IReadOnlyList<AssemblerLogEntry> logs, IReadOnlyList<SymbolEntry> symbols)
     {
         Failed = failed;
         Logs = logs;
@@ -26,10 +26,12 @@ public class AssemblyResult
     /// <summary>
     /// Gets the assmembly log.
     /// </summary>
-    public IReadOnlyList<AssemblerLog> Logs { get; }
+    public IReadOnlyList<AssemblerLogEntry> Logs { get; }
 
     /// <summary>
     /// Gets the list of symbols
     /// </summary>
     public IReadOnlyList<SymbolEntry> Symbols { get;  }
+
+
 }

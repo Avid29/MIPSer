@@ -59,22 +59,10 @@ public sealed partial class FileViewer : UserControl
         {
             oldVM.NavigateToTokenEvent -= ViewModel_NavigateToTokenEvent;
             oldVM.EditorOperationRequested -= ViewModel_EditorOperationRequested;
-            oldVM.AssembledEvent -= ViewModel_AssembledEvent;
         }
 
         newVM.NavigateToTokenEvent += ViewModel_NavigateToTokenEvent;
         newVM.EditorOperationRequested += ViewModel_EditorOperationRequested;
-        newVM.AssembledEvent += ViewModel_AssembledEvent;
-    }
-
-    private void ViewModel_AssembledEvent(object? sender, IReadOnlyList<AssemblerLog> e)
-    {
-        // Find editbox
-        var asmEditor = this.FindDescendant<AssemblyEditor>();
-        if (asmEditor is null)
-            return;
-
-        asmEditor.ApplyLogHighlights(e);
     }
 
     private void ViewModel_NavigateToTokenEvent(object? sender, SourceLocation e)

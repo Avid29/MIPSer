@@ -1,22 +1,18 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Messaging;
-using MIPS.Assembler;
+using Microsoft.Extensions.Logging;
 using MIPS.Assembler.Logging;
-using MIPS.Assembler.Models;
-using Mipser.Bindables.Files;
 using Mipser.Messages.Build;
+using Mipser.Models;
 using Mipser.Models.Enums;
 using Mipser.Models.Files;
 using Mipser.Services.Files;
-using Mipser.Services.Files.Models;
 using Mipser.Services.Settings;
-using RASM.Modules;
-using RASM.Modules.Config;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,93 +24,98 @@ namespace Mipser.Services;
 public class BuildService
 {
     private readonly IMessenger _messenger;
+    private readonly ILocalizationService _localizationService;
     private readonly ISettingsService _settingsService;
     private readonly IProjectService _projectService;
 
     private CancellationTokenSource? _resetToken;
-    private BuildStatus _buildStatus;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BuildService"/> class.
     /// </summary>
-    public BuildService(IMessenger messenger, ISettingsService settingsService, IProjectService projectService, IFileSystemService fileSystemService)
+    public BuildService(IMessenger messenger, ILocalizationService localizationService, ISettingsService settingsService, IProjectService projectService, IFileSystemService fileSystemService)
     {
         _messenger = messenger;
+        _localizationService = localizationService;
         _settingsService = settingsService;
         _projectService = projectService;
 
-        _buildStatus = BuildStatus.Ready;
+        SetStatus(BuildStatus.Ready);
     }
+
+    /// <summary>
+    /// Gets the build status
+    /// </summary>
+    public BuildStatus Status { get; private set; }
+
+    private bool Ready => Status is BuildStatus.Ready or BuildStatus.Completed or BuildStatus.Failed;
 
     /// <summary>
     /// Builds the project.
     /// </summary>
-    public async Task BuildProjectAsync()
+    public async Task<BuildResult?> BuildProjectAsync(bool rebuild = false)
     {
-        // TODO: Handle build project
+        // TODO: Report issue
+        if (_projectService.Project is null)
+            return null;
+
+        var logger = new Logger();
+        var task = _projectService.Project.BuildAsync(rebuild, logger);
+        return await BuildAsync(task, logger);
     }
 
     /// <summary>
     /// Assembles a file.
     /// </summary>
     /// <param name="files">The file to assemble.</param>
-    public async Task AssembleFilesAsync(SourceFile[] files)
+    public async Task<BuildResult?> AssembleFilesAsync(SourceFile[] files)
+    {
+        // TODO: Report issue
+        if (_projectService.Project is null)
+            return null;
+
+        var logger = new Logger();
+        var task = _projectService.Project.AssembleFilesAsync(files, true, logger);
+        return await BuildAsync(task, logger);
+    }
+
+    private async Task<BuildResult?> BuildAsync(Task<BuildResult?> buildTask, Logger logger)
     {
         // Run pre-build checks
         if (!PreBuildChecks())
-            return;
+            return null;
 
-        // TODO: Report issue
-        if (_projectService.Project is null)
-            return;
-
-        Status = BuildStatus.Assembling;
+        SetStatus(BuildStatus.Assembling);
 
         // Culminate results
-        bool failed = false;
-        var logs = new List<ILog>();
+        _messenger.Send(new BuildStartedMessage(logger));
 
-        // Assemble each file
-        foreach (var file in files)
+        // Override the current language
+        var lang = _settingsService.Local.GetValue<string>(SettingsKeys.AssemblerLanguageOverride);
+        var restore = CultureInfo.CurrentUICulture;
+        if (lang is not null)
         {
-            if (file?.FullPath is null)
-                continue;
-
-            // Override the current language
-            var lang = _settingsService.Local.GetValue<string>("AssemblerLanguageOverride");
-            var restore = CultureInfo.CurrentUICulture;
-            if (lang is not null)
-            {
-                var newCulture = CultureInfo.GetCultureInfo(lang);
-                CultureInfo.CurrentUICulture = newCulture ?? restore;
-            }
-
-            // Assemble the file
-            var result = await _projectService.Project.AssembleFileAsync(file);
-            
-            // Restore the original language
-            CultureInfo.CurrentUICulture = restore;
-
-            // Check the assembler result
-            if (result is null)
-                continue; // TODO: Handle file loading errors
-
-            // Update the status and log
-            var assemblerFailed = result?.Failed ?? false;
-            failed = failed || (result?.Failed ?? false);
-            Status = failed ? BuildStatus.Failing : BuildStatus.Assembling;
-            if (result?.Logs is not null)
-                logs.AddRange(result.Logs);
-
-            _messenger.Send(new FileAssembledMessage(file.RelativePath, assemblerFailed, result?.Logs));
+            var newCulture = CultureInfo.GetCultureInfo(lang);
+            CultureInfo.CurrentUICulture = newCulture ?? restore;
         }
 
+        // Run the build task
+        var result = await buildTask;
+
+        // Restore the original language
+        CultureInfo.CurrentUICulture = restore;
+
         // Send a message with the build results.
-        Status = failed ? BuildStatus.Failed : BuildStatus.Completed;
-        _messenger.Send(new BuildFinishedMessage(failed, logs));
+        var message = ConstructMessage(result);
+        var status = logger.Failed ? BuildStatus.Failed : BuildStatus.Completed;
+        SetStatus(status, message);
+
+        _messenger.Send(new BuildFinishedMessage(result));
 
         // Clear status after some time
-        await WaitAndClearStatus();
+        _ = WaitAndClearStatusAsync();
+
+        return result;
     }
 
     private bool PreBuildChecks()
@@ -130,7 +131,20 @@ public class BuildService
         return true;
     }
 
-    private async Task WaitAndClearStatus()
+    private void SetStatus(BuildStatus value, string? message = null)
+    {
+        // Update value and cache old value
+        var old = Status;
+        Status = value;
+
+        // Check if the value actually changed.
+        if (old != value)
+        {
+            _messenger.Send(new BuildStatusMessage(value, message));
+        }
+    }
+
+    private async Task WaitAndClearStatusAsync()
     {
         // Wait 5 seconds, then clear the status (unless cancelled)
         _resetToken = new CancellationTokenSource();
@@ -139,28 +153,31 @@ public class BuildService
         if (token.IsCancellationRequested)
             return;
 
-        Status = BuildStatus.Ready;
+        SetStatus(BuildStatus.Ready);
     }
 
-    /// <summary>
-    /// Gets the build status
-    /// </summary>
-    public BuildStatus Status
+    private string? ConstructMessage(BuildResult? result)
     {
-        get => _buildStatus;
-        set
+        if (result is null)
+            return null;
+
+        StringBuilder message = new StringBuilder();
+
+        void Append(string oneKey, string multiKey, int value)
         {
-            // Update value and cache old value
-            var old = _buildStatus;
-            _buildStatus = value;
+            if (value is 0)
+                return;
 
-            // Check if the value actually changed.
-            if (old != value)
-            {
-                _messenger.Send(new BuildStatusMessage(value));
-            }
+            if (message.Length is not 0)
+                message.Append(" - ");
+            
+            var key = value is 1 ? oneKey : multiKey;
+            message.Append(_localizationService[key, value]);
         }
-    }
 
-    private bool Ready => _buildStatus is BuildStatus.Ready or BuildStatus.Completed or BuildStatus.Failed;
+        Append("BuildStatus/OneSucceeded", "BuildStatus/Succeeded", result.SucessfullyAssembledFiles.Count);
+        Append("BuildStatus/OneFailed", "BuildStatus/Failed", result.FailedFiles.Count);
+        Append("BuildStatus/OneSkipped", "BuildStatus/Skipped", result.SkippedFiles.Count);
+        return $"{message}";
+    }
 }

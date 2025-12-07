@@ -40,4 +40,9 @@ public interface ILogger
     /// <param name="messageKey">The log resource key for the log message.</param>
     /// <param name="args">The arguments to format the message with.</param>
     bool Log(Severity severity, LogCode code, ReadOnlySpan<Token> tokens, string messageKey, params object?[] args);
+
+    /// <summary>
+    /// Flushes the current log status.
+    /// </summary>
+    public void Flush();
 }

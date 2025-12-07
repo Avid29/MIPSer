@@ -84,7 +84,7 @@ public partial class Assembler
     /// <summary>
     /// Gets the assembler's logs.
     /// </summary>
-    public IReadOnlyList<AssemblerLog> Logs => [.._logger.Logs.OfType<AssemblerLog>()];
+    public IReadOnlyList<AssemblerLogEntry> Logs => [.._logger.CurrentLog.OfType<AssemblerLogEntry>()];
 
     /// <summary>
     /// Gets the symbols found by the assembler.
@@ -94,14 +94,16 @@ public partial class Assembler
     /// <summary>
     /// Gets whether or not the assembler failed to assemble a valid module.
     /// </summary>
-    public bool Failed => _logger.Failed;
+    public bool Failed => _logger.CurrentFailed;
 
     /// <summary>
     /// Assembles an object module from a stream of assembly.
     /// </summary>
     private static async Task<Assembler> AssembleAsync(TextReader reader, string? filename, AssemblerConfig config, Logger? logger = null)
     {
-        var assembler = new Assembler(config);
+        logger?.Flush();
+
+        var assembler = new Assembler(config, logger);
         var tokens = await Tokenizer.TokenizeAsync(reader, filename);
 
         // Run the alignment pass on each line

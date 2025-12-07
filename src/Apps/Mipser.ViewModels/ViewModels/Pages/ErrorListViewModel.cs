@@ -3,8 +3,11 @@
 using CommunityToolkit.Mvvm.Messaging;
 using MIPS.Assembler.Logging;
 using Mipser.Messages.Build;
+using Mipser.Services;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.ObjectModel;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Mipser.ViewModels.Pages;
 
@@ -14,13 +17,16 @@ namespace Mipser.ViewModels.Pages;
 public class ErrorListViewModel : PageViewModel
 {
     private readonly IMessenger _messenger;
+    private readonly IDispatcherService _dispatcherService;
+    private Logger? _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ErrorListViewModel"/> class.
     /// </summary>
-    public ErrorListViewModel(IMessenger messenger)
+    public ErrorListViewModel(IMessenger messenger, IDispatcherService dispatcherService)
     {
         _messenger = messenger;
+        _dispatcherService = dispatcherService;
 
         Messages = [];
 
@@ -30,7 +36,8 @@ public class ErrorListViewModel : PageViewModel
     /// <inheritdoc/>
     protected override void OnActivated()
     {
-        _messenger.Register<ErrorListViewModel, BuildFinishedMessage>(this, (r, m) => r.UpdateLog(m));
+        _messenger.Register<ErrorListViewModel, BuildStartedMessage>(this, (r, m) => r.BeginLogging(m));
+        _messenger.Register<ErrorListViewModel, BuildFinishedMessage>(this, (r, m) => r.EndLogging(m));
     }
 
     /// <inheritdoc/>
@@ -41,17 +48,28 @@ public class ErrorListViewModel : PageViewModel
     /// </summary>
     public ObservableCollection<ILog> Messages { get; }
 
-    private void UpdateLog(BuildFinishedMessage message)
+    private void BeginLogging(BuildStartedMessage message)
     {
-        // Clear old logs
         Messages.Clear();
 
-        // No logs to display 
-        if (message.Logs is null)
+        _logger = message.Logger;
+        _logger.EntryLogged += OnEntryLogged;
+    }
+
+    private void EndLogging(BuildFinishedMessage message)
+    {
+        if (_logger is null)
             return;
 
-        // Display logs
-        foreach(var log in message.Logs)
-            Messages.Add(log);
+        _logger.EntryLogged -= OnEntryLogged;
+        _logger = null;
+    }
+
+    private void OnEntryLogged(object? sender, AssemblerLogEntry e)
+    {
+        _dispatcherService.RunOnUIThread(() =>
+        {
+            Messages.Add(e);
+        });
     }
 }

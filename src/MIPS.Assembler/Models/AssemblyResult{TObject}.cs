@@ -8,19 +8,19 @@ using System.Collections.Generic;
 namespace MIPS.Assembler.Models;
 
 /// <summary>
-/// A <see cref="AssemblyResult"/> including the constructed object module.
+/// A <see cref="AssemblerResult"/> including the constructed object module.
 /// </summary>
 /// <typeparam name="TObject">The object module type.</typeparam>
-public class AssemblyResult<TObject> : AssemblyResult
+public class AssemblyResult<TObject> : AssemblerResult
     where TObject : IBuildModule
 {
-    internal AssemblyResult(TObject? objectModule, bool failed, IReadOnlyList<AssemblerLog> logs, IReadOnlyList<SymbolEntry> symbols)
+    internal AssemblyResult(TObject? objectModule, bool failed, IReadOnlyList<AssemblerLogEntry> logs, IReadOnlyList<SymbolEntry> symbols)
         : base(failed, logs, symbols)
     {
         ObjectModule = objectModule;
     }
 
-    internal AssemblyResult(TObject? objectModule, AssemblyResult childResult)
+    internal AssemblyResult(TObject? objectModule, AssemblerResult childResult)
         : this(objectModule, childResult.Failed, childResult.Logs, childResult.Symbols)
     {
     }

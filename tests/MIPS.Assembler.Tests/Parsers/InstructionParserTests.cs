@@ -204,7 +204,7 @@ public class InstructionParserTests
 
         if (logCode.HasValue)
         {
-            Assert.IsTrue(logger.Logs[0].Code == logCode.Value);
+            Assert.IsTrue(logger.CurrentLog[0].Code == logCode.Value);
         }
     }
 }

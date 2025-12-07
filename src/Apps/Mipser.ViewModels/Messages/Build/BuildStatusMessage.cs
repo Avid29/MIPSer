@@ -12,13 +12,19 @@ public class BuildStatusMessage
     /// <summary>
     /// Initialzes a new instance of the <see cref="BuildStatusMessage"/> class.
     /// </summary>
-    public BuildStatusMessage(BuildStatus status)
+    public BuildStatusMessage(BuildStatus status, string? message = null)
     {
         Status = status;
+        Message = message;
     }
 
     /// <summary>
     /// Gets the new build status.
     /// </summary>
     public BuildStatus Status { get; }
+
+    /// <summary>
+    /// Gets the build status message.
+    /// </summary>
+    public string? Message { get; }
 }

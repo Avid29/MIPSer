@@ -1,11 +1,9 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Messages.Navigation;
 using Mipser.Services;
-using Mipser.Services.Popup;
 
 namespace Mipser.ViewModels;
 
@@ -39,6 +37,7 @@ public partial class WindowViewModel : ObservableRecipient
         CloseProjectCommand = new(CloseProjectAsync);
 
         BuildProjectCommand = new(BuildProjectAsync);
+        RebuildProjectCommand = new(RebuildProjectAsync);
         AssembleFileCommand = new(AssembleFileAsync);
 
         OpenAboutCommand = new(OpenAbout);

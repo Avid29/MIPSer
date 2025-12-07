@@ -207,4 +207,22 @@
   <data name="MipsVersion_MipsVI" xml:space="preserve">
     <value>MIPS VI</value>
   </data>
+  <data name="BuildStatus/Succeeded" xml:space="preserve">
+    <value>{0} Succeeded</value>
+  </data>
+  <data name="BuildStatus/Failed" xml:space="preserve">
+    <value>{0} Failed</value>
+  </data>
+  <data name="BuildStatus/Skipped" xml:space="preserve">
+    <value>{0} Skipped</value>
+  </data>
+  <data name="BuildStatus/OneSucceeded" xml:space="preserve">
+    <value>1 Succeeded</value>
+  </data>
+  <data name="BuildStatus/OneSkipped" xml:space="preserve">
+    <value>1 Skipped</value>
+  </data>
+  <data name="BuildStatus/OneFailed" xml:space="preserve">
+    <value>1 Failed</value>
+  </data>
 </root>
