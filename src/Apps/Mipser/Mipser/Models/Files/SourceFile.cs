@@ -28,4 +28,22 @@ public class SourceFile : FileBase
     /// Gets the associates object file.
     /// </summary>
     public ObjectFile ObjectFile { get; }
+
+    /// <summary>
+    /// Gets whether or not the source file has unassembled changes.
+    /// </summary>
+    public bool IsDirty
+    {
+        get
+        {
+            // Treat unbuilt and dirty
+            if (!ObjectFile.Exists)
+                return true;
+
+            var sourceWriteTime = File.GetLastWriteTime(FullPath);
+            var objectWriteTime = File.GetLastWriteTime(ObjectFile.FullPath);
+
+            return sourceWriteTime > objectWriteTime;
+        }
+    }
 }

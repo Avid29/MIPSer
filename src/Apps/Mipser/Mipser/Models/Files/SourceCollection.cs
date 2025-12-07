@@ -62,7 +62,7 @@ public class SourceCollection : ProjectItem
         _watcher.Created += OnFileCreated;
         _watcher.Renamed += OnFileRenamed;
         _watcher.Deleted += OnFileDeleted;
-        _watcher.Changed += OnFileChanged;
+        //_watcher.Changed += OnFileChanged;
 
         // Enable event rising
         _watcher.EnableRaisingEvents = true;
@@ -74,7 +74,7 @@ public class SourceCollection : ProjectItem
         _watcher.Created -= OnFileCreated;
         _watcher.Renamed -= OnFileRenamed;
         _watcher.Deleted -= OnFileDeleted;
-        _watcher.Changed -= OnFileChanged;
+        //_watcher.Changed -= OnFileChanged;
 
         // Disabled event rising
         _watcher.EnableRaisingEvents = false;
@@ -105,15 +105,6 @@ public class SourceCollection : ProjectItem
     private void OnFileDeleted(object sender, FileSystemEventArgs e)
     {
         _files.Remove(e.FullPath);
-    }
-
-    private void OnFileChanged(object sender, FileSystemEventArgs e)
-    {
-        var extension = Path.GetExtension(e.FullPath);
-        if (extension is not ".asm")
-            return;
-
-        // TODO: Handle dirty
     }
 
     private void Track(SourceFile file)
