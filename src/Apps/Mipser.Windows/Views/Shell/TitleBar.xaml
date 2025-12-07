@@ -98,7 +98,7 @@
                 </MenuFlyoutItem>
                 <MenuFlyoutItem x:Uid="/TitleBar/CloseProjectMFI" Text="Close Project"
                                 Command="{x:Bind ViewModel.CloseProjectCommand, Mode=OneWay}"
-                                IsEnabled="{x:Bind local:TitleBar.IsNotNull(ViewModel.MainViewModel.ExplorerViewModel.RootNode), FallbackValue=False, Mode=OneWay}"/>
+                                IsEnabled="{x:Bind local:TitleBar.IsNotNull(ViewModel.MainViewModel.ExplorerViewModel.RootFolder), FallbackValue=False, Mode=OneWay}"/>
             </MenuBarItem>
             
             <!--  Edit  -->
@@ -232,6 +232,7 @@
                         <KeyboardAccelerator Modifiers="Control" Key="B"/>
                     </MenuFlyoutItem.KeyboardAccelerators>-->
                 </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="/TitleBar/RebuildProjectMFI" Text="Rebuild Project" IsEnabled="False"/>
                 <MenuFlyoutSeparator/>
                 <MenuFlyoutItem x:Uid="/TitleBar/AssembleProjectMFI" Text="Assemble Project" IsEnabled="False">
                     <MenuFlyoutItem.KeyboardAccelerators>

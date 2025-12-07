@@ -3,6 +3,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Bindables.Files;
 using Mipser.Messages.Files;
+using Mipser.Models.Files;
 using Mipser.Models.ProjectConfig;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
@@ -43,6 +44,15 @@ public class ProjectService : IProjectService
 
     /// <inheritdoc/>
     public IFolder? ProjectRootFolder { get; private set; }
+
+    /// <inheritdoc/>
+    public SourceFile? GetSourceFile(string filePath)
+    {
+        if (Project is null)
+            return null;
+
+        return Project.SourceFiles[filePath];
+    }
 
     /// <inheritdoc/>
     public void OpenFolder(IFolder? folder, bool cacheState = true)
@@ -158,5 +168,4 @@ public class ProjectService : IProjectService
             return;
         }
     }
-
 }

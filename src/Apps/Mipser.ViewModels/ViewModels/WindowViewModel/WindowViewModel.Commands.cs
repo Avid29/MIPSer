@@ -106,7 +106,7 @@ public partial class WindowViewModel
             return;
 
         // Check if the file is null
-        var file = page.File?.FileItem;
+        var file = page.File?.SourceFile;
         if (file is null)
             return;
 

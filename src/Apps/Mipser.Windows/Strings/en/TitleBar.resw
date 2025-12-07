@@ -219,6 +219,9 @@
   <data name="PasteMFI.Text" xml:space="preserve">
     <value>Paste</value>
   </data>
+  <data name="RebuildProjectMFI.Text" xml:space="preserve">
+    <value>Rebuild Project</value>
+  </data>
   <data name="RedoMFI.Text" xml:space="preserve">
     <value>Redo</value>
   </data>

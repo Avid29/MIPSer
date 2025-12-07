@@ -219,6 +219,9 @@
   <data name="PasteMFI.Text" xml:space="preserve">
     <value>הדבק</value>
   </data>
+  <data name="RebuildProjectMFI.Text" xml:space="preserve">
+    <value>בנה מחדש את הפרויקט</value>
+  </data>
   <data name="RedoMFI.Text" xml:space="preserve">
     <value>בצע שוב</value>
   </data>

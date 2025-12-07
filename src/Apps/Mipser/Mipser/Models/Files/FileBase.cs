@@ -1,30 +1,31 @@
 ﻿// Avishai Dernis 2025
 
-namespace Mipser.Models;
+using System.IO;
+
+namespace Mipser.Models.Files;
 
 /// <summary>
-/// A model for a source file, including a paired object file.
+/// A base class for a file in a project.
 /// </summary>
-public class SourceFile
+public abstract class FileBase : ProjectItem
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="SourceFile"/> class.
+    /// Initializes a new instance of the <see cref="FileBase"/> class.
     /// </summary>
-    public SourceFile(SourceCollection collection, string fullPath)
+    public FileBase(Project project, string fullPath) : base(project)
     {
-        Collection = collection;
         FullPath = fullPath;
     }
 
     /// <summary>
     /// Gets the name of the source file without its extension.
     /// </summary>
-    public string Name => System.IO.Path.GetFileNameWithoutExtension(Path);
+    public string Name => Path.GetFileNameWithoutExtension(FullPath);
 
     /// <summary>
     /// Gets the path to the file relative to the collection root.
     /// </summary>
-    public string Path => System.IO.Path.GetRelativePath(Collection.RootPath, FullPath);
+    public string RelativePath => Path.GetRelativePath(Collection.RootPath, FullPath);
 
     /// <summary>
     /// Gets the full path of the file.
@@ -34,5 +35,5 @@ public class SourceFile
     /// <summary>
     /// Gets the <see cref="SourceCollection"/> the file belongs to.
     /// </summary>
-    public SourceCollection Collection { get; }
+    public SourceCollection Collection => Project.SourceFiles;
 }

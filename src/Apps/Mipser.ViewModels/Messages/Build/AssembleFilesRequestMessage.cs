@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using Mipser.Services.Files.Models;
+using Mipser.Models.Files;
 
 namespace Mipser.Messages.Build;
 
@@ -12,7 +12,7 @@ public class AssembleFilesRequestMessage
     /// <summary>
     /// Initializes a new instance of the <see cref="AssembleFilesRequestMessage"/> class.
     /// </summary>
-    public AssembleFilesRequestMessage(IFile[] files)
+    public AssembleFilesRequestMessage(SourceFile[] files)
     {
         Files = files;
     }
@@ -20,5 +20,5 @@ public class AssembleFilesRequestMessage
     /// <summary>
     /// Gets the files requested to assemble.
     /// </summary>
-    public IFile[] Files { get; }
+    public SourceFile[] Files { get; }
 }

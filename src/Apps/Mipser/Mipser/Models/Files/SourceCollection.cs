@@ -3,12 +3,12 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Mipser.Models;
+namespace Mipser.Models.Files;
 
 /// <summary>
 /// A collection of source files in a project.
 /// </summary>
-public class SourceCollection
+public class SourceCollection : ProjectItem
 {
     private readonly Dictionary<string, SourceFile> _files;
     private readonly FileSystemWatcher _watcher;
@@ -16,7 +16,7 @@ public class SourceCollection
     /// <summary>
     /// Initializes a new instance of the <see cref="SourceCollection"/> class.
     /// </summary>
-    public SourceCollection(string rootFolder)
+    public SourceCollection(Project project, string rootFolder) : base(project)
     {
         _files = [];
         _watcher = new(rootFolder)
@@ -45,10 +45,10 @@ public class SourceCollection
     {
         // Search for all ".asm" files
         var files = Directory.GetFiles(RootPath, "*.asm", SearchOption.AllDirectories);
-
+        
         foreach (var file in files)
         {
-            var sourceFile = new SourceFile(this, file);
+            var sourceFile = new SourceFile(Project, file);
             Track(sourceFile);
         }
     }
@@ -86,7 +86,7 @@ public class SourceCollection
         if (extension is not ".asm")
             return;
 
-        var sourceFile = new SourceFile(this, e.FullPath);
+        var sourceFile = new SourceFile(Project, e.FullPath);
         Track(sourceFile);
     }
 

@@ -137,6 +137,12 @@
                   ItemsSource="{x:Bind ViewModel.RootNode, Mode=OneWay}"
                   ItemTemplateSelector="{StaticResource FileItemTemplateSelector}"
                   Expanding="TreeView_Expanding"
-                  Grid.Row="1"/>
+                  Grid.Row="1">
+            <TreeView.ItemContainerTransitions>
+                <TransitionCollection>
+                    <RepositionThemeTransition/>
+                </TransitionCollection>
+            </TreeView.ItemContainerTransitions>
+        </TreeView>
     </Grid>
 </UserControl>

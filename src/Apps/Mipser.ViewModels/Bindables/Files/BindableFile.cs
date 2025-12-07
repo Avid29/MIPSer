@@ -1,10 +1,9 @@
 ﻿// Adam Dernis 2024
 
+using Mipser.Models.Files;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Mipser.Bindables.Files;
 
@@ -45,6 +44,11 @@ public partial class BindableFile : BindableFileItem<IFile>
             }
         }
     }
+
+    /// <summary>
+    /// Gets the associate <see cref="SourceFile"/>.
+    /// </summary>
+    public SourceFile? SourceFile { get; init; }
 
     internal void TrackAsChild(BindableFileItem child)
     {

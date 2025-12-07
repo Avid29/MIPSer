@@ -1,9 +1,8 @@
 ﻿// Avishai Dernis 2025
 
-using Mipser.Models;
+using CommunityToolkit.Diagnostics;
+using Mipser.Models.Files;
 using Mipser.Models.ProjectConfig;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Mipser;
 
@@ -14,7 +13,10 @@ public partial class Project
 {
     private Project(ProjectConfig config)
     {
+        Guard.IsNotNull(config.RootFolderPath);
+
         Config = config;
+        SourceFiles = new SourceCollection(this, config.RootFolderPath);
     }
 
     /// <summary>
@@ -25,21 +27,16 @@ public partial class Project
     /// <summary>
     /// Gets the collection of source files in the project.
     /// </summary>
-    public SourceCollection? SourceFiles { get; private set; }
+    public SourceCollection SourceFiles { get; }
 
     /// <summary>
     /// Loads a project.
     /// </summary>
     public static Project? Load(ProjectConfig config)
     {
-        // Initialize project object
-        var project = new Project(config);
-
         if (config.RootFolderPath is null)
             return null;
 
-        project.SourceFiles = new SourceCollection(config.RootFolderPath);
-
-        return project;
+        return new Project(config);
     }
 }

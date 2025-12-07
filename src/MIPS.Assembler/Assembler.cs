@@ -46,9 +46,9 @@ public partial class Assembler
     /// <summary>
     /// Initializes a new instance of the <see cref="Assembler"/> class.
     /// </summary>
-    private Assembler(AssemblerConfig config)
+    private Assembler(AssemblerConfig config, Logger? logger = null)
     {
-        _logger = new Logger();
+        _logger = logger ?? new Logger();
 
         _module = new Module();
         _activeSection = Section.Text;
@@ -99,7 +99,7 @@ public partial class Assembler
     /// <summary>
     /// Assembles an object module from a stream of assembly.
     /// </summary>
-    private static async Task<Assembler> AssembleAsync(TextReader reader, string? filename, AssemblerConfig config)
+    private static async Task<Assembler> AssembleAsync(TextReader reader, string? filename, AssemblerConfig config, Logger? logger = null)
     {
         var assembler = new Assembler(config);
         var tokens = await Tokenizer.TokenizeAsync(reader, filename);

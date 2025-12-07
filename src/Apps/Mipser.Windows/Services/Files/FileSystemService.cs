@@ -6,7 +6,6 @@ using Mipser.Services.Files.Models;
 using Mipser.Services.Popup;
 using Mipser.Services.Popup.Enums;
 using Mipser.Services.Popup.Models;
-using Mipser.Windows.Services.FileSystem.Models;
 using System;
 using System.IO;
 using System.Threading.Tasks;

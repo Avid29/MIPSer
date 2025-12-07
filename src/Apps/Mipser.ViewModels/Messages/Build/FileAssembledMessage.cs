@@ -13,10 +13,9 @@ public class FileAssembledMessage
     /// <summary>
     /// Initializes a new instance of the <see cref="FileAssembledMessage"/> class.
     /// </summary>
-    public FileAssembledMessage(string assemblyFile, string? objectFile, bool failed, IReadOnlyList<AssemblerLog>? logs)
+    public FileAssembledMessage(string assemblyFile, bool failed, IReadOnlyList<AssemblerLog>? logs)
     {
         AssemblyFile = assemblyFile;
-        ObjectFile = objectFile;
         Failed = failed;
         Logs = logs;
     }
@@ -25,11 +24,6 @@ public class FileAssembledMessage
     /// Gets the source assembly file.
     /// </summary>
     public string AssemblyFile { get; }
-
-    /// <summary>
-    /// Gets the target object module file.
-    /// </summary>
-    public string? ObjectFile { get; }
 
     /// <summary>
     /// Gets whether or not the file assembly failed.

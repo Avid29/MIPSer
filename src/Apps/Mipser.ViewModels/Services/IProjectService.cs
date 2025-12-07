@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using Mipser.Models.Files;
 using Mipser.Models.ProjectConfig;
 using Mipser.Services.Files.Models;
 using System.Threading.Tasks;
@@ -20,6 +21,13 @@ public interface IProjectService
     /// Gets the root folder of the project.
     /// </summary>
     public IFolder? ProjectRootFolder { get; }
+
+    /// <summary>
+    /// Gets the source file from a file path.
+    /// </summary>
+    /// <param name="filePath">The path of the source file.</param>
+    /// <returns></returns>
+    public SourceFile? GetSourceFile(string filePath);
 
     /// <summary>
     /// Opens a folder as the new project folder.

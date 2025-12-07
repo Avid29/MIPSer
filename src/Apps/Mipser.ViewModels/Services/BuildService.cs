@@ -7,6 +7,7 @@ using MIPS.Assembler.Models;
 using Mipser.Bindables.Files;
 using Mipser.Messages.Build;
 using Mipser.Models.Enums;
+using Mipser.Models.Files;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using Mipser.Services.Settings;
@@ -29,7 +30,6 @@ public class BuildService
     private readonly IMessenger _messenger;
     private readonly ISettingsService _settingsService;
     private readonly IProjectService _projectService;
-    private readonly IFileSystemService _fileSystemService;
 
     private CancellationTokenSource? _resetToken;
     private BuildStatus _buildStatus;
@@ -42,7 +42,6 @@ public class BuildService
         _messenger = messenger;
         _settingsService = settingsService;
         _projectService = projectService;
-        _fileSystemService = fileSystemService;
 
         _buildStatus = BuildStatus.Ready;
     }
@@ -51,10 +50,14 @@ public class BuildService
     /// Assembles a file.
     /// </summary>
     /// <param name="files">The file to assemble.</param>
-    public async Task AssembleFilesAsync(IFile[] files)
+    public async Task AssembleFilesAsync(SourceFile[] files)
     {
         // Run pre-build checks
         if (!PreBuildChecks())
+            return;
+
+        // TODO: Report issue
+        if (_projectService.Project is null)
             return;
 
         Status = BuildStatus.Assembling;
@@ -66,18 +69,8 @@ public class BuildService
         // Assemble each file
         foreach (var file in files)
         {
-            if (file?.Path is null)
+            if (file?.FullPath is null)
                 continue;
-
-            // Get save file
-            IFile? saveFile = null;
-            var directory = Path.GetDirectoryName(file.Path);
-            if (directory is not null)
-            {
-                var saveFileName = Path.GetFileNameWithoutExtension(file.Name) + ".obj";
-                var saveFilePath = Path.Combine(directory, saveFileName);
-                saveFile = await _fileSystemService.CreateFileAsync(saveFilePath);
-            }
 
             // Override the current language
             var lang = _settingsService.Local.GetValue<string>("AssemblerLanguageOverride");
@@ -89,7 +82,7 @@ public class BuildService
             }
 
             // Assemble the file
-            var result = await AssembleFileAsync(file, null, saveFile);
+            var result = await _projectService.Project.AssembleFileAsync(file);
             
             // Restore the original language
             CultureInfo.CurrentUICulture = restore;
@@ -105,7 +98,7 @@ public class BuildService
             if (result?.Logs is not null)
                 logs.AddRange(result.Logs);
 
-            _messenger.Send(new FileAssembledMessage(file.Path, saveFile?.Path, assemblerFailed, result?.Logs));
+            _messenger.Send(new FileAssembledMessage(file.RelativePath, assemblerFailed, result?.Logs));
         }
 
         // Send a message with the build results.
@@ -114,26 +107,6 @@ public class BuildService
 
         // Clear status after some time
         await WaitAndClearStatus();
-    }
-
-    private static async Task<AssemblyResult?> AssembleFileAsync(IFile file, RasmConfig? config, IFile? saveLocation = null)
-    {
-        config ??= new RasmConfig();
-
-        // Get the file contents as a stream
-        var stream = await file.OpenStreamForReadAsync();
-        if (stream is null)
-            return null;
-
-        // Open save location stream
-        Stream? saveStream = null;
-        if (saveLocation is not null)
-        {
-            saveStream = await saveLocation.OpenStreamForWriteAsync();
-        }
-
-        // Assemble the file
-        return await Assembler.AssembleAsync<RasmModule, RasmConfig>(stream, file.Path, config, saveStream);
     }
 
     private bool PreBuildChecks()
