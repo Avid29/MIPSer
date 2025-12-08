@@ -10,6 +10,7 @@ using Mipser.Models.Files;
 using Mipser.Services.Files;
 using Mipser.Services.Settings;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -68,7 +69,7 @@ public class BuildService
     /// Assembles a set of files.
     /// </summary>
     /// <param name="files">The files to assemble.</param>
-    public async Task<BuildResult?> AssembleFilesAsync(SourceFile[] files)
+    public async Task<BuildResult?> AssembleFilesAsync(IEnumerable<SourceFile> files)
     {
         // TODO: Report issue
         if (_projectService.Project is null)
@@ -94,7 +95,7 @@ public class BuildService
     /// Cleans a set of files.
     /// </summary>
     /// <param name="files">The files to clean.</param>
-    public void CleanFiles(SourceFile[] files)
+    public void CleanFiles(IEnumerable<SourceFile> files)
     {
         if (_projectService.Project is null)
             return;

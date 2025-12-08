@@ -7,6 +7,9 @@ using Mipser.Messages.Navigation;
 using Mipser.Models.Files;
 using Mipser.Services;
 using Mipser.ViewModels.Pages;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace Mipser.ViewModels;
 
@@ -41,8 +44,10 @@ public partial class WindowViewModel : ObservableRecipient
 
         BuildProjectCommand = new(BuildProjectAsync);
         RebuildProjectCommand = new(RebuildProjectAsync);
+        AssembleOpenFilesCommand = new(AssembleOpenFilesAsync);
         AssembleFileCommand = new(AssembleFileAsync);
         CleanProjectCommand = new(CleanProject);
+        CleanOpenFilesCommand = new(CleanOpenFiles);
         CleanFileCommand = new(CleanFile);
 
         OpenAboutCommand = new(OpenAbout);
@@ -94,6 +99,19 @@ public partial class WindowViewModel : ObservableRecipient
                 return null;
 
             return page.File;
+        }
+    }
+
+    private IEnumerable<BindableFile> OpenFiles
+    {
+        get
+        {
+            var panel = MainViewModel.FocusedPanel;
+            if (panel is null)
+                return [];
+
+            return panel.OpenPages.OfType<FilePageViewModel>()
+                .Where(x => x.File is not null).Select(x => x.File!);
         }
     }
 }
