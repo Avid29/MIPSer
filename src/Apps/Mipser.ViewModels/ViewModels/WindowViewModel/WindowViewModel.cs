@@ -35,7 +35,8 @@ public partial class WindowViewModel : ObservableRecipient
         PanelViewModel = panelViewModel;
 
         CreateNewFileCommand = new(CreateNewFile);
-        SaveFileCommand = new(SaveFile);
+        SaveFileCommand = new(SaveFileAsync);
+        SaveAllFilesCommand = new(SaveAllFilesAsync);
         PickAndOpenFileCommand = new(PickAndOpenFileAsync);
         PickAndOpenFolderCommand = new(PickAndOpenFolderAsync);
         PickAndOpenProjectCommand = new(PickAndOpenProjectAsync);
@@ -77,7 +78,6 @@ public partial class WindowViewModel : ObservableRecipient
 
         // Focus the panel when the window is created.
         _messenger.Send(new PanelFocusChangedMessage(PanelViewModel));
-
     }
 
     /// <summary>

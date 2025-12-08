@@ -64,12 +64,26 @@ public class PanelViewModel : ObservableObject
     /// <remarks>
     /// Does nothing if the current page is not a file.
     /// </remarks>
-    public async Task SaveCurrentFileAsync()
+    public async Task SaveFileAsync()
     {
         if (CurrentPage is null || !CurrentPage.CanSave)
             return;
 
         await CurrentPage.SaveAsync();
+    }
+
+    /// <summary>
+    /// Attempts to save the currently open files.
+    /// </summary>
+    public async Task SaveAllFilesAsync()
+    {
+        foreach(var page in OpenPages)
+        {
+            if (page.CanSave)
+            {
+                await page.SaveAsync();
+            }
+        }
     }
 
     /// <summary>

@@ -78,7 +78,8 @@
                         <KeyboardAccelerator Modifiers="Control" Key="S"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-                <MenuFlyoutItem x:Uid="/TitleBar/SaveAllMFI" Text="Save All" IsEnabled="False">
+                <MenuFlyoutItem x:Uid="/TitleBar/SaveAllMFI" Text="Save All"
+                                Command="{x:Bind ViewModel.SaveAllFilesCommand, Mode=OneWay}">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEA35;" />
                     </MenuFlyoutItem.Icon>

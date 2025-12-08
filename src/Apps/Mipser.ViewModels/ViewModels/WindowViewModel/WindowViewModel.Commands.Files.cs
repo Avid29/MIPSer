@@ -17,7 +17,12 @@ public partial class WindowViewModel
     /// <summary>
     /// Gets the command that saves the current file.
     /// </summary>
-    public RelayCommand SaveFileCommand { get; }
+    public AsyncRelayCommand SaveFileCommand { get; }
+
+    /// <summary>
+    /// Gets the command that saves the currently open files.
+    /// </summary>
+    public AsyncRelayCommand SaveAllFilesCommand { get; }
 
     /// <summary>
     /// Gets a command that picks and opens a file.
@@ -46,7 +51,9 @@ public partial class WindowViewModel
 
     private void CreateNewFile() => _messenger.Send(new FileCreateNewRequestMessage());
 
-    private void SaveFile() => _messenger.Send(new FileSaveRequestMessage());
+    private async Task SaveFileAsync() => MainViewModel.FocusedPanel?.SaveFileAsync();
+
+    private async Task SaveAllFilesAsync() => MainViewModel.FocusedPanel?.SaveAllFilesAsync();
 
     private async Task PickAndOpenFileAsync() => await MainViewModel.PickAndOpenFileAsync();
 
