@@ -12,14 +12,12 @@ namespace Mipser.Bindables.Files;
 /// </summary>
 public partial class BindableFile : BindableFileItem<IFile>
 {
-    private IFile _file;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFile"/> class.
     /// </summary>
     internal BindableFile(FileService fileService, IFile file) : base(fileService)
     {
-        _file = file;
+        FileItem = file;
         Children = [];
 
         OpenCommand = new(Open);
@@ -34,10 +32,10 @@ public partial class BindableFile : BindableFileItem<IFile>
     /// <inheritdoc/>
     protected internal override IFile FileItem
     {
-        get => _file;
+        get;
         set
         {
-            if (SetProperty(ref _file, value))
+            if (SetProperty(ref field, value))
             {
                 OnPropertyChanged(nameof(Name));
                 OnPropertyChanged(nameof(Path));

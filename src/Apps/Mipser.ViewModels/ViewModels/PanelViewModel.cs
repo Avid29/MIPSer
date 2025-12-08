@@ -19,8 +19,6 @@ public class PanelViewModel : ObservableObject
 {
     private readonly ILocalizationService _localizationService;
     private readonly IPopupService _popupService;
-
-    private PageViewModel? _currentPage;
      
     /// <summary>
     /// Initializes a new instance of the <see cref="PanelViewModel"/> class.
@@ -38,10 +36,10 @@ public class PanelViewModel : ObservableObject
     /// </summary>
     public PageViewModel? CurrentPage
     {
-        get => _currentPage;
+        get;
         set
         {
-            if (SetProperty(ref _currentPage, value))
+            if (SetProperty(ref field, value))
             {
                 OnPropertyChanged(nameof(IsPageOpen));
             }

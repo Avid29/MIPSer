@@ -24,8 +24,6 @@ public partial class FilePageViewModel : PageViewModel
     private readonly ISettingsService _settingsService;
     private readonly IProjectService _projectService;
 
-    private BindableFile? _file;
-
     /// <summary>
     /// An event invoked requesting to navigate to a token.
     /// </summary>
@@ -58,20 +56,20 @@ public partial class FilePageViewModel : PageViewModel
     /// </summary>
     public BindableFile? File
     {
-        get => _file;
+        get;
         set
         {
-            var old = _file;
-            if (SetProperty(ref _file, value))
+            var old = field;
+            if (SetProperty(ref field, value))
             {
                 if (old is not null)
                 {
                     old.PropertyChanged -= OnFileUpdate;
                 }
 
-                if (_file is not null)
+                if (field is not null)
                 {
-                    _file.PropertyChanged += OnFileUpdate;
+                    field.PropertyChanged += OnFileUpdate;
                 }
 
                 _ = LoadContentAsync();

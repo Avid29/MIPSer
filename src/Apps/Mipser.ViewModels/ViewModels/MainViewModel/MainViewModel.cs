@@ -19,8 +19,6 @@ public partial class MainViewModel : ObservableRecipient
     private readonly IFileService _fileService;
     private readonly IFileSystemService _fileSystemService;
 
-    private PanelViewModel? _focusPanel;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="MainViewModel"/> class.
     /// </summary>
@@ -42,8 +40,8 @@ public partial class MainViewModel : ObservableRecipient
     /// </summary>
     public PanelViewModel? FocusedPanel
     {
-        get => _focusPanel;
-        private set => SetProperty(ref _focusPanel, value);
+        get;
+        private set => SetProperty(ref field, value);
     }
 
     /// <summary>

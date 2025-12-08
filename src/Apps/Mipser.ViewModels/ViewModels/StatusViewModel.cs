@@ -15,9 +15,6 @@ public class StatusViewModel : ObservableRecipient
 {
     private readonly IMessenger _messenger;
 
-    private BuildStatus _buildStatus;
-    private string? _statusMessage;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="StatusViewModel"/> class.
     /// </summary>
@@ -46,8 +43,8 @@ public class StatusViewModel : ObservableRecipient
     /// </summary>
     public BuildStatus BuildStatus
     {
-        get => _buildStatus;
-        private set => SetProperty(ref _buildStatus, value);
+        get => field;
+        private set => SetProperty(ref field, value);
     }
 
     /// <summary>
@@ -55,7 +52,7 @@ public class StatusViewModel : ObservableRecipient
     /// </summary>
     public string? StatusMessage
     {
-        get => _statusMessage;
-        private set => SetProperty(ref _statusMessage, value);
+        get;
+        private set => SetProperty(ref field, value);
     }
 }

@@ -5,12 +5,10 @@ using MIPS.Interpreter.Models.System.CPU.Registers;
 using MIPS.Interpreter.Models.System.Execution;
 using MIPS.Interpreter.Models.System.Execution.Enum;
 using MIPS.Models.Instructions;
-using MIPS.Models.Instructions.Enums;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System;
-using System.Net.Http.Headers;
 
 namespace MIPS.Interpreter.System.CPU;
 

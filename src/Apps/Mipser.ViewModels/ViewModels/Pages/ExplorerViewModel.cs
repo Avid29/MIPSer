@@ -17,8 +17,6 @@ public class ExplorerViewModel : PageViewModel
     private readonly IMessenger _messenger;
     private readonly IFileService _fileService;
 
-    private BindableFolder? _rootFolder;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ExplorerViewModel"/> class.
     /// </summary>
@@ -38,10 +36,10 @@ public class ExplorerViewModel : PageViewModel
     /// </summary>
     public BindableFolder? RootFolder
     {
-        get => _rootFolder;
+        get;
         set
         {
-            if (SetProperty(ref _rootFolder, value))
+            if (SetProperty(ref field, value))
                 OnPropertyChanged(nameof(RootNode));
         }
     }

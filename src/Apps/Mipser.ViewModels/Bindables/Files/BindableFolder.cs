@@ -20,7 +20,6 @@ public partial class BindableFolder : BindableFileItem<IFolder>
     private readonly Dictionary<BindableFileItem, BindableFile> _virtualParents;
     private FileSystemWatcher? _watcher;
     private bool _childrenNotCalculated;
-    private IFolder _folder;
 
 
     /// <summary>
@@ -30,7 +29,7 @@ public partial class BindableFolder : BindableFileItem<IFolder>
     {
         _virtualParents = [];
 
-        _folder = folder;
+        FileItem = folder;
 
         Children = [];
         ChildrenNotLoaded = true;
@@ -56,10 +55,10 @@ public partial class BindableFolder : BindableFileItem<IFolder>
     /// <inheritdoc/>
     protected internal override IFolder FileItem
     {
-        get => _folder;
+        get;
         set
         {
-            if (SetProperty(ref _folder, value))
+            if (SetProperty(ref field, value))
             {
                 OnPropertyChanged(nameof(Name));
                 OnPropertyChanged(nameof(Path));

@@ -7,18 +7,15 @@ namespace Mipser.ViewModels.Pages;
 
 public partial class FilePageViewModel
 {
-    private string? _originalContent;
-    private string? _contents;
-
     /// <summary>
     /// Gets or sets the content of file.
     /// </summary>
     public string? Content
     {
-        get => _contents;
+        get;
         set
         {
-            if (SetProperty(ref _contents, value))
+            if (SetProperty(ref field, value))
             {
                 OnPropertyChanged(nameof(IsDirty));
             }
@@ -27,11 +24,11 @@ public partial class FilePageViewModel
 
     private string? OriginalContent
     {
-        get => _originalContent;
+        get;
         set
         {
             Content = value;
-            if (SetProperty(ref _originalContent, value))
+            if (SetProperty(ref field, value))
             {
                 OnPropertyChanged(nameof(IsDirty));
             }
