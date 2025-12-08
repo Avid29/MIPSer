@@ -36,10 +36,6 @@ public class SourceFile : FileBase
     {
         get
         {
-            // Treat unbuilt and dirty
-            if (!ObjectFile.Exists)
-                return true;
-
             var sourceWriteTime = File.GetLastWriteTime(FullPath);
             var objectWriteTime = File.GetLastWriteTime(ObjectFile.FullPath);
 

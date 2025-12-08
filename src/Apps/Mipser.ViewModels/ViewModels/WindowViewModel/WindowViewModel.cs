@@ -2,8 +2,11 @@
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using Mipser.Bindables.Files;
 using Mipser.Messages.Navigation;
+using Mipser.Models.Files;
 using Mipser.Services;
+using Mipser.ViewModels.Pages;
 
 namespace Mipser.ViewModels;
 
@@ -39,6 +42,8 @@ public partial class WindowViewModel : ObservableRecipient
         BuildProjectCommand = new(BuildProjectAsync);
         RebuildProjectCommand = new(RebuildProjectAsync);
         AssembleFileCommand = new(AssembleFileAsync);
+        CleanProjectCommand = new(CleanProject);
+        CleanFileCommand = new(CleanFile);
 
         OpenAboutCommand = new(OpenAbout);
         OpenCheatSheetCommand = new(OpenCheatSheet);
@@ -79,4 +84,16 @@ public partial class WindowViewModel : ObservableRecipient
     /// Gets the <see cref="ViewModels.PanelViewModel"/> for the panel in the window.
     /// </summary>
     public PanelViewModel PanelViewModel { get; }
+
+    private BindableFile? CurrentFile
+    {
+        get
+        {
+            // Get the current page, and ensure it's a file page
+            if (MainViewModel.FocusedPanel?.CurrentPage is not FilePageViewModel page)
+                return null;
+
+            return page.File;
+        }
+    }
 }

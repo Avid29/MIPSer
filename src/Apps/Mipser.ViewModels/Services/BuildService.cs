@@ -60,14 +60,14 @@ public class BuildService
             return null;
 
         var logger = new Logger();
-        var task = _projectService.Project.BuildAsync(rebuild, logger);
+        var task = _projectService.Project.BuildProjectAsync(rebuild, logger);
         return await BuildAsync(task, logger);
     }
 
     /// <summary>
-    /// Assembles a file.
+    /// Assembles a set of files.
     /// </summary>
-    /// <param name="files">The file to assemble.</param>
+    /// <param name="files">The files to assemble.</param>
     public async Task<BuildResult?> AssembleFilesAsync(SourceFile[] files)
     {
         // TODO: Report issue
@@ -77,6 +77,29 @@ public class BuildService
         var logger = new Logger();
         var task = _projectService.Project.AssembleFilesAsync(files, true, logger);
         return await BuildAsync(task, logger);
+    }
+    
+    /// <summary>
+    /// Cleans a project.
+    /// </summary>
+    public void CleanProject()
+    {
+        if (_projectService.Project is null)
+            return;
+
+        _projectService.Project.CleanProject();
+    }
+    
+    /// <summary>
+    /// Cleans a set of files.
+    /// </summary>
+    /// <param name="files">The files to clean.</param>
+    public void CleanFiles(SourceFile[] files)
+    {
+        if (_projectService.Project is null)
+            return;
+
+        _projectService.Project.CleanFiles(files);
     }
 
     private async Task<BuildResult?> BuildAsync(Task<BuildResult?> buildTask, Logger logger)

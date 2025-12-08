@@ -29,28 +29,41 @@ public partial class WindowViewModel
     /// </summary>
     public AsyncRelayCommand AssembleFileCommand { get; }
 
-    private async Task BuildProjectAsync()
-    {
-        await _buildService.BuildProjectAsync();
-    }
+    /// <summary>
+    /// Gets a command that cleans the project.
+    /// </summary>
+    public RelayCommand CleanProjectCommand { get; }
 
-    private async Task RebuildProjectAsync()
-    {
-        await _buildService.BuildProjectAsync(true);
-    }
+    /// <summary>
+    /// Gets a command that cleans the current file.
+    /// </summary>
+    public RelayCommand CleanFileCommand { get; }
+
+    private async Task BuildProjectAsync() => await _buildService.BuildProjectAsync();
+
+    private async Task RebuildProjectAsync() => await _buildService.BuildProjectAsync(true);
 
     private async Task AssembleFileAsync()
     {
-        // Get the current page, and ensure it's a file page
-        if (MainViewModel.FocusedPanel?.CurrentPage is not FilePageViewModel page)
-            return;
-
         // Check if the file is null
-        var file = page.File?.SourceFile;
+        var file = CurrentFile?.SourceFile;
         if (file is null)
             return;
 
         // Request to assemble the file
         await _buildService.AssembleFilesAsync([file]);
+    }
+
+    private void CleanProject() => _buildService.CleanProject();
+
+    private void CleanFile()
+    {
+        // Check if the file is null
+        var file = CurrentFile?.SourceFile;
+        if (file is null)
+            return;
+
+        // Request to assemble the file
+        _buildService.CleanFiles([file]);
     }
 }

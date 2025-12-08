@@ -238,7 +238,6 @@
                 <MenuFlyoutSeparator/>
                 
                 <!--  Assemble  -->
-                <MenuFlyoutItem x:Uid="/TitleBar/AssembleProjectMFI" Text="Assemble Project" IsEnabled="False"/>
                 <MenuFlyoutItem x:Uid="/TitleBar/AssembleOpenFilesMFI" Text="Assemble Open Files" IsEnabled="False"/>
                 <MenuFlyoutItem x:Uid="/TitleBar/AssembleFileMFI" Text="Assemble File"
                                 IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanAssemble, FallbackValue=False, Mode=OneWay}"
@@ -251,9 +250,12 @@
                 <MenuFlyoutSeparator/>
                 
                 <!--  Clean  -->
-                <MenuFlyoutItem x:Uid="/TitleBar/CleanProjectMFI" Text="Clean Project" IsEnabled="False"/>
+                <MenuFlyoutItem x:Uid="/TitleBar/CleanProjectMFI" Text="Clean Project"
+                                Command="{x:Bind ViewModel.CleanProjectCommand, Mode=OneWay}"/>
                 <MenuFlyoutItem x:Uid="/TitleBar/CleanOpenFilesMFI" Text="Clean Open Files" IsEnabled="False"/>
-                <MenuFlyoutItem x:Uid="/TitleBar/CleanFileMFI" Text="Clean File" IsEnabled="False"/>
+                <MenuFlyoutItem x:Uid="/TitleBar/CleanFileMFI" Text="Clean File"
+                                IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanAssemble, FallbackValue=False, Mode=OneWay}"
+                                Command="{x:Bind ViewModel.CleanFileCommand, Mode=OneWay}"/>
             </MenuBarItem>
             
             <!--  Help  -->

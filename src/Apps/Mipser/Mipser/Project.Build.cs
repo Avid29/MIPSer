@@ -18,7 +18,7 @@ public partial class Project
     /// <summary>
     /// Builds the project.
     /// </summary>
-    public async Task<BuildResult?> BuildAsync(bool rebuild = false, Logger? logger = null)
+    public async Task<BuildResult?> BuildProjectAsync(bool rebuild = false, Logger? logger = null)
     {
         var result = await AssembleFilesAsync(SourceFiles, rebuild, logger);
 
@@ -42,10 +42,25 @@ public partial class Project
         return result;
     }
 
+    /// <summary>
+    /// Cleans all files in the project.
+    /// </summary>
+    public void CleanProject() => CleanFiles(SourceFiles);
+
+    /// <summary>
+    /// Cleans a list of source files.
+    /// </summary>
+    /// <param name="files">The files to clean.</param>
+    public void CleanFiles(IEnumerable<SourceFile> files)
+    {
+        foreach(var file in files)
+            CleanFile(file);
+    }
+
     private async Task<AssemblerResult?> AssembleFileAsync(SourceFile file, bool rebuild = true, Logger? logger = null)
     {
         // Skip if not dirty and not rebuilding
-        if (!file.IsDirty && !rebuild)
+        if (!(file.IsDirty || !file.ObjectFile.Exists) && !rebuild)
             return null;
 
         // TODO: Handle error
@@ -64,7 +79,7 @@ public partial class Project
             // Delete the object file if the build failed
             if (result.Failed)
             {
-                File.Delete(file.ObjectFile.FullPath);
+                CleanFile(file);
             }
 
             return result;
@@ -72,7 +87,24 @@ public partial class Project
         catch
         {
             // TODO: Handle error
+            CleanFile(file);
             return null;
+        }
+    }
+    
+    private bool CleanFile(SourceFile file)
+    {
+        if (!file.ObjectFile.Exists)
+            return false;
+
+        try
+        {
+            File.Delete(file.ObjectFile.FullPath);
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 }
