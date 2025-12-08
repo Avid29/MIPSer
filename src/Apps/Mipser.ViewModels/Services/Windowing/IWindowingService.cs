@@ -7,5 +7,8 @@ namespace Mipser.Services.Windowing;
 /// </summary>
 public interface IWindowingService
 {
-
+    /// <summary>
+    /// Toggles full screen for the current window.
+    /// </summary>
+    public void ToggleFullScreen();
 }

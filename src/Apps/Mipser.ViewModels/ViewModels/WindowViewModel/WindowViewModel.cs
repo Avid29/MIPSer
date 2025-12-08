@@ -6,6 +6,7 @@ using Mipser.Bindables.Files;
 using Mipser.Messages.Navigation;
 using Mipser.Models.Files;
 using Mipser.Services;
+using Mipser.Services.Windowing;
 using Mipser.ViewModels.Pages;
 using System.Collections.Generic;
 using System.Data;
@@ -20,15 +21,17 @@ public partial class WindowViewModel : ObservableRecipient
 {
     private readonly IMessenger _messenger;
     private readonly IProjectService _projectService;
+    private readonly IWindowingService _windowingService;
     private readonly BuildService _buildService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WindowViewModel"/> class.
     /// </summary>
-    public WindowViewModel(IMessenger messenger, IProjectService projectService, BuildService buildService, MainViewModel mainViewModel, PanelViewModel panelViewModel)
+    public WindowViewModel(IMessenger messenger, IProjectService projectService, IWindowingService windowingService, BuildService buildService, MainViewModel mainViewModel, PanelViewModel panelViewModel)
     {
         _messenger = messenger;
         _projectService = projectService;
+        _windowingService = windowingService;
         _buildService = buildService;
 
         MainViewModel = mainViewModel;
@@ -56,6 +59,8 @@ public partial class WindowViewModel : ObservableRecipient
         OpenCreateProjectCommand = new(OpenCreateProject);
         OpenSettingsCommand = new(OpenSettings);
         OpenWelcomeCommand = new(OpenWelcome);
+
+        ToggleFullScreenModeCommand = new(ToggleFullscrenMode);
 
         UndoCommand = new(Undo);
         RedoCommand = new(Redo);

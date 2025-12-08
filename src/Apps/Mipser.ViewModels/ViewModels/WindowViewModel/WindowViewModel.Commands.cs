@@ -38,6 +38,11 @@ public partial class WindowViewModel
     /// </summary>
     public RelayCommand OpenWelcomeCommand { get; }
 
+    /// <summary>
+    /// Gets a command that toggles full screen mode.
+    /// </summary>
+    public RelayCommand ToggleFullScreenModeCommand { get; }
+
     private void OpenAbout() => MainViewModel.GoToPageByType<AboutPageViewModel>();
 
     private void OpenCheatSheet() => MainViewModel.GoToPageByType<CheatSheetViewModel>();
@@ -50,4 +55,6 @@ public partial class WindowViewModel
     /// Open the welcome page.
     /// </summary>
     public void OpenWelcome() => MainViewModel.GoToPageByType<WelcomePageViewModel>();
+
+    private void ToggleFullscrenMode() => _windowingService.ToggleFullScreen();
 }

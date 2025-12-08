@@ -1,8 +1,12 @@
 // Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
+using Microsoft.UI.Input;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Mipser.ViewModels;
+using Windows.Foundation;
+using Windows.Graphics;
 
 namespace Mipser.Windows.Views.Shell;
 
@@ -19,11 +23,14 @@ public sealed partial class TitleBar : UserControl
         this.InitializeComponent();
 
         Loaded += TitleBar_Loaded;
+        SizeChanged += TitleBar_SizeChanged;
     }
+
+    private void TitleBar_SizeChanged(object sender, SizeChangedEventArgs e) => AdjustDragRegion();
 
     private WindowViewModel ViewModel => (WindowViewModel)DataContext;
 
-    private void TitleBar_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void TitleBar_Loaded(object sender, RoutedEventArgs e)
     {
         ExtendIntoTitleBar();
     }
@@ -34,7 +41,23 @@ public sealed partial class TitleBar : UserControl
         Guard.IsNotNull(window);
 
         window.ExtendsContentIntoTitleBar = true;
-        window.SetTitleBar(AppTitleBar);
+        AdjustDragRegion();
+    }
+
+    private void AdjustDragRegion()
+    {
+        var window = App.Current.Window;
+        Guard.IsNotNull(window);
+
+        var rect = new RectInt32
+        {
+            X = 0,
+            Y = 0,
+            Width = (int)window.Bounds.Width,
+            Height = (int)ActualHeight,
+        };
+
+        window.AppWindow.TitleBar.SetDragRectangles([rect]);
     }
 
     public static bool IsNotNull(object? obj) => obj is not null;

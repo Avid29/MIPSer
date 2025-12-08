@@ -11,19 +11,19 @@
     <!--Title Bar-->
     <Grid Background="{ThemeResource TitleBarBackgroundBrush}" Padding="4,0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="auto"/>    <!--  App Icon  -->
+            <ColumnDefinition Width="auto"/>    <!--  Menu Bar  -->
+            <ColumnDefinition/>                 <!--  Gap  -->
+            <ColumnDefinition Width="auto"/>    <!--  Settings Button -->
+            <!--<ColumnDefinition x:Name="CaptionButtonColumn"/>-->
         </Grid.ColumnDefinitions>
-
-        <Border x:Name="AppTitleBar" Grid.ColumnSpan="3" Background="Transparent"/>
 
         <ImageIcon Source="{StaticResource AppIconSmall}" Height="20" VerticalAlignment="Center" Margin="8,4,8,0"/>
 
         <MenuBar Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
             <!--  File  -->
             <MenuBarItem x:Uid="/TitleBar/FileMBI" Title="File">
-                
+
                 <!--  New  -->
                 <MenuFlyoutSubItem x:Uid="/TitleBar/NewMFSI" Text="New">
                     <MenuFlyoutItem x:Uid="/TitleBar/NewProjectMFI" Text="New Project"
@@ -44,7 +44,7 @@
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                 </MenuFlyoutSubItem>
-                
+
                 <!--  Open  -->
                 <MenuFlyoutSubItem x:Uid="/TitleBar/OpenMFSI" Text="Open">
                     <MenuFlyoutItem x:Uid="/TitleBar/OpenProjectMFI" Text="Open Project"
@@ -69,7 +69,7 @@
                     </MenuFlyoutItem>
                 </MenuFlyoutSubItem>
                 <MenuFlyoutSeparator/>
-                
+
                 <!--  Save  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/SaveCurrentFileMFI" Icon="Save" Text="Save Current File"
                                 Command="{x:Bind ViewModel.SaveFileCommand, Mode=OneWay}"
@@ -88,7 +88,7 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
-                
+
                 <!--  Close  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/CloseFileMFI" Text="Close File"
                                 Command="{x:Bind ViewModel.ClosePageCommand, Mode=OneWay}"
@@ -101,7 +101,7 @@
                                 Command="{x:Bind ViewModel.CloseProjectCommand, Mode=OneWay}"
                                 IsEnabled="{x:Bind local:TitleBar.IsNotNull(ViewModel.MainViewModel.ExplorerViewModel.RootFolder), FallbackValue=False, Mode=OneWay}"/>
             </MenuBarItem>
-            
+
             <!--  Edit  -->
             <MenuBarItem x:Uid="/TitleBar/EditMBI" Title="Edit">
                 <!--  History  -->
@@ -121,7 +121,7 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
-                
+
                 <!--  Basic  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/CutMFI" Icon="Cut" Text="Cut"
                                 Command="{x:Bind ViewModel.CutCommand, Mode=OneWay}"
@@ -152,7 +152,7 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
-                
+
                 <!--  Select  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/SelectAllMFI" Icon="SelectAll" Text="Select All"
                                 Command="{x:Bind ViewModel.SelectAllCommand, Mode=OneWay}"
@@ -208,10 +208,11 @@
                     </MenuFlyoutItem>
                 </MenuFlyoutSubItem>
             </MenuBarItem>
-            
+
             <!--  View  -->
-            <MenuBarItem x:Uid="/TitleBar/ViewMBI" Title="View">
-                <MenuFlyoutItem x:Uid="/TitleBar/ToggleFullScreenMFI" Text="Toggle Full Screen" IsEnabled="False">
+            <!--<MenuBarItem x:Uid="/TitleBar/ViewMBI" Title="View">
+                <MenuFlyoutItem x:Uid="/TitleBar/ToggleFullScreenMFI" Text="Toggle Full Screen"
+                                Command="{x:Bind ViewModel.ToggleFullScreenModeCommand, Mode=OneWay}">
                     <MenuFlyoutItem.Icon>
                         <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE72B;" />
                     </MenuFlyoutItem.Icon>
@@ -219,8 +220,8 @@
                         <KeyboardAccelerator Modifiers="Control,Shift" Key="F12"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
-            </MenuBarItem>
-            
+            </MenuBarItem>-->
+
             <!--  Build  -->
             <MenuBarItem x:Uid="/TitleBar/BuildMBI" Title="Build">
                 <!-- Build/Rebuild -->
@@ -237,7 +238,7 @@
                 <MenuFlyoutItem x:Uid="/TitleBar/RebuildProjectMFI" Text="Rebuild Project"
                                 Command="{x:Bind ViewModel.RebuildProjectCommand, Mode=OneWay}"/>
                 <MenuFlyoutSeparator/>
-                
+
                 <!--  Assemble  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/AssembleOpenFilesMFI" Text="Assemble Open Files"
                                 Command="{x:Bind ViewModel.AssembleOpenFilesCommand, Mode=OneWay}"/>
@@ -250,7 +251,7 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
-                
+
                 <!--  Clean  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/CleanProjectMFI" Text="Clean Project"
                                 Command="{x:Bind ViewModel.CleanProjectCommand, Mode=OneWay}"/>
@@ -260,7 +261,7 @@
                                 IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanAssemble, FallbackValue=False, Mode=OneWay}"
                                 Command="{x:Bind ViewModel.CleanFileCommand, Mode=OneWay}"/>
             </MenuBarItem>
-            
+
             <!--  Help  -->
             <MenuBarItem x:Uid="/TitleBar/HelpMBI" Title="Help">
                 <MenuFlyoutItem x:Uid="/TitleBar/CheatSheetMFI"
@@ -285,5 +286,13 @@
                 </MenuFlyoutItem>-->
             </MenuBarItem>
         </MenuBar>
+
+        <Button Grid.Column="3" Command="{x:Bind ViewModel.OpenSettingsCommand, Mode=OneWay}"
+                Background="Transparent" BorderThickness="0"
+                VerticalAlignment="Center" Width="40" Height="36">
+            <Viewbox Height="16">
+                <SymbolIcon Symbol="Setting"/>
+            </Viewbox>
+        </Button>
     </Grid>
 </UserControl>
