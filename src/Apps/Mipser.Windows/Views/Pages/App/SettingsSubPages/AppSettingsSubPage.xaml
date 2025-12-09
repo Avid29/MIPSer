@@ -8,6 +8,7 @@
     xmlns:base="using:Mipser.Windows.Views.Pages.App"
     xmlns:local="using:Mipser.Windows.Views.Pages.App.SettingsSubPages"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
+    xmlns:models="using:Mipser.Models"
     xmlns:helpers="using:Mipser.Windows.Helpers"
     xmlns:senums="using:Mipser.Services.Settings.Enums"
     mc:Ignorable="d">
@@ -83,6 +84,19 @@
                                 </RichTextBlock>
                             </StackPanel>
                         </HyperlinkButton>
+                    </StackPanel>
+                </ctc:SettingsCard>
+                <ctc:SettingsCard HorizontalContentAlignment="Left"
+                                  ContentAlignment="Left">
+                    <StackPanel Spacing="8">
+                        <TextBlock x:Uid="/Settings/ThirdPartyDependenciesTB" Text="Third-Party Dependencies" FontSize="18"/>
+                        <ItemsRepeater ItemsSource="{x:Bind ViewModel.ThirdPartyNotices, Mode=OneWay}">
+                            <ItemsRepeater.ItemTemplate>
+                                <DataTemplate x:DataType="models:ThirdPartyNotice">
+                                    <HyperlinkButton Content="{x:Bind DependencyName, Mode=OneWay}" NavigateUri="{x:Bind Url, Mode=OneWay}"/>
+                                </DataTemplate>
+                            </ItemsRepeater.ItemTemplate>
+                        </ItemsRepeater>
                     </StackPanel>
                 </ctc:SettingsCard>
             </ctc:SettingsExpander.Items>

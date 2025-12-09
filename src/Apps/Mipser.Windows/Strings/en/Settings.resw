@@ -217,4 +217,7 @@ foo:
   <data name="RestoreOpenProjectSC.Description" xml:space="preserve">
     <value>Set whether or not the app should cache and restore the open the project/folder when opened.</value>
   </data>
+  <data name="ThirdPartyDependenciesTB.Text" xml:space="preserve">
+    <value>Third-Party Dependencies</value>
+  </data>
 </root>

@@ -217,4 +217,7 @@ foo:
   <data name="RestoreOpenProjectSC.Description" xml:space="preserve">
     <value>קבע האם היישום ישמור במטמון וישחזר את הפרויקט/התיקיה הפתוחים בעת ההפעלה.</value>
   </data>
+  <data name="ThirdPartyDependenciesTB.Text" xml:space="preserve">
+    <value>תלויות של צד שלישי</value>
+  </data>
 </root>
