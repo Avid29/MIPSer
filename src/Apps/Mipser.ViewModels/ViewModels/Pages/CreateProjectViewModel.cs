@@ -3,7 +3,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MIPS.Models.Instructions.Enums;
-using Mipser.Messages.Pages;
+using Mipser.Messages.Navigation;
 using Mipser.Models.ProjectConfig;
 using Mipser.Services;
 using Mipser.Services.Files;

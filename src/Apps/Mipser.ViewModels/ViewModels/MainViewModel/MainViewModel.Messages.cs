@@ -8,7 +8,6 @@ using Mipser.Messages.Editor;
 using Mipser.Messages.Editor.Enums;
 using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
-using Mipser.Messages.Pages;
 using Mipser.Services;
 using Mipser.ViewModels.Pages;
 using System.Linq;

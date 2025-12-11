@@ -2,7 +2,7 @@
 
 using Mipser.ViewModels.Pages.Abstract;
 
-namespace Mipser.Messages.Pages;
+namespace Mipser.Messages.Navigation;
 
 /// <summary>
 /// A message sent to close a page.

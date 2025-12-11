@@ -149,19 +149,27 @@
 
         <StackPanel x:Name="RecentFileListView"
                     x:Load="{x:Bind local:Explorer.IsNull(ViewModel.RootItem), FallbackValue=True, Mode=OneWay}">
-            <TextBlock x:Uid="/Pages/Explorer/RecentProjectsAndFoldersTB" Text="Recent Projects and Folders" FontSize="16"/>
+            <TextBlock x:Uid="/Pages/Explorer/RecentProjectsAndFoldersTB" Text="Recent Projects and Folders"
+                       FontSize="22" TextTrimming="CharacterEllipsis"/>
             <ItemsRepeater ItemsSource="{x:Bind ViewModel.RecentProjects, Mode=OneWay}"
-                      Grid.Row="1" Margin="0,8,0,0">
+                      Grid.Row="1" Margin="0,8,0,16">
                 <ItemsRepeater.ItemTemplate>
                     <DataTemplate x:DataType="x:String">
-                        <HyperlinkButton ToolTipService.ToolTip="{x:Bind}" Padding="8" MinHeight="20"
-                                         Tag="{x:Bind}"
-                                         Click="RecentFileClicked">
-                            <TextBlock Text="{x:Bind}" FontSize="11" />
+                        <HyperlinkButton Tag="{x:Bind}" ToolTipService.ToolTip="{x:Bind}" Padding="8"
+                                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                         MinHeight="20" Click="RecentFileClicked">
+                            <TextBlock Text="{x:Bind local:Explorer.FormatPath((x:String)), Mode=OneWay}"
+                                       FontSize="12" TextTrimming="None"/>
                         </HyperlinkButton>
                     </DataTemplate>
                 </ItemsRepeater.ItemTemplate>
             </ItemsRepeater>
+
+            <Button x:Uid="/Pages/Explorer/CreateNewProjectBTN"
+                    Content="Create New Project"
+                    HorizontalAlignment="Center"
+                    Command="{x:Bind ViewModel.CreateNewProjectCommand, Mode=OneWay}"/>
+
         </StackPanel>
     </Grid>
 </UserControl>

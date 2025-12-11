@@ -1,14 +1,6 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using Mipser.Messages.Build;
-using Mipser.Messages.Files;
-using Mipser.Messages.Pages;
-using Mipser.Services;
-using Mipser.ViewModels.Pages;
-using Mipser.ViewModels.Pages.App;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 

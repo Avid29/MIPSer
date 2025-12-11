@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Input;
 using Mipser.Bindables.Files;
 using Mipser.Services;
 using Mipser.ViewModels.Pages;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Mipser.Windows.Views.Pages;
@@ -83,4 +84,20 @@ public sealed partial class Explorer : UserControl
     private static bool IsNull(object? obj) => obj is null;
 
     private static bool IsNotNull(object? obj) => obj is not null;
+
+    private static string FormatPath(string path)
+    {
+        // TODO: Localization
+        var localization = Service.Get<ILocalizationService>();
+
+        if (File.GetAttributes(path).HasFlag(FileAttributes.Directory))
+        {
+            var dirInfo = new DirectoryInfo(path);
+            return $"{dirInfo.Parent?.Name}/{dirInfo.Name} (Folder)";
+        }
+        else
+        {
+            return Path.GetFileNameWithoutExtension(path);
+        }
+    }
 }

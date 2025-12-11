@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Bindables.Files;
 using Mipser.Messages;
@@ -38,6 +39,8 @@ public class ExplorerViewModel : PageViewModel
 
         RecentProjects = [];
 
+        CreateNewProjectCommand = new(CreateNewProject);
+
         _ = LoadRecentCacheAsync();
 
         IsActive = true;
@@ -69,6 +72,11 @@ public class ExplorerViewModel : PageViewModel
     /// </summary>
     public ObservableCollection<string> RecentProjects { get; private set; }
 
+    /// <summary>
+    /// Gets a command to open the create new project page.
+    /// </summary>
+    public RelayCommand CreateNewProjectCommand { get; }
+
     /// <inheritdoc/>
     protected override void OnActivated()
     {
@@ -96,5 +104,10 @@ public class ExplorerViewModel : PageViewModel
         RecentProjects.Clear();
         foreach(var item in recent.Paths)
             RecentProjects.Add(item);
+    }
+
+    private void CreateNewProject()
+    {
+        Service.Get<MainViewModel>().GoToPageByType<CreateProjectViewModel>();
     }
 }
