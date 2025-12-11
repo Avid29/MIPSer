@@ -43,7 +43,7 @@ public partial class AssemblyEditor : CodeEditor
         base.OnApplyTemplate();
 
         // Setup events
-        this.Loaded += AssemblyEditBox_Loaded;
+        this.Loaded += AssemblyEditor_Loaded;
 
         // Setup keywords
         SetupKeywords();

@@ -13,9 +13,6 @@
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 	</PropertyGroup>
-	<ItemGroup>
-	  <None Remove="PanelWindow.xaml" />
-	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Labs.WinUI.ColorAnalyzer" Version="0.1.251101-build.2372" />
@@ -70,6 +67,12 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\submodules\WinUIEdit\WinUIEditor\WinUIEditor.vcxproj" />
 		<ProjectReference Include="..\Mipser.ViewModels\Mipser.ViewModels.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="Controls\CodeEditor\CodeEditorFrame.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 
 	<ItemGroup>

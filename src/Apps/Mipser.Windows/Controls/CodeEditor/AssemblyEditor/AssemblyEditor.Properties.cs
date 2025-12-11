@@ -84,8 +84,6 @@ public partial class AssemblyEditor
         set => SetValue(AssemblerConfigProperty, value);
     }
 
-    private void UpdateTextProperty(string value) => SetValue(TextProperty, value);
-
     private static void OnSyntaxHighlightingThemeChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)
     {
         if (d is not AssemblyEditor asmBox)
