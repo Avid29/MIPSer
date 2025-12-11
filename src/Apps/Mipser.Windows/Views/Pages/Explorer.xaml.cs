@@ -1,11 +1,13 @@
 // Adam Dernis 2024
 
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Mipser.Bindables.Files;
 using Mipser.Services;
 using Mipser.ViewModels.Pages;
+using System.Threading.Tasks;
 
 namespace Mipser.Windows.Views.Pages;
 
@@ -30,13 +32,13 @@ public sealed partial class Explorer : UserControl
         if (sender is not TreeViewItem tvi)
             return;
 
-        var node = TreeViewRoot.NodeFromContainer(tvi);
+        var node = FilesTreeViewRoot.NodeFromContainer(tvi);
         if (node is null)
             return;
 
         if (node.Depth is 0)
         {
-            TreeViewRoot.Expand(node);
+            FilesTreeViewRoot.Expand(node);
         }
     }
 
@@ -66,4 +68,19 @@ public sealed partial class Explorer : UserControl
         await folder.LoadChildrenAsync();
         args.Node.IsExpanded = true;
     }
+
+    private async void RecentFileClicked(object sender, RoutedEventArgs e)
+    {
+        if (sender is not HyperlinkButton btn)
+            return;
+
+        if (btn.Tag is not string path)
+            return;
+
+        await Service.Get<IProjectService>().OpenPathAsyc(path);
+    }
+
+    private static bool IsNull(object? obj) => obj is null;
+
+    private static bool IsNotNull(object? obj) => obj is not null;
 }

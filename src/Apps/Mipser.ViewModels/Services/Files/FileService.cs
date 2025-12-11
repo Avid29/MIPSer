@@ -193,5 +193,5 @@ public class FileService : IFileService
         return true;
     }
 
-    private static bool IsFile(string? path) => path is null || Path.GetFileName(path) is not null;
+    private static bool IsFile(string? path) => path is null || !File.GetAttributes(path).HasFlag(FileAttributes.Directory);
 }

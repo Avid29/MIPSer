@@ -138,4 +138,7 @@
   <data name="CreateProject/SelectFolderBTN.Content" xml:space="preserve">
     <value>Select Folder</value>
   </data>
+  <data name="Explorer/RecentProjectsAndFoldersTB.Text" xml:space="preserve">
+    <value>Recent Projects and Folders</value>
+  </data>
 </root>

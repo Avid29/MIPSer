@@ -50,6 +50,11 @@ public interface IProjectService
     public Task OpenProjectAsync(string filePath, bool cacheState = true);
 
     /// <summary>
+    /// Opens a folder or project by path.
+    /// </summary>
+    public Task OpenPathAsyc(string path, bool cacheState = true);
+
+    /// <summary>
     /// Closes the currently open project/folder.
     /// </summary>
     public Task CloseProjectAsync();

@@ -138,4 +138,7 @@
   <data name="CreateProject/SelectFolderBTN.Content" xml:space="preserve">
     <value>בחר תיקיה</value>
   </data>
+  <data name="Explorer/RecentProjectsAndFoldersTB.Text" xml:space="preserve">
+    <value>פרויקטים ותיקיות אחרונים</value>
+  </data>
 </root>

@@ -2,10 +2,17 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Bindables.Files;
+using Mipser.Messages;
 using Mipser.Messages.Files;
+using Mipser.Models;
+using Mipser.Services;
 using Mipser.Services.Files;
+using Mipser.Services.Files.Models;
+using Mipser.Services.Settings;
 using Mipser.ViewModels.Pages.Abstract;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Mipser.ViewModels.Pages;
 
@@ -14,16 +21,24 @@ namespace Mipser.ViewModels.Pages;
 /// </summary>
 public class ExplorerViewModel : PageViewModel
 {
+    private const string RecentProjectsCacheKey = "RecentProjects";
+
     private readonly IMessenger _messenger;
+    private readonly ICacheService _cacheService;
     private readonly IFileService _fileService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExplorerViewModel"/> class.
     /// </summary>
-    public ExplorerViewModel(IMessenger messenger, IFileService fileService)
+    public ExplorerViewModel(IMessenger messenger, ICacheService cacheService, IFileService fileService)
     {
         _fileService = fileService;
+        _cacheService = cacheService;
         _messenger = messenger;
+
+        RecentProjects = [];
+
+        _ = LoadRecentCacheAsync();
 
         IsActive = true;
     }
@@ -34,7 +49,7 @@ public class ExplorerViewModel : PageViewModel
     /// <summary>
     /// Gets or sets the currently selected file.
     /// </summary>
-    public BindableFolder? RootFolder
+    public BindableFileItem? RootItem
     {
         get;
         set
@@ -47,7 +62,12 @@ public class ExplorerViewModel : PageViewModel
     /// <summary>
     /// Gets the list of root nodes.
     /// </summary>
-    public IEnumerable<BindableFileItem?> RootNode => [RootFolder];
+    public IEnumerable<BindableFileItem?> RootNode => [RootItem];
+
+    /// <summary>
+    /// Gets a list of the recently opened projects and folders.
+    /// </summary>
+    public ObservableCollection<string> RecentProjects { get; private set; }
 
     /// <inheritdoc/>
     protected override void OnActivated()
@@ -57,11 +77,24 @@ public class ExplorerViewModel : PageViewModel
             var folder = m.Folder;
             if (folder is null)
             {
-                RootFolder = null;
+                RootItem = null;
                 return;
             }
 
-            r.RootFolder = await _fileService.GetFolderAsync(folder.Path);
+            r.RootItem = await _fileService.GetFolderAsync(folder.Path);
         });
+        _messenger.Register<ExplorerViewModel, CacheChangedMessage<RecentFileItemsCache>>(this, async (r, m) => await r.LoadRecentCacheAsync());
+    }
+
+    private async Task LoadRecentCacheAsync()
+    {
+        // Get current cache
+        var recent = await _cacheService.RetrieveCacheAsync<RecentFileItemsCache>(RecentProjectsCacheKey);
+        if (recent is null)
+            return;
+
+        RecentProjects.Clear();
+        foreach(var item in recent.Paths)
+            RecentProjects.Add(item);
     }
 }

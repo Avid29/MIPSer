@@ -1,5 +1,7 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.Mvvm.Messaging;
+using Mipser.Messages;
 using Mipser.Services;
 using System;
 using System.Text.Json;
@@ -14,14 +16,17 @@ namespace Mipser.Windows.Services;
 /// </summary>
 public class CacheService : ICacheService
 {
+    private readonly IMessenger _messenger;
     private readonly AsyncMutex _mutex;
     private readonly StorageFolder _folder;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CacheService"/> class.
     /// </summary>
-    public CacheService()
+    public CacheService(IMessenger messenger)
     {
+        _messenger = messenger;
+
         _mutex = new AsyncMutex();
         _folder = ApplicationData.Current.LocalCacheFolder;
     }
@@ -38,11 +43,12 @@ public class CacheService : ICacheService
     }
 
     /// <inheritdoc/>
-    public async Task CacheAsync<T>(string key, T? value)
+    public async Task CacheAsync<T>(string key, T value)
         where T : class, new()
     {
         var serialized = JsonSerializer.Serialize(value);
         await CacheAsync(key, serialized);
+        _messenger.Send(new CacheChangedMessage<T>(key, value));
     }
 
     /// <inheritdoc/>
