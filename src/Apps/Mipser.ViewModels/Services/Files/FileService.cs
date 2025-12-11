@@ -66,7 +66,7 @@ public class FileService : IFileService
     /// <inheritdoc/>
     public async Task<BindableFileItem?> GetFileItemAsync(string path)
     {
-        return IsFile(path) switch
+        return Path.HasExtension(path) switch
         {
             true => await GetFileAsync(path),
             false => await GetFolderAsync(path),
@@ -192,6 +192,4 @@ public class FileService : IFileService
         item = result;
         return true;
     }
-
-    private static bool IsFile(string? path) => path is null || !File.GetAttributes(path).HasFlag(FileAttributes.Directory);
 }

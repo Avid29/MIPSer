@@ -90,14 +90,16 @@ public sealed partial class Explorer : UserControl
         // TODO: Localization
         var localization = Service.Get<ILocalizationService>();
 
-        if (File.GetAttributes(path).HasFlag(FileAttributes.Directory))
+        if (Path.HasExtension(path))
         {
-            var dirInfo = new DirectoryInfo(path);
-            return $"{dirInfo.Parent?.Name}/{dirInfo.Name} (Folder)";
+            return Path.GetFileNameWithoutExtension(path);
         }
         else
         {
-            return Path.GetFileNameWithoutExtension(path);
+            var dirInfo = new DirectoryInfo(path);
+            var parentName = dirInfo.Parent?.Name ?? string.Empty;
+            var name = dirInfo.Name;
+            return localization["/Pages/Explorer/RecentFolderListItem", parentName, name];
         }
     }
 }
