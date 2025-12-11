@@ -18,7 +18,7 @@ public static class SettingsKeys
     // App
     public const string AppTheme = "AppTheme";
     public const string LanguageOverride = "LanguageOverride";
-    public const string RestoreOpenProject = "RestoreOpenProject";
+    public const string RestoreOpenProject = "RestoreOpenProject";  // Old setting, key not removed
 
     // Editor
     public const string RealTimeAssembly = "RealTimeAssembly";
