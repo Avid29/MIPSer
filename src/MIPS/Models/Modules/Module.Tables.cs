@@ -3,7 +3,6 @@
 using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables;
 using MIPS.Models.Modules.Tables.Enums;
-using System.Diagnostics.CodeAnalysis;
 
 namespace MIPS.Assembler.Models.Modules;
 

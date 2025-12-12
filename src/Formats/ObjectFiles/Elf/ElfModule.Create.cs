@@ -3,7 +3,7 @@
 using LibObjectFile.Elf;
 using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
-using MIPS.Models.Modules.Tables.Enums;
+using ObjectFiles.Elf.Extensions;
 using System.IO;
 
 namespace ObjectFiles.Elf;
@@ -62,16 +62,13 @@ public partial class ElfModule
         var elfSymbolTable = new ElfSymbolTable();
         foreach(var symbol in module.Symbols.Values)
         {
+            // TODO: Section link
+
             var elfSymbol = new ElfSymbol()
             {
                 Name = symbol.Name,
                 Value = (ulong)(symbol.Address?.Value ?? 0),
-                Bind = symbol.Binding switch
-                {
-                    SymbolBinding.Global => ElfSymbolBind.Global,
-                    SymbolBinding.Weak => ElfSymbolBind.Weak,
-                    SymbolBinding.Local or _ => ElfSymbolBind.Local,
-                },
+                Bind = symbol.Binding.ToElf()
             };
 
             elfSymbolTable.Entries.Add(elfSymbol);
