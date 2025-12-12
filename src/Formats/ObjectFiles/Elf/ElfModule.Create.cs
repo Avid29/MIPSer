@@ -3,33 +3,15 @@
 using LibObjectFile.Elf;
 using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
-using MIPS.Assembler.Models.Modules.Interfaces;
-using MIPS.Interpreter.Models.Modules;
 using System.IO;
 
-namespace ObjectFiles;
+namespace ObjectFiles.Elf;
 
 /// <summary>
 /// An object module in ELF format.
 /// </summary>
-public class ElfModule : IBuildModule<ElfModule>, IExecutableModule
+public partial class ElfModule
 {
-    private readonly ElfFile _elfFile;
-
-    private ElfModule(ElfFile elfFile)
-    {
-        _elfFile = elfFile;
-    }
-    
-    /// <inheritdoc/>
-    public string Name => throw new System.NotImplementedException();
-
-    /// <inheritdoc/>
-    public Stream Contents => throw new System.NotImplementedException();
-
-    /// <inheritdoc/>
-    public uint EntryAddress => (uint)_elfFile.EntryPointAddress;
-
     /// <inheritdoc/>
     public static ElfModule? Create(Module constructor, AssemblerConfig config, Stream? stream = null)
     {
@@ -58,19 +40,7 @@ public class ElfModule : IBuildModule<ElfModule>, IExecutableModule
         }
 
         file.Write(stream);
-        return Load(constructor.Name, stream);
+        return Open(constructor.Name, stream);
     }
 
-    /// <inheritdoc/>
-    public static ElfModule? Load(string? name, Stream stream)
-    {
-        var elfFile = ElfFile.Read(stream);
-        return new ElfModule(elfFile);
-    }
-
-    /// <inheritdoc/>
-    public Module? Abstract(AssemblerConfig config)
-    {
-        throw new System.NotImplementedException();
-    }
 }

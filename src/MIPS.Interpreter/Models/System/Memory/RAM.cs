@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using MIPS.Interpreter.Helpers;
 using System.Collections.Generic;
 using System.IO;
 
@@ -10,14 +11,14 @@ namespace MIPS.Interpreter.Models.System.Memory;
 /// </summary>
 public class RAM
 {
-    private Dictionary<uint, Page> _pages;
+    private PagedMemoryStream _memoryStream;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RAM"/> class.
     /// </summary>
     public RAM()
     {
-        _pages = [];
+        _memoryStream = new PagedMemoryStream(4096);
     }
 
     /// <summary>
@@ -29,38 +30,17 @@ public class RAM
     {
         get
         {
-            GetPageAndOffset(address, out var page, out var offset);
-            return page[offset];
+            _memoryStream.Position = address;
+            if (_memoryStream.TryRead(out uint value))
+                return value;
+
+            return 0;
         }
-        set
-        {
-            GetPageAndOffset(address, out var page, out var offset);
-            page[offset] = value;
-        }
+        set => _memoryStream.TryWrite(value);
     }
-    
+
     /// <summary>
-    /// 
+    /// Gets the RAM memory as a <see cref="Stream"/>.
     /// </summary>
-    /// <param name="address"></param>
-    /// <returns></returns>
-    public Stream AsStream(uint address)
-    {
-        GetPageAndOffset(address, out var page, out var offset);
-        return page.AsStream(offset);
-    }
-
-    private void GetPageAndOffset(uint address, out Page page, out uint offset)
-    {
-        var pIndex = address & 0xFFFF_F000;
-        offset = address & 0xFFF;
-        if (!_pages.TryGetValue(pIndex, out var tpage))
-        {
-            page = new Page();
-            _pages.Add(pIndex, page);
-            return;
-        }
-
-        page = tpage;
-    }
+    public Stream AsStream() => _memoryStream;
 }

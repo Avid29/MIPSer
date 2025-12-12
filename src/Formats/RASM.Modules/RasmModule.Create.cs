@@ -197,6 +197,6 @@ public partial class RasmModule
         // Reset position, flush, and load
         context.Stream.Position = 0;
         context.Stream.Flush();
-        return Load(constructor.Name, context.Stream);
+        return Open(constructor.Name, context.Stream);
     }
 }

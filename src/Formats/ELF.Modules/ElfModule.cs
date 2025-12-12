@@ -65,7 +65,7 @@ public class ElfModule : IBuildModule<ElfModule>
     }
 
     /// <inheritdoc/>
-    public static ElfModule? Load(string name, Stream stream)
+    public static ElfModule? Open(string name, Stream stream)
     {
         throw new NotImplementedException();
     }

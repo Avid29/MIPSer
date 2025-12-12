@@ -21,8 +21,8 @@ public interface IBuildModule<TSelf> : IBuildModule
     public static abstract TSelf? Create(Module module, AssemblerConfig config, Stream? stream = null);
     
     /// <summary>
-    /// Loads a module from a stream.
+    /// Opens a module from a stream.
     /// </summary>
     /// <returns>The module contained in the stream.</returns>
-    public static abstract TSelf? Load(string name, Stream stream);
+    public static abstract TSelf? Open(string name, Stream stream);
 }

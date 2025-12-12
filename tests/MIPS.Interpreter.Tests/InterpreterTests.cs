@@ -28,7 +28,13 @@ public class InterpreterTests
         // Write the module and assert validity
         Assert.IsNotNull(result.ObjectModule);
 
-        var interpreter = new Interpreter(result.ObjectModule);
+        // Setup interpreter
+        var module = result.ObjectModule;
+        var interpreter = new Interpreter();
+        interpreter.ProgramCount = module.EntryAddress;
+        interpreter.Load(module);
+
+        // Step 3 instructions
         interpreter.StepInstruction();
         interpreter.StepInstruction();
         interpreter.StepInstruction();

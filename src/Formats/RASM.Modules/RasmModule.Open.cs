@@ -5,7 +5,7 @@ namespace RASM.Modules;
 public partial class RasmModule
 {
     /// <inheritdoc/>
-    public static RasmModule? Load(string? name, Stream stream)
+    public static RasmModule? Open(string? name, Stream stream)
     {
         if (!Header.TryRead(stream, out var header))
             return null;

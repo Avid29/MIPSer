@@ -11,20 +11,23 @@ namespace MIPS.Interpreter;
 /// </summary>
 public class Interpreter
 {
-    private readonly IExecutableModule _module;
     private readonly Computer _computer;
 
     /// <summary>
     /// Intializes a new instance of the <see cref="Interpreter"/> class.
     /// </summary>
-    public Interpreter(IExecutableModule module)
+    public Interpreter()
     {
-        _module = module;
         _computer = new Computer();
+    }
 
-        // Initialize memory and pc
-        Load();
-        _computer.Processor.ProgramCounter = _module.EntryAddress;
+    /// <summary>
+    /// Gets or sets the program counter location
+    /// </summary>
+    public uint ProgramCount
+    {
+        get => _computer.Processor.ProgramCounter;
+        set => _computer.Processor.ProgramCounter = value;
     }
 
     /// <summary>
@@ -38,14 +41,9 @@ public class Interpreter
         _computer.Processor.Execute(instruction);
     }
 
-    private void Load()
-    {
-        var source = _module.Contents;
-        source.Position = 0;
-        while (source.Position < source.Length)
-        {
-            var destination = _computer.Memory.AsStream((uint)source.Position);
-            source.CopyTo(destination, (int)long.Min(destination.Length, source.Length - source.Position));
-        }
-    }
+    /// <summary>
+    /// Loads an <see cref="IExecutableModule"/> to the interpreter's memory.
+    /// </summary>
+    /// <param name="module">The module to load.</param>
+    public void Load(IExecutableModule module) => module.Load(_computer.Memory.AsStream());
 }

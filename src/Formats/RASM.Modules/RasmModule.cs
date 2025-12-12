@@ -41,12 +41,15 @@ public partial class RasmModule : IBuildModule<RasmModule>, IExecutableModule
 
     /// <inheritdoc/>
     public uint EntryAddress => Header.EntryPoint;
-
-    /// <inheritdoc/>
-    public Stream Contents => _source;
     
     /// <inheritdoc/>
     public string? Name { get; }
+
+    /// <inheritdoc/>
+    public void Load(Stream destination)
+    {
+        throw new NotImplementedException();
+    }
 
     private unsafe void ResetStream(bool skipHeader = true)
     {

@@ -10,12 +10,13 @@ namespace MIPS.Interpreter.Models.Modules;
 public interface IExecutableModule
 {
     /// <summary>
-    /// Gets the contents of the executable.
-    /// </summary>
-    public Stream Contents { get; }
-
-    /// <summary>
     /// Gets the entry address of the executable.
     /// </summary>
     public uint EntryAddress { get; }
+
+    /// <summary>
+    /// Loads the data module to a stream.
+    /// </summary>
+    /// <param name="destination">The stream to load the module to.</param>
+    public void Load(Stream destination);
 }

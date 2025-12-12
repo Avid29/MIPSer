@@ -42,11 +42,11 @@ public class RawModule : IBuildModule<RawModule>, IExecutableModule
         foreach(var section in constructor.Sections.Values)
             section.Stream.CopyTo(stream);
 
-        return Load(constructor.Name, stream);
+        return Open(constructor.Name, stream);
     }
     
     /// <inheritdoc/>
-    public static RawModule? Load(string? name, Stream stream)
+    public static RawModule? Open(string? name, Stream stream)
     {
         return new RawModule(name, stream);
     }
