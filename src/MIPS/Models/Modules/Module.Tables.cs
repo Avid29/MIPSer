@@ -29,12 +29,12 @@ public partial class Module
     /// Adds or updates a symbol in the symbol table.
     /// </summary>
     /// <returns><see cref="false"/> if the symbol already has a value, and a new value is being defined.</returns>
-    public bool TryDefineOrUpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolBinding binding = SymbolBinding.Local)
+    public bool TryDefineOrUpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolBinding? binding = null)
     {
         if (_definitions.ContainsKey(name))
             return UpdateSymbol(name, type, value, binding);
             
-        DefineSymbol(name, type ?? SymbolType.Unknown, value, binding);
+        DefineSymbol(name, type ?? SymbolType.Unknown, value, binding ?? SymbolBinding.Local);
         return true;
     }
 
@@ -99,7 +99,7 @@ public partial class Module
         {
             // Cannot update the binding if it is already global/weak
             if (entry.Binding is not SymbolBinding.Local)
-                return false;
+                return true;
 
             entry.Binding = binding.Value;
         }

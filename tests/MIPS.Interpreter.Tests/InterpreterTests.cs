@@ -3,6 +3,7 @@
 using MIPS.Assembler.Models.Config;
 using MIPS.Tests.Helpers;
 using ObjectFiles.Elf;
+using ObjectFiles.Elf.Config;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -18,12 +19,8 @@ public class InterpreterTests
         var path = TestFilePathing.GetAssemblyFilePath("sample_tests/test1.asm");
         var stream = File.Open(path, FileMode.Open);
 
-        // Load output file
-        var output = TestFilePathing.GetMatchingObjectFilePath(path);
-        Stream outStream = File.Open(output, FileMode.OpenOrCreate);
-
         // Run assembler
-        var result = await Assembler.Assembler.AssembleAsync<ElfModule, AssemblerConfig>(stream, path, new AssemblerConfig());
+        var result = await Assembler.Assembler.AssembleAsync<ElfModule, ElfConfig>(stream, path, new ElfConfig());
 
         // Write the module and assert validity
         Assert.IsNotNull(result.ObjectModule);

@@ -58,9 +58,8 @@ public partial class Assembler
     /// <param name="label">The name of the symbol.</param>
     /// <param name="address">The value of the symbol.</param>
     /// <param name="type">The symbol type.</param>
-    /// <param name="binding">The binding info for the symbol.</param>
     /// <returns>True if successful, false on failure.</returns>
-    private bool DefineSymbol(Token label, Address address, SymbolType type, SymbolBinding binding = SymbolBinding.Local)
+    private bool DefineSymbol(Token label, Address address, SymbolType type)
     {
         // Ensure the symbol has a valid name
         if (!ValidateSymbolName(label, out var name))
