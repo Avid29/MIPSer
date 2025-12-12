@@ -30,7 +30,7 @@ public partial class Assembler
     {
         using var reader = new StringReader(str);
         var assembler = await AssembleAsync(reader, filename, config, logger);
-        var obj = TModule.Create(assembler._module, config, outStream);
+        var obj = TModule.Create(assembler._module, config);
         return new AssemblyResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
     }
 
@@ -53,7 +53,7 @@ public partial class Assembler
     {
         using var reader = new StreamReader(stream);
         var assembler = await AssembleAsync(reader, filename, config, logger);
-        var obj = TModule.Create(assembler._module, config, outStream);
+        var obj = TModule.Create(assembler._module, config);
         return new AssemblyResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
     }
 }

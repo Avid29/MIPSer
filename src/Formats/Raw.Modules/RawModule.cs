@@ -33,9 +33,9 @@ public class RawModule : IBuildModule<RawModule>, IExecutableModule
     public string? Name { get; }
 
     /// <inheritdoc/>
-    public static RawModule? Create(Module constructor, AssemblerConfig config, Stream? stream = null)
+    public static RawModule? Create(Module constructor, AssemblerConfig config)
     {
-        stream ??= new MemoryStream();
+        var stream = new MemoryStream();
         
         // Append segments to stream
         constructor.ResetStreamPositions();
@@ -44,7 +44,7 @@ public class RawModule : IBuildModule<RawModule>, IExecutableModule
 
         return Open(constructor.Name, stream);
     }
-    
+
     /// <inheritdoc/>
     public static RawModule? Open(string? name, Stream stream)
     {
@@ -53,6 +53,18 @@ public class RawModule : IBuildModule<RawModule>, IExecutableModule
     
     /// <inheritdoc/>
     public Module? Abstract(AssemblerConfig config)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc/>
+    public void Load(Stream destination)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <inheritdoc/>
+    public void Save(Stream stream)
     {
         throw new NotImplementedException();
     }

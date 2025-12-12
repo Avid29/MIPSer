@@ -16,9 +16,8 @@ public interface IBuildModule<TSelf> : IBuildModule
     /// </summary>
     /// <param name="module">The <see cref="Module"/> to build from.</param>
     /// <param name="config">The configuration settings.</param>
-    /// <param name="stream">The stream to write the module to. A new stream will be created if null.</param>
     /// <returns>The constructed module.</returns>
-    public static abstract TSelf? Create(Module module, AssemblerConfig config, Stream? stream = null);
+    public static abstract TSelf? Create(Module module, AssemblerConfig config);
     
     /// <summary>
     /// Opens a module from a stream.

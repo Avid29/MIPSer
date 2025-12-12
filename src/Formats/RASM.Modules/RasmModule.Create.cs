@@ -1,14 +1,10 @@
 ﻿// Avishai Dernis 2025
 
-using Microsoft.VisualBasic;
 using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Models.Modules.Tables;
 using RASM.Modules.Config;
-using System;
-using System.IO;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using RasmReference = RASM.Modules.Tables.ReferenceEntry;
 using RasmRelocation = RASM.Modules.Tables.RelocationEntry;
 using RasmSymbol = RASM.Modules.Tables.SymbolEntry;
@@ -22,11 +18,11 @@ public partial class RasmModule
         private Dictionary<string, long> _stringDict;
         private Stream _stringStream;
 
-        public RasmBuildContext(Module source, RasmConfig rasmConfig, Stream stream)
+        public RasmBuildContext(Module source, RasmConfig rasmConfig)
         {
             Source = source;
             Config = rasmConfig;
-            Stream = stream;
+            Stream = new MemoryStream();
 
             _stringDict = [];
             _stringStream = new MemoryStream();
@@ -163,18 +159,16 @@ public partial class RasmModule
     }
 
     /// <inheritdoc/>
-    public static RasmModule? Create(Module constructor, AssemblerConfig config, Stream? stream = null)
+    public static RasmModule? Create(Module constructor, AssemblerConfig config)
     {
         // TODO: Flags and entry point properly
         // TODO: Construct string list.
-
-        stream ??= new MemoryStream();
 
         if (config is not RasmConfig rasmConfig)
             return null;
 
         // Create context
-        var context = new RasmBuildContext(constructor, rasmConfig, stream);
+        var context = new RasmBuildContext(constructor, rasmConfig);
 
         // Allocate space for header
         context.InitAndAllocHeader();

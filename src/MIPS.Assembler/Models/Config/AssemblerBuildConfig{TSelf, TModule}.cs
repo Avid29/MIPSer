@@ -3,7 +3,6 @@
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Models.Instructions.Enums;
-using System.IO;
 
 namespace MIPS.Assembler.Models.Config;
 
@@ -22,15 +21,15 @@ public class AssemblerBuildConfig<TSelf, TModule> : AssemblerBuildConfig
     }
 
     /// <inheritdoc/>
-    public TModule? CreateModule(Module module, TSelf config, Stream? stream = null)
-        => TModule.Create(module, config, stream);
+    public TModule? CreateModule(Module module, TSelf config)
+        => TModule.Create(module, config);
 
     /// <inheritdoc/>
-    public override IBuildModule? CreateModule(Module module, AssemblerConfig config, Stream? stream = null)
+    public override IBuildModule? CreateModule(Module module, AssemblerConfig config)
     {
         if (config is not TSelf selfConfig)
             return null;
 
-        return CreateModule(module, selfConfig, stream);
+        return CreateModule(module, selfConfig);
     }
 }

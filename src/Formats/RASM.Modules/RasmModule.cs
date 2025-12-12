@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Interpreter.Models.Modules;
 using RASM.Modules.Config;
@@ -94,5 +96,12 @@ public partial class RasmModule : IBuildModule<RasmModule>, IExecutableModule
             pos += str.Length + 1;
         }
         return strings;
+    }
+
+    /// <inheritdoc/>
+    public void Save(Stream stream)
+    {
+        _source.Position = 0;
+        _source.CopyTo(stream);
     }
 }
