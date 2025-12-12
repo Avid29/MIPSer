@@ -136,7 +136,7 @@ public class PagedMemoryStream : Stream
             int pageOffset = (int)(_position % _pageSize);
 
             // Ensure page exists
-            while (pageIndex >= _pages.Count)
+            if (!_pages.ContainsKey(pageIndex))
                 _pages.Add(pageIndex, new byte[_pageSize]);
 
             int bytesToCopy = Math.Min(_pageSize - pageOffset, count);

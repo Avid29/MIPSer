@@ -30,6 +30,8 @@ public partial class ElfModule
 
     private static void CreateSections(Module module, ElfFile elfFile)
     {
+        ulong pos = 0;
+
         foreach (var section in module.Sections.Values)
         {
             var type = section.Name switch
@@ -48,6 +50,10 @@ public partial class ElfModule
 
             section.Stream.Position = 0;
             elfSec.Stream.CopyFrom(section.Stream, (int)section.Stream.Length);
+
+            elfSec.VirtualAddress = pos;
+            pos += (ulong)section.Stream.Length;
+            pos += 4096 - (pos % 4096);
         }
     }
 

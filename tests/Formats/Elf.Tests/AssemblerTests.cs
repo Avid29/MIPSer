@@ -1,17 +1,17 @@
-﻿// Adam Dernis 2024
+﻿// Avishai Dernis 2025
 
 using MIPS.Assembler.Logging.Enum;
+using MIPS.Assembler.Models.Config;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Tests.Formats;
 using MIPS.Tests.Helpers;
-using RASM.Modules;
-using RASM.Modules.Config;
+using ObjectFiles.Elf;
 using System.Threading.Tasks;
 
-namespace RASM.Tests;
+namespace Elf.Tests;
 
 [TestClass]
-public class AssemblerTests : AssemblerTests<RasmModule, RasmConfig>
+public class AssemblerTests : AssemblerTests<ElfModule, AssemblerConfig>
 {
     private const string InvalidInstruction = "xkcd $t0, $t1, 0";
     private const string MissingInstruction = "$s2, $t4, $t2";

@@ -18,6 +18,13 @@ public class AssemblerConfig
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblerConfig"/> class.
     /// </summary>
+    public AssemblerConfig() : this(MipsVersion.MipsIII)
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AssemblerConfig"/> class.
+    /// </summary>
     public AssemblerConfig(MipsVersion version = MipsVersion.MipsIII)
     {
         MipsVersion = version;

@@ -2,7 +2,7 @@
 
 using MIPS.Assembler.Models.Config;
 using MIPS.Tests.Helpers;
-using Raw.Modules;
+using ObjectFiles.Elf;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -23,15 +23,17 @@ public class InterpreterTests
         Stream outStream = File.Open(output, FileMode.OpenOrCreate);
 
         // Run assembler
-        var result = await Assembler.Assembler.AssembleAsync<RawModule, AssemblerConfig>(stream, path, new AssemblerConfig(), outStream);
+        var result = await Assembler.Assembler.AssembleAsync<ElfModule, AssemblerConfig>(stream, path, new AssemblerConfig(), outStream);
 
         // Write the module and assert validity
         Assert.IsNotNull(result.ObjectModule);
 
         // Setup interpreter
         var module = result.ObjectModule;
-        var interpreter = new Interpreter();
-        interpreter.ProgramCount = module.EntryAddress;
+        var interpreter = new Interpreter
+        {
+            ProgramCount = module.EntryAddress
+        };
         interpreter.Load(module);
 
         // Step 3 instructions

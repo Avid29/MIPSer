@@ -1,12 +1,9 @@
 ﻿// Avishai Dernis 2025
 
 using LibObjectFile.Elf;
-using MIPS.Assembler.Models.Config;
-using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Interpreter.Models.Modules;
 using System.IO;
-using System.Linq;
 
 namespace ObjectFiles.Elf;
 
@@ -34,27 +31,6 @@ public partial class ElfModule : IBuildModule<ElfModule>, IExecutableModule
     {
         var elfFile = ElfFile.Read(stream);
         return new ElfModule(name, elfFile);
-    }
-
-    /// <inheritdoc/>
-    public Module? Abstract(AssemblerConfig config)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    /// <inheritdoc/>
-    public void Load(Stream destination)
-    {
-        // TODO: Load the module into the stream.
-        foreach (var section in _elfFile.Sections.OfType<ElfStreamSection>())
-        {
-            if (!section.Flags.HasFlag(ElfSectionFlags.Alloc))
-                continue;
-
-            destination.Position = (long)section.VirtualAddress;
-            section.Stream.Position = 0;
-            section.Stream.CopyTo(destination);
-        }
     }
 
     /// <inheritdoc/>

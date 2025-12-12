@@ -90,7 +90,7 @@ public partial class Module
             return;
 
         // Append offset bytes
-        var append = new byte[offset];
+        var append = new byte[boundary - offset];
         Append(section, append);
     }
 
