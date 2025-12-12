@@ -10,12 +10,12 @@ public enum Section : byte
 #pragma warning disable CS1591
     
     // Standard sections
-    Text,                   // text
-    ReadOnlyData,           // rdata
-    Data,                   // data
-    SmallInitializedData,   // sdata
-    SmallUninitializedData, // sbss
-    UninitializedData,      // bss
+    Text,                   // .text
+    ReadOnlyData,           // .rdata
+    Data,                   // .data
+    SmallInitializedData,   // .sdata
+    SmallUninitializedData, // .sbss
+    UninitializedData,      // .bss
 
     // Meta Sections
     RelocationTable,

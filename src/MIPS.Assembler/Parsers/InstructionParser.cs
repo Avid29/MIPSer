@@ -303,9 +303,9 @@ public struct InstructionParser
         {
             var type = target switch
             {
-                Argument.Address => ReferenceType.Address,
-                Argument.Immediate => ReferenceType.Lower,
-                _ => ThrowHelper.ThrowArgumentOutOfRangeException<ReferenceType>($"Argument of type '{target}' cannot reference relocatable symbols."),
+                Argument.Address => MipsReferenceType.JumpTarget26,
+                Argument.Immediate => MipsReferenceType.Low16,
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<MipsReferenceType>($"Argument of type '{target}' cannot reference relocatable symbols."),
             };
 
             var reloc = expResult.Reference.Value;
@@ -317,7 +317,7 @@ public struct InstructionParser
         // This is the desired behavior, but when logging errors this
         // should be handled explicitly and drop an assembler warning.
 
-        long value = expResult.Base.Value;
+        long value = expResult.Value.Value;
 
         // Truncates the value to fit the target argument
         CleanInteger(ref value, arg, target);
@@ -343,7 +343,7 @@ public struct InstructionParser
                     Guard.IsNotNull(_context);
 
                     var @base = _context.CurrentAddress + 4;
-                    if (@base.Section != expResult.Base.Section)
+                    if (@base.Section != expResult.Value.Section)
                     {
                         _logger?.Log(Severity.Error, LogCode.BranchBetweenSections, arg, "CantBranchBetweenSections");
                         return false;

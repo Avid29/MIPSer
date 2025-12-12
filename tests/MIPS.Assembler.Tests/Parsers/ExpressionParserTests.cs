@@ -7,7 +7,6 @@ using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Models.Enums;
 using MIPS.Models.Addressing;
-using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables.Enums;
 using System.Collections.Generic;
 
@@ -39,7 +38,7 @@ public class ExpressionParserTests
         ["'a'", 'a'],
         [@"'\n'", '\n'],
         ["'a' + 10", 'a' + 10],
-        ["macro + 10", 10 + 10, ("macro", new Address(10, Section.Text))],
+        ["macro + 10", 10 + 10, ("macro", new Address(10, ".text"))],
     ];
 
     public static IEnumerable<object[]> ExpressionFailureTestsList =>
@@ -54,7 +53,7 @@ public class ExpressionParserTests
         ["(4 + 2 * 2"],
         ["'abc'"],
         [@"'\x'"],
-        ["macro + macro", ("macro", new Address(10, Section.Text))],
+        ["macro + macro", ("macro", new Address(10, ".text"))],
     ];
 
     [DataTestMethod]
@@ -87,7 +86,7 @@ public class ExpressionParserTests
         Assert.AreEqual(success, expected.HasValue);
         if (expected.HasValue)
         {
-            Assert.AreEqual(expected.Value, actual.Base.Value);
+            Assert.AreEqual(expected.Value, actual.Value.Value);
         }
     }
 }

@@ -1,0 +1,202 @@
+﻿// Avishai Dernis 2025
+
+using Microsoft.VisualBasic;
+using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Models.Modules;
+using MIPS.Models.Modules.Tables;
+using RASM.Modules.Config;
+using System;
+using System.IO;
+using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using RasmReference = RASM.Modules.Tables.ReferenceEntry;
+using RasmRelocation = RASM.Modules.Tables.RelocationEntry;
+using RasmSymbol = RASM.Modules.Tables.SymbolEntry;
+
+namespace RASM.Modules;
+
+public partial class RasmModule
+{
+    private struct RasmBuildContext
+    {
+        private Dictionary<string, long> _stringDict;
+        private Stream _stringStream;
+
+        public RasmBuildContext(Module source, RasmConfig rasmConfig, Stream stream)
+        {
+            Source = source;
+            Config = rasmConfig;
+            Stream = stream;
+
+            _stringDict = [];
+            _stringStream = new MemoryStream();
+        }
+
+        public Header Header { get; private set;  }
+
+        public Module Source { get; }
+
+        public RasmConfig Config { get; }
+
+        public Stream Stream { get; }
+
+        public IReadOnlyDictionary<string, long> StringEntries => _stringDict;
+
+        public void InitAndAllocHeader()
+        {
+            Source.Sections.TryGetValue(".text", out ModuleSection? text);
+            Source.Sections.TryGetValue(".rodata", out ModuleSection? rodata);
+            Source.Sections.TryGetValue(".data", out ModuleSection? data);
+            Source.Sections.TryGetValue(".sdata", out ModuleSection? sdata);
+            Source.Sections.TryGetValue(".sbss", out ModuleSection? sbss);
+            Source.Sections.TryGetValue(".bss", out ModuleSection? bss);
+
+            var sizes = new uint[]
+            {
+                (uint)(text?.Stream.Length ?? 0),       // text
+                (uint)(rodata?.Stream.Length ?? 0),     // rodata
+                (uint)(data?.Stream.Length ?? 0),       // data
+                (uint)(sdata?.Stream.Length ?? 0),      // sdata
+                (uint)(sbss?.Stream.Length ?? 0),       // sbss
+                (uint)(bss?.Stream.Length ?? 0),        // bss
+                0,                                      // rel count
+                0,                                      // ref count
+                (uint)Source.Symbols.Count,             // symbol count
+                0,
+            };
+
+            Header = new Header(Config.MagicNumber, Config.VersionNumber, 0, 0, sizes);
+            Header.TryWrite(Stream);
+        }
+
+        public void AppendSimpleSegments()
+        {
+            Source.ResetStreamPositions();
+            foreach (var section in Source.Sections.Values)
+                section.Stream.CopyTo(Stream);
+        }
+
+        public void ConvertReferences()
+        {
+            uint relCount = 0;
+            uint refCount = 0;
+            Stream relStream = new MemoryStream();
+            Stream refStream = new MemoryStream();
+
+            // Write reference and relocation table to their streams
+            foreach (var reference in Source.References)
+            {
+                if (reference.Symbol is null)
+                {
+                    // Convert to rasm relocation and write to relocation stream
+                    var newRelocation = RasmRelocation.Convert(reference);
+                    newRelocation.Write(relStream);
+                    relCount++;
+                }
+                else
+                {
+                    // Convert to rasm relocation, extract string, and write to reference stream
+                    var newReference = RasmReference.Convert(reference);
+                    newReference.SymbolIndex = (uint)GetOrAddString(reference.Symbol);
+                    newReference.Write(refStream);
+                    refCount++;
+                }
+            }
+
+            // Append rel and ref streams
+            relStream.Position = 0;
+            refStream.Position = 0;
+            relStream.CopyTo(Stream);
+            refStream.CopyTo(Stream);
+            var header = Header;
+            header.RelocationTableCount = relCount;
+            header.ReferenceTableCount = refCount;
+            Header = header;
+        }
+
+        public void ConvertSymbols()
+        {
+            foreach (var symbol in Source.Symbols.Values)
+            {
+                // Convert to rasm, extract string, and write to stream
+                var newSymbol = RasmSymbol.Convert(symbol);
+                newSymbol.SymbolIndex = (uint)GetOrAddString(symbol.Name);
+                newSymbol.Write(Stream);
+            }
+        }
+
+        public void FlushStrings()
+        {
+            _stringStream.Position = 0;
+            _stringStream.CopyTo(Stream);
+
+            var header = Header;
+            header.StringTableSize = (uint)_stringStream.Length;
+            Header = header;
+        }
+
+        public void FinalizeModule()
+        {
+            // Mark the end of the module
+            Stream.SetLength(Stream.Position);
+
+            // Rewrite the header
+            Stream.Position = 0;
+            Header.TryWrite(Stream);
+        }
+
+        private long GetOrAddString(string symbol)
+        {
+            // Get from table if already seen
+            if (_stringDict.TryGetValue(symbol, out long value))
+                return value;
+
+            // Append to table
+            var pos = _stringStream.Position;
+            _stringStream.Write(Encoding.UTF8.GetBytes(symbol));
+            _stringStream.WriteByte(0); // Null terminate
+
+            // Log in table and return position
+            _stringDict.Add(symbol, pos);
+            return pos;
+        }
+    }
+
+    /// <inheritdoc/>
+    public static RasmModule? Create(Module constructor, AssemblerConfig config, Stream? stream = null)
+    {
+        // TODO: Flags and entry point properly
+        // TODO: Construct string list.
+
+        stream ??= new MemoryStream();
+
+        if (config is not RasmConfig rasmConfig)
+            return null;
+
+        // Create context
+        var context = new RasmBuildContext(constructor, rasmConfig, stream);
+
+        // Allocate space for header
+        context.InitAndAllocHeader();
+
+        // Append segments to stream
+        context.AppendSimpleSegments();
+
+        // Create split streams for relocations and references
+        context.ConvertReferences();
+
+        // Write symbol table to the stream
+        context.ConvertSymbols();
+
+        // Write strings to the stream
+        context.FlushStrings();
+
+        // Finalize
+        context.FinalizeModule();
+
+        // Reset position, flush, and load
+        context.Stream.Position = 0;
+        context.Stream.Flush();
+        return Load(constructor.Name, context.Stream);
+    }
+}

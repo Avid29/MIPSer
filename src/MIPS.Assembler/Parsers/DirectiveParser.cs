@@ -8,11 +8,8 @@ using MIPS.Assembler.Models.Directives;
 using MIPS.Assembler.Models.Directives.Abstract;
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Assembler.Tokenization.Models.Enums;
-using MIPS.Models.Addressing;
-using MIPS.Models.Addressing.Enums;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Numerics;
 
@@ -86,14 +83,7 @@ public readonly struct DirectiveParser
             return false;
         }
 
-        Section section = sectionName switch
-        {
-            ".text" => Section.Text,
-            ".data" => Section.Data,
-            _ => ThrowHelper.ThrowArgumentException<Section>($"'{sectionName}' cannot be parsed as a section directive."),
-        };
-
-        directive = new SectionDirective(section);
+        directive = new SectionDirective(sectionName);
         return true;
     }
 
@@ -167,7 +157,10 @@ public readonly struct DirectiveParser
             return false;
         }
 
-        var value = result.Base.Value;
+        // Result should not be null
+        Guard.IsNotNull(result.Value);
+
+        var value = result.Value.Value;
 
         if (align)
         {
@@ -185,7 +178,7 @@ public readonly struct DirectiveParser
                 _logger?.Log(Severity.Message, LogCode.LargeAlignment, args[0].Tokens, "DirectiveLargeAlignMessage", value, alignMessageThreshold);
             }
 
-            directive = new AlignDirective((int)result.Base.Value);
+            directive = new AlignDirective((int)value);
         }
         else
         {
@@ -226,12 +219,15 @@ public readonly struct DirectiveParser
                 _logger?.Log(Severity.Error, LogCode.InvalidDirectiveDataArg, args[0].Tokens, "DirectiveAllocationNoRelocatableArguments", name);
                 return false;
             }
+
+            Guard.IsNotNull(result.Value);
+            var resultValue = result.Value.Value;
             
             // TODO: Double check the logic here. Does this always detect the error?
-            value = T.CreateTruncating(result.Base.Value);
-            if (value != T.CreateSaturating(result.Base.Value))
+            value = T.CreateTruncating(resultValue);
+            if (value != T.CreateSaturating(resultValue))
             {
-                _logger?.Log(Severity.Warning, LogCode.IntegerTruncated, arg.Tokens, "DirectiveAllocationTruncated",  arg.Tokens.Print(), result.Base, value);
+                _logger?.Log(Severity.Warning, LogCode.IntegerTruncated, arg.Tokens, "DirectiveAllocationTruncated",  arg.Tokens.Print(), result.Value, value);
             }
 
             value.WriteBigEndian(bytes, pos);

@@ -5,7 +5,6 @@ using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Interpreter.Models.Modules;
-using MIPS.Models.Addressing.Enums;
 using System.IO;
 
 namespace ObjectFiles;
@@ -38,16 +37,16 @@ public class ElfModule : IBuildModule<ElfModule>, IExecutableModule
 
         var file = new ElfFile(ElfArch.MIPS);
 
-        foreach (var section in constructor.Sections)
+        foreach (var section in constructor.Sections.Values)
         {
-            var type = section.Section switch
+            var type = section.Name switch
             {
-                Section.Text => ElfSectionSpecialType.Text,
-                Section.Data => ElfSectionSpecialType.Data,
-                Section.ReadOnlyData => ElfSectionSpecialType.ReadOnlyData,
-                Section.SmallInitializedData => ElfSectionSpecialType.ReadOnlyData,
-                Section.SmallUninitializedData => ElfSectionSpecialType.Bss,
-                Section.UninitializedData => ElfSectionSpecialType.Bss,
+                ".text" => ElfSectionSpecialType.Text,
+                ".data" => ElfSectionSpecialType.Data,
+                ".rodata" => ElfSectionSpecialType.ReadOnlyData,
+                ".sdata" => ElfSectionSpecialType.Data,
+                ".bss" => ElfSectionSpecialType.Bss,
+                ".sbss" => ElfSectionSpecialType.Bss,
                 _ => ElfSectionSpecialType.None,
             };
 

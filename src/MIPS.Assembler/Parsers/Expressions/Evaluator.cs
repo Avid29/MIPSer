@@ -6,7 +6,6 @@ using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Models.Addressing;
-using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables;
 using MIPS.Models.Modules.Tables.Enums;
 
@@ -46,7 +45,7 @@ public struct Evaluator
         result = default;
 
         // If both address are relocatable
-        if (!Address.TryAdd(left.Base, right.Base, out var value))
+        if (!Address.TryAdd(left.Value, right.Value, out var value))
         {
             _logger?.Log(Severity.Error, LogCode.InvalidExpressionOperation, node.ExpressionToken, "CantAddRelocatables");
             return false;
@@ -56,7 +55,7 @@ public struct Evaluator
         if (value.IsRelocatable)
         {
             var symbol = left.Reference?.Symbol ?? right.Reference?.Symbol;
-            reference = new ReferenceEntry(symbol, Context?.CurrentAddress ?? Address.External, ReferenceType.FullWord, ReferenceMethod.Add);
+            reference = new ReferenceEntry(symbol, Context?.CurrentAddress ?? default, MipsReferenceType.None, value.Value);
         }
 
         result = new ExpressionResult(value, reference);
@@ -76,7 +75,7 @@ public struct Evaluator
         result = default;
 
         // If both address are relocatable
-        if (!Address.TrySubtract(left.Base, right.Base, out var value))
+        if (!Address.TrySubtract(left.Value, right.Value, out var value))
         {
             _logger?.Log(Severity.Error, LogCode.InvalidExpressionOperation, node.ExpressionToken, "CantSubtractRelocatables");
             return false;
@@ -86,7 +85,7 @@ public struct Evaluator
         if (value.IsRelocatable)
         {
             var symbol = left.Reference?.Symbol ?? right.Reference?.Symbol;
-            reference = new ReferenceEntry(symbol, Context?.CurrentAddress ?? Address.External, ReferenceType.FullWord, ReferenceMethod.Subtract);
+            reference = new ReferenceEntry(symbol, Context?.CurrentAddress ?? default, MipsReferenceType.None, value.Value);
         }
 
         result = new(value, reference);
@@ -109,7 +108,7 @@ public struct Evaluator
         if (CheckRelocatable(node, left, right, "Multiply"))
             return false;
 
-        result = new(new Address(left.Base.Value * right.Base.Value, Section.Absolute));
+        result = new(new Address(left.Value.Value * right.Value.Value));
         return true;
     }
 
@@ -129,7 +128,7 @@ public struct Evaluator
         if (CheckRelocatable(node, left, right, "Divide"))
             return false;
 
-        result = new(new Address(left.Base.Value / right.Base.Value, Section.Absolute));
+        result = new(new Address(left.Value.Value / right.Value.Value));
         return true;
     }
 
@@ -149,7 +148,7 @@ public struct Evaluator
         if (CheckRelocatable(node, left, right, "Modulus"))
             return false;
 
-        result = new(new Address(left.Base.Value % right.Base.Value, Section.Absolute));
+        result = new(new Address(left.Value.Value % right.Value.Value));
         return true;
     }
 
@@ -181,7 +180,7 @@ public struct Evaluator
         if (CheckRelocatable(node, value, "Negate"))
             return false;
 
-        result = new(new Address(-value.Base.Value, Section.Absolute));
+        result = new(new Address(-value.Value.Value));
         return true;
     }
 
@@ -201,7 +200,7 @@ public struct Evaluator
         if (CheckRelocatable(node, left, right, "AND"))
             return false;
 
-        result = new(new Address(left.Base.Value & right.Base.Value, Section.Absolute));
+        result = new(new Address(left.Value.Value & right.Value.Value));
         return true;
     }
 
@@ -221,7 +220,7 @@ public struct Evaluator
         if (CheckRelocatable(node, left, right, "OR"))
             return false;
 
-        result = new(new Address(left.Base.Value | right.Base.Value, Section.Absolute));
+        result = new(new Address(left.Value.Value | right.Value.Value));
         return true;
     }
 
@@ -241,7 +240,7 @@ public struct Evaluator
         if (CheckRelocatable(node, left, right, "XOR"))
             return false;
 
-        result = new(new Address(left.Base.Value ^ right.Base.Value, Section.Absolute));
+        result = new(new Address(left.Value.Value ^ right.Value.Value));
         return true;
     }
 
@@ -260,7 +259,7 @@ public struct Evaluator
         if (CheckRelocatable(node, value, "NOT"))
             return false;
 
-        result = new(new Address(~value.Base.Value, Section.Absolute));
+        result = new(new Address(~value.Value.Value));
         return true;
     }
 

@@ -1,13 +1,11 @@
 ﻿// Adam Dernis 2024
 
-using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models;
 using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;
-using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables;
 using System.Collections.Generic;
 using System.IO;
@@ -41,7 +39,7 @@ public partial class Assembler
 {
     private readonly Logger _logger;
     private readonly Module _module;
-    private Section _activeSection;
+    private ModuleSection _activeSection;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Assembler"/> class.
@@ -51,7 +49,9 @@ public partial class Assembler
         _logger = logger ?? new Logger();
 
         _module = new Module();
-        _activeSection = Section.Text;
+        _module.AddSection(".text");
+        _module.AddSection(".data");
+        _activeSection = _module.Sections[".text"];
 
         Config = config;
         Context = new(this, _module);
@@ -70,16 +70,7 @@ public partial class Assembler
     /// <summary>
     /// Gets the current address.
     /// </summary>
-    internal Address CurrentAddress
-    {
-        get
-        {
-            if (_activeSection is < Section.Text or > Section.UninitializedData)
-                ThrowHelper.ThrowArgumentException(nameof(_activeSection));
-
-            return new Address(_module.GetStreamPosition(_activeSection), _activeSection);
-        }
-    }
+    internal Address CurrentAddress => new(_activeSection.Stream.Position, _activeSection.Name);
 
     /// <summary>
     /// Gets the assembler's logs.
@@ -111,7 +102,7 @@ public partial class Assembler
             assembler.AlignmentPass(tokens[i]);
 
         // Reset all streams to start
-        assembler._activeSection = Section.Text;
+        assembler._activeSection = assembler._module.Sections[".text"];
         assembler._module.ResetStreamPositions();
 
         // Run the realization pass on each line

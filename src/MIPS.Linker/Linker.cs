@@ -1,12 +1,13 @@
 ﻿// Adam Dernis 2024
 
+using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
-using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables;
+using System.Collections.Generic;
 
 namespace MIPS.Linker;
 
@@ -56,13 +57,13 @@ public class Linker
     private void LinkModule(Module module)
     {
         // Track the initial positions of each stream
-        var offsets = new long[Module.SECTION_COUNT];
+        var offsets = new Dictionary<string, long>();
 
         // Copy stream contents
-        for (int i = 0; i < Module.SECTION_COUNT; i++)
+        foreach (var section in module.Sections.Values)
         {
-            offsets[i] = _module.GetStreamPosition((Section)i);
-            _module.Append((Section)i, module.Sections[i].Stream);
+            offsets.Add(section.Name, section.Stream.Position);
+            _module.Append(section.Name, section.Stream);
         }
         
         // Merge symbol tables
@@ -77,16 +78,17 @@ public class Linker
         foreach (var @ref in module.References)
         {
             ReferenceEntry entry = @ref;
+            Guard.IsNotNull(entry.Location.Section);
 
             // Update address
-            long offset = offsets[(int)@ref.Address.Section];
-            entry.Address += offset;
+            long offset = offsets[entry.Location.Section];
+            entry.Location += offset;
 
             // Add to tracked references
             _module.TryTrackReference(entry);
 
             // Relocate apply relocations
-            if (entry.IsRelocation)
+            if (entry.Symbol is null)
             {
                 _module.Relocate(entry, offset);
             }
@@ -95,9 +97,7 @@ public class Linker
         // Resolve all references
         foreach (var @ref in _module.References)
         {
-            // Skip if the symbol is not defined
-            if (!(@ref.Symbol is not null && _module.TryGetSymbol(@ref.Symbol, out var symbol) && symbol.IsDefined))
-                continue;
+            // TODO:
         }
     }
 }

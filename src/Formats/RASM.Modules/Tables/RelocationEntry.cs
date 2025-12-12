@@ -5,12 +5,11 @@ using MIPS.Assembler.Models.Modules.Interfaces.Tables;
 using MIPS.Helpers;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
-using MIPS.Models.Modules.Tables.Enums;
 using RASM.Modules.Tables.Enums;
 using System.Runtime.InteropServices;
 
 using CommonEntry = MIPS.Models.Modules.Tables.ReferenceEntry;
-using CommonType = MIPS.Models.Modules.Tables.Enums.ReferenceType;
+using CommonType = MIPS.Models.Modules.Tables.Enums.MipsReferenceType;
 
 namespace RASM.Modules.Tables;
 
@@ -20,13 +19,6 @@ namespace RASM.Modules.Tables;
 [StructLayout(LayoutKind.Explicit)]
 public struct RelocationEntry : IReferenceEntry<RelocationEntry>, IBigEndianReadWritable<RelocationEntry>
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="RelocationEntry"/> struct.
-    /// </summary>
-    public RelocationEntry(Address address, RelocationType type) : this((uint)address.Value, address.Section, type)
-    {
-    }
-
     /// <summary>
     /// Initializes a new instance of the <see cref="RelocationEntry"/> struct.
     /// </summary>
@@ -84,36 +76,40 @@ public struct RelocationEntry : IReferenceEntry<RelocationEntry>, IBigEndianRead
     /// <inheritdoc/>
     public static RelocationEntry Convert(CommonEntry entry)
     {
-        var type = entry.Type switch
-        {
-            CommonType.FullWord => RelocationType.FullWord,
-            CommonType.Lower => RelocationType.SimpleImmediate,
-            CommonType.Address => RelocationType.Address,
-            _ => RelocationType.SimpleImmediate,
-        };
+        //var type = entry.Type switch
+        //{
+        //    CommonType.Absolute32 => RelocationType.FullWord,
+        //    CommonType.Low16 => RelocationType.SimpleImmediate,
+        //    CommonType.JumpTarget26 => RelocationType.Address,
+        //    _ => RelocationType.SimpleImmediate,
+        //};
 
-        return new RelocationEntry(entry.Address, type);
+        //return new RelocationEntry(entry.Location, type);
+
+        return default;
     }
     
     /// <inheritdoc/>
     public readonly CommonEntry Convert(string? name)
     {
-        if (name is not null)
-        {
-            ThrowHelper.ThrowArgumentException(nameof(name));
-        }
+        //if (name is not null)
+        //{
+        //    ThrowHelper.ThrowArgumentException(nameof(name));
+        //}
 
 
-        var adr = new Address(Address, Section);
+        //var adr = new Address(Address, Section);
 
-        var type = Type switch
-        {
-            RelocationType.FullWord => CommonType.FullWord,
-            RelocationType.SimpleImmediate => CommonType.Lower,
-            RelocationType.Address => CommonType.Address,
-            _ => CommonType.Lower,
-        };
+        //var type = Type switch
+        //{
+        //    RelocationType.FullWord => CommonType.Absolute32,
+        //    RelocationType.SimpleImmediate => CommonType.Low16,
+        //    RelocationType.Address => CommonType.JumpTarget26,
+        //    _ => CommonType.Low16,
+        //};
 
-        return new CommonEntry(null, adr, type, ReferenceMethod.Relocate);
+        //return new CommonEntry(null, adr, type, ReferenceMethod.Relocate);
+
+        return default;
     }
 }

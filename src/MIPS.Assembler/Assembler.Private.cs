@@ -4,9 +4,7 @@ using CommunityToolkit.Diagnostics;
 using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Models.Addressing;
-using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables.Enums;
-using System.Collections.Generic;
 using System.Numerics;
 
 namespace MIPS.Assembler;
@@ -37,8 +35,13 @@ public partial class Assembler
 
     private void Align(int boundary) => _module.Align(_activeSection, boundary);
 
-    private void SetActiveSection(Section section) => _activeSection = section;
+    private void SetActiveSection(string sectionName)
+    {
+        if (!_module.Sections.TryGetValue(sectionName, out var section))
+            return;
 
+        _activeSection = section;
+    }
     /// <summary>
     /// Defines a label at the current address.
     /// </summary>
@@ -55,9 +58,9 @@ public partial class Assembler
     /// <param name="label">The name of the symbol.</param>
     /// <param name="address">The value of the symbol.</param>
     /// <param name="type">The symbol type.</param>
-    /// <param name="flags">The flag info for the symbol.</param>
+    /// <param name="binding">The binding info for the symbol.</param>
     /// <returns>True if successful, false on failure.</returns>
-    private bool DefineSymbol(Token label, Address address, SymbolType type, SymbolFlags flags = 0)
+    private bool DefineSymbol(Token label, Address address, SymbolType type, SymbolBinding binding = SymbolBinding.Local)
     {
         // Ensure the symbol has a valid name
         if (!ValidateSymbolName(label, out var name))

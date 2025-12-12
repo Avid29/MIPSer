@@ -13,12 +13,12 @@ public struct ReferenceEntry
     /// <summary>
     /// Initializes a new instance of the <see cref="ReferenceEntry"/> class.
     /// </summary>
-    public ReferenceEntry(string? symbol, Address address, ReferenceType type, ReferenceMethod method)
+    public ReferenceEntry(string? symbol, Address location, MipsReferenceType type, long append = 0)
     {
         Symbol = symbol;
-        Address = address;
+        Location = location;
         Type = type;
-        Method = method;
+        Append = append;
     }
 
     /// <summary>
@@ -29,20 +29,15 @@ public struct ReferenceEntry
     /// <summary>
     /// Gets or sets the reference location.
     /// </summary>
-    public Address Address { get; set; }
+    public Address Location { get; set; }
 
     /// <summary>
-    /// Gets or sets a <see cref="ReferenceType"/> describing where to preform the bit modification.
+    /// Gets or sets how to perform the relocation.
     /// </summary>
-    public ReferenceType Type { get; set; }
-    
-    /// <summary>
-    /// Gets or sets a <see cref="ReferenceType"/> describing how to preform the bit modification.
-    /// </summary>
-    public ReferenceMethod Method { get; set; }
+    public MipsReferenceType Type { get; set; }
 
     /// <summary>
-    /// Gets whether or not the reference is a relocation.
+    /// Gets the appended value for
     /// </summary>
-    public readonly bool IsRelocation => Method is ReferenceMethod.Relocate;
+    public long Append { get; }
 }

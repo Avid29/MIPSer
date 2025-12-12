@@ -8,8 +8,7 @@ using RASM.Modules.Tables.Enums;
 using System.Runtime.InteropServices;
 
 using CommonEntry = MIPS.Models.Modules.Tables.ReferenceEntry;
-using CommonType = MIPS.Models.Modules.Tables.Enums.ReferenceType;
-using ReferenceMethod = MIPS.Models.Modules.Tables.Enums.ReferenceMethod;
+using CommonType = MIPS.Models.Modules.Tables.Enums.MipsReferenceType;
 
 namespace RASM.Modules.Tables;
 
@@ -22,10 +21,10 @@ public struct ReferenceEntry : IReferenceEntry<ReferenceEntry>, IBigEndianReadWr
     /// <summary>
     /// Initializes a new instance of the <see cref="RelocationEntry"/> struct.
     /// </summary>
-    public ReferenceEntry(Address address, ReferenceType type)
+    public ReferenceEntry(uint address, Section section, ReferenceType type)
     {
-        Address = (uint)address.Value;
-        Section = address.Section;
+        Address = address;
+        Section = section;
         Type = type;
     }
 
@@ -91,49 +90,50 @@ public struct ReferenceEntry : IReferenceEntry<ReferenceEntry>, IBigEndianReadWr
     /// <inheritdoc/>
     public static ReferenceEntry Convert(CommonEntry entry)
     {
+        var section = entry.Location.Section switch
+        {
+            ".text" => Section.Text,
+            ".data" => Section.Data,
+            _ => Section.None,
+        };
+
         // Get reference type
         var type = entry.Type switch
         {
-            CommonType.FullWord => ReferenceType.FullWord,
-            CommonType.Lower => ReferenceType.SimpleImmediate,
-            CommonType.Address => ReferenceType.Address,
+            CommonType.Relative32 => ReferenceType.AddFullWord,
+            CommonType.Absolute32 => ReferenceType.ReplaceFullWord,
+            CommonType.PCRelative16 => ReferenceType.AddSimpleImmediate,
+            CommonType.Low16 => ReferenceType.ReplaceSimpleImmediate,
+            CommonType.JumpTarget26 => ReferenceType.ReplaceAddress,
             _ => ReferenceType.SimpleImmediate,
         };
 
-        // Get reference method
-        var method = entry.Method switch
-        {
-            ReferenceMethod.Add => ReferenceType.Add,
-            ReferenceMethod.Replace => ReferenceType.Replace,
-            ReferenceMethod.Subtract => ReferenceType.Subtract,
-            _ => ReferenceType.Replace,
-        };
-
         // Construct new entry
-        return new ReferenceEntry(entry.Address, type | method);
+        return new ReferenceEntry((uint)entry.Location.Value, section, type) ;
     }
     
     /// <inheritdoc/>
     public readonly CommonEntry Convert(string name)
     {
-        var adr = new Address(Address, Section);
-
-        var type = (ReferenceType)((int)Type & 0xF) switch
+        var section = Section switch
         {
-            ReferenceType.FullWord => CommonType.FullWord,
-            ReferenceType.SimpleImmediate => CommonType.Lower,
-            ReferenceType.Address => CommonType.Address,
-            _ => CommonType.Lower,
+            Section.Text => ".text",
+            Section.Data => ".data",
+            _ => null,
         };
 
-        var method = (ReferenceType)((int)Type & 0xF0) switch
+        var adr = new Address(Address, section);
+
+        var type = Type switch
         {
-            ReferenceType.Add => ReferenceMethod.Add,
-            ReferenceType.Replace => ReferenceMethod.Replace,
-            ReferenceType.Subtract => ReferenceMethod.Subtract,
-            _ => ReferenceMethod.Add,
+            ReferenceType.AddFullWord => CommonType.Relative32,
+            ReferenceType.ReplaceFullWord => CommonType.Absolute32,
+            ReferenceType.AddSimpleImmediate => CommonType.PCRelative16,
+            ReferenceType.ReplaceSimpleImmediate => CommonType.Low16,
+            ReferenceType.ReplaceAddress => CommonType.JumpTarget26,
+            _ => CommonType.Low16,
         };
 
-        return new CommonEntry(name, adr, type, method);
+        return new CommonEntry(name, adr, type);
     }
 }

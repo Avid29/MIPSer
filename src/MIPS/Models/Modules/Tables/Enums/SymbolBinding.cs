@@ -6,13 +6,13 @@ namespace MIPS.Models.Modules.Tables.Enums;
 /// An enum for symbol flags.
 /// </summary>
 [Flags]
-public enum SymbolFlags
+public enum SymbolBinding
 {
     #pragma warning disable CS1591
 
-    Global = 0x01,
-    ForwardDefined = 0x02,
+    Local,
+    Global,
+    Weak,
     
-
     #pragma warning restore CS1591
 }

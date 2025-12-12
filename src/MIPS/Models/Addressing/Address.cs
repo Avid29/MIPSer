@@ -1,6 +1,5 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Models.Addressing.Enums;
 using System.Diagnostics;
 
 namespace MIPS.Models.Addressing;
@@ -14,7 +13,7 @@ public struct Address
     /// <summary>
     /// Initializes a new instance of the <see cref="Address"/> struct.
     /// </summary>
-    public Address(long value, Section section)
+    public Address(long value, string? section = null)
     {
         Value = value;
         Section = section;
@@ -28,30 +27,12 @@ public struct Address
     /// <summary>
     /// Gets the section the address belongs to.
     /// </summary>
-    public Section Section { get; set; }
+    public string? Section { get; set; }
 
     /// <summary>
-    /// Get whether or not the address is fixed and not subject to relocation.
+    /// Gets whether or not the address is locatable.
     /// </summary>
-    public readonly bool IsFixed => Section is Section.None or Section.Absolute;
-
-    /// <summary>
-    /// Gets whether or not the address is relocating.
-    /// </summary>
-    /// <remarks>
-    /// External addresses are not counted as relocatable.
-    /// </remarks>
-    public readonly bool IsRelocatable => !(IsFixed || IsExternal);
-    
-    /// <summary>
-    /// Gets whether or not the address is external.
-    /// </summary>
-    public readonly bool IsExternal => Section is Section.External;
-
-    /// <summary>
-    /// Gets the default external address.
-    /// </summary>
-    public static Address External => new(0, Section.External);
+    public readonly bool IsRelocatable => Section is not null;
 
     /// <summary>
     /// Attempts to add two <see cref="Address"/> structs.
@@ -67,7 +48,7 @@ public struct Address
         if (left.IsRelocatable && right.IsRelocatable)
             return false;
 
-        var section = left.IsFixed ? right.Section : left.Section;
+        var section = left.Section ?? right.Section;
         result = new Address(left.Value + right.Value, section);
         return true;
     }
@@ -86,7 +67,7 @@ public struct Address
         if (left.Section == right.Section)
         {
             var value = left.Value - right.Value;
-            result = new Address(value, Section.Absolute);
+            result = new Address(value, null);
             return true;
         }
 

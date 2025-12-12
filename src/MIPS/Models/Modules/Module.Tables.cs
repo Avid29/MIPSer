@@ -29,17 +29,13 @@ public partial class Module
     /// <summary>
     /// Adds or updates a symbol in the symbol table.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="value"></param>
-    /// <param name="type"></param>
-    /// <param name="flags"></param>
     /// <returns><see cref="false"/> if the symbol already has a value, and a new value is being defined.</returns>
-    public bool TryDefineOrUpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolFlags flags = 0)
+    public bool TryDefineOrUpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolBinding binding = SymbolBinding.Local)
     {
         if (_definitions.ContainsKey(name))
-            return UpdateSymbol(name, type, value, flags);
+            return UpdateSymbol(name, type, value, binding);
             
-        DefineSymbol(name, type ?? SymbolType.Unknown, value, flags);
+        DefineSymbol(name, type ?? SymbolType.Unknown, value, binding);
         return true;
     }
 
@@ -49,7 +45,7 @@ public partial class Module
     /// <param name="name">The name of the symbol.</param>
     /// <param name="value">The realized value of the symbol.</param>
     /// <returns><see cref="true"/> if the symbol exists, <see cref="false"/> otherwise.</returns>
-    public bool TryGetSymbol(string name, out SymbolEntry value) => _definitions.TryGetValue(name, out value);
+    public bool TryGetSymbol(string name, out SymbolEntry? value) => _definitions.TryGetValue(name, out value);
 
     /// <summary>
     /// Attempts to track a reference to a symbol.
@@ -62,20 +58,20 @@ public partial class Module
         return true;
     }
 
-    private void DefineSymbol(string name, SymbolType type, Address? value = null, SymbolFlags flags = 0)
+    private void DefineSymbol(string name, SymbolType type, Address? value = null, SymbolBinding binding = SymbolBinding.Local)
     {
         // Create entry
-        var entry = new SymbolEntry(name, type, value ?? Address.External, flags);
+        var entry = new SymbolEntry(name, value, type, binding);
 
         if (!value.HasValue)
         {
-            entry.ForwardDefined = true;
+            entry.ForwardDeclared = true;
         }
 
         _definitions.Add(name, entry);
     }
 
-    private bool UpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolFlags flags = 0)
+    private bool UpdateSymbol(string name, SymbolType? type = null, Address? value = null, SymbolBinding? binding = null)
     {
         var entry = _definitions[name];
 
@@ -99,8 +95,15 @@ public partial class Module
             entry.Type = type.Value;
         }
         
-        // Update flags
-        entry.Flags |= flags;
+        // Update bindings
+        if (binding.HasValue)
+        {
+            // Cannot update the binding if it is already global/weak
+            if (entry.Binding is not SymbolBinding.Local)
+                return false;
+
+            entry.Binding = binding.Value;
+        }
 
         _definitions[name] = entry;
         return true;
