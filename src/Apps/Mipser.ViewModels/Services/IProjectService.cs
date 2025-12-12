@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2025
 
+using Mipser.Config;
 using Mipser.Models.Files;
-using Mipser.Models.ProjectConfig;
 using Mipser.Services.Files.Models;
 using System.Threading.Tasks;
 

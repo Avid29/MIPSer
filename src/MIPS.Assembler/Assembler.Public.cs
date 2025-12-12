@@ -24,14 +24,20 @@ public partial class Assembler
     /// <summary>
     /// Assembles a string.
     /// </summary>
-    public static async Task<AssemblyResult<TModule>> AssembleAsync<TModule, TConfig>(string str, string? filename, TConfig config, Stream? outStream = null, Logger? logger = null)
+    public static async Task<AssemblerBuildResult<TModule>> AssembleAsync<TModule, TConfig>(string str, string? filename, TConfig config, Logger? logger = null)
         where TModule : IBuildModule<TModule>
         where TConfig : AssemblerConfig
     {
         using var reader = new StringReader(str);
         var assembler = await AssembleAsync(reader, filename, config, logger);
-        var obj = TModule.Create(assembler._module, config);
-        return new AssemblyResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
+
+        TModule? obj = default;
+        if (!assembler.Failed)
+        {
+            obj = TModule.Create(assembler._module, config);
+        }
+
+        return new AssemblerBuildResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
     }
 
     /// <summary>
@@ -47,13 +53,19 @@ public partial class Assembler
     /// <summary>
     /// Assembles a stream.
     /// </summary>
-    public static async Task<AssemblyResult<TModule>> AssembleAsync<TModule, TConfig>(Stream stream, string? filename, TConfig config, Stream? outStream = null, Logger? logger = null)
+    public static async Task<AssemblerBuildResult<TModule>> AssembleAsync<TModule, TConfig>(Stream stream, string? filename, TConfig config, Logger? logger = null)
         where TModule : IBuildModule<TModule>
         where TConfig : AssemblerConfig
     {
         using var reader = new StreamReader(stream);
         var assembler = await AssembleAsync(reader, filename, config, logger);
-        var obj = TModule.Create(assembler._module, config);
-        return new AssemblyResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
+
+        TModule? obj = default;
+        if (!assembler.Failed)
+        {
+            obj = TModule.Create(assembler._module, config);
+        }
+
+        return new AssemblerBuildResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
     }
 }

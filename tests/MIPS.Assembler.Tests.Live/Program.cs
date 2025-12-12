@@ -63,9 +63,8 @@ public class Program()
     private async Task<bool> TestLine(string line)
     {
         var stream = new MemoryStream(Encoding.Default.GetBytes(line));
-        var outStream = new MemoryStream();
 
-        var result = await Assembler.AssembleAsync<RasmModule, RasmConfig>(stream, null, new RasmConfig(), outStream);
+        var result = await Assembler.AssembleAsync<RasmModule, RasmConfig>(stream, null, new RasmConfig());
 
         if (!result.Failed)
         {

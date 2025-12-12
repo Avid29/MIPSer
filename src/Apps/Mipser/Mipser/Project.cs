@@ -1,8 +1,8 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
+using Mipser.Config;
 using Mipser.Models.Files;
-using Mipser.Models.ProjectConfig;
 
 namespace Mipser;
 

@@ -1,18 +1,17 @@
 ﻿// Avishai Dernis 2025
 
-using RASM.Modules.Config;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Mipser.Models.ProjectConfig;
+namespace Mipser.Config;
 
 /// <summary>
 /// A model for project configurations.
 /// </summary>
 [XmlRoot("Project")]
-public class ProjectConfig
+public partial class ProjectConfig
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ProjectConfig"/> class.
@@ -20,30 +19,6 @@ public class ProjectConfig
     public ProjectConfig()
     {
     }
-
-    /// <summary>
-    /// Gets or sets the project name.
-    /// </summary>
-    [XmlElement("ProjectName", IsNullable = false)]
-    public string? Name { get; set; }
-
-    /// <summary>
-    /// Gets or sets the path for the config file.
-    /// </summary>
-    [XmlIgnore]
-    public string? ConfigPath { get; set; }
-
-    /// <summary>
-    /// Gets the path root folder path.
-    /// </summary>
-    [XmlIgnore]
-    public string? RootFolderPath => Path.GetDirectoryName(ConfigPath);
-
-    /// <summary>
-    /// Gets or sets the assembler configuration for the project.
-    /// </summary>
-    [XmlElement(IsNullable = false)]
-    public RasmConfig? AssemblerConfig { get; set; } // TODO: Abstract typing
 
     /// <summary>
     /// Serializes the <see cref="ProjectConfig"/>

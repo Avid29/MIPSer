@@ -1,11 +1,10 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Messaging;
-using Mipser.Bindables.Files;
+using Mipser.Config;
 using Mipser.Messages.Files;
 using Mipser.Models;
 using Mipser.Models.Files;
-using Mipser.Models.ProjectConfig;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using Mipser.Services.Settings;

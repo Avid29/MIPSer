@@ -11,16 +11,16 @@ namespace MIPS.Assembler.Models;
 /// A <see cref="AssemblerResult"/> including the constructed object module.
 /// </summary>
 /// <typeparam name="TObject">The object module type.</typeparam>
-public class AssemblyResult<TObject> : AssemblerResult
+public class AssemblerBuildResult<TObject> : AssemblerBuildResult
     where TObject : IBuildModule
 {
-    internal AssemblyResult(TObject? objectModule, bool failed, IReadOnlyList<AssemblerLogEntry> logs, IReadOnlyList<SymbolEntry> symbols)
+    internal AssemblerBuildResult(TObject? objectModule, bool failed, IReadOnlyList<AssemblerLogEntry> logs, IReadOnlyList<SymbolEntry> symbols)
         : base(failed, logs, symbols)
     {
         ObjectModule = objectModule;
     }
 
-    internal AssemblyResult(TObject? objectModule, AssemblerResult childResult)
+    internal AssemblerBuildResult(TObject? objectModule, AssemblerResult childResult)
         : this(objectModule, childResult.Failed, childResult.Logs, childResult.Symbols)
     {
     }
@@ -29,4 +29,9 @@ public class AssemblyResult<TObject> : AssemblerResult
     /// Gets the object module result of the assembly.
     /// </summary>
     public TObject? ObjectModule { get; }
+
+    /// <summary>
+    /// Gets the object module result of the assembly.
+    /// </summary>
+    public override IBuildModule? Module => ObjectModule;
 }

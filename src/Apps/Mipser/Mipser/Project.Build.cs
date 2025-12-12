@@ -1,10 +1,15 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.Diagnostics;
+using LibObjectFile.IO;
 using MIPS.Assembler;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models;
+using MIPS.Assembler.Models.Config;
 using Mipser.Models;
 using Mipser.Models.Files;
+using ObjectFiles.Elf;
+using ObjectFiles.Elf.Config;
 using RASM.Modules;
 using RASM.Modules.Config;
 using System.Collections.Generic;
@@ -69,17 +74,19 @@ public partial class Project
 
         try
         {
-            AssemblerResult result;
             using var stream = File.OpenRead(file.FullPath);
-            using (var outStream = File.Open(file.ObjectFile.FullPath, FileMode.OpenOrCreate))
+            AssemblerBuildResult result = Config.AssemblerConfig switch
             {
-                result = await Assembler.AssembleAsync<RasmModule, RasmConfig>(stream, file.Name, Config.AssemblerConfig, outStream, logger);
-            }
+                RasmConfig config => await Assembler.AssembleAsync<RasmModule, RasmConfig>(stream, file.Name, config, logger),
+                ElfConfig config => await Assembler.AssembleAsync<ElfModule, ElfConfig>(stream, file.Name, config, logger),
+                _ => ThrowHelper.ThrowArgumentException<AssemblerBuildResult>(nameof(Config.AssemblerConfig)),
+            };
 
-            // Delete the object file if the build failed
-            if (result.Failed)
+            // Write the object file if the build succeeded
+            if (!result.Failed)
             {
-                CleanFile(file);
+                using var outStream = File.Open(file.ObjectFile.FullPath, FileMode.OpenOrCreate);
+                result.Module?.Save(outStream);
             }
 
             return result;

@@ -53,7 +53,9 @@ public class Program
 
         var inFile = File.Open(filePath, FileMode.Open);
         var outFile = File.Open(resultFile, FileMode.Create);
-        var assembler = await Assembler.AssembleAsync<RasmModule, RasmConfig>(inFile, filePath, new RasmConfig(), outFile);
+        var assembler = await Assembler.AssembleAsync<RasmModule, RasmConfig>(inFile, filePath, new RasmConfig());
+        assembler.Module?.Save(outFile);
+
 
         Console.WriteLine(!assembler.Failed
             ? $"Assembled with {assembler.Logs.Count} messages."

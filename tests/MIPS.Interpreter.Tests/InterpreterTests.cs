@@ -23,7 +23,7 @@ public class InterpreterTests
         Stream outStream = File.Open(output, FileMode.OpenOrCreate);
 
         // Run assembler
-        var result = await Assembler.Assembler.AssembleAsync<ElfModule, AssemblerConfig>(stream, path, new AssemblerConfig(), outStream);
+        var result = await Assembler.Assembler.AssembleAsync<ElfModule, AssemblerConfig>(stream, path, new AssemblerConfig());
 
         // Write the module and assert validity
         Assert.IsNotNull(result.ObjectModule);
