@@ -18,7 +18,7 @@ public partial class Assembler
     {
         using var reader = new StringReader(str);
         var assembler = await AssembleAsync(reader, filename, config, logger);
-        return new AssemblerResult(assembler.Failed, assembler.Logs, assembler.Symbols);
+        return new AssemblerResult(assembler.Failed, assembler.Logs, assembler.Symbols, assembler._module);
     }
     
     /// <summary>
@@ -37,7 +37,7 @@ public partial class Assembler
             obj = TModule.Create(assembler._module, config);
         }
 
-        return new AssemblerBuildResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
+        return new AssemblerBuildResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols, assembler._module);
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public partial class Assembler
     {
         using var reader = new StreamReader(stream);
         var assembler = await AssembleAsync(reader, filename, config, logger);
-        return new AssemblerResult(assembler.Failed, assembler.Logs, assembler.Symbols);
+        return new AssemblerResult(assembler.Failed, assembler.Logs, assembler.Symbols, assembler._module);
     }
 
     /// <summary>
@@ -66,6 +66,6 @@ public partial class Assembler
             obj = TModule.Create(assembler._module, config);
         }
 
-        return new AssemblerBuildResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols);
+        return new AssemblerBuildResult<TModule>(obj, assembler.Failed, assembler.Logs, assembler.Symbols, assembler._module);
     }
 }

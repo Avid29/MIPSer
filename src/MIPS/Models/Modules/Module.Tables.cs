@@ -14,14 +14,15 @@ public partial class Module
     /// <param name="name">The name of the symbol.</param>
     /// <param name="type">The symbol's type.</param>
     /// <param name="value">The value of the symbol.</param>
+    /// <param name="binding">The binding of the symbol.</param>
     /// <returns><see langword="false"/> if the symbol already exists. <see langword="true"/> otherwise.</returns>
-    public bool TryDefineSymbol(string name, SymbolType type, Address? value = null)
+    public bool TryDefineSymbol(string name, SymbolType type, Address? value = null, SymbolBinding? binding = null)
     {
         // Check if table already contains symbol
         if (_definitions.ContainsKey(name))
             return false;
 
-        DefineSymbol(name, type, value);
+        DefineSymbol(name, type, value, binding);
         return true;
     }
 
@@ -57,10 +58,12 @@ public partial class Module
         return true;
     }
 
-    private void DefineSymbol(string name, SymbolType type, Address? value = null, SymbolBinding binding = SymbolBinding.Local)
+    private void DefineSymbol(string name, SymbolType type, Address? value = null, SymbolBinding? binding = null)
     {
+        binding ??= SymbolBinding.Local;
+
         // Create entry
-        var entry = new SymbolEntry(name, value, type, binding);
+        var entry = new SymbolEntry(name, value, type, binding.Value);
 
         if (!value.HasValue)
         {

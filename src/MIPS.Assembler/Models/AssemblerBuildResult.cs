@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Assembler.Logging;
+using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Models.Modules.Tables;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace MIPS.Assembler.Models
     /// </summary>
     public abstract class AssemblerBuildResult : AssemblerResult
     {
-        internal AssemblerBuildResult(bool failed, IReadOnlyList<AssemblerLogEntry> logs, IReadOnlyList<SymbolEntry> symbols) : base(failed, logs, symbols)
+        internal AssemblerBuildResult(bool failed, IReadOnlyList<AssemblerLogEntry> logs, IReadOnlyList<SymbolEntry> symbols, Module? module = null) : base(failed, logs, symbols, module)
         {
         }
 

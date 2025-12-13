@@ -46,14 +46,15 @@ public partial class ElfModule
     {
         foreach(var elfSymbol in symbolTable.Entries)
         {
-            // TODO: Section link
             var name = elfSymbol.Name.Value;
             if (name is null)
                 continue;
-            
-            var value = (long)elfSymbol.Value;
-            var bind = elfSymbol.Bind.FromElf();
-            module.TryDefineSymbol(name, SymbolType.Label, new Address(value));
+
+            var sectionName = elfSymbol.SectionLink.Section?.Name.Value;
+            Address? value = sectionName is null ? null : new Address((long)elfSymbol.Value, sectionName);
+            var binding = elfSymbol.Bind.FromElf();
+
+            module.TryDefineSymbol(name, SymbolType.Label, value, binding);
         }
 
         return true;

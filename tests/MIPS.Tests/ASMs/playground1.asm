@@ -1,4 +1,4 @@
-.globl main
+.globl label1
 .globl label2
 
 label1:
