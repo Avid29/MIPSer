@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.Diagnostics;
 using LibObjectFile.Ar;
 using LibObjectFile.Elf;
 using MIPS.Assembler.Models.Config;
@@ -17,6 +18,8 @@ public partial class ElfModule
 {
     private ref struct ElfBuildContext
     {
+        private ElfSymbolTable? _symtab;
+
         public ElfBuildContext(Module module)
         {
             Module = module;
@@ -34,7 +37,6 @@ public partial class ElfModule
         public void CreateSections()
         {
             ulong pos = 0;
-
 
             foreach (var section in Module.Sections.Values)
             {
@@ -63,7 +65,7 @@ public partial class ElfModule
 
         public void CreateSymTable()
         {
-            var elfSymbolTable = new ElfSymbolTable();
+            _symtab = new ElfSymbolTable();
             foreach (var symbol in Module.Symbols.Values)
             {
                 var sectionName = symbol.Address?.Section;
@@ -82,10 +84,40 @@ public partial class ElfModule
                     SectionLink = link,
                 };
 
-                elfSymbolTable.Entries.Add(elfSymbol);
+                _symtab.Entries.Add(elfSymbol);
             }
 
-            ElfFile.Add(elfSymbolTable);
+            ElfFile.Add(_symtab);
+        }
+
+        public void CreateRelTables()
+        {
+            Guard.IsNotNull(_symtab);
+
+            var relTable = new ElfRelocationTable(false);
+            var refTable = new ElfRelocationTable(true);
+
+            foreach (var @ref in Module.References)
+            {
+                var offset = @ref.Location.Value;
+                var symbolIndex = _symtab.Entries.FindIndex(x => x.Name.Value == @ref.Symbol);
+                Guard.IsNotEqualTo(symbolIndex, -1);
+
+                var type = new ElfRelocationType(ElfArchEx.MIPS, (uint)@ref.Type);
+                var relItem = new ElfRelocation((ulong)@ref.Location.Value, type, (uint)symbolIndex, @ref.Append);
+
+                if (@ref.Append is 0)
+                {
+                    relTable.Entries.Add(relItem);
+                }
+                else
+                {
+                    refTable.Entries.Add(relItem);
+                }
+            }
+
+            ElfFile.Add(relTable);
+            ElfFile.Add(refTable);
         }
     }
 
@@ -95,9 +127,9 @@ public partial class ElfModule
 
         var context = new ElfBuildContext(module);
 
-
         context.CreateSections();
         context.CreateSymTable();
+        context.CreateRelTables();
 
         return new ElfModule(context.Module.Name, context.ElfFile);
     }

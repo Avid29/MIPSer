@@ -26,6 +26,7 @@ public partial class ElfModule
                 // Stream sections
                 ElfStreamSection streamSection => AbstractStreamSection(module, streamSection),
                 ElfSymbolTable symbolTable => AbstractSymbolTable(module, symbolTable),
+                ElfRelocationTable relocationTable => AbstractRelocationTable(module, relocationTable),
                 _ => false,
             };
         }
@@ -55,6 +56,16 @@ public partial class ElfModule
             var binding = elfSymbol.Bind.FromElf();
 
             module.TryDefineSymbol(name, SymbolType.Label, value, binding);
+        }
+
+        return true;
+    }
+
+    private bool AbstractRelocationTable(Module module, ElfRelocationTable relocationTable)
+    {
+        foreach(var relEntry in relocationTable.Entries)
+        {
+            var symbolIndex = relEntry.SymbolIndex;
         }
 
         return true;
