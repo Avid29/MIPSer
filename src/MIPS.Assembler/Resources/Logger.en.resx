@@ -351,4 +351,7 @@
   <data name="InstructionDisabled" xml:space="preserve">
     <value>The instruction '{0}' is disabled by the project configuration.</value>
   </data>
+  <data name="RelocatableShiftAmount" xml:space="preserve">
+    <value>Shift amount argument cannot reference relocatable symbols.</value>
+  </data>
 </root>

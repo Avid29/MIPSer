@@ -293,7 +293,7 @@ public struct InstructionParser
         if (expResult.IsRelocatable && target is Argument.Shift)
         {
             // TODO: Consider tracking ref symbol token
-            _logger?.Log(Severity.Error, LogCode.RelocatableReferenceInShift, arg, "Shift amount argument cannot reference relocatable symbols.");
+            _logger?.Log(Severity.Error, LogCode.RelocatableReferenceInShift, arg, "RelocatableShiftAmount");
             return false;
         }
 
