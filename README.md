@@ -8,7 +8,7 @@
 
 # Cross-Platform Usage
 
-While the MIPSer IDE is a WinUI 3 project, and therefore only available on Windows, the Assembler back-end for MIPSer is a .NET 9 library, available on any machine with the .NET runtime.
+While the MIPSer IDE is a WinUI 3 project, and therefore only available on Windows, the Assembler back-end for MIPSer is a .NET 10 library, available on any machine with the .NET runtime.
 
 # Translation
 
