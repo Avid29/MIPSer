@@ -5,11 +5,17 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml;
+using Microsoft.Windows.AppLifecycle;
 using Mipser.Messages;
 using Mipser.Services;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
 using Mipser.Windows.Helpers;
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using Windows.ApplicationModel.Activation;
+using Windows.UI.StartScreen;
 
 namespace Mipser.Windows;
 
@@ -43,13 +49,16 @@ public partial class App : Application
         _messenger.Register<App, SettingChangedMessage<Theme>>(this, (r, m) => r.ApplyRequestedTheme(m.NewValue));
 
         this.InitializeComponent();
+
+        // Setup jump list config
+        _ = SetupJumpList();
     }
 
     /// <summary>
     /// Invoked when the application is launched.
     /// </summary>
     /// <param name="args">Details about the launch request and process.</param>
-    protected override void OnLaunched(LaunchActivatedEventArgs args)
+    protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
     {
         Window = WindowHelper.CreateWindow<MainWindow>();
         Window.Activate();
@@ -59,6 +68,14 @@ public partial class App : Application
 
         // Initiaize dispatcher on UI thread.
         Services.GetRequiredService<IDispatcherService>().Init();
+
+        // Handle activiation arguments
+        var activationArgs = AppInstance.GetCurrent().GetActivatedEventArgs();
+        bool success = activationArgs.Kind switch
+        {
+            ExtendedActivationKind.File => await HandleFileArgAsync(activationArgs),
+            _ => false,
+        };
     }
 
     private void LoadRequestedTheme()
@@ -71,7 +88,7 @@ public partial class App : Application
     {
         // Find root item
         var root = Window?.Content.FindDescendantOrSelf<FrameworkElement>();
-        if(root is null)
+        if (root is null)
             return;
 
         // Update theme from root content
@@ -81,5 +98,35 @@ public partial class App : Application
             Theme.Light => ElementTheme.Light,
             Theme.Default or _ => ElementTheme.Default,
         };
+    }
+
+    private static async Task SetupJumpList()
+    {
+        var jumpList = await JumpList.LoadCurrentAsync();
+        jumpList.SystemGroupKind = JumpListSystemGroupKind.Recent;
+        await jumpList.SaveAsync();
+    }
+
+    private static async Task<bool> HandleFileArgAsync(AppActivationArguments args)
+    {
+        if (args.Data is not IFileActivatedEventArgs fileArgs)
+            return false;
+
+        if (fileArgs.Files.Count is <= 0)
+            return false;
+
+        var file = fileArgs.Files[0];
+
+        switch (Path.GetExtension(file.Path))
+        {
+            case ".asm":
+                break;
+            case ".mipser":
+                var projectService = Service.Get<IProjectService>();
+                await projectService.OpenProjectAsync(file.Path);
+                break;
+        }
+
+        return true;
     }
 }
