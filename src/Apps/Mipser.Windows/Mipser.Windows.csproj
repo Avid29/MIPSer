@@ -13,6 +13,10 @@
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Views\Pages\Editor\HexEditorPage.xaml" />
+	  <None Remove="Views\Pages\Editor\TextEditorPage.xaml" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Labs.WinUI.ColorAnalyzer" Version="0.1.251101-build.2372" />
@@ -30,6 +34,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="HexBox.WinUI" Version="0.2.3" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250108002" />
 		<PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
@@ -67,6 +72,12 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\submodules\WinUIEdit\WinUIEditor\WinUIEditor.vcxproj" />
 		<ProjectReference Include="..\Mipser.ViewModels\Mipser.ViewModels.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="Views\Pages\Editor\TextEditorPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -155,6 +166,11 @@
 		<Page Update="Views\Shell\TitleBar.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</Page>
+	</ItemGroup>
+	<ItemGroup>
+	  <Page Update="Views\Pages\Editor\HexEditorPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 
 </Project>

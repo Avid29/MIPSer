@@ -46,7 +46,6 @@ public partial class EditorTemplateSelector : DataTemplateSelector
         return type switch
         {
             ".obj" => HexEditorTemplate,
-            ".asm" => AssemblyEditorTemplate,
             _ => TextEditorTemplate,
         };
     }
