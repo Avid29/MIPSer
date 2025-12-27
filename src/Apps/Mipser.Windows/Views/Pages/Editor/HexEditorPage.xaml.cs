@@ -2,6 +2,7 @@
 
 using Microsoft.UI.Xaml.Controls;
 using Mipser.ViewModels.Pages;
+using System.IO;
 
 
 namespace Mipser.Windows.Views.Pages.Editor;
@@ -19,5 +20,21 @@ public sealed partial class HexEditorPage : UserControl
     /// <summary>
     /// Gets or sets the <see cref="FilePageViewModel"/>.
     /// </summary>
-    public FilePageViewModel? ViewModel { get; set; }
+    public FilePageViewModel? ViewModel
+    {
+        get;
+        set
+        {
+            field = value;
+
+            var path = value?.File?.Path;
+            if (path is null)
+                return;
+
+            var fileStream = new FileStream(path, FileMode.Open, FileAccess.Read);
+            Reader = new BinaryReader(fileStream);
+        }
+    }
+
+    private BinaryReader? Reader { get; set; }
 }

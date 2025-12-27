@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid>
-        <hexbox:HexBox DataSource="{x:Bind ViewModel.BinaryReader, Mode=OneWay}" />
+    <Grid FlowDirection="LeftToRight">
+        <hexbox:HexBox DataSource="{x:Bind Reader, Mode=OneWay}" />
     </Grid>
 </UserControl>

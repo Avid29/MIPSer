@@ -34,15 +34,6 @@ public partial class FilePageViewModel
             }
         }
     }
-    
-    /// <summary>
-    /// Gets a binary ready for the file's contents.
-    /// </summary>
-    public BinaryReader? BinaryReader
-    {
-        get;
-        set => SetProperty(ref field, value);
-    }
 
     private async Task LoadContentAsync()
     {
@@ -52,8 +43,6 @@ public partial class FilePageViewModel
         await using var stream = await File.FileItem.OpenStreamForReadAsync();
         using var reader = new StreamReader(stream);
         OriginalContent = await reader.ReadToEndAsync();
-
-        BinaryReader = new BinaryReader(stream);
     }
 
     /// <summary>
