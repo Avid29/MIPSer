@@ -61,5 +61,8 @@ public class Folder : IFolder
     }
 
     /// <inheritdoc/>
+    public async Task RenameAsync(string desiredName) => await _storageFolder.RenameAsync(desiredName);
+
+    /// <inheritdoc/>
     public async Task DeleteAsync() => await _storageFolder.DeleteAsync();
 }

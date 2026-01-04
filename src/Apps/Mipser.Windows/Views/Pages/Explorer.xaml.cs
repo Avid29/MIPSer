@@ -1,14 +1,14 @@
 // Adam Dernis 2024
 
-using CommunityToolkit.Mvvm.DependencyInjection;
+using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Mipser.Bindables.Files;
 using Mipser.Services;
 using Mipser.ViewModels.Pages;
+using Mipser.Windows.Controls;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace Mipser.Windows.Views.Pages;
 
@@ -101,5 +101,19 @@ public sealed partial class Explorer : UserControl
             var name = dirInfo.Name;
             return localization["/Pages/Explorer/RecentFolderListItem", parentName, name];
         }
+    }
+
+    private void RenameClicked(object sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuFlyoutItem mfi)
+            return;
+
+        var container = FilesTreeViewRoot.ContainerFromItem(mfi.DataContext);
+        var editblock = container.FindDescendant<EditableTextBlock>();
+
+        if (editblock is null)
+            return;
+
+        editblock.BeginEdit();
     }
 }

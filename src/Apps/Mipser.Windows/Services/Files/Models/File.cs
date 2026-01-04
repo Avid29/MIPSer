@@ -36,5 +36,8 @@ public sealed class File : IFile
     public Task<Stream> OpenStreamForWriteAsync() => _storageFile.OpenStreamForWriteAsync();
 
     /// <inheritdoc/>
+    public async Task RenameAsync(string desiredName) => await _storageFile.RenameAsync(desiredName);
+
+    /// <inheritdoc/>
     public async Task DeleteAsync() => await _storageFile.DeleteAsync();
 }

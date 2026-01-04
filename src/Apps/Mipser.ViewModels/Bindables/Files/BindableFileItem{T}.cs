@@ -26,7 +26,11 @@ public abstract class BindableFileItem<T> : BindableFileItem
     protected internal abstract T FileItem { get; set; }
 
     /// <inheritdoc/>
-    public override string Name => FileItem.Name;
+    public override string Name
+    {
+        get => FileItem.Name;
+        set => FileItem.RenameAsync(value);
+    }
 
     /// <inheritdoc/>
     public override string Path => FileItem.Path;
