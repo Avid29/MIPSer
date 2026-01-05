@@ -9,6 +9,7 @@
     xmlns:convert="using:Mipser.Windows.Converters"
     xmlns:selector="using:Mipser.Windows.Selectors"
     xmlns:files="using:Mipser.Bindables.Files"
+    xmlns:ctrls="using:Mipser.Windows.Controls"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -43,7 +44,7 @@
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/PasteMFI" Text="Paste" Icon="Paste" IsEnabled="False"/>
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/DeleteMFI" Text="Delete" Icon="Delete"
                                         Command="{x:Bind DeleteCommand, Mode=OneWay}"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/RenameMFI" Text="Rename" Icon="Rename" IsEnabled="False"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/RenameMFI" Text="Rename" Icon="Rename" Click="RenameClicked"/>
                         <MenuFlyoutSeparator/>
                         
                         <!--  Open  -->
@@ -75,7 +76,7 @@
                 </TreeViewItem.ContextFlyout>
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <ImageIcon Source="{StaticResource FolderIcon}" Height="20"/>
-                    <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+                    <ctrls:EditableTextBlock Text="{x:Bind Name, Mode=TwoWay}"/>
                 </StackPanel>
             </TreeViewItem>
         </DataTemplate>
@@ -97,7 +98,7 @@
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyMFI" Text="Copy" Icon="Copy" IsEnabled="False"/>
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/DeleteMFI" Text="Delete" Icon="Delete"
                                         Command="{x:Bind DeleteCommand, Mode=OneWay}"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/RenameMFI" Text="Rename" Icon="Rename" IsEnabled="False"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/RenameMFI" Text="Rename" Icon="Rename" Click="RenameClicked"/>
                         <MenuFlyoutSeparator/>
 
                         <!--  Copy Path  -->
@@ -113,7 +114,7 @@
                 </TreeViewItem.ContextFlyout>
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <ImageIcon Source="{x:Bind Name, Converter={StaticResource FileTypeIconConverter}, Mode=OneWay}" Height="20"/>
-                    <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+                    <ctrls:EditableTextBlock Text="{x:Bind Name, Mode=TwoWay}"/>
                 </StackPanel>
             </TreeViewItem>
         </DataTemplate>

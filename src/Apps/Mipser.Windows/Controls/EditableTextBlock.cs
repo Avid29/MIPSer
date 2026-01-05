@@ -61,6 +61,16 @@ public sealed partial class EditableTextBlock : Control
         _textBox.Visibility = Visibility.Visible;
 
         _textBox.Focus(FocusState.Programmatic);
+        _textBox.Text = Text;
+
+        // Select file name without extension
+        var selectionEnd = Text.LastIndexOf('.');
+        if (selectionEnd is -1)
+        {
+            selectionEnd = Text.Length;
+        }
+
+        _textBox.Select(0, selectionEnd);
     }
 
     private void OnTextBoxLostFocus(object sender, RoutedEventArgs args)
@@ -78,7 +88,7 @@ public sealed partial class EditableTextBlock : Control
         if (_textBlock is null || _textBox is null)
             return;
 
-        _textBox.LosingFocus -= OnTextBoxLostFocus;
+        _textBox.LostFocus -= OnTextBoxLostFocus;
         Unloaded -= OnUnloaded;
     }
 }
