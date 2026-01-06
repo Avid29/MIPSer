@@ -61,8 +61,8 @@ public class BuildService
             return null;
 
         var logger = new Logger();
-        var task = _projectService.Project.BuildProjectAsync(rebuild, logger);
-        return await BuildAsync(task, logger);
+        var buildFunc = async () => await _projectService.Project.BuildProjectAsync(rebuild, logger);
+        return await BuildAsync(buildFunc, logger);
     }
 
     /// <summary>
@@ -76,8 +76,8 @@ public class BuildService
             return null;
 
         var logger = new Logger();
-        var task = _projectService.Project.AssembleFilesAsync(files, true, logger);
-        return await BuildAsync(task, logger);
+        var buildFunc = async () => await _projectService.Project.AssembleFilesAsync(files, true, logger);
+        return await BuildAsync(buildFunc, logger);
     }
     
     /// <summary>
@@ -103,7 +103,7 @@ public class BuildService
         _projectService.Project.CleanFiles(files);
     }
 
-    private async Task<BuildResult?> BuildAsync(Task<BuildResult?> buildTask, Logger logger)
+    private async Task<BuildResult?> BuildAsync(Func<Task<BuildResult?>> buildFunction, Logger logger)
     {
         // Run pre-build checks
         if (!PreBuildChecks())
@@ -124,7 +124,7 @@ public class BuildService
         }
 
         // Run the build task
-        var result = await buildTask;
+        var result = await buildFunction();
 
         // Restore the original language
         CultureInfo.CurrentUICulture = restore;
