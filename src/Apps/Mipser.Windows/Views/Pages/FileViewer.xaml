@@ -67,8 +67,6 @@
             </UserControl>
         </DataTemplate>
 
-        <editctrl:AssemblySyntaxHighlightingTheme x:Name="SyntaxHighlighting" />
-
         <selectors:EditorTemplateSelector x:Key="EditorTemplateSelector">
             <selectors:EditorTemplateSelector.HexEditorTemplate>
                 <DataTemplate x:DataType="vm:FilePageViewModel">

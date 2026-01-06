@@ -34,9 +34,6 @@ public sealed partial class FileViewer : UserControl
     public FileViewer()
     {
         this.InitializeComponent();
-
-        Service.Get<IMessenger>().Register<FileViewer, SettingChangedMessage<Theme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
-        Service.Get<IMessenger>().Register<FileViewer, SettingChangedMessage<EditorColorScheme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
     }
 
     /// <summary>

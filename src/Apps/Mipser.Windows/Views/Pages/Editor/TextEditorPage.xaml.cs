@@ -1,9 +1,14 @@
 // Avishai Dernis 2025
 
+using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml.Controls;
 using MIPS.Assembler.Tokenization.Models;
+using Mipser.Messages;
 using Mipser.Messages.Editor.Enums;
+using Mipser.Models.EditorConfig.ColorScheme;
+using Mipser.Services;
+using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages;
 using Mipser.Windows.Controls.CodeEditor;
 
@@ -17,6 +22,9 @@ public sealed partial class TextEditorPage : UserControl
     public TextEditorPage()
     {
         InitializeComponent();
+
+        Service.Get<IMessenger>().Register<TextEditorPage, SettingChangedMessage<Theme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
+        Service.Get<IMessenger>().Register<TextEditorPage, SettingChangedMessage<EditorColorScheme>>(this, (r, m) => SyntaxHighlighting.ReloadFromSettings());
     }
 
     /// <summary>
