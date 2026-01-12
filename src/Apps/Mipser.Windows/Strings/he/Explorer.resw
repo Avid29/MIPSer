@@ -156,6 +156,9 @@
   <data name="Flyout/OpenWithMFSI.Text" xml:space="preserve">
     <value>פתח עם</value>
   </data>
+  <data name="Flyout/PasteMFI.Text" xml:space="preserve">
+    <value>הדבק</value>
+  </data>
   <data name="Flyout/RenameMFI.Text" xml:space="preserve">
     <value>שנה שם</value>
   </data>
