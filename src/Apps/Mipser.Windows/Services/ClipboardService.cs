@@ -1,7 +1,10 @@
 ﻿// Avishai Dernis 2025
 
 using Mipser.Services;
+using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Storage;
 
 namespace Mipser.Windows.Services;
 
@@ -11,19 +14,26 @@ namespace Mipser.Windows.Services;
 public class ClipboardService : IClipboardService
 {
     /// <inheritdoc/>
-    public void Copy(string text, bool flush = true)
+    public void CopyText(string text, bool flush = true)
     {
         var package = new DataPackage();
         package.SetText(text);
-        Copy(package, flush);
+        SetClipboard(package, DataPackageOperation.Copy, flush);
     }
 
-    private static void Copy(DataPackage data, bool flush = true)
+    /// <inheritdoc/>
+    public async Task CutFileAsync(string filePath, bool flush = true)
+        => await ClipFileAsync(filePath, DataPackageOperation.Move, flush);
+
+    /// <inheritdoc/>
+    public async Task CopyFileAsync(string filePath, bool flush = true)
+        => await ClipFileAsync(filePath, DataPackageOperation.Copy, flush);
+
+    private static void SetClipboard(DataPackage data, DataPackageOperation operation, bool flush = true)
     {
-        // Set content
-        data.RequestedOperation = DataPackageOperation.Copy;
+        data.RequestedOperation = operation;
         Clipboard.SetContent(data);
-        
+
         // Flush?
         if (flush)
         {
