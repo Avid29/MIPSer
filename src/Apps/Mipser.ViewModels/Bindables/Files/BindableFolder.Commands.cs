@@ -1,7 +1,9 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Input;
+using Mipser.Services;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Mipser.Bindables.Files;
 
@@ -26,4 +28,7 @@ public partial class BindableFolder
     /// Open the windows terminal to the folder.
     /// </summary>
     public void OpenInWindowsTerminal() => Process.Start("wt.exe", $"-d \"{Path}\"");
+
+    /// <inheritdoc/>
+    public override Task CopyFileAsync() => Service.Get<IClipboardService>().CopyFileItemsAsync([FileItem]);
 }

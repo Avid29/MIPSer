@@ -96,7 +96,8 @@
 
                         <!--  Modify  -->
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/CutMFI" Text="Cut" Icon="Cut" IsEnabled="False"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyMFI" Text="Copy" Icon="Copy" IsEnabled="False"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyMFI" Text="Copy" Icon="Copy"
+                                        Command="{x:Bind CopyFileCommand, Mode=OneWay}"/>
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/DeleteMFI" Text="Delete" Icon="Delete"
                                         Command="{x:Bind DeleteCommand, Mode=OneWay}"/>
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/RenameMFI" Text="Rename" Icon="Rename" Click="RenameClicked"/>

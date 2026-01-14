@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using Mipser.Services.Files.Models;
+using Mipser.Windows.Services.Files.Models;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace Mipser.Windows.Services.FileSystem.Models;
 /// <summary>
 /// An <see cref="IFile"/> implementation wrapping <see cref="StorageFile"/>.
 /// </summary>
-public sealed class File : IFile
+public sealed class File : FileItemBase, IFile
 {
     private readonly StorageFile _storageFile;
 
@@ -24,20 +25,11 @@ public sealed class File : IFile
     }
 
     /// <inheritdoc/>
-    public string Name => _storageFile.Name;
-
-    /// <inheritdoc/>
-    public string Path => _storageFile.Path;
+    public override IStorageItem StorageItem => _storageFile;
 
     /// <inheritdoc/>
     public Task<Stream> OpenStreamForReadAsync() => _storageFile.OpenStreamForReadAsync();
 
     /// <inheritdoc/>
     public Task<Stream> OpenStreamForWriteAsync() => _storageFile.OpenStreamForWriteAsync();
-
-    /// <inheritdoc/>
-    public async Task RenameAsync(string desiredName) => await _storageFile.RenameAsync(desiredName);
-
-    /// <inheritdoc/>
-    public async Task DeleteAsync() => await _storageFile.DeleteAsync();
 }

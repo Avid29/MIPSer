@@ -21,7 +21,7 @@ public partial class BindableFileItem
     /// <summary>
     /// Gets a command to copy the file to the clipboard.
     /// </summary>
-    public RelayCommand CopyFileCommand { get; }
+    public AsyncRelayCommand CopyFileCommand { get; }
 
     /// <summary>
     /// Gets a command to delete the file.

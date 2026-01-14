@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Messages.Navigation;
 using Mipser.Services;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Mipser.Bindables.Files;
@@ -22,5 +21,5 @@ public partial class BindableFile
     public void Open() => Service.Get<IMessenger>().Send(new FileOpenRequestMessage(this));
 
     /// <inheritdoc/>
-    public override async Task CopyFileAsync() => await Service.Get<IClipboardService>().CopyFileAsync(Path);
+    public override async Task CopyFileAsync() => await Service.Get<IClipboardService>().CopyFileItemsAsync([FileItem]);
 }

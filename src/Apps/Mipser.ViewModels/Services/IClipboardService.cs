@@ -1,5 +1,7 @@
 ﻿// Avishai Dernis 2025
 
+using Mipser.Services.Files.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Mipser.Services;
@@ -17,16 +19,16 @@ public interface IClipboardService
     void CopyText(string text, bool flush = true);
 
     /// <summary>
-    /// Copies a file to the clipboard as a cut operation.
+    /// Copies a collection of file items to the clipboard.
     /// </summary>
-    /// <param name="filePath">The path of the file to cut.</param>
+    /// <param name="fileItems">The path of the folder to copy.</param>
     /// <param name="flush">Whether or not the data should persist outside the app.</param>
-    Task CutFileAsync(string filePath, bool flush = true);
+    Task CutFileItemsAsync(IEnumerable<IFileItem> fileItems, bool flush = true);
 
     /// <summary>
-    /// Copies a file to the clipboard.
+    /// Copies a collection of file items to the clipboard as a cut operation.
     /// </summary>
-    /// <param name="filePath">The path of the folder to copy.</param>
+    /// <param name="fileItems">The path of the file to cut.</param>
     /// <param name="flush">Whether or not the data should persist outside the app.</param>
-    Task CopyFileAsync(string filePath, bool flush = true);
+    Task CopyFileItemsAsync(IEnumerable<IFileItem> fileItems, bool flush = true);
 }
