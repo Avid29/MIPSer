@@ -53,7 +53,7 @@ public partial class WindowViewModel
 
     private async Task SaveFileAsync() => MainViewModel.FocusedPanel?.SaveFileAsync();
 
-    private async Task SaveAllFilesAsync() => MainViewModel.FocusedPanel?.SaveAllFilesAsync();
+    private async Task SaveAllFilesAsync() => await MainViewModel.SaveAllFilesAsync();
 
     private async Task PickAndOpenFileAsync() => await MainViewModel.PickAndOpenFileAsync();
 

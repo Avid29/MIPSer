@@ -23,12 +23,14 @@ public class PanelViewModel : ObservableObject
     /// <summary>
     /// Initializes a new instance of the <see cref="PanelViewModel"/> class.
     /// </summary>
-    public PanelViewModel(ILocalizationService localizationService, IPopupService popupService)
+    public PanelViewModel(MainViewModel mainViewModel, ILocalizationService localizationService, IPopupService popupService)
     {
         _localizationService = localizationService;
         _popupService = popupService;
 
         OpenPages = [];
+
+        mainViewModel.Panels.Add(this);
     }
 
     /// <summary>

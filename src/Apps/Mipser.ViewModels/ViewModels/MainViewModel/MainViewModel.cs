@@ -5,6 +5,8 @@ using CommunityToolkit.Mvvm.Messaging;
 using Mipser.Services;
 using Mipser.Services.Files;
 using Mipser.ViewModels.Pages;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Mipser.ViewModels;
 
@@ -31,6 +33,7 @@ public partial class MainViewModel : ObservableRecipient
         _fileSystemService = fileSystemService;
 
         ExplorerViewModel = explorerViewModel;
+        Panels = [];
 
         IsActive = true;
     }
@@ -45,7 +48,23 @@ public partial class MainViewModel : ObservableRecipient
     }
 
     /// <summary>
+    /// Gets a list of all panels.
+    /// </summary>
+    public List<PanelViewModel> Panels { get; }
+
+    /// <summary>
     /// Gets the <see cref="ExplorerViewModel"/>.
     /// </summary>
     public ExplorerViewModel ExplorerViewModel { get; }
+
+    /// <summary>
+    /// Saves all open files.
+    /// </summary>
+    public async Task SaveAllFilesAsync()
+    {
+        foreach (var panel in Panels)
+        {
+            await panel.SaveAllFilesAsync();
+        }
+    }
 }

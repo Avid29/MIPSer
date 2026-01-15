@@ -8,7 +8,9 @@ using Mipser.Models;
 using Mipser.Models.Enums;
 using Mipser.Models.Files;
 using Mipser.Services.Files;
+using Mipser.Services.Popup;
 using Mipser.Services.Settings;
+using Mipser.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -34,7 +36,7 @@ public class BuildService
     /// <summary>
     /// Initializes a new instance of the <see cref="BuildService"/> class.
     /// </summary>
-    public BuildService(IMessenger messenger, ILocalizationService localizationService, ISettingsService settingsService, IProjectService projectService, IFileSystemService fileSystemService)
+    public BuildService(IMessenger messenger, ILocalizationService localizationService, ISettingsService settingsService, IProjectService projectService)
     {
         _messenger = messenger;
         _localizationService = localizationService;
@@ -60,6 +62,9 @@ public class BuildService
         if (_projectService.Project is null)
             return null;
 
+        // TODO: Consider making a popup asking about saving
+        await Service.Get<MainViewModel>().SaveAllFilesAsync();
+
         var logger = new Logger();
         var buildFunc = async () => await _projectService.Project.BuildProjectAsync(rebuild, logger);
         return await BuildAsync(buildFunc, logger);
@@ -74,6 +79,9 @@ public class BuildService
         // TODO: Report issue
         if (_projectService.Project is null)
             return null;
+
+        // TODO: Consider making a popup asking about saving
+        await Service.Get<MainViewModel>().SaveAllFilesAsync();
 
         var logger = new Logger();
         var buildFunc = async () => await _projectService.Project.AssembleFilesAsync(files, true, logger);
