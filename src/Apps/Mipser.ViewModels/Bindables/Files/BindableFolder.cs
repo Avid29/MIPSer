@@ -184,5 +184,6 @@ public partial class BindableFolder : BindableFileItem<IFolder>
 
         _watcher.Created -= OnChildFileItemCreated;
         _watcher.Deleted -= OnChildFileItemDeleted;
+        _watcher.Renamed -= OnChildFileItemRenamed;
     }
 }
