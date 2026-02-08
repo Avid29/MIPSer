@@ -12,7 +12,8 @@ public struct Execution()
 {
     private readonly uint _writeValue;
     private readonly uint _pc;
-    private readonly uint _memAddress;
+    private readonly uint _secondary1;
+    private readonly uint _secondary2;
     private readonly GPRegister _reg;
 
     /// <summary>
@@ -72,8 +73,8 @@ public struct Execution()
     /// </summary>
     public uint Low
     {
-        get => Get(_memAddress, SecondaryWritebacks.High);
-        init => Set(ref _memAddress, value, SecondaryWritebacks.High);
+        get => Get(_secondary1, SecondaryWritebacks.High);
+        init => Set(ref _secondary1, value, SecondaryWritebacks.High);
     }
 
     /// <summary>
@@ -81,8 +82,8 @@ public struct Execution()
     /// </summary>
     public uint High
     {
-        get => Get(_memAddress, SecondaryWritebacks.High);
-        init => Set(ref _memAddress, value, SecondaryWritebacks.High);
+        get => Get(_secondary2, SecondaryWritebacks.High);
+        init => Set(ref _secondary2, value, SecondaryWritebacks.High);
     }
 
     /// <summary>
@@ -99,8 +100,8 @@ public struct Execution()
     /// </summary>
     public uint MemAddress
     {
-        readonly get => Get(_memAddress, SecondaryWritebacks.Memory);
-        init => Set(ref _memAddress, value, SecondaryWritebacks.Memory);
+        readonly get => Get(_secondary1, SecondaryWritebacks.Memory);
+        init => Set(ref _secondary1, value, SecondaryWritebacks.Memory);
     }
 
     /// <summary>
@@ -147,6 +148,8 @@ public struct Execution()
         where T : unmanaged
     {
         // TODO: Design around this instead of handling it specially
+        // This is to handle the fact that some instructions write back to both high and low,
+        // but we want to be able to read them both without having to check for both separately.
         if (when is SecondaryWritebacks.Low or SecondaryWritebacks.High
             && SideEffects is SecondaryWritebacks.HighLow)
             return field;

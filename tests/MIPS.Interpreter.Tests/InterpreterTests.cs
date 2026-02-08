@@ -29,7 +29,7 @@ public class InterpreterTests
         var module = result.ObjectModule;
         var interpreter = new Interpreter
         {
-            ProgramCount = module.EntryAddress
+            ProgramCounter = module.EntryAddress
         };
         interpreter.Load(module);
 

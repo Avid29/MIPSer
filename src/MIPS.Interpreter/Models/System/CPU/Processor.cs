@@ -11,7 +11,15 @@ namespace MIPS.Interpreter.System.CPU;
 public partial class Processor
 {
     private readonly RAM _memory;
-    private readonly RegisterFile _regFile;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Processor"/> class.
+    /// </summary>
+    public Processor(RAM memory)
+    {
+        RegisterFile = new RegisterFile();
+        _memory = memory;
+    }
 
     /// <summary>
     /// Gets or sets the value in the high register.
@@ -29,11 +37,7 @@ public partial class Processor
     public uint ProgramCounter { get; set; }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Processor"/> class.
+    /// Gets the register file of the processor.
     /// </summary>
-    public Processor(RAM memory)
-    {
-        _regFile = new RegisterFile();
-        _memory = memory;
-    }
+    public RegisterFile RegisterFile { get; }
 }

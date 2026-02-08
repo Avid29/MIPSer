@@ -25,27 +25,29 @@ public partial class Processor
     /// Executes an instruction.
     /// </summary>
     /// <param name="instruction">The instruction to execute.</param>
-    public void Execute(Instruction instruction)
+    public Execution Execute(Instruction instruction)
     {
-        // Create exeuction
+        // Create the exeuction
         var execution = CreateExecution(instruction);
-        Apply(execution);
-    }
 
-    private void Apply(Execution execution)
-    {
+        // Select the register file to write to, if any.
         var regFile = execution.RegisterSet switch
         {
             RegisterSet.Numbered => null,
-            RegisterSet.GeneralPurpose => _regFile,
+            RegisterSet.GeneralPurpose => RegisterFile,
             _ => ThrowHelper.ThrowNotSupportedException<RegisterFile>(),
         };
 
+        // Write to the register file if needed, some instructions will not write to a register
         if (regFile is not null)
         {
             regFile[execution.Destination] = execution.Output;
         }
 
+        // Increment the program counter by default, some instructions will override this
+        var programCounter = ProgramCounter + 4;
+
+        // Apply side effects
         switch (execution.SideEffects)
         {
             case SecondaryWritebacks.Low:
@@ -59,24 +61,23 @@ public partial class Processor
                 High = execution.High;
                 break;
             case SecondaryWritebacks.ProgramCounter:
-                ProgramCounter = execution.ProgramCounter;
+                programCounter = execution.ProgramCounter;
                 break;
             case SecondaryWritebacks.Memory:
                 _memory[execution.MemAddress] = execution.Output;
                 break;
         }
 
-        // Increment program counter if not handled by execution
-        if (!execution.PCHandled)
-        {
-            ProgramCounter += 4;
-        }
+        // Apply the program counter update
+        ProgramCounter = programCounter;
+
+        return execution;
     }
 
     private Execution CreateExecution(Instruction instruction)
     {
-        var rs = _regFile[instruction.RS];
-        var rt = _regFile[instruction.RT];
+        var rs = RegisterFile[instruction.RS];
+        var rt = RegisterFile[instruction.RT];
         var shift = instruction.ShiftAmount;
 
         return instruction.OpCode switch
@@ -134,7 +135,7 @@ public partial class Processor
                     Low = rs,
                 },
 
-                FunctionCode.Multiply => MultR(instruction, (rs, rt) => (ulong)((long)rs * rt)),
+                FunctionCode.Multiply => MultR(instruction, (rs, rt) => (ulong)((long)(int)rs * (int)rt)),
                 FunctionCode.MultiplyUnsigned => MultR(instruction, (rs, rt) => (ulong)rs * rt),
 
                 FunctionCode.Divide => throw new NotImplementedException(),
@@ -215,8 +216,8 @@ public partial class Processor
 
     private Execution BasicR(Instruction instruction, BasicRDelegate func)
     {
-        var rs = _regFile[instruction.RS];
-        var rt = _regFile[instruction.RT];
+        var rs = RegisterFile[instruction.RS];
+        var rt = RegisterFile[instruction.RT];
         var shift = instruction.ShiftAmount;
 
         var dest = instruction.RD;
@@ -231,12 +232,12 @@ public partial class Processor
 
     private Execution ShiftR(Instruction instruction, ShiftRDelegate func)
     {
-        var rs = _regFile[instruction.RS];
-        var rt = _regFile[instruction.RT];
+        var rs = RegisterFile[instruction.RS];
+        var rt = RegisterFile[instruction.RT];
         var shift = instruction.ShiftAmount;
 
         var dest = instruction.RD;
-        uint value = func(rs, shift);
+        uint value = func(rt, shift);
 
         return new Execution
         {
@@ -247,8 +248,8 @@ public partial class Processor
 
     private Execution MultR(Instruction instruction, MultRDelegate func)
     {
-        var rs = _regFile[instruction.RS];
-        var rt = _regFile[instruction.RT];
+        var rs = RegisterFile[instruction.RS];
+        var rt = RegisterFile[instruction.RT];
         
         var dest = instruction.RD;
         ulong value = func(rs, rt);
@@ -261,7 +262,7 @@ public partial class Processor
 
     private Execution JumpR(Instruction instruction, GPRegister link = GPRegister.Zero)
     {
-        var rs = _regFile[instruction.RS];
+        var rs = RegisterFile[instruction.RS];
 
         return new Execution
         {
@@ -273,7 +274,7 @@ public partial class Processor
 
     private Execution BasicI(Instruction instruction, BasicIDelegate func)
     {
-        var rs = _regFile[instruction.RS];
+        var rs = RegisterFile[instruction.RS];
         var imm = instruction.ImmediateValue;
 
         var dest = instruction.RT;
@@ -288,8 +289,8 @@ public partial class Processor
 
     private Execution Branch(Instruction instruction, BranchDelegate func)
     {
-        var rs = _regFile[instruction.RS];
-        var rt = _regFile[instruction.RT];
+        var rs = RegisterFile[instruction.RS];
+        var rt = RegisterFile[instruction.RT];
         var imm = instruction.Offset;
 
         if (func(rs, rt))

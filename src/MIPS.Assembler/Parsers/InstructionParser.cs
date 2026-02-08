@@ -22,7 +22,6 @@ using MIPS.Models.Modules.Tables.Enums;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Xml;
 
 namespace MIPS.Assembler.Parsers;
 
