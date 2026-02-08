@@ -13,32 +13,28 @@ namespace MIPS.Interpreter.Tests;
 [TestClass]
 public class InstructionTests
 {
-    public static IEnumerable<object[]> SimpleInstructionTestsList { get; } =
-    [
-        Flatten("sll $t1, $t0, 1", (GPRegister.Temporary1, 20), (GPRegister.Temporary0, 10)),
-        Flatten("add $t2, $t0, $t1", (GPRegister.Temporary2, 30), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 10)),
-        Flatten("sub $t2, $t0, $t1", (GPRegister.Temporary2, 10), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20)),
-         
-        Flatten("add $t2, $t0, $t1", (GPRegister.Temporary2, 20), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, unchecked((uint)-10))),
-        Flatten("sub $t2, $t0, $t1", (GPRegister.Temporary2, 30), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, unchecked((uint)-10))),
-    ];
+    public sealed record SimpleInstructionTestCase(
+        string Input,
+        (GPRegister Regiter, uint Value) Expected,
+        params (GPRegister Register, uint Value)[] RegisterInitialization);
 
-    private static object[] Flatten(string input, (GPRegister, uint) check, params (GPRegister, uint)[] regInits)
+    public static IEnumerable<object[]> SimpleInstructionTestsList
     {
-        var array = new object[2 + regInits.Length];
+        get
+        {
+            yield return [new SimpleInstructionTestCase("sll $t1, $t0, 1", (GPRegister.Temporary1, 20), (GPRegister.Temporary0, 10))];
+            yield return [new SimpleInstructionTestCase("add $t2, $t0, $t1", (GPRegister.Temporary2, 30), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 10))];
+            yield return [new SimpleInstructionTestCase("sub $t2, $t0, $t1", (GPRegister.Temporary2, 10), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
 
-        array[0] = input;
-        array[1] = check;
-        for (int i = 0; i < regInits.Length; i++)
-            array[2 + i] = regInits[i];
-
-        return array;
+            yield return [new SimpleInstructionTestCase("add $t2, $t0, $t1", (GPRegister.Temporary2, 20), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, unchecked((uint)-10)))];
+            yield return [new SimpleInstructionTestCase("sub $t2, $t0, $t1", (GPRegister.Temporary2, 30), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, unchecked((uint)-10)))];
+        }
     }
 
     [DataTestMethod]
     [DynamicData(nameof(SimpleInstructionTestsList))]
-    public void SimpleInstructionTests(string input, (GPRegister, uint) check, params (GPRegister, uint)[] regInits)
-        => RunTest(input, check, regInits);
+    public void SimpleInstructionTests(SimpleInstructionTestCase @case)
+        => RunTest(@case.Input, @case.Expected, @case.RegisterInitialization);
 
     private static void RunTest(string line, (GPRegister, uint) check, params (GPRegister, uint)[] regInits)
     {
