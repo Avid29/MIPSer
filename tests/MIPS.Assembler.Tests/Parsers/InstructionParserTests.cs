@@ -20,6 +20,7 @@ using MIPS.Services;
 using MIPS.Tests.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace MIPS.Assembler.Tests.Parsers;
@@ -27,75 +28,78 @@ namespace MIPS.Assembler.Tests.Parsers;
 [TestClass]
 public class InstructionParserTests
 {
-    public static IEnumerable<object[]> RawInstructionSuccessTestsList { get; } =
-    [
-        Flatten("nop", Instruction.NOP),
-        Flatten("add $t0, $s0, $s1", Instruction.Create(FunctionCode.Add, GPRegister.Saved0, GPRegister.Saved1, GPRegister.Temporary0)),
-        Flatten("addi $t0, $s0, 100", Instruction.Create(OperationCode.AddImmediate, GPRegister.Saved0, GPRegister.Temporary0, (short)100)),
-        Flatten("sll $t0, $s0, 3", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 3)),
-        Flatten("lw $t0, 100($s0)", Instruction.Create(OperationCode.LoadWord, GPRegister.Saved0, GPRegister.Temporary0, (short)100)),
-        Flatten("sb $t0, -100($s0)", Instruction.Create(OperationCode.StoreByte, GPRegister.Saved0, GPRegister.Temporary0, (short)-100)),
-        Flatten("j 1000", Instruction.Create(OperationCode.Jump, 1000)),
-        Flatten("j 10*10", Instruction.Create(OperationCode.Jump, 10 * 10)),
-        Flatten("di", CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Zero, 12)),
-        Flatten("di $t1", CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Temporary1, 12)),
-        Flatten("ei", CoProc0Instruction.Create(MFMC0FuncCode.EnableInterupts, GPRegister.Zero, 12)),
-        Flatten("cvt.S.D $f4, $f8", FloatInstruction.Create(FloatFuncCode.ConvertToSingle, FloatFormat.Double, FloatRegister.F8, FloatRegister.F4)),
-    ];
-
-    public static IEnumerable<object[]> RawInstructionFailureTestsList { get; } =
-    [
-        Flatten("xkcd $t0, $s0, $s1", LogCode.InvalidInstructionName),
-        Flatten("add $t0, $s0", LogCode.InvalidInstructionArgCount),
-        Flatten("add $t0, $s0, $s1, $s1", LogCode.InvalidInstructionArgCount),
-    ];
-
-    public static IEnumerable<object[]> RawInstructionWarningTestsList { get; } =
-    [
-        Flatten("sll $t0, $s0, 33", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 1), LogCode.IntegerTruncated),
-        Flatten("sll $t0, $s0, -1", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 31), LogCode.IntegerTruncated),
-        Flatten("j 0x1", Instruction.Create(OperationCode.Jump, 0x1), LogCode.IntegerTruncated),
-    ];
-
-    public static object[] Flatten(string input, Instruction instruction)
+    public sealed record InstructionParsingTestCase(
+        string Input,
+        Instruction? Expected,
+        LogCode? Code)
     {
-        var array = new object[2];
-        array[0] = input;
-        array[1] = (uint)instruction;
-        return array;
+        public InstructionParsingTestCase(string input, Instruction expected) : this(input, expected, null)
+        {
+        }
+
+        public InstructionParsingTestCase(string input, LogCode code) : this(input, null, code)
+        {
+        }
+
+        public override string ToString() => Input;
     }
 
-    public static object[] Flatten(string input, LogCode logCode)
+    public static IEnumerable<object[]> RawInstructionSuccessTestsList
     {
-        var array = new object[2];
-        array[0] = input;
-        array[1] = logCode;
-        return array;
+        get
+        {
+            yield return [new InstructionParsingTestCase("nop", Instruction.NOP)];
+            yield return [new InstructionParsingTestCase("add $t0, $s0, $s1", Instruction.Create(FunctionCode.Add, GPRegister.Saved0, GPRegister.Saved1, GPRegister.Temporary0))];
+            yield return [new InstructionParsingTestCase("addi $t0, $s0, 100", Instruction.Create(OperationCode.AddImmediate, GPRegister.Saved0, GPRegister.Temporary0, (short)100))];
+            yield return [new InstructionParsingTestCase("sll $t0, $s0, 3", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 3))];
+            yield return [new InstructionParsingTestCase("lw $t0, 100($s0)", Instruction.Create(OperationCode.LoadWord, GPRegister.Saved0, GPRegister.Temporary0, (short)100))];
+            yield return [new InstructionParsingTestCase("sb $t0, -100($s0)", Instruction.Create(OperationCode.StoreByte, GPRegister.Saved0, GPRegister.Temporary0, (short)-100))];
+            yield return [new InstructionParsingTestCase("j 1000", Instruction.Create(OperationCode.Jump, 1000))];
+            yield return [new InstructionParsingTestCase("j 10*10", Instruction.Create(OperationCode.Jump, 10 * 10))];
+            yield return [new InstructionParsingTestCase("di", CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Zero, 12))];
+            yield return [new InstructionParsingTestCase("di $t1", CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Temporary1, 12))];
+            yield return [new InstructionParsingTestCase("ei", CoProc0Instruction.Create(MFMC0FuncCode.EnableInterupts, GPRegister.Zero, 12))];
+            yield return [new InstructionParsingTestCase("cvt.S.D $f4, $f8", FloatInstruction.Create(FloatFuncCode.ConvertToSingle, FloatFormat.Double, FloatRegister.F8, FloatRegister.F4))];
+        }
     }
 
-    public static object[] Flatten(string input, Instruction instruction, LogCode logCode)
+    public static string InstructionParsingTestCaseDisplayName(MethodInfo _, object[] data)
+        => $"{(InstructionParsingTestCase)data[0]}";
+
+    public static IEnumerable<object[]> RawInstructionFailureTestsList
     {
-        var array = new object[3];
-        array[0] = input;
-        array[1] = (uint)instruction;
-        array[2] = logCode;
-        return array;
+        get
+        {
+            yield return [new InstructionParsingTestCase("xkcd $t0, $s0, $s1", LogCode.InvalidInstructionName)];
+            yield return [new InstructionParsingTestCase("add $t0, $s0", LogCode.InvalidInstructionArgCount)];
+            yield return [new InstructionParsingTestCase("add $t0, $s0, $s1, $s1", LogCode.InvalidInstructionArgCount)];
+        }
+    }
+
+    public static IEnumerable<object[]> RawInstructionWarningTestsList
+    {
+        get
+        {
+            yield return [new InstructionParsingTestCase("sll $t0, $s0, 33", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 1), LogCode.IntegerTruncated)];
+            yield return [new InstructionParsingTestCase("sll $t0, $s0, -1", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 31), LogCode.IntegerTruncated)];
+            yield return [new InstructionParsingTestCase("j 0x1", Instruction.Create(OperationCode.Jump, 0x1), LogCode.IntegerTruncated)];
+        }
     }
 
     [DataTestMethod]
-    [DynamicData(nameof(RawInstructionSuccessTestsList))]
-    public void RawInstructionSuccessTests(string input, uint expected)
-        => RunTest(input, new ParsedInstruction((Instruction)expected));
+    [DynamicData(nameof(RawInstructionSuccessTestsList), DynamicDataDisplayName = nameof(InstructionParsingTestCaseDisplayName))]
+    public void RawInstructionSuccessTests(InstructionParsingTestCase @case)
+        => RunTest(@case.Input, new ParsedInstruction(@case.Expected!.Value));
 
     [DataTestMethod]
-    [DynamicData(nameof(RawInstructionFailureTestsList))]
-    public void RawInstructionFailureTests(string input, LogCode logCode)
-        => RunTest(input, logCode: logCode);
+    [DynamicData(nameof(RawInstructionFailureTestsList), DynamicDataDisplayName = nameof(InstructionParsingTestCaseDisplayName))]
+    public void RawInstructionFailureTests(InstructionParsingTestCase @case)
+        => RunTest(@case.Input, logCode: @case.Code);
 
     [DataTestMethod]
-    [DynamicData(nameof(RawInstructionWarningTestsList))]
-    public void RawInstructionWarningTests(string input, uint expected, LogCode logCode)
-        => RunTest(input, new ParsedInstruction((Instruction)expected), logCode);
+    [DynamicData(nameof(RawInstructionWarningTestsList), DynamicDataDisplayName = nameof(InstructionParsingTestCaseDisplayName))]
+    public void RawInstructionWarningTests(InstructionParsingTestCase @case)
+        => RunTest(@case.Input, new ParsedInstruction(@case.Expected!.Value), @case.Code);
 
     private const string LoadImmediate = "li $t0, 0x10001";
     
