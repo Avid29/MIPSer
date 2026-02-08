@@ -7,6 +7,7 @@ using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace MIPS.Interpreter.Tests;
 
@@ -22,7 +23,12 @@ public class InstructionTests
     {
         get
         {
-            // Behaviorally unsigned arithmetic tests
+            // Unsigned
+            yield return [new SimpleInstructionTestCase("addu $t2, $t0, $t1", (GPRegister.Temporary2, 20 + 10), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 10))];
+            yield return [new SimpleInstructionTestCase("addiu $t1, $t0, 10", (GPRegister.Temporary1, 20 + 10), (GPRegister.Temporary0, 20))];
+            yield return [new SimpleInstructionTestCase("subu $t2, $t0, $t1", (GPRegister.Temporary2, 30 - 20), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+
+            // Signed (without signs)
             yield return [new SimpleInstructionTestCase("add $t2, $t0, $t1", (GPRegister.Temporary2, 20 + 10), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 10))];
             yield return [new SimpleInstructionTestCase("addi $t1, $t0, 10", (GPRegister.Temporary1, 20 + 10), (GPRegister.Temporary0, 20))];
             yield return [new SimpleInstructionTestCase("sub $t2, $t0, $t1", (GPRegister.Temporary2, 30 - 20), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
@@ -30,21 +36,12 @@ public class InstructionTests
             yield return [new SimpleInstructionTestCase("sra $t1, $t0, 4", (GPRegister.Temporary1, 101 >> 4), (GPRegister.Temporary0, 101))];
             yield return [new SimpleInstructionTestCase("srav $t2, $t0, $t1", (GPRegister.Temporary2, 101 >> 4), (GPRegister.Temporary0, 101), (GPRegister.Temporary1, 4))];
 
-            // Behaviorally signed arithmetic tests
-            yield return [new SimpleInstructionTestCase("add $t2, $t0, $t1", (GPRegister.Temporary2, 30 + (-10)), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, unchecked((uint)-10)))];
-            yield return [new SimpleInstructionTestCase("sub $t2, $t0, $t1", (GPRegister.Temporary2, 20 - (-10)), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, unchecked((uint)-10)))];
-
-            // TODO: Test/Handle overflow behavior
-        }
-    }
-
-    public static IEnumerable<object[]> UnsignedArithmeticInstructionTestsList
-    {
-        get
-        {
-            yield return [new SimpleInstructionTestCase("addu $t2, $t0, $t1", (GPRegister.Temporary2, 20 + 10), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 10))];
-            yield return [new SimpleInstructionTestCase("addiu $t1, $t0, 10", (GPRegister.Temporary1, 20 + 10), (GPRegister.Temporary0, 20))];
-            yield return [new SimpleInstructionTestCase("subu $t2, $t0, $t1", (GPRegister.Temporary2, 30 - 20), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            // Signed (with signs)
+            unchecked
+            {
+                yield return [new SimpleInstructionTestCase("add $t2, $t0, $t1", (GPRegister.Temporary2, 30 + (-10)), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, (uint)-10))];
+                yield return [new SimpleInstructionTestCase("sub $t2, $t0, $t1", (GPRegister.Temporary2, 20 - (-10)), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, (uint)-10))];
+            }
 
             // TODO: Test/Handle overflow behavior
         }
@@ -74,14 +71,26 @@ public class InstructionTests
     {
         get
         {
-            // Data (kept here for convience, since it doesn't fit well in the other categories)
-            yield return [new SimpleInstructionTestCase("lui $t0, 0x1234", (GPRegister.Temporary0, 0x12340000))];
-
-            // Compare
-            yield return [new SimpleInstructionTestCase("slt $t2, $t0, $t1", (GPRegister.Temporary2, 1), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 30))];
-            yield return [new SimpleInstructionTestCase("slt $t2, $t0, $t1", (GPRegister.Temporary2, 0), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            // Unsigned
             yield return [new SimpleInstructionTestCase("sltu $t2, $t0, $t1", (GPRegister.Temporary2, 1), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 30))];
             yield return [new SimpleInstructionTestCase("sltu $t2, $t0, $t1", (GPRegister.Temporary2, 0), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            yield return [new SimpleInstructionTestCase("sltiu $t1, $t0, 30", (GPRegister.Temporary1, 1), (GPRegister.Temporary0, 20))];
+            yield return [new SimpleInstructionTestCase("sltiu $t1, $t0, 20", (GPRegister.Temporary1, 0), (GPRegister.Temporary0, 30))];
+
+            // Signed (without signs)
+            yield return [new SimpleInstructionTestCase("slt $t2, $t0, $t1", (GPRegister.Temporary2, 1), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 30))];
+            yield return [new SimpleInstructionTestCase("slt $t2, $t0, $t1", (GPRegister.Temporary2, 0), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            yield return [new SimpleInstructionTestCase("slti $t1, $t0, 30", (GPRegister.Temporary1, 1), (GPRegister.Temporary0, 20))];
+            yield return [new SimpleInstructionTestCase("slti $t1, $t0, 20", (GPRegister.Temporary1, 0), (GPRegister.Temporary0, 30))];
+
+            // Signed (with signs)
+            unchecked
+            {
+                yield return [new SimpleInstructionTestCase("slt $t2, $t0, $t1", (GPRegister.Temporary2, 1), (GPRegister.Temporary0, (uint)-30), (GPRegister.Temporary1, (uint)-20))];
+                yield return [new SimpleInstructionTestCase("slt $t2, $t0, $t1", (GPRegister.Temporary2, 0), (GPRegister.Temporary0, (uint)-20), (GPRegister.Temporary1, (uint)-30))];
+                yield return [new SimpleInstructionTestCase("slti $t1, $t0, -20", (GPRegister.Temporary1, 1), (GPRegister.Temporary0, (uint)-30))];
+                yield return [new SimpleInstructionTestCase("slti $t1, $t0, -30", (GPRegister.Temporary1, 0), (GPRegister.Temporary0, (uint)-20))];
+            }
         }
     }
 
@@ -93,17 +102,15 @@ public class InstructionTests
             yield return [new SimpleInstructionTestCase("lui $t0, 0x1234", (GPRegister.Temporary0, 0x12340000))];
 
             // Niche bit-manipulation
+            // TODO: ext, ins, seb, seh, wsbh, wshd
+            yield return [new SimpleInstructionTestCase("clz $t1, $t0", (GPRegister.Temporary1, (uint)BitOperations.LeadingZeroCount(0x0080_a244)), (GPRegister.Temporary0, 0x0080_a244))];
+            yield return [new SimpleInstructionTestCase("clo $t1, $t0", (GPRegister.Temporary1, (uint)BitOperations.LeadingZeroCount(~(uint)0xFF80_a244)), (GPRegister.Temporary0, 0xFF80_a244))];
         }
     }
 
     [DataTestMethod]
     [DynamicData(nameof(ArithmeticInstructionTestsList))]
     public void ArithmeticInstructionTests(SimpleInstructionTestCase @case)
-        => RunTest(@case.Input, @case.Expected, @case.RegisterInitialization);
-
-    [DataTestMethod]
-    [DynamicData(nameof(UnsignedArithmeticInstructionTestsList))]
-    public void UnsignedArithmeticInstructionTests(SimpleInstructionTestCase @case)
         => RunTest(@case.Input, @case.Expected, @case.RegisterInitialization);
 
     [DataTestMethod]

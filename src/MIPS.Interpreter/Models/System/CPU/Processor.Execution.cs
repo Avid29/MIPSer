@@ -9,6 +9,7 @@ using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System;
+using System.Numerics;
 
 namespace MIPS.Interpreter.System.CPU;
 
@@ -82,6 +83,7 @@ public partial class Processor
 
         return instruction.OpCode switch
         {
+            // Special (R-Type)
             OperationCode.Special => instruction.FuncCode switch
             {
                 // Shift
@@ -148,6 +150,15 @@ public partial class Processor
                 FunctionCode.TrapOnNotEquals => throw new NotImplementedException(),
                 _ => throw new NotImplementedException(),
             },
+
+            // Special 2 (R-Type)
+            OperationCode.Special2 => instruction.Func2Code switch
+            {
+                Func2Code.CountLeadingZeros => BasicR(instruction, (rs, _) => (uint)BitOperations.LeadingZeroCount(rs)),
+                Func2Code.CountLeadingOnes => BasicR(instruction, (rs, _) => (uint)BitOperations.LeadingZeroCount(~rs)),
+                _ => throw new NotImplementedException(),
+            },
+
             OperationCode.Jump => new Execution
             {
                 ProgramCounter = instruction.Address,
@@ -160,18 +171,26 @@ public partial class Processor
             },
 
             OperationCode.RegisterImmediate => throw new NotImplementedException(),
+            
+            // Branch
             OperationCode.BranchOnEquals => Branch(instruction, (rs, rt) => rs == rt),
             OperationCode.BranchOnNotEquals => Branch(instruction, (rs, rt) => rs != rt),
             OperationCode.BranchOnLessThanOrEqualToZero => throw new NotImplementedException(),
             OperationCode.BranchOnGreaterThanZero => throw new NotImplementedException(),
+
+            // Arithmetic
             OperationCode.AddImmediate => BasicI(instruction, (rs, imm) => (uint)((int)rs + imm)),
             OperationCode.AddImmediateUnsigned => BasicI(instruction, (rs, imm) => rs + (ushort)imm),
-            OperationCode.SetLessThanImmediate => throw new NotImplementedException(),
-            OperationCode.SetLessThanImmediateUnsigned => throw new NotImplementedException(),
 
+            // Compare
+            OperationCode.SetLessThanImmediate => BasicI(instruction, (rs, imm) => (uint)((int)rs < imm ? 1 : 0)),
+            OperationCode.SetLessThanImmediateUnsigned => BasicI(instruction, (rs, imm) => (uint)(rs < imm ? 1 : 0)),
+
+            // Logical
             OperationCode.AndImmediate => BasicI(instruction, (rs, imm) => rs & (ushort)imm),
             OperationCode.OrImmediate => BasicI(instruction, (rs, imm) => rs | (ushort)imm),
             OperationCode.ExclusiveOrImmediate => BasicI(instruction, (rs, imm) => rs ^ (ushort)imm),
+
             OperationCode.LoadUpperImmediate => BasicI(instruction, (rs, imm) => (uint)((ushort)imm << 16)),
 
             OperationCode.Coprocessor0 => throw new NotImplementedException(),
@@ -183,7 +202,6 @@ public partial class Processor
             OperationCode.BranchOnLessThanOrEqualToZeroLikely => throw new NotImplementedException(),
             OperationCode.BranchOnGreaterThanZeroLikely => throw new NotImplementedException(),
             OperationCode.Trap => throw new NotImplementedException(),
-            OperationCode.Special2 => throw new NotImplementedException(),
             OperationCode.JumpAndLinkX => throw new NotImplementedException(),
             OperationCode.SIMD => throw new NotImplementedException(),
             OperationCode.Special3 => throw new NotImplementedException(),
