@@ -100,6 +100,16 @@ namespace Mipser.ViewModels.Pages.App.Settings
         [
             new()
             {
+                DependencyName = "GitInfo",
+                Url = "https://github.com/devlooped/GitInfo",
+            },
+            new()
+            {
+                DependencyName = "LibObjectFile",
+                Url = "https://github.com/xoofx/LibObjectFile",
+            },
+            new()
+            {
                 DependencyName = "Windows Community Toolkit",
                 Url = "https://github.com/CommunityToolkit/Windows",
             },
@@ -107,11 +117,6 @@ namespace Mipser.ViewModels.Pages.App.Settings
             {
                 DependencyName = "WinUIEdit",
                 Url = "https://github.com/BreeceW/WinUIEdit",
-            },
-            new()
-            {
-                DependencyName = "GitInfo",
-                Url = "https://github.com/devlooped/GitInfo",
             },
         ];
     }
