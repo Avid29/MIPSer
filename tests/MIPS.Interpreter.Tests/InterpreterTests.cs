@@ -1,6 +1,5 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Assembler.Models.Config;
 using MIPS.Tests.Helpers;
 using ObjectFiles.Elf;
 using ObjectFiles.Elf.Config;

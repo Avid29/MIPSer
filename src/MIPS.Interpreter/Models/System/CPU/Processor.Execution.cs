@@ -99,10 +99,10 @@ public partial class Processor
                 FunctionCode.SubtractUnsigned => BasicR(instruction, (rs, rt) => rs - rt),
                 
                 // Logical
-                FunctionCode.And => BasicR(instruction, (rs, rt) => rs & rs),
-                FunctionCode.Or => BasicR(instruction, (rs, rt) => rs | rs),
-                FunctionCode.ExclusiveOr => BasicR(instruction, (rs, rt) => rs ^ rs),
-                FunctionCode.Nor => BasicR(instruction, (rs, rt) => ~(rs & rs)),
+                FunctionCode.And => BasicR(instruction, (rs, rt) => rs & rt),
+                FunctionCode.Or => BasicR(instruction, (rs, rt) => rs | rt),
+                FunctionCode.ExclusiveOr => BasicR(instruction, (rs, rt) => rs ^ rt),
+                FunctionCode.Nor => BasicR(instruction, (rs, rt) => ~(rs | rt)),
 
                 // Compare
                 FunctionCode.SetLessThan => BasicR(instruction, (rs, rt) => (uint)((int)rs < (int)rt ? 1 : 0)),
