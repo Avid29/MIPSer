@@ -1,11 +1,11 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
-using LibObjectFile.Ar;
 using LibObjectFile.Elf;
 using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
 using ObjectFiles.Elf.Extensions;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -94,11 +94,20 @@ public partial class ElfModule
         {
             Guard.IsNotNull(_symtab);
 
-            var relTable = new ElfRelocationTable(false);
-            var refTable = new ElfRelocationTable(true);
+            Dictionary<(string, bool), ElfRelocationTable> relTables = new();
 
             foreach (var @ref in Module.References)
             {
+                Guard.IsNotNull(@ref.Location.Section);
+
+                var isRela = @ref.Append is not 0;
+
+                if (!relTables.TryGetValue((@ref.Location.Section, isRela), out var table))
+                {
+                    table = new ElfRelocationTable(isRela);
+                    relTables[(@ref.Location.Section, isRela)] = table;
+                }
+
                 var offset = @ref.Location.Value;
                 var symbolIndex = _symtab.Entries.FindIndex(x => x.Name.Value == @ref.Symbol);
                 Guard.IsNotEqualTo(symbolIndex, -1);
@@ -106,25 +115,21 @@ public partial class ElfModule
                 var type = new ElfRelocationType(ElfArchEx.MIPS, (uint)@ref.Type);
                 var relItem = new ElfRelocation((ulong)@ref.Location.Value, type, (uint)symbolIndex, @ref.Append);
 
-                if (@ref.Append is 0)
-                {
-                    relTable.Entries.Add(relItem);
-                }
-                else
-                {
-                    refTable.Entries.Add(relItem);
-                }
+                table.Entries.Add(relItem);
             }
 
-            ElfFile.Add(relTable);
-            ElfFile.Add(refTable);
+            foreach (var ((section, isRela), table) in relTables)
+            {
+                table.Name = isRela ? $".rela{section}" : $".rel{section}";
+                table.Info = new ElfSectionLink(ElfFile.Sections.First(x => x.Name == section));
+                ElfFile.Add(table);
+            }
         }
     }
 
     /// <inheritdoc/>
     public static ElfModule? Create(Module module, AssemblerConfig config)
     {
-
         var context = new ElfBuildContext(module);
 
         context.CreateSections();

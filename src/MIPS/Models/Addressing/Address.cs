@@ -80,8 +80,20 @@ public struct Address
     }
 
     /// <inheritdoc/>
+    public static bool operator ==(Address left, Address right) => left.Value == right.Value && left.Section == right.Section;
+
+    /// <inheritdoc/>
+    public static bool operator !=(Address left, Address right) => left.Value != right.Value || left.Section != right.Section;
+
+    /// <inheritdoc/>
     public static Address operator +(Address address, long offset) => new(address.Value + offset, address.Section);
     
     /// <inheritdoc/>
     public static Address operator -(Address address, long offset) => new(address.Value - offset, address.Section);
+
+    /// <inheritdoc/>
+    public readonly override bool Equals(object? obj) => base.Equals(obj);
+
+    /// <inheritdoc/>
+    public readonly override int GetHashCode() => HashCode.Combine(Value, Section);
 }

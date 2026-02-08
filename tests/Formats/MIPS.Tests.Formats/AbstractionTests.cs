@@ -6,6 +6,7 @@ using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Tests.Helpers;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MIPS.Tests.Formats;
@@ -45,6 +46,14 @@ public class AbstractionTests<TModule, TConfig>
                 Assert.Fail();
 
             Assert.AreEqual(value.IsDefined, symbol.IsDefined);
+        }
+
+        foreach(var @ref in original.References)
+        {
+            var matchingRef = compare.References.FirstOrDefault(r => r.Location == @ref.Location && r.Type == @ref.Type);
+
+            Assert.IsNotNull(matchingRef);
+            Assert.AreEqual(@ref.Symbol, matchingRef.Symbol);
         }
     }
 }
