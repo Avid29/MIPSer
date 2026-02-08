@@ -18,6 +18,7 @@ using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 using MIPS.Services;
 using MIPS.Tests.Helpers;
+using Mono.Cecil.Rocks;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -44,6 +45,9 @@ public class InstructionParserTests
         public override string ToString() => Input;
     }
 
+    public static string InstructionParsingTestCaseDisplayName(MethodInfo _, object[] data)
+        => $"{(InstructionParsingTestCase)data[0]}";
+
     public static IEnumerable<object[]> RawInstructionSuccessTestsList
     {
         get
@@ -63,9 +67,6 @@ public class InstructionParserTests
         }
     }
 
-    public static string InstructionParsingTestCaseDisplayName(MethodInfo _, object[] data)
-        => $"{(InstructionParsingTestCase)data[0]}";
-
     public static IEnumerable<object[]> RawInstructionFailureTestsList
     {
         get
@@ -83,6 +84,59 @@ public class InstructionParserTests
             yield return [new InstructionParsingTestCase("sll $t0, $s0, 33", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 1), LogCode.IntegerTruncated)];
             yield return [new InstructionParsingTestCase("sll $t0, $s0, -1", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 31), LogCode.IntegerTruncated)];
             yield return [new InstructionParsingTestCase("j 0x1", Instruction.Create(OperationCode.Jump, 0x1), LogCode.IntegerTruncated)];
+        }
+    }
+
+    public static IEnumerable<object[]> GeneratedTestList
+    {
+        get
+        {
+            var table = new InstructionTable(new());
+            foreach (var instruction in table.GetInstructions())
+            {
+                if (instruction.IsPseudoInstruction)
+                    continue;
+
+                // TODO: Disassembling CoProc0 instructions
+                if (instruction.OpCode is OperationCode.Coprocessor0)
+                    continue;
+
+                // Apply format to instruction name, if applicable
+                var name = instruction.Name;
+                if (name.EndsWith(".fmt"))
+                {
+                    name = FloatFormatTable.ApplyFormat(name, ArgGenerator.RandomFormat(instruction.FloatFormats));
+                }
+
+                // Generate instruction
+                StringBuilder line = new(name);
+                line.Append(' ');
+
+                foreach (var arg in instruction.ArgumentPattern)
+                {
+                    line.Append(arg switch
+                    {
+                        Argument.RS or Argument.RT or Argument.RD => RegistersTable.GetRegisterString(ArgGenerator.RandomRegister()),
+                        Argument.FS or Argument.FT or Argument.FD => RegistersTable.GetRegisterString(ArgGenerator.RandomRegister(), RegisterSet.FloatingPoints),
+                        Argument.Immediate => $"{ArgGenerator.RandomImmediate()}",
+                        Argument.Offset => $"{ArgGenerator.RandomOffset()}",
+                        Argument.Address => $"{ArgGenerator.RandomAddress()}",
+                        Argument.AddressBase => $"{ArgGenerator.RandomImmediate()}({RegistersTable.GetRegisterString(ArgGenerator.RandomRegister())})",
+                        Argument.Shift => $"{ArgGenerator.RandomShift()}",
+                        Argument.FullImmediate => Random.Shared.Next(),
+                        _ => throw new NotImplementedException(),
+                    });
+
+                    line.Append(", ");
+                }
+
+                // Remove final ", "
+                if (instruction.ArgumentPattern.Length > 0)
+                    line.Remove(line.Length - 2, 2);
+
+                // Return test case
+                yield return [$"{line}"];
+            }
         }
     }
 
@@ -111,71 +165,28 @@ public class InstructionParserTests
     }
 
     [TestMethod("Generated Tests")]
-    public void GeneratedTests()
+    [DynamicData(nameof(GeneratedTestList))]
+    public void GeneratedTests(string input)
     {
-        #if DEBUG
+#if DEBUG
         ServiceCollection.DisassemblerService = new DisassemblerService();
-        #endif
+#endif
 
         var table = new InstructionTable(new());
         var parser = new InstructionParser(table, null);
 
-        foreach(var instruction in table.GetInstructions())
-        {
-            if (instruction.IsPseudoInstruction)
-                    continue;
+        var tokenized = Tokenizer.TokenizeLine(input, nameof(RunTest));
+        var succeeded = parser.TryParse(tokenized, out var actual);
 
-            // TODO: Disassembling CoProc0 instructions
-            if (instruction.OpCode is OperationCode.Coprocessor0)
-                    continue;
+        // Validate execution
+        Assert.IsTrue(succeeded);
 
-            // Apply format to instruction name, if applicable
-            var name = instruction.Name;
-            if (name.EndsWith(".fmt"))
-            {
-                name = FloatFormatTable.ApplyFormat(name, ArgGenerator.RandomFormat(instruction.FloatFormats));
-            }
-
-            // Generate instruction
-            StringBuilder line = new(name);
-            line.Append(' ');
-
-            foreach(var arg in instruction.ArgumentPattern)
-            {
-                line.Append(arg switch
-                {
-                    Argument.RS or Argument.RT or Argument.RD => RegistersTable.GetRegisterString(ArgGenerator.RandomRegister()),
-                    Argument.FS or Argument.FT or Argument.FD => RegistersTable.GetRegisterString(ArgGenerator.RandomRegister(), RegisterSet.FloatingPoints),
-                    Argument.Immediate => $"{ArgGenerator.RandomImmediate()}",
-                    Argument.Offset => $"{ArgGenerator.RandomOffset()}",
-                    Argument.Address => $"{ArgGenerator.RandomAddress()}",
-                    Argument.AddressBase => $"{ArgGenerator.RandomImmediate()}({RegistersTable.GetRegisterString(ArgGenerator.RandomRegister())})",
-                    Argument.Shift => $"{ArgGenerator.RandomShift()}",
-                    Argument.FullImmediate => Random.Shared.Next(),
-                    _ => throw new NotImplementedException(),
-                });
-
-                line.Append(", ");
-            }
-
-            // Remove final ", "
-            if (instruction.ArgumentPattern.Length > 0)
-                line.Remove(line.Length-2,2);
-            
-            // Parse instruction
-            var input = line.ToString();
-            var tokenized = Tokenizer.TokenizeLine(input, nameof(RunTest));
-            var succeeded = parser.TryParse(tokenized, out var actual);
-
-            // Validate execution
-            Assert.IsTrue(succeeded, input);
-            var result = actual?.Realize()[0];
-            Assert.IsTrue(result.HasValue, input);
+        var result = actual?.Realize()[0];
+        Assert.IsTrue(result.HasValue);
 
 #if DEBUG
-            Assert.IsTrue(input == result.Value.Disassembled, $"\"{input}\" != \"{result.Value.Disassembled}\"");
+        Assert.AreEqual(input, result.Value.Disassembled);
 #endif
-        }
     }
 
     private static void RunTest(string input, ParsedInstruction? expected = null, LogCode? logCode = null, string? expectedSymbol = null)

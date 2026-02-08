@@ -20,36 +20,31 @@ namespace MIPS.Assembler.Tests.Parsers;
 [TestClass]
 public class DirectiveParserTests
 {
-    private const string Global = ".globl main";
+    public sealed record DirectiveDataTestCase(
+        string Input,
+        params byte[] Expected);
 
-    public static IEnumerable<object[]> DataTests =>
-    [
-        Flatten(".byte 10", 10),
-        Flatten(".word 10", 0, 0, 0, 10),
-        Flatten(".byte 10, 10", 10, 10),
-        Flatten(".ascii \"Test String\"", Encoding.ASCII.GetBytes("Test String")),
-        Flatten(".asciiz \"Test String\"", Encoding.ASCII.GetBytes("Test String\0")),
-    ];
-
-    private static object[] Flatten(string input, params byte[] bytes)
+    public static IEnumerable<object[]> DataTestsList
     {
-        var arr = new object[bytes.Length + 1];
-        arr[0] = input;
-
-        for (int i = 0; i < bytes.Length; i++)
-            arr[i + 1] = bytes[i];
-
-        return arr;
+        get
+        {
+            yield return [new DirectiveDataTestCase(".byte 10", 10)];
+            yield return [new DirectiveDataTestCase(".word 10", 0, 0, 0, 10)];
+            yield return [new DirectiveDataTestCase(".byte 10, 10", 10, 10)];
+            yield return [new DirectiveDataTestCase(".ascii \"Test String\"", Encoding.ASCII.GetBytes("Test String"))];
+            yield return [new DirectiveDataTestCase(".asciiz \"Test String\"", Encoding.ASCII.GetBytes("Test String\0"))];
+        }
     }
 
+    private const string Global = ".globl main";
 
     [TestMethod(Global)]
     public void GlobalTest() => RunGlobalTest(Global, "main");
 
     [DataTestMethod]
-    [DynamicData(nameof(DataTests))]
-    public void DirectiveDataTest(string input, params byte[] expected) =>
-        RunDataTest(input, expected);
+    [DynamicData(nameof(DataTestsList))]
+    public void DirectiveDataTest(DirectiveDataTestCase @case) =>
+        RunDataTest(@case.Input, @case.Expected);
 
     private static Directive ParseDirective(string input)
     {
@@ -60,7 +55,7 @@ public class DirectiveParserTests
         if (line.Directive is null)
             Assert.Fail();
 
-        if(!parser.TryParseDirective(line, out var directive))
+        if (!parser.TryParseDirective(line, out var directive))
             Assert.Fail();
 
         if (directive is null)

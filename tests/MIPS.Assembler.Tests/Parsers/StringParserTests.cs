@@ -42,6 +42,7 @@ public class StringParserTests
             Assert.IsTrue(expectNull);
             return;
         }
+
         // Assert the result matches the expected
         Assert.AreEqual(expected, actual);
     }
