@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Interpreter.Models.System.CPU.Registers;
+using MIPS.Interpreter.Models.System.Execution.Enum;
 using MIPS.Models.Instructions.Enums.Registers;
 
 namespace MIPS.Interpreter.Models.System.CPU.CoProcessors;
@@ -24,12 +25,23 @@ public class CoProcessor0
     }
 
     /// <summary>
+    /// Gets the processor's current privilege mode.
+    /// </summary>
+    /// <remarks>
+    /// This is not neccesarily the same as the <see cref="StatusRegister.PrivilegeMode"/>.
+    /// If the processor is in <see cref="StatusRegister.ErrorLevel"/> or <see cref="StatusRegister.ExceptionLevel"/>, the privilege mode is always kernel, regardless of the value of <see cref="StatusRegister.PrivilegeMode"/>.
+    /// </remarks>
+    public PrivilegeMode PrivilegeMode
+        => StatusRegister.ErrorLevel || StatusRegister.ExceptionLevel
+        ? PrivilegeMode.Kernel
+        : StatusRegister.PrivilegeMode;
+
+    /// <summary>
     /// Gets the current exception vector.
     /// </summary>
-    public uint ExceptionVector =>
-        StatusRegister.BootStrapping ?
-        BOOT_STRAPPING_EXCEPTION_VECTOR :
-        NORMAL_EXCEPTION_VECTOR;
+    public uint ExceptionVector => StatusRegister.BootStrapping
+        ? BOOT_STRAPPING_EXCEPTION_VECTOR
+        : NORMAL_EXCEPTION_VECTOR;
 
     /// <summary>
     /// Gets or sets the status register.

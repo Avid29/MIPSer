@@ -120,7 +120,7 @@ public partial class Processor
             OperationCode.RegisterImmediate => throw new NotImplementedException(),
 
             // Coprocessor instructions
-            OperationCode.Coprocessor0 => throw new NotImplementedException(),
+            OperationCode.Coprocessor0 => CreateExecutionCoProc0(instruction),
             OperationCode.Coprocessor1 => throw new NotImplementedException(),
             OperationCode.Coprocessor2 => throw new NotImplementedException(),
             OperationCode.Coprocessor3 => throw new NotImplementedException(),

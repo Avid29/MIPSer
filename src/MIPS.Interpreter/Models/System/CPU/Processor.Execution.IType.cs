@@ -1,15 +1,11 @@
 ﻿// Avishai Dernis 2025
 
-using CommunityToolkit.Diagnostics;
-using MIPS.Interpreter.Models.System.CPU.Registers;
 using MIPS.Interpreter.Models.System.Execution;
 using MIPS.Interpreter.Models.System.Execution.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
-using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System;
-using System.Numerics;
 
 namespace MIPS.Interpreter.System.CPU;
 

@@ -1,6 +1,5 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Interpreter.Models.System.CPU.CoProcessors;
 using MIPS.Interpreter.Models.System.Memory;
 using MIPS.Interpreter.System.CPU;
 

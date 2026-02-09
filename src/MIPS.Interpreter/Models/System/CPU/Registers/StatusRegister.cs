@@ -67,6 +67,9 @@ public struct StatusRegister
     /// <summary>
     /// Gets or sets the processor privilege mode.
     /// </summary>
+    /// <remarks>
+    /// The effective status is <see cref="PrivilegeMode.Kernel"/> regardless of the <see cref="PrivilegeMode"/> when <see cref="ExceptionLevel"/> or <see cref="ErrorLevel"/> is <see langword="true"/>.
+    /// </remarks>
     public PrivilegeMode PrivilegeMode
     {
         readonly get => (PrivilegeMode)UintMasking.GetShiftMask(_status, KSU_SIZE, KSU_OFFSET);
