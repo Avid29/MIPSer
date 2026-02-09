@@ -98,12 +98,14 @@ public partial class Processor
                     Low = rs,
                 },
 
-                FunctionCode.TrapOnGreaterOrEqual => throw new NotImplementedException(),
-                FunctionCode.TrapOnGreaterOrEqualUnsigned => throw new NotImplementedException(),
-                FunctionCode.TrapOnLessThan => throw new NotImplementedException(),
-                FunctionCode.TrapOnLessThanUnsigned => throw new NotImplementedException(),
-                FunctionCode.TrapOnEquals => throw new NotImplementedException(),
-                FunctionCode.TrapOnNotEquals => throw new NotImplementedException(),
+                // Trap
+                FunctionCode.TrapOnGreaterOrEqual => TrapR(instruction, (rs, rt) => (int)rs >= (int)rt),
+                FunctionCode.TrapOnGreaterOrEqualUnsigned => TrapR(instruction, (rs, rt) => rs >= rt),
+                FunctionCode.TrapOnLessThan => TrapR(instruction, (rs, rt) => (int)rs < (int)rt),
+                FunctionCode.TrapOnLessThanUnsigned => TrapR(instruction, (rs, rt) => rs < rt),
+                FunctionCode.TrapOnEquals => TrapR(instruction, (rs, rt) => rs == rt),
+                FunctionCode.TrapOnNotEquals => TrapR(instruction, (rs, rt) => rs != rt),
+
                 _ => throw new NotImplementedException(),
             },
 
@@ -165,7 +167,6 @@ public partial class Processor
         {
             return new Execution
             {
-                Destination = null,
                 Trap = TrapKind.ArithmeticOverflow,
             };
         }
@@ -222,6 +223,22 @@ public partial class Processor
             Low = div,
             High = rem,
         };
+    }
+
+    private Execution TrapR(Instruction instruction, BranchDelegate func)
+    {
+        var rs = _regFile[instruction.RS];
+        var rt = _regFile[instruction.RT];
+
+        if (func(rs, rt))
+        {
+            return new Execution
+            {
+                Trap = TrapKind.Trap,
+            };
+        }
+
+        return default;
     }
 
     private Execution JumpR(Instruction instruction, GPRegister? link = null)

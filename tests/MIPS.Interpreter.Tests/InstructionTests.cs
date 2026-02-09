@@ -198,6 +198,45 @@ public class InstructionTests
         }
     }
 
+    public static IEnumerable<object[]> TrapInstructionTestsList
+    {
+        get
+        {
+            // Equality
+            yield return [new SimpleInstructionTestCase("teq $t0, $t1", TrapKind.None, (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 30))];
+            yield return [new SimpleInstructionTestCase("teq $t0, $t1", TrapKind.Trap, (GPRegister.Temporary0, 25), (GPRegister.Temporary1, 25))];
+            yield return [new SimpleInstructionTestCase("tne $t0, $t1", TrapKind.None, (GPRegister.Temporary0, 25), (GPRegister.Temporary1, 25))];
+            yield return [new SimpleInstructionTestCase("tne $t0, $t1", TrapKind.Trap, (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+
+            // Unsigned
+            yield return [new SimpleInstructionTestCase("tltu $t0, $t1", TrapKind.None, (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            yield return [new SimpleInstructionTestCase("tltu $t0, $t1", TrapKind.Trap, (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 30))];
+            yield return [new SimpleInstructionTestCase("tltu $t0, $t0", TrapKind.None, (GPRegister.Temporary0, 20))];
+            yield return [new SimpleInstructionTestCase("tgeu $t0, $t1", TrapKind.None, (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 30))];
+            yield return [new SimpleInstructionTestCase("tgeu $t0, $t1", TrapKind.Trap, (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            yield return [new SimpleInstructionTestCase("tgeu $t0, $t0", TrapKind.Trap, (GPRegister.Temporary0, 30))];
+
+            // Signed (without signs)
+            yield return [new SimpleInstructionTestCase("tlt $t0, $t1", TrapKind.None, (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            yield return [new SimpleInstructionTestCase("tlt $t0, $t1", TrapKind.Trap, (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 30))];
+            yield return [new SimpleInstructionTestCase("tlt $t0, $t0", TrapKind.None, (GPRegister.Temporary0, 20))];
+            yield return [new SimpleInstructionTestCase("tge $t0, $t1", TrapKind.None, (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 30))];
+            yield return [new SimpleInstructionTestCase("tge $t0, $t1", TrapKind.Trap, (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            yield return [new SimpleInstructionTestCase("tge $t0, $t0", TrapKind.Trap, (GPRegister.Temporary0, 30))];
+
+            // Signed (with signs)
+            unchecked
+            {
+                yield return [new SimpleInstructionTestCase("tlt $t0, $t1", TrapKind.None, (GPRegister.Temporary0, (uint)-20), (GPRegister.Temporary1, (uint)-30))];
+                yield return [new SimpleInstructionTestCase("tlt $t0, $t1", TrapKind.Trap, (GPRegister.Temporary0, (uint)-30), (GPRegister.Temporary1, (uint)-20))];
+                yield return [new SimpleInstructionTestCase("tlt $t0, $t0", TrapKind.None, (GPRegister.Temporary0, (uint)-30))];
+                yield return [new SimpleInstructionTestCase("tge $t0, $t1", TrapKind.None, (GPRegister.Temporary0, (uint)-30), (GPRegister.Temporary1, (uint)-20))];
+                yield return [new SimpleInstructionTestCase("tge $t0, $t1", TrapKind.Trap, (GPRegister.Temporary0, (uint)-20), (GPRegister.Temporary1, (uint)-30))];
+                yield return [new SimpleInstructionTestCase("tge $t0, $t0", TrapKind.Trap, (GPRegister.Temporary0, (uint)-20))];
+            }
+        }
+    }
+
     public static IEnumerable<object[]> UncategorizedRegisterOnlyInstructionTestsList
     {
         get
@@ -232,6 +271,10 @@ public class InstructionTests
     [DataTestMethod]
     [DynamicData(nameof(CompareInstructionTestsList))]
     public void CompareInstructionTests(SimpleInstructionTestCase @case) => RunTest(@case);
+
+    [DataTestMethod]
+    [DynamicData(nameof(TrapInstructionTestsList))]
+    public void TrapInstructionTests(SimpleInstructionTestCase @case) => RunTest(@case);
 
     [DataTestMethod]
     [DynamicData(nameof(UncategorizedRegisterOnlyInstructionTestsList))]

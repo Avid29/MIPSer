@@ -8,7 +8,7 @@ namespace MIPS.Interpreter.Models.System.Execution;
 /// <summary>
 /// A struct representing the results of an instruction's execution.
 /// </summary>
-public struct Execution()
+public struct Execution
 {
     private readonly uint _secondary1;
     private readonly uint _secondary2;
@@ -141,16 +141,6 @@ public struct Execution()
     /// Gets the type of trap that occurred during execution, if any.
     /// </summary>
     public TrapKind Trap { get; init; }
-
-    /// <summary>
-    /// Gets an execution that does nothing.
-    /// </summary>
-    public static Execution NoOp => new()
-    {
-        SideEffects = SecondaryWritebacks.None,
-        Destination = GPRegister.Zero,
-        RegisterSet = RegisterSet.GeneralPurpose,
-    };
 
     /// <summary>
     /// Gets a value indicating whether or not execution handled the PC changing.

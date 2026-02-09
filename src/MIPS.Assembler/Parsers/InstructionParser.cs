@@ -579,7 +579,7 @@ public struct InstructionParser
             OperationCode.RegisterImmediate => _meta.RegisterImmediateFuncCode switch
             {
                 // Register Immediate Branching
-                (>= RegImmFuncCode.BranchOnLessThanZero and <= RegImmFuncCode.BranchOnGreaterThanZeroLikely) or
+                (>= RegImmFuncCode.BranchOnLessThanZero and <= RegImmFuncCode.BranchOnGreaterThanOrEqualToZeroLikely) or
                 (>= RegImmFuncCode.BranchOnLessThanZeroAndLink and <= RegImmFuncCode.BranchOnGreaterThanOrEqualToZeroLikelyAndLink)
                     => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, _immediate),
 

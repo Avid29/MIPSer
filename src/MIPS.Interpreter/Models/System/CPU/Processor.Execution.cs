@@ -16,6 +16,7 @@ namespace MIPS.Interpreter.System.CPU;
 public partial class Processor
 {
     delegate uint MemoryDelegate(uint rs, byte mem);
+    delegate bool BranchDelegate(uint rs, uint rt);
     delegate bool OverflowCheckDelegate(int a, int b, int r);
 
     /// <summary>
@@ -116,7 +117,7 @@ public partial class Processor
             OperationCode.JumpAndLinkX => throw new NotImplementedException(),
 
             // Branch/Trap type (B-Type)
-            OperationCode.RegisterImmediate => throw new NotImplementedException(),
+            OperationCode.RegisterImmediate => CreateExecutionRegImm(instruction),
 
             // Coprocessor instructions
             OperationCode.Coprocessor0 => CreateExecutionCoProc0(instruction),

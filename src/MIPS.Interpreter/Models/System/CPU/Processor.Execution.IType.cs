@@ -12,7 +12,6 @@ namespace MIPS.Interpreter.System.CPU;
 public partial class Processor
 {
     delegate uint BasicIDelegate(uint rs, short imm);
-    delegate bool BranchDelegate(uint rs, uint rt);
 
     private Execution CreateExecutionIType(Instruction instruction)
     {
@@ -109,6 +108,6 @@ public partial class Processor
             };
         }
 
-        return Execution.NoOp;
+        return default;
     }
 }
