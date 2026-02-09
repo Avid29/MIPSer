@@ -48,8 +48,8 @@ public partial class Processor
                 FunctionCode.Multiply => MultR(instruction, (rs, rt) => (ulong)((long)(int)rs * (int)rt)),
                 FunctionCode.MultiplyUnsigned => MultR(instruction, (rs, rt) => (ulong)rs * rt),
                 FunctionCode.Divide => DivR(instruction,
-                    (rs, rt) => (uint)((int)rs / rt),
-                    (rs, rt) => (uint)((int)rs % rt)),
+                    (rs, rt) => (uint)((int)rs / (int)rt),
+                    (rs, rt) => (uint)((int)rs % (int)rt)),
                 FunctionCode.DivideUnsigned => DivR(instruction,
                     (rs, rt) => rs / rt,
                     (rs, rt) => rs % rt),
@@ -81,7 +81,7 @@ public partial class Processor
 
                 FunctionCode.MoveFromHigh => new Execution
                 {
-                    WriteBack = High,
+                    WriteBack = HighLow.High,
                     Destination = instruction.RD,
                 },
                 FunctionCode.MoveToHigh => new Execution
@@ -90,7 +90,7 @@ public partial class Processor
                 },
                 FunctionCode.MoveFromLow => new Execution
                 {
-                    WriteBack = Low,
+                    WriteBack = HighLow.Low,
                     Destination = instruction.RD,
                 },
                 FunctionCode.MoveToLow => new Execution

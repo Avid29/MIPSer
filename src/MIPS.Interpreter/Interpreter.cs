@@ -14,41 +14,35 @@ namespace MIPS.Interpreter;
 /// </summary>
 public class Interpreter
 {
-    private readonly Computer _computer;
-
     /// <summary>
     /// Intializes a new instance of the <see cref="Interpreter"/> class.
     /// </summary>
     public Interpreter()
     {
-        _computer = new Computer();
+        Computer = new Computer();
     }
 
     /// <summary>
-    /// Gets or sets the program counter location
+    /// Gets the computer system the interpreter is emulating.
     /// </summary>
-    public uint ProgramCounter
-    {
-        get => _computer.Processor.ProgramCounter;
-        set => _computer.Processor.ProgramCounter = value;
-    }
+    public Computer Computer { get; }
 
     /// <summary>
     /// Runs a single instruction
     /// </summary>
     public void StepInstruction()
     {
-        var word = _computer.Memory[ProgramCounter];
+        var word = Computer.Memory[Computer.Processor.ProgramCounter];
         var instruction = (Instruction)word;
 
-        _computer.Processor.Execute(instruction);
+        Computer.Processor.Execute(instruction);
     }
 
     /// <summary>
     /// Loads an <see cref="IExecutableModule"/> to the interpreter's memory.
     /// </summary>
     /// <param name="module">The module to load.</param>
-    public void Load(IExecutableModule module) => module.Load(_computer.Memory.AsStream());
+    public void Load(IExecutableModule module) => module.Load(Computer.Memory.AsStream());
 
     /// <summary>
     /// Inserts an instruction to execute into the interpreter's current state.
@@ -57,29 +51,13 @@ public class Interpreter
     /// <param name="execution">The execution details from the instruction.</param>
     public void InsertInstructionExecution(Instruction instruction, out Execution execution)
     {
-        var oldPC = ProgramCounter;
-        execution = _computer.Processor.Execute(instruction);
+        var oldPC = Computer.Processor.ProgramCounter;
+        execution = Computer.Processor.Execute(instruction);
 
         // If the instruction execution did not explicitly handle the program counter, restore it to the old value.
         if (!execution.PCHandled)
         {
-            ProgramCounter = oldPC;
+            Computer.Processor.ProgramCounter = oldPC;
         }
     }
-
-    /// <summary>
-    /// Gets the specified general-purpose register's value.
-    /// </summary>
-    /// <param name="register"></param>
-    /// <returns></returns>
-    public uint GetRegister(GPRegister register)
-        => _computer.Processor[register];
-
-    /// <summary>
-    /// Sets the specified general-purpose register to the given value.
-    /// </summary>
-    /// <param name="register">The general-purpose register to update.</param>
-    /// <param name="value">The value to assign to the specified register.</param>
-    public void SetRegister(GPRegister register, uint value)
-        => _computer.Processor[register] = value;
 }

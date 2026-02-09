@@ -26,10 +26,9 @@ public class InterpreterTests
 
         // Setup interpreter
         var module = result.ObjectModule;
-        var interpreter = new Interpreter
-        {
-            ProgramCounter = module.EntryAddress
-        };
+        var interpreter = new Interpreter();
+        interpreter.Computer.Processor.ProgramCounter = module.EntryAddress;
+
         interpreter.Load(module);
 
         // Step 3 instructions

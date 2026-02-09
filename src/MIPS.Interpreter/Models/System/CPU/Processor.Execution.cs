@@ -71,14 +71,13 @@ public partial class Processor
         switch (execution.SideEffects)
         {
             case SecondaryWritebacks.Low:
-                Low = execution.Low;
+                HighLow = (HighLow.High, execution.Low);
                 break;
             case SecondaryWritebacks.High:
-                High = execution.High;
+                HighLow = (execution.High, HighLow.Low);
                 break;
             case SecondaryWritebacks.HighLow:
-                Low = execution.Low;
-                High = execution.High;
+                HighLow = (execution.High, execution.Low);
                 break;
             case SecondaryWritebacks.ProgramCounter:
                 programCounter = execution.ProgramCounter;

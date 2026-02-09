@@ -30,12 +30,7 @@ public partial class Processor
     /// <summary>
     /// Gets or sets the value in the high register.
     /// </summary>
-    public uint High { get; set; }
-
-    /// <summary>
-    /// Gets or sets the value in the low register.
-    /// </summary>
-    public uint Low { get; set; }
+    public (uint High, uint Low) HighLow { get; set; }
 
     /// <summary>
     /// Gets or sets the value in the program counter register.
