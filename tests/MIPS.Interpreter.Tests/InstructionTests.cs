@@ -43,7 +43,7 @@ public class InstructionTests
             yield return [new SimpleInstructionTestCase("add $t2, $t0, $t1", (GPRegister.Temporary2, 20 + 10), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 10))];
             yield return [new SimpleInstructionTestCase("addi $t1, $t0, 10", (GPRegister.Temporary1, 20 + 10), (GPRegister.Temporary0, 20))];
             yield return [new SimpleInstructionTestCase("sub $t2, $t0, $t1", (GPRegister.Temporary2, 30 - 20), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
-            //yield return [new SimpleInstructionTestCase("mul $t2, $t0, $t1", (GPRegister.Temporary2, 30 * 20), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            yield return [new SimpleInstructionTestCase("mul $t2, $t0, $t1", (GPRegister.Temporary2, 30 * 20), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
             yield return [new SimpleInstructionTestCase("sra $t1, $t0, 4", (GPRegister.Temporary1, 101 >> 4), (GPRegister.Temporary0, 101))];
             yield return [new SimpleInstructionTestCase("srav $t2, $t0, $t1", (GPRegister.Temporary2, 101 >> 4), (GPRegister.Temporary0, 101), (GPRegister.Temporary1, 4))];
 

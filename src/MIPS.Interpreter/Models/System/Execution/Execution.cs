@@ -96,8 +96,8 @@ public struct Execution()
     /// </summary>
     public uint Low
     {
-        get => Get(_secondary1, SecondaryWritebacks.High);
-        init => Set(ref _secondary1, value, SecondaryWritebacks.High);
+        get => Get(_secondary1, SecondaryWritebacks.Low);
+        init => Set(ref _secondary1, value, SecondaryWritebacks.Low);
     }
 
     /// <summary>
@@ -190,6 +190,25 @@ public struct Execution()
 
     private void Set<T>(ref T field, T value, SecondaryWritebacks sideEffects)
     {
+        // Handle special case for high/low writebacks, since they can be written to separately or together.
+        if (sideEffects is SecondaryWritebacks.Low or SecondaryWritebacks.High)
+        {
+            // If side effects is high or low, and the current side effects is the opposite, set it to highlow.
+            // Otherwise, just set it to the new side effect.
+            if (sideEffects is SecondaryWritebacks.High && SideEffects is SecondaryWritebacks.Low
+                || sideEffects is SecondaryWritebacks.Low && SideEffects is SecondaryWritebacks.High)
+            {
+                SideEffects = SecondaryWritebacks.HighLow;
+            }
+            else if (SideEffects is not SecondaryWritebacks.HighLow)
+            {
+                SideEffects = sideEffects;
+            }
+
+            field = value;
+            return;
+        }
+
         field = value;
         SideEffects = sideEffects;
     }

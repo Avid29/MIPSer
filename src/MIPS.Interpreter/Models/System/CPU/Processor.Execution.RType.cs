@@ -45,6 +45,14 @@ public partial class Processor
                     (rs, rt) => (uint)((int)rs - (int)rt),
                     (a, b, r) => ((a ^ b) & (a ^ r)) < 0),
                 FunctionCode.SubtractUnsigned => BasicR(instruction, (rs, rt) => rs - rt),
+                FunctionCode.Multiply => MultR(instruction, (rs, rt) => (ulong)((long)(int)rs * (int)rt)),
+                FunctionCode.MultiplyUnsigned => MultR(instruction, (rs, rt) => (ulong)rs * rt),
+                FunctionCode.Divide => DivR(instruction,
+                    (rs, rt) => (uint)((int)rs / rt),
+                    (rs, rt) => (uint)((int)rs % rt)),
+                FunctionCode.DivideUnsigned => DivR(instruction,
+                    (rs, rt) => rs / rt,
+                    (rs, rt) => rs % rt),
 
                 // Logical
                 FunctionCode.And => BasicR(instruction, (rs, rt) => rs & rt),
@@ -90,11 +98,6 @@ public partial class Processor
                     Low = rs,
                 },
 
-                FunctionCode.Multiply => MultR(instruction, (rs, rt) => (ulong)((long)(int)rs * (int)rt)),
-                FunctionCode.MultiplyUnsigned => MultR(instruction, (rs, rt) => (ulong)rs * rt),
-
-                FunctionCode.Divide => throw new NotImplementedException(),
-                FunctionCode.DivideUnsigned => throw new NotImplementedException(),
                 FunctionCode.TrapOnGreaterOrEqual => throw new NotImplementedException(),
                 FunctionCode.TrapOnGreaterOrEqualUnsigned => throw new NotImplementedException(),
                 FunctionCode.TrapOnLessThan => throw new NotImplementedException(),
@@ -107,6 +110,8 @@ public partial class Processor
             // Special 2 (R-Type)
             OperationCode.Special2 => instruction.Func2Code switch
             {
+                Func2Code.MultiplyToGPR => BasicR(instruction, (rs, rt) => (uint)((long)(int)rs * (int)rt)),
+
                 Func2Code.CountLeadingZeros => BasicR(instruction, (rs, _) => (uint)BitOperations.LeadingZeroCount(rs)),
                 Func2Code.CountLeadingOnes => BasicR(instruction, (rs, _) => (uint)BitOperations.LeadingZeroCount(~rs)),
                 _ => throw new NotImplementedException(),
@@ -175,6 +180,21 @@ public partial class Processor
         return new Execution
         {
             HighLow = value,
+        };
+    }
+
+    private Execution DivR(Instruction instruction, BasicRDelegate divFunc, BasicRDelegate remFunc)
+    {
+        var rs = _regFile[instruction.RS];
+        var rt = _regFile[instruction.RT];
+
+        uint div = divFunc(rs, rt);
+        uint rem = remFunc(rs, rt);
+
+        return new Execution
+        {
+            Low = div,
+            High = rem,
         };
     }
 
