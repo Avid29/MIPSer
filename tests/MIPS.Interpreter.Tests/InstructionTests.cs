@@ -172,22 +172,28 @@ public class InstructionTests
             // Unsigned
             yield return [new SimpleInstructionTestCase("sltu $t2, $t0, $t1", (GPRegister.Temporary2, 1), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 30))];
             yield return [new SimpleInstructionTestCase("sltu $t2, $t0, $t1", (GPRegister.Temporary2, 0), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            yield return [new SimpleInstructionTestCase("sltu $t1, $t0, $t0", (GPRegister.Temporary1, 0), (GPRegister.Temporary0, 10))];
             yield return [new SimpleInstructionTestCase("sltiu $t1, $t0, 30", (GPRegister.Temporary1, 1), (GPRegister.Temporary0, 20))];
             yield return [new SimpleInstructionTestCase("sltiu $t1, $t0, 20", (GPRegister.Temporary1, 0), (GPRegister.Temporary0, 30))];
+            yield return [new SimpleInstructionTestCase("sltiu $t1, $t0, 10", (GPRegister.Temporary1, 0), (GPRegister.Temporary0, 10))];
 
             // Signed (without signs)
             yield return [new SimpleInstructionTestCase("slt $t2, $t0, $t1", (GPRegister.Temporary2, 1), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 30))];
             yield return [new SimpleInstructionTestCase("slt $t2, $t0, $t1", (GPRegister.Temporary2, 0), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            yield return [new SimpleInstructionTestCase("slt $t1, $t0, $t0", (GPRegister.Temporary1, 0), (GPRegister.Temporary0, 10))];
             yield return [new SimpleInstructionTestCase("slti $t1, $t0, 30", (GPRegister.Temporary1, 1), (GPRegister.Temporary0, 20))];
             yield return [new SimpleInstructionTestCase("slti $t1, $t0, 20", (GPRegister.Temporary1, 0), (GPRegister.Temporary0, 30))];
+            yield return [new SimpleInstructionTestCase("slti $t1, $t0, 10", (GPRegister.Temporary1, 0), (GPRegister.Temporary0, 10))];
 
             // Signed (with signs)
             unchecked
             {
                 yield return [new SimpleInstructionTestCase("slt $t2, $t0, $t1", (GPRegister.Temporary2, 1), (GPRegister.Temporary0, (uint)-30), (GPRegister.Temporary1, (uint)-20))];
                 yield return [new SimpleInstructionTestCase("slt $t2, $t0, $t1", (GPRegister.Temporary2, 0), (GPRegister.Temporary0, (uint)-20), (GPRegister.Temporary1, (uint)-30))];
+                yield return [new SimpleInstructionTestCase("slt $t1, $t0, $t0", (GPRegister.Temporary2, 0), (GPRegister.Temporary0, (uint)-10))];
                 yield return [new SimpleInstructionTestCase("slti $t1, $t0, -20", (GPRegister.Temporary1, 1), (GPRegister.Temporary0, (uint)-30))];
                 yield return [new SimpleInstructionTestCase("slti $t1, $t0, -30", (GPRegister.Temporary1, 0), (GPRegister.Temporary0, (uint)-20))];
+                yield return [new SimpleInstructionTestCase("slti $t1, $t0, -10", (GPRegister.Temporary1, 0), (GPRegister.Temporary0, (uint)-10))];
             }
         }
     }
