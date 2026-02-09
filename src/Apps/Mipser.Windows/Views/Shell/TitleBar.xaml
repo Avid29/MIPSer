@@ -228,7 +228,7 @@
                 <MenuFlyoutItem x:Uid="/TitleBar/BuildProjectMFI" Text="Build Project"
                                 Command="{x:Bind ViewModel.BuildProjectCommand, Mode=OneWay}">
                     <MenuFlyoutItem.Icon>
-                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEBD2;" />
+                        <ImageIcon Source="{StaticResource BuildIcon}"/>
                     </MenuFlyoutItem.Icon>
                     <MenuFlyoutItem.KeyboardAccelerators>
                         <KeyboardAccelerator Key="F5"/>
@@ -236,7 +236,11 @@
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutItem x:Uid="/TitleBar/RebuildProjectMFI" Text="Rebuild Project"
-                                Command="{x:Bind ViewModel.RebuildProjectCommand, Mode=OneWay}"/>
+                                Command="{x:Bind ViewModel.RebuildProjectCommand, Mode=OneWay}">
+                    <MenuFlyoutItem.Icon>
+                        <ImageIcon Source="{StaticResource ReBuildIcon}"/>
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
 
                 <!--  Assemble  -->
@@ -254,7 +258,11 @@
 
                 <!--  Clean  -->
                 <MenuFlyoutItem x:Uid="/TitleBar/CleanProjectMFI" Text="Clean Project"
-                                Command="{x:Bind ViewModel.CleanProjectCommand, Mode=OneWay}"/>
+                                Command="{x:Bind ViewModel.CleanProjectCommand, Mode=OneWay}">
+                    <MenuFlyoutItem.Icon>
+                        <ImageIcon Source="{StaticResource CleanIcon}"/>
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
                 <MenuFlyoutItem x:Uid="/TitleBar/CleanOpenFilesMFI" Text="Clean Open Files"
                                 Command="{x:Bind ViewModel.CleanOpenFilesCommand, Mode=OneWay}"/>
                 <MenuFlyoutItem x:Uid="/TitleBar/CleanFileMFI" Text="Clean File"
@@ -268,13 +276,13 @@
                 <MenuFlyoutItem x:Uid="/TitleBar/StartDebuggingMFI" Text="Start Debugging"
                                 IsEnabled="False">
                     <MenuFlyoutItem.Icon>
-                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF5B0;" />
+                        <ImageIcon Source="{StaticResource StartDebuggingIcon}"/>
                     </MenuFlyoutItem.Icon>
                 </MenuFlyoutItem>
                 <MenuFlyoutItem x:Uid="/TitleBar/StartWithoutDebuggingMFI" Text="Start Without Debugging"
                                 IsEnabled="False">
                     <MenuFlyoutItem.Icon>
-                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE768;" />
+                        <ImageIcon Source="{StaticResource StartWithoutDebuggingIcon}"/>
                     </MenuFlyoutItem.Icon>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
@@ -283,19 +291,19 @@
                 <MenuFlyoutItem x:Uid="/TitleBar/StepOverMFI" Text="Step Over"
                                 IsEnabled="False">
                     <MenuFlyoutItem.Icon>
-                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEDDA;" />
+                        <ImageIcon Source="{StaticResource StepOverIcon}"/>
                     </MenuFlyoutItem.Icon>
                 </MenuFlyoutItem>
                 <MenuFlyoutItem x:Uid="/TitleBar/StepIntoMFI" Text="Step Into"
                                 IsEnabled="False">
                     <MenuFlyoutItem.Icon>
-                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEDDC;" />
+                        <ImageIcon Source="{StaticResource StepIntoIcon}"/>
                     </MenuFlyoutItem.Icon>
                 </MenuFlyoutItem>
                 <MenuFlyoutItem x:Uid="/TitleBar/StepOutMFI" Text="Step Out"
                                 IsEnabled="False">
                     <MenuFlyoutItem.Icon>
-                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEDDB;" />
+                        <ImageIcon Source="{StaticResource StepOutIcon}"/>
                     </MenuFlyoutItem.Icon>
                 </MenuFlyoutItem>
             </MenuBarItem>
