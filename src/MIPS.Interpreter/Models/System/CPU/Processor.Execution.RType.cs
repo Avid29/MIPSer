@@ -48,11 +48,11 @@ public partial class Processor
                 FunctionCode.Multiply => MultR(instruction, (rs, rt) => (ulong)((long)(int)rs * (int)rt)),
                 FunctionCode.MultiplyUnsigned => MultR(instruction, (rs, rt) => (ulong)rs * rt),
                 FunctionCode.Divide => DivR(instruction,
-                    (rs, rt) => (uint)((int)rs / (int)rt),
-                    (rs, rt) => (uint)((int)rs % (int)rt)),
+                    (rs, rt) => rt is not 0 ? (uint)((int)rs / (int)rt) : 0,
+                    (rs, rt) => rt is not 0 ? (uint)((int)rs % (int)rt) : rs),
                 FunctionCode.DivideUnsigned => DivR(instruction,
-                    (rs, rt) => rs / rt,
-                    (rs, rt) => rs % rt),
+                    (rs, rt) => rt is not 0 ? rs / rt : 0,
+                    (rs, rt) => rt is not 0 ? rs % rt : rs),
 
                 // Logical
                 FunctionCode.And => BasicR(instruction, (rs, rt) => rs & rt),
@@ -110,8 +110,34 @@ public partial class Processor
             // Special 2 (R-Type)
             OperationCode.Special2 => instruction.Func2Code switch
             {
+                // Multiply
                 Func2Code.MultiplyToGPR => BasicR(instruction, (rs, rt) => (uint)((long)(int)rs * (int)rt)),
+                Func2Code.MultiplyAndAddHiLow => MultR(instruction, (rs, rt) =>
+                {
+                    long sum = ((long)(int)HighLow.High << 32) + (int)HighLow.Low;
+                    sum += (long)(int)rs * (int)rt;
+                    return (ulong)sum;
+                }),
+                Func2Code.MultiplyAndAddHiLowUnsigned => MultR(instruction, (rs, rt) =>
+                {
+                    ulong sum = ((ulong)HighLow.High << 32) + HighLow.Low;
+                    sum += (ulong)rs* rt;
+                    return sum;
+                }),
+                Func2Code.MultiplyAndSubtractHiLow => MultR(instruction, (rs, rt) =>
+                {
+                    long diff = ((long)(int)HighLow.High << 32) + (int)HighLow.Low;
+                    diff -= (long)(int)rs * (int)rt;
+                    return (ulong)diff;
+                }),
+                Func2Code.MultiplyAndSubtractHiLowUnsigned => MultR(instruction, (rs, rt) =>
+                {
+                    ulong diff = ((ulong)HighLow.High << 32) + HighLow.Low;
+                    diff -= (ulong)rs * rt;
+                    return diff;
+                }),
 
+                // Bit counting
                 Func2Code.CountLeadingZeros => BasicR(instruction, (rs, _) => (uint)BitOperations.LeadingZeroCount(rs)),
                 Func2Code.CountLeadingOnes => BasicR(instruction, (rs, _) => (uint)BitOperations.LeadingZeroCount(~rs)),
                 _ => throw new NotImplementedException(),

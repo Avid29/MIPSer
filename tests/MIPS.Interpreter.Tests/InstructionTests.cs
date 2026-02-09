@@ -68,7 +68,7 @@ public class InstructionTests
             yield return [new SimpleInstructionTestCase("addiu $t1, $t0, 10", (GPRegister.Temporary1, 20 + 10), (GPRegister.Temporary0, 20))];
             yield return [new SimpleInstructionTestCase("subu $t2, $t0, $t1", (GPRegister.Temporary2, 30 - 20), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
             yield return [new SimpleInstructionTestCase("multu $t0, $t1", 30 * 20, (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
-            yield return [new SimpleInstructionTestCase("divu $t0, $t1", highLow:(30 % 20, 30 / 20), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
+            yield return [new SimpleInstructionTestCase("divu $t0, $t1", highLow: (30 % 20, 30 / 20), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20))];
 
             // Signed (without signs)
             yield return [new SimpleInstructionTestCase("add $t2, $t0, $t1", (GPRegister.Temporary2, 20 + 10), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, 10))];
@@ -123,6 +123,28 @@ public class InstructionTests
                 yield return [new SimpleInstructionTestCase("mult $t0, $t0", (long)int.MinValue * int.MinValue, (GPRegister.Temporary0, (uint)int.MinValue))];
                 yield return [new SimpleInstructionTestCase("div $t0, $t0", highLow: ((uint)((long)int.MinValue % int.MinValue), (uint)((long)int.MinValue / int.MinValue)), (GPRegister.Temporary0, (uint)int.MinValue))];
             }
+
+            // Division by zero. Undefined behavior, but NOT a trap! (Shouldn't crash the emulator either)
+            yield return [new SimpleInstructionTestCase("divu $t0, $t1", trap: TrapKind.None, (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 0))];
+            yield return [new SimpleInstructionTestCase("div $t0, $t1", trap: TrapKind.None, (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 0))];
+
+            // Multiply and Add/Subtract
+            yield return [new SimpleInstructionTestCase("maddu $t0, $t1", highLow: (1, 1024 + (30 * 20)), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20), (GPRegister.Temporary2, 1))
+            {
+                    InitialHighLow = (1, 1024)
+            }];
+            yield return [new SimpleInstructionTestCase("madd $t0, $t1", highLow: (1, 1024 + (30 * 20)), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20), (GPRegister.Temporary2, 1))
+            {
+                    InitialHighLow = (1, 1024)
+            }];
+            yield return [new SimpleInstructionTestCase("msubu $t0, $t1", highLow: (1, 1024 - (30 * 20)), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20), (GPRegister.Temporary2, 1))
+            {
+                    InitialHighLow = (1, 1024)
+            }];
+            yield return [new SimpleInstructionTestCase("msub $t0, $t1", highLow: (1, 1024 - (30 * 20)), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20), (GPRegister.Temporary2, 1))
+            {
+                    InitialHighLow = (1, 1024)
+            }];
         }
     }
 

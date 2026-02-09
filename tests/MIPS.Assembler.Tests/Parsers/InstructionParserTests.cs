@@ -94,6 +94,7 @@ public class InstructionParserTests
             var table = new InstructionTable(new());
             foreach (var instruction in table.GetInstructions())
             {
+                // TODO: Disassembling pseudo instructions
                 if (instruction.IsPseudoInstruction)
                     continue;
 
