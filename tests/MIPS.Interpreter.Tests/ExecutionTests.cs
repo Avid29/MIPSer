@@ -15,6 +15,11 @@ public class ExecutionTests
 {
     public sealed record SimpleInstructionTestCase
     {
+        public SimpleInstructionTestCase(string input)
+        {
+            Input = input;
+        }
+
         public SimpleInstructionTestCase(string input, (GPRegister, uint) expected, params (GPRegister, uint)[] registerInit)
         {
             Input = input;
@@ -43,17 +48,28 @@ public class ExecutionTests
             RegisterInitialization = registerInit;
         }
 
-        public string Input { get; }
+        public SimpleInstructionTestCase(string input, (uint, byte[]) expectedMemory, params (uint, byte[])[] memoryInit)
+        {
+            Input = input;
+            ExpectedMemory = expectedMemory;
+            MemoryInitialization = memoryInit;
+        }
 
-        public (GPRegister Regiter, uint Value)? ExpectedWriteBack { get; init; } = null;
+        public string Input { get; }
 
         public TrapKind ExpectedTrap { get; init; } = TrapKind.None;
 
+        public (GPRegister Regiter, uint Value)? ExpectedWriteBack { get; init; } = null;
+
+        public (uint Address, byte[] Data)? ExpectedMemory { get; init; }
+
         public (uint High, uint Low)? ExpectedHighLow { get; init; }
 
-        public (uint High, uint Low)? InitialHighLow { get; init; }
+        public (GPRegister Register, uint Value)[] RegisterInitialization { get; init; } = [];
 
-        public (GPRegister Register, uint Value)[] RegisterInitialization { get; } = [];
+        public (uint Address, byte[] Data)[] MemoryInitialization { get; init; } = [];
+
+        public (uint High, uint Low)? InitialHighLow { get; init; }
     }
 
     public static IEnumerable<object[]> ArithmeticInstructionTestsList
@@ -126,21 +142,29 @@ public class ExecutionTests
             yield return [new SimpleInstructionTestCase("div $t0, $t1", trap: TrapKind.None, (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 0))];
 
             // Multiply and Add/Subtract
-            yield return [new SimpleInstructionTestCase("maddu $t0, $t1", highLow: (1, 1024 + (30 * 20)), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20), (GPRegister.Temporary2, 1))
+            yield return [new SimpleInstructionTestCase("maddu $t0, $t1")
             {
-                    InitialHighLow = (1, 1024)
+                ExpectedHighLow = (1, 1024 + (30 * 20)),
+                InitialHighLow = (1, 1024),
+                RegisterInitialization = [(GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20)],
             }];
-            yield return [new SimpleInstructionTestCase("madd $t0, $t1", highLow: (1, 1024 + (30 * 20)), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20), (GPRegister.Temporary2, 1))
+            yield return [new SimpleInstructionTestCase("madd $t0, $t1")
             {
-                    InitialHighLow = (1, 1024)
+                ExpectedHighLow = (1, 1024 + (30 * 20)),
+                InitialHighLow = (1, 1024),
+                RegisterInitialization = [(GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20)],
             }];
-            yield return [new SimpleInstructionTestCase("msubu $t0, $t1", highLow: (1, 1024 - (30 * 20)), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20), (GPRegister.Temporary2, 1))
+            yield return [new SimpleInstructionTestCase("msubu $t0, $t1")
             {
-                    InitialHighLow = (1, 1024)
+                ExpectedHighLow = (1, 1024 - (30 * 20)),
+                InitialHighLow = (1, 1024),
+                RegisterInitialization = [(GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20)],
             }];
-            yield return [new SimpleInstructionTestCase("msub $t0, $t1", highLow: (1, 1024 - (30 * 20)), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20), (GPRegister.Temporary2, 1))
+            yield return [new SimpleInstructionTestCase("msub $t0, $t1")
             {
-                    InitialHighLow = (1, 1024)
+                ExpectedHighLow = (1, 1024 - (30 * 20)),
+                InitialHighLow = (1, 1024),
+                RegisterInitialization = [(GPRegister.Temporary0, 30), (GPRegister.Temporary1, 20)],
             }];
         }
     }
@@ -235,6 +259,46 @@ public class ExecutionTests
         }
     }
 
+    public static IEnumerable<object[]> MemoryInstructionTestsList
+    {
+        get
+        {
+            // Load
+            yield return [new SimpleInstructionTestCase("lb $t0, 0x1000($zero)")
+            {
+                ExpectedWriteBack = (GPRegister.Temporary0, 0x12),
+                MemoryInitialization = [(0x1000, [0x12, 0x34, 0x56, 0x78])],
+            }];
+            yield return [new SimpleInstructionTestCase("lh $t0, 0x1000($zero)")
+            {
+                ExpectedWriteBack = (GPRegister.Temporary0, 0x1234),
+                MemoryInitialization = [(0x1000, [0x12, 0x34, 0x56, 0x78])],
+            }];
+            yield return [new SimpleInstructionTestCase("lw $t0, 0x1000($zero)")
+            {
+                ExpectedWriteBack = (GPRegister.Temporary0, 0x1234_5678),
+                MemoryInitialization = [(0x1000, [0x12, 0x34, 0x56, 0x78])],
+            }];
+
+            // Store
+            yield return [new SimpleInstructionTestCase("sb $t0, 0x1000($zero)")
+            {
+                ExpectedMemory = (0x1000, [0x00, 0x00, 0x00, 0x78]),
+                RegisterInitialization = [(GPRegister.Temporary0, 0x1234_5678)],
+            }];
+            yield return [new SimpleInstructionTestCase("sh $t0, 0x1000($zero)")
+            {
+                ExpectedMemory = (0x1000, [0x00, 0x00, 0x56, 0x78]),
+                RegisterInitialization = [(GPRegister.Temporary0, 0x1234_5678)],
+            }];
+            yield return [new SimpleInstructionTestCase("sw $t0, 0x1000($zero)")
+            {
+                ExpectedMemory = (0x1000, [0x12, 0x34, 0x56, 0x78]),
+                RegisterInitialization = [(GPRegister.Temporary0, 0x1234_5678)],
+            }];
+        }
+    }
+
     public static IEnumerable<object[]> UncategorizedRegisterOnlyInstructionTestsList
     {
         get
@@ -287,6 +351,10 @@ public class ExecutionTests
     public void TrapInstructionTests(SimpleInstructionTestCase @case) => RunTest(@case);
 
     [DataTestMethod]
+    [DynamicData(nameof(MemoryInstructionTestsList))]
+    public void MemoryInstructionTests(SimpleInstructionTestCase @case) => RunTest(@case);
+
+    [DataTestMethod]
     [DynamicData(nameof(UncategorizedRegisterOnlyInstructionTestsList))]
     public void UncategorizedRegisterOnlyInstructionTests(SimpleInstructionTestCase @case) => RunTest(@case);
 
@@ -317,7 +385,14 @@ public class ExecutionTests
             interpreter.Computer.Processor.HighLow = @case.InitialHighLow.Value;
         }
 
+        // Initialize the memory, if specified in the test case
+        foreach (var (address, data) in @case.MemoryInitialization)
+            interpreter.Computer.Memory.Write(address, data);
+
         interpreter.InsertInstructionExecution(instruction, out var execution);
+
+        // Ensure that the expected trap was raised (if any)
+        Assert.AreEqual(@case.ExpectedTrap, execution.Trap);
 
         var writeback = @case.ExpectedWriteBack;
         if (writeback.HasValue)
@@ -337,7 +412,12 @@ public class ExecutionTests
             Assert.AreEqual(highLow.Value, interpreter.Computer.Processor.HighLow);
         }
 
-        // Ensure that the expected trap was raised (if any)
-        Assert.AreEqual(@case.ExpectedTrap, execution.Trap);
+        var expectedMemory = @case.ExpectedMemory;
+        if (expectedMemory is not null)
+        {
+            var buffer = new byte[expectedMemory.Value.Data.Length];
+            interpreter.Computer.Memory.Read(expectedMemory.Value.Address, buffer);
+            CollectionAssert.AreEqual(expectedMemory.Value.Data, buffer);
+        }
     }
 }

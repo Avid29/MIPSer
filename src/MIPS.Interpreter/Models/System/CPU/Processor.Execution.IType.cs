@@ -72,7 +72,6 @@ public partial class Processor
         var dest = instruction.RT;
         uint value = func(rs, imm);
 
-
         // Check for overflow if a check function is provided
         // Return a trap execution if overflow is detected
         if (checkFunc is not null &&

@@ -15,7 +15,6 @@ namespace MIPS.Interpreter.System.CPU;
 
 public partial class Processor
 {
-    delegate uint MemoryDelegate(uint rs, byte mem);
     delegate bool BranchDelegate(uint rs, uint rt);
     delegate bool OverflowCheckDelegate(int a, int b, int r);
 
@@ -125,18 +124,9 @@ public partial class Processor
 
             OperationCode.Trap => new Execution(TrapKind.Trap),
             OperationCode.SIMD => throw new NotImplementedException(),
-            OperationCode.LoadByte => throw new NotImplementedException(),
-            OperationCode.LoadHalfWord => throw new NotImplementedException(),
-            OperationCode.LoadWordLeft => throw new NotImplementedException(),
-            OperationCode.LoadWord => throw new NotImplementedException(),
-            OperationCode.LoadByteUnsigned => throw new NotImplementedException(),
-            OperationCode.LoadHalfWordUnsigned => throw new NotImplementedException(),
-            OperationCode.LoadWordRight => throw new NotImplementedException(),
-            OperationCode.StoreByte => throw new NotImplementedException(),
-            OperationCode.StoreHalfWord => throw new NotImplementedException(),
-            OperationCode.StoreWordLeft => throw new NotImplementedException(),
-            OperationCode.StoreWord => throw new NotImplementedException(),
-            OperationCode.StoreWordRight => throw new NotImplementedException(),
+
+            >= OperationCode.LoadByte and <= OperationCode.StoreWordRight => CreateExecutionMemory(instruction),
+
             OperationCode.LoadLinkedWord => throw new NotImplementedException(),
             OperationCode.LoadWordCoprocessor1 => throw new NotImplementedException(),
             OperationCode.LoadWordCoprocessor2 => throw new NotImplementedException(),

@@ -8,7 +8,7 @@ using System.IO;
 namespace MIPS.Interpreter.Helpers;
 
 /// <summary>
-/// A <see cref="MemoryStream"/> with a virtual paging TLB above it to allow  sparse .
+/// A <see cref="MemoryStream"/> with a virtual paging TLB above it to allow sparse .
 /// </summary>
 public class PagedMemoryStream : Stream
 {
@@ -49,6 +49,7 @@ public class PagedMemoryStream : Stream
         {
             if (value < 0 || value > _length)
                 throw new ArgumentOutOfRangeException(nameof(value));
+
             _position = value;
         }
     }
@@ -72,12 +73,20 @@ public class PagedMemoryStream : Stream
         int bytesRead = 0;
         while (count > 0 && _position < _length)
         {
-            long pageIndex = (_position / _pageSize);
+            long pageIndex = _position / _pageSize;
             int pageOffset = (int)(_position % _pageSize);
             int bytesAvailable = (int)Math.Min(_pageSize - pageOffset, _length - _position);
             int bytesToCopy = Math.Min(bytesAvailable, count);
 
-            Array.Copy(_pages[pageIndex], pageOffset, buffer, offset, bytesToCopy);
+            if (_pages.TryGetValue(pageIndex, out byte[]? page))
+            {
+                Array.Copy(page, pageOffset, buffer, offset, bytesToCopy);
+            }
+            else
+            {
+                // If the page doesn't exist, fill with zeros
+                Array.Clear(buffer, offset, bytesToCopy);
+            }
 
             offset += bytesToCopy;
             count -= bytesToCopy;
@@ -89,7 +98,6 @@ public class PagedMemoryStream : Stream
     }
 
     /// <inheritdoc/>
-
     public override long Seek(long offset, SeekOrigin origin)
     {
         long newPos = origin switch
