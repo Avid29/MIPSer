@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using MIPS.Interpreter.Models.System.CPU.Registers;
 using MIPS.Interpreter.Models.System.Execution;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Registers;
@@ -10,15 +11,39 @@ namespace MIPS.Interpreter.System.CPU;
 
 public partial class Processor
 {
+    delegate void StatusUpdateDelegate(ref StatusRegister rs);
+
     private Execution CreateExecutionCoProc0(CoProc0Instruction instruction)
     {
         return instruction.CoProc0RSCode switch
         {
-            // Coprocessor instructions
+            // C0 Instructions
             CoProc0RSCode.C0 => instruction.Co0FuncCode switch
             {
                 Co0FuncCode.ExceptionReturn => Eret(),
+
                 _ => throw new NotImplementedException()
+            },
+
+            // MFMC0 Instructions
+            CoProc0RSCode.MFMC0 => instruction.MFMC0FuncCode switch
+            {
+                MFMC0FuncCode.EnableInterupts => StatusUpdateInstruction((ref status) => status.InteruptEnabled = true),
+                MFMC0FuncCode.DisableInterupts => StatusUpdateInstruction((ref status) => status.InteruptEnabled = false),
+
+                _ => throw new NotImplementedException()
+            },
+
+            // Move instructions
+            CoProc0RSCode.MFC0 => new Execution
+            {
+                WriteBack = CoProcessor0[(CP0Registers)instruction.RD],
+                Destination = instruction.RT,
+            },
+            CoProc0RSCode.MTC0 => new Execution
+            {
+                CPR0 = (CP0Registers)instruction.RD,
+                WriteBack = _regFile[instruction.RT],
             },
 
             _ => throw new NotImplementedException()
@@ -50,6 +75,21 @@ public partial class Processor
         return new Execution
         {
             ProgramCounter = targetPC,
+            WriteBack = (uint)status,
+            CPR0 = CP0Registers.Status,
+        };
+    }
+
+    private Execution StatusUpdateInstruction(StatusUpdateDelegate func)
+    {
+        // Retrieve the status register
+        var status = CoProcessor0.StatusRegister;
+
+        // Apply the update function
+        func(ref status);
+
+        return new Execution
+        {
             WriteBack = (uint)status,
             CPR0 = CP0Registers.Status,
         };
