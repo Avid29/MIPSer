@@ -2,6 +2,7 @@
 
 using MIPS.Interpreter.Models.Modules;
 using MIPS.Interpreter.Models.System;
+using MIPS.Interpreter.Models.System.Execution;
 using MIPS.Interpreter.Models.System.Execution.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Registers;
@@ -53,12 +54,11 @@ public class Interpreter
     /// Inserts an instruction to execute into the interpreter's current state.
     /// </summary>
     /// <param name="instruction">The instruction to execute</param>
-    /// <param name="trap">The resulting trap of the execution.</param>
-    public void InsertInstructionExecution(Instruction instruction, out TrapKind trap)
+    /// <param name="execution">The execution details from the instruction.</param>
+    public void InsertInstructionExecution(Instruction instruction, out Execution execution)
     {
         var oldPC = ProgramCounter;
-        var execution = _computer.Processor.Execute(instruction);
-        trap = execution.Trap;
+        execution = _computer.Processor.Execute(instruction);
 
         // If the instruction execution did not explicitly handle the program counter, restore it to the old value.
         if (!execution.PCHandled)

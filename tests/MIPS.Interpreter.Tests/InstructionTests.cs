@@ -137,6 +137,15 @@ public class InstructionTests
         }
     }
 
+    public static IEnumerable<object[]> SystemInstructionTestsList
+    {
+        get
+        {
+            yield return [new SimpleInstructionTestCase("syscall", TrapKind.Syscall)];
+            yield return [new SimpleInstructionTestCase("break", TrapKind.Break)];
+        }
+    }
+
     [DataTestMethod]
     [DynamicData(nameof(ArithmeticInstructionTestsList))]
     public void ArithmeticInstructionTests(SimpleInstructionTestCase @case)
@@ -157,6 +166,11 @@ public class InstructionTests
     public void UncategorizedRegisterOnlyInstructionTests(SimpleInstructionTestCase @case)
         => RunTest(@case.Input, @case.Expected, @case.Trap, @case.RegisterInitialization);
 
+    [DataTestMethod]
+    [DynamicData(nameof(SystemInstructionTestsList))]
+    public void SystemInstructionTests(SimpleInstructionTestCase @case)
+        => RunTest(@case.Input, @case.Expected, @case.Trap, @case.RegisterInitialization);
+
     private static void RunTest(string line, (GPRegister, uint)? check, TrapKind expectedTrap = TrapKind.None, params (GPRegister, uint)[] regInits)
     {
         // The instruction parser is only used to convert the instruction string into an Instruction struct, so we can test the interpreter with it.
@@ -174,14 +188,20 @@ public class InstructionTests
         foreach (var (reg, value) in regInits)
             interpreter.SetRegister(reg, value);
 
-        interpreter.InsertInstructionExecution(instruction, out var trap);
+        interpreter.InsertInstructionExecution(instruction, out var execution);
 
-        // Check the register value after execution, if provided
         if (check is not null)
         {
+            // Ensure that the expected register was written to with the expected value
             Assert.AreEqual(check.Value.Item2, interpreter.GetRegister(check.Value.Item1));
         }
+        else
+        {
+            // If no register check was provided, we at least want to make sure no register was written to (as that would be unexpected)
+            Assert.IsNull(execution.Destination);
+        }
 
-        Assert.AreEqual(expectedTrap, trap);
+        // Ensure that the expected trap was raised (if any)
+        Assert.AreEqual(expectedTrap, execution.Trap);
     }
 }

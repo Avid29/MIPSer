@@ -38,7 +38,7 @@ public partial class Processor
         // Write to the register file if needed, some instructions will not write to a register
         if (regFile is not null)
         {
-            regFile[execution.Destination] = execution.WriteBackValue;
+            regFile[execution.GPR] = execution.WriteBack;
         }
 
         // Increment the program counter by default, some instructions will override this
@@ -61,7 +61,7 @@ public partial class Processor
                 programCounter = execution.ProgramCounter;
                 break;
             case SecondaryWritebacks.Memory:
-                _memory[execution.MemAddress] = execution.WriteBackValue;
+                _memory[execution.MemAddress] = execution.WriteBack;
                 break;
         }
 

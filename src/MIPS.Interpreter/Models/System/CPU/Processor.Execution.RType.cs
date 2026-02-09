@@ -1,7 +1,5 @@
 ﻿// Avishai Dernis 2025
 
-using CommunityToolkit.Diagnostics;
-using MIPS.Interpreter.Models.System.CPU.Registers;
 using MIPS.Interpreter.Models.System.Execution;
 using MIPS.Interpreter.Models.System.Execution.Enum;
 using MIPS.Models.Instructions;
@@ -37,7 +35,7 @@ public partial class Processor
                 FunctionCode.ShiftLeftLogicalVariable => BasicR(instruction, (rs, rt) => rt << (int)rs),
                 FunctionCode.ShiftRightLogicalVariable => BasicR(instruction, (rs, rt) => rt >> (int)rs),
                 FunctionCode.ShiftRightArithmeticVariable => BasicR(instruction, (rs, rt) => (uint)((int)rt >> (int)rs)),
-                
+
                 // Arithmetic
                 FunctionCode.Add => BasicR(instruction,
                     (rs, rt) => (uint)((int)rs + (int)rt),
@@ -47,7 +45,7 @@ public partial class Processor
                     (rs, rt) => (uint)((int)rs - (int)rt),
                     (a, b, r) => ((a ^ b) & (a ^ r)) < 0),
                 FunctionCode.SubtractUnsigned => BasicR(instruction, (rs, rt) => rs - rt),
-                
+
                 // Logical
                 FunctionCode.And => BasicR(instruction, (rs, rt) => rs & rt),
                 FunctionCode.Or => BasicR(instruction, (rs, rt) => rs | rt),
@@ -62,8 +60,15 @@ public partial class Processor
                 FunctionCode.JumpRegister => JumpR(instruction),
                 FunctionCode.JumpAndLinkRegister => JumpR(instruction, instruction.RD),
 
-                FunctionCode.SystemCall => throw new NotImplementedException(),
-                FunctionCode.Break => throw new NotImplementedException(),
+                // System
+                FunctionCode.SystemCall => new Execution
+                {
+                    Trap = TrapKind.Syscall,
+                },
+                FunctionCode.Break => new Execution
+                {
+                    Trap = TrapKind.Break,
+                },
                 FunctionCode.Sync => throw new NotImplementedException(),
 
                 FunctionCode.MoveFromHigh => new Execution
@@ -113,24 +118,33 @@ public partial class Processor
 
     private Execution BasicR(Instruction instruction, BasicRDelegate func, OverflowCheckDelegate? checkFunc = null)
     {
+        // Retrieve the source register values
         var rs = RegisterFile[instruction.RS];
         var rt = RegisterFile[instruction.RT];
 
+        // Determine the destination register and
+        // compute the result using the provided function
         var dest = instruction.RD;
         uint value = func(rs, rt);
 
-        bool overflow = false;
-        if (checkFunc is not null)
+        // Check for overflow if a check function is provided
+        // Return a trap execution if overflow is detected
+        if (checkFunc is not null &&
+            checkFunc((int)rs, (int)rt, (int)value))
         {
-            overflow = checkFunc((int)rs, (int)rt, (int)value);
+            return new Execution
+            {
+                Destination = null,
+                Trap = TrapKind.ArithmeticOverflow,
+            };
         }
 
+        // No overflow detected
+        // Return the execution with the computed value and destination
         return new Execution
         {
-            // TODO: This is a hack to prevent writing to the destination register if there is an overflow, we should handle this better in the future.
-            Destination = overflow ? GPRegister.Zero : dest,
+            Destination = dest,
             WriteBack = value,
-            Trap = overflow ? TrapKind.ArithmeticOverflow : TrapKind.None,
         };
     }
 
@@ -154,7 +168,7 @@ public partial class Processor
     {
         var rs = RegisterFile[instruction.RS];
         var rt = RegisterFile[instruction.RT];
-        
+
         var dest = instruction.RD;
         ulong value = func(rs, rt);
 
@@ -168,11 +182,23 @@ public partial class Processor
     {
         var rs = RegisterFile[instruction.RS];
 
+        if (link is null)
+        {
+            // No link register specified, just jump to the target address
+            return new Execution
+            {
+                ProgramCounter = rs,
+            };
+        }
+
+        // A link register was provided
+        // Write the return address to the specificied link register
+        // and set the program counter to the jump address
         return new Execution
         {
             ProgramCounter = rs,
-            Destination = link ?? GPRegister.Zero,
-            WriteBack = link is null ? null : ProgramCounter,
+            Destination = link.Value,
+            WriteBack = ProgramCounter + 4,
         };
     }
 }

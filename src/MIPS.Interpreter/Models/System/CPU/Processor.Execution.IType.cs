@@ -68,24 +68,34 @@ public partial class Processor
 
     private Execution BasicI(Instruction instruction, BasicIDelegate func, OverflowCheckDelegate? checkFunc = null)
     {
+        // Retrieve the source register and immediate values
         var rs = RegisterFile[instruction.RS];
         var imm = instruction.ImmediateValue;
 
+        // Determine the destination register and
+        // compute the result using the provided function
         var dest = instruction.RT;
         uint value = func(rs, imm);
 
-        bool overflow = false;
-        if (checkFunc is not null)
+
+        // Check for overflow if a check function is provided
+        // Return a trap execution if overflow is detected
+        if (checkFunc is not null &&
+            checkFunc((int)rs, imm, (int)value))
         {
-            overflow = checkFunc((int)rs, imm, (int)value);
+            return new Execution
+            {
+                Destination = null,
+                Trap = TrapKind.ArithmeticOverflow,
+            };
         }
 
+        // No overflow detected
+        // Return the execution with the computed value and destination
         return new Execution
         {
-            // TODO: This is a hack to prevent writing to the destination register if there is an overflow, we should handle this better in the future.
-            Destination = overflow ? GPRegister.Zero : dest,
+            Destination = dest,
             WriteBack = value,
-            Trap = overflow ? TrapKind.ArithmeticOverflow : TrapKind.None,
         };
     }
 

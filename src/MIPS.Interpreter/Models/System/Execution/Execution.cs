@@ -10,7 +10,6 @@ namespace MIPS.Interpreter.Models.System.Execution;
 /// </summary>
 public struct Execution()
 {
-    private readonly uint _writeBack;
     private readonly uint _secondary1;
     private readonly uint _secondary2;
     private readonly GPRegister _reg;
@@ -18,34 +17,44 @@ public struct Execution()
     /// <summary>
     /// Gets the writeback to the destination.
     /// </summary>
-    public readonly uint? WriteBack
+    public readonly uint WriteBack { get; init; }
+
+    /// <summary>
+    /// Gets the destination of the output.
+    /// </summary>
+    /// <remarks>
+    /// Will set the register set to none if <see langword="null"/>.
+    /// </remarks>
+    public GPRegister? Destination
     {
-        get => _writeBack;
+        readonly get
+        {
+            if (RegisterSet is RegisterSet.None)
+                return null;
+
+            return Get(_reg, RegisterSet.GeneralPurpose);
+        }
         init
         {
-            if (value.HasValue)
+            if (value is not null)
             {
-                _writeBack = value.Value;
+                Set(ref _reg, value.Value, RegisterSet.GeneralPurpose);
             }
             else
             {
+                _reg = GPRegister.Zero;
                 RegisterSet = RegisterSet.None;
             }
         }
     }
 
     /// <summary>
-    /// Gets the writeback value to the destination.
-    /// </summary>
-    public readonly uint WriteBackValue => _writeBack;
-    
-    /// <summary>
     /// Gets the general purpose register destination of the output.
     /// </summary>
     /// <remarks>
     /// <see cref="GPRegister.Zero"/> if none.
     /// </remarks>
-    public GPRegister Destination
+    public GPRegister GPR
     {
         readonly get => Get(_reg, RegisterSet.GeneralPurpose);
         init => Set(ref _reg, value, RegisterSet.GeneralPurpose);
