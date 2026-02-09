@@ -1,22 +1,10 @@
 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_784_254)">
-<path d="M4.5 9L10.5 1" stroke="url(#paint0_linear_784_254)" stroke-width="1.4" stroke-linecap="round"/>
-<path d="M3.11485 7.269C4.52824 6.91565 5.06115 4.56247 6.84544 5.91574C8.62973 7.26901 6.84544 11.4457 5.64525 11.7457C4.44507 12.0458 -0.323695 11.7457 0.13037 7.40798C1.91466 7.26901 1.85068 7.58504 3.11485 7.269Z" fill="url(#paint1_linear_784_254)"/>
-<path d="M4.899 8.01545C5.04988 8.09439 3.05201 11.1389 2.80184 11.5194C2.18839 11.3198 1.58769 11.0086 1.10882 10.5414C1.11999 10.4753 1.15717 10.4124 1.22022 10.3691C2.19868 9.69717 4.76776 7.94881 4.899 8.01545Z" fill="url(#paint2_linear_784_254)"/>
+<path d="M4.5 9L10.5 1" stroke="#804A00" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M3.11485 7.269C4.52824 6.91565 5.06115 4.56247 6.84544 5.91574C8.62973 7.26901 6.84544 11.4457 5.64525 11.7457C4.44507 12.0458 -0.323695 11.7457 0.13037 7.40798C1.91466 7.26901 1.85068 7.58504 3.11485 7.269Z" fill="#FFBB33"/>
+<path d="M4.899 8.01545C5.04988 8.09439 3.05201 11.1389 2.80184 11.5194C2.18839 11.3198 1.58769 11.0086 1.10882 10.5414C1.11999 10.4753 1.15717 10.4124 1.22022 10.3691C2.19868 9.69717 4.76776 7.94881 4.899 8.01545Z" fill="#664400"/>
 </g>
 <defs>
-<linearGradient id="paint0_linear_784_254" x1="11" y1="-0.5" x2="6.5" y2="7" gradientUnits="userSpaceOnUse">
-<stop stop-color="#804A00"/>
-<stop offset="1" stop-color="#CC6600"/>
-</linearGradient>
-<linearGradient id="paint1_linear_784_254" x1="3.39125" y1="6.16971" x2="4.46618" y2="11.5443" gradientUnits="userSpaceOnUse">
-<stop stop-color="#FFBB33"/>
-<stop offset="1" stop-color="#B87A00"/>
-</linearGradient>
-<linearGradient id="paint2_linear_784_254" x1="2.17143" y1="9.13434" x2="2.87332" y2="11.6991" gradientUnits="userSpaceOnUse">
-<stop stop-color="#664400"/>
-<stop offset="1" stop-color="#332200"/>
-</linearGradient>
 <clipPath id="clip0_784_254">
 <rect width="12" height="12" fill="white"/>
 </clipPath>
