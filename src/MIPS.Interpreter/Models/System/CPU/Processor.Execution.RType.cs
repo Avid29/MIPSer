@@ -177,10 +177,7 @@ public partial class Processor
 
         ulong value = func(rs, rt);
 
-        return new Execution
-        {
-            HighLow = value,
-        };
+        return new Execution(value);
     }
 
     private Execution DivR(Instruction instruction, BasicRDelegate divFunc, BasicRDelegate remFunc)
@@ -191,11 +188,7 @@ public partial class Processor
         uint div = divFunc(rs, rt);
         uint rem = remFunc(rs, rt);
 
-        return new Execution
-        {
-            Low = div,
-            High = rem,
-        };
+        return new Execution((rem, div));
     }
 
     private Execution TrapR(Instruction instruction, BranchDelegate func)
@@ -213,10 +206,7 @@ public partial class Processor
         if (link is null)
         {
             // No link register specified, just jump to the target address
-            return new Execution
-            {
-                ProgramCounter = rs,
-            };
+            return new Execution(rs);
         }
 
         // A link register was provided

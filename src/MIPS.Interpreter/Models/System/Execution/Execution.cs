@@ -41,6 +41,40 @@ public struct Execution
     }
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="Execution"/> struct.
+    /// </summary>
+    public Execution(uint address, uint writeBack)
+    {
+        MemAddress = address;
+        WriteBack = writeBack;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Execution"/> struct.
+    /// </summary>
+    public Execution(uint pc)
+    {
+        ProgramCounter = pc;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Execution"/> struct.
+    /// </summary>
+    public Execution(ulong highLow)
+    {
+        HighLow = highLow;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Execution"/> struct.
+    /// </summary>
+    public Execution((uint High, uint Low) highLow)
+    {
+        High = highLow.High;
+        Low = highLow.Low;
+    }
+
+    /// <summary>
     /// Gets the writeback to the destination.
     /// </summary>
     public readonly uint WriteBack { get; init; }

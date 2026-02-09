@@ -80,10 +80,6 @@ public partial class Processor
         var memMask = ~regMask;
         var value = (regValue & regMask) | (memValue & memMask);
 
-        return new Execution
-        {
-            WriteBack = value,
-            MemAddress = addr,
-        };
+        return new Execution(addr, value);
     }
 }

@@ -18,7 +18,7 @@ public class ExecutionTests
 
     public sealed record SimpleInstructionTestCase
     {
-        public SimpleInstructionTestCase(string input, bool providedState = false)
+        public SimpleInstructionTestCase(string input)
         {
             Input = input;
 
@@ -52,27 +52,27 @@ public class ExecutionTests
             }
         }
 
-        public SimpleInstructionTestCase(string input, TrapKind trap) : this(input, true)
+        public SimpleInstructionTestCase(string input, TrapKind trap) : this(input)
         {
             ExpectedTrap = trap;
         }
 
-        public SimpleInstructionTestCase(string input, uint writeBack) : this(input, true)
+        public SimpleInstructionTestCase(string input, uint writeBack) : this(input)
         {
             ExpectedWriteBack = (GPRegister.ReturnValue0, writeBack);
         }
 
-        public SimpleInstructionTestCase(string input, (uint, byte[]) memory) : this(input, true)
+        public SimpleInstructionTestCase(string input, (uint, byte[]) memory) : this(input)
         {
             ExpectedMemory = memory;
         }
 
-        public SimpleInstructionTestCase(string input, ulong highLow) : this(input, true)
+        public SimpleInstructionTestCase(string input, ulong highLow) : this(input)
         {
             ExpectedHighLow = ((uint)(highLow >> 32), (uint)highLow);
         }
 
-        public SimpleInstructionTestCase(string input, (uint, uint) highLow) : this(input, true)
+        public SimpleInstructionTestCase(string input, (uint, uint) highLow) : this(input)
         {
             ExpectedHighLow = highLow;
         }

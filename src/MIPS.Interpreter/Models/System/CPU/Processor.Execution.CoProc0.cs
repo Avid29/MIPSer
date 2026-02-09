@@ -70,11 +70,9 @@ public partial class Processor
 
         // TODO: Explorer special commit phase to avoid setting
         // the status register as a writeback
-        return new Execution
+        return new Execution(CP0Registers.Status, (uint)status)
         {
-            ProgramCounter = targetPC,
-            WriteBack = (uint)status,
-            CPR0 = CP0Registers.Status,
+            ProgramCounter = targetPC
         };
     }
 
@@ -86,10 +84,6 @@ public partial class Processor
         // Apply the update function
         func(ref status);
 
-        return new Execution
-        {
-            WriteBack = (uint)status,
-            CPR0 = CP0Registers.Status,
-        };
+        return new Execution(CP0Registers.Status, (uint)status);
     }
 }

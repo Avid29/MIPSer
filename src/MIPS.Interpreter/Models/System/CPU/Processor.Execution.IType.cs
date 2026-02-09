@@ -93,10 +93,7 @@ public partial class Processor
 
         if (func(rs, rt))
         {
-            return new Execution
-            {
-                ProgramCounter = (uint)(ProgramCounter + imm),
-            };
+            return new Execution((uint)(ProgramCounter + imm));
         }
 
         return default;

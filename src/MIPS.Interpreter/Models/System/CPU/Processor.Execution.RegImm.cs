@@ -41,10 +41,7 @@ public partial class Processor
 
         if (func(rs, imm))
         {
-            return new Execution
-            {
-                Trap = TrapKind.Trap,
-            };
+            return new Execution(TrapKind.Trap);
         }
 
         return default;
