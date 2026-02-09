@@ -46,4 +46,9 @@ public enum SecondaryWritebacks
     /// Writes to memory.
     /// </summary>
     Memory,
+
+    /// <summary>
+    /// Write to the RT register of the instruction, as part of a move from coprocessor instruction.
+    /// </summary>
+    WriteToRT,
 }

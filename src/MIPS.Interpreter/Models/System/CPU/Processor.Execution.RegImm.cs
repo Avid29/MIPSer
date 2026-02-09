@@ -36,7 +36,7 @@ public partial class Processor
 
     private Execution TrapI(Instruction instruction, TrapIDelegate func)
     {
-        var rs = _regFile[instruction.RS];
+        var rs = RegisterFile[instruction.RS];
         var imm = instruction.ImmediateValue;
 
         if (func(rs, imm))

@@ -34,15 +34,15 @@ public partial class Processor
             // MFMC0 Instructions
             CoProc0RSCode.MFMC0 => instruction.MFMC0FuncCode switch
             {
-                MFMC0FuncCode.EnableInterupts => StatusUpdateInstruction((ref status) => status.InteruptEnabled = true),
-                MFMC0FuncCode.DisableInterupts => StatusUpdateInstruction((ref status) => status.InteruptEnabled = false),
+                MFMC0FuncCode.EnableInterupts => StatusUpdateInstruction(instruction, (ref status) => status.InteruptEnabled = true),
+                MFMC0FuncCode.DisableInterupts => StatusUpdateInstruction(instruction, (ref status) => status.InteruptEnabled = false),
 
                 _ => throw new NotImplementedException()
             },
 
             // Move instructions
             CoProc0RSCode.MFC0 => new Execution(instruction.RT, CoProcessor0[(CP0Registers)instruction.RD]),
-            CoProc0RSCode.MTC0 => new Execution((CP0Registers)instruction.RD, _regFile[instruction.RT]),
+            CoProc0RSCode.MTC0 => new Execution((CP0Registers)instruction.RD, RegisterFile[instruction.RT]),
 
             _ => throw new NotImplementedException()
         };
@@ -76,13 +76,22 @@ public partial class Processor
         };
     }
 
-    private Execution StatusUpdateInstruction(StatusUpdateDelegate func)
+    private Execution StatusUpdateInstruction(Instruction instruction, StatusUpdateDelegate func)
     {
         // Retrieve the status register
         var status = CoProcessor0.StatusRegister;
 
         // Apply the update function
         func(ref status);
+
+        if (instruction.RT is not GPRegister.Zero)
+        {
+            // Write the updated status register value back to the specified GPR
+            return new Execution(CP0Registers.Status, (uint)status)
+            {
+                RTDump = (uint)status,
+            };
+        }
 
         return new Execution(CP0Registers.Status, (uint)status);
     }

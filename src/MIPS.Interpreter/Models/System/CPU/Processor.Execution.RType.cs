@@ -19,8 +19,8 @@ public partial class Processor
 
     private Execution CreateExecutionRType(Instruction instruction)
     {
-        var rs = _regFile[instruction.RS];
-        var rt = _regFile[instruction.RT];
+        var rs = RegisterFile[instruction.RS];
+        var rt = RegisterFile[instruction.RT];
         var shift = instruction.ShiftAmount;
 
         return instruction.OpCode switch
@@ -138,8 +138,8 @@ public partial class Processor
     private Execution BasicR(Instruction instruction, BasicRDelegate func, OverflowCheckDelegate? checkFunc = null)
     {
         // Retrieve the source register values
-        var rs = _regFile[instruction.RS];
-        var rt = _regFile[instruction.RT];
+        var rs = RegisterFile[instruction.RS];
+        var rt = RegisterFile[instruction.RT];
 
         // Determine the destination register and
         // compute the result using the provided function
@@ -161,7 +161,7 @@ public partial class Processor
 
     private Execution ShiftR(Instruction instruction, ShiftRDelegate func)
     {
-        var rt = _regFile[instruction.RT];
+        var rt = RegisterFile[instruction.RT];
         var shift = instruction.ShiftAmount;
 
         var dest = instruction.RD;
@@ -172,8 +172,8 @@ public partial class Processor
 
     private Execution MultR(Instruction instruction, MultRDelegate func)
     {
-        var rs = _regFile[instruction.RS];
-        var rt = _regFile[instruction.RT];
+        var rs = RegisterFile[instruction.RS];
+        var rt = RegisterFile[instruction.RT];
 
         ulong value = func(rs, rt);
 
@@ -182,8 +182,8 @@ public partial class Processor
 
     private Execution DivR(Instruction instruction, BasicRDelegate divFunc, BasicRDelegate remFunc)
     {
-        var rs = _regFile[instruction.RS];
-        var rt = _regFile[instruction.RT];
+        var rs = RegisterFile[instruction.RS];
+        var rt = RegisterFile[instruction.RT];
 
         uint div = divFunc(rs, rt);
         uint rem = remFunc(rs, rt);
@@ -193,15 +193,15 @@ public partial class Processor
 
     private Execution TrapR(Instruction instruction, BranchDelegate func)
     {
-        var rs = _regFile[instruction.RS];
-        var rt = _regFile[instruction.RT];
+        var rs = RegisterFile[instruction.RS];
+        var rt = RegisterFile[instruction.RT];
 
         return func(rs, rt) ? new Execution(TrapKind.Trap) : default;
     }
 
     private Execution JumpR(Instruction instruction, GPRegister? link = null)
     {
-        var rs = _regFile[instruction.RS];
+        var rs = RegisterFile[instruction.RS];
 
         if (link is null)
         {

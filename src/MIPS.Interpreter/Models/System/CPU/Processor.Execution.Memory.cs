@@ -38,7 +38,7 @@ public partial class Processor
     private Execution Load<T>(Instruction instruction)
         where T : unmanaged, IBinaryInteger<T>
     {
-        uint baseAddr = _regFile[instruction.RS];
+        uint baseAddr = RegisterFile[instruction.RS];
         int offset = instruction.ImmediateValue; // already sign-extended
         uint addr = baseAddr + (uint)offset;
 
@@ -60,7 +60,7 @@ public partial class Processor
     private Execution Store<T>(Instruction instruction)
         where T : unmanaged, IBinaryInteger<T>
     {
-        uint baseAddr = _regFile[instruction.RS];
+        uint baseAddr = RegisterFile[instruction.RS];
         int offset = instruction.ImmediateValue; // already sign-extended
         uint addr = baseAddr + (uint)offset;
 
@@ -74,7 +74,7 @@ public partial class Processor
 
         // TODO: Handle writeback size in apply stage
         // In the meantime, we'll read the existing value from memory, combine it with the value from the register, and write it back
-        var regValue = _regFile[instruction.RT];
+        var regValue = RegisterFile[instruction.RT];
         var memValue = _computer.Memory.Read<uint>(addr);
         var regMask = uint.MaxValue >> (32 - size * 8);
         var memMask = ~regMask;

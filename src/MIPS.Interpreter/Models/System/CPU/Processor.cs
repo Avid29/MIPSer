@@ -14,7 +14,6 @@ namespace MIPS.Interpreter.System.CPU;
 public partial class Processor
 {
     private readonly Computer _computer;
-    private readonly RegisterFile _regFile;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Processor"/> class.
@@ -23,9 +22,11 @@ public partial class Processor
     {
         _computer = computer;
 
-        _regFile = new RegisterFile();
+        RegisterFile = new RegisterFile();
         CoProcessor0 = new CoProcessor0();
     }
+
+    internal RegisterFile RegisterFile { get; }
 
     /// <summary>
     /// Gets or sets the value in the high register.
@@ -49,7 +50,7 @@ public partial class Processor
     /// <returns>The value of the register.</returns>
     public uint this[GPRegister reg]
     {
-        get => _regFile[reg];
-        set => _regFile[reg] = value;
+        get => RegisterFile[reg];
+        set => RegisterFile[reg] = value;
     }
 }

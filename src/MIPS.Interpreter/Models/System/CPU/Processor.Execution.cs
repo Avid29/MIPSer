@@ -7,9 +7,7 @@ using MIPS.Interpreter.Models.System.Execution.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
-using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System;
-using System.Numerics;
 
 namespace MIPS.Interpreter.System.CPU;
 
@@ -30,16 +28,13 @@ public partial class Processor
         // Handle exceptions and traps first, if any
         if (execution.Trap is not TrapKind.None)
         {
-            // Status register
-            var status = CoProcessor0.StatusRegister;
-            status.ExceptionLevel = true;
-            CoProcessor0.StatusRegister = status;
-
-            // Cause register
-            var cause = CoProcessor0.CauseRegister;
-            cause.ExecptionCode = execution.Trap;
-            // causeReg.IsBranchDelayed = // TODO: Handle delay slots
-            CoProcessor0.CauseRegister = cause;
+            // Status and cause registers
+            CoProcessor0.StatusRegister = CoProcessor0.StatusRegister with { ExceptionLevel = true };
+            CoProcessor0.CauseRegister = CoProcessor0.CauseRegister with
+            {
+                ExecptionCode = execution.Trap,
+                //IsBranchDelayed = // TODO: Handle delay slots
+            };
 
             // Track the current program counter in the EPC register
             // before jumping to the exception handler
@@ -54,7 +49,8 @@ public partial class Processor
         var regFile = execution.RegisterSet switch
         {
             RegisterSet.None => null,
-            RegisterSet.GeneralPurpose => _regFile,
+            RegisterSet.GeneralPurpose => RegisterFile,
+            RegisterSet.CoProc0 => CoProcessor0.RegisterFile,
             _ => ThrowHelper.ThrowNotSupportedException<RegisterFile>(),
         };
 

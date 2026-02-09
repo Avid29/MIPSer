@@ -3,8 +3,11 @@
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
+using MIPS.Interpreter.Models.System.CPU.Registers;
 using MIPS.Interpreter.Models.System.Execution.Enum;
 using MIPS.Models.Instructions.Enums.Registers;
+using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -18,9 +21,11 @@ public class ExecutionTests
 
     public sealed record SimpleInstructionTestCase
     {
-        public SimpleInstructionTestCase(string input)
+        private SimpleInstructionTestCase(string input)
         {
             Input = input;
+
+            PrivilegeMode = PrivilegeMode.User;
 
             unchecked
             {
@@ -59,7 +64,17 @@ public class ExecutionTests
 
         public SimpleInstructionTestCase(string input, uint writeBack) : this(input)
         {
-            ExpectedWriteBack = (GPRegister.ReturnValue0, writeBack);
+            ExpectedWriteBack = (RegisterSet.GeneralPurpose, GPRegister.ReturnValue0, writeBack);
+        }
+
+        public SimpleInstructionTestCase(string input, RegisterSet set, GPRegister reg, uint? writeBack = null) : this(input)
+        {
+            ExpectedWriteBack = (set, reg, writeBack);
+        }
+
+        public SimpleInstructionTestCase(string input, RegisterSet set, CP0Registers reg, uint? writeBack = null) : this(input)
+        {
+            ExpectedWriteBack = (set, (GPRegister)reg, writeBack);
         }
 
         public SimpleInstructionTestCase(string input, (uint, byte[]) memory) : this(input)
@@ -77,11 +92,18 @@ public class ExecutionTests
             ExpectedHighLow = highLow;
         }
 
+        public SimpleInstructionTestCase(string input, SecondaryWritebacks sideEffects) : this(input)
+        {
+            ExpectedSideEffects = sideEffects;
+        }
+
         public string Input { get; }
 
         public TrapKind ExpectedTrap { get; init; } = TrapKind.None;
 
-        public (GPRegister Regiter, uint Value)? ExpectedWriteBack { get; init; } = null;
+        public (RegisterSet Set, GPRegister Regiter, uint? Value)? ExpectedWriteBack { get; init; } = null;
+
+        public SecondaryWritebacks? ExpectedSideEffects { get; init; }
 
         public (uint Address, byte[] Data)? ExpectedMemory { get; init; }
 
@@ -92,6 +114,14 @@ public class ExecutionTests
         public (uint Address, byte[] Data)[] MemoryInitialization { get; init; } = [];
 
         public (uint High, uint Low)? InitialHighLow { get; init; }
+
+        public PrivilegeMode PrivilegeMode
+        {
+            get => Status.PrivilegeMode;
+            init => Status = Status with { PrivilegeMode = value };
+        }
+
+        public StatusRegister Status { get; init; }
     }
 
     public static IEnumerable<object[]> ArithmeticInstructionTestsList
@@ -303,6 +333,37 @@ public class ExecutionTests
         {
             yield return [new SimpleInstructionTestCase("syscall", TrapKind.Syscall)];
             yield return [new SimpleInstructionTestCase("break", TrapKind.Breakpoint)];
+
+            // Exception Return
+            yield return [new SimpleInstructionTestCase("eret", TrapKind.ReservedInstruction)];
+            yield return [new SimpleInstructionTestCase("eret", RegisterSet.CoProc0, CP0Registers.Status)
+            { Status = new StatusRegister { ExceptionLevel = true } }];
+
+            // Enable Interrupts
+            yield return [new SimpleInstructionTestCase("ei", TrapKind.ReservedInstruction)];
+            yield return [new SimpleInstructionTestCase("ei", RegisterSet.CoProc0, CP0Registers.Status)
+            {
+                ExpectedSideEffects = SecondaryWritebacks.None,
+                PrivilegeMode = PrivilegeMode.Kernel
+            }];
+            yield return [new SimpleInstructionTestCase("ei $v0", RegisterSet.CoProc0, CP0Registers.Status)
+            {
+                ExpectedSideEffects = SecondaryWritebacks.WriteToRT,
+                PrivilegeMode = PrivilegeMode.Kernel
+            }];
+
+            // Disable Interrupts
+            yield return [new SimpleInstructionTestCase("di", TrapKind.ReservedInstruction)];
+            yield return [new SimpleInstructionTestCase("di", RegisterSet.CoProc0, CP0Registers.Status)
+            {
+                ExpectedSideEffects = SecondaryWritebacks.None,
+                PrivilegeMode = PrivilegeMode.Kernel
+            }];
+            yield return [new SimpleInstructionTestCase("di $v1", RegisterSet.CoProc0, CP0Registers.Status)
+            {
+                ExpectedSideEffects = SecondaryWritebacks.WriteToRT,
+                PrivilegeMode = PrivilegeMode.Kernel
+            }];
         }
     }
 
@@ -346,8 +407,12 @@ public class ExecutionTests
         // TODO: Psuedo instruction support
         var instruction = parsed.Realize()[0];
 
-        // Initialize the register file with the provided values
         var interpreter = new Interpreter();
+
+        // Initialize the status register
+        interpreter.Computer.Processor.CoProcessor0.StatusRegister = @case.Status;
+
+        // Initialize the register file with the provided values
         foreach (var (reg, value) in @case.RegisterInitialization)
             interpreter.Computer.Processor[reg] = value;
 
@@ -370,7 +435,22 @@ public class ExecutionTests
         if (writeback.HasValue)
         {
             // Ensure that the expected register was written to with the expected value
-            Assert.AreEqual(writeback.Value.Value, interpreter.Computer.Processor[writeback.Value.Regiter]);
+            Assert.AreEqual(writeback.Value.Set, execution.RegisterSet);
+            Assert.IsNotNull(execution.Destination);
+            Assert.AreEqual(writeback.Value.Regiter, execution.Destination.Value);
+
+            var writeBackValue = writeback.Value.Value;
+            if (writeBackValue.HasValue)
+            {
+                var regFile = writeback.Value.Set switch
+                {
+                    RegisterSet.GeneralPurpose => interpreter.Computer.Processor.RegisterFile,
+                    RegisterSet.CoProc0 => interpreter.Computer.Processor.CoProcessor0.RegisterFile,
+                    _ => throw new ArgumentOutOfRangeException(nameof(writeback.Value.Set))
+                };
+
+                Assert.AreEqual(writeBackValue.Value, regFile[execution.Destination.Value]);
+            }
         }
         else
         {

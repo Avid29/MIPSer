@@ -92,7 +92,7 @@ public struct Execution
             if (RegisterSet is RegisterSet.None)
                 return null;
 
-            return Get(_reg, RegisterSet.GeneralPurpose);
+            return Get(_reg, RegisterSet.Numbered);
         }
         init
         {
@@ -188,6 +188,15 @@ public struct Execution
     }
 
     /// <summary>
+    /// Gets the new value to write back to the RT register as a side-effect of the instruction, if applicable.
+    /// </summary>
+    public uint RTDump 
+    {
+        readonly get => Get(_secondary1, SecondaryWritebacks.WriteToRT);
+        init => Set(ref _secondary1, value, SecondaryWritebacks.WriteToRT);
+    }
+
+    /// <summary>
     /// Gets the register set to writeback to.
     /// </summary>
     public RegisterSet RegisterSet { get; private set; }
@@ -210,7 +219,7 @@ public struct Execution
     private readonly T Get<T>(T field, RegisterSet when, T fallback = default)
         where T : unmanaged
     {
-        if (RegisterSet == when)
+        if (when is RegisterSet.Numbered || RegisterSet == when)
             return field;
 
         return fallback;

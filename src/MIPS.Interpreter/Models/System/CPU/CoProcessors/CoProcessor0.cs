@@ -14,15 +14,15 @@ public class CoProcessor0
     private const uint NORMAL_EXCEPTION_VECTOR = 0x8000_0180;
     private const uint BOOT_STRAPPING_EXCEPTION_VECTOR = 0xBFC0_0180;
 
-    private readonly RegisterFile _regFile;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="CoProcessor0"/> class.
     /// </summary>
     public CoProcessor0()
     {
-        _regFile = new RegisterFile();
+        RegisterFile = new RegisterFile();
     }
+
+    internal RegisterFile RegisterFile { get; }
 
     /// <summary>
     /// Gets the processor's current privilege mode.
@@ -48,8 +48,8 @@ public class CoProcessor0
     /// </summary>
     public StatusRegister StatusRegister
     {
-        get => (StatusRegister)_regFile[CP0Registers.Status];
-        set => _regFile[CP0Registers.Status] = (uint)value;
+        get => (StatusRegister)RegisterFile[CP0Registers.Status];
+        set => RegisterFile[CP0Registers.Status] = (uint)value;
     }
 
     /// <summary>
@@ -57,8 +57,8 @@ public class CoProcessor0
     /// </summary>
     public CauseRegister CauseRegister
     {
-        get => (CauseRegister)_regFile[CP0Registers.Cause];
-        set => _regFile[CP0Registers.Cause] = (uint)value;
+        get => (CauseRegister)RegisterFile[CP0Registers.Cause];
+        set => RegisterFile[CP0Registers.Cause] = (uint)value;
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public class CoProcessor0
     /// <returns>The value of the register.</returns>
     public uint this[CP0Registers reg]
     {
-        get => _regFile[reg];
-        set => _regFile[reg] = value;
+        get => RegisterFile[reg];
+        set => RegisterFile[reg] = value;
     }
 }
