@@ -74,9 +74,11 @@ public partial class Processor
 
         // TODO: Handle writeback size in apply stage
         // In the meantime, we'll read the existing value from memory, combine it with the value from the register, and write it back
-        var value = _computer.Memory.Read<uint>(addr);
-        value &= uint.MaxValue >> (32 - size * 8); // Mask to the size of T
-        value |= (uint.CreateTruncating(_regFile[instruction.RT]) & uint.MaxValue >> (32 - size * 8)); // Combine with the value from the register
+        var regValue = _regFile[instruction.RT];
+        var memValue = _computer.Memory.Read<uint>(addr);
+        var regMask = uint.MaxValue >> (32 - size * 8);
+        var memMask = ~regMask;
+        var value = (regValue & regMask) | (memValue & memMask);
 
         return new Execution
         {
