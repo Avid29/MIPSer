@@ -2,6 +2,7 @@
 
 using MIPS.Interpreter.Models.System.CPU.Registers;
 using MIPS.Interpreter.Models.System.Execution;
+using MIPS.Interpreter.Models.System.Execution.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
@@ -15,6 +16,11 @@ public partial class Processor
 
     private Execution CreateExecutionCoProc0(CoProc0Instruction instruction)
     {
+        // Check if the current privilege mode allows executing coprocessor instructions
+        // NOTE: Make mfc0 permissions in user mode configurable?
+        if (CoProcessor0.PrivilegeMode is not PrivilegeMode.Kernel)
+            return new Execution(TrapKind.ReservedInstruction);
+
         return instruction.CoProc0RSCode switch
         {
             // C0 Instructions
@@ -35,16 +41,8 @@ public partial class Processor
             },
 
             // Move instructions
-            CoProc0RSCode.MFC0 => new Execution
-            {
-                WriteBack = CoProcessor0[(CP0Registers)instruction.RD],
-                Destination = instruction.RT,
-            },
-            CoProc0RSCode.MTC0 => new Execution
-            {
-                CPR0 = (CP0Registers)instruction.RD,
-                WriteBack = _regFile[instruction.RT],
-            },
+            CoProc0RSCode.MFC0 => new Execution(instruction.RT, CoProcessor0[(CP0Registers)instruction.RD]),
+            CoProc0RSCode.MTC0 => new Execution((CP0Registers)instruction.RD, _regFile[instruction.RT]),
 
             _ => throw new NotImplementedException()
         };

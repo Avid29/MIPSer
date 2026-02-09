@@ -108,11 +108,9 @@ public partial class Processor
             {
                 ProgramCounter = instruction.Address,
             },
-            OperationCode.JumpAndLink => new Execution
+            OperationCode.JumpAndLink => new Execution(GPRegister.ReturnAddress, ProgramCounter + 4)
             {
                 ProgramCounter = instruction.Address,
-                Destination = GPRegister.ReturnAddress,
-                WriteBack = ProgramCounter,
             },
             OperationCode.JumpAndLinkX => throw new NotImplementedException(),
 
@@ -125,7 +123,7 @@ public partial class Processor
             OperationCode.Coprocessor2 => throw new NotImplementedException(),
             OperationCode.Coprocessor3 => throw new NotImplementedException(),
 
-            OperationCode.Trap => throw new NotImplementedException(),
+            OperationCode.Trap => new Execution(TrapKind.Trap),
             OperationCode.SIMD => throw new NotImplementedException(),
             OperationCode.LoadByte => throw new NotImplementedException(),
             OperationCode.LoadHalfWord => throw new NotImplementedException(),

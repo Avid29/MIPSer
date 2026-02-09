@@ -69,30 +69,16 @@ public partial class Processor
                 FunctionCode.JumpAndLinkRegister => JumpR(instruction, instruction.RD),
 
                 // System
-                FunctionCode.SystemCall => new Execution
-                {
-                    Trap = TrapKind.Syscall,
-                },
-                FunctionCode.Break => new Execution
-                {
-                    Trap = TrapKind.Breakpoint,
-                },
+                FunctionCode.SystemCall => new Execution(TrapKind.Syscall),
+                FunctionCode.Break => new Execution(TrapKind.Breakpoint),
                 FunctionCode.Sync => throw new NotImplementedException(),
 
-                FunctionCode.MoveFromHigh => new Execution
-                {
-                    WriteBack = HighLow.High,
-                    Destination = instruction.RD,
-                },
+                FunctionCode.MoveFromHigh => new Execution(instruction.RD, HighLow.High),
                 FunctionCode.MoveToHigh => new Execution
                 {
                     High = rs,
                 },
-                FunctionCode.MoveFromLow => new Execution
-                {
-                    WriteBack = HighLow.Low,
-                    Destination = instruction.RD,
-                },
+                FunctionCode.MoveFromLow => new Execution(instruction.RD, HighLow.Low),
                 FunctionCode.MoveToLow => new Execution
                 {
                     Low = rs,
@@ -123,7 +109,7 @@ public partial class Processor
                 Func2Code.MultiplyAndAddHiLowUnsigned => MultR(instruction, (rs, rt) =>
                 {
                     ulong sum = ((ulong)HighLow.High << 32) + HighLow.Low;
-                    sum += (ulong)rs* rt;
+                    sum += (ulong)rs * rt;
                     return sum;
                 }),
                 Func2Code.MultiplyAndSubtractHiLow => MultR(instruction, (rs, rt) =>
@@ -165,35 +151,23 @@ public partial class Processor
         if (checkFunc is not null &&
             checkFunc((int)rs, (int)rt, (int)value))
         {
-            return new Execution
-            {
-                Trap = TrapKind.ArithmeticOverflow,
-            };
+            return new Execution(TrapKind.ArithmeticOverflow);
         }
 
         // No overflow detected
         // Return the execution with the computed value and destination
-        return new Execution
-        {
-            Destination = dest,
-            WriteBack = value,
-        };
+        return new Execution(dest, value);
     }
 
     private Execution ShiftR(Instruction instruction, ShiftRDelegate func)
     {
-        var rs = _regFile[instruction.RS];
         var rt = _regFile[instruction.RT];
         var shift = instruction.ShiftAmount;
 
         var dest = instruction.RD;
         uint value = func(rt, shift);
 
-        return new Execution
-        {
-            Destination = dest,
-            WriteBack = value,
-        };
+        return new Execution(dest, value);
     }
 
     private Execution MultR(Instruction instruction, MultRDelegate func)
@@ -201,7 +175,6 @@ public partial class Processor
         var rs = _regFile[instruction.RS];
         var rt = _regFile[instruction.RT];
 
-        var dest = instruction.RD;
         ulong value = func(rs, rt);
 
         return new Execution
@@ -230,15 +203,7 @@ public partial class Processor
         var rs = _regFile[instruction.RS];
         var rt = _regFile[instruction.RT];
 
-        if (func(rs, rt))
-        {
-            return new Execution
-            {
-                Trap = TrapKind.Trap,
-            };
-        }
-
-        return default;
+        return func(rs, rt) ? new Execution(TrapKind.Trap) : default;
     }
 
     private Execution JumpR(Instruction instruction, GPRegister? link = null)
@@ -257,11 +222,9 @@ public partial class Processor
         // A link register was provided
         // Write the return address to the specificied link register
         // and set the program counter to the jump address
-        return new Execution
+        return new Execution(link.Value, ProgramCounter + 4)
         {
             ProgramCounter = rs,
-            Destination = link.Value,
-            WriteBack = ProgramCounter + 4,
         };
     }
 }

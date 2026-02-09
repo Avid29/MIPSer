@@ -15,6 +15,32 @@ public struct Execution
     private readonly GPRegister _reg;
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="Execution"/> struct.
+    /// </summary>
+    public Execution(TrapKind trap)
+    {
+        Trap = trap;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Execution"/> struct.
+    /// </summary>
+    public Execution(GPRegister dest, uint writeBack)
+    {
+        GPR = dest;
+        WriteBack = writeBack;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Execution"/> struct.
+    /// </summary>
+    public Execution(CP0Registers dest, uint writeBack)
+    {
+        CPR0 = dest;
+        WriteBack = writeBack;
+    }
+
+    /// <summary>
     /// Gets the writeback to the destination.
     /// </summary>
     public readonly uint WriteBack { get; init; }

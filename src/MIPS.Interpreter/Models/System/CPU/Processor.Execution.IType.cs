@@ -78,20 +78,12 @@ public partial class Processor
         if (checkFunc is not null &&
             checkFunc((int)rs, imm, (int)value))
         {
-            return new Execution
-            {
-                Destination = null,
-                Trap = TrapKind.ArithmeticOverflow,
-            };
+            return new Execution(TrapKind.ArithmeticOverflow);
         }
 
         // No overflow detected
         // Return the execution with the computed value and destination
-        return new Execution
-        {
-            Destination = dest,
-            WriteBack = value,
-        };
+        return new Execution(dest, value);
     }
 
     private Execution Branch(Instruction instruction, BranchDelegate func)
