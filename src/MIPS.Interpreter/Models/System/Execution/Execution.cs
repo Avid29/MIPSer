@@ -10,20 +10,34 @@ namespace MIPS.Interpreter.Models.System.Execution;
 /// </summary>
 public struct Execution()
 {
-    private readonly uint _writeValue;
-    private readonly uint _pc;
+    private readonly uint _writeBack;
     private readonly uint _secondary1;
     private readonly uint _secondary2;
     private readonly GPRegister _reg;
 
     /// <summary>
-    /// Gets the execution output.
+    /// Gets the writeback to the destination.
     /// </summary>
-    public readonly uint Output
+    public readonly uint? WriteBack
     {
-        get => _writeValue;
-        init => _writeValue = value;
+        get => _writeBack;
+        init
+        {
+            if (value.HasValue)
+            {
+                _writeBack = value.Value;
+            }
+            else
+            {
+                RegisterSet = RegisterSet.None;
+            }
+        }
     }
+
+    /// <summary>
+    /// Gets the writeback value to the destination.
+    /// </summary>
+    public readonly uint WriteBackValue => _writeBack;
     
     /// <summary>
     /// Gets the general purpose register destination of the output.
@@ -91,8 +105,8 @@ public struct Execution()
     /// </summary>
     public uint ProgramCounter
     {
-        readonly get => Get(_pc, SecondaryWritebacks.ProgramCounter);
-        init => Set(ref _pc, value, SecondaryWritebacks.ProgramCounter);
+        readonly get => Get(field, SecondaryWritebacks.ProgramCounter);
+        init => Set(ref field, value, SecondaryWritebacks.ProgramCounter);
     }
 
     /// <summary>
@@ -110,9 +124,14 @@ public struct Execution()
     public RegisterSet RegisterSet { get; private set; }
 
     /// <summary>
-    /// 
+    /// Gets the type of secondary writeback from the execution, if any.
     /// </summary>
-    public SecondaryWritebacks SideEffects {get; private set; }
+    public SecondaryWritebacks SideEffects { get; private set; }
+
+    /// <summary>
+    /// Gets the type of trap that occurred during execution, if any.
+    /// </summary>
+    public TrapKind Trap { get; init; }
 
     /// <summary>
     /// Gets an execution that does nothing.

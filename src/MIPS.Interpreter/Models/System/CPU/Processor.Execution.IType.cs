@@ -1,0 +1,108 @@
+﻿// Avishai Dernis 2025
+
+using CommunityToolkit.Diagnostics;
+using MIPS.Interpreter.Models.System.CPU.Registers;
+using MIPS.Interpreter.Models.System.Execution;
+using MIPS.Interpreter.Models.System.Execution.Enum;
+using MIPS.Models.Instructions;
+using MIPS.Models.Instructions.Enums.Operations;
+using MIPS.Models.Instructions.Enums.Registers;
+using MIPS.Models.Instructions.Enums.SpecialFunctions;
+using System;
+using System.Numerics;
+
+namespace MIPS.Interpreter.System.CPU;
+
+public partial class Processor
+{
+    delegate uint BasicIDelegate(uint rs, short imm);
+    delegate bool BranchDelegate(uint rs, uint rt);
+
+    private Execution CreateExecutionIType(Instruction instruction)
+    {
+        return instruction.OpCode switch
+        {
+            OperationCode.Jump => new Execution
+            {
+                ProgramCounter = instruction.Address,
+            },
+            OperationCode.JumpAndLink => new Execution
+            {
+                ProgramCounter = instruction.Address,
+                Destination = GPRegister.ReturnAddress,
+                WriteBack = ProgramCounter,
+            },
+
+            OperationCode.RegisterImmediate => throw new NotImplementedException(),
+            
+            // Branch
+            OperationCode.BranchOnEquals or
+            OperationCode.BranchOnEqualLikely => Branch(instruction, (rs, rt) => rs == rt),
+            OperationCode.BranchOnNotEquals or 
+            OperationCode.BranchOnNotEqualLikely => Branch(instruction, (rs, rt) => rs != rt),
+            OperationCode.BranchOnLessThanOrEqualToZero or
+            OperationCode.BranchOnLessThanOrEqualToZeroLikely => throw new NotImplementedException(),
+            OperationCode.BranchOnGreaterThanZero or
+            OperationCode.BranchOnGreaterThanZeroLikely => throw new NotImplementedException(),
+
+            // Arithmetic
+            OperationCode.AddImmediate => BasicI(instruction,
+                (rs, imm) => (uint)((int)rs + imm),
+                (a, b, r) => ((a ^ r) & (b ^ r)) < 0),
+            OperationCode.AddImmediateUnsigned => BasicI(instruction, (rs, imm) => rs + (ushort)imm),
+
+            // Compare
+            OperationCode.SetLessThanImmediate => BasicI(instruction, (rs, imm) => (uint)((int)rs < imm ? 1 : 0)),
+            OperationCode.SetLessThanImmediateUnsigned => BasicI(instruction, (rs, imm) => (uint)(rs < imm ? 1 : 0)),
+
+            // Logical
+            OperationCode.AndImmediate => BasicI(instruction, (rs, imm) => rs & (ushort)imm),
+            OperationCode.OrImmediate => BasicI(instruction, (rs, imm) => rs | (ushort)imm),
+            OperationCode.ExclusiveOrImmediate => BasicI(instruction, (rs, imm) => rs ^ (ushort)imm),
+
+            OperationCode.LoadUpperImmediate => BasicI(instruction, (rs, imm) => (uint)((ushort)imm << 16)),
+
+            _ => throw new NotImplementedException()
+        };
+    }
+
+    private Execution BasicI(Instruction instruction, BasicIDelegate func, OverflowCheckDelegate? checkFunc = null)
+    {
+        var rs = RegisterFile[instruction.RS];
+        var imm = instruction.ImmediateValue;
+
+        var dest = instruction.RT;
+        uint value = func(rs, imm);
+
+        bool overflow = false;
+        if (checkFunc is not null)
+        {
+            overflow = checkFunc((int)rs, imm, (int)value);
+        }
+
+        return new Execution
+        {
+            // TODO: This is a hack to prevent writing to the destination register if there is an overflow, we should handle this better in the future.
+            Destination = overflow ? GPRegister.Zero : dest,
+            WriteBack = value,
+            Trap = overflow ? TrapKind.ArithmeticOverflow : TrapKind.None,
+        };
+    }
+
+    private Execution Branch(Instruction instruction, BranchDelegate func)
+    {
+        var rs = RegisterFile[instruction.RS];
+        var rt = RegisterFile[instruction.RT];
+        var imm = instruction.Offset;
+
+        if (func(rs, rt))
+        {
+            return new Execution
+            {
+                ProgramCounter = (uint)(ProgramCounter + imm),
+            };
+        }
+
+        return Execution.NoOp;
+    }
+}

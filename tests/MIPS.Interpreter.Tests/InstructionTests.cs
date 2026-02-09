@@ -3,6 +3,7 @@
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Parsers;
 using MIPS.Assembler.Tokenization;
+using MIPS.Interpreter.Models.System.Execution.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions;
@@ -16,8 +17,18 @@ public class InstructionTests
 {
     public sealed record SimpleInstructionTestCase(
         string Input,
-        (GPRegister Regiter, uint Value) Expected,
-        params (GPRegister Register, uint Value)[] RegisterInitialization);
+        (GPRegister Regiter, uint Value)? Expected = null,
+        TrapKind Trap = TrapKind.None,
+        params (GPRegister Register, uint Value)[] RegisterInitialization)
+    {
+        public SimpleInstructionTestCase(string input, (GPRegister, uint) expected, params (GPRegister, uint)[] registerInit) : this(input, expected, TrapKind.None, registerInit)
+        {
+        }
+
+        public SimpleInstructionTestCase(string input, TrapKind trap, params (GPRegister, uint)[] registerInit) : this(input, Trap: trap, RegisterInitialization: registerInit)
+        {
+        }
+    }
 
     public static IEnumerable<object[]> ArithmeticInstructionTestsList
     {
@@ -40,10 +51,28 @@ public class InstructionTests
             unchecked
             {
                 yield return [new SimpleInstructionTestCase("add $t2, $t0, $t1", (GPRegister.Temporary2, 30 + (-10)), (GPRegister.Temporary0, 30), (GPRegister.Temporary1, (uint)-10))];
+                yield return [new SimpleInstructionTestCase("addi $t1, $t0, -10", (GPRegister.Temporary1, 30 + (-10)), (GPRegister.Temporary0, 30))];
                 yield return [new SimpleInstructionTestCase("sub $t2, $t0, $t1", (GPRegister.Temporary2, 20 - (-10)), (GPRegister.Temporary0, 20), (GPRegister.Temporary1, (uint)-10))];
             }
 
-            // TODO: Test/Handle overflow behavior
+            // Overflowing
+            unchecked
+            {
+                // Unsigned (should not overflow)
+                yield return [new SimpleInstructionTestCase("addu $t2, $t0, $t1", (GPRegister.Temporary2, uint.MaxValue + 1), (GPRegister.Temporary0, uint.MaxValue), (GPRegister.Temporary1, 1))];
+                yield return [new SimpleInstructionTestCase("addiu $t1, $t0, 1", (GPRegister.Temporary1, uint.MaxValue + 1), (GPRegister.Temporary0, uint.MaxValue))];
+                yield return [new SimpleInstructionTestCase("subu $t2, $t0, $t1", (GPRegister.Temporary2, uint.MinValue - 1), (GPRegister.Temporary0, uint.MinValue), (GPRegister.Temporary1, 1))];
+
+                // Signed (without signs)
+                yield return [new SimpleInstructionTestCase("add $t2, $t0, $t1", TrapKind.ArithmeticOverflow, (GPRegister.Temporary0, int.MaxValue), (GPRegister.Temporary1, 1))];
+                yield return [new SimpleInstructionTestCase("addi $t1, $t0, 1", TrapKind.ArithmeticOverflow, (GPRegister.Temporary0, int.MaxValue))];
+                yield return [new SimpleInstructionTestCase("sub $t2, $t0, $t1", TrapKind.ArithmeticOverflow, (GPRegister.Temporary0, (uint)int.MinValue), (GPRegister.Temporary1, 1))];
+
+                // Signed (with signs)
+                yield return [new SimpleInstructionTestCase("add $t2, $t0, $t1", TrapKind.ArithmeticOverflow, (GPRegister.Temporary0, (uint)int.MinValue), (GPRegister.Temporary1, (uint)-1))];
+                yield return [new SimpleInstructionTestCase("addi $t1, $t0, -1", TrapKind.ArithmeticOverflow, (GPRegister.Temporary0, (uint)int.MinValue))];
+                yield return [new SimpleInstructionTestCase("sub $t2, $t0, $t1", TrapKind.ArithmeticOverflow, (GPRegister.Temporary0, int.MaxValue), (GPRegister.Temporary1, (uint)-1))];
+            }
         }
     }
 
@@ -111,24 +140,24 @@ public class InstructionTests
     [DataTestMethod]
     [DynamicData(nameof(ArithmeticInstructionTestsList))]
     public void ArithmeticInstructionTests(SimpleInstructionTestCase @case)
-        => RunTest(@case.Input, @case.Expected, @case.RegisterInitialization);
+        => RunTest(@case.Input, @case.Expected, @case.Trap, @case.RegisterInitialization);
 
     [DataTestMethod]
     [DynamicData(nameof(LogicalInstructionTestsList))]
     public void LogicalInstructionTests(SimpleInstructionTestCase @case)
-        => RunTest(@case.Input, @case.Expected, @case.RegisterInitialization);
+        => RunTest(@case.Input, @case.Expected, @case.Trap, @case.RegisterInitialization);
 
     [DataTestMethod]
     [DynamicData(nameof(CompareInstructionTestsList))]
     public void CompareInstructionTests(SimpleInstructionTestCase @case)
-        => RunTest(@case.Input, @case.Expected, @case.RegisterInitialization);
+        => RunTest(@case.Input, @case.Expected, @case.Trap, @case.RegisterInitialization);
 
     [DataTestMethod]
     [DynamicData(nameof(UncategorizedRegisterOnlyInstructionTestsList))]
     public void UncategorizedRegisterOnlyInstructionTests(SimpleInstructionTestCase @case)
-        => RunTest(@case.Input, @case.Expected, @case.RegisterInitialization);
+        => RunTest(@case.Input, @case.Expected, @case.Trap, @case.RegisterInitialization);
 
-    private static void RunTest(string line, (GPRegister, uint) check, params (GPRegister, uint)[] regInits)
+    private static void RunTest(string line, (GPRegister, uint)? check, TrapKind expectedTrap = TrapKind.None, params (GPRegister, uint)[] regInits)
     {
         // The instruction parser is only used to convert the instruction string into an Instruction struct, so we can test the interpreter with it.
         var tokenized = Tokenizer.TokenizeLine(line);
@@ -145,7 +174,14 @@ public class InstructionTests
         foreach (var (reg, value) in regInits)
             interpreter.SetRegister(reg, value);
 
-        interpreter.InsertInstructionExecution(instruction);
-        Assert.AreEqual(check.Item2, interpreter.GetRegister(check.Item1));
+        interpreter.InsertInstructionExecution(instruction, out var trap);
+
+        // Check the register value after execution, if provided
+        if (check is not null)
+        {
+            Assert.AreEqual(check.Value.Item2, interpreter.GetRegister(check.Value.Item1));
+        }
+
+        Assert.AreEqual(expectedTrap, trap);
     }
 }
