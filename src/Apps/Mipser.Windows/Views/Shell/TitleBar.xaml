@@ -262,6 +262,44 @@
                                 Command="{x:Bind ViewModel.CleanFileCommand, Mode=OneWay}"/>
             </MenuBarItem>
 
+            <!--  Debug  -->
+            <MenuBarItem x:Uid="/TitleBar/DebugMBI" Title="Debug">
+                <!--  Run  -->
+                <MenuFlyoutItem x:Uid="/TitleBar/StartDebuggingMFI" Text="Start Debugging"
+                                IsEnabled="False">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xF5B0;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="/TitleBar/StartWithoutDebuggingMFI" Text="Start Without Debugging"
+                                IsEnabled="False">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE768;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutSeparator/>
+                
+                <!--Step-->
+                <MenuFlyoutItem x:Uid="/TitleBar/StepOverMFI" Text="Step Over"
+                                IsEnabled="False">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEDDA;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="/TitleBar/StepIntoMFI" Text="Step Into"
+                                IsEnabled="False">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEDDC;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem x:Uid="/TitleBar/StepOutMFI" Text="Step Out"
+                                IsEnabled="False">
+                    <MenuFlyoutItem.Icon>
+                        <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xEDDB;" />
+                    </MenuFlyoutItem.Icon>
+                </MenuFlyoutItem>
+            </MenuBarItem>
+            
             <!--  Help  -->
             <MenuBarItem x:Uid="/TitleBar/HelpMBI" Title="Help">
                 <MenuFlyoutItem x:Uid="/TitleBar/CheatSheetMFI"

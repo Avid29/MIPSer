@@ -165,6 +165,9 @@
   <data name="CutMFI.Text" xml:space="preserve">
     <value>גזור</value>
   </data>
+  <data name="DebugMBI.Title" xml:space="preserve">
+    <value>ניפוי שגיאות</value>
+  </data>
   <data name="DuplicateMFI.Text" xml:space="preserve">
     <value>שכפל</value>
   </data>
@@ -239,6 +242,21 @@
   </data>
   <data name="SettingsMFI.Text" xml:space="preserve">
     <value>הגדרות מיפסר</value>
+  </data>
+  <data name="StartDebuggingMFI.Text" xml:space="preserve">
+    <value>הפעל ניפוי שגיאות</value>
+  </data>
+  <data name="StartWithoutDebuggingMFI.Text" xml:space="preserve">
+    <value>הפעל ללא ניפוי שגיאות</value>
+  </data>
+  <data name="StepIntoMFI.Text" xml:space="preserve">
+    <value>צעד לתוך</value>
+  </data>
+  <data name="StepOutMFI.Text" xml:space="preserve">
+    <value>צעד החוצה</value>
+  </data>
+  <data name="StepOverMFI.Text" xml:space="preserve">
+    <value>צעד מעל</value>
   </data>
   <data name="ToggleFullScreenMFI.Text" xml:space="preserve">
     <value>הפעלה/כיבוי מסך מלא</value>
