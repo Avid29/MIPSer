@@ -142,17 +142,23 @@ public class InstructionParserTests
     }
 
     [DataTestMethod]
-    [DynamicData(nameof(RawInstructionSuccessTestsList), DynamicDataDisplayName = nameof(InstructionParsingTestCaseDisplayName))]
+    [DynamicData(nameof(RawInstructionSuccessTestsList),
+        DynamicDataDisplayName = nameof(InstructionParsingTestCaseDisplayName),
+        DynamicDataDisplayNameDeclaringType = typeof(InstructionParserTests))]
     public void RawInstructionSuccessTests(InstructionParsingTestCase @case)
         => RunTest(@case.Input, new ParsedInstruction(@case.Expected!.Value));
 
     [DataTestMethod]
-    [DynamicData(nameof(RawInstructionFailureTestsList), DynamicDataDisplayName = nameof(InstructionParsingTestCaseDisplayName))]
+    [DynamicData(nameof(RawInstructionFailureTestsList),
+        DynamicDataDisplayName = nameof(InstructionParsingTestCaseDisplayName),
+        DynamicDataDisplayNameDeclaringType = typeof(InstructionParserTests))]
     public void RawInstructionFailureTests(InstructionParsingTestCase @case)
         => RunTest(@case.Input, logCode: @case.Code);
 
     [DataTestMethod]
-    [DynamicData(nameof(RawInstructionWarningTestsList), DynamicDataDisplayName = nameof(InstructionParsingTestCaseDisplayName))]
+    [DynamicData(nameof(RawInstructionWarningTestsList),
+        DynamicDataDisplayName = nameof(InstructionParsingTestCaseDisplayName),
+        DynamicDataDisplayNameDeclaringType = typeof(InstructionParserTests))]
     public void RawInstructionWarningTests(InstructionParsingTestCase @case)
         => RunTest(@case.Input, new ParsedInstruction(@case.Expected!.Value), @case.Code);
 
