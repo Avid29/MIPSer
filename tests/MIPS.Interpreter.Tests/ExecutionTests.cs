@@ -11,7 +11,7 @@ using System.Numerics;
 namespace MIPS.Interpreter.Tests;
 
 [TestClass]
-public class InstructionTests
+public class ExecutionTests
 {
     public sealed record SimpleInstructionTestCase
     {
@@ -160,8 +160,6 @@ public class InstructionTests
             yield return [new SimpleInstructionTestCase("srl $t1, $t0, 4", (GPRegister.Temporary1, 101 >> 4), (GPRegister.Temporary0, 101))];
             yield return [new SimpleInstructionTestCase("sllv $t2, $t0, $t1", (GPRegister.Temporary2, 101 << 4), (GPRegister.Temporary0, 101), (GPRegister.Temporary1, 4))];
             yield return [new SimpleInstructionTestCase("srlv $t2, $t0, $t1", (GPRegister.Temporary2, 101 >> 4), (GPRegister.Temporary0, 101), (GPRegister.Temporary1, 4))];
-
-            // TODO: Test/Handle overflow behavior
         }
     }
 
@@ -243,6 +241,18 @@ public class InstructionTests
         {
             // lui
             yield return [new SimpleInstructionTestCase("lui $t0, 0x1234", (GPRegister.Temporary0, 0x12340000))];
+
+            // Move from/to high and low registers
+            yield return [new SimpleInstructionTestCase("mtlo $t0", highLow: (0, 0x5678), (GPRegister.Temporary0, 0x5678))];
+            yield return [new SimpleInstructionTestCase("mthi $t0", highLow: (0x1234, 0), (GPRegister.Temporary0, 0x1234))];
+            yield return [new SimpleInstructionTestCase("mflo $t0", (GPRegister.Temporary0, 0x5678))
+            {
+                InitialHighLow = (0x1234, 0x5678)
+            }];
+            yield return [new SimpleInstructionTestCase("mfhi $t0", (GPRegister.Temporary0, 0x1234))
+            {
+                InitialHighLow = (0x1234, 0x5678)
+            }];
 
             // Niche bit-manipulation
             // TODO: ext, ins, seb, seh, wsbh, wshd
