@@ -27,11 +27,34 @@ public partial class Processor
         // Create the exeuction
         var execution = CreateExecution(instruction);
 
+        // Handle exceptions and traps first, if any
+        if (execution.Trap is not TrapKind.None)
+        {
+            // Status register
+            var status = CoProcessor0.StatusRegister;
+            status.ExceptionLevel = true;
+            CoProcessor0.StatusRegister = status;
+
+            // Cause register
+            var cause = CoProcessor0.CauseRegister;
+            cause.Trap = execution.Trap;
+            // causeReg.IsBranchDelayed = // TODO: Handle delay slots
+            CoProcessor0.CauseRegister = cause;
+
+            // Track the current program counter in the EPC register
+            // before jumping to the exception handler
+            CoProcessor0[CP0Registers.ExceptionPC] = ProgramCounter;
+            ProgramCounter = CoProcessor0.ExceptionVector;
+
+            // No writebacks. No side-effects. Periodt. Full stop.
+            return execution;
+        }
+
         // Select the register file to write to, if any.
         var regFile = execution.RegisterSet switch
         {
             RegisterSet.None => null,
-            RegisterSet.GeneralPurpose => RegisterFile,
+            RegisterSet.GeneralPurpose => _regFile,
             _ => ThrowHelper.ThrowNotSupportedException<RegisterFile>(),
         };
 
@@ -61,7 +84,7 @@ public partial class Processor
                 programCounter = execution.ProgramCounter;
                 break;
             case SecondaryWritebacks.Memory:
-                _memory[execution.MemAddress] = execution.WriteBack;
+                _computer.Memory[execution.MemAddress] = execution.WriteBack;
                 break;
         }
 
@@ -73,10 +96,6 @@ public partial class Processor
 
     private Execution CreateExecution(Instruction instruction)
     {
-        var rs = RegisterFile[instruction.RS];
-        var rt = RegisterFile[instruction.RT];
-        var shift = instruction.ShiftAmount;
-
         return instruction.OpCode switch
         {
             // Special (R-Type)

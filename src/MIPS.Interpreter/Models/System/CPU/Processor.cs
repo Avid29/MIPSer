@@ -1,7 +1,10 @@
 ﻿// Avishai Dernis 2025
 
+using MIPS.Interpreter.Models.System;
+using MIPS.Interpreter.Models.System.CPU.CoProcessors;
 using MIPS.Interpreter.Models.System.CPU.Registers;
 using MIPS.Interpreter.Models.System.Memory;
+using MIPS.Models.Instructions.Enums.Registers;
 
 namespace MIPS.Interpreter.System.CPU;
 
@@ -10,26 +13,29 @@ namespace MIPS.Interpreter.System.CPU;
 /// </summary>
 public partial class Processor
 {
-    private readonly RAM _memory;
+    private readonly Computer _computer;
+    private readonly RegisterFile _regFile;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Processor"/> class.
     /// </summary>
-    public Processor(RAM memory)
+    public Processor(Computer computer)
     {
-        RegisterFile = new RegisterFile();
-        _memory = memory;
+        _computer = computer;
+
+        _regFile = new RegisterFile();
+        CoProcessor0 = new CoProcessor0();
     }
 
     /// <summary>
     /// Gets or sets the value in the high register.
     /// </summary>
-    public uint High { get ; set; }
+    public uint High { get; set; }
 
     /// <summary>
     /// Gets or sets the value in the low register.
     /// </summary>
-    public uint Low { get ; set; }
+    public uint Low { get; set; }
 
     /// <summary>
     /// Gets or sets the value in the program counter register.
@@ -37,7 +43,18 @@ public partial class Processor
     public uint ProgramCounter { get; set; }
 
     /// <summary>
-    /// Gets the register file of the processor.
+    /// Gets the coprocessor 0 unit of the computer system.
     /// </summary>
-    public RegisterFile RegisterFile { get; }
+    public CoProcessor0 CoProcessor0 { get; }
+
+    /// <summary>
+    /// Gets or sets the value of a general-purpose register on the processor.
+    /// </summary>
+    /// <param name="reg">The register to get or set.</param>
+    /// <returns>The value of the register.</returns>
+    public uint this[GPRegister reg]
+    {
+        get => _regFile[reg];
+        set => _regFile[reg] = value;
+    }
 }

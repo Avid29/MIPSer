@@ -12,6 +12,7 @@ public struct StatusRegister
 {
     private const int INTERUPT_ENABLED_BIT = 0;
     private const int EXCEPTION_LEVEL_BIT = 1;
+    private const int BOOTSTRAPPING_BIT = 2;
     private const int USER_MODE_BIT = 4;
     private const int INTERUPT_MASK_SIZE = 8;
     private const int INTERUPT_MASK_OFFSET = 8;
@@ -34,6 +35,15 @@ public struct StatusRegister
     {
         readonly get => UintMasking.CheckBit(_status, EXCEPTION_LEVEL_BIT);
         set => UintMasking.SetBit(ref _status, EXCEPTION_LEVEL_BIT, value);
+    }
+
+    /// <summary>
+    /// Gets or sets if the system is in bootstrapping mode.
+    /// </summary>
+    public bool BootStrapping
+    {
+        readonly get => UintMasking.CheckBit(_status, BOOTSTRAPPING_BIT);
+        set => UintMasking.SetBit(ref _status, BOOTSTRAPPING_BIT, value);
     }
 
     /// <summary>

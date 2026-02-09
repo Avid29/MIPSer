@@ -69,7 +69,7 @@ public partial class Processor
     private Execution BasicI(Instruction instruction, BasicIDelegate func, OverflowCheckDelegate? checkFunc = null)
     {
         // Retrieve the source register and immediate values
-        var rs = RegisterFile[instruction.RS];
+        var rs = _regFile[instruction.RS];
         var imm = instruction.ImmediateValue;
 
         // Determine the destination register and
@@ -101,8 +101,8 @@ public partial class Processor
 
     private Execution Branch(Instruction instruction, BranchDelegate func)
     {
-        var rs = RegisterFile[instruction.RS];
-        var rt = RegisterFile[instruction.RT];
+        var rs = _regFile[instruction.RS];
+        var rt = _regFile[instruction.RT];
         var imm = instruction.Offset;
 
         if (func(rs, rt))

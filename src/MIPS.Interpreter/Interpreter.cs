@@ -73,7 +73,7 @@ public class Interpreter
     /// <param name="register"></param>
     /// <returns></returns>
     public uint GetRegister(GPRegister register)
-        => _computer.Processor.RegisterFile[register];
+        => _computer.Processor[register];
 
     /// <summary>
     /// Sets the specified general-purpose register to the given value.
@@ -81,5 +81,5 @@ public class Interpreter
     /// <param name="register">The general-purpose register to update.</param>
     /// <param name="value">The value to assign to the specified register.</param>
     public void SetRegister(GPRegister register, uint value)
-        => _computer.Processor.RegisterFile[register] = value;
+        => _computer.Processor[register] = value;
 }

@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using MIPS.Interpreter.Models.System.CPU.CoProcessors;
 using MIPS.Interpreter.Models.System.Memory;
 using MIPS.Interpreter.System.CPU;
 
@@ -16,7 +17,7 @@ public class Computer
     public Computer()
     {
         Memory = new RAM();
-        Processor = new Processor(Memory);
+        Processor = new Processor(this);
     }
 
     /// <summary>

@@ -1,6 +1,8 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Helpers;
+using MIPS.Interpreter.Models.System.Execution.Enum;
+using System.Runtime.CompilerServices;
 
 namespace MIPS.Interpreter.Models.System.CPU.Registers;
 
@@ -18,6 +20,15 @@ public struct CauseRegister
     private const int COPROCESSOR_EXCEPTION_OFFSET = 28;
 
     private uint _cause;
+
+    /// <summary>
+    /// Gets or sets the trap code for the last exception.
+    /// </summary>
+    public TrapKind Trap
+    {
+        readonly get => (TrapKind)UintMasking.GetShiftMask(_cause, EXCEPTION_CODE_SIZE, EXCEPTION_CODE_OFFSET);
+        set => UintMasking.SetShiftMask(ref _cause, EXCEPTION_CODE_SIZE, EXCEPTION_CODE_OFFSET, (uint)value);
+    }
 
     /// <summary>
     /// Gets or sets the pending interupts.
@@ -45,4 +56,14 @@ public struct CauseRegister
         readonly get => UintMasking.CheckBit(_cause, BRANCH_DELAY_BIT);
         set => UintMasking.SetBit(ref _cause, BRANCH_DELAY_BIT, value);
     }
+
+    /// <summary>
+    /// Casts a <see cref="uint"/> to a <see cref="CauseRegister"/>.
+    /// </summary>
+    public static unsafe explicit operator CauseRegister(uint value) => Unsafe.As<uint, CauseRegister>(ref value);
+
+    /// <summary>
+    /// Casts a <see cref="CauseRegister"/> to a <see cref="uint"/>.
+    /// </summary>
+    public static unsafe explicit operator uint(CauseRegister value) => Unsafe.As<CauseRegister, uint>(ref value);
 }

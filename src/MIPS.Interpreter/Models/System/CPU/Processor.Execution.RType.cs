@@ -19,8 +19,8 @@ public partial class Processor
 
     private Execution CreateExecutionRType(Instruction instruction)
     {
-        var rs = RegisterFile[instruction.RS];
-        var rt = RegisterFile[instruction.RT];
+        var rs = _regFile[instruction.RS];
+        var rt = _regFile[instruction.RT];
         var shift = instruction.ShiftAmount;
 
         return instruction.OpCode switch
@@ -67,7 +67,7 @@ public partial class Processor
                 },
                 FunctionCode.Break => new Execution
                 {
-                    Trap = TrapKind.Break,
+                    Trap = TrapKind.Breakpoint,
                 },
                 FunctionCode.Sync => throw new NotImplementedException(),
 
@@ -119,8 +119,8 @@ public partial class Processor
     private Execution BasicR(Instruction instruction, BasicRDelegate func, OverflowCheckDelegate? checkFunc = null)
     {
         // Retrieve the source register values
-        var rs = RegisterFile[instruction.RS];
-        var rt = RegisterFile[instruction.RT];
+        var rs = _regFile[instruction.RS];
+        var rt = _regFile[instruction.RT];
 
         // Determine the destination register and
         // compute the result using the provided function
@@ -150,8 +150,8 @@ public partial class Processor
 
     private Execution ShiftR(Instruction instruction, ShiftRDelegate func)
     {
-        var rs = RegisterFile[instruction.RS];
-        var rt = RegisterFile[instruction.RT];
+        var rs = _regFile[instruction.RS];
+        var rt = _regFile[instruction.RT];
         var shift = instruction.ShiftAmount;
 
         var dest = instruction.RD;
@@ -166,8 +166,8 @@ public partial class Processor
 
     private Execution MultR(Instruction instruction, MultRDelegate func)
     {
-        var rs = RegisterFile[instruction.RS];
-        var rt = RegisterFile[instruction.RT];
+        var rs = _regFile[instruction.RS];
+        var rt = _regFile[instruction.RT];
 
         var dest = instruction.RD;
         ulong value = func(rs, rt);
@@ -180,7 +180,7 @@ public partial class Processor
 
     private Execution JumpR(Instruction instruction, GPRegister? link = null)
     {
-        var rs = RegisterFile[instruction.RS];
+        var rs = _regFile[instruction.RS];
 
         if (link is null)
         {

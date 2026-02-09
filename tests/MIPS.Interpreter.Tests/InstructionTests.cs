@@ -142,7 +142,7 @@ public class InstructionTests
         get
         {
             yield return [new SimpleInstructionTestCase("syscall", TrapKind.Syscall)];
-            yield return [new SimpleInstructionTestCase("break", TrapKind.Break)];
+            yield return [new SimpleInstructionTestCase("break", TrapKind.Breakpoint)];
         }
     }
 
