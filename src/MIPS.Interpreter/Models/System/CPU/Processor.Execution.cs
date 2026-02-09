@@ -37,7 +37,7 @@ public partial class Processor
 
             // Cause register
             var cause = CoProcessor0.CauseRegister;
-            cause.Trap = execution.Trap;
+            cause.ExecptionCode = execution.Trap;
             // causeReg.IsBranchDelayed = // TODO: Handle delay slots
             CoProcessor0.CauseRegister = cause;
 

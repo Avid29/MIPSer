@@ -7,24 +7,30 @@ using System.Runtime.CompilerServices;
 namespace MIPS.Interpreter.Models.System.CPU.Registers;
 
 /// <summary>
-/// TODO
+/// CoProcessor0 Cause register.
 /// </summary>
+/// <remarks>
+/// Holds the reason for the last exception and interrupt pending state.
+/// </remarks>
 public struct CauseRegister
 {
     private const int EXCEPTION_CODE_OFFSET = 2;
     private const int EXCEPTION_CODE_SIZE = 5;
+
     private const int PENDING_INTERUPTS_OFFSET = 8;
     private const int PENDING_INTERUPTS_SIZE = 8;
-    private const int BRANCH_DELAY_BIT = 31;
+
     private const int COPROCESSOR_EXCEPTION_SIZE = 2;
     private const int COPROCESSOR_EXCEPTION_OFFSET = 28;
+
+    private const int BRANCH_DELAY_BIT = 31;
 
     private uint _cause;
 
     /// <summary>
     /// Gets or sets the trap code for the last exception.
     /// </summary>
-    public TrapKind Trap
+    public TrapKind ExecptionCode
     {
         readonly get => (TrapKind)UintMasking.GetShiftMask(_cause, EXCEPTION_CODE_SIZE, EXCEPTION_CODE_OFFSET);
         set => UintMasking.SetShiftMask(ref _cause, EXCEPTION_CODE_SIZE, EXCEPTION_CODE_OFFSET, (uint)value);

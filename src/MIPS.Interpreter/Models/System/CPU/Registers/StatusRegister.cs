@@ -1,27 +1,39 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Helpers;
+using MIPS.Interpreter.Models.System.Execution.Enum;
 using System.Runtime.CompilerServices;
 
 namespace MIPS.Interpreter.Models.System.CPU.Registers;
 
 /// <summary>
-/// TODO
+/// CoProcessor0 Status register.
 /// </summary>
+/// <remarks>
+/// Controls processor mode, interrupt enabling, and exception state.
+/// </remarks>
 public struct StatusRegister
 {
     private const int INTERUPT_ENABLED_BIT = 0;
     private const int EXCEPTION_LEVEL_BIT = 1;
-    private const int BOOTSTRAPPING_BIT = 2;
-    private const int USER_MODE_BIT = 4;
+    private const int ERROR_LEVEL_BIT = 2;
+
+    private const int KSU_OFFSET = 3;
+    private const int KSU_SIZE = 2;
+
     private const int INTERUPT_MASK_SIZE = 8;
     private const int INTERUPT_MASK_OFFSET = 8;
+
+    private const int BOOTSTRAPPING_BIT = 22;
 
     private uint _status;
 
     /// <summary>
     /// Gets or sets if interupts are enabled.
     /// </summary>
+    /// <remarks>
+    /// Interrupts are only taken when <see cref="InteruptEnabled"/> is <see langword="true"/> and <see cref="ExceptionLevel"/> is <see langword="false"/>."/>
+    /// </remarks>
     public bool InteruptEnabled
     {
         readonly get => UintMasking.CheckBit(_status, INTERUPT_ENABLED_BIT);
@@ -31,10 +43,46 @@ public struct StatusRegister
     /// <summary>
     /// Gets or sets the exception level.
     /// </summary>
+    /// <remarks>
+    /// Set on exception entry. Cleared by eret.
+    /// </remarks>
     public bool ExceptionLevel
     {
         readonly get => UintMasking.CheckBit(_status, EXCEPTION_LEVEL_BIT);
         set => UintMasking.SetBit(ref _status, EXCEPTION_LEVEL_BIT, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the error level.
+    /// </summary>
+    /// <remarks>
+    /// Used for reset and NMI handling.
+    /// </remarks>
+    public bool ErrorLevel
+    {
+        readonly get => UintMasking.CheckBit(_status, ERROR_LEVEL_BIT);
+        set => UintMasking.SetBit(ref _status, ERROR_LEVEL_BIT, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the processor privilege mode.
+    /// </summary>
+    public PrivilegeMode PrivilegeMode
+    {
+        readonly get => (PrivilegeMode)UintMasking.GetShiftMask(_status, KSU_SIZE, KSU_OFFSET);
+        set => UintMasking.SetShiftMask(ref _status, KSU_SIZE, KSU_OFFSET, (uint)value);
+    }
+
+    /// <summary>
+    /// Gets or sets the interupt mask.
+    /// </summary>
+    /// <remarks>
+    /// Each bit masks a corresponding interrupt line.
+    /// </remarks>
+    public byte InteruptMask
+    {
+        readonly get => (byte)UintMasking.GetShiftMask(_status, INTERUPT_MASK_SIZE, INTERUPT_MASK_OFFSET);
+        set => UintMasking.SetShiftMask(ref _status, INTERUPT_MASK_SIZE, INTERUPT_MASK_OFFSET, value);
     }
 
     /// <summary>
@@ -44,24 +92,6 @@ public struct StatusRegister
     {
         readonly get => UintMasking.CheckBit(_status, BOOTSTRAPPING_BIT);
         set => UintMasking.SetBit(ref _status, BOOTSTRAPPING_BIT, value);
-    }
-
-    /// <summary>
-    /// Gets or sets if user mode is enabled.
-    /// </summary>
-    public bool UserMode
-    {
-        readonly get => UintMasking.CheckBit(_status, USER_MODE_BIT);
-        set => UintMasking.SetBit(ref _status, USER_MODE_BIT, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the interupt mask.
-    /// </summary>
-    public byte InteruptMask
-    {
-        readonly get => (byte)UintMasking.GetShiftMask(_status, INTERUPT_MASK_SIZE, INTERUPT_MASK_OFFSET);
-        set => UintMasking.SetShiftMask(ref _status, INTERUPT_MASK_SIZE, INTERUPT_MASK_OFFSET, value);
     }
 
     /// <summary>
