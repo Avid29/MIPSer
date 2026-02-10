@@ -1,9 +1,9 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Emulator.Models.System.Memory;
-using MIPS.Emulator.System.CPU;
+using MIPS.Emulator.Components.CPU;
+using MIPS.Emulator.Components.Memory;
 
-namespace MIPS.Emulator.Models.System;
+namespace MIPS.Emulator.Components;
 
 /// <summary>
 /// A class representing a computer system in the MIPS interpreter.
@@ -15,8 +15,8 @@ public class Computer
     /// </summary>
     public Computer()
     {
-        Memory = new SystemMemory();
         Processor = new Processor(this);
+        Memory = new SystemMemory();
     }
 
     /// <summary>
@@ -28,4 +28,16 @@ public class Computer
     /// Gets the memory of the computer system.
     /// </summary>
     public SystemMemory Memory { get; }
+
+    /// <summary>
+    /// Advance one tick.
+    /// </summary>
+    /// <remarks>
+    /// This is an instruction-accurate emulator, not cycle. Still, we advance in ticks.
+    /// TODO: Cycle-accurate emulation.
+    /// </remarks>
+    public void Tick()
+    {
+        Processor.Step();
+    }
 }

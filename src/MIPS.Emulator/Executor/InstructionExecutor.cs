@@ -1,14 +1,12 @@
 ﻿// Avishai Dernis 2026
 
+using MIPS.Emulator.Components.CPU;
+using MIPS.Emulator.Components.CPU.Registers;
 using MIPS.Emulator.Models;
-using MIPS.Emulator.Models.System.CPU.Registers;
-using MIPS.Emulator.Models.System.Execution;
-using MIPS.Emulator.Models.System.Execution.Enum;
-using MIPS.Emulator.System.CPU;
+using MIPS.Emulator.Models.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
-using MIPS.Models.Instructions.Enums.SpecialFunctions;
 using System;
 
 namespace MIPS.Emulator.Executor;

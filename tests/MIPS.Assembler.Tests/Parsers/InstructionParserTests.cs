@@ -60,9 +60,9 @@ public class InstructionParserTests
             yield return [new InstructionParsingTestCase("sb $t0, -100($s0)", Instruction.Create(OperationCode.StoreByte, GPRegister.Saved0, GPRegister.Temporary0, (short)-100))];
             yield return [new InstructionParsingTestCase("j 1000", Instruction.Create(OperationCode.Jump, 1000))];
             yield return [new InstructionParsingTestCase("j 10*10", Instruction.Create(OperationCode.Jump, 10 * 10))];
-            yield return [new InstructionParsingTestCase("di", CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Zero, 12))];
-            yield return [new InstructionParsingTestCase("di $t1", CoProc0Instruction.Create(MFMC0FuncCode.DisableInterupts, GPRegister.Temporary1, 12))];
-            yield return [new InstructionParsingTestCase("ei", CoProc0Instruction.Create(MFMC0FuncCode.EnableInterupts, GPRegister.Zero, 12))];
+            yield return [new InstructionParsingTestCase("di", CoProc0Instruction.Create(MFMC0FuncCode.DisableInterrupts, GPRegister.Zero, 12))];
+            yield return [new InstructionParsingTestCase("di $t1", CoProc0Instruction.Create(MFMC0FuncCode.DisableInterrupts, GPRegister.Temporary1, 12))];
+            yield return [new InstructionParsingTestCase("ei", CoProc0Instruction.Create(MFMC0FuncCode.EnableInterrupts, GPRegister.Zero, 12))];
             yield return [new InstructionParsingTestCase("cvt.S.D $f4, $f8", FloatInstruction.Create(FloatFuncCode.ConvertToSingle, FloatFormat.Double, FloatRegister.F8, FloatRegister.F4))];
         }
     }

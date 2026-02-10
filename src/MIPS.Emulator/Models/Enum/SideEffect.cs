@@ -1,11 +1,11 @@
 ﻿// Avishai Dernis 2025
 
-namespace MIPS.Emulator.Models.System.Execution.Enum;
+namespace MIPS.Emulator.Models.Enum;
 
 /// <summary>
 /// An enum describing the secondary effect of an <see cref="Execution"/>.
 /// </summary>
-public enum SecondaryEffect
+public enum SideEffect
 {
     /// <summary>
     /// No secondary effect.

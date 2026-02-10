@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2026
 
-using MIPS.Emulator.Models.System.Execution;
-using MIPS.Emulator.Models.System.Execution.Enum;
+using MIPS.Emulator.Models;
+using MIPS.Emulator.Models.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;
@@ -181,7 +181,7 @@ public partial class InstructionExecutor
         }
 
         // A link register was provided
-        // Write the return address to the specificied link register
+        // Write the return address to the specified link register
         // and set the program counter to the jump address
         return new Execution(link.Value, Processor.ProgramCounter + 4)
         {

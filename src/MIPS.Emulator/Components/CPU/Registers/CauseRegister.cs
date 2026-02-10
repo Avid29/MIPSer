@@ -1,10 +1,10 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Helpers;
-using MIPS.Emulator.Models.System.Execution.Enum;
 using System.Runtime.CompilerServices;
+using MIPS.Emulator.Models.Enum;
 
-namespace MIPS.Emulator.Models.System.CPU.Registers;
+namespace MIPS.Emulator.Components.CPU.Registers;
 
 /// <summary>
 /// CoProcessor0 Cause register.

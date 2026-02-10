@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2026
 
-using MIPS.Emulator.Models.System.Execution;
-using MIPS.Emulator.Models.System.Execution.Enum;
+using MIPS.Emulator.Models;
+using MIPS.Emulator.Models.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
@@ -34,8 +34,8 @@ public partial class InstructionExecutor
             // MFMC0 Instructions
             CoProc0RSCode.MFMC0 => CoProc0Instruction.MFMC0FuncCode switch
             {
-                MFMC0FuncCode.EnableInterupts => StatusUpdateInstruction((ref status) => status.InteruptEnabled = true),
-                MFMC0FuncCode.DisableInterupts => StatusUpdateInstruction((ref status) => status.InteruptEnabled = false),
+                MFMC0FuncCode.EnableInterrupts => StatusUpdateInstruction((ref status) => status.InteruptEnabled = true),
+                MFMC0FuncCode.DisableInterrupts => StatusUpdateInstruction((ref status) => status.InteruptEnabled = false),
 
                 _ => throw new NotImplementedException()
             },

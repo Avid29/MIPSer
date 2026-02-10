@@ -7,7 +7,7 @@ using System;
 using System.IO;
 using System.Numerics;
 
-namespace MIPS.Emulator.Models.System.Memory;
+namespace MIPS.Emulator.Components.Memory;
 
 /// <summary>
 /// Represents the RAM (Random Access Memory) in a MIPS emulator.

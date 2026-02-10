@@ -1,17 +1,17 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Emulator.Components.CPU.CoProcessors;
+using MIPS.Emulator.Components.CPU.Registers;
+using MIPS.Emulator.Events;
 using MIPS.Emulator.Executor;
-using MIPS.Emulator.Models.System;
-using MIPS.Emulator.Models.System.CPU.CoProcessors;
-using MIPS.Emulator.Models.System.CPU.Registers;
-using MIPS.Emulator.Models.System.Execution;
-using MIPS.Emulator.Models.System.Execution.Enum;
+using MIPS.Emulator.Models;
+using MIPS.Emulator.Models.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Registers;
 using System;
 
-namespace MIPS.Emulator.System.CPU;
+namespace MIPS.Emulator.Components.CPU;
 
 /// <summary>
 /// A class representing a processor unit.
@@ -19,6 +19,11 @@ namespace MIPS.Emulator.System.CPU;
 public partial class Processor
 {
     private readonly Computer _computer;
+
+    /// <summary>
+    /// An event that is invoked when a trap occures before it is handled.
+    /// </summary>
+    public event EventHandler<TrapOccurringEventArgs>? TrapOccurring;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Processor"/> class.
@@ -69,21 +74,9 @@ public partial class Processor
     /// </summary>
     public void Step()
     {
-        // Pre-define everything to avoid unset variable accusations
-        TrapKind trap = TrapKind.None;
-        Instruction instruction = default;
-
-        // Immitate the MIPS instruction pipeline
-        // Fetch, Decode, Execute, Mem, WriteBack
-        // Except Decode is handled by a simple cast here
-        trap = trap is TrapKind.None ? Fetch(out instruction) : trap;
-        trap = trap is TrapKind.None ? ExecuteAndApply(instruction, out _) : trap;
-
-        // Handle trap, if any occured
-        if (trap is not TrapKind.None)
-        {
-
-        }
+        // Fetch, Execute, and Apply the instruction
+        var trap = Fetch(out var instruction);
+        ExecuteAndApply(instruction, out _, trap);
     }
 
     /// <summary>
@@ -112,22 +105,21 @@ public partial class Processor
     /// Wraps the last 3 stages of the instruction pipeline.
     /// This allows for executing instructions that were not fetched.
     /// </remarks>
-    private TrapKind ExecuteAndApply(Instruction instruction, out Execution execution)
+    private TrapKind ExecuteAndApply(Instruction instruction, out Execution execution, TrapKind proceedingTrap = TrapKind.None)
     {
         // Pre-define everything to avoid unset variable accusations
-        TrapKind trap = TrapKind.None;
+        TrapKind trap = proceedingTrap;
         uint memRead = default;
         execution = default;
 
+        // Perform the back-half of the MIPS pipeline
         trap = trap is TrapKind.None ? Execute(instruction, out execution) : trap;
         trap = trap is TrapKind.None ? MemAccess(execution, out memRead) : trap;
         trap = trap is TrapKind.None ? WriteBack(execution, memRead) : trap;
 
-        // Handle trap, if any occured
+        // Handle trap, if any occurred
         if (trap is not TrapKind.None)
-        {
-
-        }
+            HandleTrap(trap);
 
         return trap;
     }
@@ -146,7 +138,10 @@ public partial class Processor
         uint size = execution.MemSize;
         bool signed = execution.MemSigned;
 
-        if (execution.SideEffects is SecondaryEffect.ReadMemory)
+        // NOTE: Alignment was already checked during the execution phase.
+        // No need to check it here too.
+
+        if (execution.SideEffect is SideEffect.ReadMemory)
         {
             read = size switch
             {
@@ -160,7 +155,7 @@ public partial class Processor
                 _ => ThrowHelper.ThrowInvalidOperationException<uint>($"Invalid memory read size: {size}"),
             };
         }
-        else if (execution.SideEffects is SecondaryEffect.WriteMemory)
+        else if (execution.SideEffect is SideEffect.WriteMemory)
         {
             switch (size)
             {
@@ -195,29 +190,29 @@ public partial class Processor
         RegisterFile[execution.GPR] = execution.WriteBack;
 
         // Apply side effects
-        switch (execution.SideEffects)
+        switch (execution.SideEffect)
         {
-            case SecondaryEffect.Low:
+            case SideEffect.Low:
                 Low = execution.Low;
                 break;
-            case SecondaryEffect.High:
+            case SideEffect.High:
                 High = execution.High;
                 break;
-            case SecondaryEffect.HighLow:
+            case SideEffect.HighLow:
                 (High, Low) = (execution.High, execution.Low);
                 break;
-            case SecondaryEffect.ProgramCounter:
+            case SideEffect.ProgramCounter:
                 programCounter = execution.ProgramCounter;
                 break;
-            case SecondaryEffect.ReadMemory:
+            case SideEffect.ReadMemory:
                 RegisterFile[execution.GPR] = memRead;
                 break;
-            case SecondaryEffect.WriteCoProc:
+            case SideEffect.WriteCoProc:
                 (execution.CoProcRegisterSet switch
                 {
                     RegisterSet.GeneralPurpose => RegisterFile,
                     RegisterSet.CoProc0 => CoProcessor0.RegisterFile,
-                    _ => throw new ArgumentOutOfRangeException(nameof(execution.CoProcRegisterSet)),
+                    _ => ThrowHelper.ThrowArgumentOutOfRangeException<RegisterFile>(nameof(execution.CoProcRegisterSet)),
                 })[execution.CoProcReg] = execution.CoProcWriteBack;
                 break;
         }
@@ -226,5 +221,30 @@ public partial class Processor
         ProgramCounter = programCounter;
 
         return TrapKind.None;
+    }
+
+    private void HandleTrap(TrapKind trap)
+    {
+        if (trap is TrapKind.None)
+            return;
+
+        TrapOccurring?.Invoke(this, new TrapOccurringEventArgs(trap));
+
+        // Breakpoints are handled by the debugger upon the trap occurring event.
+        if (trap is TrapKind.Breakpoint)
+            return;
+
+        // Status and cause registers
+        CoProcessor0.StatusRegister = CoProcessor0.StatusRegister with { ExceptionLevel = true };
+        CoProcessor0.CauseRegister = CoProcessor0.CauseRegister with
+        {
+            ExecptionCode = trap,
+            //IsBranchDelayed = // TODO: Handle delay slots
+        };
+
+        // Track the current program counter in the EPC register
+        // before jumping to the exception handler
+        CoProcessor0[CP0Registers.ExceptionPC] = ProgramCounter;
+        ProgramCounter = CoProcessor0.ExceptionVector;
     }
 }

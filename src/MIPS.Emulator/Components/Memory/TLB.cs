@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-namespace MIPS.Emulator.Models.System.Memory;
+namespace MIPS.Emulator.Components.Memory;
 
 /// <summary>
 /// Represents the Translation Lookaside Buffer (TLB) in a MIPS interpreter.

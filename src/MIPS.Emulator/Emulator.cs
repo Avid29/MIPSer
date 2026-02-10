@@ -1,10 +1,7 @@
 ﻿// Avishai Dernis 2025
 
+using MIPS.Emulator.Components;
 using MIPS.Emulator.Models.Modules;
-using MIPS.Emulator.Models.System;
-using MIPS.Emulator.Models.System.Execution;
-using MIPS.Emulator.Models.System.Execution.Enum;
-using MIPS.Models.Instructions;
 
 namespace MIPS.Emulator;
 
@@ -14,7 +11,7 @@ namespace MIPS.Emulator;
 public class Emulator
 {
     /// <summary>
-    /// Intializes a new instance of the <see cref="Emulator"/> class.
+    /// Initializes a new instance of the <see cref="Emulator"/> class.
     /// </summary>
     public Emulator()
     {

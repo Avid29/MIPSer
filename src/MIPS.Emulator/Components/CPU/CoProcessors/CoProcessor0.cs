@@ -1,10 +1,10 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Emulator.Models.System.CPU.Registers;
-using MIPS.Emulator.Models.System.Execution.Enum;
+using MIPS.Emulator.Components.CPU.Registers;
+using MIPS.Emulator.Models.Enum;
 using MIPS.Models.Instructions.Enums.Registers;
 
-namespace MIPS.Emulator.Models.System.CPU.CoProcessors;
+namespace MIPS.Emulator.Components.CPU.CoProcessors;
 
 /// <summary>
 /// A class representing the 0th co-processor unit.

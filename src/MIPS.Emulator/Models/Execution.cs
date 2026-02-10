@@ -1,11 +1,11 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Emulator.Models.System.Execution.Enum;
+using MIPS.Emulator.Models.Enum;
 using MIPS.Helpers;
 using MIPS.Models.Instructions.Enums.Registers;
 using System;
 
-namespace MIPS.Emulator.Models.System.Execution;
+namespace MIPS.Emulator.Models;
 
 /// <summary>
 /// A struct representing the results of an instruction's execution.
@@ -46,7 +46,7 @@ public readonly struct Execution
     {
         GPR = dest;
         MemAddress = address;
-        SideEffects = SecondaryEffect.ReadMemory;
+        SideEffect = SideEffect.ReadMemory;
 
         size *= signed ? -1 : 1;
         _secondary2 = (uint)size;
@@ -59,7 +59,7 @@ public readonly struct Execution
     {
         WriteBack = writeBack;
         MemAddress = address;
-        SideEffects = SecondaryEffect.WriteMemory;
+        SideEffect = SideEffect.WriteMemory;
 
         _secondary2 = (uint)size;
     }
@@ -104,9 +104,9 @@ public readonly struct Execution
     public GPRegister GPR { get; init; }
 
     /// <summary>
-    /// Gets the type of secondary writeback from the execution, if any.
+    /// Gets the type of secondary effect from the execution, if any.
     /// </summary>
-    public SecondaryEffect SideEffects { get; init; }
+    public SideEffect SideEffect { get; init; }
 
     /// <summary>
     /// Gets the new value of the low register if applicable.
@@ -117,7 +117,7 @@ public readonly struct Execution
         init
         {
             _secondary1 = value;
-            SideEffects = MergeHighLow(SecondaryEffect.Low);
+            SideEffect = MergeHighLow(SideEffect.Low);
         }
     }
 
@@ -130,7 +130,7 @@ public readonly struct Execution
         init
         {
             _secondary2 = value;
-            SideEffects = MergeHighLow(SecondaryEffect.High);
+            SideEffect = MergeHighLow(SideEffect.High);
         }
     }
 
@@ -143,7 +143,7 @@ public readonly struct Execution
         init
         {
             _secondary1 = value;
-            SideEffects = SecondaryEffect.ProgramCounter;
+            SideEffect = SideEffect.ProgramCounter;
         }
     }
 
@@ -178,7 +178,7 @@ public readonly struct Execution
         init
         {
             UintMasking.SetShiftMask(ref _secondary2, REG_BITCOUNT, 0, (uint)value);
-            SideEffects = SecondaryEffect.WriteCoProc;
+            SideEffect = SideEffect.WriteCoProc;
         }
     }
 
@@ -204,7 +204,7 @@ public readonly struct Execution
         init
         {
             UintMasking.SetShiftMask(ref _secondary2, REGSET_BITCOUNT, REGSET_OFFSET, (uint)value);
-            SideEffects = SecondaryEffect.WriteCoProc;
+            SideEffect = SideEffect.WriteCoProc;
         }
     }
 
@@ -217,21 +217,21 @@ public readonly struct Execution
         init
         {
             _secondary1 = value;
-            SideEffects = SecondaryEffect.WriteCoProc;
+            SideEffect = SideEffect.WriteCoProc;
         }
     }
 
     /// <summary>
     /// Gets a value indicating whether or not execution handled the PC changing.
     /// </summary>
-    public readonly bool PCHandled => SideEffects == SecondaryEffect.ProgramCounter;
+    public readonly bool PCHandled => SideEffect == SideEffect.ProgramCounter;
 
-    private SecondaryEffect MergeHighLow(SecondaryEffect @new)
+    private SideEffect MergeHighLow(SideEffect @new)
     {
-        if (SideEffects is SecondaryEffect.Low or
-            SecondaryEffect.High or SecondaryEffect.HighLow)
+        if (SideEffect is SideEffect.Low or
+            SideEffect.High or SideEffect.HighLow)
         {
-            return SideEffects | @new;
+            return SideEffect | @new;
         }
 
         return @new;
