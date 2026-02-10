@@ -2,7 +2,7 @@
 
 using LibObjectFile.Elf;
 using MIPS.Assembler.Models.Modules.Interfaces;
-using MIPS.Interpreter.Models.Modules;
+using MIPS.Emulator.Models.Modules;
 using System.IO;
 
 namespace ObjectFiles.Elf;
