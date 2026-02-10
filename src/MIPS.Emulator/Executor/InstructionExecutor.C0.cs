@@ -72,7 +72,7 @@ public partial class InstructionExecutor
         // the status register as a writeback
         return new Execution(CP0Registers.Status, (uint)status)
         {
-            ProgramCounter = targetPC
+            ProgramCounter = targetPC,
         };
     }
 
@@ -89,7 +89,8 @@ public partial class InstructionExecutor
             // Write the updated status register value back to the specified GPR
             return new Execution(CP0Registers.Status, (uint)status)
             {
-                RTDump = (uint)status,
+                WriteBack = (uint)status,
+                GPR = Instruction.RT,
             };
         }
 

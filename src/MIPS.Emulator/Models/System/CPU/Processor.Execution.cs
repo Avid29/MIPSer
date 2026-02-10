@@ -44,20 +44,8 @@ public partial class Processor
             return execution;
         }
 
-        // Select the register file to write to, if any.
-        var regFile = execution.RegisterSet switch
-        {
-            RegisterSet.None => null,
-            RegisterSet.GeneralPurpose => RegisterFile,
-            RegisterSet.CoProc0 => CoProcessor0.RegisterFile,
-            _ => ThrowHelper.ThrowNotSupportedException<RegisterFile>(),
-        };
-
-        // Write to the register file if needed, some instructions will not write to a register
-        if (regFile is not null)
-        {
-            regFile[execution.GPR] = execution.WriteBack;
-        }
+        // Handle write base
+        RegisterFile[execution.GPR] = execution.WriteBack;
 
         // Increment the program counter by default, some instructions will override this
         var programCounter = ProgramCounter + 4;
@@ -65,20 +53,28 @@ public partial class Processor
         // Apply side effects
         switch (execution.SideEffects)
         {
-            case SecondaryWritebacks.Low:
+            case SecondaryEffect.Low:
                 Low = execution.Low;
                 break;
-            case SecondaryWritebacks.High:
+            case SecondaryEffect.High:
                 High = execution.High;
                 break;
-            case SecondaryWritebacks.HighLow:
+            case SecondaryEffect.HighLow:
                 (High, Low) = (execution.High, execution.Low);
                 break;
-            case SecondaryWritebacks.ProgramCounter:
+            case SecondaryEffect.ProgramCounter:
                 programCounter = execution.ProgramCounter;
                 break;
-            case SecondaryWritebacks.Memory:
+            case SecondaryEffect.WriteMemory:
                 _computer.Memory[execution.MemAddress] = execution.WriteBack;
+                break;
+            case SecondaryEffect.WriteCoProc:
+                (execution.CoProcRegisterSet switch
+                {
+                    RegisterSet.GeneralPurpose => RegisterFile,
+                    RegisterSet.CoProc0 => CoProcessor0.RegisterFile,
+                    _ => throw new ArgumentOutOfRangeException(nameof(execution.CoProcRegisterSet)),
+                })[execution.CoProcReg] = execution.CoProcWriteBack;
                 break;
         }
 

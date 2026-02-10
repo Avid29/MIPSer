@@ -26,7 +26,7 @@ public partial class Processor
     {
         _computer = computer;
 
-        RegisterFile = new RegisterFile();
+        RegisterFile = new RegisterFile(true);
         CoProcessor0 = new CoProcessor0();
     }
 
@@ -71,16 +71,12 @@ public partial class Processor
         // Pre-define everything to avoid unset variable accusations
         TrapKind trap = TrapKind.None;
         Instruction instruction = default;
-        Execution execution = default;
-        uint memRead = default;
 
         // Immitate the MIPS instruction pipeline
         // Fetch, Decode, Execute, Mem, WriteBack
         // Except Decode is handled by a simple cast here
         trap = trap is not TrapKind.None ? Fetch(out instruction) : trap;
-        trap = trap is not TrapKind.None ? Execute(instruction, out execution) : trap;
-        trap = trap is not TrapKind.None ? MemAccess(execution, out memRead) : trap;
-        trap = trap is not TrapKind.None ? WriteBack(execution, memRead) : trap;
+        trap = trap is not TrapKind.None ? ExecuteAndApply(instruction, out _) : trap;
 
         // Handle trap, if any occured
         if (trap is not TrapKind.None)
@@ -88,6 +84,12 @@ public partial class Processor
 
         }
     }
+
+    /// <summary>
+    /// Executes an instruction on the current state of the processor.
+    /// </summary>
+    public void Insert(Instruction instruction, out Execution execution, out TrapKind trap)
+        => trap = ExecuteAndApply(instruction, out execution);
 
     /// <remarks>
     /// Immitates the fetch step in a MIPS cpu, reading an instruction from memory.
@@ -103,6 +105,30 @@ public partial class Processor
 
         instruction = (Instruction)_computer.Memory.Read<uint>(ProgramCounter);
         return TrapKind.None;
+    }
+
+    /// <remarks>
+    /// Wraps the last 3 stages of the instruction pipeline.
+    /// This allows for executing instructions that were not fetched.
+    /// </remarks>
+    private TrapKind ExecuteAndApply(Instruction instruction, out Execution execution)
+    {
+        // Pre-define everything to avoid unset variable accusations
+        TrapKind trap = TrapKind.None;
+        uint memRead = default;
+        execution = default;
+
+        trap = trap is not TrapKind.None ? Execute(instruction, out execution) : trap;
+        trap = trap is not TrapKind.None ? MemAccess(execution, out memRead) : trap;
+        trap = trap is not TrapKind.None ? WriteBack(execution, memRead) : trap;
+
+        // Handle trap, if any occured
+        if (trap is not TrapKind.None)
+        {
+
+        }
+
+        return trap;
     }
 
     /// <summary>

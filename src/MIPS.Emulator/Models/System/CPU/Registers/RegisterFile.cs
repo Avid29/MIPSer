@@ -10,12 +10,14 @@ namespace MIPS.Emulator.Models.System.CPU.Registers;
 public class RegisterFile
 {
     private readonly uint[] _registers;
+    private readonly bool _gpr;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RegisterFile"/> class.
     /// </summary>
-    public RegisterFile(int count = 32)
+    public RegisterFile(bool gpr = false, int count = 32)
     {
+        _gpr = gpr;
         _registers = new uint[count];
     }
     
@@ -27,6 +29,10 @@ public class RegisterFile
         get => _registers[register];
         set
         {
+            // Cannot set the 0 GPR register
+            if (register is 0 && _gpr)
+                return;
+
             // Register is out of the indexable bounds. Do nothing.
             if (register < 0 || register >= _registers.Length)
                 return;
@@ -41,14 +47,7 @@ public class RegisterFile
     public uint this[GPRegister register]
     {
         get => this[(int)register];
-        set
-        {
-            // Cannot set zero register. Do nothing.
-            if (register is GPRegister.Zero)
-                return;
-
-            this[(int)register] = value;
-        }
+        set => this[(int)register] = value;
     }
 
     /// <inheritdoc cref="this[GPRegister]"/>

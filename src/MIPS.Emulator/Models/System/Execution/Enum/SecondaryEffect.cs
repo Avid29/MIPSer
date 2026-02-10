@@ -3,12 +3,12 @@
 namespace MIPS.Emulator.Models.System.Execution.Enum;
 
 /// <summary>
-/// An enum describing the secondary writebacks of an <see cref="Execution"/>.
+/// An enum describing the secondary effect of an <see cref="Execution"/>.
 /// </summary>
-public enum SecondaryWritebacks
+public enum SecondaryEffect
 {
     /// <summary>
-    /// No secondary writebacks.
+    /// No secondary effect.
     /// </summary>
     None,
 
@@ -38,17 +38,22 @@ public enum SecondaryWritebacks
     HighLow = Low | High,
 
     /// <summary>
+    /// Writes to memory.
+    /// </summary>
+    ReadMemory,
+
+    /// <summary>
+    /// Writes to memory.
+    /// </summary>
+    WriteMemory,
+
+    /// <summary>
     /// Writes to the program counter.
     /// </summary>
     ProgramCounter,
 
     /// <summary>
-    /// Writes to memory.
+    /// Writes to co-processor.
     /// </summary>
-    Memory,
-
-    /// <summary>
-    /// Write to the RT register of the instruction, as part of a move from coprocessor instruction.
-    /// </summary>
-    WriteToRT,
+    WriteCoProc,
 }

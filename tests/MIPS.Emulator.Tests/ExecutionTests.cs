@@ -64,17 +64,12 @@ public class ExecutionTests
 
         public SimpleInstructionTestCase(string input, uint writeBack) : this(input)
         {
-            ExpectedWriteBack = (RegisterSet.GeneralPurpose, GPRegister.ReturnValue0, writeBack);
+            ExpectedWriteBack = (GPRegister.ReturnValue0, writeBack);
         }
 
-        public SimpleInstructionTestCase(string input, RegisterSet set, GPRegister reg, uint? writeBack = null) : this(input)
+        public SimpleInstructionTestCase(string input, GPRegister reg, uint? writeBack = null) : this(input)
         {
-            ExpectedWriteBack = (set, reg, writeBack);
-        }
-
-        public SimpleInstructionTestCase(string input, RegisterSet set, CP0Registers reg, uint? writeBack = null) : this(input)
-        {
-            ExpectedWriteBack = (set, (GPRegister)reg, writeBack);
+            ExpectedWriteBack = (reg, writeBack);
         }
 
         public SimpleInstructionTestCase(string input, (uint, byte[]) memory) : this(input)
@@ -92,7 +87,7 @@ public class ExecutionTests
             ExpectedHighLow = highLow;
         }
 
-        public SimpleInstructionTestCase(string input, SecondaryWritebacks sideEffects) : this(input)
+        public SimpleInstructionTestCase(string input, SecondaryEffect sideEffects) : this(input)
         {
             ExpectedSideEffects = sideEffects;
         }
@@ -101,9 +96,9 @@ public class ExecutionTests
 
         public TrapKind ExpectedTrap { get; init; } = TrapKind.None;
 
-        public (RegisterSet Set, GPRegister Regiter, uint? Value)? ExpectedWriteBack { get; init; } = null;
+        public (GPRegister Regiter, uint? Value)? ExpectedWriteBack { get; init; } = null;
 
-        public SecondaryWritebacks? ExpectedSideEffects { get; init; }
+        public SecondaryEffect? ExpectedSideEffects { get; init; }
 
         public (uint Address, byte[] Data)? ExpectedMemory { get; init; }
 
@@ -336,32 +331,26 @@ public class ExecutionTests
 
             // Exception Return
             yield return [new SimpleInstructionTestCase("eret", TrapKind.ReservedInstruction)];
-            yield return [new SimpleInstructionTestCase("eret", RegisterSet.CoProc0, CP0Registers.Status)
+            yield return [new SimpleInstructionTestCase("eret", SecondaryEffect.WriteCoProc)
             { Status = new StatusRegister { ExceptionLevel = true } }];
 
             // Enable Interrupts
             yield return [new SimpleInstructionTestCase("ei", TrapKind.ReservedInstruction)];
-            yield return [new SimpleInstructionTestCase("ei", RegisterSet.CoProc0, CP0Registers.Status)
+            yield return [new SimpleInstructionTestCase("ei", SecondaryEffect.WriteCoProc)
+            { PrivilegeMode = PrivilegeMode.Kernel }];
+            yield return [new SimpleInstructionTestCase("ei $v0", GPRegister.ReturnValue0)
             {
-                ExpectedSideEffects = SecondaryWritebacks.None,
-                PrivilegeMode = PrivilegeMode.Kernel
-            }];
-            yield return [new SimpleInstructionTestCase("ei $v0", RegisterSet.CoProc0, CP0Registers.Status)
-            {
-                ExpectedSideEffects = SecondaryWritebacks.WriteToRT,
+                ExpectedSideEffects = SecondaryEffect.WriteCoProc,
                 PrivilegeMode = PrivilegeMode.Kernel
             }];
 
             // Disable Interrupts
             yield return [new SimpleInstructionTestCase("di", TrapKind.ReservedInstruction)];
-            yield return [new SimpleInstructionTestCase("di", RegisterSet.CoProc0, CP0Registers.Status)
+            yield return [new SimpleInstructionTestCase("di", SecondaryEffect.WriteCoProc)
+            { PrivilegeMode = PrivilegeMode.Kernel }];
+            yield return [new SimpleInstructionTestCase("di $v1", GPRegister.ReturnValue1)
             {
-                ExpectedSideEffects = SecondaryWritebacks.None,
-                PrivilegeMode = PrivilegeMode.Kernel
-            }];
-            yield return [new SimpleInstructionTestCase("di $v1", RegisterSet.CoProc0, CP0Registers.Status)
-            {
-                ExpectedSideEffects = SecondaryWritebacks.WriteToRT,
+                ExpectedSideEffects = SecondaryEffect.WriteCoProc,
                 PrivilegeMode = PrivilegeMode.Kernel
             }];
         }
@@ -436,27 +425,18 @@ public class ExecutionTests
         if (writeback.HasValue)
         {
             // Ensure that the expected register was written to with the expected value
-            Assert.AreEqual(writeback.Value.Set, execution.RegisterSet);
-            Assert.IsNotNull(execution.Destination);
-            Assert.AreEqual(writeback.Value.Regiter, execution.Destination.Value);
+            Assert.AreEqual(writeback.Value.Regiter, execution.GPR);
 
             var writeBackValue = writeback.Value.Value;
             if (writeBackValue.HasValue)
             {
-                var regFile = writeback.Value.Set switch
-                {
-                    RegisterSet.GeneralPurpose => interpreter.Computer.Processor.RegisterFile,
-                    RegisterSet.CoProc0 => interpreter.Computer.Processor.CoProcessor0.RegisterFile,
-                    _ => throw new ArgumentOutOfRangeException(nameof(writeback.Value.Set))
-                };
-
-                Assert.AreEqual(writeBackValue.Value, regFile[execution.Destination.Value]);
+                Assert.AreEqual(writeBackValue.Value, interpreter.Computer.Processor.RegisterFile[execution.GPR]);
             }
         }
         else
         {
             // If no register check was provided, we at least want to make sure no register was written to (as that would be unexpected)
-            Assert.IsNull(execution.Destination);
+            Assert.AreEqual(execution.GPR, GPRegister.Zero);
         }
 
         var highLow = @case.ExpectedHighLow;
