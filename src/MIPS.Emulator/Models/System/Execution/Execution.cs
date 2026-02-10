@@ -17,14 +17,6 @@ public struct Execution
     /// <summary>
     /// Initializes a new instance of the <see cref="Execution"/> struct.
     /// </summary>
-    public Execution(TrapKind trap)
-    {
-        Trap = trap;
-    }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Execution"/> struct.
-    /// </summary>
     public Execution(GPRegister dest, uint writeBack)
     {
         GPR = dest;
@@ -205,11 +197,6 @@ public struct Execution
     /// Gets the type of secondary writeback from the execution, if any.
     /// </summary>
     public SecondaryWritebacks SideEffects { get; private set; }
-
-    /// <summary>
-    /// Gets the type of trap that occurred during execution, if any.
-    /// </summary>
-    public TrapKind Trap { get; init; }
 
     /// <summary>
     /// Gets a value indicating whether or not execution handled the PC changing.

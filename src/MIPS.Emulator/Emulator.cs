@@ -3,12 +3,13 @@
 using MIPS.Emulator.Models.Modules;
 using MIPS.Emulator.Models.System;
 using MIPS.Emulator.Models.System.Execution;
+using MIPS.Emulator.Models.System.Execution.Enum;
 using MIPS.Models.Instructions;
 
 namespace MIPS.Emulator;
 
 /// <summary>
-/// A .
+/// An emulator of a MIPS machine.
 /// </summary>
 public class Emulator
 {
@@ -33,7 +34,7 @@ public class Emulator
         var word = Computer.Memory[Computer.Processor.ProgramCounter];
         var instruction = (Instruction)word;
 
-        Computer.Processor.Execute(instruction);
+        Computer.Processor.Execute(instruction, out _);
     }
 
     /// <summary>
@@ -47,10 +48,11 @@ public class Emulator
     /// </summary>
     /// <param name="instruction">The instruction to execute</param>
     /// <param name="execution">The execution details from the instruction.</param>
-    public void InsertInstructionExecution(Instruction instruction, out Execution execution)
+    /// <param name="trap">The trap that occured, if any.</param>
+    public void InsertInstructionExecution(Instruction instruction, out Execution execution, out TrapKind trap)
     {
         var oldPC = Computer.Processor.ProgramCounter;
-        execution = Computer.Processor.Execute(instruction);
+        execution = Computer.Processor.Execute(instruction, out trap);
 
         // If the instruction execution did not explicitly handle the program counter, restore it to the old value.
         if (!execution.PCHandled)

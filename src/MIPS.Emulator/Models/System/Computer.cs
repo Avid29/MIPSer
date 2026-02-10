@@ -15,7 +15,7 @@ public class Computer
     /// </summary>
     public Computer()
     {
-        Memory = new RAM();
+        Memory = new SystemMemory();
         Processor = new Processor(this);
     }
 
@@ -27,5 +27,5 @@ public class Computer
     /// <summary>
     /// Gets the memory of the computer system.
     /// </summary>
-    public RAM Memory { get; }
+    public SystemMemory Memory { get; }
 }

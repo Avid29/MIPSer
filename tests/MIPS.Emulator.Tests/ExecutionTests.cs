@@ -419,17 +419,18 @@ public class ExecutionTests
         // Initialize the high and low registers if specified in the test case
         if (@case.InitialHighLow.HasValue)
         {
-            interpreter.Computer.Processor.HighLow = @case.InitialHighLow.Value;
+            interpreter.Computer.Processor.Low = @case.InitialHighLow.Value.Low;
+            interpreter.Computer.Processor.High = @case.InitialHighLow.Value.High;
         }
 
         // Initialize the memory, if specified in the test case
         foreach (var (address, data) in @case.MemoryInitialization)
             interpreter.Computer.Memory.Write(address, data);
 
-        interpreter.InsertInstructionExecution(instruction, out var execution);
+        interpreter.InsertInstructionExecution(instruction, out var execution, out var trap);
 
         // Ensure that the expected trap was raised (if any)
-        Assert.AreEqual(@case.ExpectedTrap, execution.Trap);
+        Assert.AreEqual(@case.ExpectedTrap, trap);
 
         var writeback = @case.ExpectedWriteBack;
         if (writeback.HasValue)
@@ -461,7 +462,8 @@ public class ExecutionTests
         var highLow = @case.ExpectedHighLow;
         if (highLow.HasValue)
         {
-            Assert.AreEqual(highLow.Value, interpreter.Computer.Processor.HighLow);
+            Assert.AreEqual(highLow.Value.Low, interpreter.Computer.Processor.Low);
+            Assert.AreEqual(highLow.Value.High, interpreter.Computer.Processor.High);
         }
 
         var expectedMemory = @case.ExpectedMemory;

@@ -1,23 +1,22 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Emulator.Helpers;
-using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 
 namespace MIPS.Emulator.Models.System.Memory;
 
 /// <summary>
-/// Represents the RAM (Random Access Memory) in a MIPS interpreter.
+/// Represents the RAM (Random Access Memory) in a MIPS emulator.
 /// </summary>
-public class RAM
+public class SystemMemory
 {
     private PagedMemoryStream _memoryStream;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="RAM"/> class.
+    /// Initializes a new instance of the <see cref="SystemMemory"/> class.
     /// </summary>
-    public RAM()
+    public SystemMemory()
     {
         _memoryStream = new PagedMemoryStream(4096);
 
