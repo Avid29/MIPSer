@@ -296,8 +296,8 @@ public class ExecutionTests
             yield return [new SimpleInstructionTestCase("lw $v0, 0x1000($zero)", 0x1234_5678)];
 
             // Store
-            yield return [new SimpleInstructionTestCase("sb $at, 0x1000($zero)", (0x1000, [0x12, 0x34, 0x56, 0xef]))];
-            yield return [new SimpleInstructionTestCase("sh $at, 0x1000($zero)", (0x1000, [0x12, 0x34, 0xcd, 0xef]))];
+            yield return [new SimpleInstructionTestCase("sb $at, 0x1000($zero)", (0x1000, [0xef, 0x34, 0x56, 0x78]))];
+            yield return [new SimpleInstructionTestCase("sh $at, 0x1000($zero)", (0x1000, [0xcd, 0xef, 0x56, 0x78]))];
             yield return [new SimpleInstructionTestCase("sw $at, 0x1000($zero)", (0x1000, [0x89, 0xab, 0xcd, 0xef]))];
         }
     }
@@ -396,27 +396,27 @@ public class ExecutionTests
         // TODO: Psuedo instruction support
         var instruction = parsed.Realize()[0];
 
-        var interpreter = new Emulator();
+        var emulator = new Emulator();
 
         // Initialize the status register
-        interpreter.Computer.Processor.CoProcessor0.StatusRegister = @case.Status;
+        emulator.Computer.Processor.CoProcessor0.StatusRegister = @case.Status;
 
         // Initialize the register file with the provided values
         foreach (var (reg, value) in @case.RegisterInitialization)
-            interpreter.Computer.Processor[reg] = value;
+            emulator.Computer.Processor[reg] = value;
 
         // Initialize the high and low registers if specified in the test case
         if (@case.InitialHighLow.HasValue)
         {
-            interpreter.Computer.Processor.Low = @case.InitialHighLow.Value.Low;
-            interpreter.Computer.Processor.High = @case.InitialHighLow.Value.High;
+            emulator.Computer.Processor.Low = @case.InitialHighLow.Value.Low;
+            emulator.Computer.Processor.High = @case.InitialHighLow.Value.High;
         }
 
         // Initialize the memory, if specified in the test case
         foreach (var (address, data) in @case.MemoryInitialization)
-            interpreter.Computer.Memory.Write(address, data);
+            emulator.Computer.Memory.Write(address, data);
 
-        interpreter.InsertInstructionExecution(instruction, out var execution, out var trap);
+        emulator.Computer.Processor.Insert(instruction, out var execution, out var trap);
 
         // Ensure that the expected trap was raised (if any)
         Assert.AreEqual(@case.ExpectedTrap, trap);
@@ -430,7 +430,7 @@ public class ExecutionTests
             var writeBackValue = writeback.Value.Value;
             if (writeBackValue.HasValue)
             {
-                Assert.AreEqual(writeBackValue.Value, interpreter.Computer.Processor.RegisterFile[execution.GPR]);
+                Assert.AreEqual(writeBackValue.Value, emulator.Computer.Processor.RegisterFile[execution.GPR]);
             }
         }
         else
@@ -442,15 +442,15 @@ public class ExecutionTests
         var highLow = @case.ExpectedHighLow;
         if (highLow.HasValue)
         {
-            Assert.AreEqual(highLow.Value.Low, interpreter.Computer.Processor.Low);
-            Assert.AreEqual(highLow.Value.High, interpreter.Computer.Processor.High);
+            Assert.AreEqual(highLow.Value.Low, emulator.Computer.Processor.Low);
+            Assert.AreEqual(highLow.Value.High, emulator.Computer.Processor.High);
         }
 
         var expectedMemory = @case.ExpectedMemory;
         if (expectedMemory is not null)
         {
             var buffer = new byte[expectedMemory.Value.Data.Length];
-            interpreter.Computer.Memory.Read(expectedMemory.Value.Address, buffer);
+            emulator.Computer.Memory.Read(expectedMemory.Value.Address, buffer);
             CollectionAssert.AreEqual(expectedMemory.Value.Data, buffer);
         }
     }

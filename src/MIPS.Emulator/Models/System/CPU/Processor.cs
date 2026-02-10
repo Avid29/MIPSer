@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.Diagnostics;
 using MIPS.Emulator.Executor;
-using MIPS.Emulator.Models;
 using MIPS.Emulator.Models.System;
 using MIPS.Emulator.Models.System.CPU.CoProcessors;
 using MIPS.Emulator.Models.System.CPU.Registers;
@@ -9,6 +9,7 @@ using MIPS.Emulator.Models.System.Execution;
 using MIPS.Emulator.Models.System.Execution.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Registers;
+using System;
 
 namespace MIPS.Emulator.System.CPU;
 
@@ -75,8 +76,8 @@ public partial class Processor
         // Immitate the MIPS instruction pipeline
         // Fetch, Decode, Execute, Mem, WriteBack
         // Except Decode is handled by a simple cast here
-        trap = trap is not TrapKind.None ? Fetch(out instruction) : trap;
-        trap = trap is not TrapKind.None ? ExecuteAndApply(instruction, out _) : trap;
+        trap = trap is TrapKind.None ? Fetch(out instruction) : trap;
+        trap = trap is TrapKind.None ? ExecuteAndApply(instruction, out _) : trap;
 
         // Handle trap, if any occured
         if (trap is not TrapKind.None)
@@ -118,9 +119,9 @@ public partial class Processor
         uint memRead = default;
         execution = default;
 
-        trap = trap is not TrapKind.None ? Execute(instruction, out execution) : trap;
-        trap = trap is not TrapKind.None ? MemAccess(execution, out memRead) : trap;
-        trap = trap is not TrapKind.None ? WriteBack(execution, memRead) : trap;
+        trap = trap is TrapKind.None ? Execute(instruction, out execution) : trap;
+        trap = trap is TrapKind.None ? MemAccess(execution, out memRead) : trap;
+        trap = trap is TrapKind.None ? WriteBack(execution, memRead) : trap;
 
         // Handle trap, if any occured
         if (trap is not TrapKind.None)
@@ -141,11 +142,89 @@ public partial class Processor
     {
         read = default;
 
+        uint addr = execution.MemAddress;
+        uint size = execution.MemSize;
+        bool signed = execution.MemSigned;
+
+        if (execution.SideEffects is SecondaryEffect.ReadMemory)
+        {
+            read = size switch
+            {
+                1 => signed
+                    ? (uint)_computer.Memory.Read<sbyte>(addr)
+                    : _computer.Memory.Read<byte>(addr),
+                2 => signed
+                    ? (uint)_computer.Memory.Read<short>(addr)
+                    : _computer.Memory.Read<ushort>(addr),
+                4 => _computer.Memory.Read<uint>(addr),
+                _ => ThrowHelper.ThrowInvalidOperationException<uint>($"Invalid memory read size: {size}"),
+            };
+        }
+        else if (execution.SideEffects is SecondaryEffect.WriteMemory)
+        {
+            switch (size)
+            {
+                case 1:
+                    _computer.Memory.Write(addr, (byte)execution.WriteBack);
+                    break;
+
+                case 2:
+                    _computer.Memory.Write(addr, (ushort)execution.WriteBack);
+                    break;
+
+                case 4:
+                    _computer.Memory.Write(addr, execution.WriteBack);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Invalid memory write size: {size}");
+            }
+        }
+
         return TrapKind.None;
     }
 
     private TrapKind WriteBack(Execution execution, uint memRead)
     {
+        // Increment the program counter by default
+        // (some instructions will override this)
+        var programCounter = ProgramCounter + 4;
+
+        // Handle gpr writeback
+        // NOTE: This will clear the register momentarily during load operations.
+        RegisterFile[execution.GPR] = execution.WriteBack;
+
+        // Apply side effects
+        switch (execution.SideEffects)
+        {
+            case SecondaryEffect.Low:
+                Low = execution.Low;
+                break;
+            case SecondaryEffect.High:
+                High = execution.High;
+                break;
+            case SecondaryEffect.HighLow:
+                (High, Low) = (execution.High, execution.Low);
+                break;
+            case SecondaryEffect.ProgramCounter:
+                programCounter = execution.ProgramCounter;
+                break;
+            case SecondaryEffect.ReadMemory:
+                RegisterFile[execution.GPR] = memRead;
+                break;
+            case SecondaryEffect.WriteCoProc:
+                (execution.CoProcRegisterSet switch
+                {
+                    RegisterSet.GeneralPurpose => RegisterFile,
+                    RegisterSet.CoProc0 => CoProcessor0.RegisterFile,
+                    _ => throw new ArgumentOutOfRangeException(nameof(execution.CoProcRegisterSet)),
+                })[execution.CoProcReg] = execution.CoProcWriteBack;
+                break;
+        }
+
+        // Apply the program counter update
+        ProgramCounter = programCounter;
+
         return TrapKind.None;
     }
 }

@@ -26,14 +26,14 @@ public class InterpreterTests
 
         // Setup interpreter
         var module = result.ObjectModule;
-        var interpreter = new Emulator();
-        interpreter.Computer.Processor.ProgramCounter = module.EntryAddress;
+        var emulator = new Emulator();
+        emulator.Computer.Processor.ProgramCounter = module.EntryAddress;
 
-        interpreter.Load(module);
+        emulator.Load(module);
 
         // Step 3 instructions
-        interpreter.StepInstruction();
-        interpreter.StepInstruction();
-        interpreter.StepInstruction();
+        emulator.Computer.Processor.Step();
+        emulator.Computer.Processor.Step();
+        emulator.Computer.Processor.Step();
     }
 }

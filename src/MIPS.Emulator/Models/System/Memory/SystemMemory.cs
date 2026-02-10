@@ -1,6 +1,9 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.HighPerformance.Buffers;
+using CommunityToolkit.HighPerformance.Helpers;
 using MIPS.Emulator.Helpers;
+using System;
 using System.IO;
 using System.Numerics;
 
@@ -68,23 +71,27 @@ public class SystemMemory
     /// <summary>
     /// Reads a byte array from the specified address into the provided buffer.
     /// </summary>
-    /// <param name="address"></param>
-    /// <param name="buffer"></param>
-    public void Read(uint address, byte[] buffer)
+    public void Read(uint address, byte[] buffer, bool endianCheck = false)
     {
         // NOTE: Handle the case where the buffer is larger than the remaining memory, or if the address is out of bounds
 
         _memoryStream.Position = address;
         _memoryStream.ReadExactly(buffer);
+
+        // Handle endianess
+        if(endianCheck && BitConverter.IsLittleEndian)
+            buffer.Reverse();
     }
 
     /// <summary>
     /// Writes a byte array to the specified address.
     /// </summary>
-    /// <param name="address"></param>
-    /// <param name="bytes"></param>
-    public void Write(uint address, byte[] bytes)
+    public void Write(uint address, byte[] bytes, bool endianCheck = false)
     {
+        // Handle endianess
+        if (endianCheck && BitConverter.IsLittleEndian)
+            bytes.Reverse();
+
         _memoryStream.Position = address;
         _memoryStream.Write(bytes);
     }

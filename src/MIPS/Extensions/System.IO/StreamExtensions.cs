@@ -82,9 +82,7 @@ public static class StreamExtensions
             : value.TryWriteBigEndian(bytes, out bytesWritten);
 
         if (success && bytesWritten == byteCount)
-        {
             stream.Write(bytes);
-        }
 
         // Free temporary array
         if (pooledArray is not null)

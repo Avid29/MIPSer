@@ -3,6 +3,7 @@
 using MIPS.Emulator.Models.System.Execution.Enum;
 using MIPS.Helpers;
 using MIPS.Models.Instructions.Enums.Registers;
+using System;
 
 namespace MIPS.Emulator.Models.System.Execution;
 
@@ -16,7 +17,7 @@ public readonly struct Execution
     private const int REGSET_BITCOUNT = 4;
 
     // These values are used for secondary effects
-    // They can be (low, high), (memAddress, size), (pc, _), (writeback, register|regset)
+    // They can be (low, high), (memAddress, size*(-signed)), (pc, _), (writeback, register|regset)
     private readonly uint _secondary1; 
     private readonly uint _secondary2;
 
@@ -41,10 +42,26 @@ public readonly struct Execution
     /// <summary>
     /// Initializes a new instance of the <see cref="Execution"/> struct.
     /// </summary>
-    public Execution(uint address, uint writeBack)
+    public Execution(GPRegister dest, uint address, int size, bool signed = true)
     {
+        GPR = dest;
         MemAddress = address;
+        SideEffects = SecondaryEffect.ReadMemory;
+
+        size *= signed ? -1 : 1;
+        _secondary2 = (uint)size;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Execution"/> struct.
+    /// </summary>
+    public Execution(uint writeBack, uint address, int size)
+    {
         WriteBack = writeBack;
+        MemAddress = address;
+        SideEffects = SecondaryEffect.WriteMemory;
+
+        _secondary2 = (uint)size;
     }
 
     /// <summary>
@@ -145,11 +162,12 @@ public readonly struct Execution
     /// <remarks>
     /// Number of bytes to read/write.
     /// </remarks>
-    public readonly uint MemSize
-    {
-        get => _secondary2;
-        init => _secondary2 = value;
-    }
+    public readonly uint MemSize => (uint)int.Abs((int)_secondary2);
+
+    /// <summary>
+    /// Gets whether or not the memory operation is singed (should sign-extend)
+    /// </summary>
+    public readonly bool MemSigned => (int)_secondary2 < 0;
 
     /// <summary>
     /// Gets the register set to writeback to for co-process writeback.

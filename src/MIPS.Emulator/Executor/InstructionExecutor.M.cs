@@ -39,50 +39,36 @@ public partial class InstructionExecutor
     }
 
     private Execution Load<T>()
-        where T : unmanaged, IBinaryInteger<T>
+        where T : IBinaryInteger<T>
     {
         uint baseAddr = RS;
         int offset = Instruction.ImmediateValue; // already sign-extended
         uint addr = baseAddr + (uint)offset;
 
-        int size = Unsafe.SizeOf<T>();
-
         // Alignment check (bytes are always aligned)
+        int size = Unsafe.SizeOf<T>();
         if (size > 1 && (addr & (uint)(size - 1)) != 0)
         {
-            return CreateTrap(TrapKind.AddressErrorLoad);
+            return CreateTrap(TrapKind.AddressErrorStore);
         }
 
-        // Load the value from memory and zero/sign-extend it to 32 bits
-        var value = 0;
-        uint result = uint.CreateTruncating(value);
-
-        return new Execution(Instruction.RT, result);
+        bool signed = (-T.MultiplicativeIdentity) < T.Zero;
+        return new Execution(Instruction.RT, addr, size, signed);
     }
 
     private Execution Store<T>()
-        where T : unmanaged, IBinaryInteger<T>
     {
         uint baseAddr = RS;
         int offset = Instruction.ImmediateValue; // already sign-extended
         uint addr = baseAddr + (uint)offset;
 
-        int size = Unsafe.SizeOf<T>();
-
         // Alignment check (bytes are always aligned)
+        int size = Unsafe.SizeOf<T>();
         if (size > 1 && (addr & (uint)(size - 1)) != 0)
         {
-            return CreateTrap(TrapKind.AddressErrorLoad);
+            return CreateTrap(TrapKind.AddressErrorStore);
         }
 
-        // TODO: Handle writeback size in apply stage
-        // In the meantime, we'll read the existing value from memory, combine it with the value from the register, and write it back
-        var regValue = RT;
-        uint memValue = 0;
-        var regMask = uint.MaxValue >> (32 - size * 8);
-        var memMask = ~regMask;
-        var value = (regValue & regMask) | (memValue & memMask);
-
-        return new Execution(addr, value);
+        return new Execution(RT, addr, size);
     }
 }
