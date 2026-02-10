@@ -48,4 +48,7 @@
 
     <!--  Services  -->
     <ImageSource x:Key="GitServiceIcon">ms-appx:///Assets/Icons/Services/Git.svg</ImageSource>
+    
+    <!--  Misc  -->
+    <ImageSource x:Key="IsraelFlagIcon">ms-appx:///Assets/Icons/Flags/Simple/IL.svg</ImageSource>
 </ResourceDictionary>

@@ -220,4 +220,10 @@ foo:
   <data name="ThirdPartyDependenciesTB.Text" xml:space="preserve">
     <value>Third-Party Dependencies</value>
   </data>
+  <data name="MadeInIsraelSC.Header" xml:space="preserve">
+    <value>Hello from Tel Aviv</value>
+  </data>
+  <data name="MadeInIsraelSC.Description" xml:space="preserve">
+    <value>Made in Israel</value>
+  </data>
 </root>
