@@ -5,7 +5,6 @@ using MIPS.Emulator.Components;
 using MIPS.Emulator.Models.Enums;
 using MIPS.Emulator.Models.Modules;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading;
 
 namespace MIPS.Emulator;
@@ -15,6 +14,7 @@ namespace MIPS.Emulator;
 /// </summary>
 public class Emulator
 {
+    private readonly ManualResetEventSlim _runGate = new(false);
     private Thread? _thread;
 
     /// <summary>
@@ -46,13 +46,17 @@ public class Emulator
             field = value;
             StateChanged?.Invoke(this, value);
         }
-    }
+    } = EmulatorState.Stopped;
 
     /// <summary>
     /// Loads an <see cref="IExecutableModule"/> to the interpreter's memory.
     /// </summary>
     /// <param name="module">The module to load.</param>
-    public void Load(IExecutableModule module) => module.Load(Computer.Memory.AsStream());
+    public void Load(IExecutableModule module)
+    {
+        module.Load(Computer.Memory.AsStream());
+        State = EmulatorState.Ready;
+    }
 
     /// <summary>
     /// Starts the execution loop for the emulator.
@@ -82,6 +86,7 @@ public class Emulator
 
         // Update the 
         State = EmulatorState.Running;
+        _runGate.Set();
     }
 
     /// <summary>
@@ -97,6 +102,7 @@ public class Emulator
         Guard.IsTrue(State is EmulatorState.Paused);
 
         State = EmulatorState.Running;
+        _runGate.Set();
     }
 
     /// <summary>
@@ -106,6 +112,7 @@ public class Emulator
     {
         // Schedule pause
         State = EmulatorState.Pausing;
+        _runGate.Reset();
     }
 
     /// <summary>
@@ -115,6 +122,7 @@ public class Emulator
     {
         // Schedule the shutdown
         State = EmulatorState.Stopping;
+        _runGate.Set(); // The thread must run to exit
         _thread?.Join();
 
         // Shutdown complete
@@ -125,16 +133,16 @@ public class Emulator
     {
         while (State is not EmulatorState.Stopping)
         {
-            // Running loop
+            // Wait here if paused
+            _runGate.Wait();
+
+            // Loop ticks while running
             while (State is EmulatorState.Running)
-                Computer.Processor.Step();
+                Computer.Tick();
 
             // Complete pausing transition
             if (State is EmulatorState.Pausing)
                 State = EmulatorState.Paused;
-
-            // Avoid spinning
-            Thread.Sleep(1);
         }
     }
 }
