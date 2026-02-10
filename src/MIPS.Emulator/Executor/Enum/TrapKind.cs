@@ -1,6 +1,11 @@
 ﻿// Avishai Dernis 2026
 
-namespace MIPS.Emulator.Models.Enum;
+
+// Avishai Dernis 2026
+
+using MIPS.Emulator.Executor;
+
+namespace MIPS.Emulator.Executor.Enum;
 
 /// <summary>
 /// An enum describing the kind of trap that occurred during an <see cref="Execution"/>.

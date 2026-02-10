@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2026
 
-namespace MIPS.Emulator.Models.Enum;
+namespace MIPS.Emulator.Components.Enums;
 
 /// <summary>
 /// An enum describing the priviledge mode the processor is operating in.

@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-namespace MIPS.Emulator.Models.Enum;
+namespace MIPS.Emulator.Executor.Enum;
 
 /// <summary>
 /// An enum describing which register to writeback to.

@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2026
 
-using MIPS.Emulator.Models;
-using MIPS.Emulator.Models.Enum;
+using MIPS.Emulator.Components.Enums;
+using MIPS.Emulator.Executor.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Registers;
 using MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;

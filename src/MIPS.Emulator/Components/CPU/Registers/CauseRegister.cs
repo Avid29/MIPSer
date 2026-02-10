@@ -2,7 +2,7 @@
 
 using MIPS.Helpers;
 using System.Runtime.CompilerServices;
-using MIPS.Emulator.Models.Enum;
+using MIPS.Emulator.Executor.Enum;
 
 namespace MIPS.Emulator.Components.CPU.Registers;
 

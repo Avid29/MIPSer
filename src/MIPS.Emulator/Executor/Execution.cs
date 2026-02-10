@@ -1,11 +1,11 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Emulator.Models.Enum;
+using MIPS.Emulator.Executor.Enum;
 using MIPS.Helpers;
 using MIPS.Models.Instructions.Enums.Registers;
 using System;
 
-namespace MIPS.Emulator.Models;
+namespace MIPS.Emulator.Executor;
 
 /// <summary>
 /// A struct representing the results of an instruction's execution.

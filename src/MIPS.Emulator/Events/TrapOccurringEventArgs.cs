@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2026
 
-using MIPS.Emulator.Models.Enum;
+using MIPS.Emulator.Executor.Enum;
 using System;
 
 namespace MIPS.Emulator.Events;

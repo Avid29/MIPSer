@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Emulator.Components.CPU.Registers;
-using MIPS.Emulator.Models.Enum;
+using MIPS.Emulator.Components.Enums;
 using MIPS.Models.Instructions.Enums.Registers;
 
 namespace MIPS.Emulator.Components.CPU.CoProcessors;

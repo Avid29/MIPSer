@@ -2,8 +2,7 @@
 
 using MIPS.Emulator.Components.CPU;
 using MIPS.Emulator.Components.CPU.Registers;
-using MIPS.Emulator.Models;
-using MIPS.Emulator.Models.Enum;
+using MIPS.Emulator.Executor.Enum;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums.Operations;
 using MIPS.Models.Instructions.Enums.Registers;

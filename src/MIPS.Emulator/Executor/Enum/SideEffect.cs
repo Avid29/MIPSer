@@ -1,6 +1,11 @@
 ﻿// Avishai Dernis 2025
 
-namespace MIPS.Emulator.Models.Enum;
+
+// Avishai Dernis 2025
+
+using MIPS.Emulator.Executor;
+
+namespace MIPS.Emulator.Executor.Enum;
 
 /// <summary>
 /// An enum describing the secondary effect of an <see cref="Execution"/>.
