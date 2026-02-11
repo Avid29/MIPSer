@@ -38,9 +38,9 @@ Current languages:
 | Spanish  | ⌛ Planned | ⌛ Planned        |
 | Japanese | ⌛ Planned | ⌛ Planned        |
 
-[![Crowdin](https://badges.crowdin.net/Zarem/localized.svg)](https://crowdin.com/project/Zarem)
+[![Crowdin](https://badges.crowdin.net/zarem/localized.svg)](https://crowdin.com/project/zarem)
 
-Help translate on [Crowdin](https://crowdin.com/project/Zarem)!
+Help translate on [Crowdin](https://crowdin.com/project/zarem)!
 
 # Screenshots
 
