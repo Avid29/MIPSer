@@ -22,7 +22,7 @@ public partial class Processor
     /// <summary>
     /// An event that is invoked when a trap occures before it is handled.
     /// </summary>
-    public event EventHandler<TrapOccurringEventArgs>? TrapOccurring;
+    public event EventHandler<Processor, TrapOccurringEventArgs>? TrapOccurring;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Processor"/> class.
@@ -227,14 +227,13 @@ public partial class Processor
         if (trap is TrapKind.None)
             return;
 
-        var hostTrap = _computer.Config.HostedTraps;
+        // Breakpoints are handled by the debugger upon the trap occurring event
+        // The host also handles every kind of trap if that's what the config specifies
+        var hostTrap = trap is TrapKind.Breakpoint || _computer.Config.HostedTraps;
         TrapOccurring?.Invoke(this, new TrapOccurringEventArgs(trap, hostTrap));
 
-        // Breakpoints are handled by the debugger upon the trap occurring event.
-        if (trap is TrapKind.Breakpoint)
-            return;
-
         // The host handled the trap, do not emulate it
+        // This includes breakpoints
         if (hostTrap)
             return;
 

@@ -1,8 +1,8 @@
-# Adam Dernis 2024
+# Avishai Dernis 2026
 
 # Prints the number 42 using a syscall
 
 entry:
-	li		$a0,	42
-	li		$v0, 1
+	xori		$a0,	$zero,	42
+	xori		$v0,	$zero,	1
 	syscall

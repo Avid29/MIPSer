@@ -1,11 +1,8 @@
 ﻿// Adam Dernis 2024
 
 using MIPS.Assembler.Models.Enums;
-using MIPS.Assembler.Models.Modules;
-using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Models.Instructions.Enums;
 using System.Collections.Generic;
-using System.IO;
 using System.Xml.Serialization;
 
 namespace MIPS.Assembler.Config;
