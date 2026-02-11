@@ -17,7 +17,7 @@ public class TokenizerTests
     [TestMethod(TestFilePathing.InstructionsTestFile)]
     public async Task InstructionsFileTest() => await RunFileTest(TestFilePathing.InstructionsTestFile,
         "ori", "$s0", ",", "$zero", ",", "10",
-        "ori", "$s1", ",", "$zero", ",", "10",
+        "ori", "$s1", ",", "$zero", ",", "'a'",
         "add", "$t0", ",", "$s0", ",", "$s1");
 
     private static async Task RunFileTest(string testFile, params string[] canon)
@@ -34,6 +34,21 @@ public class TokenizerTests
         var results = await Tokenizer.TokenizeAsync(stream, fileName);
         Assert.AreEqual(canon.Length, results.TokenCount);
 
-        // TODO: Assert token strings match
+        // Assert token strings match
+        int i = 0; // Token in canon
+        int j = 1; // Assembly line (1 indexed)
+        int k = 0; // Token in line
+        for (; i < canon.Length; i++)
+        {
+            // Search for next token. "while" because a line can contain no tokens
+            var line = results[j];
+            while (k >= line.Tokens.Length)
+            {
+                k = 0;
+                line = results[++j];
+            }
+
+            Assert.AreEqual(canon[i], line[k++].Source);
+        }
     }
 }
