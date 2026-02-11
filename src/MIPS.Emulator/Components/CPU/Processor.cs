@@ -230,12 +230,17 @@ public partial class Processor
         // Breakpoints are handled by the debugger upon the trap occurring event
         // The host also handles every kind of trap if that's what the config specifies
         var hostTrap = trap is TrapKind.Breakpoint || _computer.Config.HostedTraps;
-        TrapOccurring?.Invoke(this, new TrapOccurringEventArgs(trap, hostTrap));
+        var args = new TrapOccurringEventArgs(trap, hostTrap);
+        TrapOccurring?.Invoke(this, args);
 
         // The host handled the trap, do not emulate it
-        // This includes breakpoints
+        // Breakpoints are always handled by the host
         if (hostTrap)
+        {
+            // Wait for the host to handle the trap before resuming execution
+            args.Wait();
             return;
+        }
 
         // Status and cause registers
         CoProcessor0.StatusRegister = CoProcessor0.StatusRegister with { ExceptionLevel = true };
