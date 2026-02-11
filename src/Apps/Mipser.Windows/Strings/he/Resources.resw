@@ -208,21 +208,21 @@
     <value>MIPS VI</value>
   </data>
   <data name="BuildStatus/Succeeded" xml:space="preserve">
-    <value>{0} Succeeded</value>
+    <value>{0} הצליחו</value>
   </data>
   <data name="BuildStatus/Failed" xml:space="preserve">
-    <value>{0} Failed</value>
+    <value>{0} נכשלו</value>
   </data>
   <data name="BuildStatus/Skipped" xml:space="preserve">
-    <value>{0} Skipped</value>
+    <value>{0} דליגו</value>
   </data>
   <data name="BuildStatus/OneSucceeded" xml:space="preserve">
-    <value>1 Succeeded</value>
+    <value>1 הצליח</value>
   </data>
   <data name="BuildStatus/OneSkipped" xml:space="preserve">
-    <value>1 Skipped</value>
+    <value>1 דליג</value>
   </data>
   <data name="BuildStatus/OneFailed" xml:space="preserve">
-    <value>1 Failed</value>
+    <value>{0} נכשל</value>
   </data>
 </root>

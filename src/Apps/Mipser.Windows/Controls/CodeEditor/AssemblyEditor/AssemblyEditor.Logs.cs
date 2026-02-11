@@ -1,10 +1,9 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Assembler;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Models;
-using MIPS.Assembler.Models.Config;
 using MIPS.Models.Instructions.Enums;
 using System;
 using System.Collections.Generic;
@@ -23,7 +22,7 @@ public partial class AssemblyEditor
     /// <summary>
     /// Applies formatting based on a log messages.
     /// </summary>
-    public void ApplyLogHighlights(IReadOnlyList<AssemblerLog> logs)
+    public void ApplyLogHighlights(IReadOnlyList<AssemblerLogEntry> logs)
     {
         if (!TryGetEditor(out var editor))
             return;

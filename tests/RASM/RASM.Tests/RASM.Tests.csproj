@@ -1,29 +1,30 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	<IsPackable>false</IsPackable>
-    <IsTestProject>true</IsTestProject>
-	<GenerateDocumentationFile>false</GenerateDocumentationFile>
-  </PropertyGroup>
+	<PropertyGroup>
+		<IsPackable>false</IsPackable>
+		<IsTestProject>true</IsTestProject>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.12.6" />
-    <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.4.0" />
-    <PackageReference Include="MSTest" Version="3.6.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+		<PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="17.12.6" />
+		<PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.4.3" />
+		<PackageReference Include="MSTest" Version="3.6.4" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Formats\RASM.Modules\RASM.Modules.csproj" />
-    <ProjectReference Include="..\..\..\src\MIPS.Assembler\MIPS.Assembler.csproj" />
-    <ProjectReference Include="..\..\..\src\MIPS.Linker\MIPS.Linker.csproj" />
-    <ProjectReference Include="..\..\..\src\MIPS\MIPS.csproj" />
-    <ProjectReference Include="..\..\MIPS.Assembler.Tests\MIPS.Assembler.Tests.csproj" />
-    <ProjectReference Include="..\..\MIPS.Tests\MIPS.Tests.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\src\Formats\RASM.Modules\RASM.Modules.csproj" />
+		<ProjectReference Include="..\..\..\src\MIPS.Assembler\MIPS.Assembler.csproj" />
+		<ProjectReference Include="..\..\..\src\MIPS.Linker\MIPS.Linker.csproj" />
+		<ProjectReference Include="..\..\..\src\MIPS\MIPS.csproj" />
+		<ProjectReference Include="..\..\Formats\MIPS.Tests.Formats\MIPS.Tests.Formats.csproj" />
+		<ProjectReference Include="..\..\MIPS.Assembler.Tests\MIPS.Assembler.Tests.csproj" />
+		<ProjectReference Include="..\..\MIPS.Tests\MIPS.Tests.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
-  </ItemGroup>
+	<ItemGroup>
+		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+	</ItemGroup>
 
 </Project>

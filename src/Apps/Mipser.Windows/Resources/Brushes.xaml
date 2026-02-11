@@ -8,9 +8,11 @@
 
             <!--  Background Colors  -->
             <Color x:Key="TitleBarBackgroundColor">#222024</Color>
+            <Color x:Key="TabViewBackgroundColor">#131215</Color>
             <Color x:Key="PrimaryBackgroundColor">#131215</Color>
             <SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="{ThemeResource PrimaryBackgroundColor}"/>
             <AcrylicBrush x:Key="TitleBarBackgroundBrush" TintColor="{ThemeResource TitleBarBackgroundColor}" TintOpacity="0.8"/>
+            <AcrylicBrush x:Key="TabViewBackgroundBrush" TintColor="{ThemeResource TabViewBackgroundColor}" TintOpacity="0.8"/>
             <AcrylicBrush x:Key="SideBarBackgroundBrush" TintColor="#161518" TintOpacity="0.5"/>
 
             <!--  Syntax Highlighting -->
@@ -41,9 +43,11 @@
 
             <!--  Background Colors  -->
             <Color x:Key="TitleBarBackgroundColor">#E0E0E0</Color>
+            <Color x:Key="TabViewBackgroundColor">#E8E8E8</Color>
             <Color x:Key="PrimaryBackgroundColor">#FFFFFF</Color>
             <SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="{ThemeResource PrimaryBackgroundColor}"/>
             <AcrylicBrush x:Key="TitleBarBackgroundBrush" TintColor="{ThemeResource TitleBarBackgroundColor}" TintOpacity="0.8"/>
+            <AcrylicBrush x:Key="TabViewBackgroundBrush" TintColor="{ThemeResource TabViewBackgroundColor}" TintOpacity="0.8"/>
             <AcrylicBrush x:Key="SideBarBackgroundBrush" TintColor="#F0F0F0" TintOpacity="0.75"/>
 
             <!--  Syntax Highlighting -->

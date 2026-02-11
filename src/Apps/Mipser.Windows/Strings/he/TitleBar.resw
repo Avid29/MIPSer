@@ -168,6 +168,9 @@
   <data name="DebugMBI.Title" xml:space="preserve">
     <value>Debug</value>
   </data>
+  <data name="DebugMBI.Title" xml:space="preserve">
+    <value>ניפוי שגיאות</value>
+  </data>
   <data name="DuplicateMFI.Text" xml:space="preserve">
     <value>Duplicate</value>
   </data>
@@ -225,6 +228,9 @@
   <data name="RebuildProjectMFI.Text" xml:space="preserve">
     <value>Rebuild Project</value>
   </data>
+  <data name="RebuildProjectMFI.Text" xml:space="preserve">
+    <value>בנה מחדש את הפרויקט</value>
+  </data>
   <data name="RedoMFI.Text" xml:space="preserve">
     <value>Redo</value>
   </data>
@@ -257,6 +263,21 @@
   </data>
   <data name="StepOverMFI.Text" xml:space="preserve">
     <value>Step Over</value>
+  </data>
+  <data name="StartDebuggingMFI.Text" xml:space="preserve">
+    <value>הפעל ניפוי שגיאות</value>
+  </data>
+  <data name="StartWithoutDebuggingMFI.Text" xml:space="preserve">
+    <value>הפעל ללא ניפוי שגיאות</value>
+  </data>
+  <data name="StepIntoMFI.Text" xml:space="preserve">
+    <value>צעד לתוך</value>
+  </data>
+  <data name="StepOutMFI.Text" xml:space="preserve">
+    <value>צעד החוצה</value>
+  </data>
+  <data name="StepOverMFI.Text" xml:space="preserve">
+    <value>צעד מעל</value>
   </data>
   <data name="ToggleFullScreenMFI.Text" xml:space="preserve">
     <value>Toggle Full Screen</value>

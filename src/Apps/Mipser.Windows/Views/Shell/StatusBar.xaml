@@ -26,8 +26,14 @@
             <SolidColorBrush x:Name="BackgroundBrush" Color="{x:Bind ViewModel.BuildStatus, Converter={StaticResource BuildStatusColorConverter}, Mode=OneWay}"/>
         </Grid.Background>
 
-        <TextBlock Text="{x:Bind helpers:LocalizationHelper.Localize(ViewModel.BuildStatus), Mode=OneWay}"
-                   cth:ContrastHelper.Opponent="{x:Bind BackgroundBrush.Color, Mode=OneWay}"
-                   HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <StackPanel Orientation="Horizontal" Spacing="12">
+            <TextBlock Text="{x:Bind helpers:LocalizationHelper.Localize(ViewModel.BuildStatus), Mode=OneWay}"
+                       cth:ContrastHelper.Opponent="{x:Bind BackgroundBrush.Color, Mode=OneWay}"
+                       HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+            <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}"
+                       cth:ContrastHelper.Opponent="{x:Bind BackgroundBrush.Color, Mode=OneWay}"
+                       HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="12" Margin="0,2,0,0"/>
+        </StackPanel>
     </Grid>
 </UserControl>

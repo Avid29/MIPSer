@@ -36,6 +36,9 @@ public partial class CodeEditor : Control
         // Setup template parts
         ChildEditor = (CodeEditorControl)GetTemplateChild(CodeEditorPartName);
 
+        // Setup events
+        this.Loaded += CodeEditor_Loaded;
+
         // Setup keybinds
         SetupKeybinds();
 

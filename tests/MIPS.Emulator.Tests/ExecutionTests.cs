@@ -1,0 +1,456 @@
+﻿// Avishai Dernis 2026
+
+using MIPS.Assembler.Models.Instructions;
+using MIPS.Assembler.Parsers;
+using MIPS.Assembler.Tokenization;
+using MIPS.Emulator.Components.CPU.Registers;
+using MIPS.Emulator.Components.Enums;
+using MIPS.Emulator.Executor.Enum;
+using MIPS.Models.Instructions.Enums.Registers;
+using System.Collections.Generic;
+using System.Numerics;
+
+namespace MIPS.Emulator.Tests;
+
+[TestClass]
+public class ExecutionTests
+{
+    private const uint K0 = 0xbd0;
+    private const uint K1 = 0xd16;
+
+    public sealed record ExecutionTestCase
+    {
+        private ExecutionTestCase(string input)
+        {
+            Input = input;
+
+            PrivilegeMode = PrivilegeMode.User;
+
+            unchecked
+            {
+                RegisterInitialization =
+                    [
+                        // Max/Min values to test edge cases, as well as some arbitrary non-edge-case values for good measure
+                        // Stored in the argument registers
+                        (GPRegister.Argument0, int.MaxValue), (GPRegister.Argument1, (uint)int.MinValue),
+                        (GPRegister.Argument2, uint.MaxValue), (GPRegister.Argument3, uint.MinValue),
+
+                        // Saved 1 - 4 are assigned to 1 through 4 respectively,
+                        // while saved 5 and 6 are assigned to -1 and -2 (to test sign handling in arithmetic instructions)
+                        (GPRegister.Saved1, 1), (GPRegister.Saved2, 2), (GPRegister.Saved3, 3), (GPRegister.Saved4, 4),
+                        (GPRegister.Saved5, (uint)-1), (GPRegister.Saved6, (uint)-2),
+
+                        // Temp 1 - 4 are assigned to 10, 20, 30, 40 respectively,
+                        // while temp 5 and 6 are assigned to -10 and -20 (to test sign handling in arithmetic instructions)
+                        (GPRegister.Temporary1, 10), (GPRegister.Temporary2, 20), (GPRegister.Temporary3, 30), (GPRegister.Temporary4, 40),
+                        (GPRegister.Temporary5, (uint)-10), (GPRegister.Temporary6, (uint)-20), (GPRegister.Temporary7, (uint)-30),
+
+                        // Assign some arbitrary values to the rest of the registers as well, just in case
+                        (GPRegister.Temporary8, 101), (GPRegister.AssemblerTemporary, 0x89ab_cdef), (GPRegister.Kernel0, K0), (GPRegister.Kernel1, K1)
+                    ];
+
+                InitialHighLow = (0x1234, 0x5678);
+
+                MemoryInitialization =
+                    [(0x1000, [0x12, 0x34, 0x56, 0x78])];
+            }
+        }
+
+        public ExecutionTestCase(string input, TrapKind trap) : this(input)
+        {
+            ExpectedTrap = trap;
+        }
+
+        public ExecutionTestCase(string input, uint writeBack) : this(input)
+        {
+            ExpectedWriteBack = (GPRegister.ReturnValue0, writeBack);
+        }
+
+        public ExecutionTestCase(string input, GPRegister reg, uint? writeBack = null) : this(input)
+        {
+            ExpectedWriteBack = (reg, writeBack);
+        }
+
+        public ExecutionTestCase(string input, (uint, byte[]) memory) : this(input)
+        {
+            ExpectedMemory = memory;
+        }
+
+        public ExecutionTestCase(string input, ulong highLow) : this(input)
+        {
+            ExpectedHighLow = ((uint)(highLow >> 32), (uint)highLow);
+        }
+
+        public ExecutionTestCase(string input, (uint, uint) highLow) : this(input)
+        {
+            ExpectedHighLow = highLow;
+        }
+
+        public ExecutionTestCase(string input, SideEffect sideEffects) : this(input)
+        {
+            ExpectedSideEffect = sideEffects;
+        }
+
+        public string Input { get; }
+
+        public TrapKind ExpectedTrap { get; init; } = TrapKind.None;
+
+        public (GPRegister Regiter, uint? Value)? ExpectedWriteBack { get; init; } = null;
+
+        public SideEffect? ExpectedSideEffect { get; init; }
+
+        public (uint Address, byte[] Data)? ExpectedMemory { get; init; }
+
+        public (uint High, uint Low)? ExpectedHighLow { get; init; }
+
+        public (GPRegister Register, uint Value)[] RegisterInitialization { get; init; } = [];
+
+        public (uint Address, byte[] Data)[] MemoryInitialization { get; init; } = [];
+
+        public (uint High, uint Low)? InitialHighLow { get; init; }
+
+        public PrivilegeMode PrivilegeMode
+        {
+            get => Status.PrivilegeMode;
+            init => Status = Status with { PrivilegeMode = value };
+        }
+
+        public StatusRegister Status { get; init; }
+    }
+
+    public static IEnumerable<object[]> ArithmeticInstructionTestsList
+    {
+        get
+        {
+            // Unsigned
+            yield return [new ExecutionTestCase("addu $v0, $t2, $t1", 30)];
+            yield return [new ExecutionTestCase("addiu $v0, $t2, 10", 30)];
+            yield return [new ExecutionTestCase("subu $v0, $t3, $t2", 30 - 20)];
+            yield return [new ExecutionTestCase("multu $t3, $t2", (ulong)(30 * 20))];
+            yield return [new ExecutionTestCase("divu $t3, $t2", (30 % 20, 30 / 20))];
+
+            // Signed (without signs)
+            yield return [new ExecutionTestCase("add $v0, $t2, $t1", 30)];
+            yield return [new ExecutionTestCase("addi $v0, $t2, 10", 30)];
+            yield return [new ExecutionTestCase("sub $v0, $t3, $t2", 30 - 20)];
+            yield return [new ExecutionTestCase("mul $v0, $t3, $t2", 30 * 20)];
+            yield return [new ExecutionTestCase("mult $t3, $t2", (ulong)(30 * 20))];
+            yield return [new ExecutionTestCase("div $t3, $t2", (30 % 20, 30 / 20))];
+            yield return [new ExecutionTestCase("sra $v0, $t8, 4", 101 >> 4)];
+            yield return [new ExecutionTestCase("srav $v0, $t8, $s4", 101 >> 4)];
+
+            // Signed (with signs)
+            unchecked
+            {
+                yield return [new ExecutionTestCase("add $v0, $t3, $t5", 30 + (-10))];
+                yield return [new ExecutionTestCase("addi $v0, $t3, -10", 30 + (-10))];
+                yield return [new ExecutionTestCase("sub $v0, $t2, $t5", 20 - (-10))];
+                yield return [new ExecutionTestCase("mul $v0, $t3, $t6", (uint)(30 * -20))];
+                yield return [new ExecutionTestCase("mult $t3, $t6", (ulong)(30 * -20))];
+                yield return [new ExecutionTestCase("div $t3, $t6", (30 % -20, (uint)(30 / -20)))];
+            }
+
+            // Overflowing
+            unchecked
+            {
+                // Unsigned (should not overflow)
+                yield return [new ExecutionTestCase("addu $v0, $a2, $s1", uint.MaxValue + 1)];
+                yield return [new ExecutionTestCase("addiu $v0, $a2, 1", uint.MaxValue + 1)];
+                yield return [new ExecutionTestCase("subu $v0, $a3, $s1", uint.MinValue - 1)];
+                yield return [new ExecutionTestCase("multu $a2, $a2", (ulong)uint.MaxValue * uint.MaxValue)];
+                yield return [new ExecutionTestCase("divu $a2, $a2", (uint.MaxValue % uint.MaxValue, uint.MaxValue / uint.MaxValue))];
+
+                // Note:
+                // "mul" does not trap on overflow. We expect the low 32 bits of the result to be written back, and the high 32 bits to be discarded.
+                // "mult" also does not trap on overflow, but instead writes the full 64-bit result into the high and low registers.
+                // "div" does not trap on overflow either. The behavior is undefined if the quotient is too large to fit in 32 bits.
+                // In practice, we will just take the low 32 bits of the quotient and discard the high 32 bits, and write the remainder to the high register.
+
+                // Signed (without signs)
+                yield return [new ExecutionTestCase("add $v0, $a0, $s1", TrapKind.ArithmeticOverflow)];             // max + 1
+                yield return [new ExecutionTestCase("addi $v0, $a0, 1", TrapKind.ArithmeticOverflow)];              // max + 1
+                yield return [new ExecutionTestCase("sub $v0, $a1, $s1", TrapKind.ArithmeticOverflow)];             // min - 1
+                yield return [new ExecutionTestCase("mul $v0, $a0, $a0", int.MaxValue * int.MaxValue)];             // max * max
+                yield return [new ExecutionTestCase("mult $a0, $a0", (long)int.MaxValue * int.MaxValue)];           // max * max
+                yield return [new ExecutionTestCase("div $a0, $a0", ((uint)((long)int.MaxValue % int.MaxValue), (uint)((long)int.MaxValue / int.MaxValue)))];
+
+                // Signed (with signs)
+                yield return [new ExecutionTestCase("add $v0, $a1, $s5", TrapKind.ArithmeticOverflow)];             // min + (-1)
+                yield return [new ExecutionTestCase("addi $v0, $a1, -1", TrapKind.ArithmeticOverflow)];             // min + (-1)
+                yield return [new ExecutionTestCase("sub $v0, $a0, $s5", TrapKind.ArithmeticOverflow)];             // max - (-1)
+                yield return [new ExecutionTestCase("mul $v0, $a1, $a1", (uint)(int.MinValue * int.MinValue))];     // min * min
+                yield return [new ExecutionTestCase("mult $a1, $a1", (long)int.MinValue * int.MinValue)];           // min * min
+                yield return [new ExecutionTestCase("div $a1, $a1", ((uint)((long)int.MinValue % int.MinValue), (uint)((long)int.MinValue / int.MinValue)))];
+            }
+
+            // Division by zero. Undefined behavior, but NOT a trap! (Shouldn't crash the emulator either)
+            yield return [new ExecutionTestCase("divu $t3, $zero", TrapKind.None)];
+            yield return [new ExecutionTestCase("div $t3, $zero", TrapKind.None)];
+
+            // Multiply and Add/Subtract
+            yield return [new ExecutionTestCase("maddu $t3, $t2", (0x1234, 0x5678 + (30 * 20)))];
+            yield return [new ExecutionTestCase("madd $t3, $t2", (0x1234, 0x5678 + (30 * 20)))];
+            yield return [new ExecutionTestCase("msubu $t3, $t2", (0x1234, 0x5678 - (30 * 20)))];
+            yield return [new ExecutionTestCase("msub $t3, $t2", (0x1234, 0x5678 - (30 * 20)))];
+        }
+    }
+
+    public static IEnumerable<object[]> LogicalInstructionTestsList
+    {
+        get
+        {
+            yield return [new ExecutionTestCase("and $v0, $k0, $k1", K0 & K1)];
+            yield return [new ExecutionTestCase("andi $v0, $k0, 0xd16", K0 & K1)];
+            yield return [new ExecutionTestCase("or $v0, $k0, $k1", K0 | K1)];
+            yield return [new ExecutionTestCase("ori $v0, $k0, 0xd16", K0 | K1)];
+            yield return [new ExecutionTestCase("xor $v0, $k0, $k1", K0 ^ K1)];
+            yield return [new ExecutionTestCase("xori $v0, $k0, 0xd16", K0 ^ K1)];
+            yield return [new ExecutionTestCase("nor $v0, $k0, $k1", ~(K0 | K1))];
+            yield return [new ExecutionTestCase("sll $v0, $t8, 4", 101 << 4)];
+            yield return [new ExecutionTestCase("srl $v0, $t8, 4", 101 >> 4)];
+            yield return [new ExecutionTestCase("sllv $v0, $t8, $s4", 101 << 4)];
+            yield return [new ExecutionTestCase("srlv $v0, $t8, $s4", 101 >> 4)];
+        }
+    }
+
+    public static IEnumerable<object[]> CompareInstructionTestsList
+    {
+        get
+        {
+            // Unsigned
+            yield return [new ExecutionTestCase("sltu $v0, $t2, $t3", 1)];
+            yield return [new ExecutionTestCase("sltu $v0, $t3, $t2", (uint)0)];
+            yield return [new ExecutionTestCase("sltu $v0, $t1, $t1", (uint)0)];
+            yield return [new ExecutionTestCase("sltiu $v0, $t2, 30", 1)];
+            yield return [new ExecutionTestCase("sltiu $v0, $t3, 20", (uint)0)];
+            yield return [new ExecutionTestCase("sltiu $v0, $t1, 10", (uint)0)];
+
+            // Signed (without signs)
+            yield return [new ExecutionTestCase("slt $v0, $t2, $t3", 1)];
+            yield return [new ExecutionTestCase("slt $v0, $t3, $t2", (uint)0)];
+            yield return [new ExecutionTestCase("slt $v0, $t1, $t1", (uint)0)];
+            yield return [new ExecutionTestCase("slti $v0, $t2, 30", 1)];
+            yield return [new ExecutionTestCase("slti $v0, $t3, 20", (uint)0)];
+            yield return [new ExecutionTestCase("slti $v0, $t1, 10", (uint)0)];
+
+            // Signed (with signs)
+            unchecked
+            {
+                yield return [new ExecutionTestCase("slt $v0, $t7, $t6", 1)];
+                yield return [new ExecutionTestCase("slt $v0, $t6, $t7", (uint)0)];
+                yield return [new ExecutionTestCase("slt $v0, $t5, $t5", (uint)0)];
+                yield return [new ExecutionTestCase("slti $v0, $t7, -20", 1)];
+                yield return [new ExecutionTestCase("slti $v0, $t6, -30", (uint)0)];
+                yield return [new ExecutionTestCase("slti $v0, $t5, -10", (uint)0)];
+            }
+        }
+    }
+
+    public static IEnumerable<object[]> TrapInstructionTestsList
+    {
+        get
+        {
+            // Equality
+            yield return [new ExecutionTestCase("teq $t2, $t3", TrapKind.None)];
+            yield return [new ExecutionTestCase("teq $t1, $t1", TrapKind.Trap)];
+            yield return [new ExecutionTestCase("tne $t1, $t1", TrapKind.None)];
+            yield return [new ExecutionTestCase("tne $t3, $t2", TrapKind.Trap)];
+
+            // Unsigned
+            yield return [new ExecutionTestCase("tltu $t3, $t2", TrapKind.None)];
+            yield return [new ExecutionTestCase("tltu $t2, $t3", TrapKind.Trap)];
+            yield return [new ExecutionTestCase("tltu $t1, $t1", TrapKind.None)];
+            yield return [new ExecutionTestCase("tgeu $t2, $t3", TrapKind.None)];
+            yield return [new ExecutionTestCase("tgeu $t3, $t2", TrapKind.Trap)];
+            yield return [new ExecutionTestCase("tgeu $t1, $t1", TrapKind.Trap)];
+
+            // Signed (without signs)
+            yield return [new ExecutionTestCase("tlt $t3, $t2", TrapKind.None)];
+            yield return [new ExecutionTestCase("tlt $t2, $t3", TrapKind.Trap)];
+            yield return [new ExecutionTestCase("tlt $t1, $t1", TrapKind.None)];
+            yield return [new ExecutionTestCase("tge $t2, $t3", TrapKind.None)];
+            yield return [new ExecutionTestCase("tge $t3, $t2", TrapKind.Trap)];
+            yield return [new ExecutionTestCase("tge $t1, $t1", TrapKind.Trap)];
+
+            // Signed (with signs)
+            unchecked
+            {
+                yield return [new ExecutionTestCase("tlt $t6, $t7", TrapKind.None)];
+                yield return [new ExecutionTestCase("tlt $t7, $t6", TrapKind.Trap)];
+                yield return [new ExecutionTestCase("tlt $t5, $t5", TrapKind.None)];
+                yield return [new ExecutionTestCase("tge $t7, $t6", TrapKind.None)];
+                yield return [new ExecutionTestCase("tge $t6, $t7", TrapKind.Trap)];
+                yield return [new ExecutionTestCase("tge $t5, $t5", TrapKind.Trap)];
+            }
+        }
+    }
+
+    public static IEnumerable<object[]> MemoryInstructionTestsList
+    {
+        get
+        {
+            // Load
+            yield return [new ExecutionTestCase("lb $v0, 0x1000($zero)", 0x12)];
+            yield return [new ExecutionTestCase("lh $v0, 0x1000($zero)", 0x1234)];
+            yield return [new ExecutionTestCase("lw $v0, 0x1000($zero)", 0x1234_5678)];
+
+            // Store
+            yield return [new ExecutionTestCase("sb $at, 0x1000($zero)", (0x1000, [0xef, 0x34, 0x56, 0x78]))];
+            yield return [new ExecutionTestCase("sh $at, 0x1000($zero)", (0x1000, [0xcd, 0xef, 0x56, 0x78]))];
+            yield return [new ExecutionTestCase("sw $at, 0x1000($zero)", (0x1000, [0x89, 0xab, 0xcd, 0xef]))];
+        }
+    }
+
+    public static IEnumerable<object[]> UncategorizedRegisterOnlyInstructionTestsList
+    {
+        get
+        {
+            // lui
+            yield return [new ExecutionTestCase("lui $v0, 0x1234", 0x12340000)];
+
+            // Move from/to high and low registers
+            yield return [new ExecutionTestCase("mtlo $k0", (0x1234, K0))];
+            yield return [new ExecutionTestCase("mthi $k1", (K1, 0x5678))];
+            yield return [new ExecutionTestCase("mflo $v0", 0x5678)];
+            yield return [new ExecutionTestCase("mfhi $v0", 0x1234)];
+
+            // Niche bit-manipulation
+            // TODO: ext, ins, seb, seh, wsbh, wshd
+            yield return [new ExecutionTestCase("clz $v0, $k0", (uint)BitOperations.LeadingZeroCount(K0))];
+            yield return [new ExecutionTestCase("clo $v0, $k0", (uint)BitOperations.LeadingZeroCount(~K0))];
+        }
+    }
+
+    public static IEnumerable<object[]> SystemInstructionTestsList
+    {
+        get
+        {
+            yield return [new ExecutionTestCase("syscall", TrapKind.Syscall)];
+            yield return [new ExecutionTestCase("break", TrapKind.Breakpoint)];
+
+            // Exception Return
+            yield return [new ExecutionTestCase("eret", TrapKind.ReservedInstruction)];
+            yield return [new ExecutionTestCase("eret", SideEffect.WriteCoProc)
+            { Status = new StatusRegister { ExceptionLevel = true } }];
+
+            // Enable Interrupts
+            yield return [new ExecutionTestCase("ei", TrapKind.ReservedInstruction)];
+            yield return [new ExecutionTestCase("ei", SideEffect.WriteCoProc)
+            { PrivilegeMode = PrivilegeMode.Kernel }];
+            yield return [new ExecutionTestCase("ei $v0", GPRegister.ReturnValue0)
+            {
+                ExpectedSideEffect = SideEffect.WriteCoProc,
+                PrivilegeMode = PrivilegeMode.Kernel
+            }];
+
+            // Disable Interrupts
+            yield return [new ExecutionTestCase("di", TrapKind.ReservedInstruction)];
+            yield return [new ExecutionTestCase("di", SideEffect.WriteCoProc)
+            { PrivilegeMode = PrivilegeMode.Kernel }];
+            yield return [new ExecutionTestCase("di $v1", GPRegister.ReturnValue1)
+            {
+                ExpectedSideEffect = SideEffect.WriteCoProc,
+                PrivilegeMode = PrivilegeMode.Kernel
+            }];
+        }
+    }
+
+    [DataTestMethod]
+    [DynamicData(nameof(ArithmeticInstructionTestsList))]
+    public void ArithmeticInstructionTests(ExecutionTestCase @case) => RunTest(@case);
+
+    [DataTestMethod]
+    [DynamicData(nameof(LogicalInstructionTestsList))]
+    public void LogicalInstructionTests(ExecutionTestCase @case) => RunTest(@case);
+
+    [DataTestMethod]
+    [DynamicData(nameof(CompareInstructionTestsList))]
+    public void CompareInstructionTests(ExecutionTestCase @case) => RunTest(@case);
+
+    [DataTestMethod]
+    [DynamicData(nameof(TrapInstructionTestsList))]
+    public void TrapInstructionTests(ExecutionTestCase @case) => RunTest(@case);
+
+    [DataTestMethod]
+    [DynamicData(nameof(MemoryInstructionTestsList))]
+    public void MemoryInstructionTests(ExecutionTestCase @case) => RunTest(@case);
+
+    [DataTestMethod]
+    [DynamicData(nameof(UncategorizedRegisterOnlyInstructionTestsList))]
+    public void UncategorizedRegisterOnlyInstructionTests(ExecutionTestCase @case) => RunTest(@case);
+
+    [DataTestMethod]
+    [DynamicData(nameof(SystemInstructionTestsList))]
+    public void SystemInstructionTests(ExecutionTestCase @case) => RunTest(@case);
+
+    private static void RunTest(ExecutionTestCase @case)
+    {
+        // The instruction parser is only used to convert the instruction string into an Instruction struct, so we can test the interpreter with it.
+        var tokenized = Tokenizer.TokenizeLine(@case.Input);
+        var table = new InstructionTable(new());
+        var parser = new InstructionParser(table, null);
+        if (!parser.TryParse(tokenized, out var parsed))
+            Assert.Fail();
+
+        // TODO: Psuedo instruction support
+        var instruction = parsed.Realize()[0];
+
+        var emulator = new Emulator(new());
+
+        // Initialize the status register
+        emulator.Computer.Processor.CoProcessor0.StatusRegister = @case.Status;
+
+        // Initialize the register file with the provided values
+        foreach (var (reg, value) in @case.RegisterInitialization)
+            emulator.Computer.Processor[reg] = value;
+
+        // Initialize the high and low registers if specified in the test case
+        if (@case.InitialHighLow.HasValue)
+        {
+            emulator.Computer.Processor.Low = @case.InitialHighLow.Value.Low;
+            emulator.Computer.Processor.High = @case.InitialHighLow.Value.High;
+        }
+
+        // Initialize the memory, if specified in the test case
+        foreach (var (address, data) in @case.MemoryInitialization)
+            emulator.Computer.Memory.Write(address, data);
+
+        emulator.Computer.Processor.Insert(instruction, out var execution, out var trap);
+
+        // Ensure that the expected trap was raised (if any)
+        Assert.AreEqual(@case.ExpectedTrap, trap);
+
+        var writeback = @case.ExpectedWriteBack;
+        if (writeback.HasValue)
+        {
+            // Ensure that the expected register was written to with the expected value
+            Assert.AreEqual(writeback.Value.Regiter, execution.GPR);
+
+            var writeBackValue = writeback.Value.Value;
+            if (writeBackValue.HasValue)
+            {
+                Assert.AreEqual(writeBackValue.Value, emulator.Computer.Processor.RegisterFile[execution.GPR]);
+            }
+        }
+        else
+        {
+            // If no register check was provided, we at least want to make sure no register was written to (as that would be unexpected)
+            Assert.AreEqual(execution.GPR, GPRegister.Zero);
+        }
+
+        var highLow = @case.ExpectedHighLow;
+        if (highLow.HasValue)
+        {
+            Assert.AreEqual(highLow.Value.Low, emulator.Computer.Processor.Low);
+            Assert.AreEqual(highLow.Value.High, emulator.Computer.Processor.High);
+        }
+
+        var expectedMemory = @case.ExpectedMemory;
+        if (expectedMemory is not null)
+        {
+            var buffer = new byte[expectedMemory.Value.Data.Length];
+            emulator.Computer.Memory.Read(expectedMemory.Value.Address, buffer);
+            CollectionAssert.AreEqual(expectedMemory.Value.Data, buffer);
+        }
+    }
+}

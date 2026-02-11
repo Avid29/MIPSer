@@ -107,7 +107,7 @@ public partial class Assembler
         }
         
         // TODO: Macro flags
-        DefineSymbol(name, result.Base, SymbolType.Macro);
+        DefineSymbol(name, result.Value, SymbolType.Macro);
     }
 
     private void HandleInstruction(AssemblyLine line)
@@ -148,10 +148,10 @@ public partial class Assembler
         switch (directive)
         {
             case GlobalDirective global:
-                _module.TryDefineOrUpdateSymbol(global.Symbol, flags: SymbolFlags.Global);
+                _module.TryDefineOrUpdateSymbol(global.Symbol, binding: SymbolBinding.Global);
                 break;
             case SectionDirective segment:
-                SetActiveSection(segment.ActiveSection);
+                SetActiveSection(segment.Section);
                 break;
             case AlignDirective align:
                 Align(align.Boundary);

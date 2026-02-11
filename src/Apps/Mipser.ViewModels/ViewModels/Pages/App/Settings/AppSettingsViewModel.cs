@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using Mipser.Models;
 using Mipser.Services;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
@@ -91,5 +92,32 @@ namespace Mipser.ViewModels.Pages.App.Settings
         /// Gets a link to the build's commit on github.
         /// </summary>
         public string CommitGitHubLink => $"https://github.com/Avid29/MIPSer/tree/{GitInfo.Sha}";
+
+        /// <summary>
+        /// Gets a list of third-party dependencies used in MIPSer.
+        /// </summary>
+        public IEnumerable<ThirdPartyNotice> ThirdPartyNotices { get; } =
+        [
+            new()
+            {
+                DependencyName = "GitInfo",
+                Url = "https://github.com/devlooped/GitInfo",
+            },
+            new()
+            {
+                DependencyName = "LibObjectFile",
+                Url = "https://github.com/xoofx/LibObjectFile",
+            },
+            new()
+            {
+                DependencyName = "Windows Community Toolkit",
+                Url = "https://github.com/CommunityToolkit/Windows",
+            },
+            new()
+            {
+                DependencyName = "WinUIEdit",
+                Url = "https://github.com/BreeceW/WinUIEdit",
+            },
+        ];
     }
 }

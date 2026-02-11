@@ -1,10 +1,11 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MIPS.Assembler.Models;
 
@@ -46,7 +47,7 @@ public class AssemblerContext
     public AssemblerConfig Config => _assembler.Config;
 
     /// <inheritdoc cref="Assembler.CurrentAddress"/>
-    public Address CurrentAddress => _assembler?.CurrentAddress ?? Address.External;
+    public Address CurrentAddress => _assembler?.CurrentAddress ?? default;
 
     /// <summary>
     /// Gets a table of instructions for the assemlber.
@@ -54,5 +55,5 @@ public class AssemblerContext
     public InstructionTable InstructionTable { get; }
 
     /// <inheritdoc cref="Module.TryGetSymbol(string, out SymbolEntry)"/>
-    public bool TryGetSymbol(string name, out SymbolEntry value) => _module.TryGetSymbol(name, out value);
+    public bool TryGetSymbol(string name, [NotNullWhen(true)] out SymbolEntry? value) => _module.TryGetSymbol(name, out value);
 }

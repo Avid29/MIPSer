@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using Mipser.Services.Files.Models;
+using Mipser.Windows.Services.Files.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace Mipser.Windows.Services.FileSystem.Models;
 /// <summary>
 /// An <see cref="IFolder"/> implementation wrapping a <see cref="StorageFolder"/>.
 /// </summary>
-public class Folder : IFolder
+public class Folder : FileItemBase, IFolder
 {
     private readonly StorageFolder _storageFolder;
 
@@ -26,10 +27,7 @@ public class Folder : IFolder
     }
 
     /// <inheritdoc/>
-    public string Name => _storageFolder.Name;
-
-    /// <inheritdoc/>
-    public string Path => _storageFolder.Path;
+    public override IStorageItem StorageItem => _storageFolder;
 
     /// <inheritdoc/>
     public async Task<IFileItem[]> GetItemsAsync()

@@ -1,12 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <UserControl
     x:Class="Mipser.Windows.Views.Pages.FileViewer"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:editor="using:Mipser.Windows.Controls.CodeEditor"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:editctrl="using:Mipser.Windows.Controls.CodeEditor"
+    xmlns:editor="using:Mipser.Windows.Views.Pages.Editor"
+    xmlns:hexbox="using:HexBox.WinUI"
     xmlns:hexview="using:Mipser.Editors.HexViewer"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:selectors="using:Mipser.Windows.Selectors"
     xmlns:vm="using:Mipser.ViewModels.Pages"
     mc:Ignorable="d">
@@ -14,79 +16,76 @@
     <UserControl.Resources>
         <DataTemplate x:Key="WIPFileTemplate">
             <UserControl>
-                <Grid VerticalAlignment="Top"
-                  HorizontalAlignment="Left"
-                  Margin="36,64">
+                <Grid
+                    Margin="36,64"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <Image
+                        x:Name="TrafficCone"
+                        Height="100"
+                        VerticalAlignment="Center"
+                        Source="{ThemeResource TrafficConeIcon}" />
+
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="0,24"
+                        VerticalAlignment="Top">
+                        <TextBlock
+                            x:Name="WIPTitle"
+                            x:Uid="WIPTitleTB"
+                            FontSize="22"
+                            Text="We're Not Ready Yet..."
+                            TextWrapping="WrapWholeWords" />
+                        <TextBlock
+                            x:Name="WIPDescription"
+                            x:Uid="WIPDescriptionTB"
+                            FontSize="12"
+                            Opacity=".8"
+                            Text="We're working on handling this file type, but it's not ready yet."
+                            TextWrapping="WrapWholeWords" />
+                    </StackPanel>
                     <VisualStateManager.VisualStateGroups>
                         <VisualStateGroup>
                             <VisualState>
                                 <VisualState.StateTriggers>
-                                    <AdaptiveTrigger MinWindowWidth="1240"/>
+                                    <AdaptiveTrigger MinWindowWidth="1240" />
                                 </VisualState.StateTriggers>
                                 <VisualState.Setters>
-                                    <Setter Target="TrafficCone.Height" Value="160"/>
-                                    <Setter Target="WIPTitle.FontSize" Value="32"/>
-                                    <Setter Target="WIPDescription.FontSize" Value="20"/>
+                                    <Setter Target="TrafficCone.Height" Value="160" />
+                                    <Setter Target="WIPTitle.FontSize" Value="32" />
+                                    <Setter Target="WIPDescription.FontSize" Value="20" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
                     </VisualStateManager.VisualStateGroups>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Image x:Name="TrafficCone"
-                           Source="{ThemeResource TrafficConeIcon}"
-                           Height="100"
-                           VerticalAlignment="Center"/>
-
-                    <StackPanel VerticalAlignment="Top"
-                                Margin="0,24"
-                                Grid.Column="1">
-                        <TextBlock x:Uid="WIPTitleTB"
-                                   x:Name="WIPTitle"
-                                   Text="We're Not Ready Yet..."
-                                   FontSize="22"
-                                   TextWrapping="WrapWholeWords"/>
-                        <TextBlock x:Uid="WIPDescriptionTB"
-                                   x:Name="WIPDescription"
-                                   Text="We're working on handling this file type, but it's not ready yet."
-                                   FontSize="12"
-                                   Opacity=".8"
-                                   TextWrapping="WrapWholeWords"/>
-                    </StackPanel>
                 </Grid>
             </UserControl>
         </DataTemplate>
 
-        <editor:AssemblySyntaxHighlightingTheme x:Name="SyntaxHighlighting"/>
-
-        <selectors:EditorTemplateSelector x:Key="EditorTemplateSelector"
-                                          HexEditorTemplate="{StaticResource WIPFileTemplate}">
-            <selectors:EditorTemplateSelector.AssemblyEditorTemplate>
+        <selectors:EditorTemplateSelector x:Key="EditorTemplateSelector">
+            <selectors:EditorTemplateSelector.HexEditorTemplate>
                 <DataTemplate x:DataType="vm:FilePageViewModel">
-                    <editor:AssemblyEditor Text="{x:Bind Content, Mode=TwoWay}"
-                                           AssemblerConfig="{x:Bind AssemblerConfig, Mode=OneWay}"
-                                           RealTimeAssembly="{x:Bind AssembleRealTime, Mode=OneWay}"
-                                           AnnotationThreshold="{x:Bind AnnotationThreshold, Mode=OneWay}"
-                                           SyntaxHighlightingTheme="{StaticResource SyntaxHighlighting}"
-                                           FlowDirection="LeftToRight"/>
+                    <editor:HexEditorPage ViewModel="{x:Bind}" />
                 </DataTemplate>
-            </selectors:EditorTemplateSelector.AssemblyEditorTemplate>
+            </selectors:EditorTemplateSelector.HexEditorTemplate>
             <selectors:EditorTemplateSelector.TextEditorTemplate>
                 <DataTemplate x:DataType="vm:FilePageViewModel">
-                    <editor:CodeEditor Text="{x:Bind Content, Mode=TwoWay}"
-                                       FlowDirection="LeftToRight"/>
+                    <editor:TextEditorPage ViewModel="{x:Bind}" />
                 </DataTemplate>
             </selectors:EditorTemplateSelector.TextEditorTemplate>
         </selectors:EditorTemplateSelector>
 
     </UserControl.Resources>
 
-    <ContentControl Content="{x:Bind ViewModel, Mode=OneWay}"
-                    ContentTemplateSelector="{StaticResource EditorTemplateSelector}"
-                    HorizontalContentAlignment="Stretch"
-                    VerticalContentAlignment="Stretch"/>
+    <ContentControl
+        HorizontalContentAlignment="Stretch"
+        VerticalContentAlignment="Stretch"
+        Content="{x:Bind ViewModel, Mode=OneWay}"
+        ContentTemplateSelector="{StaticResource EditorTemplateSelector}" />
 
 </UserControl>

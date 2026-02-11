@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using System.IO;
 
 namespace MIPS.Assembler.Models.Modules.Interfaces;
@@ -16,13 +16,12 @@ public interface IBuildModule<TSelf> : IBuildModule
     /// </summary>
     /// <param name="module">The <see cref="Module"/> to build from.</param>
     /// <param name="config">The configuration settings.</param>
-    /// <param name="stream">The stream to write the module to. A new stream will be created if null.</param>
     /// <returns>The constructed module.</returns>
-    public static abstract TSelf? Create(Module module, AssemblerConfig config, Stream? stream = null);
+    public static abstract TSelf? Create(Module module, AssemblerConfig config);
     
     /// <summary>
-    /// Loads a module from a stream.
+    /// Opens a module from a stream.
     /// </summary>
     /// <returns>The module contained in the stream.</returns>
-    public static abstract TSelf? Load(string name, Stream stream);
+    public static abstract TSelf? Open(string name, Stream stream);
 }

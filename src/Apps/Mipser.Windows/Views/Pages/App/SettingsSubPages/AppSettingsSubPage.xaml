@@ -8,6 +8,7 @@
     xmlns:base="using:Mipser.Windows.Views.Pages.App"
     xmlns:local="using:Mipser.Windows.Views.Pages.App.SettingsSubPages"
     xmlns:ctc="using:CommunityToolkit.WinUI.Controls"
+    xmlns:models="using:Mipser.Models"
     xmlns:helpers="using:Mipser.Windows.Helpers"
     xmlns:senums="using:Mipser.Services.Settings.Enums"
     mc:Ignorable="d">
@@ -20,6 +21,9 @@
         <ctc:SettingsCard x:Uid="/Settings/AppThemeSC"
                           Header="Theme"
                           Description="Change the app's theme.">
+            <ctc:SettingsCard.HeaderIcon>
+                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE2B1;" />
+            </ctc:SettingsCard.HeaderIcon>
             <ComboBox SelectedItem="{x:Bind ViewModel.AppTheme, Mode=TwoWay}"
                       ItemsSource="{x:Bind ViewModel.AppThemeOptions, Mode=OneWay}">
                 <ComboBox.ItemTemplate>
@@ -30,15 +34,18 @@
             </ComboBox>
         </ctc:SettingsCard>
 
-        <ctc:SettingsCard x:Uid="/Settings/RestoreOpenProjectSC"
+        <!--<ctc:SettingsCard x:Uid="/Settings/RestoreOpenProjectSC"
                           Header="Restore Open Project/Folder"
                           Description="Set whether or not the app should cache and restore the open the project/folder when opened.">
             <ToggleSwitch IsOn="{x:Bind ViewModel.RestoreOpenProject, Mode=TwoWay}"/>
-        </ctc:SettingsCard>
+        </ctc:SettingsCard>-->
 
         <ctc:SettingsCard x:Uid="/Settings/AppLanguageSC"
                           Header="App Language"
                           Description="Set the app's display language. (Requires a restart to take effect).">
+            <ctc:SettingsCard.HeaderIcon>
+                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE774;" />
+            </ctc:SettingsCard.HeaderIcon>
             <ComboBox SelectedItem="{x:Bind ViewModel.LanguageOverride, Mode=TwoWay}"
                       ItemsSource="{x:Bind ViewModel.AppLanguageOptions, Mode=OneWay}">
                 <ComboBox.ItemTemplate>
@@ -84,6 +91,26 @@
                             </StackPanel>
                         </HyperlinkButton>
                     </StackPanel>
+                </ctc:SettingsCard>
+                <ctc:SettingsCard HorizontalContentAlignment="Left"
+                                  ContentAlignment="Left">
+                    <StackPanel Spacing="8">
+                        <TextBlock x:Uid="/Settings/ThirdPartyDependenciesTB" Text="Third-Party Dependencies" FontSize="18"/>
+                        <ItemsRepeater ItemsSource="{x:Bind ViewModel.ThirdPartyNotices, Mode=OneWay}">
+                            <ItemsRepeater.ItemTemplate>
+                                <DataTemplate x:DataType="models:ThirdPartyNotice">
+                                    <HyperlinkButton Content="{x:Bind DependencyName, Mode=OneWay}" NavigateUri="{x:Bind Url, Mode=OneWay}"/>
+                                </DataTemplate>
+                            </ItemsRepeater.ItemTemplate>
+                        </ItemsRepeater>
+                    </StackPanel>
+                </ctc:SettingsCard>
+                <ctc:SettingsCard x:Uid="/Settings/MadeInIsraelSC"
+                                  Header="Hello from Tel Aviv"
+                                  Description="Made in Israel">
+                    <ctc:SettingsCard.HeaderIcon>
+                        <ImageIcon Source="{StaticResource IsraelFlagIcon}"/>
+                    </ctc:SettingsCard.HeaderIcon>
                 </ctc:SettingsCard>
             </ctc:SettingsExpander.Items>
         </ctc:SettingsExpander>

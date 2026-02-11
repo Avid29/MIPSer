@@ -8,7 +8,6 @@ using Mipser.Messages.Editor;
 using Mipser.Messages.Editor.Enums;
 using Mipser.Messages.Files;
 using Mipser.Messages.Navigation;
-using Mipser.Messages.Pages;
 using Mipser.Services;
 using Mipser.ViewModels.Pages;
 using System.Linq;
@@ -23,7 +22,6 @@ public partial class MainViewModel
     {
         RegisterFileMessages();
         RegisterEditMessages();
-        RegisterBuildMessages();
         RegisterNavigationMessages();
     }
 
@@ -31,14 +29,6 @@ public partial class MainViewModel
     {
         _messenger.Register<MainViewModel, FileCreateNewRequestMessage>(this, (r, m) => r.CreateNewFile());
         _messenger.Register<MainViewModel, FileOpenRequestMessage>(this, (r, m) => r.OpenFile(m.File));
-        _messenger.Register<MainViewModel, FileSaveRequestMessage>(this, async (r, m) =>
-        {
-            var panel = r.FocusedPanel;
-            if (panel is null)
-                return;
-
-            await panel.SaveCurrentFileAsync();
-        });
         _messenger.Register<MainViewModel, PageCloseRequestMessage>(this, async (r, m) =>
         {
             var panel = r.FocusedPanel;
@@ -52,19 +42,6 @@ public partial class MainViewModel
     private void RegisterEditMessages()
     {
         _messenger.Register<MainViewModel, EditorOperationRequestMessage>(this, (r, m) => r.ApplyEditorOperation(m.Operation));
-    }
-
-    private void RegisterBuildMessages()
-    {
-        _messenger.Register<MainViewModel, AssembleFilesRequestMessage>(this, async (r, m) =>
-        {
-            // Get current file if possible, return if not
-            if (m.Files is null)
-                return;
-
-            // Build the file
-            await _buildService.AssembleFilesAsync(m.Files);
-        });
     }
 
     private void RegisterNavigationMessages()

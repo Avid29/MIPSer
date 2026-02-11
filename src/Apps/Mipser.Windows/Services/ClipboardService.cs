@@ -1,7 +1,14 @@
 ﻿// Avishai Dernis 2025
 
 using Mipser.Services;
+using Mipser.Services.Files.Models;
+using Mipser.Windows.Services.Files.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Storage;
 
 namespace Mipser.Windows.Services;
 
@@ -11,19 +18,36 @@ namespace Mipser.Windows.Services;
 public class ClipboardService : IClipboardService
 {
     /// <inheritdoc/>
-    public void Copy(string text, bool flush = true)
+    public void CopyText(string text, bool flush = true)
     {
         var package = new DataPackage();
         package.SetText(text);
-        Copy(package, flush);
+        SetClipboard(package, DataPackageOperation.Copy, flush);
     }
 
-    private static void Copy(DataPackage data, bool flush = true)
+    /// <inheritdoc/>
+    public async Task CutFileItemsAsync(IEnumerable<IFileItem> fileItems, bool flush = true)
+        => await ClipFileItemsAsync(fileItems, DataPackageOperation.Move, flush);
+
+    /// <inheritdoc/>
+    public async Task CopyFileItemsAsync(IEnumerable<IFileItem> fileItems, bool flush = true)
+        => await ClipFileItemsAsync(fileItems, DataPackageOperation.Copy, flush);
+
+    public static async Task ClipFileItemsAsync(IEnumerable<IFileItem> fileItems, DataPackageOperation operation, bool flush = true)
     {
-        // Set content
-        data.RequestedOperation = DataPackageOperation.Copy;
-        Clipboard.SetContent(data);
+        // Convert the file items to storage items using the assumption they're FileItemBases in implementation
+        var storageItems = fileItems.OfType<FileItemBase>().Select(x => x.StorageItem);
         
+        var package = new DataPackage();
+        package.SetStorageItems(storageItems);
+        SetClipboard(package, operation, flush);
+    }
+
+    private static void SetClipboard(DataPackage data, DataPackageOperation operation, bool flush = true)
+    {
+        data.RequestedOperation = operation;
+        Clipboard.SetContent(data);
+
         // Flush?
         if (flush)
         {

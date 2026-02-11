@@ -2,7 +2,7 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using Mipser.Services.Settings.Enums;
 using System;
 
@@ -83,8 +83,6 @@ public partial class AssemblyEditor
         get => (AssemblerConfig)GetValue(AssemblerConfigProperty);
         set => SetValue(AssemblerConfigProperty, value);
     }
-
-    private void UpdateTextProperty(string value) => SetValue(TextProperty, value);
 
     private static void OnSyntaxHighlightingThemeChanged(DependencyObject d, DependencyPropertyChangedEventArgs arg)
     {

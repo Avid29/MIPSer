@@ -5,6 +5,7 @@ using MIPS.Assembler.Logging.Enum;
 using MIPS.Assembler.Tokenization.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MIPS.Assembler.Logging;
 
@@ -13,8 +14,16 @@ namespace MIPS.Assembler.Logging;
 /// </summary>
 public class Logger : ILogger
 {
-    private readonly List<AssemblerLog> _logs;
+    private readonly List<AssemblerLogEntry> _currentLogs;
+    private readonly List<AssemblerLogEntry> _flushedLogs;
     private readonly Localizer _localizer;
+
+    private bool _currentFailed;
+
+    /// <summary>
+    /// An event invoked when an <see cref="AssemblerLogEntry"/> is logged.
+    /// </summary>
+    public event EventHandler<AssemblerLogEntry>? EntryLogged;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Logger"/> class.
@@ -22,7 +31,24 @@ public class Logger : ILogger
     public Logger()
     {
         _localizer = new Localizer("MIPS.Assembler.Resources.Logger");
-        _logs = [];
+        _currentLogs = [];
+        _flushedLogs = [];
+    }
+
+    /// <summary>
+    /// Gets a value indicating whether or not assembly failed.
+    /// </summary>
+    public bool CurrentFailed
+    {
+        get => _currentFailed;
+        set
+        {
+            _currentFailed = value;
+            if (value)
+            {
+                Failed = true;
+            }
+        }
     }
 
     /// <summary>
@@ -46,17 +72,34 @@ public class Logger : ILogger
         var localizedMessage = _localizer[messageKey];
         var formattedMessage = string.Format(localizedMessage, args);
 
-        var log = new AssemblerLog(severity, code, formattedMessage, tokens.ToArray());
-        _logs.Add(log);
+        var log = new AssemblerLogEntry(severity, code, formattedMessage, tokens.ToArray());
+        _currentLogs.Add(log);
+        EntryLogged?.Invoke(this, log);
 
         if (severity is Severity.Error)
-            Failed = true;
+            CurrentFailed = true;
 
         return severity is not Severity.Error;
     }
 
+    /// <inheritdoc/>
+    public void Flush()
+    {
+        if (_currentLogs.Count is 0)
+            return;
+
+        CurrentFailed = false;
+        _flushedLogs.AddRange(_currentLogs);
+        _currentLogs.Clear();
+    }
+
+    /// <summary>
+    /// Gets a readonly list of logs for the current file.
+    /// </summary>
+    public IReadOnlyList<ILog> CurrentLog => _currentLogs;
+
     /// <summary>
     /// Gets a readonly list of logs.
     /// </summary>
-    public IReadOnlyList<ILog> Logs => _logs;
+    public IEnumerable<ILog> Logs => _currentLogs.Concat(_flushedLogs);
 }

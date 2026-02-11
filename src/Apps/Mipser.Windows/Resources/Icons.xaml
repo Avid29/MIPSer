@@ -27,6 +27,18 @@
     <ImageSource x:Key="ErrorIcon">ms-appx:///Assets/Icons/Severity/Error.svg</ImageSource>
     <ImageSource x:Key="WarningIcon">ms-appx:///Assets/Icons/Severity/Warning.svg</ImageSource>
     <ImageSource x:Key="MessageIcon">ms-appx:///Assets/Icons/Severity/Message.svg</ImageSource>
+
+    <!--  Build  -->
+    <ImageSource x:Key="BuildIcon">ms-appx:///Assets/Icons/BuildIcons/Build.svg</ImageSource>
+    <ImageSource x:Key="ReBuildIcon">ms-appx:///Assets/Icons/BuildIcons/ReBuild.svg</ImageSource>
+    <ImageSource x:Key="CleanIcon">ms-appx:///Assets/Icons/BuildIcons/Clean.svg</ImageSource>
+    
+    <!--  Debug  -->
+    <ImageSource x:Key="StartDebuggingIcon">ms-appx:///Assets/Icons/DebugIcons/StartDebugging.svg</ImageSource>
+    <ImageSource x:Key="StartWithoutDebuggingIcon">ms-appx:///Assets/Icons/DebugIcons/StartWithoutDebugging.svg</ImageSource>
+    <ImageSource x:Key="StepOverIcon">ms-appx:///Assets/Icons/DebugIcons/StepOver.svg</ImageSource>
+    <ImageSource x:Key="StepIntoIcon">ms-appx:///Assets/Icons/DebugIcons/StepInto.svg</ImageSource>
+    <ImageSource x:Key="StepOutIcon">ms-appx:///Assets/Icons/DebugIcons/StepOut.svg</ImageSource>
     
     <!--  Files  -->
     <ImageSource x:Key="FileIcon">ms-appx:///Assets/Icons/Files/File.svg</ImageSource>
@@ -36,4 +48,7 @@
 
     <!--  Services  -->
     <ImageSource x:Key="GitServiceIcon">ms-appx:///Assets/Icons/Services/Git.svg</ImageSource>
+    
+    <!--  Misc  -->
+    <ImageSource x:Key="IsraelFlagIcon">ms-appx:///Assets/Icons/Flags/Simple/IL.svg</ImageSource>
 </ResourceDictionary>

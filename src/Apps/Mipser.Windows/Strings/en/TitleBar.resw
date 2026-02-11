@@ -165,6 +165,9 @@
   <data name="CutMFI.Text" xml:space="preserve">
     <value>Cut</value>
   </data>
+  <data name="DebugMBI.Title" xml:space="preserve">
+    <value>Debug</value>
+  </data>
   <data name="DuplicateMFI.Text" xml:space="preserve">
     <value>Duplicate</value>
   </data>
@@ -219,6 +222,9 @@
   <data name="PasteMFI.Text" xml:space="preserve">
     <value>Paste</value>
   </data>
+  <data name="RebuildProjectMFI.Text" xml:space="preserve">
+    <value>Rebuild Project</value>
+  </data>
   <data name="RedoMFI.Text" xml:space="preserve">
     <value>Redo</value>
   </data>
@@ -236,6 +242,21 @@
   </data>
   <data name="SettingsMFI.Text" xml:space="preserve">
     <value>MIPSer Settings</value>
+  </data>
+  <data name="StartDebuggingMFI.Text" xml:space="preserve">
+    <value>Start Debugging</value>
+  </data>
+  <data name="StartWithoutDebuggingMFI.Text" xml:space="preserve">
+    <value>Start Without Debugging</value>
+  </data>
+  <data name="StepIntoMFI.Text" xml:space="preserve">
+    <value>Step Into</value>
+  </data>
+  <data name="StepOutMFI.Text" xml:space="preserve">
+    <value>Step Out</value>
+  </data>
+  <data name="StepOverMFI.Text" xml:space="preserve">
+    <value>Step Over</value>
   </data>
   <data name="ToggleFullScreenMFI.Text" xml:space="preserve">
     <value>Toggle Full Screen</value>

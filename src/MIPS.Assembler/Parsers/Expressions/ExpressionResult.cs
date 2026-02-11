@@ -15,7 +15,7 @@ public readonly struct ExpressionResult
     /// </summary>
     public ExpressionResult(Address value, ReferenceEntry? reference = null)
     {
-        Base = value;
+        Value = value;
         Reference = reference;
     }
 
@@ -30,7 +30,7 @@ public readonly struct ExpressionResult
     /// <summary>
     /// Gets the value of the parsed expression.
     /// </summary>
-    public Address Base { get; }
+    public Address Value { get; }
 
     /// <summary>
     /// Gets the reference information for any tracked reference made in the in expression.

@@ -4,6 +4,7 @@
 // Avishai Dernis 2025
 
 using Mipser.Services.Windowing;
+using Windows.UI.ViewManagement;
 
 namespace Mipser.Windows.Services.Windowing;
 
@@ -12,4 +13,17 @@ namespace Mipser.Windows.Services.Windowing;
 /// </summary>
 public class WindowingService : IWindowingService
 {
+    /// <inheritdoc/>
+    public void ToggleFullScreen()
+    {
+        var view = ApplicationView.GetForCurrentView();
+        if (view.IsFullScreenMode)
+        {
+            view.ExitFullScreenMode();
+        }
+        else
+        {
+            view.TryEnterFullScreenMode();
+        }
+    }
 }

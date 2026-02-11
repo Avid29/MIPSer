@@ -1,19 +1,16 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Messaging;
-using MIPS.Assembler.Logging;
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Bindables.Files;
 using Mipser.Messages;
-using Mipser.Messages.Build;
 using Mipser.Messages.Editor.Enums;
 using Mipser.Services;
 using Mipser.Services.Settings;
 using Mipser.Services.Settings.Enums;
 using Mipser.ViewModels.Pages.Abstract;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Mipser.ViewModels.Pages;
@@ -27,17 +24,10 @@ public partial class FilePageViewModel : PageViewModel
     private readonly ISettingsService _settingsService;
     private readonly IProjectService _projectService;
 
-    private BindableFile? _file;
-
     /// <summary>
     /// An event invoked requesting to navigate to a token.
     /// </summary>
     public event EventHandler<SourceLocation>? NavigateToTokenEvent;
-
-    /// <summary>
-    /// An event invoked when the file is assembled.
-    /// </summary>
-    public event EventHandler<IReadOnlyList<AssemblerLog>>? AssembledEvent;
 
     /// <summary>
     /// An event invoked when an editor operation is requested.
@@ -66,20 +56,20 @@ public partial class FilePageViewModel : PageViewModel
     /// </summary>
     public BindableFile? File
     {
-        get => _file;
+        get;
         set
         {
-            var old = _file;
-            if (SetProperty(ref _file, value))
+            var old = field;
+            if (SetProperty(ref field, value))
             {
                 if (old is not null)
                 {
                     old.PropertyChanged -= OnFileUpdate;
                 }
 
-                if (_file is not null)
+                if (field is not null)
                 {
-                    _file.PropertyChanged += OnFileUpdate;
+                    field.PropertyChanged += OnFileUpdate;
                 }
 
                 _ = LoadContentAsync();
@@ -120,7 +110,6 @@ public partial class FilePageViewModel : PageViewModel
     /// <inheritdoc/>
     protected override void OnActivated()
     {
-        _messenger.Register<FilePageViewModel, FileAssembledMessage>(this, (r, m) => r.OnBuildFinished(m.AssemblyFile, m.Logs));
         _messenger.Register<FilePageViewModel, SettingChangedMessage<AnnotationThreshold>>(this, (r, m) => OnPropertyChanged(nameof(AnnotationThreshold)));
         _messenger.Register<FilePageViewModel, SettingChangedMessage<bool>>(this, (r, m) =>
         {
@@ -146,18 +135,5 @@ public partial class FilePageViewModel : PageViewModel
     private void OnFileUpdate(object? sender, PropertyChangedEventArgs args)
     {
         OnPropertyChanged(nameof(Title));
-    }
-
-    private void OnBuildFinished(string file, IReadOnlyList<AssemblerLog>? logs)
-    {
-        // Ensure the file matches
-        if (file != _file?.Path)
-            return;
-
-        // Ensure the logs aren't null
-        if (logs is null)
-            return;
-
-        AssembledEvent?.Invoke(this, logs);
     }
 }

@@ -19,18 +19,18 @@ public class PanelViewModel : ObservableObject
 {
     private readonly ILocalizationService _localizationService;
     private readonly IPopupService _popupService;
-
-    private PageViewModel? _currentPage;
      
     /// <summary>
     /// Initializes a new instance of the <see cref="PanelViewModel"/> class.
     /// </summary>
-    public PanelViewModel(ILocalizationService localizationService, IPopupService popupService)
+    public PanelViewModel(MainViewModel mainViewModel, ILocalizationService localizationService, IPopupService popupService)
     {
         _localizationService = localizationService;
         _popupService = popupService;
 
         OpenPages = [];
+
+        mainViewModel.Panels.Add(this);
     }
 
     /// <summary>
@@ -38,10 +38,10 @@ public class PanelViewModel : ObservableObject
     /// </summary>
     public PageViewModel? CurrentPage
     {
-        get => _currentPage;
+        get;
         set
         {
-            if (SetProperty(ref _currentPage, value))
+            if (SetProperty(ref field, value))
             {
                 OnPropertyChanged(nameof(IsPageOpen));
             }
@@ -64,12 +64,26 @@ public class PanelViewModel : ObservableObject
     /// <remarks>
     /// Does nothing if the current page is not a file.
     /// </remarks>
-    public async Task SaveCurrentFileAsync()
+    public async Task SaveFileAsync()
     {
         if (CurrentPage is null || !CurrentPage.CanSave)
             return;
 
         await CurrentPage.SaveAsync();
+    }
+
+    /// <summary>
+    /// Attempts to save the currently open files.
+    /// </summary>
+    public async Task SaveAllFilesAsync()
+    {
+        foreach(var page in OpenPages)
+        {
+            if (page.CanSave)
+            {
+                await page.SaveAsync();
+            }
+        }
     }
 
     /// <summary>
@@ -101,13 +115,13 @@ public class PanelViewModel : ObservableObject
 
         if (confirm)
         {
-            var title = _localizationService["UnsavedChangesTitle", page.Title];
-            var desc = _localizationService["UnsavedChangesDescription"];
+            var title = _localizationService["/Popups/UnsavedChangesTitle", page.Title];
+            var desc = _localizationService["/Popups/UnsavedChangesDescription"];
             var popup = new PopupDetails(title, desc)
             {
-                PrimaryButtonText = _localizationService["Save"],
-                SecondaryButtonText = _localizationService["DontSave"],
-                CloseButtonText = _localizationService["Cancel"],
+                PrimaryButtonText = _localizationService["/Popups/Save"],
+                SecondaryButtonText = _localizationService["/Popups/DontSave"],
+                CloseButtonText = _localizationService["/Popups/Cancel"],
             };
 
             confirmation = await _popupService.ShowPopAsync(popup);

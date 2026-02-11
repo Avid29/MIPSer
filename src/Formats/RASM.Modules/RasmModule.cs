@@ -1,27 +1,26 @@
 ﻿// Adam Dernis 2024
 
-using CommunityToolkit.Diagnostics;
-using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
+using MIPS.Emulator.Models.Modules;
 using RASM.Modules.Config;
-using MIPS.Models.Modules.Tables;
 using System.Text;
-
-using RasmRelocation = RASM.Modules.Tables.RelocationEntry;
-using RasmReference = RASM.Modules.Tables.ReferenceEntry;
-using RasmSymbol = RASM.Modules.Tables.SymbolEntry;
-using MIPS.Models.Addressing.Enums;
-using MIPS.Interpreter.Models.Modules;
-using MIPS.Assembler.Models.Config;
 
 namespace RASM.Modules;
 
 /// <summary>
 /// A fully assembled object module in RASM format.
 /// </summary>
-public class RasmModule : IBuildModule<RasmModule>, IExecutableModule
+public partial class RasmModule : IBuildModule<RasmModule>, IExecutableModule
 {
-    private const int SECTION_COUNT = 6;
+    private static readonly string[] SectionNames =
+    {
+        ".text",
+        ".rodata",
+        ".data",
+        ".sdata",
+        ".sbss",
+        ".bss",
+    };
 
     private readonly Stream _source;
 
@@ -42,218 +41,14 @@ public class RasmModule : IBuildModule<RasmModule>, IExecutableModule
 
     /// <inheritdoc/>
     public uint EntryAddress => Header.EntryPoint;
-
-    /// <inheritdoc/>
-    public Stream Contents => _source;
     
     /// <inheritdoc/>
     public string? Name { get; }
 
     /// <inheritdoc/>
-    public static RasmModule? Create(Module constructor, AssemblerConfig config, Stream? stream = null)
+    public void Load(Stream destination)
     {
-        stream ??= new MemoryStream();
-
-        if (config is not RasmConfig rasmConfig)
-            return null;
-
-        // TODO: Flags and entry point properly
-        // TODO: Construct string list.
-
-        // Allocate space for header
-        var sizes = new uint[]
-        {
-            (uint)constructor.Text.Length,
-            (uint)constructor.ReadOnlyData.Length,
-            (uint)constructor.Data.Length,
-            (uint)constructor.SmallInitializedData.Length,
-            (uint)constructor.SmallUninitializedData.Length,
-            (uint)constructor.UninitializedData.Length,
-            0, 0, 0, 0
-        };
-
-        var header = new Header(rasmConfig.MagicNumber, rasmConfig.VersionNumber, 0, 0, sizes);
-        header.TryWrite(stream);
-
-        // Append segments to stream
-        constructor.ResetStreamPositions();
-        foreach (var section in constructor.Sections)
-            section.Stream.CopyTo(stream);
-
-        // Split string references to string table.
-        var strings = new MemoryStream();
-        var positions = new Dictionary<string, long>();
-
-        long GetStringPosition(string? symbol)
-        {
-            // TODO: Better error handling
-            if (symbol is null)
-                return 0;
-
-            // Get from table if already seen
-            if (positions.TryGetValue(symbol, out long value))
-                return value;
-
-            // Append to table
-            var pos = strings.Position;
-            strings.Write(Encoding.UTF8.GetBytes(symbol));
-            strings.WriteByte(0); // Null terminate
-
-            // Log in table and return position
-            positions.Add(symbol, pos);
-            return pos;
-        }
-
-        // Create split streams for relocations and references
-        uint relCount = 0;
-        uint refCount = 0;
-        Stream relStream = new MemoryStream();
-        Stream refStream = new MemoryStream();
-
-        // Write reference and relocation table to their streams
-        foreach (var reference in constructor.References)
-        {
-            if (reference.IsRelocation)
-            {
-                // Convert to rasm relocation and write to relocation stream
-                var newRelocation = RasmRelocation.Convert(reference);
-                newRelocation.Write(relStream);
-                relCount++;
-            }
-            else
-            {
-                // Convert to rasm relocation, extract string, and write to reference stream
-                var newReference = RasmReference.Convert(reference);
-                newReference.SymbolIndex = (uint)GetStringPosition(reference.Symbol);
-                newReference.Write(refStream);
-                refCount++;
-            }
-        }
-
-        // Append rel and ref streams
-        relStream.Position = 0;
-        refStream.Position = 0;
-        relStream.CopyTo(stream);
-        refStream.CopyTo(stream);
-
-        // Write symbol table to the stream
-        foreach (var symbol in constructor.Symbols.Values)
-        {
-            // Convert to rasm, extract string, and write to stream
-            var newSymbol = RasmSymbol.Convert(symbol);
-            newSymbol.SymbolIndex = (uint)GetStringPosition(symbol.Name);
-            newSymbol.Write(stream);
-        }
-
-        // Write strings to the stream
-        strings.Position = 0;
-        strings.CopyTo(stream);
-
-        // Mark the end of the module
-        stream.SetLength(stream.Position);
-
-        // Rewrite the header
-        stream.Position = 0;
-        header.RelocationTableCount = relCount;
-        header.ReferenceTableCount = refCount;
-        header.DefinitionsTableCount = (uint)constructor.Symbols.Count;
-        header.StringTableSize = (uint)strings.Length;
-        header.TryWrite(stream);
-
-        // Reset position, flush, and load
-        stream.Position = 0;
-        stream.Flush();
-        return Load(constructor.Name, stream);
-    }
-
-    /// <inheritdoc/>
-    public static RasmModule? Load(string? name, Stream stream)
-    {
-        if (!Header.TryRead(stream, out var header))
-            return null;
-
-        return new RasmModule(name, header, stream);
-    }
-
-    /// <inheritdoc/>
-    public Module? Abstract(AssemblerConfig config)
-    {
-        if (config is not RasmConfig rasmConfig)
-        {
-            ThrowHelper.ThrowArgumentException(nameof(config), $"{config} must be a {nameof(RasmConfig)}.");
-            return null;
-        }
-
-        // Validate the header for this assembly
-        if (!ValidateHeader(rasmConfig))
-            return null;
-
-        // Return to start of module
-        ResetStream();
-
-        // Grab section sizes
-        var sizes = new uint[]
-        {
-            Header.TextSize,
-            Header.ReadOnlyDataSize,
-            Header.DataSize,
-            Header.SmallDataSize,
-            Header.SmallUninitializedDataSize,
-            Header.UninitializedDataSize
-        };
-
-        // Copy sections
-        var sections = new ModuleSection[SECTION_COUNT];
-        for (int i = 0; i < sections.Length; i++)
-        {
-            var size = (int)sizes[i];
-            sections[i] = new ModuleSection((Section)i);
-            if (size is not 0)
-            {
-                sections[i].Stream.CopyFrom(_source, size);
-            }
-        }
-
-        // Load table entries
-        var relocations = new RasmRelocation[Header.RelocationTableCount];
-        var references = new RasmReference[Header.ReferenceTableCount];
-        var symbols = new RasmSymbol[Header.DefinitionsTableCount];
-        for (int i = 0; i < relocations.Length; i++)
-            relocations[i] = relocations[i].Read(_source);
-        for (int i = 0; i < references.Length; i++)
-            references[i] = references[i].Read(_source);
-        for (int i = 0; i < symbols.Length; i++)
-            symbols[i] = symbols[i].Read(_source);
-
-        // Get string table
-        var strings = LoadStrings();
-
-        // Initialize the tables
-        var referenceList = new List<ReferenceEntry>();
-        var symbolTable = new Dictionary<string, SymbolEntry>();
-
-        // Convert relocations
-        foreach (var rel in relocations)
-            referenceList.Add(rel.Convert(null));
-
-        // Convert references
-        foreach (var @ref in references)
-        {
-            var name = strings[(int)@ref.SymbolIndex];
-            var reference = @ref.Convert(name);
-            referenceList.Add(reference);
-        }
-
-        // Convert symbols
-        foreach (var sym in symbols)
-        {
-            var name = strings[(int)sym.SymbolIndex];
-            var symbol = sym.Convert(name);
-            symbolTable.Add(symbol.Name, symbol);
-        }
-
-        // Create constructor from the sections
-        return new Module(sections, referenceList, symbolTable);
+        throw new NotImplementedException();
     }
 
     private unsafe void ResetStream(bool skipHeader = true)
@@ -299,5 +94,12 @@ public class RasmModule : IBuildModule<RasmModule>, IExecutableModule
             pos += str.Length + 1;
         }
         return strings;
+    }
+
+    /// <inheritdoc/>
+    public void Save(Stream stream)
+    {
+        _source.Position = 0;
+        _source.CopyTo(stream);
     }
 }

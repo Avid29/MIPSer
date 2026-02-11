@@ -4,6 +4,7 @@ using MIPS.Assembler.Models.Modules.Interfaces.Tables;
 using MIPS.Helpers;
 using MIPS.Models.Addressing;
 using MIPS.Models.Addressing.Enums;
+using MIPS.Models.Modules.Tables.Enums;
 using RASM.Modules.Tables.Enums;
 using System.Runtime.InteropServices;
 
@@ -23,20 +24,10 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>, IBigEndianReadWritable<Sy
     /// <summary>
     /// Initializes a new instance of the <see cref="SymbolEntry"/> struct.
     /// </summary>
-    public SymbolEntry(Address? address)
+    public SymbolEntry(uint address, Section section)
     {
-        if (address.HasValue)
-        {
-            var adr = address.Value;
-            Value = (uint)adr.Value;
-            Section = adr.Section;
-            SetFlags(SymbolFlags.Defined, true);
-        }
-        else
-        {
-            Value = 0;
-            Section = Section.External;
-        }
+        Value = address;
+        Section = section;
     }
 
     /// <summary>
@@ -112,19 +103,6 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>, IBigEndianReadWritable<Sy
         }
     }
 
-    /// <summary>
-    /// Gets the address of the symbol entry.
-    /// </summary>
-    public Address Address
-    {
-        readonly get => new(Value, Section);
-        set
-        {
-            Value = (uint)value.Value;
-            Section = value.Section;
-        }
-    }
-
     /// <inheritdoc/>
     public readonly SymbolEntry Read(Stream stream)
     {
@@ -157,16 +135,17 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>, IBigEndianReadWritable<Sy
     /// <inheritdoc/>
     public static SymbolEntry Convert(CommonEntry entry)
     {
-        // Initialize symbol
-        var symbol = new SymbolEntry(entry.Address);
-        
-        // Set flags
-        symbol.SetFlags(SymbolFlags.Global, entry.Global);
-        symbol.SetFlags(SymbolFlags.Forward, entry.ForwardDefined && entry.IsDefined);
-        symbol.SetFlags(SymbolFlags.Def_Label, entry.Type is SymbolType.Label);
+        //// Initialize symbol
+        //var symbol = new SymbolEntry(entry.Address);
 
-        // Return
-        return symbol;
+        //// Set flags
+        //symbol.SetFlags(SymbolFlags.Global, entry.Binding.HasFlag(SymbolBinding.Global));
+        //symbol.SetFlags(SymbolFlags.Def_Label, entry.Type is SymbolType.Label);
+
+        //// Return
+        //return symbol;
+
+        return default;
     }
     
     /// <inheritdoc/>
@@ -175,20 +154,21 @@ public struct SymbolEntry : ISymbolEntry<SymbolEntry>, IBigEndianReadWritable<Sy
     /// </remarks>
     public readonly CommonEntry Convert(string name)
     {
-        // Get type
-        var type = SymbolType.Macro;
-        if (CheckFlag(SymbolFlags.Def_Label))
-            type = SymbolType.Label;
+        //// Get type
+        //var type = SymbolType.Macro;
+        //if (CheckFlag(SymbolFlags.Def_Label))
+        //    type = SymbolType.Label;
 
-        // Get address and initialize
-        var adr = new Address(Value, Section);
-        var symbol = new CommonEntry(name, type, adr) 
-        {
-            // Set flags
-            Global = CheckFlag(SymbolFlags.Global),
-            ForwardDefined = CheckFlag(SymbolFlags.Forward)
-        }; 
+        //// Get address and initialize
+        //var adr = new Address(Value, Section);
+        //var symbol = new CommonEntry(name, type, adr) 
+        //{
+        //    // Set flags
+        //    Binding = CheckFlag(SymbolFlags.Global) ? SymbolBinding.Global : SymbolBinding.Local,
+        //}; 
 
-        return symbol;
+        //return symbol;
+
+        return new CommonEntry(name, null);
     }
 }

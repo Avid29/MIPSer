@@ -1,12 +1,14 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Messaging;
-using Mipser.Bindables.Files;
+using Mipser.Config;
 using Mipser.Messages.Files;
-using Mipser.Models.ProjectConfig;
+using Mipser.Models;
+using Mipser.Models.Files;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using Mipser.Services.Settings;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Mipser.Services;
@@ -16,8 +18,7 @@ namespace Mipser.Services;
 /// </summary>
 public class ProjectService : IProjectService
 {
-    private const string OpenProjectCacheKey = "OpenProject";
-    private const string OpenFolderCacheKey = "OpenFolder";
+    private const string RecentProjectsCacheKey = "RecentProjects";
 
     private readonly IMessenger _messenger;
     private readonly ICacheService _cacheService;
@@ -31,11 +32,6 @@ public class ProjectService : IProjectService
         _messenger = messenger;
         _cacheService = cacheService;
         _fileSystemService = fileSystemService;
-
-        if (settingsService.Local.GetValue<bool>(SettingsKeys.RestoreOpenProject))
-        {
-            _ = RestoreOpenProject();
-        }
     }
 
     /// <inheritdoc/>
@@ -45,7 +41,16 @@ public class ProjectService : IProjectService
     public IFolder? ProjectRootFolder { get; private set; }
 
     /// <inheritdoc/>
-    public void OpenFolder(IFolder folder, bool cacheState = true)
+    public SourceFile? GetSourceFile(string filePath)
+    {
+        if (Project is null)
+            return null;
+
+        return Project.SourceFiles[filePath];
+    }
+
+    /// <inheritdoc/>
+    public void OpenFolder(IFolder? folder, bool cacheState = true)
     {
         // Change the root folder
         ProjectRootFolder = folder;
@@ -53,10 +58,10 @@ public class ProjectService : IProjectService
         // Send a message notifying the change
         _messenger.Send(new FolderOpenedMessage(folder));
 
-        // Update the state.
-        if (cacheState)
+        // Update the state
+        if (cacheState && folder is not null)
         {
-            _ = CacheOpenProject(true);
+            _ = CacheOpenProjectAsync(true);
         }
     }
 
@@ -73,6 +78,19 @@ public class ProjectService : IProjectService
     }
 
     /// <inheritdoc/>
+    public async Task OpenPathAsyc(string path, bool cacheState = true)
+    {
+        if (File.GetAttributes(path).HasFlag(FileAttributes.Directory))
+        {
+            await OpenFolderAsync(path);
+        }
+        else
+        {
+            await OpenProjectAsync(path);
+        }
+    }
+
+    /// <inheritdoc/>
     public async Task OpenProjectAsync(ProjectConfig config, bool cacheState = true)
     {
         Project = Project.Load(config);
@@ -83,7 +101,7 @@ public class ProjectService : IProjectService
 
         if (cacheState)
         {
-            await CacheOpenProject();
+            await CacheOpenProjectAsync();
         }
     }
 
@@ -109,39 +127,29 @@ public class ProjectService : IProjectService
         await OpenProjectAsync(config, cacheState);
     }
 
-    private async Task CacheOpenProject(bool folder = false)
+    /// <inheritdoc/>
+    public async Task CloseProjectAsync()
     {
-        // Clear current cache
-        await _cacheService.DeleteCacheAsync(OpenProjectCacheKey);
-        await _cacheService.DeleteCacheAsync(OpenFolderCacheKey);
-
-        // Cache value and key
-        var (key, value) = folder switch
-        {
-            false => (OpenProjectCacheKey, Project?.Config?.ConfigPath),
-            true => (OpenFolderCacheKey, ProjectRootFolder?.Path),
-        };
-        await _cacheService.CacheAsync(key, value);
+        Project = null;
+        OpenFolder(null, false);
     }
 
-    private async Task RestoreOpenProject()
+    private async Task CacheOpenProjectAsync(bool folder = false)
     {
-        // Attempt to restore open project
-        var projectPath = await _cacheService.RetrieveCacheAsync(OpenProjectCacheKey);
-        if (projectPath is not null)
-        {
-            // Restore project and return
-            await OpenProjectAsync(projectPath);
-            return;
-        }
+        // Get current cache
+        var recent = await _cacheService.RetrieveCacheAsync<RecentFileItemsCache>(RecentProjectsCacheKey);
+        if (recent is null)
+            recent = new();
 
-        // Attempt to restore open folder
-        var folderPath = await _cacheService.RetrieveCacheAsync(OpenFolderCacheKey);
-        if (folderPath is not null)
+        // Append proper path
+        var path = folder switch
         {
-            // Restore folder and return
-            await OpenFolderAsync(folderPath);
-            return;
-        }
+            false => Project?.Config?.ConfigPath,
+            true => ProjectRootFolder?.Path,
+        };
+        recent.Append(path, 10);
+
+        // Cache updated cache model
+        await _cacheService.CacheAsync(RecentProjectsCacheKey, recent);
     }
 }

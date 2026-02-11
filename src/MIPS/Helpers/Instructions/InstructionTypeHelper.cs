@@ -34,7 +34,7 @@ public static class InstructionTypeHelper
             OperationCode.Special3 => InstructionType.Special3R,
 
             OperationCode.RegisterImmediate
-                when rtFuncCode is <= RegImmFuncCode.BranchOnGreaterThanZeroLikely or
+                when rtFuncCode is <= RegImmFuncCode.BranchOnGreaterThanOrEqualToZeroLikely or
                 >= RegImmFuncCode.BranchOnLessThanZeroAndLink => InstructionType.RegisterImmediateBranch,
             OperationCode.RegisterImmediate => InstructionType.RegisterImmediate,
             

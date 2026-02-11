@@ -3,8 +3,8 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using MIPS.Models.Instructions.Enums;
-using Mipser.Messages.Pages;
-using Mipser.Models.ProjectConfig;
+using Mipser.Config;
+using Mipser.Messages.Navigation;
 using Mipser.Services;
 using Mipser.Services.Files;
 using Mipser.ViewModels.Pages.Abstract;
@@ -27,8 +27,6 @@ public class CreateProjectViewModel : PageViewModel
     private readonly IFileSystemService _fileSystemService;
     private readonly IProjectService _projectService;
 
-    private string? _projectName;
-    private string? _folderPath;
     private MipsVersion _mipsVersion = MipsVersion.MipsIII;
 
     /// <summary>
@@ -54,10 +52,10 @@ public class CreateProjectViewModel : PageViewModel
     /// </summary>
     public string? ProjectName
     {
-        get => _projectName;
+        get;
         set
         {
-            if(SetProperty(ref _projectName, value))
+            if(SetProperty(ref field, value))
             {
                 OnPropertyChanged(nameof(ReadyToCreate));
             }
@@ -69,10 +67,10 @@ public class CreateProjectViewModel : PageViewModel
     /// </summary>
     public string? FolderPath
     {
-        get => _folderPath;
+        get;
         set
         {
-            if (SetProperty(ref _folderPath, value))
+            if (SetProperty(ref field, value))
             {
                 OnPropertyChanged(nameof(ReadyToCreate));
             }

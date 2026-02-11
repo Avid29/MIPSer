@@ -7,18 +7,20 @@ namespace MIPS.Tests.Helpers;
 
 public static class TestFilePathing
 {
-    private const string AssemblyFilesPathBase = @"MIPS.Tests/ASMs/";
+    private const string AssemblyFilesPathBase = @"AssemblyTests/";
     private const string ObjectFolder = "obj/";
 
-    public const string BranchLiteralFile = "component_tests/branch_literal.asm";
-    public const string BranchRelativeFile = "component_tests/branch_relative.asm";
-    public const string EmptyTestFile = "component_tests/empty.asm";
-    public const string InstructionsTestFile = "component_tests/instructions.asm";
-    public const string PseudoInstructionsTestFile = "component_tests/pseudo_instructions.asm";
+    public const string AssemblerTestPath = "assembler_tests/";
 
-    public const string CompositeFailTestFile = "error_tests/composite_fail.asm";
-    public const string DuplicateSymbolFile = "error_tests/duplicate_symbol.asm";
-    public const string SubtractAddressFile = "error_tests/subtract_address.asm";
+    public const string BranchLiteralFile = $"{AssemblerTestPath}component_tests/branch_literal.asm";
+    public const string BranchRelativeFile = $"{AssemblerTestPath}component_tests/branch_relative.asm";
+    public const string EmptyTestFile = $"{AssemblerTestPath}component_tests/empty.asm";
+    public const string InstructionsTestFile = $"{AssemblerTestPath}component_tests/instructions.asm";
+    public const string PseudoInstructionsTestFile = $"{AssemblerTestPath}component_tests/pseudo_instructions.asm";
+
+    public const string CompositeFailTestFile = $"{AssemblerTestPath}error_tests/composite_fail.asm";
+    public const string DuplicateSymbolFile = $"{AssemblerTestPath}error_tests/duplicate_symbol.asm";
+    public const string SubtractAddressFile = $"{AssemblerTestPath}error_tests/subtract_address.asm";
 
     public const string PlaygroundTestFile1 = "playground1.asm";
 

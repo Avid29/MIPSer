@@ -3,8 +3,8 @@
 using MIPS.Assembler.Parsers.Expressions.Abstract;
 using MIPS.Assembler.Parsers.Expressions.Enums;
 using MIPS.Assembler.Tokenization.Models;
-using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables;
+using MIPS.Models.Modules.Tables.Enums;
 
 namespace MIPS.Assembler.Parsers.Expressions;
 
@@ -26,11 +26,11 @@ public class SymbolNode : ValueNode<SymbolEntry>
     /// <inheritdoc/>
     public override bool TryEvaluate(Evaluator evaluator, out ExpressionResult result)
     {
-        // TODO: Handle undefined symbols
+        // TODO: Special behavior for undefined symbols?
 
         var symbolName = this.ExpressionToken.Source;
-        var address = evaluator.Context?.CurrentAddress ?? Address.External;
-        result = new ExpressionResult(Value.Address, new ReferenceEntry(symbolName, address, default, default));
+        var address = evaluator.Context?.CurrentAddress ?? default;
+        result = new ExpressionResult(Value.Address ?? default, new ReferenceEntry(symbolName, address, MipsReferenceType.None));
         return true;
     }
 }

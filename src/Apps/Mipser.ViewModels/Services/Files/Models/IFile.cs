@@ -21,10 +21,4 @@ public interface IFile : IFileItem
     /// </summary>
     /// <returns>A <see cref="Task{TResult}"/> returning the requested <see cref="FileStream"/>.</returns>
     Task<Stream> OpenStreamForWriteAsync();
-
-    /// <summary>
-    /// Deletes the file.
-    /// </summary>
-    /// <returns>A <see cref="Task"/> that completes when the file is deleted.</returns>
-    Task DeleteAsync();
 }

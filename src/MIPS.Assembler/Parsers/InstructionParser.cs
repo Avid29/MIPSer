@@ -22,7 +22,6 @@ using MIPS.Models.Modules.Tables.Enums;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Xml;
 
 namespace MIPS.Assembler.Parsers;
 
@@ -293,7 +292,7 @@ public struct InstructionParser
         if (expResult.IsRelocatable && target is Argument.Shift)
         {
             // TODO: Consider tracking ref symbol token
-            _logger?.Log(Severity.Error, LogCode.RelocatableReferenceInShift, arg, "Shift amount argument cannot reference relocatable symbols.");
+            _logger?.Log(Severity.Error, LogCode.RelocatableReferenceInShift, arg, "RelocatableShiftAmount");
             return false;
         }
 
@@ -303,9 +302,10 @@ public struct InstructionParser
         {
             var type = target switch
             {
-                Argument.Address => ReferenceType.Address,
-                Argument.Immediate => ReferenceType.Lower,
-                _ => ThrowHelper.ThrowArgumentOutOfRangeException<ReferenceType>($"Argument of type '{target}' cannot reference relocatable symbols."),
+                Argument.Address => MipsReferenceType.JumpTarget26,
+                Argument.Immediate => MipsReferenceType.Low16,
+                Argument.FullImmediate => MipsReferenceType.Low16, // TODO: Handle high addresses
+                _ => ThrowHelper.ThrowArgumentOutOfRangeException<MipsReferenceType>($"Argument of type '{target}' cannot reference relocatable symbols."),
             };
 
             var reloc = expResult.Reference.Value;
@@ -317,7 +317,7 @@ public struct InstructionParser
         // This is the desired behavior, but when logging errors this
         // should be handled explicitly and drop an assembler warning.
 
-        long value = expResult.Base.Value;
+        long value = expResult.Value.Value;
 
         // Truncates the value to fit the target argument
         CleanInteger(ref value, arg, target);
@@ -343,7 +343,7 @@ public struct InstructionParser
                     Guard.IsNotNull(_context);
 
                     var @base = _context.CurrentAddress + 4;
-                    if (@base.Section != expResult.Base.Section)
+                    if (@base.Section != expResult.Value.Section)
                     {
                         _logger?.Log(Severity.Error, LogCode.BranchBetweenSections, arg, "CantBranchBetweenSections");
                         return false;
@@ -580,7 +580,7 @@ public struct InstructionParser
             OperationCode.RegisterImmediate => _meta.RegisterImmediateFuncCode switch
             {
                 // Register Immediate Branching
-                (>= RegImmFuncCode.BranchOnLessThanZero and <= RegImmFuncCode.BranchOnGreaterThanZeroLikely) or
+                (>= RegImmFuncCode.BranchOnLessThanZero and <= RegImmFuncCode.BranchOnGreaterThanOrEqualToZeroLikely) or
                 (>= RegImmFuncCode.BranchOnLessThanZeroAndLink and <= RegImmFuncCode.BranchOnGreaterThanOrEqualToZeroLikelyAndLink)
                     => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, _immediate),
 

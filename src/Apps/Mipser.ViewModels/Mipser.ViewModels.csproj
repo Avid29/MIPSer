@@ -38,7 +38,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Formats\RASM.Modules\RASM.Modules.csproj" />
     <ProjectReference Include="..\..\MIPS.Assembler\MIPS.Assembler.csproj" />
-    <ProjectReference Include="..\..\MIPS.Interpreter\MIPS.Interpreter.csproj" />
+    <ProjectReference Include="..\..\MIPS.Emulator\MIPS.Emulator.csproj" />
     <ProjectReference Include="..\..\MIPS.Linker\MIPS.Linker.csproj" />
     <ProjectReference Include="..\Mipser\Mipser\Mipser.csproj" />
   </ItemGroup>

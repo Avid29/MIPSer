@@ -82,10 +82,10 @@
             <ResourceDictionary>
                 <ResourceDictionary.ThemeDictionaries>
                     <ResourceDictionary x:Key="Dark">
-                        <AcrylicBrush x:Key="TabViewBackground" TintColor="{ThemeResource TitleBarBackgroundColor}" TintOpacity="0.8"/>
+                        <AcrylicBrush x:Key="TabViewBackground" TintColor="{ThemeResource TabViewBackgroundColor}" TintOpacity="0.8"/>
                     </ResourceDictionary>
                     <ResourceDictionary x:Key="Light">
-                        <AcrylicBrush x:Key="TabViewBackground" TintColor="{ThemeResource TitleBarBackgroundColor}" TintOpacity="0.8"/>
+                        <AcrylicBrush x:Key="TabViewBackground" TintColor="{ThemeResource TabViewBackgroundColor}" TintOpacity="0.8"/>
                     </ResourceDictionary>
                 </ResourceDictionary.ThemeDictionaries>
             </ResourceDictionary>

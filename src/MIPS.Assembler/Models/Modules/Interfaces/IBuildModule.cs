@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
+using System.IO;
 
 namespace MIPS.Assembler.Models.Modules.Interfaces;
 
@@ -20,4 +21,9 @@ public interface IBuildModule
     /// <param name="config">The configuration settings.</param>
     /// <returns>The module as a <see cref="Module"/>.</returns>
     public Module? Abstract(AssemblerConfig config);
+
+    /// <summary>
+    /// Save the module to a stream (likely as a file).
+    /// </summary>
+    public void Save(Stream stream);
 }

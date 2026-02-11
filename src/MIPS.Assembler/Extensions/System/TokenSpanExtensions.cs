@@ -2,7 +2,6 @@
 
 using MIPS.Assembler.Tokenization.Models;
 using MIPS.Assembler.Tokenization.Models.Enums;
-using System.Diagnostics;
 
 namespace System;
 

@@ -1,9 +1,16 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Mipser.Bindables.Files;
 using Mipser.Messages.Navigation;
+using Mipser.Models.Files;
+using Mipser.Services;
+using Mipser.Services.Windowing;
+using Mipser.ViewModels.Pages;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace Mipser.ViewModels;
 
@@ -13,30 +20,47 @@ namespace Mipser.ViewModels;
 public partial class WindowViewModel : ObservableRecipient
 {
     private readonly IMessenger _messenger;
+    private readonly IProjectService _projectService;
+    private readonly IWindowingService _windowingService;
+    private readonly BuildService _buildService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WindowViewModel"/> class.
     /// </summary>
-    public WindowViewModel(MainViewModel mainViewModel, PanelViewModel panelViewModel, IMessenger messenger)
+    public WindowViewModel(IMessenger messenger, IProjectService projectService, IWindowingService windowingService, BuildService buildService, MainViewModel mainViewModel, PanelViewModel panelViewModel)
     {
         _messenger = messenger;
+        _projectService = projectService;
+        _windowingService = windowingService;
+        _buildService = buildService;
+
         MainViewModel = mainViewModel;
         PanelViewModel = panelViewModel;
 
         CreateNewFileCommand = new(CreateNewFile);
-        SaveFileCommand = new(SaveFile);
+        SaveFileCommand = new(SaveFileAsync);
+        SaveAllFilesCommand = new(SaveAllFilesAsync);
         PickAndOpenFileCommand = new(PickAndOpenFileAsync);
         PickAndOpenFolderCommand = new(PickAndOpenFolderAsync);
         PickAndOpenProjectCommand = new(PickAndOpenProjectAsync);
-        ClosePageCommand = new(ClosePage);
+        ClosePageCommand = new(ClosePageAsync);
+        CloseProjectCommand = new(CloseProjectAsync);
 
-        AssembleFileCommand = new(AssembleFile);
+        BuildProjectCommand = new(BuildProjectAsync);
+        RebuildProjectCommand = new(RebuildProjectAsync);
+        AssembleOpenFilesCommand = new(AssembleOpenFilesAsync);
+        AssembleFileCommand = new(AssembleFileAsync);
+        CleanProjectCommand = new(CleanProject);
+        CleanOpenFilesCommand = new(CleanOpenFiles);
+        CleanFileCommand = new(CleanFile);
 
         OpenAboutCommand = new(OpenAbout);
         OpenCheatSheetCommand = new(OpenCheatSheet);
         OpenCreateProjectCommand = new(OpenCreateProject);
         OpenSettingsCommand = new(OpenSettings);
         OpenWelcomeCommand = new(OpenWelcome);
+
+        ToggleFullScreenModeCommand = new(ToggleFullscrenMode);
 
         UndoCommand = new(Undo);
         RedoCommand = new(Redo);
@@ -59,7 +83,6 @@ public partial class WindowViewModel : ObservableRecipient
 
         // Focus the panel when the window is created.
         _messenger.Send(new PanelFocusChangedMessage(PanelViewModel));
-
     }
 
     /// <summary>
@@ -71,4 +94,29 @@ public partial class WindowViewModel : ObservableRecipient
     /// Gets the <see cref="ViewModels.PanelViewModel"/> for the panel in the window.
     /// </summary>
     public PanelViewModel PanelViewModel { get; }
+
+    private BindableFile? CurrentFile
+    {
+        get
+        {
+            // Get the current page, and ensure it's a file page
+            if (MainViewModel.FocusedPanel?.CurrentPage is not FilePageViewModel page)
+                return null;
+
+            return page.File;
+        }
+    }
+
+    private IEnumerable<BindableFile> OpenFiles
+    {
+        get
+        {
+            var panel = MainViewModel.FocusedPanel;
+            if (panel is null)
+                return [];
+
+            return panel.OpenPages.OfType<FilePageViewModel>()
+                .Where(x => x.File is not null).Select(x => x.File!);
+        }
+    }
 }

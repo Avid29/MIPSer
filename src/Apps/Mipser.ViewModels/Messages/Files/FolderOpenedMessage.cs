@@ -12,7 +12,7 @@ public class FolderOpenedMessage
     /// <summary>
     /// Initializes a new instance of the <see cref="FolderOpenedMessage"/> class.
     /// </summary>
-    public FolderOpenedMessage(IFolder folder)
+    public FolderOpenedMessage(IFolder? folder)
     {
         Folder = folder;
     }
@@ -20,5 +20,5 @@ public class FolderOpenedMessage
     /// <summary>
     /// Gets the opened folder.
     /// </summary>
-    public IFolder Folder { get; }
+    public IFolder? Folder { get; }
 }

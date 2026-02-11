@@ -351,4 +351,7 @@
   <data name="InstructionDisabled" xml:space="preserve">
     <value>ההוראה '{0}' הושבתה על־ידי תצורת הפרויקט.</value>
   </data>
+  <data name="RelocatableShiftAmount" xml:space="preserve">
+    <value>ארגומנט כמות ההזזה אינו יכול להפנות לסמלים ניתנים לרילוקציה.</value>
+  </data>
 </root>

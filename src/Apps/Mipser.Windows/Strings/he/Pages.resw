@@ -147,4 +147,13 @@
   <data name="Explorer/RecentProjectsAndFoldersTB.Text" xml:space="preserve">
     <value>Recent Projects and Folders</value>
   </data>
+  <data name="Explorer/CreateNewProjectBTN.Content" xml:space="preserve">
+    <value>צור פרויקט חדש</value>
+  </data>
+  <data name="Explorer/RecentFolderListItem" xml:space="preserve">
+    <value>{0}/{1} (תיקיה)</value>
+  </data>
+  <data name="Explorer/RecentProjectsAndFoldersTB.Text" xml:space="preserve">
+    <value>פרויקטים ותיקיות אחרונים</value>
+  </data>
 </root>

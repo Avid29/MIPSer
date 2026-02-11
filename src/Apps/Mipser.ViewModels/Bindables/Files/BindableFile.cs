@@ -1,10 +1,9 @@
 ﻿// Adam Dernis 2024
 
+using Mipser.Models.Files;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Mipser.Bindables.Files;
 
@@ -13,14 +12,12 @@ namespace Mipser.Bindables.Files;
 /// </summary>
 public partial class BindableFile : BindableFileItem<IFile>
 {
-    private IFile _file;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="BindableFile"/> class.
     /// </summary>
     internal BindableFile(FileService fileService, IFile file) : base(fileService)
     {
-        _file = file;
+        FileItem = file;
         Children = [];
 
         OpenCommand = new(Open);
@@ -35,10 +32,10 @@ public partial class BindableFile : BindableFileItem<IFile>
     /// <inheritdoc/>
     protected internal override IFile FileItem
     {
-        get => _file;
+        get;
         set
         {
-            if (SetProperty(ref _file, value))
+            if (SetProperty(ref field, value))
             {
                 OnPropertyChanged(nameof(Name));
                 OnPropertyChanged(nameof(Path));
@@ -46,9 +43,19 @@ public partial class BindableFile : BindableFileItem<IFile>
         }
     }
 
+    /// <summary>
+    /// Gets the associate <see cref="SourceFile"/>.
+    /// </summary>
+    public SourceFile? SourceFile { get; init; }
+
     internal void TrackAsChild(BindableFileItem child)
     {
         Children.Add(child);
+    }
+
+    internal void UntrackChild(BindableFileItem child)
+    {
+        Children.Remove(child);
     }
 
     /// <inheritdoc/>

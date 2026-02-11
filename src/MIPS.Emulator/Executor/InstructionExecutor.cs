@@ -1,0 +1,122 @@
+﻿// Avishai Dernis 2026
+
+using MIPS.Emulator.Components.CPU;
+using MIPS.Emulator.Components.CPU.Registers;
+using MIPS.Emulator.Executor.Enum;
+using MIPS.Models.Instructions;
+using MIPS.Models.Instructions.Enums.Operations;
+using MIPS.Models.Instructions.Enums.Registers;
+using System;
+
+namespace MIPS.Emulator.Executor;
+
+/// <summary>
+/// A class which handles converting decoded instructions into <see cref="Execution"/> models.
+/// </summary>
+public partial class InstructionExecutor
+{
+    // R-Type delegates
+    delegate uint BasicRDelegate(uint rs, uint rt);
+    delegate ulong MultRDelegate(uint rs, uint rt);
+    delegate uint ShiftRDelegate(uint rs, byte shift);
+
+    // I-Type delegates
+    delegate uint BasicIDelegate(uint rs, short imm);
+
+    // CoProc0 delegates
+    delegate void StatusUpdateDelegate(ref StatusRegister rs);
+    
+    // Misc delegates
+    delegate bool BranchDelegate(uint rs, uint rt);
+    delegate bool TrapIDelegate(uint rs, short rt);
+    delegate bool OverflowCheckDelegate(int a, int b, int r);
+
+    private Instruction Instruction { get; }
+
+    private Processor Processor { get; }
+
+    private TrapKind Trap { get; set; }
+
+    private uint RS => Processor[Instruction.RS];
+
+    private uint RT => Processor[Instruction.RT];
+
+    private CoProc0Instruction CoProc0Instruction => (CoProc0Instruction)Instruction;
+
+    private InstructionExecutor(Instruction instruction, Processor processor)
+    {
+        Instruction = instruction;
+        Processor = processor;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="instruction"></param>
+    /// <param name="processor"></param>
+    /// <param name="execution"></param>
+    /// <returns></returns>
+    public static TrapKind Execute(Instruction instruction, Processor processor, out Execution execution)
+    {
+        var context = new InstructionExecutor(instruction, processor);
+        execution = context.CreateExecution();
+        return context.Trap;
+    }
+
+    private Execution CreateExecution()
+    {
+        return Instruction.OpCode switch
+        {
+            // Special (R-Type)
+            OperationCode.Special or
+            OperationCode.Special2 or
+            OperationCode.Special3 => CreateRTypeExecution(),
+
+            // Jump (J-Type)
+            OperationCode.Jump => new Execution
+            {
+                ProgramCounter = Instruction.Address,
+            },
+            OperationCode.JumpAndLink => new Execution(GPRegister.ReturnAddress, Processor.ProgramCounter + 4)
+            {
+                ProgramCounter = Instruction.Address,
+            },
+            OperationCode.JumpAndLinkX => throw new NotImplementedException(),
+
+            // Branch/Trap type (B-Type)
+            OperationCode.RegisterImmediate => CreateRegImmExecution(),
+
+            // Coprocessor instructions
+            OperationCode.Coprocessor0 => CreateCo0Execution(),
+            OperationCode.Coprocessor1 => throw new NotImplementedException(),
+            OperationCode.Coprocessor2 => throw new NotImplementedException(),
+            OperationCode.Coprocessor3 => throw new NotImplementedException(),
+
+            OperationCode.Trap => CreateTrap(TrapKind.Trap),
+            OperationCode.SIMD => throw new NotImplementedException(),
+
+            >= OperationCode.LoadByte and <= OperationCode.StoreWordRight => CreateMemoryExecution(),
+
+            OperationCode.LoadLinkedWord => throw new NotImplementedException(),
+            OperationCode.LoadWordCoprocessor1 => throw new NotImplementedException(),
+            OperationCode.LoadWordCoprocessor2 => throw new NotImplementedException(),
+            OperationCode.LoadWordCoprocessor3 => throw new NotImplementedException(),
+            OperationCode.LoadDoubleWordCoprocessor1 => throw new NotImplementedException(),
+            OperationCode.LoadDoubleWordCoprocessor2 => throw new NotImplementedException(),
+            OperationCode.LoadDoubleWordCoprocessor3 => throw new NotImplementedException(),
+            OperationCode.StoreConditionalWord => throw new NotImplementedException(),
+            OperationCode.StoreWordCoprocessor1 => throw new NotImplementedException(),
+            OperationCode.StoreWordCoprocessor2 => throw new NotImplementedException(),
+            OperationCode.StoreWordCoprocessor3 => throw new NotImplementedException(),
+
+            // Fall-through to I-Type by default. Most instructions are I-Type and they take up many opcodes.
+            _ => CreateITypeExecution(),
+        };
+    }
+
+    private Execution CreateTrap(TrapKind trap)
+    {
+        Trap = trap;
+        return default;
+    }
+}

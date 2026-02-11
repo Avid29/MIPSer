@@ -16,9 +16,13 @@
         <StackPanel.ChildrenTransitions>
             <EntranceThemeTransition FromVerticalOffset="50" IsStaggeringEnabled="True" />
         </StackPanel.ChildrenTransitions>
+        
         <ctc:SettingsCard x:Uid="/Settings/AssemblerLanguageSC"
                               Header="Assembler Language"
                               Description="Set the language used by for assembler log information.">
+            <ctc:SettingsCard.HeaderIcon>
+                <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE774;" />
+            </ctc:SettingsCard.HeaderIcon>
             <ComboBox SelectedItem="{x:Bind ViewModel.AssemblerLanguageOverride, Mode=TwoWay}"
                           ItemsSource="{x:Bind ViewModel.AssemblerLanguageOptions, Mode=OneWay}">
                 <ComboBox.ItemTemplate>

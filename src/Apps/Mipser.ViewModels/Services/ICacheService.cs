@@ -12,7 +12,7 @@ public interface ICacheService
     /// <summary>
     /// Caches a value.
     /// </summary>
-    Task CacheAsync<T>(string key, T? value) where T : class, new();
+    Task CacheAsync<T>(string key, T value) where T : class, new();
 
     /// <summary>
     /// Caches a value.

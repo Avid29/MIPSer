@@ -1,7 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Assembler.Logging;
-using System.Collections.Generic;
+using Mipser.Models;
 
 namespace Mipser.Messages.Build;
 
@@ -13,19 +12,13 @@ public class BuildFinishedMessage
     /// <summary>
     /// Initializes a new instance of the <see cref="BuildFinishedMessage"/> class.
     /// </summary>
-    public BuildFinishedMessage(bool failed, IReadOnlyList<ILog>? log)
+    public BuildFinishedMessage(BuildResult? result)
     {
-        Failed = failed;
-        Logs = log;
+        Result = result;
     }
 
     /// <summary>
-    /// Gets whether or not the build failed.
+    /// Gets the build result.
     /// </summary>
-    public bool Failed { get; }
-
-    /// <summary>
-    /// Gets the log events from the build.
-    /// </summary>
-    public IReadOnlyList<ILog>? Logs { get; }
+    public BuildResult? Result { get; }
 }

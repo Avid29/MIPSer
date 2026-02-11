@@ -159,6 +159,9 @@
   <data name="Flyout/PasteMFI.Text" xml:space="preserve">
     <value>Paste</value>
   </data>
+  <data name="Flyout/PasteMFI.Text" xml:space="preserve">
+    <value>הדבק</value>
+  </data>
   <data name="Flyout/RenameMFI.Text" xml:space="preserve">
     <value>Rename</value>
   </data>

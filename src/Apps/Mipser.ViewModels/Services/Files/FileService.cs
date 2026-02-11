@@ -17,14 +17,16 @@ public class FileService : IFileService
 {
     // TODO: Untracking out of use files
     private readonly IFileSystemService _fileSystemService;
+    private readonly IProjectService _projectService;
     private readonly Dictionary<string, BindableFileItem> _openItems;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="FileService"/> class.
     /// </summary>
-    public FileService(IFileSystemService fileSystemService)
+    public FileService(IFileSystemService fileSystemService, IProjectService projectService)
     {
         _fileSystemService = fileSystemService;
+        _projectService = projectService;
         
         _openItems = [];
     }
@@ -64,7 +66,7 @@ public class FileService : IFileService
     /// <inheritdoc/>
     public async Task<BindableFileItem?> GetFileItemAsync(string path)
     {
-        return IsFile(path) switch
+        return Path.HasExtension(path) switch
         {
             true => await GetFileAsync(path),
             false => await GetFolderAsync(path),
@@ -113,8 +115,14 @@ public class FileService : IFileService
         if (TryGetItem(key, out BindableFile? value))
             return value;
 
+        // Get source file
+        var sourceFile = _projectService.GetSourceFile(key);
+
         // Create and track new bindable
-        var bindable = new BindableFile(this, file);
+        var bindable = new BindableFile(this, file)
+        {
+            SourceFile = sourceFile,
+        };
         _openItems.Add(key, bindable);
         return bindable;
     }
@@ -184,6 +192,4 @@ public class FileService : IFileService
         item = result;
         return true;
     }
-
-    private static bool IsFile(string? path) => path is null || Path.GetFileName(path) is not null;
 }

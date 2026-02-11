@@ -5,9 +5,11 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="using:Mipser.Windows.Views.Pages"
     xmlns:convert="using:Mipser.Windows.Converters"
     xmlns:selector="using:Mipser.Windows.Selectors"
     xmlns:files="using:Mipser.Bindables.Files"
+    xmlns:ctrls="using:Mipser.Windows.Controls"
     mc:Ignorable="d">
 
     <UserControl.Resources>
@@ -38,10 +40,12 @@
 
                         <!--  Modify  -->
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/CutMFI" Text="Cut" Icon="Cut" IsEnabled="False"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyMFI" Text="Copy" Icon="Copy" IsEnabled="False"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyMFI" Text="Copy" Icon="Copy"
+                                        Command="{x:Bind CopyFileCommand, Mode=OneWay}"/>
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/PasteMFI" Text="Paste" Icon="Paste" IsEnabled="False"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/DeleteMFI" Text="Delete" Icon="Delete" IsEnabled="False"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/RenameMFI" Text="Rename" Icon="Rename" IsEnabled="False"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/DeleteMFI" Text="Delete" Icon="Delete"
+                                        Command="{x:Bind DeleteCommand, Mode=OneWay}"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/RenameMFI" Text="Rename" Icon="Rename" Click="RenameClicked"/>
                         <MenuFlyoutSeparator/>
                         
                         <!--  Open  -->
@@ -73,7 +77,7 @@
                 </TreeViewItem.ContextFlyout>
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <ImageIcon Source="{StaticResource FolderIcon}" Height="20"/>
-                    <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+                    <ctrls:EditableTextBlock Text="{x:Bind Name, Mode=TwoWay}"/>
                 </StackPanel>
             </TreeViewItem>
         </DataTemplate>
@@ -92,9 +96,11 @@
 
                         <!--  Modify  -->
                         <MenuFlyoutItem x:Uid="/Explorer/Flyout/CutMFI" Text="Cut" Icon="Cut" IsEnabled="False"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyMFI" Text="Copy" Icon="Copy" IsEnabled="False"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/DeleteMFI" Text="Delete" Icon="Delete" IsEnabled="False"/>
-                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/RenameMFI" Text="Rename" Icon="Rename" IsEnabled="False"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/CopyMFI" Text="Copy" Icon="Copy"
+                                        Command="{x:Bind CopyFileCommand, Mode=OneWay}"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/DeleteMFI" Text="Delete" Icon="Delete"
+                                        Command="{x:Bind DeleteCommand, Mode=OneWay}"/>
+                        <MenuFlyoutItem x:Uid="/Explorer/Flyout/RenameMFI" Text="Rename" Icon="Rename" Click="RenameClicked"/>
                         <MenuFlyoutSeparator/>
 
                         <!--  Copy Path  -->
@@ -110,7 +116,7 @@
                 </TreeViewItem.ContextFlyout>
                 <StackPanel Orientation="Horizontal" Spacing="8">
                     <ImageIcon Source="{x:Bind Name, Converter={StaticResource FileTypeIconConverter}, Mode=OneWay}" Height="20"/>
-                    <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+                    <ctrls:EditableTextBlock Text="{x:Bind Name, Mode=TwoWay}"/>
                 </StackPanel>
             </TreeViewItem>
         </DataTemplate>
@@ -121,7 +127,7 @@
         
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Margin="4,0,8,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
@@ -131,10 +137,42 @@
                         PlaceholderText="Search Files"
                         Margin="16,0,16,12"
                         IsEnabled="False"/>-->
-        <TreeView x:Name="TreeViewRoot"
+        <TreeView x:Name="FilesTreeViewRoot"
+                  x:Load="{x:Bind local:Explorer.IsNotNull(ViewModel.RootItem), FallbackValue=False, Mode=OneWay}"
                   ItemsSource="{x:Bind ViewModel.RootNode, Mode=OneWay}"
                   ItemTemplateSelector="{StaticResource FileItemTemplateSelector}"
                   Expanding="TreeView_Expanding"
-                  Grid.Row="1"/>
+                  Grid.Row="1">
+            <TreeView.ItemContainerTransitions>
+                <TransitionCollection>
+                    <RepositionThemeTransition/>
+                </TransitionCollection>
+            </TreeView.ItemContainerTransitions>
+        </TreeView>
+
+        <StackPanel x:Name="RecentFileListView"
+                    x:Load="{x:Bind local:Explorer.IsNull(ViewModel.RootItem), FallbackValue=True, Mode=OneWay}">
+            <TextBlock x:Uid="/Pages/Explorer/RecentProjectsAndFoldersTB" Text="Recent Projects and Folders"
+                       FontSize="22" TextTrimming="CharacterEllipsis"/>
+            <ItemsRepeater ItemsSource="{x:Bind ViewModel.RecentProjects, Mode=OneWay}"
+                      Grid.Row="1" Margin="0,8,0,16">
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <HyperlinkButton Tag="{x:Bind}" ToolTipService.ToolTip="{x:Bind}" Padding="8"
+                                         HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                                         MinHeight="20" Click="RecentFileClicked">
+                            <TextBlock Text="{x:Bind local:Explorer.FormatPath((x:String)), Mode=OneWay}"
+                                       FontSize="12" TextTrimming="None"/>
+                        </HyperlinkButton>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+
+            <Button x:Uid="/Pages/Explorer/CreateNewProjectBTN"
+                    Content="Create New Project"
+                    HorizontalAlignment="Center"
+                    Command="{x:Bind ViewModel.CreateNewProjectCommand, Mode=OneWay}"/>
+
+        </StackPanel>
     </Grid>
 </UserControl>

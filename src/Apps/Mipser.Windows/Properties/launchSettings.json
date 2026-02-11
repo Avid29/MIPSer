@@ -2,7 +2,8 @@
   "profiles": {
     "Mipser.Windows (Package)": {
       "commandName": "MsixPackage",
-      "nativeDebugging": false
+      "nativeDebugging": false,
+      "alwaysReinstallApp": false
     },
     "Mipser.Windows (Unpackaged)": {
       "commandName": "Project"

@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NewFile" xml:space="preserve">
-    <value>New File</value>
-  </data>
   <data name="MessageDC.Content" xml:space="preserve">
     <value>Message</value>
   </data>
@@ -210,19 +207,22 @@
   <data name="MipsVersion_MipsVI" xml:space="preserve">
     <value>MIPS VI</value>
   </data>
-  <data name="UnsavedChangesTitle" xml:space="preserve">
-    <value>{0} contains unsaved changes</value>
+  <data name="BuildStatus/Succeeded" xml:space="preserve">
+    <value>{0} Succeeded</value>
   </data>
-  <data name="UnsavedChangesDescription" xml:space="preserve">
-    <value>Would you like to save the changes before closing the file?</value>
+  <data name="BuildStatus/Failed" xml:space="preserve">
+    <value>{0} Failed</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
+  <data name="BuildStatus/Skipped" xml:space="preserve">
+    <value>{0} Skipped</value>
   </data>
-  <data name="DontSave" xml:space="preserve">
-    <value>Don't Save</value>
+  <data name="BuildStatus/OneSucceeded" xml:space="preserve">
+    <value>1 Succeeded</value>
   </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+  <data name="BuildStatus/OneSkipped" xml:space="preserve">
+    <value>1 Skipped</value>
+  </data>
+  <data name="BuildStatus/OneFailed" xml:space="preserve">
+    <value>1 Failed</value>
   </data>
 </root>

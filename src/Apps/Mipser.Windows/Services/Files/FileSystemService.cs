@@ -1,15 +1,20 @@
 ﻿// Adam Dernis 2024
 
+using Mipser.Services;
 using Mipser.Services.Files;
 using Mipser.Services.Files.Models;
-using Mipser.Windows.Services.FileSystem.Models;
+using Mipser.Services.Popup;
+using Mipser.Services.Popup.Enums;
+using Mipser.Services.Popup.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
+
+using File = Mipser.Windows.Services.FileSystem.Models.File;
+using Folder = Mipser.Windows.Services.FileSystem.Models.Folder;
 
 namespace Mipser.Windows.Services.FileSystem;
 
@@ -18,14 +23,24 @@ namespace Mipser.Windows.Services.FileSystem;
 /// </summary>
 public class FileSystemService : IFileSystemService
 {
+    private readonly IPopupService _popupService;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FileSystemService"/> class.
+    /// </summary>
+    public FileSystemService(IPopupService popupService)
+    {
+        _popupService = popupService;
+    }
+
     /// <inheritdoc/>
     public async Task<IFile?> CreateFileAsync(string path)
     {
         try
         {
             // Split the path
-            var folderPath = System.IO.Path.GetDirectoryName(path);
-            var fileName = System.IO.Path.GetFileName(path);
+            var folderPath = Path.GetDirectoryName(path);
+            var fileName = Path.GetFileName(path);
 
             // Create the file in the parent folder.
             var folder = await StorageFolder.GetFolderFromPathAsync(folderPath);
@@ -44,8 +59,8 @@ public class FileSystemService : IFileSystemService
         try
         {
             // Split the path
-            var folderPath = System.IO.Path.GetDirectoryName(path);
-            var fileName = System.IO.Path.GetFileName(path);
+            var folderPath = Path.GetDirectoryName(path);
+            var fileName = Path.GetFileName(path);
 
             // Create the file in the parent folder.
             var parent = await StorageFolder.GetFolderFromPathAsync(folderPath);
@@ -65,12 +80,13 @@ public class FileSystemService : IFileSystemService
         {
             var file = await StorageFile.GetFileFromPathAsync(path);
             return new File(file);
-        } catch
+        }
+        catch
         {
             return null;
         }
     }
-    
+
     /// <inheritdoc/>
     public async Task<IFolder?> GetFolderAsync(string path)
     {
@@ -78,10 +94,43 @@ public class FileSystemService : IFileSystemService
         {
             var folder = await StorageFolder.GetFolderFromPathAsync(path);
             return new Folder(folder);
-        } catch
+        }
+        catch
         {
             return null;
         }
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> DeleteFileItemAsync(IFileItem item, bool confirm = true)
+    {
+        if (confirm)
+        {
+            // Get the resource keys
+            var (titleKey, descKey) = item switch
+            {
+                IFolder => ("/Popups/DeleteFolderTitle", "/Popups/DeleteFolderDescription"),
+                IFile or _ => ("/Popups/DeleteFileTitle", "/Popups/DeleteFileDescription"),
+            };
+
+            // Load the resources
+            var localizer = Service.Get<ILocalizationService>();
+            var title = localizer[titleKey, item.Name];
+            var desc = localizer[descKey, item.Name];
+
+            var popup = new PopupDetails(title, desc)
+            {
+                PrimaryButtonText = localizer["/Popups/Confirm"],
+                CloseButtonText = localizer["/Popups/Cancel"],
+            };
+
+            var confirmation = await _popupService.ShowPopAsync(popup);
+            if (confirmation is not PopupResult.Primary)
+                return false;
+        }
+
+        await item.DeleteAsync();
+        return true;
     }
 
     /// <inheritdoc/>

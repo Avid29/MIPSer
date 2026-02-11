@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Formats\ELF.Modules\ELF.Modules.csproj" />
     <ProjectReference Include="..\..\..\Formats\ObjectFiles\ObjectFiles.csproj" />
     <ProjectReference Include="..\..\..\Formats\RASM.Modules\RASM.Modules.csproj" />
     <ProjectReference Include="..\..\..\MIPS\MIPS.csproj" />

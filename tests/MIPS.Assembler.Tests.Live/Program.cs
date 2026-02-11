@@ -22,7 +22,7 @@ public class Program()
 
     static async Task Main()
     {
-        ServiceCollection.DisassemblerService = new DisassemblerService();
+        ServiceCollection.DisassemblerService = new DisassemblerService(new());
 
         var program = new Program();
         while (true)
@@ -63,9 +63,8 @@ public class Program()
     private async Task<bool> TestLine(string line)
     {
         var stream = new MemoryStream(Encoding.Default.GetBytes(line));
-        var outStream = new MemoryStream();
 
-        var result = await Assembler.AssembleAsync<RasmModule, RasmConfig>(stream, null, new RasmConfig(), outStream);
+        var result = await Assembler.AssembleAsync<RasmModule, RasmConfig>(stream, null, new RasmConfig());
 
         if (!result.Failed)
         {
@@ -86,7 +85,7 @@ public class Program()
             }
 
             Console.Write("\n\nDisassembly: ");
-            var disassembly = new Disassembler.Disassembler(new RasmConfig()).DisassembleInstruction((Instruction)inst);
+            var disassembly = new Disassembler.Disassembler(new RasmConfig()).Disassemble((Instruction)inst);
             Console.Write(disassembly);
         }
         else

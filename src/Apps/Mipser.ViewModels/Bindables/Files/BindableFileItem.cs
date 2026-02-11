@@ -22,6 +22,8 @@ public abstract partial class BindableFileItem : ObservableObject, IDisposable
 
         CopyFileNameCommand = new(CopyFileName);
         CopyFilePathCommand = new(CopyFilePath);
+        CopyFileCommand = new(CopyFileAsync);
+        DeleteCommand = new(DeleteAsync);
     }
 
     /// <summary>
@@ -30,9 +32,9 @@ public abstract partial class BindableFileItem : ObservableObject, IDisposable
     protected FileService FileService { get; }
 
     /// <summary>
-    /// Gets the name of the file.
+    /// Gets or sets the name of the file.
     /// </summary>
-    public abstract string Name { get; }
+    public abstract string Name { get; set;  }
 
     /// <summary>
     /// Gets the file's path.

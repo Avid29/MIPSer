@@ -1,19 +1,26 @@
 ﻿// Adam Dernis 2024
 
+using CommunityToolkit.Diagnostics;
+using CommunityToolkit.HighPerformance;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
-using MIPS.Models.Addressing.Enums;
 using MIPS.Models.Modules.Tables;
+using MIPS.Models.Modules.Tables.Enums;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace MIPS.Linker;
 
 /// <summary>
 /// A MIPS linker.
 /// </summary>
-public class Linker
+public class Linker<TModule, TConfig>
+    where TModule : IBuildModule<TModule>
+    where TConfig : AssemblerBuildConfig<TConfig, TModule>
 {
     private readonly Logger _logger;
     private readonly Module _module;
@@ -34,35 +41,71 @@ public class Linker
     /// <summary>
     /// Links an array of object modules into a single object module.
     /// </summary>
-    public static Linker Link(IBuildModule[] modules, AssemblerConfig config, string? entryPoint = null)
+    public static Module Link(TConfig config, params TModule[] modules)
+        => Link(config, null, modules);
+
+    /// <summary>
+    /// Links an array of object modules into a single object module.
+    /// </summary>
+    public static Module Link(TConfig config, string? entryPoint, params TModule[] modules)
     {
-        var linker = new Linker(config);
-        foreach (var m in modules)
+        Module[] abstracteds = new Module[modules.Length];
+        for(int i = 0; i < modules.Length; i++)
         {
-            var module = m.Abstract(config);
+            var module = modules[i].Abstract(config);
             if (module is null)
             {
                 // TODO: Linker errors
-                linker._logger.Log(Severity.Error, LogCode.FailedToLoadModule, m.Name, "FailedToLoadModule");
                 continue;
             }
+        }
 
+        return Link(config, entryPoint, abstracteds);
+    }
+
+    /// <summary>
+    /// Links an array of object modules into a single object module.
+    /// </summary>
+    public static Module Link(TConfig config, params Module[] modules)
+        => Link(config, null, modules);
+
+    /// <summary>
+    /// Links an array of object modules into a single object module.
+    /// </summary>
+    public static Module Link(TConfig config, string? entryPoint, params Module[] modules)
+    {
+        var linker = new Linker<TModule, TConfig>(config);
+        foreach (var module in modules)
+        {
             linker.LinkModule(module);
         }
 
-        return linker;
+        linker.AlignSections();
+        linker.ResolveReferences();
+
+        if (entryPoint is not null)
+        {
+            // TODO: Verify the module is execution ready
+
+            // Set the entry point
+            linker._module.SetEntryPoint(entryPoint);
+        }
+
+        return linker._module;
     }
 
     private void LinkModule(Module module)
     {
         // Track the initial positions of each stream
-        var offsets = new long[Module.SECTION_COUNT];
+        var offsets = new Dictionary<string, long>();
 
         // Copy stream contents
-        for (int i = 0; i < Module.SECTION_COUNT; i++)
+        foreach (var srcSection in module.Sections.Values)
         {
-            offsets[i] = _module.GetStreamPosition((Section)i);
-            _module.Append((Section)i, module.Sections[i].Stream);
+            var destSection = _module.GetOrAddSection(srcSection.Name);
+
+            offsets.Add(destSection.Name, destSection.Stream.Position);
+            destSection.Append(srcSection.Stream);
         }
         
         // Merge symbol tables
@@ -70,34 +113,71 @@ public class Linker
         {
             // TODO: What flags are tracked?
 
-            module.TryDefineOrUpdateSymbol(symEntry.Name, symEntry.Type, symEntry.Address);
+            _module.TryDefineOrUpdateSymbol(symEntry.Name, symEntry.Type, symEntry.Address);
         }
 
         // Append references and apply relocations
         foreach (var @ref in module.References)
         {
             ReferenceEntry entry = @ref;
+            Guard.IsNotNull(entry.Location.Section);
 
             // Update address
-            long offset = offsets[(int)@ref.Address.Section];
-            entry.Address += offset;
+            long offset = offsets[entry.Location.Section];
+            entry.Location += offset;
 
             // Add to tracked references
+            // (All references will be applied after all modules are merged)
             _module.TryTrackReference(entry);
 
             // Relocate apply relocations
-            if (entry.IsRelocation)
+            if (entry.Symbol is null)
             {
                 _module.Relocate(entry, offset);
             }
         }
+    }
 
-        // Resolve all references
-        foreach (var @ref in _module.References)
+    private void AlignSections()
+    {
+        uint position = 0x00;
+        foreach (var section in _module.Sections.Values)
         {
-            // Skip if the symbol is not defined
-            if (!(@ref.Symbol is not null && _module.TryGetSymbol(@ref.Symbol, out var symbol) && symbol.IsDefined))
+            section.VirtualAddress = position;
+            position += (uint)section.Stream.Length;
+
+            // Ensure word alignment
+            uint offset = position % 4;
+            if (offset != 0)
+            {
+                position += 4 - offset;
+            }
+        }
+    }
+
+    private void ResolveReferences()
+    {
+        foreach (var entry in _module.References)
+        {
+            // Skip relocations. Everything has been relocated
+            if (entry.Symbol is null || !_module.TryGetSymbol(entry.Symbol, out var symbol))
                 continue;
+
+            Guard.IsNotNull(entry.Location.Section);
+            Guard.IsNotNull(symbol.Address?.Section);
+
+            var section = _module.Sections[entry.Location.Section];
+            var symbolSection = _module.Sections[symbol.Address.Value.Section];
+            var baseLocation = entry.Location.Value;
+            var symbolLocation = symbolSection.VirtualAddress + symbol.Address.Value.Value;
+
+            switch (entry.Type)
+            {
+                case MipsReferenceType.Low16:
+                    section.Stream.Position = baseLocation + 2;
+                    section.Stream.TryWrite((ushort)symbolLocation);
+                    break;
+            }
         }
     }
 }

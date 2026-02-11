@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2024
 
+using System.Threading.Tasks;
+
 namespace Mipser.Services.Files.Models;
 
 /// <summary>
@@ -16,4 +18,15 @@ public interface IFileItem
     /// Gets the path of the files item.
     /// </summary>
     string Path { get; }
+
+    /// <summary>
+    /// Attempts to rename the file item.
+    /// </summary>
+    /// <param name="desiredName">The desired new name for the file.</param>
+    Task RenameAsync(string desiredName);
+
+    /// <summary>
+    /// Delete the file item.
+    /// </summary>
+    Task DeleteAsync();
 }
