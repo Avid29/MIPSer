@@ -304,6 +304,7 @@ public struct InstructionParser
             {
                 Argument.Address => MipsReferenceType.JumpTarget26,
                 Argument.Immediate => MipsReferenceType.Low16,
+                Argument.FullImmediate => MipsReferenceType.Low16, // TODO: Handle high addresses
                 _ => ThrowHelper.ThrowArgumentOutOfRangeException<MipsReferenceType>($"Argument of type '{target}' cannot reference relocatable symbols."),
             };
 

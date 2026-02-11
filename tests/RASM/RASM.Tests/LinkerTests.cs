@@ -26,12 +26,12 @@ public class LinkerTests
         var defResult = await Assembler.AssembleAsync<RasmModule, RasmConfig>(defStream, "def.asm", config);
         var refResult = await Assembler.AssembleAsync<RasmModule, RasmConfig>(refStream, "ref.asm", config);
 
-        var defModule = defResult.ObjectModule;
-        var refModule = refResult.ObjectModule;
+        var defModule = defResult.AbstractModule;
+        var refModule = refResult.AbstractModule;
 
         Assert.IsNotNull(defModule);
         Assert.IsNotNull(refModule);
 
-        Linker.Link([defModule, refModule], config);
+        Linker<RasmModule, RasmConfig>.Link(config, defModule, refModule);
     }
 }

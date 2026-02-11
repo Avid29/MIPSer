@@ -39,6 +39,26 @@ public abstract class InterpreterBase
     protected Computer Computer { get; }
 
     /// <summary>
+    /// Gets the value of first argument register.
+    /// </summary>
+    protected uint A0 => Computer.Processor[GPRegister.Argument0];
+
+    /// <summary>
+    /// Gets the value of first argument register.
+    /// </summary>
+    protected uint A1 => Computer.Processor[GPRegister.Argument1];
+
+    /// <summary>
+    /// Gets the value of first argument register.
+    /// </summary>
+    protected uint A2 => Computer.Processor[GPRegister.Argument2];
+
+    /// <summary>
+    /// Gets the value of first argument register.
+    /// </summary>
+    protected uint A3 => Computer.Processor[GPRegister.Argument3];
+
+    /// <summary>
     /// A method to direct a syscall to the appropriate interpretation.
     /// </summary>
     /// <param name="code"></param>

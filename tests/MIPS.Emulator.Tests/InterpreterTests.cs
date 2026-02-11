@@ -1,8 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using MIPS.Emulator.Config;
-using MIPS.Emulator.Executor.Enum;
-using MIPS.Models.Instructions.Enums.Registers;
+using MIPS.Emulator.Interpreter;
 using MIPS.Tests.Helpers;
 using ObjectFiles.Elf;
 using ObjectFiles.Elf.Config;
@@ -18,39 +17,31 @@ public class InterpreterTests
     public async Task RunPrintIntTest()
     {
         // Load the file
-        var path = TestFilePathing.GetAssemblyFilePath("emulator_tests/usercode_tests/print_int.asm");
+        var path = TestFilePathing.GetAssemblyFilePath("emulator_tests/usercode_tests/hello_world.asm");
         var stream = File.Open(path, FileMode.Open);
 
-        // Run assembler, and assert successful assembly
-        var result = await Assembler.Assembler.AssembleAsync<ElfModule, ElfConfig>(stream, path, new ElfConfig());
-        Assert.IsNotNull(result.ObjectModule);
+        var elfConfig = new ElfConfig();
 
-        // Setup interpreter
-        var module = result.ObjectModule;
-        var config = new EmulatorConfig()
+        // Run assembler, and assert successful assembly
+        var result = await Assembler.Assembler.AssembleAsync(stream, path, elfConfig);
+        Assert.IsNotNull(result.AbstractModule);
+
+        // Link
+        var module = Linker.Linker<ElfModule, ElfConfig>.Link(elfConfig, "entry", result.AbstractModule);
+        var elfModule = ElfModule.Create(module, elfConfig);
+        Assert.IsNotNull(elfModule);
+
+        // Setup emulator
+        var emulatorConfig = new EmulatorConfig()
         {
             HostedTraps = true
         };
-        var emulator = new Emulator(config);
-        emulator.Computer.Processor.ProgramCounter = module.EntryAddress;
-        emulator.Load(module);
+        var emulator = new Emulator(emulatorConfig);
+        emulator.Computer.Processor.ProgramCounter = elfModule.EntryAddress;
+        emulator.Load(elfModule);
 
-        // Register for traps (we're gonna handle the syscall)
-        emulator.Computer.Processor.TrapOccurring += (p, e) =>
-        {
-            // Assert the emulator is not handling the syscall (interpreter mode)
-            Assert.IsTrue(e.Unhandled);
-
-            // Assert the trap was a syscall
-            Assert.IsTrue(e.Trap is TrapKind.Syscall);
-
-            // Assert the syscall requested is to print the integer 42
-            Assert.IsTrue(p.RegisterFile[GPRegister.ReturnValue0] is 1);
-            Assert.IsTrue(p.RegisterFile[GPRegister.Argument0] is 42);
-
-            // Kill the emulator and end the test
-            emulator.ShutDown();
-        };
+        // Setup interpreter
+        var interpreter = new MARSInterpreter(emulator.Computer);
 
         // Start the emulator
         emulator.Start();

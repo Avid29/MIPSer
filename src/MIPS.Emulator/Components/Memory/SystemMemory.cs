@@ -1,11 +1,13 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.HighPerformance;
 using CommunityToolkit.HighPerformance.Buffers;
 using CommunityToolkit.HighPerformance.Helpers;
 using MIPS.Emulator.Helpers;
 using System;
 using System.IO;
 using System.Numerics;
+using System.Text;
 
 namespace MIPS.Emulator.Components.Memory;
 
@@ -94,6 +96,27 @@ public class SystemMemory
 
         _memoryStream.Position = address;
         _memoryStream.Write(bytes);
+    }
+
+    /// <summary>
+    /// Reads a null-terminated string from the specified address.
+    /// </summary>
+    /// <param name="address">The address to read from.</param>
+    /// <returns>The string at that address</returns>
+    public string ReadString(uint address)
+    {
+        _memoryStream.Position = address;
+
+        // Construct the string through reading memory
+        StringBuilder builder = new();
+        var c = _memoryStream.Read<byte>();
+        while (c is not 0)
+        {
+            builder.Append((char)c);
+            c = _memoryStream.Read<byte>();
+        }
+
+        return $"{builder}";
     }
 
     /// <summary>

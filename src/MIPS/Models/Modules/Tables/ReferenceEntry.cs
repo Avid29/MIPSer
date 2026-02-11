@@ -37,7 +37,7 @@ public struct ReferenceEntry
     public MipsReferenceType Type { get; set; }
 
     /// <summary>
-    /// Gets the appended value for
+    /// Gets the appended value for the reference.
     /// </summary>
     public long Append { get; }
 }

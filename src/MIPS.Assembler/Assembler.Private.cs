@@ -14,7 +14,7 @@ public partial class Assembler
     /// <remarks>
     /// Bytes should be passed in as big endian.
     /// </remarks>
-    private void Append(params byte[] bytes) => _module.Append(_activeSection, bytes);
+    private void Append(params byte[] bytes) => _activeSection.Append(bytes);
 
     private void Append<T>(params T[] values)
         where T : IBinaryInteger<T>
@@ -33,7 +33,7 @@ public partial class Assembler
         Append(new byte[byteCount]);
     }
 
-    private void Align(int boundary) => _module.Align(_activeSection, boundary);
+    private void Align(int boundary) => _activeSection.Align(boundary);
 
     private void SetActiveSection(string sectionName)
     {

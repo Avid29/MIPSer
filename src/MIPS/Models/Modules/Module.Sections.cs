@@ -12,26 +12,24 @@ public partial class Module
     /// <summary>
     /// Adds a new section to the module.
     /// </summary>
-    public void AddSection(string sectionName, SectionFlags flags = SectionFlags.Default)
+    public ModuleSection AddSection(string sectionName, SectionFlags flags = SectionFlags.Default)
     {
         var section = new ModuleSection(sectionName, flags);
         _sections.Add(section.Name, section);
+        return section;
     }
-
+    
     /// <summary>
-    /// Appends an array of bytes to the end of the specified section.
+    /// Gets a section, or creates it if it does not exist.
     /// </summary>
-    /// <remarks>
-    /// Bytes must be in big endian, this is mips.
-    /// </remarks>
-    /// <param name="section">The section to append to.</param>
-    /// <param name="bytes">The bytes to append to the end of the buffer.</param>
-    /// <exception cref="ArgumentException"/>
-    /// <returns>true if the data was successfully appended.</returns>
-    public void Append(ModuleSection section, params byte[] bytes)
+    /// <param name="sectionName">The name of the section to get.</param>
+    /// <returns>A section with the provided name</returns>
+    public ModuleSection GetOrAddSection(string sectionName)
     {
-        Stream buffer = section.Stream;
-        buffer.Write(bytes);
+        if (!_sections.TryGetValue(sectionName, out var section))
+            section = AddSection(sectionName);
+
+        return section;
     }
 
     /// <summary>
@@ -47,51 +45,8 @@ public partial class Module
         if (!_sections.TryGetValue(sectionName, out var section))
             return false;
 
-        Append(section, stream, seekEnd);
+        section.Append(stream, seekEnd);
         return true;
-    }
-
-    /// <summary>
-    /// Appends the contents of a stream to the end of the specified section.
-    /// </summary>
-    /// <param name="section">The section to append to.</param>
-    /// <param name="stream">The stream to copy.</param>
-    /// <param name="seekEnd">Whether or not to seek the end of the section buffer before copying.</param>
-    /// <exception cref="ArgumentException"/>
-    /// <returns>true if the data was successfully appended.</returns>
-    public void Append(ModuleSection section, Stream stream, bool seekEnd = true)
-    {
-        Stream buffer = section.Stream;
-        if (seekEnd)
-        {
-            stream.Seek(0, SeekOrigin.Begin);
-            buffer.Seek(0, SeekOrigin.End);
-        }
-
-        stream.CopyTo(buffer);
-    }
-
-    /// <summary>
-    /// Aligns a section to an n-size boundary.
-    /// </summary>
-    /// <param name="section">The section to align.</param>
-    /// <param name="boundary">The alignment boundary.</param>
-    /// <returns>true if the section was successfully aligned.</returns>
-    public void Align(ModuleSection section, int boundary)
-    {
-        // Scale boundary by power of 2.
-        boundary = 1 << boundary;
-
-        Stream stream = section.Stream;
-        int offset = (int)stream.Length % boundary;
-
-        // Already aligned
-        if (offset <= 0)
-            return;
-
-        // Append offset bytes
-        var append = new byte[boundary - offset];
-        Append(section, append);
     }
 
     /// <summary>
