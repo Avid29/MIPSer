@@ -27,6 +27,8 @@ Current languages:
 
 ![Crowdin](https://badges.crowdin.net/mipser/localized.svg)
 
+Help translate on [Crowdin](https://crowdin.com/project/mipser)!
+
 # Screenshots
 
 <img width="1439" height="831" alt="image" src="https://github.com/user-attachments/assets/8c4d4d9a-dca8-4d9f-b676-dbb5af670c4a" />
