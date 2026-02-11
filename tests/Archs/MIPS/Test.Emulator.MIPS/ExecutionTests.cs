@@ -326,7 +326,7 @@ public class ExecutionTests
         get
         {
             yield return [new ExecutionTestCase("syscall", TrapKind.Syscall)];
-            //yield return [new ExecutionTestCase("break", TrapKind.Breakpoint)];
+            yield return [new ExecutionTestCase("break", TrapKind.Breakpoint)];
 
             // Exception Return
             yield return [new ExecutionTestCase("eret", TrapKind.ReservedInstruction)];

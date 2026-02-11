@@ -238,7 +238,10 @@ public partial class Processor
         if (hostTrap)
         {
             // Wait for the host to handle the trap before resuming execution
-            args.Wait();
+            // Only do this if there's actually a host register to the even though
+            if (TrapOccurring is not null)
+                args.Wait();
+
             return;
         }
 
