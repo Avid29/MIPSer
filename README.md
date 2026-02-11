@@ -4,11 +4,22 @@
 
 # Introduction
 
-**MIPSer** is an IDE for the MIPS assembly language. It is very much a WIP, but the goal is to create the most accessible environment possible for learning to write assembly code.
+**Zarem** (Zippy Assembly Resolver, Emulator, & Manager) is a assembler, linker, emulator, and IDE education in assembly. It is very much a WIP, but the goal is to create the most accessible environment possible for learning to write assembly code.
 
-# Cross-Platform Usage
+# Assembly/Emulation Architectures
 
-The MIPSer IDE is a WinUI 3 project, and therefore only available on Windows. **However**, the Assembler and Emulator are made in .NET 10 with no windows-only dependendencies, and therefore available on any machine with the .NET runtime.
+Zarem is currently MIPS only, but support for other architectures is planned.
+
+| Architecture   | Assembling     | Linking     | Emulating       | Disassembly  |
+| -------------- | -------------- | ----------- | --------------- | ------------ |
+| MIPS32         | ✅ Supported  | ⚠️  WIP     | ⚠️  WIP         | ⚠️  WIP      |
+| MIPS64         | ⌛ Planned    | ⌛ Planned  | ⌛ Planned      | ⌛ Planned   |
+| ARM            | ⌛ Planned    | ⌛ Planned  | ⌛ Planned      | ⌛ Planned   |
+| RISC-V         | ⌛ Planned    | ⌛ Planned  | ⌛ Planned      | ⌛ Planned   |
+
+# Cross-Platform Support
+
+The Zarem IDE is a WinUI 3 project, and therefore only available on Windows. **However**, the Assembler and Emulator are made in .NET 10 with no windows-only dependendencies, and therefore available on any machine with the .NET runtime.
 
 | Assembler      | Emulator        | IDE          |
 | -------------- | --------------- | ------------ |
@@ -16,14 +27,16 @@ The MIPSer IDE is a WinUI 3 project, and therefore only available on Windows. **
 
 # Translation
 
-MIPSer supports localization for both the IDE and the Assembler. Assembler localization is integrated directly into the assembler, and is therefore available in the console as-well-as the MIPSer IDE app.
+Zarem supports localization for both the IDE and the Assembler. Assembler localization is integrated directly into the assembler, and is therefore available in the console as-well-as the Zarem IDE app.
 
 Current languages:
 
 | Language | IDE Support | Assembler Support |
 | -------- | ----------- | ----------------- |
-| English  | Yes         | Yes               |
-| Hebrew   | Yes         | Yes               |
+| English  | ✅ Yes     | ✅ Yes            |
+| Hebrew   | ✅ Yes     | ✅ Yes            |
+| Spanish  | ⌛ Planned | ⌛ Planned        |
+| Japanese | ⌛ Planned | ⌛ Planned        |
 
 [![Crowdin](https://badges.crowdin.net/mipser/localized.svg)](https://crowdin.com/project/mipser)
 
