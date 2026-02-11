@@ -20,8 +20,9 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <Image Source="/Assets/AppIcons/Logo.svg"
-               Height="160"
+        <Image Source="{StaticResource AppIconLarge}"
+               Height="150"
+               Margin="16,8"
                VerticalAlignment="Center"/>
 
         <StackPanel VerticalAlignment="Top"
