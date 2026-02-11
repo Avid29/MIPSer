@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2025
 
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Helpers.Tables;
-using MIPS.Assembler.Models.Config;
 using MIPS.Disassembler.Models.Instructions;
 using MIPS.Models.Instructions;
 using MIPS.Models.Instructions.Enums;
@@ -40,7 +40,7 @@ public class Disassembler
     /// </summary>
     /// <param name="instruction">The instruction to disassemble.</param>
     /// <returns>The instruction as a string.</returns>
-    public string DisassembleInstruction(Instruction instruction)
+    public string Disassemble(Instruction instruction)
     {
         byte funcCode = instruction.Type switch
         {

@@ -1,8 +1,8 @@
 ﻿// Adam Dernis 2024
 
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models;
-using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Tokenization;
 using MIPS.Models.Addressing;

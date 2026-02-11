@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Messaging;
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Tokenization.Models;
 using Mipser.Bindables.Files;
 using Mipser.Messages;

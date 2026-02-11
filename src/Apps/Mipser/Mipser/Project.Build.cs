@@ -1,11 +1,9 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
-using LibObjectFile.IO;
 using MIPS.Assembler;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Models;
-using MIPS.Assembler.Models.Config;
 using Mipser.Models;
 using Mipser.Models.Files;
 using ObjectFiles.Elf;

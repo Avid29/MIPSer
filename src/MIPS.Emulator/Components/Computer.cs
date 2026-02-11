@@ -2,6 +2,7 @@
 
 using MIPS.Emulator.Components.CPU;
 using MIPS.Emulator.Components.Memory;
+using MIPS.Emulator.Config;
 
 namespace MIPS.Emulator.Components;
 
@@ -13,8 +14,10 @@ public class Computer
     /// <summary>
     /// Initializes a new instance of the <see cref="Computer"/> class.
     /// </summary>
-    public Computer()
+    public Computer(EmulatorConfig config)
     {
+        Config = config;
+
         Processor = new Processor(this);
         Memory = new SystemMemory();
     }
@@ -28,6 +31,11 @@ public class Computer
     /// Gets the memory of the computer system.
     /// </summary>
     public SystemMemory Memory { get; }
+
+    /// <summary>
+    /// Gets the emulation configuration to follow for computing.
+    /// </summary>
+    public EmulatorConfig Config { get; }
 
     /// <summary>
     /// Advance one tick.

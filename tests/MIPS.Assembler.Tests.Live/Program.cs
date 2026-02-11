@@ -22,7 +22,7 @@ public class Program()
 
     static async Task Main()
     {
-        ServiceCollection.DisassemblerService = new DisassemblerService();
+        ServiceCollection.DisassemblerService = new DisassemblerService(new());
 
         var program = new Program();
         while (true)
@@ -85,7 +85,7 @@ public class Program()
             }
 
             Console.Write("\n\nDisassembly: ");
-            var disassembly = new Disassembler.Disassembler(new RasmConfig()).DisassembleInstruction((Instruction)inst);
+            var disassembly = new Disassembler.Disassembler(new RasmConfig()).Disassemble((Instruction)inst);
             Console.Write(disassembly);
         }
         else

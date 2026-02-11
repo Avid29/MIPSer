@@ -13,13 +13,19 @@ public class TrapOccurringEventArgs : EventArgs
     /// <summary>
     /// Initializes a new instance of the <see cref="TrapOccurringEventArgs"/> class.
     /// </summary>
-    public TrapOccurringEventArgs(TrapKind trap)
+    public TrapOccurringEventArgs(TrapKind trap, bool unhandled)
     {
         Trap = trap;
+        Unhandled = unhandled;
     }
 
     /// <summary>
     /// Gets the trap that occurred.
     /// </summary>
     public TrapKind Trap { get; }
+
+    /// <summary>
+    /// Gets whether or not the trap will be handled by the emulation.
+    /// </summary>
+    public bool Unhandled { get; }
 }

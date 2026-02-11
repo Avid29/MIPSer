@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using LibObjectFile.Elf;
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Models.Modules;
 using ObjectFiles.Elf.Extensions;
 using System.Collections.Generic;

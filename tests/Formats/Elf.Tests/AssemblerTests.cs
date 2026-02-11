@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2025
 
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Models.Config;
 using MIPS.Models.Instructions.Enums;
 using MIPS.Tests.Formats;
 using MIPS.Tests.Helpers;

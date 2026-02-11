@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Models.Instructions;
 using MIPS.Assembler.Tokenization;
 using MIPS.Assembler.Tokenization.Models;

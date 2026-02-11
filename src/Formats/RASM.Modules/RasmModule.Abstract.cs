@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Models.Modules.Tables;
 using MIPS.Models.Modules.Tables.Enums;

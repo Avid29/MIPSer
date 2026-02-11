@@ -26,7 +26,7 @@ public class InterpreterTests
 
         // Setup interpreter
         var module = result.ObjectModule;
-        var emulator = new Emulator();
+        var emulator = new Emulator(new());
         emulator.Computer.Processor.ProgramCounter = module.EntryAddress;
 
         emulator.Load(module);

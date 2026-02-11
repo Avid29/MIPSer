@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Models.Enums;
 using MIPS.Assembler.Models.Instructions.Abstract;
 using MIPS.Models.Instructions.Enums;

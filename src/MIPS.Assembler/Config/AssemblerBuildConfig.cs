@@ -4,7 +4,7 @@ using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Models.Instructions.Enums;
 
-namespace MIPS.Assembler.Models.Config;
+namespace MIPS.Assembler.Config;
 
 /// <summary>
 /// A base class for a build ready <see cref="AssemblerConfig"/>.

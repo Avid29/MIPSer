@@ -1,7 +1,5 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Assembler.Models.Config;
-using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Emulator.Models.Modules;
 using RASM.Modules.Config;

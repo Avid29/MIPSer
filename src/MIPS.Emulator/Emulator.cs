@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using MIPS.Emulator.Components;
+using MIPS.Emulator.Config;
 using MIPS.Emulator.Models.Enums;
 using MIPS.Emulator.Models.Modules;
 using System;
@@ -25,9 +26,9 @@ public class Emulator
     /// <summary>
     /// Initializes a new instance of the <see cref="Emulator"/> class.
     /// </summary>
-    public Emulator()
+    public Emulator(EmulatorConfig config)
     {
-        Computer = new Computer();
+        Computer = new Computer(config);
     }
 
     /// <summary>

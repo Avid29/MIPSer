@@ -1,9 +1,9 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
-using MIPS.Assembler.Models.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Models.Modules.Tables;

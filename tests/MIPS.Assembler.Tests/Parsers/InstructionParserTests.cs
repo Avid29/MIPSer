@@ -1,6 +1,7 @@
 // Adam Dernis 2024
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Helpers.Tables;
 using MIPS.Assembler.Logging;
 using MIPS.Assembler.Logging.Enum;
@@ -175,11 +176,12 @@ public class InstructionParserTests
     [DynamicData(nameof(GeneratedTestList))]
     public void GeneratedTests(string input)
     {
+        var config = new AssemblerConfig();
 #if DEBUG
-        ServiceCollection.DisassemblerService = new DisassemblerService();
+        ServiceCollection.DisassemblerService = new DisassemblerService(config);
 #endif
 
-        var table = new InstructionTable(new());
+        var table = new InstructionTable(config);
         var parser = new InstructionParser(table, null);
 
         var tokenized = Tokenizer.TokenizeLine(input, nameof(RunTest));

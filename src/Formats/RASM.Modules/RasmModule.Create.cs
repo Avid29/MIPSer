@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Models.Modules.Tables;
 using RASM.Modules.Config;

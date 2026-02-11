@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace MIPS.Assembler.Models.Config;
+namespace MIPS.Assembler.Config;
 
 /// <summary>
 /// A class containing assembler configurations.

@@ -8,4 +8,8 @@
     <ProjectReference Include="..\MIPS\MIPS.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Config\Enums\" />
+	</ItemGroup>
+
 </Project>

@@ -2,7 +2,7 @@
 
 using LibObjectFile.Elf;
 using LibObjectFile.PE;
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Models.Modules;
 using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables;

@@ -227,10 +227,15 @@ public partial class Processor
         if (trap is TrapKind.None)
             return;
 
-        TrapOccurring?.Invoke(this, new TrapOccurringEventArgs(trap));
+        var hostTrap = _computer.Config.HostedTraps;
+        TrapOccurring?.Invoke(this, new TrapOccurringEventArgs(trap, hostTrap));
 
         // Breakpoints are handled by the debugger upon the trap occurring event.
         if (trap is TrapKind.Breakpoint)
+            return;
+
+        // The host handled the trap, do not emulate it
+        if (hostTrap)
             return;
 
         // Status and cause registers

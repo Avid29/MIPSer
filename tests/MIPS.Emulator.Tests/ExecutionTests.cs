@@ -395,7 +395,7 @@ public class ExecutionTests
         // TODO: Psuedo instruction support
         var instruction = parsed.Realize()[0];
 
-        var emulator = new Emulator();
+        var emulator = new Emulator(new());
 
         // Initialize the status register
         emulator.Computer.Processor.CoProcessor0.StatusRegister = @case.Status;

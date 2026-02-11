@@ -2,7 +2,7 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using Mipser.Services.Settings.Enums;
 using System;
 

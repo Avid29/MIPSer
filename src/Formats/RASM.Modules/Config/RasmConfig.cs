@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using MIPS.Models.Instructions.Enums;
 using System.Xml.Serialization;
 

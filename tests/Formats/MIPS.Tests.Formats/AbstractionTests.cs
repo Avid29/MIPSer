@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using MIPS.Assembler.Models.Modules.Interfaces;
 using MIPS.Tests.Helpers;
 using System.IO;

@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using MIPS.Assembler.Models.Config;
+using MIPS.Assembler.Config;
 using System.IO;
 using System.Xml.Serialization;
 
