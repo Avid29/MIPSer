@@ -10,6 +10,10 @@
 
 The MIPSer IDE is a WinUI 3 project, and therefore only available on Windows. **However**, the Assembler and Emulator are made in .NET 10 with no windows-only dependendencies, and therefore available on any machine with the .NET runtime.
 
+| Assembler      | Emulator        | IDE          |
+| -------------- | --------------- | ------------ |
+| Cross-Platform | Cross-Platform  | Windows-Only | 
+
 # Translation
 
 MIPSer supports localization for both the IDE and the Assembler. Assembler localization is integrated directly into the assembler, and is therefore available in the console as-well-as the MIPSer IDE app.
