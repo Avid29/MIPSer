@@ -16,15 +16,15 @@ public class LinkerTests
     [TestMethod]
     public async Task DefRefTest()
     {
-        var defPath = TestFilePathing.GetAssemblyFilePath("link_tests/def.asm");
-        var refPath = TestFilePathing.GetAssemblyFilePath("link_tests/ref.asm");
+        var defPath = TestFilePathing.GetAssemblyFilePath("linker_tests/def.asm");
+        var refPath = TestFilePathing.GetAssemblyFilePath("linker_tests/ref.asm");
 
         Stream defStream = File.Open(defPath, FileMode.Open);
         Stream refStream = File.Open(refPath, FileMode.Open);
 
         var config = new RasmConfig();
-        var defResult = await Assembler.AssembleAsync<RasmModule, RasmConfig>(defStream, "def", config);
-        var refResult = await Assembler.AssembleAsync<RasmModule, RasmConfig>(refStream, "ref", config);
+        var defResult = await Assembler.AssembleAsync<RasmModule, RasmConfig>(defStream, "def.asm", config);
+        var refResult = await Assembler.AssembleAsync<RasmModule, RasmConfig>(refStream, "ref.asm", config);
 
         var defModule = defResult.ObjectModule;
         var refModule = refResult.ObjectModule;
