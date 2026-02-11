@@ -117,122 +117,112 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutHeaderTB.Text" xml:space="preserve">
-    <value>About</value>
+  <data name="MessageDC.Content" xml:space="preserve">
+    <value>Message</value>
   </data>
-  <data name="AboutSE.Description" xml:space="preserve">
-    <value>© Avishai Dernis</value>
+  <data name="FileDC.Content" xml:space="preserve">
+    <value>File</value>
   </data>
-  <data name="AboutSE.Header" xml:space="preserve">
-    <value>About MIPSer</value>
+  <data name="LineDC.Content" xml:space="preserve">
+    <value>Line</value>
   </data>
-  <data name="AnnotationThresholdSC.Description" xml:space="preserve">
-    <value>When should the editor show log messages as an annotation below the log.</value>
+  <data name="BuildStatus_NotReady" xml:space="preserve">
+    <value>Not Ready</value>
   </data>
-  <data name="AnnotationThresholdSC.Header" xml:space="preserve">
-    <value>Annotations Threshold</value>
+  <data name="BuildStatus_Ready" xml:space="preserve">
+    <value>Ready</value>
   </data>
-  <data name="AppLanguageSC.Description" xml:space="preserve">
-    <value>Set the app's display language. (Requires a restart to take effect).</value>
+  <data name="BuildStatus_Preparing" xml:space="preserve">
+    <value>Preparing</value>
   </data>
-  <data name="AppLanguageSC.Header" xml:space="preserve">
-    <value>App Language</value>
+  <data name="BuildStatus_Assembling" xml:space="preserve">
+    <value>Assembling</value>
   </data>
-  <data name="AppSettingsTitle" xml:space="preserve">
-    <value>App Settings</value>
+  <data name="BuildStatus_Linking" xml:space="preserve">
+    <value>Linking</value>
   </data>
-  <data name="AppThemeSC.Description" xml:space="preserve">
-    <value>Change the app's theme.</value>
+  <data name="BuildStatus_Completed" xml:space="preserve">
+    <value>Build Complete</value>
   </data>
-  <data name="AppThemeSC.Header" xml:space="preserve">
-    <value>Theme</value>
+  <data name="BuildStatus_Failed" xml:space="preserve">
+    <value>Build Failed</value>
   </data>
-  <data name="AssemblerLanguageSC.Description" xml:space="preserve">
-    <value>Set the language used by for assembler log information.</value>
+  <data name="Theme_Default" xml:space="preserve">
+    <value>Default</value>
   </data>
-  <data name="AssemblerLanguageSC.Header" xml:space="preserve">
-    <value>Assembler Language</value>
+  <data name="Theme_Dark" xml:space="preserve">
+    <value>Dark</value>
   </data>
-  <data name="AssemblerSettingsTitle" xml:space="preserve">
-    <value>Assembler Settings</value>
-  </data>
-  <data name="EditorSettingsHeaderTB.Text" xml:space="preserve">
-    <value>Editor Settings</value>
-  </data>
-  <data name="EditorSettingsTitle" xml:space="preserve">
-    <value>Editor Settings</value>
+  <data name="Theme_Light" xml:space="preserve">
+    <value>Light</value>
   </data>
   <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">
     <value>Language Settings</value>
   </data>
-  <data name="RealTimeAssemblySC.Description" xml:space="preserve">
-    <value>Should the editor continuously assemble the open file to show errors in real-time?</value>
+  <data name="SearchFilesASB.PlaceholderText" xml:space="preserve">
+    <value>Search Files</value>
   </data>
-  <data name="RealTimeAssemblySC.Header" xml:space="preserve">
-    <value>Real-Time Assembly</value>
+  <data name="WIPTitleTB.Text" xml:space="preserve">
+    <value>We're Not Ready Yet...</value>
   </data>
-  <data name="ThemeSettingsHeaderTB.Text" xml:space="preserve">
-    <value>Theme Settings</value>
+  <data name="WIPDescriptionTB.Text" xml:space="preserve">
+    <value>We're working on handling this file type, but it's not ready yet.</value>
   </data>
-  <data name="UseAppLanguage" xml:space="preserve">
-    <value>Use App Language</value>
+  <data name="AboutHeaderTB.Text" xml:space="preserve">
+    <value>About</value>
   </data>
-  <data name="UseSystemLanguage" xml:space="preserve">
-    <value>Use System Language</value>
+  <data name="AnnotationThreshold_Never" xml:space="preserve">
+    <value>Never</value>
   </data>
-  <data name="VersionFormat" xml:space="preserve">
-    <value>{0}.{1}.{2}</value>
+  <data name="AnnotationThreshold_Errors" xml:space="preserve">
+    <value>Only Errors</value>
   </data>
-  <data name="ViewOnGitHubTB.Text" xml:space="preserve">
-    <value>View on GitHub</value>
+  <data name="AnnotationThreshold_Warnings" xml:space="preserve">
+    <value>Warnings and Errors</value>
   </data>
-  <data name="EditorDemoText" xml:space="preserve">
-    <value># Editor Demo
-bar:  
-    addi    $s0, 10         # Error
-    sll     $s1, $s0, 33    # Warning
-    add     $zero, $s0, $s1 # Message
-.data
-foo:  
-    .asciiz "Hello World!"</value>
+  <data name="AnnotationThreshold_Always" xml:space="preserve">
+    <value>Always</value>
   </data>
-  <data name="SelectSchemeFileBTN.Content" xml:space="preserve">
-    <value>Select File</value>
+  <data name="CreateBTN.Content" xml:space="preserve">
+    <value>Create</value>
   </data>
-  <data name="LoadSchemeFromFileSC.Header" xml:space="preserve">
-    <value>Load from File</value>
+  <data name="CancelBTN.Content" xml:space="preserve">
+    <value>Cancel</value>
   </data>
-  <data name="LoadSchemeFromFileSC.Description" xml:space="preserve">
-    <value>Load an editor Color Scheme from a JSON file.</value>
+  <data name="MipsVersion_MipsI" xml:space="preserve">
+    <value>MIPS I</value>
   </data>
-  <data name="EditorColorSchemeSE.Header" xml:space="preserve">
-    <value>Color Scheme</value>
+  <data name="MipsVersion_MipsII" xml:space="preserve">
+    <value>MIPS II</value>
   </data>
-  <data name="EditorColorSchemeSE.Description" xml:space="preserve">
-    <value>Fully customize the color scheme of the text editor.</value>
+  <data name="MipsVersion_MipsIII" xml:space="preserve">
+    <value>MIPS III</value>
   </data>
-  <data name="RestoreOpenProjectSC.Header" xml:space="preserve">
-    <value>Restore Open Project/Folder</value>
+  <data name="MipsVersion_MipsIV" xml:space="preserve">
+    <value>MIPS IV</value>
   </data>
-  <data name="RestoreOpenProjectSC.Description" xml:space="preserve">
-    <value>Set whether or not the app should cache and restore the open the project/folder when opened.</value>
+  <data name="MipsVersion_MipsV" xml:space="preserve">
+    <value>MIPS V</value>
   </data>
-  <data name="ThirdPartyDependenciesTB.Text" xml:space="preserve">
-    <value>Third-Party Dependencies</value>
+  <data name="MipsVersion_MipsVI" xml:space="preserve">
+    <value>MIPS VI</value>
   </data>
-  <data name="MadeInIsraelSC.Header" xml:space="preserve">
-    <value>Hello from Tel Aviv</value>
+  <data name="BuildStatus/Succeeded" xml:space="preserve">
+    <value>{0} Succeeded</value>
   </data>
-  <data name="MadeInIsraelSC.Description" xml:space="preserve">
-    <value>Made in Israel</value>
+  <data name="BuildStatus/Failed" xml:space="preserve">
+    <value>{0} Failed</value>
   </data>
-  <data name="ThirdPartyDependenciesTB.Text" xml:space="preserve">
-    <value>תלויות של צד שלישי</value>
+  <data name="BuildStatus/Skipped" xml:space="preserve">
+    <value>{0} Skipped</value>
   </data>
-  <data name="MadeInIsraelSC.Header" xml:space="preserve">
-    <value>שלום מגבעתיים</value>
+  <data name="BuildStatus/OneSucceeded" xml:space="preserve">
+    <value>1 Succeeded</value>
   </data>
-  <data name="MadeInIsraelSC.Description" xml:space="preserve">
-    <value>תוצרת הארץ</value>
+  <data name="BuildStatus/OneSkipped" xml:space="preserve">
+    <value>1 Skipped</value>
+  </data>
+  <data name="BuildStatus/OneFailed" xml:space="preserve">
+    <value>1 Failed</value>
   </data>
 </root>

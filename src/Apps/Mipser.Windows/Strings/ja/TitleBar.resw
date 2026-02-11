@@ -117,122 +117,157 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutHeaderTB.Text" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="AboutSE.Description" xml:space="preserve">
-    <value>© Avishai Dernis</value>
-  </data>
-  <data name="AboutSE.Header" xml:space="preserve">
+  <data name="AboutMFI.Text" xml:space="preserve">
     <value>About MIPSer</value>
   </data>
-  <data name="AnnotationThresholdSC.Description" xml:space="preserve">
-    <value>When should the editor show log messages as an annotation below the log.</value>
+  <data name="AssembleFileMFI.Text" xml:space="preserve">
+    <value>Assemble File</value>
   </data>
-  <data name="AnnotationThresholdSC.Header" xml:space="preserve">
-    <value>Annotations Threshold</value>
+  <data name="AssembleOpenFilesMFI.Text" xml:space="preserve">
+    <value>Assemble Open Files</value>
   </data>
-  <data name="AppLanguageSC.Description" xml:space="preserve">
-    <value>Set the app's display language. (Requires a restart to take effect).</value>
+  <data name="AssembleProjectMFI.Text" xml:space="preserve">
+    <value>Assemble Project</value>
   </data>
-  <data name="AppLanguageSC.Header" xml:space="preserve">
-    <value>App Language</value>
+  <data name="BuildMBI.Title" xml:space="preserve">
+    <value>Build</value>
   </data>
-  <data name="AppSettingsTitle" xml:space="preserve">
-    <value>App Settings</value>
+  <data name="BuildProjectMFI.Text" xml:space="preserve">
+    <value>Build Project</value>
   </data>
-  <data name="AppThemeSC.Description" xml:space="preserve">
-    <value>Change the app's theme.</value>
+  <data name="CheatSheetMFI.Text" xml:space="preserve">
+    <value>Show Cheat Sheet</value>
   </data>
-  <data name="AppThemeSC.Header" xml:space="preserve">
-    <value>Theme</value>
+  <data name="CleanFileMFI.Text" xml:space="preserve">
+    <value>Clean File</value>
   </data>
-  <data name="AssemblerLanguageSC.Description" xml:space="preserve">
-    <value>Set the language used by for assembler log information.</value>
+  <data name="CleanOpenFilesMFI.Text" xml:space="preserve">
+    <value>Clean Open Files</value>
   </data>
-  <data name="AssemblerLanguageSC.Header" xml:space="preserve">
-    <value>Assembler Language</value>
+  <data name="CleanProjectMFI.Text" xml:space="preserve">
+    <value>Clean Project</value>
   </data>
-  <data name="AssemblerSettingsTitle" xml:space="preserve">
-    <value>Assembler Settings</value>
+  <data name="CloseFileMFI.Text" xml:space="preserve">
+    <value>Close File</value>
   </data>
-  <data name="EditorSettingsHeaderTB.Text" xml:space="preserve">
-    <value>Editor Settings</value>
+  <data name="CloseProjectMFI.Text" xml:space="preserve">
+    <value>Close Project</value>
   </data>
-  <data name="EditorSettingsTitle" xml:space="preserve">
-    <value>Editor Settings</value>
+  <data name="CollapseAllMFI.Text" xml:space="preserve">
+    <value>Collapse All</value>
   </data>
-  <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">
-    <value>Language Settings</value>
+  <data name="CollapseCurrentMFI.Text" xml:space="preserve">
+    <value>Collapse Current</value>
   </data>
-  <data name="RealTimeAssemblySC.Description" xml:space="preserve">
-    <value>Should the editor continuously assemble the open file to show errors in real-time?</value>
+  <data name="CopyMFI.Text" xml:space="preserve">
+    <value>Copy</value>
   </data>
-  <data name="RealTimeAssemblySC.Header" xml:space="preserve">
-    <value>Real-Time Assembly</value>
+  <data name="CutMFI.Text" xml:space="preserve">
+    <value>Cut</value>
   </data>
-  <data name="ThemeSettingsHeaderTB.Text" xml:space="preserve">
-    <value>Theme Settings</value>
+  <data name="DebugMBI.Title" xml:space="preserve">
+    <value>Debug</value>
   </data>
-  <data name="UseAppLanguage" xml:space="preserve">
-    <value>Use App Language</value>
+  <data name="DuplicateMFI.Text" xml:space="preserve">
+    <value>Duplicate</value>
   </data>
-  <data name="UseSystemLanguage" xml:space="preserve">
-    <value>Use System Language</value>
+  <data name="EditMBI.Title" xml:space="preserve">
+    <value>Edit</value>
   </data>
-  <data name="VersionFormat" xml:space="preserve">
-    <value>{0}.{1}.{2}</value>
+  <data name="EditorAdvancedMFSI.Text" xml:space="preserve">
+    <value>Advanced</value>
   </data>
-  <data name="ViewOnGitHubTB.Text" xml:space="preserve">
-    <value>View on GitHub</value>
+  <data name="ExpandAllMFI.Text" xml:space="preserve">
+    <value>Expand All</value>
   </data>
-  <data name="EditorDemoText" xml:space="preserve">
-    <value># Editor Demo
-bar:  
-    addi    $s0, 10         # Error
-    sll     $s1, $s0, 33    # Warning
-    add     $zero, $s0, $s1 # Message
-.data
-foo:  
-    .asciiz "Hello World!"</value>
+  <data name="ExpandCurrentMFI.Text" xml:space="preserve">
+    <value>Expand Current</value>
   </data>
-  <data name="SelectSchemeFileBTN.Content" xml:space="preserve">
-    <value>Select File</value>
+  <data name="FileMBI.Title" xml:space="preserve">
+    <value>File</value>
   </data>
-  <data name="LoadSchemeFromFileSC.Header" xml:space="preserve">
-    <value>Load from File</value>
+  <data name="HelpMBI.Title" xml:space="preserve">
+    <value>Help</value>
   </data>
-  <data name="LoadSchemeFromFileSC.Description" xml:space="preserve">
-    <value>Load an editor Color Scheme from a JSON file.</value>
+  <data name="MoveLineDownMFI.Text" xml:space="preserve">
+    <value>Shift Line Down</value>
   </data>
-  <data name="EditorColorSchemeSE.Header" xml:space="preserve">
-    <value>Color Scheme</value>
+  <data name="MoveLineUpMFI.Text" xml:space="preserve">
+    <value>Shift Line Up</value>
   </data>
-  <data name="EditorColorSchemeSE.Description" xml:space="preserve">
-    <value>Fully customize the color scheme of the text editor.</value>
+  <data name="NewFileMFI.Text" xml:space="preserve">
+    <value>New File</value>
   </data>
-  <data name="RestoreOpenProjectSC.Header" xml:space="preserve">
-    <value>Restore Open Project/Folder</value>
+  <data name="NewMFSI.Text" xml:space="preserve">
+    <value>New</value>
   </data>
-  <data name="RestoreOpenProjectSC.Description" xml:space="preserve">
-    <value>Set whether or not the app should cache and restore the open the project/folder when opened.</value>
+  <data name="NewProjectMFI.Text" xml:space="preserve">
+    <value>New Project</value>
   </data>
-  <data name="ThirdPartyDependenciesTB.Text" xml:space="preserve">
-    <value>Third-Party Dependencies</value>
+  <data name="OpenFileMFI.Text" xml:space="preserve">
+    <value>Open File</value>
   </data>
-  <data name="MadeInIsraelSC.Header" xml:space="preserve">
-    <value>Hello from Tel Aviv</value>
+  <data name="OpenFolderMFI.Text" xml:space="preserve">
+    <value>Open Folder</value>
   </data>
-  <data name="MadeInIsraelSC.Description" xml:space="preserve">
-    <value>Made in Israel</value>
+  <data name="OpenMFSI.Text" xml:space="preserve">
+    <value>Open</value>
   </data>
-  <data name="ThirdPartyDependenciesTB.Text" xml:space="preserve">
-    <value>תלויות של צד שלישי</value>
+  <data name="OpenProjectMFI.Text" xml:space="preserve">
+    <value>Open Project</value>
   </data>
-  <data name="MadeInIsraelSC.Header" xml:space="preserve">
-    <value>שלום מגבעתיים</value>
+  <data name="OutliningMFSI.Text" xml:space="preserve">
+    <value>Outlining</value>
   </data>
-  <data name="MadeInIsraelSC.Description" xml:space="preserve">
-    <value>תוצרת הארץ</value>
+  <data name="PasteMFI.Text" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="RebuildProjectMFI.Text" xml:space="preserve">
+    <value>Rebuild Project</value>
+  </data>
+  <data name="RedoMFI.Text" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="SaveAllMFI.Text" xml:space="preserve">
+    <value>Save All</value>
+  </data>
+  <data name="SaveCurrentFileMFI.Text" xml:space="preserve">
+    <value>Save Current File</value>
+  </data>
+  <data name="SaveMFI.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SelectAllMFI.Text" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="SettingsMFI.Text" xml:space="preserve">
+    <value>MIPSer Settings</value>
+  </data>
+  <data name="StartDebuggingMFI.Text" xml:space="preserve">
+    <value>Start Debugging</value>
+  </data>
+  <data name="StartWithoutDebuggingMFI.Text" xml:space="preserve">
+    <value>Start Without Debugging</value>
+  </data>
+  <data name="StepIntoMFI.Text" xml:space="preserve">
+    <value>Step Into</value>
+  </data>
+  <data name="StepOutMFI.Text" xml:space="preserve">
+    <value>Step Out</value>
+  </data>
+  <data name="StepOverMFI.Text" xml:space="preserve">
+    <value>Step Over</value>
+  </data>
+  <data name="ToggleFullScreenMFI.Text" xml:space="preserve">
+    <value>Toggle Full Screen</value>
+  </data>
+  <data name="UndoMFI.Text" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="ViewMBI.Title" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="WelcomeMFI.Text" xml:space="preserve">
+    <value>Open Welcome Page</value>
   </data>
 </root>

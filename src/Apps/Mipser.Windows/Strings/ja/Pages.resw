@@ -117,122 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutHeaderTB.Text" xml:space="preserve">
-    <value>About</value>
+  <data name="CreateProject/CreateANewProjectTB.Text" xml:space="preserve">
+    <value>Create a new project</value>
   </data>
-  <data name="AboutSE.Description" xml:space="preserve">
-    <value>© Avishai Dernis</value>
+  <data name="CreateProject/FolderTBox.Header" xml:space="preserve">
+    <value>Folder</value>
   </data>
-  <data name="AboutSE.Header" xml:space="preserve">
-    <value>About MIPSer</value>
+  <data name="CreateProject/FolderTBox.PlaceholderText" xml:space="preserve">
+    <value>Path</value>
   </data>
-  <data name="AnnotationThresholdSC.Description" xml:space="preserve">
-    <value>When should the editor show log messages as an annotation below the log.</value>
+  <data name="CreateProject/MipsVersionCB.Header" xml:space="preserve">
+    <value>Mips Version</value>
   </data>
-  <data name="AnnotationThresholdSC.Header" xml:space="preserve">
-    <value>Annotations Threshold</value>
+  <data name="CreateProject/ProjectNameTBox.Header" xml:space="preserve">
+    <value>Project Name</value>
   </data>
-  <data name="AppLanguageSC.Description" xml:space="preserve">
-    <value>Set the app's display language. (Requires a restart to take effect).</value>
+  <data name="CreateProject/ProjectNameTBox.PlaceholderText" xml:space="preserve">
+    <value>Cool Project Name</value>
   </data>
-  <data name="AppLanguageSC.Header" xml:space="preserve">
-    <value>App Language</value>
+  <data name="CreateProject/SelectFolderBTN.Content" xml:space="preserve">
+    <value>Select Folder</value>
   </data>
-  <data name="AppSettingsTitle" xml:space="preserve">
-    <value>App Settings</value>
+  <data name="Explorer/CreateNewProjectBTN.Content" xml:space="preserve">
+    <value>Create New Project</value>
   </data>
-  <data name="AppThemeSC.Description" xml:space="preserve">
-    <value>Change the app's theme.</value>
+  <data name="Explorer/RecentFolderListItem" xml:space="preserve">
+    <value>{0}/{1} (Folder)</value>
   </data>
-  <data name="AppThemeSC.Header" xml:space="preserve">
-    <value>Theme</value>
-  </data>
-  <data name="AssemblerLanguageSC.Description" xml:space="preserve">
-    <value>Set the language used by for assembler log information.</value>
-  </data>
-  <data name="AssemblerLanguageSC.Header" xml:space="preserve">
-    <value>Assembler Language</value>
-  </data>
-  <data name="AssemblerSettingsTitle" xml:space="preserve">
-    <value>Assembler Settings</value>
-  </data>
-  <data name="EditorSettingsHeaderTB.Text" xml:space="preserve">
-    <value>Editor Settings</value>
-  </data>
-  <data name="EditorSettingsTitle" xml:space="preserve">
-    <value>Editor Settings</value>
-  </data>
-  <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">
-    <value>Language Settings</value>
-  </data>
-  <data name="RealTimeAssemblySC.Description" xml:space="preserve">
-    <value>Should the editor continuously assemble the open file to show errors in real-time?</value>
-  </data>
-  <data name="RealTimeAssemblySC.Header" xml:space="preserve">
-    <value>Real-Time Assembly</value>
-  </data>
-  <data name="ThemeSettingsHeaderTB.Text" xml:space="preserve">
-    <value>Theme Settings</value>
-  </data>
-  <data name="UseAppLanguage" xml:space="preserve">
-    <value>Use App Language</value>
-  </data>
-  <data name="UseSystemLanguage" xml:space="preserve">
-    <value>Use System Language</value>
-  </data>
-  <data name="VersionFormat" xml:space="preserve">
-    <value>{0}.{1}.{2}</value>
-  </data>
-  <data name="ViewOnGitHubTB.Text" xml:space="preserve">
-    <value>View on GitHub</value>
-  </data>
-  <data name="EditorDemoText" xml:space="preserve">
-    <value># Editor Demo
-bar:  
-    addi    $s0, 10         # Error
-    sll     $s1, $s0, 33    # Warning
-    add     $zero, $s0, $s1 # Message
-.data
-foo:  
-    .asciiz "Hello World!"</value>
-  </data>
-  <data name="SelectSchemeFileBTN.Content" xml:space="preserve">
-    <value>Select File</value>
-  </data>
-  <data name="LoadSchemeFromFileSC.Header" xml:space="preserve">
-    <value>Load from File</value>
-  </data>
-  <data name="LoadSchemeFromFileSC.Description" xml:space="preserve">
-    <value>Load an editor Color Scheme from a JSON file.</value>
-  </data>
-  <data name="EditorColorSchemeSE.Header" xml:space="preserve">
-    <value>Color Scheme</value>
-  </data>
-  <data name="EditorColorSchemeSE.Description" xml:space="preserve">
-    <value>Fully customize the color scheme of the text editor.</value>
-  </data>
-  <data name="RestoreOpenProjectSC.Header" xml:space="preserve">
-    <value>Restore Open Project/Folder</value>
-  </data>
-  <data name="RestoreOpenProjectSC.Description" xml:space="preserve">
-    <value>Set whether or not the app should cache and restore the open the project/folder when opened.</value>
-  </data>
-  <data name="ThirdPartyDependenciesTB.Text" xml:space="preserve">
-    <value>Third-Party Dependencies</value>
-  </data>
-  <data name="MadeInIsraelSC.Header" xml:space="preserve">
-    <value>Hello from Tel Aviv</value>
-  </data>
-  <data name="MadeInIsraelSC.Description" xml:space="preserve">
-    <value>Made in Israel</value>
-  </data>
-  <data name="ThirdPartyDependenciesTB.Text" xml:space="preserve">
-    <value>תלויות של צד שלישי</value>
-  </data>
-  <data name="MadeInIsraelSC.Header" xml:space="preserve">
-    <value>שלום מגבעתיים</value>
-  </data>
-  <data name="MadeInIsraelSC.Description" xml:space="preserve">
-    <value>תוצרת הארץ</value>
+  <data name="Explorer/RecentProjectsAndFoldersTB.Text" xml:space="preserve">
+    <value>Recent Projects and Folders</value>
   </data>
 </root>
