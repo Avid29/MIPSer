@@ -25,7 +25,7 @@ Current languages:
 | English  | Yes         | Yes               |
 | Hebrew   | Yes         | Yes               |
 
-![Crowdin](https://badges.crowdin.net/mipser/localized.svg)
+[![Crowdin](https://badges.crowdin.net/mipser/localized.svg)](https://crowdin.com/project/mipser)
 
 Help translate on [Crowdin](https://crowdin.com/project/mipser)!
 
