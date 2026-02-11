@@ -39,6 +39,11 @@ public partial class Module
     public string? Name { get; } 
 
     /// <summary>
+    /// Gets the symbol designating the entry point of the module.
+    /// </summary>
+    public SymbolEntry? Entry { get; private set; }
+
+    /// <summary>
     /// Gets the references dictionary.
     /// </summary>
     public IReadOnlyList<ReferenceEntry> References => _references;
@@ -52,4 +57,23 @@ public partial class Module
     /// Gets the module sections streams.
     /// </summary>
     public IReadOnlyDictionary<string, ModuleSection> Sections => _sections;
+
+    /// <summary>
+    /// Sets the entry point of the module.
+    /// </summary>
+    /// <param name="symbolName">The name of the symbol for the entry point.</param>
+    /// <returns>The </returns>
+    public SymbolEntry? SetEntryPoint(string? symbolName)
+    {
+        // Determine new entry symbol
+        SymbolEntry? newEntry = null;
+        if (symbolName is not null)
+        {
+            Symbols.TryGetValue(symbolName, out newEntry);
+        }
+
+        // Assign and return
+        Entry = newEntry;
+        return Entry;
+    }
 }

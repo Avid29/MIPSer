@@ -125,6 +125,23 @@ public partial class ElfModule
                 ElfFile.Add(table);
             }
         }
+
+        public void SetEntry()
+        {
+            // Ensure there is an entry point
+            var entry = Module.Entry;
+            if (entry is null || !entry.IsDefined)
+                return;
+
+            // Fetch the section the entry point belongs to
+            var entrySection = ElfFile.Sections.FirstOrDefault(x => x.Name == (entry.Address.Value.Section ?? ""));
+            if (entrySection is null)
+                return;
+
+            // Calculate and set the entry point address as an offset of the section's virual address
+            var entryPoint = entrySection.VirtualAddress + (uint)entry.Address.Value.Value;
+            ElfFile.EntryPointAddress = entryPoint;
+        }
     }
 
     /// <inheritdoc/>
@@ -135,6 +152,7 @@ public partial class ElfModule
         context.CreateSections();
         context.CreateSymTable();
         context.CreateRelTables();
+        context.SetEntry();
 
         return new ElfModule(context.Module.Name, context.ElfFile);
     }

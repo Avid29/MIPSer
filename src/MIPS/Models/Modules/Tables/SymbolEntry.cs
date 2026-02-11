@@ -2,6 +2,7 @@
 
 using MIPS.Models.Addressing;
 using MIPS.Models.Modules.Tables.Enums;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MIPS.Models.Modules.Tables;
 
@@ -49,5 +50,6 @@ public class SymbolEntry
     /// <summary>
     /// Gets whether or not the address is defined.
     /// </summary>
+    [MemberNotNullWhen(true, nameof(Address))]
     public bool IsDefined => Address is not null;
 }

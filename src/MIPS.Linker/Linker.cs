@@ -51,6 +51,15 @@ public class Linker
             linker.LinkModule(module);
         }
 
+        if (entryPoint is not null)
+        {
+            // TODO: Verify the module is execution ready
+
+            // Set the entry point
+            linker._module.SetEntryPoint(entryPoint);
+        }
+
+
         return linker;
     }
 
