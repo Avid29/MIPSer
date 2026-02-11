@@ -1,0 +1,63 @@
+<Solution>
+  <Configurations>
+    <Platform Name="ARM" />
+    <Platform Name="arm64" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Archs/" />
+  <Folder Name="/Archs/MIPS/">
+    <Project Path="src/Archs/MIPS/Zarem.Assembler.MIPS/Zarem.Assembler.MIPS.csproj" />
+    <Project Path="src/Archs/MIPS/Zarem.Debugger.MIPS/Zarem.Debugger.MIPS.csproj" />
+    <Project Path="src/Archs/MIPS/Zarem.Disassembler.MIPS/Zarem.Disassembler.MIPS.csproj" />
+    <Project Path="src/Archs/MIPS/Zarem.Emulator.MIPS/Zarem.Emulator.MIPS.csproj" />
+    <Project Path="src/Archs/MIPS/Zarem.Linker.MIPS/Zarem.Linker.MIPS.csproj" />
+    <Project Path="src/Archs/MIPS/Zarem.MIPS/Zarem.MIPS.csproj" />
+  </Folder>
+  <Folder Name="/Clients/">
+    <Project Path="src/Clients/Zarem.Console/Zarem.Console.csproj" />
+    <Project Path="src/Clients/Zarem.ViewModels/Zarem.ViewModels.csproj" />
+    <Project Path="src/Clients/Zarem.Windows/Zarem.Windows.csproj">
+      <Platform Solution="*|ARM" Project="x64" />
+      <Platform Solution="*|arm64" Project="ARM64" />
+      <Platform Solution="*|x64" Project="x64" />
+      <Platform Solution="*|x86" Project="x86" />
+      <Deploy />
+    </Project>
+  </Folder>
+  <Folder Name="/ObjFormats/">
+    <Project Path="src/ObjFormats/ObjFormats.LibOF/ObjFormats.LibOF.csproj" />
+    <Project Path="src/ObjFormats/ObjFormats.RASM/ObjFormats.RASM.csproj" />
+  </Folder>
+  <Folder Name="/SolutionItems/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path=".gitmodules" />
+    <File Path="crowdin.yml" />
+    <File Path="Directory.Build.props" />
+    <File Path="nuget.config" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/Submodules/">
+    <File Path="submodules/Directory.Build.props" />
+    <File Path="submodules/WinUIEdit/UseWinUI3.txt" />
+    <Project Path="submodules/WinUIEdit/WinUIEditor/WinUIEditor.vcxproj" Id="290647e3-d8cb-46b5-87ce-409f721e441a" />
+  </Folder>
+  <Folder Name="/Tests/" />
+  <Folder Name="/Tests/Archs/" />
+  <Folder Name="/Tests/Archs/MIPS/">
+    <Project Path="tests/Archs/MIPS/Test.Assembler.MIPS.Live/Test.Assembler.MIPS.Live.csproj" />
+    <Project Path="tests/Archs/MIPS/Test.Assembler.MIPS/Test.Assembler.MIPS.csproj" />
+    <Project Path="tests/Archs/MIPS/Test.Emulator.MIPS/Tests.Emulator.MIPS.csproj" />
+    <Project Path="tests/Archs/MIPS/Test.Linker.MIPS/Test.Linker.MIPS.csproj" />
+    <Project Path="tests/Archs/MIPS/Test.MIPS.Asms/Test.MIPS.Asms.vcxitems" Id="f152d20e-aa8a-4d50-9852-0eb0b4a962c4" />
+    <Project Path="tests/Archs/MIPS/Test.MIPS/Test.MIPS.csproj" />
+  </Folder>
+  <Folder Name="/Tests/ObjFormats/">
+    <Project Path="tests/ObjFormats/Test.ELF/Test.ELF.csproj" />
+    <Project Path="tests/ObjFormats/Test.Formats/Test.ObjFormats.csproj" />
+    <Project Path="tests/ObjFormats/Test.RASM/Test.RASM.csproj" />
+  </Folder>
+  <Project Path="src/Zarem/Zarem.csproj" />
+</Solution>

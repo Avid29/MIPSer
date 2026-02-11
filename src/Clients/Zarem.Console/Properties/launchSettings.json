@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Zarem": {
+      "commandName": "Project",
+      "commandLineArgs": "playground1.asm",
+      "workingDirectory": "C:\\Users\\avid2\\source\\repos\\Personal\\Zarem\\tests\\Test.MIPS\\ASMs"
+    }
+  }
+}

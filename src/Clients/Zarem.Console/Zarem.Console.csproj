@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+	  <RootNamespace>Zarem</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Archs\MIPS\Zarem.Assembler.MIPS\Zarem.Assembler.MIPS.csproj" />
+    <ProjectReference Include="..\..\ObjFormats\ObjFormats.LibOF\ObjFormats.LibOF.csproj" />
+    <ProjectReference Include="..\..\ObjFormats\ObjFormats.RASM\ObjFormats.RASM.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -4,11 +4,11 @@
 
 # Introduction
 
-**MIPSer** is an IDE for the MIPS assembly language. It is very much a WIP, but the goal is to create the most accessible environment possible for learning to write assembly code.
+**Zarem** is an IDE for the MIPS assembly language. It is very much a WIP, but the goal is to create the most accessible environment possible for learning to write assembly code.
 
 # Cross-Platform Usage
 
-The MIPSer IDE is a WinUI 3 project, and therefore only available on Windows. **However**, the Assembler and Emulator are made in .NET 10 with no windows-only dependendencies, and therefore available on any machine with the .NET runtime.
+The Zarem IDE is a WinUI 3 project, and therefore only available on Windows. **However**, the Assembler and Emulator are made in .NET 10 with no windows-only dependendencies, and therefore available on any machine with the .NET runtime.
 
 | Assembler      | Emulator        | IDE          |
 | -------------- | --------------- | ------------ |
@@ -16,7 +16,7 @@ The MIPSer IDE is a WinUI 3 project, and therefore only available on Windows. **
 
 # Translation
 
-MIPSer supports localization for both the IDE and the Assembler. Assembler localization is integrated directly into the assembler, and is therefore available in the console as-well-as the MIPSer IDE app.
+Zarem supports localization for both the IDE and the Assembler. Assembler localization is integrated directly into the assembler, and is therefore available in the console as-well-as the Zarem IDE app.
 
 Current languages:
 
@@ -25,9 +25,9 @@ Current languages:
 | English  | Yes         | Yes               |
 | Hebrew   | Yes         | Yes               |
 
-[![Crowdin](https://badges.crowdin.net/mipser/localized.svg)](https://crowdin.com/project/mipser)
+[![Crowdin](https://badges.crowdin.net/Zarem/localized.svg)](https://crowdin.com/project/Zarem)
 
-Help translate on [Crowdin](https://crowdin.com/project/mipser)!
+Help translate on [Crowdin](https://crowdin.com/project/Zarem)!
 
 # Screenshots
 

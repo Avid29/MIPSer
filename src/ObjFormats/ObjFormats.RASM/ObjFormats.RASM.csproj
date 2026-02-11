@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Archs\MIPS\Zarem.Assembler.MIPS\Zarem.Assembler.MIPS.csproj" />
+	  <ProjectReference Include="..\..\Archs\MIPS\Zarem.Emulator.MIPS\Zarem.Emulator.MIPS.csproj" />
+	</ItemGroup>
+
+</Project>

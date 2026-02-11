@@ -1,0 +1,22 @@
+{
+  "name": "Zarem Dark",
+  "theme": 1,
+  "foreground": "#FFFFFF",
+  "background": "#131215",
+  "syntax_highlighting": {
+    "instruction": "#A7FA95",
+    "register": "#FE8482",
+    "immediate": "#F8FC8B",
+    "reference": "#73EEFD",
+    "operator": "#77A7FD",
+    "directive": "#FA9EF6",
+    "string": "#FFC47A",
+    "comment": "#9B88FC",
+    "macro": "#BF472F"
+  },
+  "log_colors": {
+    "error": "#FF0000",
+    "warning": "#FFAA00",
+    "message": "#00AAFF"
+  }
+}

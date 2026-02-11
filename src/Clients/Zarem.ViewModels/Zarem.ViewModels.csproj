@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+	<RootNamespace>Zarem</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ColorSchemes\Autumn.json" />
+    <EmbeddedResource Include="Resources\ColorSchemes\Winter.json" />
+    <EmbeddedResource Include="Resources\ColorSchemes\Terminal-Dark.json" />
+    <EmbeddedResource Include="Resources\ColorSchemes\Terminal-Light.json" />
+    <EmbeddedResource Include="Resources\ColorSchemes\Zarem-Dark.json" />
+    <EmbeddedResource Include="Resources\ColorSchemes\Zarem-Light.json" />
+    <EmbeddedResource Include="Resources\EncodingPatterns\UniqueEncodings.json" />
+    <EmbeddedResource Include="Resources\EncodingPatterns\CoProcessor0Encodings.json" />
+    <EmbeddedResource Include="Resources\EncodingPatterns\CoProcessor1Encodings.json" />
+    <EmbeddedResource Include="Resources\EncodingPatterns\PrimaryEncodings.json" />
+    <EmbeddedResource Include="Resources\Instructions\FloatInstructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\SpecializedInstructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\CoProc0Instructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\CommonInstructions.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Zarem\Zarem.csproj" />
+  </ItemGroup>
+
+</Project>

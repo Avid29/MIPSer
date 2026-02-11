@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <RootNamespace>Zarem.Assembler.MIPS</RootNamespace>
+	  <DefaultLanguage>en</DefaultLanguage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Instructions\CoProcessor1Instructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\FloatingPointInstructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\CoProcessor0Instructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\ITypeInstructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\JTypeInstructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\PseudoInstructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\RegImmInstructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\RTypeInstructions.json" />
+    <EmbeddedResource Include="Resources\Instructions\Special2Instructions.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zarem.MIPS\Zarem.MIPS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Logger.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Logger.en.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Logger.en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Logger.en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
