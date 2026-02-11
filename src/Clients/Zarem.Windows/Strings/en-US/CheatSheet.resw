@@ -117,113 +117,145 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AboutHeaderTB.Text" xml:space="preserve">
-    <value>אודות</value>
+  <data name="EncodingPattern/RTypeInstructions" xml:space="preserve">
+    <value>Register (R) Type Instructions</value>
   </data>
-  <data name="AboutSE.Description" xml:space="preserve">
-    <value>© אבישי דרניס</value>
+  <data name="EncodingPattern/ITypeInstructions" xml:space="preserve">
+    <value>Immediate (I) Type Instructions</value>
   </data>
-  <data name="AboutSE.Header" xml:space="preserve">
-    <value>אודות זרם</value>
+  <data name="EncodingPattern/JTypeInstructions" xml:space="preserve">
+    <value>Jump (J) Type Instructions</value>
   </data>
-  <data name="AnnotationThresholdSC.Description" xml:space="preserve">
-    <value>מתי על העורך להציג הודעות יומן כהערות מתחת ליומן.</value>
+  <data name="EncodingPattern/BTypeInstructions" xml:space="preserve">
+    <value>Branch/Trap (B) Type Instructions</value>
   </data>
-  <data name="AnnotationThresholdSC.Header" xml:space="preserve">
-    <value>סף הערות</value>
+  <data name="EncodingPattern/C0Instructions" xml:space="preserve">
+    <value>C0 Instructions</value>
   </data>
-  <data name="AppLanguageSC.Description" xml:space="preserve">
-    <value>בחר את שפת התצוגה של היישום. (נדרשת הפעלה מחדש כדי שהשינוי ייכנס לתוקף).</value>
+  <data name="EncodingPattern/CoProc0MoveInstructions" xml:space="preserve">
+    <value>CoProcessor0 Move Instructions</value>
   </data>
-  <data name="AppLanguageSC.Header" xml:space="preserve">
-    <value>שפת האפליקציה</value>
+  <data name="EncodingPattern/FloatingPointInstructions" xml:space="preserve">
+    <value>Floating-Point Instructions</value>
   </data>
-  <data name="AppSettingsTitle" xml:space="preserve">
-    <value>הגדרות אפליקציה</value>
+  <data name="EncodingPattern/CoProc1MoveInstructions" xml:space="preserve">
+    <value>CoProcessor1 Move Instructions</value>
   </data>
-  <data name="AppThemeSC.Description" xml:space="preserve">
-    <value>שנה את הצבעים המופעים של היישום.</value>
+  <data name="EncodingPattern/CoProc1XInstructions" xml:space="preserve">
+    <value>CoProcessor1X Instructions</value>
   </data>
-  <data name="AppThemeSC.Header" xml:space="preserve">
-    <value>בחרית מצב</value>
+  <data name="EncodingPattern/SyscallBreakSdbbp" xml:space="preserve">
+    <value>SYSCALL / BREAK / SDBBP</value>
   </data>
-  <data name="AssemblerLanguageSC.Description" xml:space="preserve">
-    <value>בחר את השפה המשמשת ליומן האסמבלר.</value>
+  <data name="EncodingPattern/Sync" xml:space="preserve">
+    <value>SYNC</value>
   </data>
-  <data name="AssemblerLanguageSC.Header" xml:space="preserve">
-    <value>שפת אסמבלר</value>
+  <data name="EncodingPattern/CachePref" xml:space="preserve">
+    <value>CACHE / PREF</value>
   </data>
-  <data name="AssemblerSettingsTitle" xml:space="preserve">
-    <value>הגדרות אסמבלר</value>
+  <data name="EncodingPattern/ExecutionHazardBarrier" xml:space="preserve">
+    <value>Execution Hazard Barrier</value>
   </data>
-  <data name="EditorSettingsHeaderTB.Text" xml:space="preserve">
-    <value>הגדרות עורך</value>
+  <data name="CommonInstructionsTB.Text" xml:space="preserve">
+    <value>Common Instructions</value>
   </data>
-  <data name="EditorSettingsTitle" xml:space="preserve">
-    <value>הגדרות עורך</value>
+  <data name="InstructionUsageTablesTB.Text" xml:space="preserve">
+    <value>Instruction Usage Tables</value>
   </data>
-  <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">
-    <value>הגדרות שפה</value>
+  <data name="CoProc0InstructionsTB.Text" xml:space="preserve">
+    <value>CoProcessor0 Instruction</value>
   </data>
-  <data name="RealTimeAssemblySC.Description" xml:space="preserve">
-    <value>האם העורך צריך להרכיב את הקובץ הפתוח באופן רציף כדי להציג שגיאות בזמן אמת?</value>
+  <data name="CoProc0InstructionTypePatternsTB.Text" xml:space="preserve">
+    <value>CoProcessor0 Instruction Types Encoding Patterns</value>
   </data>
-  <data name="RealTimeAssemblySC.Header" xml:space="preserve">
-    <value>הרכבה בזמן אמת</value>
+  <data name="CoProc1InstructionTypePatternsTB.Text" xml:space="preserve">
+    <value>Floating-Point CoProcessor Instruction Types Encoding Patterns</value>
   </data>
-  <data name="ThemeSettingsHeaderTB.Text" xml:space="preserve">
-    <value>הגדרות נושא</value>
+  <data name="FloatInstructionsTB.Text" xml:space="preserve">
+    <value>Floating-Point Instructions</value>
   </data>
-  <data name="UseAppLanguage" xml:space="preserve">
-    <value>שימוש בשפת היישום</value>
+  <data name="SpecializedInstructionsTB.Text" xml:space="preserve">
+    <value>Specialized Instructions</value>
   </data>
-  <data name="UseSystemLanguage" xml:space="preserve">
-    <value>שימוש בשפת המערכת</value>
+  <data name="InstructionEncodingPatternsTB.Text" xml:space="preserve">
+    <value>Instruction Encoding Patterns</value>
   </data>
-  <data name="VersionFormat" xml:space="preserve">
-    <value>{0}.{1}.{2}</value>
+  <data name="PrimaryInstructionTypePatternsTB.Text" xml:space="preserve">
+    <value>Primary Instruction Types Encoding Patterns</value>
   </data>
-  <data name="ViewOnGitHubTB.Text" xml:space="preserve">
-    <value>צפה ב-GitHub</value>
+  <data name="EncodingTablesTB.Text" xml:space="preserve">
+    <value>Encoding Tables</value>
   </data>
-  <data name="EditorDemoText" xml:space="preserve">
-    <value># דגמת עורך
-bar:  
-    addi    $s0, 10         # שגיאה  
-    sll     $s1, $s0, 33    # אזהרה  
-    add     $zero, $s0, $s1 # הודעה  
-.data
-foo:  
-    .asciiz "שלום עולם"</value>
+  <data name="UniqueInstructionPatternsTB.Text" xml:space="preserve">
+    <value>Unique Instruction Encoding Patterns</value>
   </data>
-  <data name="SelectSchemeFileBTN.Content" xml:space="preserve">
-    <value>בחר קובץ</value>
+  <data name="GeneralPurposeRegisterEncodingTB.Text" xml:space="preserve">
+    <value>General Purpose Register Encoding</value>
   </data>
-  <data name="LoadSchemeFromFileSC.Header" xml:space="preserve">
-    <value>טען מקובץ</value>
+  <data name="InstructionGroup/SignedArithmetic" xml:space="preserve">
+    <value>Arithmetic (Signed)</value>
   </data>
-  <data name="LoadSchemeFromFileSC.Description" xml:space="preserve">
-    <value>טען ערכת צבעים של העורך מקובץ JSON.</value>
+  <data name="InstructionGroup/UnsignedArithmetic" xml:space="preserve">
+    <value>Arithmetic (Unsigned)</value>
   </data>
-  <data name="EditorColorSchemeSE.Header" xml:space="preserve">
-    <value>ערכת צבעים</value>
+  <data name="InstructionGroup/Logical" xml:space="preserve">
+    <value>Logical</value>
   </data>
-  <data name="EditorColorSchemeSE.Description" xml:space="preserve">
-    <value>התאם באופן מלא את ערכת הצבעים של עורך הטקסט.</value>
+  <data name="InstructionGroup/Memory" xml:space="preserve">
+    <value>Memory</value>
   </data>
-  <data name="RestoreOpenProjectSC.Header" xml:space="preserve">
-    <value>שחזר פרויקט/תיקייה פתוחים</value>
+  <data name="InstructionGroup/Jump" xml:space="preserve">
+    <value>Jump</value>
   </data>
-  <data name="RestoreOpenProjectSC.Description" xml:space="preserve">
-    <value>קבע האם היישום ישמור במטמון וישחזר את הפרויקט/התיקיה הפתוחים בעת ההפעלה.</value>
+  <data name="InstructionGroup/Data" xml:space="preserve">
+    <value>Data</value>
   </data>
-  <data name="ThirdPartyDependenciesTB.Text" xml:space="preserve">
-    <value>תלויות של צד שלישי</value>
+  <data name="InstructionGroup/Branch" xml:space="preserve">
+    <value>Branch</value>
   </data>
-  <data name="MadeInIsraelSC.Header" xml:space="preserve">
-    <value>שלום מגבעתיים</value>
+  <data name="InstructionGroup/Compare" xml:space="preserve">
+    <value>Compare</value>
   </data>
-  <data name="MadeInIsraelSC.Description" xml:space="preserve">
-    <value>תוצרת הארץ</value>
+  <data name="InstructionGroup/System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="InstructionGroup/Move" xml:space="preserve">
+    <value>Move</value>
+  </data>
+  <data name="InstructionGroup/Interrupts" xml:space="preserve">
+    <value>Interrupts</value>
+  </data>
+  <data name="InstructionGroup/TLB" xml:space="preserve">
+    <value>Translation Lookaside Buffer</value>
+  </data>
+  <data name="InstructionGroup/Debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="InstructionGroup/FPArithmetic" xml:space="preserve">
+    <value>Floating-Point Arithmetic</value>
+  </data>
+  <data name="InstructionGroup/FPRounding" xml:space="preserve">
+    <value>Floating-Point Rounding</value>
+  </data>
+  <data name="InstructionGroup/FPConversion" xml:space="preserve">
+    <value>Floating-Point Conversion</value>
+  </data>
+  <data name="InstructionGroup/FPConditionalMove" xml:space="preserve">
+    <value>Conditional Move</value>
+  </data>
+  <data name="InstructionGroup/Trap" xml:space="preserve">
+    <value>Trap</value>
+  </data>
+  <data name="Usage/address" xml:space="preserve">
+    <value>address</value>
+  </data>
+  <data name="Usage/immediate" xml:space="preserve">
+    <value>immediate</value>
+  </data>
+  <data name="Usage/offset" xml:space="preserve">
+    <value>offset</value>
+  </data>
+  <data name="Usage/shift" xml:space="preserve">
+    <value>shift</value>
   </data>
 </root>
