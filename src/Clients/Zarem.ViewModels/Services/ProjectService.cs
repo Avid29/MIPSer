@@ -13,6 +13,7 @@ using Zarem.MIPS.Projects;
 using Zarem.Models;
 using Zarem.Models.Files;
 using Zarem.Serialization;
+using Zarem.Serialization.Registry;
 using Zarem.Services.Files;
 using Zarem.Services.Files.Models;
 using Zarem.Services.Settings;
@@ -124,13 +125,7 @@ public class ProjectService : IProjectService
         if (file is null)
             return;
 
-        // Attempt to open the file as a stream
-        var stream = await file.OpenStreamForReadAsync();
-        if (stream is null)
-            return;
-
-        var project = ProjectFactory.Load(stream, path);
-        project.Config.ConfigPath = path;
+        var project = ProjectFactory.Load(path);
 
         // Open the project
         await OpenProjectAsync(project.Config, cacheState);

@@ -4,13 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Zarem.Assembler.Models.Modules;
 using Zarem.Attributes;
 using Zarem.Config;
-using Zarem.Emulator.Models.Modules;
 using Zarem.Models.Modules.Interface;
 
-namespace Zarem.Serialization;
+namespace Zarem.Serialization.Registry;
 
 /// <summary>
 /// Central registry that maps string identifiers from XML
