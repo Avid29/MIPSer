@@ -7,10 +7,10 @@ namespace Zarem.Assembler;
 /// <summary>
 /// An assembler.
 /// </summary>
-public abstract class Assembler
+public interface IAssembler
 {
     /// <summary>
     /// Gets the current address.
     /// </summary>
-    public abstract Address CurrentAddress { get; }
+    public Address CurrentAddress { get; }
 }

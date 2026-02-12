@@ -6,16 +6,16 @@ using Zarem.Models.Instructions.Enums;
 namespace Zarem.Emulator.Config;
 
 /// <summary>
-/// A class containing emulator configurations.
+/// A class containing emulator configurations for the MIPS emulator.
 /// </summary>
-public class MIPSEmulatorConfig
+public class MIPSEmulatorConfig : EmulatorConfig
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="MIPSEmulatorConfig"/> class.
     /// </summary>
-    public MIPSEmulatorConfig(MipsVersion version = MipsVersion.MipsIII)
+    public MIPSEmulatorConfig()
     {
-        MipsVersion = version;
+        MipsVersion = MipsVersion.MipsIV;
     }
 
     /// <summary>
@@ -23,14 +23,4 @@ public class MIPSEmulatorConfig
     /// </summary>
     [XmlElement]
     public MipsVersion MipsVersion { get; set; }
-
-    /// <summary>
-    /// Gets or sets whether or not the host should handle traps.
-    /// </summary>
-    /// <remarks>
-    /// If set to true, ALL traps will be handled by the host-layer, and not the emulated machine.
-    /// This allows user-code programs to be interpreted by the emulator without loading and executing an OS.
-    /// </remarks>
-    [XmlElement]
-    public bool HostedTraps { get; set; }
 }

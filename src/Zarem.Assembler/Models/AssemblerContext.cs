@@ -32,7 +32,7 @@ public abstract class AssemblerContext
     /// </summary>
     protected Module Module { get; }
 
-    /// <inheritdoc cref="Assembler.CurrentAddress"/>
+    /// <inheritdoc cref="IAssembler.CurrentAddress"/>
     public abstract Address CurrentAddress { get; }
 
     /// <inheritdoc cref="Module.TryGetSymbol(string, out SymbolEntry)"/>

@@ -10,7 +10,7 @@ public abstract class ProjectItem
     /// <summary>
     /// Initializes a new instance of the <see cref="ProjectItem"/> class.
     /// </summary>
-    protected ProjectItem(Project project)
+    protected ProjectItem(IProject project)
     {
         Project = project;
     }
@@ -18,5 +18,5 @@ public abstract class ProjectItem
     /// <summary>
     /// Gets the project the item belongs to.
     /// </summary>
-    public Project Project { get; }
+    public IProject Project { get; }
 }

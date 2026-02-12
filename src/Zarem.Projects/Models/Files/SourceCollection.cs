@@ -17,7 +17,7 @@ public class SourceCollection : ProjectItem, IEnumerable<SourceFile>
     /// <summary>
     /// Initializes a new instance of the <see cref="SourceCollection"/> class.
     /// </summary>
-    public SourceCollection(Project project, string rootFolder) : base(project)
+    public SourceCollection(IProject project, string rootFolder) : base(project)
     {
         _files = [];
         _watcher = new(rootFolder)

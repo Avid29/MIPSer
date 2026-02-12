@@ -13,7 +13,7 @@ public class SourceFile : FileBase
     /// <summary>
     /// Initializes a new instance of the <see cref="SourceFile"/> class.
     /// </summary>
-    public SourceFile(Project project, string fullPath) : base(project, fullPath)
+    public SourceFile(IProject project, string fullPath) : base(project, fullPath)
     {
         var directory = Path.GetDirectoryName(FullPath);
         Guard.IsNotNull(directory);

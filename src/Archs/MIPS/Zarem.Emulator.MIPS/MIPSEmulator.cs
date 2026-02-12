@@ -13,7 +13,7 @@ namespace Zarem.Emulator;
 /// <summary>
 /// An emulator of a MIPS machine.
 /// </summary>
-public class MIPSEmulator
+public class MIPSEmulator : Emulator<MIPSEmulatorConfig>
 {
     private readonly ManualResetEventSlim _runGate = new(false);
     private Thread? _thread;

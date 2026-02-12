@@ -38,7 +38,7 @@ namespace Zarem.Assembler;
 /// <summary>
 /// A MIPS assembler.
 /// </summary>
-public partial class MIPSAssembler : Assembler<MIPSAssemblerConfig>
+public partial class MIPSAssembler : IAssembler<MIPSAssemblerConfig>
 {
     private readonly Logger _logger;
     private readonly Module _module;
@@ -47,7 +47,7 @@ public partial class MIPSAssembler : Assembler<MIPSAssemblerConfig>
     /// <summary>
     /// Initializes a new instance of the <see cref="MIPSAssembler"/> class.
     /// </summary>
-    private MIPSAssembler(MIPSAssemblerConfig config, Logger? logger = null) : base(config)
+    private MIPSAssembler(MIPSAssemblerConfig config, Logger? logger = null)
     {
         _logger = logger ?? new Logger();
         _logger.Register(new SetLocalizer("Zarem.Assembler.Resources.Logger", typeof(MIPSAssembler).Assembly));
@@ -57,18 +57,20 @@ public partial class MIPSAssembler : Assembler<MIPSAssemblerConfig>
         _module.AddSection(".data");
         _activeSection = _module.Sections[".text"];
 
+        Config = config;
         Context = new(this, _module);
     }
+
+    /// <inheritdoc/>
+    public MIPSAssemblerConfig Config { get; }
+
+    /// <inheritdoc/>
+    public Address CurrentAddress => new(_activeSection.Stream.Position, _activeSection.Name);
 
     /// <summary>
     /// Gets the assembler context for this assembler instance.
     /// </summary>
     internal MIPSAssemblerContext Context { get; }
-
-    /// <summary>
-    /// Gets the current address.
-    /// </summary>
-    public override Address CurrentAddress => new(_activeSection.Stream.Position, _activeSection.Name);
 
     /// <summary>
     /// Gets the assembler's logs.

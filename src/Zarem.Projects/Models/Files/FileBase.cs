@@ -12,7 +12,7 @@ public abstract class FileBase : ProjectItem
     /// <summary>
     /// Initializes a new instance of the <see cref="FileBase"/> class.
     /// </summary>
-    public FileBase(Project project, string fullPath) : base(project)
+    public FileBase(IProject project, string fullPath) : base(project)
     {
         FullPath = fullPath;
     }

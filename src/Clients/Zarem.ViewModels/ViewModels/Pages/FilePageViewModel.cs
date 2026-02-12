@@ -8,6 +8,7 @@ using Zarem.Assembler.Tokenization.Models;
 using Zarem.Bindables.Files;
 using Zarem.Messages;
 using Zarem.Messages.Editor.Enums;
+using Zarem.MIPS.Projects;
 using Zarem.Services;
 using Zarem.Services.Settings;
 using Zarem.Services.Settings.Enums;
@@ -90,7 +91,16 @@ public partial class FilePageViewModel : PageViewModel
     /// <summary>
     /// Gets the config to use for assembler checking.
     /// </summary>
-    public MIPSAssemblerConfig? AssemblerConfig => _projectService.Project?.Config?.AssemblerConfig;
+    public MIPSAssemblerConfig? AssemblerConfig
+    {
+        get
+        {
+            if (_projectService.Project is MIPSProject mipsProj)
+                return mipsProj.Config.AssemblerConfig;
+
+            return null;
+        }
+    }
 
     /// <inheritdoc/>
     public override string Title => File?.Name ?? string.Empty;

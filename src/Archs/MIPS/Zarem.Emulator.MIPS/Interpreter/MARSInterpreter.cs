@@ -31,12 +31,12 @@ public class MARSInterpreter : InterpreterBase
 
             // Print float
             case 2:
-                // TODO:
+                // TODO: Print float
                 break;
 
             // Print double
             case 3:
-                // TODO:
+                // TODO: Print double
                 break;
 
             // Print string

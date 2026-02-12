@@ -15,7 +15,7 @@ namespace Zarem.Assembler.Models;
 /// This class provides readonly access to a handful of contextual information the parsers depend on.
 /// </remarks>
 public abstract class AssemblerContext<TAssembler, TConfig> : AssemblerContext
-    where TAssembler : Assembler<TConfig>
+    where TAssembler : class, IAssembler<TConfig>
     where TConfig : AssemblerConfig
 {
     /// <summary>
@@ -39,9 +39,9 @@ public abstract class AssemblerContext<TAssembler, TConfig> : AssemblerContext
     /// </summary>
     protected TAssembler Assembler { get; }
 
-    /// <inheritdoc cref="Assembler{TConfig}.Config"/>
+    /// <inheritdoc cref="IAssembler{TConfig}.Config"/>
     public TConfig Config => Assembler.Config;
 
-    /// <inheritdoc cref="Assembler.CurrentAddress"/>
+    /// <inheritdoc cref="IAssembler.CurrentAddress"/>
     public override Address CurrentAddress => Assembler?.CurrentAddress ?? default;
 }

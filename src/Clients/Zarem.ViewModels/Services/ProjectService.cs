@@ -1,15 +1,17 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Messaging;
+using System.IO;
+using System.Threading.Tasks;
 using Zarem.Config;
+using Zarem.Factory;
 using Zarem.Messages.Files;
+using Zarem.MIPS.Projects;
 using Zarem.Models;
 using Zarem.Models.Files;
 using Zarem.Services.Files;
 using Zarem.Services.Files.Models;
 using Zarem.Services.Settings;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Zarem.Services;
 
@@ -32,10 +34,13 @@ public class ProjectService : IProjectService
         _messenger = messenger;
         _cacheService = cacheService;
         _fileSystemService = fileSystemService;
+
+        // Populate
+        ProjectTypeRegistry.RegisterProject<MIPSProject>();
     }
 
     /// <inheritdoc/>
-    public Project? Project { get; private set; }
+    public IProject? Project { get; private set; }
 
     /// <inheritdoc/>
     public IFolder? ProjectRootFolder { get; private set; }
@@ -93,7 +98,7 @@ public class ProjectService : IProjectService
     /// <inheritdoc/>
     public async Task OpenProjectAsync(ProjectConfig config, bool cacheState = true)
     {
-        Project = Project.Load(config);
+        Project = ProjectFactory.Create(config);
         if (Project?.Config?.RootFolderPath is null)
             return;
 
@@ -108,25 +113,10 @@ public class ProjectService : IProjectService
     /// <inheritdoc/>
     public async Task OpenProjectAsync(string path, bool cacheState = true)
     {
-        // Attempt to load the file
-        var file = await _fileSystemService.GetFileAsync(path);
-        if (file is null)
-            return;
-
-        // Attempt to open the file as a stream
-        var stream = await file.OpenStreamForReadAsync();
-        if (stream is null)
-            return;
-        
-        // TODO: Deserialize and open projects
-
-        //// Attempt to deserialize
-        //var config = await ProjectConfig.DeserializeAsync(path, stream);
-        //if (config is null)
-        //    return;
+        var project = ProjectFactory.Load(path);
 
         //// Open the project
-        //await OpenProjectAsync(config, cacheState);
+        await OpenProjectAsync(project.Config, cacheState);
     }
 
     /// <inheritdoc/>

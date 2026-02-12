@@ -8,8 +8,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using Zarem.Assembler.Config;
-using Zarem.Config;
+using Zarem.Factory;
 using Zarem.Messages.Navigation;
+using Zarem.MIPS.Projects;
 using Zarem.Models.Instructions.Enums;
 using Zarem.Services;
 using Zarem.Services.Files;
@@ -131,23 +132,15 @@ public class CreateProjectViewModel : PageViewModel
         if (projectFile is null)
             return;
 
-        // Attempt to open the project file for writing
-        var stream = await projectFile.OpenStreamForWriteAsync();
-        if (stream is null)
-            return;
-
         // Create the file config
-        var projectConfig = new ProjectConfig
+        var projectConfig = new MIPSProjectConfig
         {
             Name = ProjectName,
-            ConfigPath = projectFilePath,
             AssemblerConfig = new MIPSAssemblerConfig(MipsVersion)
         };
 
-        // TODO: Serialize and save the project 
-
         // Write project config to the file 
-        //await projectConfig.SerializeAsync(stream);
+        ProjectFactory.Store(projectConfig, projectFilePath);
 
         // Open the project and close the page
         await _projectService.OpenProjectAsync(projectConfig);

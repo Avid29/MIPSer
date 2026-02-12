@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.Diagnostics;
 using ObjectFiles.Elf;
 using ObjectFiles.Elf.Config;
 using System.Collections.Generic;
@@ -9,16 +10,20 @@ using Zarem.Assembler;
 using Zarem.Assembler.Config;
 using Zarem.Assembler.Logging;
 using Zarem.Assembler.Models;
+using Zarem.Emulator;
+using Zarem.Emulator.Config;
 using Zarem.Models;
 using Zarem.Models.Files;
 
 namespace Zarem;
 
-public partial class Project
+public abstract partial class Project<TAssembler, TEmulator, TAsmConfig, TEmuConfig>
+    where TAssembler : IAssembler<TAsmConfig>
+    where TEmulator : Emulator<TEmuConfig>
+    where TAsmConfig : AssemblerConfig
+    where TEmuConfig : EmulatorConfig
 {
-    /// <summary>
-    /// Builds the project.
-    /// </summary>
+    /// <inheritdoc/>
     public async Task<BuildResult?> BuildProjectAsync(bool rebuild = false, Logger? logger = null)
     {
         var result = await AssembleFilesAsync(SourceFiles, rebuild, logger);
@@ -28,9 +33,7 @@ public partial class Project
         return result;
     }
 
-    /// <summary>
-    /// Assembles a list of files.
-    /// </summary>
+    /// <inheritdoc/>
     public async Task<BuildResult?> AssembleFilesAsync(IEnumerable<SourceFile> files, bool rebuild = true, Logger? logger = null)
     {
         var result = new BuildResult();
@@ -43,15 +46,10 @@ public partial class Project
         return result;
     }
 
-    /// <summary>
-    /// Cleans all files in the project.
-    /// </summary>
+    /// <inheritdoc/>
     public void CleanProject() => CleanFiles(SourceFiles);
 
-    /// <summary>
-    /// Cleans a list of source files.
-    /// </summary>
-    /// <param name="files">The files to clean.</param>
+    /// <inheritdoc/>
     public void CleanFiles(IEnumerable<SourceFile> files)
     {
         foreach (var file in files)
@@ -64,17 +62,13 @@ public partial class Project
         if (!(file.IsDirty || !file.ObjectFile.Exists) && !rebuild)
             return null;
 
-        // TODO: Handle error
-        if (Config.AssemblerConfig is null)
-            return null;
+        Guard.IsNotNull(Config?.AssemblerConfig);
 
         try
         {
             using var stream = File.OpenRead(file.FullPath);
 
-
-            // TODO: Select assembler by architecture
-            AssemblerResult result = await MIPSAssembler.AssembleAsync(stream, file.Name,(MIPSAssemblerConfig)Config.AssemblerConfig, logger);
+            var result = await TAssembler.AssembleAsync(stream, file.Name, Config.AssemblerConfig);
 
             // Write the object file if the build succeeded
             if (!result.Failed && result.Module is not null)

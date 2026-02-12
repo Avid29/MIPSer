@@ -15,7 +15,7 @@ public interface IProjectService
     /// <summary>
     /// Gets the open project.
     /// </summary>
-    public Project? Project { get; }
+    public IProject? Project { get; }
 
     /// <summary>
     /// Gets the root folder of the project.

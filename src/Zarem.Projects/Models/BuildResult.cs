@@ -11,9 +11,9 @@ namespace Zarem.Models;
 /// </summary>
 public class BuildResult
 {
-    private List<(SourceFile, AssemblerResult)> _successfullyAssembledFiles;
-    private List<(SourceFile, AssemblerResult)> _failedFiles;
-    private List<SourceFile> _skipped;
+    private readonly List<(SourceFile, AssemblerResult)> _successfullyAssembledFiles;
+    private readonly List<(SourceFile, AssemblerResult)> _failedFiles;
+    private readonly List<SourceFile> _skipped;
 
     internal BuildResult()
     {
