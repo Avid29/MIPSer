@@ -3,7 +3,6 @@
 using Zarem.Assembler;
 using Zarem.Assembler.Config;
 using Zarem.Attributes;
-using Zarem.Config;
 using Zarem.Emulator;
 using Zarem.Emulator.Config;
 

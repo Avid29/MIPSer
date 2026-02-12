@@ -8,6 +8,7 @@ namespace Zarem.Config;
 /// <summary>
 /// A model for project configurations.
 /// </summary>
+[XmlRoot("Project")]
 public abstract partial class ProjectConfig
 {
     /// <summary>
@@ -16,10 +17,17 @@ public abstract partial class ProjectConfig
     public ProjectConfig()
     {
     }
+    
     /// <summary>
     /// Gets or sets the project name.
     /// </summary>
     public string? Name { get; init; }
+
+    /// <summary>
+    /// Gets or sets the project type name.
+    /// </summary>
+    [XmlAttribute("Type")]
+    public string TypeName { get; set; } = "";
 
     /// <summary>
     /// Gets or sets the path for the config file.

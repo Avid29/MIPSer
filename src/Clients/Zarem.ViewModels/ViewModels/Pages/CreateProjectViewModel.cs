@@ -132,15 +132,21 @@ public class CreateProjectViewModel : PageViewModel
         if (projectFile is null)
             return;
 
+        // Attempt to open the project file for writing
+        var stream = await projectFile.OpenStreamForWriteAsync();
+        if (stream is null)
+            return;
+
         // Create the file config
         var projectConfig = new MIPSProjectConfig
         {
             Name = ProjectName,
+            ConfigPath = projectFilePath,
             AssemblerConfig = new MIPSAssemblerConfig(MipsVersion)
         };
 
         // Write project config to the file 
-        ProjectFactory.Store(projectConfig, projectFilePath);
+        ProjectFactory.Store(projectConfig, stream);
 
         // Open the project and close the page
         await _projectService.OpenProjectAsync(projectConfig);

@@ -113,9 +113,20 @@ public class ProjectService : IProjectService
     /// <inheritdoc/>
     public async Task OpenProjectAsync(string path, bool cacheState = true)
     {
-        var project = ProjectFactory.Load(path);
+        // Attempt to load the file
+        var file = await _fileSystemService.GetFileAsync(path);
+        if (file is null)
+            return;
 
-        //// Open the project
+        // Attempt to open the file as a stream
+        var stream = await file.OpenStreamForReadAsync();
+        if (stream is null)
+            return;
+
+        var project = ProjectFactory.Load(stream, path);
+        project.Config.ConfigPath = path;
+
+        // Open the project
         await OpenProjectAsync(project.Config, cacheState);
     }
 

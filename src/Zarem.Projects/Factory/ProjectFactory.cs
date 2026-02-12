@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using System;
+using System.IO;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Serialization;
@@ -25,35 +26,40 @@ public static class ProjectFactory
         Guard.IsNotNull(typeInfo);
 
         // Construct project
-        var project = (IProject)Activator.CreateInstance(
-            typeInfo.ProjectType,
-            config)!;
-
+        var project = (IProject?)Activator.CreateInstance(typeInfo.ProjectType, config);
+        Guard.IsNotNull(project);
+        
         return project;
     }
 
     /// <summary>
     /// Loads a <see cref="IProject"/> from XML.
     /// </summary>
-    /// <param name="path">The path of the file to load.</param>
+    /// <param name="stream">The stream of the XML to load.</param>
+    /// <param name="path">The path to the config file.</param>
     /// <returns>The loaded <see cref="IProject"/>.</returns>
-    public static IProject Load(string path)
+    public static IProject Load(Stream stream, string path)
     {
         var doc = new XmlDocument();
-        doc.Load(path);
+        doc.Load(stream);
 
-        var root = doc.DocumentElement!;
+        var root = doc.DocumentElement;
+        Guard.IsNotNull(root);
+
         var typeName = root.GetAttribute("Type");
 
         var typeInfo = ProjectTypeRegistry.GetProjectType(typeName);
         Guard.IsNotNull(typeInfo);
 
         // Deserialize config
-        var serializer = new XmlSerializer(typeInfo.ConfigType);
-
-        ProjectConfig config;
+        var serializer = new XmlSerializer(typeInfo.ConfigType, new XmlRootAttribute("Project"));
         using var reader = new XmlNodeReader(root);
-        config = (ProjectConfig)serializer.Deserialize(reader)!;
+        var config = (ProjectConfig?)serializer.Deserialize(reader);
+        
+        // Create the project
+        Guard.IsNotNull(config);
+
+        config.ConfigPath = path;
         return Create(config);
     }
 
@@ -61,40 +67,45 @@ public static class ProjectFactory
     /// Stores a <see cref="ProjectConfig"/> as an XML file.
     /// </summary>
     /// <param name="config">The project config to save as a file.</param>
-    /// <param name="path">The path of the file to load.</param>
-    /// <returns>The loaded <see cref="IProject"/>.</returns>
-    public static void Store(ProjectConfig config, string path)
+    /// <param name="stream">The stream to save the file to.</param>
+    public static void Store(ProjectConfig config, Stream stream)
     {
         var configType = config.GetType();
 
-        // Resolve type name from registry
+        // Setup serializer of the proper type
         var typeInfo = ProjectTypeRegistry.GetProjectType(configType);
         Guard.IsNotNull(typeInfo);
+        config.TypeName = typeInfo.TypeName;
 
-        var serializer = new XmlSerializer(configType);
-
-        var settings = new XmlWriterSettings
-        {
-            Indent = true
-        };
-
-        using var writer = XmlWriter.Create(path, settings);
-
-        writer.WriteStartDocument();
-
-        // Start root element
-        writer.WriteStartElement("Project");
-
-        // Write Type attribute
-        writer.WriteAttributeString("Type", typeInfo.TypeName);
-
-        // Serialize config content inside the Project element
+        // Remove namespaces from the serializer
         var namespaces = new XmlSerializerNamespaces();
-        namespaces.Add("", ""); // remove xsi/xsd noise
+        namespaces.Add("", "");
 
-        serializer.Serialize(writer, config, namespaces);
+        // TODO: This can probably be optimized
 
-        writer.WriteEndElement(); // Project
-        writer.WriteEndDocument();
+        // Serialize config
+        using var tempStream = new MemoryStream();
+        var xmlSerializer = new XmlSerializer(configType, new XmlRootAttribute("Project"));
+        xmlSerializer.Serialize(tempStream, config, namespaces);
+
+        // Load the doc to modify
+        var doc = new XmlDocument();
+        tempStream.Position = 0;
+        doc.Load(tempStream);
+
+        // Remove null fields from their parent
+        var mgr = new XmlNamespaceManager(doc.NameTable);
+        mgr.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        var nullFields = doc.SelectNodes("//*[@xsi:nil='true']", mgr);
+        if (nullFields is not null)
+        {
+            foreach (XmlNode field in nullFields)
+            {
+                field.ParentNode?.RemoveChild(field);
+            }
+        }
+
+        // Save the doc
+        doc.Save(stream);
     }
 }
