@@ -86,7 +86,7 @@ public partial class MainViewModel
     public async Task PickAndOpenProjectAsync()
     {
         // Select the project to open
-        var project = await _fileSystemService.PickFileAsync(".mipsproj");
+        var project = await _fileSystemService.PickFileAsync(".zrmp");
         if (project?.Path is null)
             return;
 

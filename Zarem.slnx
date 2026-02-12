@@ -49,7 +49,7 @@
   <Folder Name="/Tests/Archs/MIPS/">
     <Project Path="tests/Archs/MIPS/Test.Assembler.MIPS.Live/Test.Assembler.MIPS.Live.csproj" />
     <Project Path="tests/Archs/MIPS/Test.Assembler.MIPS/Test.Assembler.MIPS.csproj" />
-    <Project Path="tests/Archs/MIPS/Test.Emulator.MIPS/Tests.Emulator.MIPS.csproj" />
+    <Project Path="tests/Archs/MIPS/Test.Emulator.MIPS/Test.Emulator.MIPS.csproj" />
     <Project Path="tests/Archs/MIPS/Test.Linker.MIPS/Test.Linker.MIPS.csproj" />
     <Project Path="tests/Archs/MIPS/Test.MIPS.Asms/Test.MIPS.Asms.vcxitems" Id="f152d20e-aa8a-4d50-9852-0eb0b4a962c4" />
     <Project Path="tests/Archs/MIPS/Test.MIPS/Test.MIPS.csproj" />

@@ -1,9 +1,9 @@
 ﻿// Adam Dernis 2024
 
-using  Zarem.ObjFormats.RASM.Tables;
+using ObjFormats.RASM.Tables;
 using System.Runtime.CompilerServices;
 
-namespace  Zarem.ObjFormats.RASM;
+namespace ObjFormats.RASM;
 
 /// <summary>
 /// A struct containing the module header info for the RASM format.

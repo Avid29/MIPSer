@@ -59,7 +59,7 @@
 				<uap:Extension Category="windows.fileTypeAssociation">
 					<uap:FileTypeAssociation Name="projectfile">
 						<uap:SupportedFileTypes>
-							<uap:FileType ContentType="text/xml">.mipsproject</uap:FileType>
+							<uap:FileType ContentType="text/xml">.zrmp</uap:FileType>
 						</uap:SupportedFileTypes>
 						<uap:Logo>Assets\AppIcons\StoreLogo.png</uap:Logo>
 						<uap:DisplayName>Zarem Project</uap:DisplayName>

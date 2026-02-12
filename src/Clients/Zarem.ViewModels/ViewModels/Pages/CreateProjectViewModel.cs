@@ -126,7 +126,7 @@ public class CreateProjectViewModel : PageViewModel
             return;
 
         // Attempt to create project file
-        var projectFilePath = Path.Combine(rootFolderPath, $"{ProjectName}.mipsproj");
+        var projectFilePath = Path.Combine(rootFolderPath, $"{ProjectName}.zrmp");
         var projectFile = await _fileSystemService.CreateFileAsync(projectFilePath);
         if (projectFile is null)
             return;

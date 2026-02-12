@@ -3,6 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using ObjectFiles.Elf;
 using ObjectFiles.Elf.Config;
+using ObjFormats.RASM.Config;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,7 +12,6 @@ using Zarem.Assembler.MIPS.Models;
 using Zarem.Models;
 using Zarem.Models.Files;
 using Zarem.ObjFormats.RASM;
-using Zarem.ObjFormats.RASM.Config;
 
 namespace Zarem;
 

@@ -1,5 +1,7 @@
 ﻿// Avishai Dernis 2025
 
+using ObjFormats.RASM;
+
 namespace  Zarem.ObjFormats.RASM;
 
 public partial class RasmModule

@@ -5,7 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Zarem.Assembler.MIPS;
 using Zarem.ObjFormats.RASM;
-using Zarem.ObjFormats.RASM.Config;
+using ObjFormats.RASM.Config;
 
 namespace Test.RASM;
 

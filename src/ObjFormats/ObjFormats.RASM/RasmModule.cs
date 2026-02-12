@@ -1,9 +1,10 @@
 ﻿// Adam Dernis 2024
 
+using ObjFormats.RASM;
+using ObjFormats.RASM.Config;
 using System.Text;
 using Zarem.Assembler.MIPS.Models.Modules.Interfaces;
 using Zarem.Emulator.MIPS.Models.Modules;
-using Zarem.ObjFormats.RASM.Config;
 
 namespace  Zarem.ObjFormats.RASM;
 
@@ -51,7 +52,7 @@ public partial class RasmModule : IBuildModule<RasmModule>, IExecutableModule
         throw new NotImplementedException();
     }
 
-    private unsafe void ResetStream(bool skipHeader = true)
+    private void ResetStream(bool skipHeader = true)
     {
         _source.Position = skipHeader ? Header.HEADER_SIZE : 0;
     }

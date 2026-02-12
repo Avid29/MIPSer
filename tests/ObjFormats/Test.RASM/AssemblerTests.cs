@@ -7,7 +7,7 @@ using Zarem.Assembler.MIPS.Logging.Enum;
 using Zarem.Assembler.MIPS.Models.Enums;
 using Zarem.MIPS.Models.Instructions.Enums;
 using Zarem.ObjFormats.RASM;
-using Zarem.ObjFormats.RASM.Config;
+using ObjFormats.RASM.Config;
 
 namespace Test.RASM;
 

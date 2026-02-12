@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-namespace Zarem.MIPS.Models.Addressing.Enums;
+namespace ObjFormats.RASM.Tables.Enums;
 
 /// <summary>
 /// An enum marking the section an address belongs to.

@@ -1,13 +1,13 @@
 ﻿// Avishai Dernis 2025
 
 using ObjectFiles.Elf.Config;
+using ObjFormats.RASM.Config;
 using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Zarem.Assembler.MIPS.Config;
-using Zarem.ObjFormats.RASM.Config;
 
 namespace Zarem.Config;
 

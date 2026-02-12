@@ -3,8 +3,9 @@
 using System.Xml.Serialization;
 using Zarem.Assembler.MIPS.Config;
 using Zarem.MIPS.Models.Instructions.Enums;
+using Zarem.ObjFormats.RASM;
 
-namespace  Zarem.ObjFormats.RASM.Config;
+namespace ObjFormats.RASM.Config;
 
 /// <summary>
 /// A class containing rasm configuration info.

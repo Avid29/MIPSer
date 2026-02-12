@@ -1,11 +1,11 @@
 ﻿// Adam Dernis 2024
 
-using  Zarem.ObjFormats.RASM;
-using  Zarem.ObjFormats.RASM.Config;
+using Zarem.ObjFormats.RASM;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using Zarem.Assembler.MIPS.Logging.Enum;
+using ObjFormats.RASM.Config;
 
 namespace Zarem;
 

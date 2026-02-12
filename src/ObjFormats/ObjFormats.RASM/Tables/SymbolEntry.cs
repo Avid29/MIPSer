@@ -1,13 +1,12 @@
 ﻿// Adam Dernis 2024
 
+using ObjFormats.RASM.Tables.Enums;
 using System.Runtime.InteropServices;
 using Zarem.Assembler.MIPS.Models.Modules.Interfaces.Tables;
 using Zarem.MIPS.Helpers;
-using Zarem.MIPS.Models.Addressing.Enums;
-using Zarem.ObjFormats.RASM.Tables.Enums;
 using CommonEntry = Zarem.MIPS.Models.Modules.Tables.SymbolEntry;
 
-namespace  Zarem.ObjFormats.RASM.Tables;
+namespace ObjFormats.RASM.Tables;
 
 /// <summary>
 /// An entry in the RASM load module's symbol table.

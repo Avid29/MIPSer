@@ -1,5 +1,6 @@
 ﻿// Adam Dernis 2024
 
+using ObjFormats.RASM.Config;
 using System.Text;
 using Test.Assembler.MIPS.Live.Enums;
 using Zarem.Assembler.MIPS.Logging.Enum;
@@ -13,7 +14,6 @@ using Zarem.MIPS.Models.Instructions;
 using Zarem.MIPS.Models.Instructions.Enums;
 using Zarem.MIPS.Services;
 using Zarem.ObjFormats.RASM;
-using Zarem.ObjFormats.RASM.Config;
 
 namespace Test.Assembler.MIPS.Live;
 

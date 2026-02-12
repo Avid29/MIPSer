@@ -1,14 +1,15 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
+using ObjFormats.RASM.Config;
+using ObjFormats.RASM.Tables;
 using Zarem.Assembler.MIPS.Config;
 using Zarem.Assembler.MIPS.Models.Modules;
 using Zarem.MIPS.Models.Modules.Tables;
 using Zarem.MIPS.Models.Modules.Tables.Enums;
-using Zarem.ObjFormats.RASM.Config;
-using RasmReference = Zarem.ObjFormats.RASM.Tables.ReferenceEntry;
-using RasmRelocation = Zarem.ObjFormats.RASM.Tables.RelocationEntry;
-using RasmSymbol = Zarem.ObjFormats.RASM.Tables.SymbolEntry;
+using RasmReference = ObjFormats.RASM.Tables.ReferenceEntry;
+using RasmRelocation = ObjFormats.RASM.Tables.RelocationEntry;
+using RasmSymbol = ObjFormats.RASM.Tables.SymbolEntry;
 
 namespace  Zarem.ObjFormats.RASM;
 
