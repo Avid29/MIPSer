@@ -77,7 +77,7 @@ public struct Evaluator
         // If both address are relocatable
         if (!Address.TrySubtract(left.Value, right.Value, out var value))
         {
-            _logger?.Log(Severity.Error, LogCode.InvalidExpressionOperation, node.ExpressionToken, "CantSubtractRelocatables");
+            _logger?.Log(Severity.Error, LogCode.InvalidExpressionOperation, node.ExpressionToken, "CantSubtractRelocatable");
             return false;
         }
 

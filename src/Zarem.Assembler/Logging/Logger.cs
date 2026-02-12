@@ -3,9 +3,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Zarem.Assembler.Helpers;
-using Zarem.Assembler.Tokenization.Models;
+using Zarem.Assembler.Localization;
 using Zarem.Assembler.Logging.Enum;
+using Zarem.Assembler.Tokenization.Models;
 
 namespace Zarem.Assembler.Logging;
 
@@ -14,9 +14,9 @@ namespace Zarem.Assembler.Logging;
 /// </summary>
 public class Logger : ILogger
 {
+    private readonly CompositeLocalizer _localizer;
     private readonly List<AssemblerLogEntry> _currentLogs;
     private readonly List<AssemblerLogEntry> _flushedLogs;
-    private readonly Localizer _localizer;
 
     private bool _currentFailed;
 
@@ -30,9 +30,8 @@ public class Logger : ILogger
     /// </summary>
     public Logger()
     {
-        // TODO: Architecture specific logging IDs/Codes and localization
-
-        _localizer = new Localizer("Zarem.Assembler.MIPS.Resources.Logger");
+        // TODO: Architecture specific logging IDs/Codes
+        _localizer = new CompositeLocalizer();
         _currentLogs = [];
         _flushedLogs = [];
     }
@@ -57,7 +56,13 @@ public class Logger : ILogger
     /// Gets a value indicating whether or not assembly failed.
     /// </summary>
     public bool Failed { get; private set; }
-    
+
+    /// <summary>
+    /// Registers a string source with the logger.
+    /// </summary>
+    /// <param name="localizer"></param>
+    public void Register(IStringLocalizer localizer) => _localizer.Register(localizer);
+
     /// <inheritdoc/>
     public bool Log(Severity severity, LogCode code, string? file, string messageKey, params object[] args)
     {
@@ -71,8 +76,8 @@ public class Logger : ILogger
     /// <inheritdoc/>
     public bool Log(Severity severity, LogCode code, ReadOnlySpan<Token> tokens, string messageKey, params object?[] args)
     {
-        var localizedMessage = _localizer[messageKey];
-        var formattedMessage = string.Format(localizedMessage, args);
+        var formattedMessage = _localizer.TryGet(messageKey, args);
+        formattedMessage ??= messageKey;
 
         var log = new AssemblerLogEntry(severity, code, formattedMessage, tokens.ToArray());
         _currentLogs.Add(log);

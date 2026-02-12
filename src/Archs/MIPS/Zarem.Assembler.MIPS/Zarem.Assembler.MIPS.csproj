@@ -26,19 +26,4 @@
     <ProjectReference Include="..\Zarem.MIPS\Zarem.MIPS.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Resources\Logger.en.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Logger.en.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\Logger.en.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Logger.en.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-
 </Project>

@@ -3,14 +3,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Zarem.Assembler.Config;
+using Zarem.Assembler.Localization;
 using Zarem.Assembler.Logging;
 using Zarem.Assembler.MIPS.Tokenization;
 using Zarem.Assembler.Models;
 using Zarem.Models.Addressing;
-using Zarem.Models.Modules;
 using Zarem.Models.Modules.Tables;
+using Module = Zarem.Models.Modules.Module;
+
 
 namespace Zarem.Assembler;
 
@@ -47,6 +50,7 @@ public partial class MIPSAssembler : Assembler<MIPSAssemblerConfig>
     private MIPSAssembler(MIPSAssemblerConfig config, Logger? logger = null) : base(config)
     {
         _logger = logger ?? new Logger();
+        _logger.Register(new SetLocalizer("Zarem.Assembler.Resources.Logger", typeof(MIPSAssembler).Assembly));
 
         _module = new Module();
         _module.AddSection(".text");

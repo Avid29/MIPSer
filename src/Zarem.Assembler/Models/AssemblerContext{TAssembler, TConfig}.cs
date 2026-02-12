@@ -43,5 +43,5 @@ public abstract class AssemblerContext<TAssembler, TConfig> : AssemblerContext
     public TConfig Config => Assembler.Config;
 
     /// <inheritdoc cref="Assembler.CurrentAddress"/>
-    public override Address CurrentAddress => Assembler.CurrentAddress;
+    public override Address CurrentAddress => Assembler?.CurrentAddress ?? default;
 }
