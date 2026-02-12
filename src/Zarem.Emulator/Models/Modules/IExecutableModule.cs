@@ -1,13 +1,14 @@
 ﻿// Avishai Dernis 2025
 
 using System.IO;
+using Zarem.Models.Modules.Interface;
 
 namespace Zarem.Emulator.Models.Modules;
 
 /// <summary>
 /// An interface representing an executable module in the MIPS interpreter.
 /// </summary>
-public interface IExecutableModule
+public interface IExecutableModule : IModule
 {
     /// <summary>
     /// Gets the entry address of the executable.

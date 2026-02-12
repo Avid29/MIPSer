@@ -2,16 +2,17 @@
 
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using ObjectFiles.Elf.Config;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using Zarem.Assembler.Config;
-using Zarem.Factory;
 using Zarem.Messages.Navigation;
 using Zarem.MIPS.Projects;
 using Zarem.Models.Instructions.Enums;
+using Zarem.Serialization;
 using Zarem.Services;
 using Zarem.Services.Files;
 using Zarem.ViewModels.Pages.Abstract;
@@ -142,7 +143,8 @@ public class CreateProjectViewModel : PageViewModel
         {
             Name = ProjectName,
             ConfigPath = projectFilePath,
-            AssemblerConfig = new MIPSAssemblerConfig(MipsVersion)
+            AssemblerConfig = new MIPSAssemblerConfig(MipsVersion),
+            FormatConfig = new ElfConfig(),
         };
 
         // Write project config to the file 

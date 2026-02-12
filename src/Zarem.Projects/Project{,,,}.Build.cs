@@ -1,8 +1,6 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
-using ObjectFiles.Elf;
-using ObjectFiles.Elf.Config;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -74,10 +72,10 @@ public abstract partial class Project<TAssembler, TEmulator, TAsmConfig, TEmuCon
             if (!result.Failed && result.Module is not null)
             {
                 // TODO: Select module type by format
-                var module = ElfModule.Create(result.Module, new ElfConfig());
+                //var module = ElfModule.Create(result.Module, new ElfConfig());
 
                 using var outStream = File.Open(file.ObjectFile.FullPath, FileMode.OpenOrCreate);
-                module?.Save(outStream);
+                //module?.Save(outStream);
             }
 
             return result;
@@ -90,7 +88,7 @@ public abstract partial class Project<TAssembler, TEmulator, TAsmConfig, TEmuCon
         }
     }
 
-    private bool CleanFile(SourceFile file)
+    private static bool CleanFile(SourceFile file)
     {
         if (!file.ObjectFile.Exists)
             return false;

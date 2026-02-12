@@ -1,13 +1,14 @@
 ﻿// Adam Dernis 2024
 
 using System.IO;
+using Zarem.Models.Modules.Interface;
 
 namespace Zarem.Assembler.Models.Modules;
 
 /// <summary>
 /// An interface for a module implementation.
 /// </summary>
-public interface IBuildModule
+public interface IBuildModule : IModule
 {
     /// <summary>
     /// Gets the name of the <see cref="IBuildModule"/>.

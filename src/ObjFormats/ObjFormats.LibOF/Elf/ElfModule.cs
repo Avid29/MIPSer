@@ -4,6 +4,7 @@ using LibObjectFile.Elf;
 using ObjectFiles.Elf.Config;
 using System.IO;
 using Zarem.Assembler.Models.Modules;
+using Zarem.Attributes;
 using Zarem.Emulator.Models.Modules;
 
 namespace ObjectFiles.Elf;
@@ -11,6 +12,7 @@ namespace ObjectFiles.Elf;
 /// <summary>
 /// An object module in ELF format.
 /// </summary>
+[FormatType("ELF", typeof(ElfConfig))]
 public partial class ElfModule : IBuildModule<ElfModule, ElfConfig>, IExecutableModule
 {
     private readonly ElfFile _elfFile;

@@ -6,8 +6,9 @@ using System.Linq;
 using System.Reflection;
 using Zarem.Attributes;
 using Zarem.Config;
+using Zarem.Models.Modules.Interface;
 
-namespace Zarem.Factory;
+namespace Zarem.Serialization;
 
 /// <summary>
 /// Central registry that maps string identifiers from XML
@@ -19,8 +20,9 @@ namespace Zarem.Factory;
 public static class ProjectTypeRegistry
 {
     private static readonly Dictionary<string, ProjectTypeInfo> _projectTypes = [];
-    private static readonly Dictionary<string, Type> _formatTypes = [];
+    private static readonly Dictionary<string, FormatTypeInfo> _formatTypes = [];
     private static readonly Dictionary<Type, ProjectTypeInfo> _projectTypesReverse = [];
+    private static readonly Dictionary<Type, FormatTypeInfo> _formatTypesReverse = [];
 
     static ProjectTypeRegistry()
     {
@@ -54,10 +56,22 @@ public static class ProjectTypeRegistry
     /// </summary>
     /// <param name="typeName">The name of the type.</param>
     /// <param name="formatType">The <see cref="Type"/> for the format config class.</param>
-    public static void RegisterFormat(string typeName, Type formatType)
+    /// <param name="configType">The <see cref="Type"/> for the format config class.</param>
+    public static void RegisterFormat(string typeName, Type formatType, Type configType)
     {
-        _formatTypes[typeName] = formatType;
+        var typeInfo = new FormatTypeInfo(typeName, formatType, configType);
+        _formatTypes[typeName] = typeInfo;
+        _formatTypesReverse[formatType] = typeInfo;
+        _formatTypesReverse[configType] = typeInfo;
     }
+
+    /// <summary>
+    /// Registers a format type.
+    /// </summary>
+    /// <typeparam name="T">The type of format to register.</typeparam>
+    public static void RegisterFormat<T>()
+        where T : IModule
+        => TryRegisterFormat(typeof(T));
 
     /// <summary>
     /// Resolves a project type by its XML "Type" attribute.
@@ -84,9 +98,20 @@ public static class ProjectTypeRegistry
     /// <summary>
     /// Resolves a format type by its XML "Type" attribute.
     /// </summary>
-    internal static Type? GetFormatType(string typeName)
+    internal static FormatTypeInfo? GetFormatType(string typeName)
     {
         if (_formatTypes.TryGetValue(typeName, out var type))
+            return type;
+
+        return null;
+    }
+
+    /// <summary>
+    /// Resolves a format type by its XML "Type" attribute.
+    /// </summary>
+    internal static FormatTypeInfo? GetFormatType(Type formatType)
+    {
+        if (_formatTypesReverse.TryGetValue(formatType, out var type))
             return type;
 
         return null;
@@ -124,20 +149,14 @@ public static class ProjectTypeRegistry
 
                 // Register FormatConfigs
                 if (typeof(FormatConfig).IsAssignableFrom(type))
-                {
-                    var attr = type.GetCustomAttribute<FormatTypeAttribute>();
-                    var typeName = attr?.TypeName ?? type.Name;
-
-                    // Register the type
-                    RegisterFormat(typeName, type);
-                }
+                    TryRegisterFormat(type);
             }
         }
     }
 
-    private static void TryRegisterProject(Type projType)
+    private static void TryRegisterProject(Type projectType)
     {
-        var attr = projType.GetCustomAttribute<ProjectTypeAttribute>();
+        var attr = projectType.GetCustomAttribute<ProjectTypeAttribute>();
         if (attr is null)
             return;
 
@@ -145,6 +164,19 @@ public static class ProjectTypeRegistry
         var configType = attr.ConfigType;
 
         // Register the type
-        RegisterProject(typeName, projType, configType);
+        RegisterProject(typeName, projectType, configType);
+    }
+
+    private static void TryRegisterFormat(Type formatType)
+    {
+        var attr = formatType.GetCustomAttribute<FormatTypeAttribute>();
+        if (attr is null)
+            return;
+
+        var typeName = attr.TypeName;
+        var configType = attr.ConfigType;
+
+        // Register the type
+        RegisterFormat(typeName, formatType, configType);
     }
 }

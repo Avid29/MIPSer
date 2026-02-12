@@ -24,12 +24,6 @@ public abstract partial class ProjectConfig
     public string? Name { get; init; }
 
     /// <summary>
-    /// Gets or sets the project type name.
-    /// </summary>
-    [XmlAttribute("Type")]
-    public string TypeName { get; set; } = "";
-
-    /// <summary>
     /// Gets or sets the path for the config file.
     /// </summary>
     [XmlIgnore]

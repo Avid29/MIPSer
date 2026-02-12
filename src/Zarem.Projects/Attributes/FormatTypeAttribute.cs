@@ -13,11 +13,19 @@ public class FormatTypeAttribute : Attribute
     /// <summary>
     /// Initializes a new instance of the <see cref="FormatTypeAttribute"/> class.
     /// </summary>
-    /// <param name="typeName"></param>
-    public FormatTypeAttribute(string typeName) => TypeName = typeName;
+    public FormatTypeAttribute(string typeName, Type configType)
+    {
+        TypeName = typeName;
+        ConfigType = configType;
+    }
 
     /// <summary>
-    /// Gets the project type's name.
+    /// Gets the format's type's name.
     /// </summary>
     public string TypeName { get; }
+
+    /// <summary>
+    /// Gets the format's config <see cref="Type"/>.
+    /// </summary>
+    public Type ConfigType { get; }
 }

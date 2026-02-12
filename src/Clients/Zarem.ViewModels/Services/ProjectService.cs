@@ -1,14 +1,16 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Mvvm.Messaging;
+using ObjectFiles.Elf;
+using ObjFormats.RASM;
 using System.IO;
 using System.Threading.Tasks;
 using Zarem.Config;
-using Zarem.Factory;
 using Zarem.Messages.Files;
 using Zarem.MIPS.Projects;
 using Zarem.Models;
 using Zarem.Models.Files;
+using Zarem.Serialization;
 using Zarem.Services.Files;
 using Zarem.Services.Files.Models;
 using Zarem.Services.Settings;
@@ -37,6 +39,8 @@ public class ProjectService : IProjectService
 
         // Populate
         ProjectTypeRegistry.RegisterProject<MIPSProject>();
+        ProjectTypeRegistry.RegisterFormat<ElfModule>();
+        ProjectTypeRegistry.RegisterFormat<RasmModule>();
     }
 
     /// <inheritdoc/>

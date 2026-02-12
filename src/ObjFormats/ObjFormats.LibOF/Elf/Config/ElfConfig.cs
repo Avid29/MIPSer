@@ -9,4 +9,8 @@ namespace ObjectFiles.Elf.Config;
 /// </summary>
 public class ElfConfig : FormatConfig
 {
+    /// <summary>
+    /// Gets whether or not to use little endian.
+    /// </summary>
+    public bool IsLittleEndian { get; set; } = false;
 }

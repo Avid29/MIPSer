@@ -2,9 +2,9 @@
 
 using System;
 
-namespace Zarem.Factory;
+namespace Zarem.Serialization;
 
 /// <summary>
 /// A record containing project configuration type info.
 /// </summary>
-public record ProjectTypeInfo(string TypeName, Type ProjectType, Type ConfigType);
+public record FormatTypeInfo(string TypeName, Type FormatType, Type ConfigType);

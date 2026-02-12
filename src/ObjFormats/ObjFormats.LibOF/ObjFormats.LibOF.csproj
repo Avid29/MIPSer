@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Zarem.Assembler\Zarem.Assembler.csproj" />
     <ProjectReference Include="..\..\Zarem.Emulator\Zarem.Emulator.csproj" />
+    <ProjectReference Include="..\..\Zarem.Projects\Zarem.Projects.csproj" />
   </ItemGroup>
 
 </Project>
