@@ -23,11 +23,24 @@ public static class ProjectFactory
     /// <returns></returns>
     public static IProject Create(ProjectConfig config)
     {
+        Guard.IsNotNull(config.FormatConfig);
+
         var typeInfo = ProjectTypeRegistry.GetProjectType(config.GetType());
         Guard.IsNotNull(typeInfo);
 
+        var formatTypeInfo = ProjectTypeRegistry.GetFormatType(config.FormatConfig.GetType());
+        Guard.IsNotNull(formatTypeInfo);
+
+        // Construct closed project type
+        var openProjectType = typeInfo.ProjectType;
+        var moduleType = formatTypeInfo.FormatType;
+        var modConfigType = formatTypeInfo.ConfigType;
+        var closedProjectType = openProjectType.MakeGenericType(moduleType, modConfigType);
+
+        // TODO: Get Module config to the module
+
         // Construct project
-        var project = (IProject?)Activator.CreateInstance(typeInfo.ProjectType, config);
+        var project = (IProject?)Activator.CreateInstance(closedProjectType, config);
         Guard.IsNotNull(project);
         
         return project;
@@ -90,11 +103,13 @@ public static class ProjectFactory
 
             if (typeof(FormatConfig).IsAssignableFrom(prop.PropertyType))
             {
-                var formatTypeName = child.Attribute("Type")!.Value;
+                var formatTypeName = child.Attribute("Type")?.Value;
+                Guard.IsNotNull(formatTypeName);
+
                 var typeInfo = ProjectTypeRegistry.GetFormatType(formatTypeName);
                 Guard.IsNotNull(typeInfo);
 
-                var formatInstance = (FormatConfig?)Activator.CreateInstance(typeInfo.FormatType);
+                var formatInstance = (FormatConfig?)Activator.CreateInstance(typeInfo.ConfigType);
                 Guard.IsNotNull(formatInstance);
 
                 ReadObjectProperties(child, formatInstance);
@@ -132,7 +147,7 @@ public static class ProjectFactory
                 var typeInfo = ProjectTypeRegistry.GetFormatType(format.GetType());
                 Guard.IsNotNull(typeInfo);
 
-                var formatElement = new XElement("Format", new XAttribute("Type", typeInfo.TypeName));
+                var formatElement = new XElement("FormatConfig", new XAttribute("Type", typeInfo.TypeName));
 
                 WriteObjectProperties(formatElement, format);
                 parent.Add(formatElement);

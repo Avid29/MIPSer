@@ -8,18 +8,24 @@ using Zarem.Assembler;
 using Zarem.Assembler.Config;
 using Zarem.Assembler.Logging;
 using Zarem.Assembler.Models;
+using Zarem.Assembler.Models.Modules;
+using Zarem.Config;
 using Zarem.Emulator;
 using Zarem.Emulator.Config;
+using Zarem.Emulator.Models.Modules;
 using Zarem.Models;
 using Zarem.Models.Files;
+using Zarem.Models.Modules.Interface;
 
 namespace Zarem;
 
-public abstract partial class Project<TAssembler, TEmulator, TAsmConfig, TEmuConfig>
+public abstract partial class Project<TAssembler, TEmulator, TModule, TAsmConfig, TEmuConfig, TModConfig>
     where TAssembler : IAssembler<TAsmConfig>
     where TEmulator : Emulator<TEmuConfig>
+    where TModule : IModule, IBuildModule<TModule, TModConfig>, IExecutableModule
     where TAsmConfig : AssemblerConfig
     where TEmuConfig : EmulatorConfig
+    where TModConfig : FormatConfig, new()
 {
     /// <inheritdoc/>
     public async Task<BuildResult?> BuildProjectAsync(bool rebuild = false, Logger? logger = null)
@@ -72,7 +78,7 @@ public abstract partial class Project<TAssembler, TEmulator, TAsmConfig, TEmuCon
             if (!result.Failed && result.Module is not null)
             {
                 // TODO: Select module type by format
-                //var module = ElfModule.Create(result.Module, new ElfConfig());
+                var module = TModule.Create(result.Module, new TModConfig());
 
                 using var outStream = File.Open(file.ObjectFile.FullPath, FileMode.OpenOrCreate);
                 //module?.Save(outStream);

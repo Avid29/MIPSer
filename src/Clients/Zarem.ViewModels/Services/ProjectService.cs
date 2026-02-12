@@ -2,7 +2,9 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using ObjectFiles.Elf;
+using ObjectFiles.Elf.Config;
 using ObjFormats.RASM;
+using ObjFormats.RASM.Config;
 using System.IO;
 using System.Threading.Tasks;
 using Zarem.Config;
@@ -38,9 +40,9 @@ public class ProjectService : IProjectService
         _fileSystemService = fileSystemService;
 
         // Populate
-        ProjectTypeRegistry.RegisterProject<MIPSProject>();
-        ProjectTypeRegistry.RegisterFormat<ElfModule>();
-        ProjectTypeRegistry.RegisterFormat<RasmModule>();
+        ProjectTypeRegistry.RegisterProject(typeof(MIPSProject<,>));
+        ProjectTypeRegistry.RegisterFormat(typeof(ElfModule));
+        ProjectTypeRegistry.RegisterFormat(typeof(RasmModule));
     }
 
     /// <inheritdoc/>

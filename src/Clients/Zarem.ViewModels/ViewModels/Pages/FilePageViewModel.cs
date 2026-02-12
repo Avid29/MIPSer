@@ -95,8 +95,8 @@ public partial class FilePageViewModel : PageViewModel
     {
         get
         {
-            if (_projectService.Project is MIPSProject mipsProj)
-                return mipsProj.Config.AssemblerConfig;
+            if (_projectService.Project?.Config is MIPSProjectConfig mips)
+                return mips.AssemblerConfig;
 
             return null;
         }

@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Zarem.Assembler.Models.Modules;
 using Zarem.Attributes;
 using Zarem.Config;
+using Zarem.Emulator.Models.Modules;
 using Zarem.Models.Modules.Interface;
 
 namespace Zarem.Serialization;
@@ -49,7 +51,24 @@ public static class ProjectTypeRegistry
     /// <typeparam name="T">The type of project to register.</typeparam>
     public static void RegisterProject<T>()
         where T : IProject
-        => TryRegisterProject(typeof(T));
+        => RegisterProject(typeof(T));
+
+    /// <summary>
+    /// Registers a project type.
+    /// </summary>
+    /// <param name="projectType">The type of project to register.</param>
+    public static void RegisterProject(Type projectType)
+    {
+        var attr = projectType.GetCustomAttribute<ProjectTypeAttribute>();
+        if (attr is null)
+            return;
+
+        var typeName = attr.TypeName;
+        var configType = attr.ConfigType;
+
+        // Register the type
+        RegisterProject(typeName, projectType, configType);
+    }
 
     /// <summary>
     /// Registers an object format type.
@@ -71,7 +90,24 @@ public static class ProjectTypeRegistry
     /// <typeparam name="T">The type of format to register.</typeparam>
     public static void RegisterFormat<T>()
         where T : IModule
-        => TryRegisterFormat(typeof(T));
+        => RegisterFormat(typeof(T));
+
+    /// <summary>
+    /// Registers a format type.
+    /// </summary>
+    /// <param name="formatType">The type of format to register.</param>
+    public static void RegisterFormat(Type formatType)
+    {
+        var attr = formatType.GetCustomAttribute<FormatTypeAttribute>();
+        if (attr is null)
+            return;
+
+        var typeName = attr.TypeName;
+        var configType = attr.ConfigType;
+
+        // Register the type
+        RegisterFormat(typeName, formatType, configType);
+    }
 
     /// <summary>
     /// Resolves a project type by its XML "Type" attribute.
@@ -144,39 +180,13 @@ public static class ProjectTypeRegistry
                     continue;
 
                 // Register ProjectConfigs
-                if (typeof(Project<,,,>).IsAssignableFrom(type))
-                    TryRegisterProject(type);
+                if (typeof(Project<,,,,,>).IsAssignableFrom(type))
+                    RegisterProject(type);
 
                 // Register FormatConfigs
                 if (typeof(FormatConfig).IsAssignableFrom(type))
-                    TryRegisterFormat(type);
+                    RegisterFormat(type);
             }
         }
-    }
-
-    private static void TryRegisterProject(Type projectType)
-    {
-        var attr = projectType.GetCustomAttribute<ProjectTypeAttribute>();
-        if (attr is null)
-            return;
-
-        var typeName = attr.TypeName;
-        var configType = attr.ConfigType;
-
-        // Register the type
-        RegisterProject(typeName, projectType, configType);
-    }
-
-    private static void TryRegisterFormat(Type formatType)
-    {
-        var attr = formatType.GetCustomAttribute<FormatTypeAttribute>();
-        if (attr is null)
-            return;
-
-        var typeName = attr.TypeName;
-        var configType = attr.ConfigType;
-
-        // Register the type
-        RegisterFormat(typeName, formatType, configType);
     }
 }

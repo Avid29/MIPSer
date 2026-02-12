@@ -3,21 +3,26 @@
 using CommunityToolkit.Diagnostics;
 using Zarem.Assembler;
 using Zarem.Assembler.Config;
+using Zarem.Assembler.Models.Modules;
 using Zarem.Config;
 using Zarem.Emulator;
 using Zarem.Emulator.Config;
+using Zarem.Emulator.Models.Modules;
 using Zarem.Models.Files;
+using Zarem.Models.Modules.Interface;
 
 namespace Zarem;
 
 /// <summary>
 /// A loaded mipser project.
 /// </summary>
-public abstract partial class Project<TAssembler, TEmulator, TAsmConfig, TEmuConfig> : IProject
+public abstract partial class Project<TAssembler, TEmulator, TModule, TAsmConfig, TEmuConfig, TModConfig> : IProject
     where TAssembler : IAssembler<TAsmConfig>
     where TEmulator : Emulator<TEmuConfig>
+    where TModule : IModule, IBuildModule<TModule, TModConfig>, IExecutableModule
     where TAsmConfig : AssemblerConfig
     where TEmuConfig : EmulatorConfig
+    where TModConfig : FormatConfig, new()
 {
     /// <summary>
     /// Initialzes a new instance of the <see cref="ProjectConfig{TAsmConfig, TEmuConfig}"/> class.
