@@ -1,14 +1,10 @@
 ﻿// Avishai Dernis 2025
 
-using CommunityToolkit.Diagnostics;
-using Zarem.Assembler.MIPS.Logging;
-using Zarem.Assembler.MIPS.Logging.Enum;
-using Zarem.MIPS.Models.Instructions.Enums;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
 using System.Collections.Generic;
 using System.Linq;
+using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.Assembler.MIPS.Helpers.Tables;
+namespace Zarem.Assembler.Helpers.Tables;
 
 /// <summary>
 /// A class containing a constant table for register lookup.

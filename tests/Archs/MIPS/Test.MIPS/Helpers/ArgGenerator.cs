@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Zarem.MIPS.Models.Instructions.Enums;
-using Zarem.MIPS.Models.Instructions.Enums.Operations;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions;
+using Zarem.Models.Instructions.Enums;
+using Zarem.Models.Instructions.Enums.Operations;
+using Zarem.Models.Instructions.Enums.Registers;
+using Zarem.Models.Instructions.Enums.SpecialFunctions;
 
 namespace Test.MIPS.Helpers;
 

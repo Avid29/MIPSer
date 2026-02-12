@@ -2,16 +2,16 @@
 
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Zarem.MIPS.Helpers;
-using Zarem.MIPS.Helpers.Instructions;
-using Zarem.MIPS.Models.Instructions.Enums;
-using Zarem.MIPS.Models.Instructions.Enums.Operations;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
-using Zarem.MIPS.Services;
+using Zarem.Helpers;
+using Zarem.Helpers.Instructions;
+using Zarem.Models.Instructions.Enums;
+using Zarem.Models.Instructions.Enums.Operations;
+using Zarem.Models.Instructions.Enums.Registers;
+using Zarem.Models.Instructions.Enums.SpecialFunctions;
+using Zarem.Models.Instructions.Enums.SpecialFunctions.CoProc0;
+using Zarem.Services;
 
-namespace Zarem.MIPS.Models.Instructions;
+namespace Zarem.Models.Instructions;
 
 //                               MIPS Primary Instructions Layout
 // ----------------------------------------------------------------------------

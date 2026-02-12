@@ -1,19 +1,18 @@
 ﻿// Adam Dernis 2024
 
-using ObjFormats.RASM.Config;
 using System.Text;
 using Test.Assembler.MIPS.Live.Enums;
-using Zarem.Assembler.MIPS.Logging.Enum;
-using Zarem.Assembler.MIPS.Models.Instructions;
-using Zarem.Assembler.MIPS.Parsers;
+using Zarem.Assembler;
+using Zarem.Assembler.Logging.Enum;
 using Zarem.Assembler.MIPS.Tokenization;
-using Zarem.Assembler.MIPS.Tokenization.Models.Enums;
-using Zarem.Disassembler.MIPS;
-using Zarem.Disassembler.MIPS.Services;
-using Zarem.MIPS.Models.Instructions;
-using Zarem.MIPS.Models.Instructions.Enums;
-using Zarem.MIPS.Services;
-using Zarem.ObjFormats.RASM;
+using Zarem.Assembler.Models.Instructions;
+using Zarem.Assembler.Parsers;
+using Zarem.Assembler.Tokenization.Models.Enums;
+using Zarem.Disassembler;
+using Zarem.Disassembler.Services;
+using Zarem.Models.Instructions;
+using Zarem.Models.Instructions.Enums;
+using Zarem.Services;
 
 namespace Test.Assembler.MIPS.Live;
 
@@ -23,7 +22,7 @@ public class Program()
 
     static async Task Main()
     {
-        ServiceCollection.DisassemblerService = new DisassemblerService(new());
+        ServiceCollection.DisassemblerService = new MIPSDisassemblerService(new());
 
         var program = new Program();
         while (true)
@@ -65,7 +64,7 @@ public class Program()
     {
         var stream = new MemoryStream(Encoding.Default.GetBytes(line));
 
-        var result = await Zarem.Assembler.MIPS.Assembler.AssembleAsync<RasmModule, RasmConfig>(stream, null, new RasmConfig());
+        var result = await MIPSAssembler.AssembleAsync(stream, null, new());
 
         if (!result.Failed)
         {
@@ -86,7 +85,7 @@ public class Program()
             }
 
             Console.Write("\n\nDisassembly: ");
-            var disassembly = new Disassembler(new RasmConfig()).Disassemble((Instruction)inst);
+            var disassembly = new MIPSDisassembler(new()).Disassemble((Instruction)inst);
             Console.Write(disassembly);
         }
         else

@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-namespace Zarem.Emulator.MIPS.Executor.Enum;
+namespace Zarem.Emulator.Executor.Enum;
 
 /// <summary>
 /// An enum describing which register to writeback to.

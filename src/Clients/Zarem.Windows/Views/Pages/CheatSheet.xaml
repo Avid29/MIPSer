@@ -6,13 +6,13 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:collections="using:CommunityToolkit.Mvvm.Collections"
-    xmlns:data="using:Zarem.Assembler.MIPS.Models.Instructions"
+    xmlns:data="using:Zarem.Assembler.Models.Instructions"
     xmlns:models="using:Zarem.Models.CheatSheet"
-    xmlns:reg="using:Zarem.MIPS.Models.Instructions.Enums.Registers"
+    xmlns:reg="using:Zarem.Models.Instructions.Enums.Registers"
     xmlns:convert="using:Zarem.Windows.Converters"
-    xmlns:helper="using:Zarem.Windows.Helpers"
+    xmlns:palette="using:Zarem.Windows.Controls.CheatSheet.Palettes"
     xmlns:cheat="using:Zarem.Windows.Controls.CheatSheet"
-    xmlns:tables="using:Zarem.Assembler.MIPS.Helpers.Tables"
+    xmlns:tables="using:Zarem.Assembler.Helpers.Tables"
     Loaded="UserControl_Loaded"
     mc:Ignorable="d">
 
@@ -105,7 +105,7 @@
                 </GradientStopCollection>
             </LinearGradientBrush>
 
-            <helper:InstructionTypeBrushPalette x:Key="InstructionBrushPalette"
+            <palette:InstructionTypeBrushPalette x:Key="InstructionBrushPalette"
                                             RType="{StaticResource RInst}"
                                             R2Type="{StaticResource R2Inst}"
                                             IType="{StaticResource IInst}"
@@ -114,14 +114,14 @@
                                             CoProcessor0="{StaticResource CoProc0Inst}"
                                             CoProcessor1="{StaticResource CoProc1Inst}"/>
 
-            <helper:ArgumentBrushPalette x:Key="ArgumentBrushPalette"
+            <palette:ArgumentBrushPalette x:Key="ArgumentBrushPalette"
                                      GPRegisterBrush="{StaticResource GPRArg}"
                                      CPRegisterBrush="{StaticResource CPRArg}"
                                      ImmediateValueBrush="{StaticResource ImmArg}"
                                      FormatBrush="{StaticResource FormatArg}"
                                      MiscArgBrush="{StaticResource MiscArg}"/>
 
-            <helper:EncodingPatternSectionBrushPalette x:Key="SectionBrushPalette"
+            <palette:EncodingPatternSectionBrushPalette x:Key="SectionBrushPalette"
                                                    OpCodeBrush="{StaticResource OpCodeSection}"
                                                    FuncCodeBrush="{StaticResource FuncCodeSection}"
                                                    RegisterFuncCodeBrush="{StaticResource RegFuncCodeSection}"

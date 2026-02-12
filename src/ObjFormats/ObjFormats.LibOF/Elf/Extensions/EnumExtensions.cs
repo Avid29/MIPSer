@@ -1,9 +1,9 @@
 ﻿// Avishai Dernis 2025
 
 using LibObjectFile.Elf;
-using Zarem.MIPS.Models.Modules.Tables.Enums;
+using Zarem.Models.Modules.Tables.Enums;
 
-namespace ObjectFiles.Elf.Extensions;
+namespace ObjFormats.LibOF.Elf.Extensions;
 
 /// <summary>
 /// A static class containing enum extensions

@@ -1,14 +1,13 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using Zarem.Services.Files.Models;
-using Zarem.Windows.Services.Files.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Zarem.Services.Files.Models;
 
-namespace Zarem.Windows.Services.FileSystem.Models;
+namespace Zarem.Windows.Services.Files.Models;
 
 /// <summary>
 /// An <see cref="IFolder"/> implementation wrapping a <see cref="StorageFolder"/>.

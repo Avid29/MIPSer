@@ -1,14 +1,14 @@
 ﻿// Avishai Dernis 2026
 
-using Zarem.Emulator.MIPS.Components.CPU;
-using Zarem.Emulator.MIPS.Components.CPU.Registers;
-using Zarem.Emulator.MIPS.Executor.Enum;
-using Zarem.MIPS.Models.Instructions;
-using Zarem.MIPS.Models.Instructions.Enums.Operations;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
 using System;
+using Zarem.Emulator.Components.CPU;
+using Zarem.Emulator.Components.CPU.Registers;
+using Zarem.Emulator.Executor.Enum;
+using Zarem.Models.Instructions;
+using Zarem.Models.Instructions.Enums.Operations;
+using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.Emulator.MIPS.Executor;
+namespace Zarem.Emulator.Executor;
 
 /// <summary>
 /// A class which handles converting decoded instructions into <see cref="Execution"/> models.

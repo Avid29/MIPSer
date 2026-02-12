@@ -12,12 +12,13 @@ using Zarem.ViewModels;
 using Zarem.ViewModels.Pages;
 using Zarem.ViewModels.Pages.App;
 using Zarem.Windows.Services;
-using Zarem.Windows.Services.FileSystem;
 using Zarem.Windows.Services.Popup;
 using Zarem.Windows.Services.Settings;
 using Zarem.Windows.Services.Versioning;
 using Zarem.Windows.Services.Windowing;
 using System;
+using Zarem.Windows.Services.Files;
+using ServiceCollection = Microsoft.Extensions.DependencyInjection.ServiceCollection;
 
 namespace Zarem.Windows;
 

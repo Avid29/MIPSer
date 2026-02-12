@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using Zarem.Assembler.MIPS.Logging;
+using Zarem.Assembler.Logging;
 
 namespace Zarem.Messages.Build;
 

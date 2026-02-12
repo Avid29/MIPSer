@@ -1,13 +1,12 @@
 ﻿// Adam Dernis 2024
 
 using Zarem.Services.Files.Models;
-using Zarem.Windows.Services.Files.Models;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
 
-namespace Zarem.Windows.Services.FileSystem.Models;
+namespace Zarem.Windows.Services.Files.Models;
 
 /// <summary>
 /// An <see cref="IFile"/> implementation wrapping <see cref="StorageFile"/>.

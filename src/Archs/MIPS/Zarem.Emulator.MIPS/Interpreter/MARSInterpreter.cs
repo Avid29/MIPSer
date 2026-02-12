@@ -1,10 +1,10 @@
 ﻿// Avishai Dernis 2026
 
-using Zarem.Emulator.MIPS.Components;
-using Zarem.Emulator.MIPS.Executor.Enum;
 using System;
+using Zarem.Emulator.Executor.Enum;
+using Zarem.Emulator.Components;
 
-namespace Zarem.Emulator.MIPS.Interpreter;
+namespace Zarem.Emulator.Interpreter;
 
 /// <summary>
 /// An interpreter mimicking the MARS syscall pattern.

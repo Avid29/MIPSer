@@ -2,13 +2,13 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using Zarem.Assembler.MIPS.Models;
-using Zarem.Assembler.MIPS.Models.Modules;
-using Zarem.Assembler.MIPS.Parsers;
 using Zarem.Assembler.MIPS.Tokenization;
-using Zarem.Assembler.MIPS.Tokenization.Models.Enums;
-using Zarem.MIPS.Models.Addressing;
-using Zarem.MIPS.Models.Modules.Tables.Enums;
+using Zarem.Assembler.Models;
+using Zarem.Assembler.Parsers;
+using Zarem.Assembler.Tokenization.Models.Enums;
+using Zarem.Models.Addressing;
+using Zarem.Models.Modules;
+using Zarem.Models.Modules.Tables.Enums;
 
 namespace Test.Assembler.MIPS.Parsers;
 
@@ -75,11 +75,11 @@ public class ExpressionParserTests
             obj.TryDefineSymbol(name, SymbolType.Macro, addr);
         }
 
-        var context = new AssemblerContext(obj);
+        var context = new MIPSAssemblerContext(obj);
         RunTest(input, expected, context);
     }
 
-    private static void RunTest(string input, long? expected = null, AssemblerContext? context = null)
+    private static void RunTest(string input, long? expected = null, MIPSAssemblerContext? context = null)
     {
         var line = Tokenizer.TokenizeLine(input, nameof(RunTest), TokenizerMode.Expression);
         bool success = ExpressionParser.TryParse(line.Tokens, out var actual, context);

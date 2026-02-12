@@ -1,31 +1,26 @@
 ﻿// Avishai Dernis 2025
 
-using CommunityToolkit.Diagnostics;
 using ObjFormats.RASM.Config;
-using ObjFormats.RASM.Tables;
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Models.Modules;
-using Zarem.MIPS.Models.Modules.Tables;
-using Zarem.MIPS.Models.Modules.Tables.Enums;
+using System.Collections.Generic;
+using Zarem.Extensions.System.IO;
+using Zarem.Models.Modules;
+using Zarem.Models.Modules.Tables;
+using Zarem.Models.Modules.Tables.Enums;
 using RasmReference = ObjFormats.RASM.Tables.ReferenceEntry;
 using RasmRelocation = ObjFormats.RASM.Tables.RelocationEntry;
 using RasmSymbol = ObjFormats.RASM.Tables.SymbolEntry;
+using ReferenceEntry = Zarem.Models.Modules.Tables.ReferenceEntry;
+using SymbolEntry = Zarem.Models.Modules.Tables.SymbolEntry;
 
-namespace  Zarem.ObjFormats.RASM;
+namespace ObjFormats.RASM;
 
 public partial class RasmModule
 {
     /// <inheritdoc/>
-    public Module? Abstract(AssemblerConfig config)
+    public Module? Abstract(RasmConfig config)
     {
-        if (config is not RasmConfig rasmConfig)
-        {
-            ThrowHelper.ThrowArgumentException(nameof(config), $"{config} must be a {nameof(RasmConfig)}.");
-            return null;
-        }
-
         // Validate the header for this assembly
-        if (!ValidateHeader(rasmConfig))
+        if (!ValidateHeader(config))
             return null;
 
         // Return to start of module

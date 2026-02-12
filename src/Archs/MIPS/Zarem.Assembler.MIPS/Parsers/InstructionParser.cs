@@ -5,32 +5,33 @@ using CommunityToolkit.HighPerformance;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Zarem.Assembler.MIPS.Helpers.Tables;
-using Zarem.Assembler.MIPS.Logging;
-using Zarem.Assembler.MIPS.Logging.Enum;
-using Zarem.Assembler.MIPS.Models;
-using Zarem.Assembler.MIPS.Models.Instructions;
-using Zarem.Assembler.MIPS.Parsers.Enums;
-using Zarem.Assembler.MIPS.Tokenization.Models;
-using Zarem.Assembler.MIPS.Tokenization.Models.Enums;
-using Zarem.MIPS.Extensions;
-using Zarem.MIPS.Helpers;
-using Zarem.MIPS.Models.Instructions;
-using Zarem.MIPS.Models.Instructions.Enums;
-using Zarem.MIPS.Models.Instructions.Enums.Operations;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions;
-using Zarem.MIPS.Models.Modules.Tables;
-using Zarem.MIPS.Models.Modules.Tables.Enums;
+using Zarem.Assembler.Extensions.System;
+using Zarem.Assembler.Helpers.Tables;
+using Zarem.Assembler.Logging;
+using Zarem.Assembler.Logging.Enum;
+using Zarem.Assembler.Models;
+using Zarem.Assembler.Models.Instructions;
+using Zarem.Assembler.Parsers.Enums;
+using Zarem.Assembler.Tokenization.Models;
+using Zarem.Assembler.Tokenization.Models.Enums;
+using Zarem.Extensions;
+using Zarem.Helpers;
+using Zarem.Models.Instructions;
+using Zarem.Models.Instructions.Enums;
+using Zarem.Models.Instructions.Enums.Operations;
+using Zarem.Models.Instructions.Enums.Registers;
+using Zarem.Models.Instructions.Enums.SpecialFunctions;
+using Zarem.Models.Modules.Tables;
+using Zarem.Models.Modules.Tables.Enums;
 
-namespace Zarem.Assembler.MIPS.Parsers;
+namespace Zarem.Assembler.Parsers;
 
 /// <summary>
 /// A struct for parsing instructions.
 /// </summary>
 public struct InstructionParser
 {
-    private readonly AssemblerContext? _context;
+    private readonly MIPSAssemblerContext? _context;
     private readonly InstructionTable _instructionTable;
     private readonly ILogger? _logger;
 
@@ -56,7 +57,7 @@ public struct InstructionParser
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionParser"/> struct.
     /// </summary>
-    public InstructionParser(AssemblerContext context, ILogger? logger)
+    public InstructionParser(MIPSAssemblerContext context, ILogger? logger)
     {
         _context = context;
 

@@ -1,10 +1,10 @@
 ﻿// Avishai Dernis 2026
 
-using Zarem.Emulator.MIPS.Executor.Enum;
 using System;
 using System.Threading;
+using Zarem.Emulator.Executor.Enum;
 
-namespace Zarem.Emulator.MIPS.Events;
+namespace Zarem.Emulator.Events;
 
 /// <summary>
 /// The event args for when a trap occurs in emulation.

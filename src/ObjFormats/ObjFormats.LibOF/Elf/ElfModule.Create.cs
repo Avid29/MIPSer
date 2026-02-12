@@ -2,12 +2,13 @@
 
 using CommunityToolkit.Diagnostics;
 using LibObjectFile.Elf;
-using ObjectFiles.Elf.Extensions;
+using ObjectFiles.Elf.Config;
+using ObjFormats.LibOF.Elf.Extensions;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Models.Modules;
+using Zarem.Assembler.Config;
+using Zarem.Extensions.System.IO;
+using Zarem.Models.Modules;
 
 namespace ObjectFiles.Elf;
 
@@ -145,7 +146,7 @@ public partial class ElfModule
     }
 
     /// <inheritdoc/>
-    public static ElfModule? Create(Module module, AssemblerConfig config)
+    public static ElfModule? Create(Module module, ElfConfig config)
     {
         var context = new ElfBuildContext(module);
 

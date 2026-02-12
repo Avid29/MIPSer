@@ -4,7 +4,7 @@ using Microsoft.UI.Xaml;
 using System.Collections.Generic;
 using System.Text;
 using Windows.UI;
-using Zarem.Assembler.MIPS.Tokenization.Models;
+using Zarem.Assembler.Tokenization.Models;
 
 namespace Zarem.Windows.Controls.CodeEditor;
 
@@ -71,5 +71,5 @@ public partial class AssemblyEditor : CodeEditor
     private static int GetEncodingSize(string original)
         => Encoding.UTF8.GetByteCount(original);
 
-    private int ToInt(Color color) => color.R | color.G << 8 | color.B << 16;
+    private static int ToInt(Color color) => color.R | color.G << 8 | color.B << 16;
 }

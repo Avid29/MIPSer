@@ -1,8 +1,11 @@
 ﻿// Adam Dernis 2024
 
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions;
 
-namespace Zarem.MIPS.Models.Instructions.Enums.Operations;
+// Adam Dernis 2024
+
+using Zarem.Models.Instructions.Enums.SpecialFunctions;
+
+namespace Zarem.Models.Instructions.Enums.Operations;
 
 /// <summary>
 /// An enum for instruction op codes.

@@ -1,13 +1,12 @@
 ﻿// Avishai Dernis 2026
 
-using Zarem.Emulator.MIPS.Executor.Enum;
-using Zarem.MIPS.Models.Instructions;
-using Zarem.MIPS.Models.Instructions.Enums.Operations;
 using System;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using Zarem.Emulator.Executor.Enum;
+using Zarem.Models.Instructions.Enums.Operations;
 
-namespace Zarem.Emulator.MIPS.Executor;
+namespace Zarem.Emulator.Executor;
 
 /// <summary>
 /// A class which handles converting decoded instructions into <see cref="Execution"/> models.

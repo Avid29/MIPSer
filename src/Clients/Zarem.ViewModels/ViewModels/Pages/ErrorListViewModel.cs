@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
-using Zarem.Assembler.MIPS.Logging;
+using Zarem.Assembler.Logging;
 using Zarem.Messages.Build;
 using Zarem.Services;
 using Zarem.ViewModels.Pages.Abstract;

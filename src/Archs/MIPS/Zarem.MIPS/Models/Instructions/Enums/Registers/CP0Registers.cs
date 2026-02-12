@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-namespace Zarem.MIPS.Models.Instructions.Enums.Registers;
+namespace Zarem.Models.Instructions.Enums.Registers;
 
 /// <summary>
 /// An enum for coprocessor0 registers.

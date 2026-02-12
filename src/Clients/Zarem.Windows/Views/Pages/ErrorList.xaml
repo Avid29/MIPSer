@@ -8,8 +8,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:local="using:Zarem.Windows.Views.Pages"
-    xmlns:logenum="using:Zarem.Assembler.MIPS.Logging.Enum"
-    xmlns:logger="using:Zarem.Assembler.MIPS.Logging"
+    xmlns:logenum="using:Zarem.Assembler.Logging.Enum"
+    xmlns:logger="using:Zarem.Assembler.Logging"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 

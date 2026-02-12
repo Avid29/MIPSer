@@ -1,13 +1,14 @@
 ﻿// Avishai Dernis 2025
 
-using Test.MIPS.Helpers;
 using ObjectFiles.Elf;
 using ObjectFiles.Elf.Config;
 using System.IO;
 using System.Threading.Tasks;
-using Zarem.Assembler.MIPS;
-using Zarem.Emulator.MIPS.Config;
-using Zarem.Emulator.MIPS.Interpreter;
+using Test.MIPS.Helpers;
+using Zarem.Assembler;
+using Zarem.Emulator;
+using Zarem.Emulator.Interpreter;
+using Zarem.Linker;
 
 namespace Test.Emulator.MIPS;
 
@@ -21,23 +22,22 @@ public class InterpreterTests
         var path = TestFilePathing.GetAssemblyFilePath("emulator_tests/usercode_tests/hello_world.asm");
         var stream = File.Open(path, FileMode.Open);
 
-        var elfConfig = new ElfConfig();
-
         // Run assembler, and assert successful assembly
-        var result = await Assembler.AssembleAsync(stream, path, elfConfig);
-        Assert.IsNotNull(result.AbstractModule);
+        var result = await MIPSAssembler.AssembleAsync(stream, path, new());
+        Assert.IsNotNull(result.Module);
 
         // Link
-        var module = Zarem.Linker.MIPS.Linker<ElfModule, ElfConfig>.Link(elfConfig, "entry", result.AbstractModule);
+        var elfConfig = new ElfConfig();
+        var module = MIPSLinker.Link("entry", result.Module);
         var elfModule = ElfModule.Create(module, elfConfig);
         Assert.IsNotNull(elfModule);
 
         // Setup emulator
-        var emulatorConfig = new EmulatorConfig()
+        var emulatorConfig = new Zarem.Emulator.Config.MIPSEmulatorConfig()
         {
             HostedTraps = true
         };
-        var emulator = new Zarem.Emulator.MIPS.Emulator(emulatorConfig);
+        var emulator = new MIPSEmulator(emulatorConfig);
         emulator.Computer.Processor.ProgramCounter = elfModule.EntryAddress;
         emulator.Load(elfModule);
 

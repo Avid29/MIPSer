@@ -2,18 +2,18 @@
 
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using Zarem.MIPS.Models.Instructions.Enums;
-using Zarem.Config;
-using Zarem.Messages.Navigation;
-using Zarem.Services;
-using Zarem.Services.Files;
-using Zarem.ViewModels.Pages.Abstract;
-using  Zarem.ObjFormats.RASM.Config;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
+using Zarem.Assembler.Config;
+using Zarem.Config;
+using Zarem.Messages.Navigation;
+using Zarem.Models.Instructions.Enums;
+using Zarem.Services;
+using Zarem.Services.Files;
+using Zarem.ViewModels.Pages.Abstract;
 
 namespace Zarem.ViewModels.Pages;
 
@@ -141,17 +141,19 @@ public class CreateProjectViewModel : PageViewModel
         {
             Name = ProjectName,
             ConfigPath = projectFilePath,
-            AssemblerConfig = new RasmConfig(MipsVersion)
+            AssemblerConfig = new MIPSAssemblerConfig(MipsVersion)
         };
 
+        // TODO: Serialize and save the project 
+
         // Write project config to the file 
-        await projectConfig.SerializeAsync(stream);
+        //await projectConfig.SerializeAsync(stream);
 
         // Open the project and close the page
         await _projectService.OpenProjectAsync(projectConfig);
         ClosePage();
 
-        // TODO: Open the project in a new window
+        // TODO: Open the project in a new window?
     }
 
     private async Task SelectFolderAsync()

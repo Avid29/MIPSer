@@ -1,8 +1,9 @@
 ﻿// Adam Dernis 2025
 
-using Zarem.MIPS.Models.Instructions.Enums.Operations;
+using Zarem.Models.Instructions;
+using Zarem.Models.Instructions.Enums.Operations;
 
-namespace Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions;
+namespace Zarem.Models.Instructions.Enums.SpecialFunctions;
 
 /// <summary>
 /// An enum for <see cref="OperationCode.Special3"/> instruction function codes.

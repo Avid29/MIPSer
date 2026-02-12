@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-namespace Zarem.MIPS.Models.Instructions.Enums;
+namespace Zarem.Models.Instructions.Enums;
 
 /// <summary>
 /// An enum for potential argument types.

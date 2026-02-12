@@ -1,9 +1,10 @@
 ﻿// Adam Dernis 2025
 
-using Zarem.MIPS.Models.Instructions.Enums.Operations;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
+using Zarem.Models.Instructions;
+using Zarem.Models.Instructions.Enums.Operations;
+using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
+namespace Zarem.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 
 /// <summary>
 /// An enum for <see cref="OperationCode.Coprocessor1"/> instruction rs field function codes.

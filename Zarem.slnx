@@ -59,5 +59,11 @@
     <Project Path="tests/ObjFormats/Test.Formats/Test.ObjFormats.csproj" />
     <Project Path="tests/ObjFormats/Test.RASM/Test.RASM.csproj" />
   </Folder>
-  <Project Path="src/Zarem/Zarem.csproj" />
+  <Project Path="src/Zarem.Assembler/Zarem.Assembler.csproj" Id="a4a13c0e-dc3b-4c0d-aa24-5e7e3c2f5500" />
+  <Project Path="src/Zarem.Debugger/Zarem.Debugger.csproj" Id="8514a780-630d-45ee-a9c5-683d7e26ed09" />
+  <Project Path="src/Zarem.Disassembler/Zarem.Disassembler.csproj" Id="cfe7fc00-2550-4bc7-aae5-9484270fa566" />
+  <Project Path="src/Zarem.Emulator/Zarem.Emulator.csproj" Id="89e90d7f-f7ba-4b83-be1d-16e3c7e8efb0" />
+  <Project Path="src/Zarem.Linker/Zarem.Linker.csproj" Id="6f7e8e0f-a148-420b-818d-24f34caed6da" />
+  <Project Path="src/Zarem.Projects/Zarem.Projects.csproj" Id="b349d2a5-f504-49a6-8abc-bf6e499795d2" />
+  <Project Path="src/Zarem/Zarem.Base.csproj" />
 </Solution>

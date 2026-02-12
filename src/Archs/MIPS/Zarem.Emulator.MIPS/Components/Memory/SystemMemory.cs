@@ -3,13 +3,14 @@
 using CommunityToolkit.HighPerformance;
 using CommunityToolkit.HighPerformance.Buffers;
 using CommunityToolkit.HighPerformance.Helpers;
-using Zarem.Emulator.MIPS.Helpers;
 using System;
 using System.IO;
 using System.Numerics;
 using System.Text;
+using Zarem.Emulator.Helpers;
+using Zarem.Extensions.System.IO;
 
-namespace Zarem.Emulator.MIPS.Components.Memory;
+namespace Zarem.Emulator.Components.Memory;
 
 /// <summary>
 /// Represents the RAM (Random Access Memory) in a MIPS emulator.

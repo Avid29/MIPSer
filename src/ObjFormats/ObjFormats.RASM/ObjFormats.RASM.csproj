@@ -1,13 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		<RootNamespace>ObjFormats.RASM</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Archs\MIPS\Zarem.Assembler.MIPS\Zarem.Assembler.MIPS.csproj" />
-	  <ProjectReference Include="..\..\Archs\MIPS\Zarem.Emulator.MIPS\Zarem.Emulator.MIPS.csproj" />
+	  <ProjectReference Include="..\..\Zarem.Assembler\Zarem.Assembler.csproj" />
+	  <ProjectReference Include="..\..\Zarem.Emulator\Zarem.Emulator.csproj" />
 	</ItemGroup>
 
 </Project>

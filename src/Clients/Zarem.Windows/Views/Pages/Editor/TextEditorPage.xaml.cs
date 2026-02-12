@@ -3,7 +3,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI;
 using Microsoft.UI.Xaml.Controls;
-using Zarem.Assembler.MIPS.Tokenization.Models;
+using Zarem.Assembler.Tokenization.Models;
 using Zarem.Messages;
 using Zarem.Messages.Editor.Enums;
 using Zarem.Models.EditorConfig.ColorScheme;

@@ -1,16 +1,16 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
-using Zarem.Emulator.MIPS.Components.CPU.CoProcessors;
-using Zarem.Emulator.MIPS.Components.CPU.Registers;
-using Zarem.Emulator.MIPS.Events;
-using Zarem.Emulator.MIPS.Executor;
-using Zarem.Emulator.MIPS.Executor.Enum;
-using Zarem.MIPS.Models.Instructions;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
 using System;
+using Zarem.Emulator.Components.CPU.CoProcessors;
+using Zarem.Emulator.Components.CPU.Registers;
+using Zarem.Emulator.Events;
+using Zarem.Emulator.Executor;
+using Zarem.Emulator.Executor.Enum;
+using Zarem.Models.Instructions;
+using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.Emulator.MIPS.Components.CPU;
+namespace Zarem.Emulator.Components.CPU;
 
 /// <summary>
 /// A class representing a processor unit.

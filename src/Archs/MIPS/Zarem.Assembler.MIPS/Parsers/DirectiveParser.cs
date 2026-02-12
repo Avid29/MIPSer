@@ -1,19 +1,20 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using Zarem.Assembler.MIPS.Logging;
-using Zarem.Assembler.MIPS.Logging.Enum;
-using Zarem.Assembler.MIPS.Models;
-using Zarem.Assembler.MIPS.Models.Directives;
-using Zarem.Assembler.MIPS.Models.Directives.Abstract;
-using Zarem.Assembler.MIPS.Tokenization.Models;
-using Zarem.Assembler.MIPS.Tokenization.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Zarem.Assembler.Extensions.System;
+using Zarem.Assembler.Logging;
+using Zarem.Assembler.Logging.Enum;
+using Zarem.Assembler.Models;
+using Zarem.Assembler.Models.Directives;
+using Zarem.Assembler.Models.Directives.Abstract;
+using Zarem.Assembler.Tokenization.Models;
+using Zarem.Assembler.Tokenization.Models.Enums;
 
-namespace Zarem.Assembler.MIPS.Parsers;
+namespace Zarem.Assembler.Parsers;
 
 // TODO: Allow repeat with <express> [: <count>] format
 
@@ -22,13 +23,13 @@ namespace Zarem.Assembler.MIPS.Parsers;
 /// </summary>
 public readonly struct DirectiveParser
 {
-    private readonly AssemblerContext? _context;
+    private readonly MIPSAssemblerContext? _context;
     private readonly ILogger? _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="DirectiveParser"/> struct.
     /// </summary>
-    public DirectiveParser(AssemblerContext context, ILogger? logger = null)
+    public DirectiveParser(MIPSAssemblerContext context, ILogger? logger = null)
     {
         _context = context;
         _logger = logger;

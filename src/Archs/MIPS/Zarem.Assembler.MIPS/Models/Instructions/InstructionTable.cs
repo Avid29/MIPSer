@@ -1,14 +1,14 @@
 ﻿// Adam Dernis 2024
 
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Models.Enums;
-using Zarem.Assembler.MIPS.Models.Instructions.Abstract;
-using Zarem.MIPS.Models.Instructions.Enums;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Zarem.Assembler.Config;
+using Zarem.Assembler.Models.Enums;
+using Zarem.Assembler.Models.Instructions.Abstract;
+using Zarem.Models.Instructions.Enums;
 
-namespace Zarem.Assembler.MIPS.Models.Instructions;
+namespace Zarem.Assembler.Models.Instructions;
 
 /// <summary>
 /// A class for managing instruction lookup by name.
@@ -21,7 +21,7 @@ public class InstructionTable : InstructionTableBase<string>
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionTable"/> class.
     /// </summary>
-    public InstructionTable(AssemblerConfig config) : base(config)
+    public InstructionTable(MIPSAssemblerConfig config) : base(config)
     {
     }
 

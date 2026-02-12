@@ -1,16 +1,17 @@
 ﻿// Avishai Dernis 2025
 
-using ObjFormats.RASM;
 using ObjFormats.RASM.Config;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Models.Modules;
-using Zarem.MIPS.Models.Modules.Tables;
+using Zarem.Assembler.Config;
+using Zarem.Models.Modules;
+using Zarem.Models.Modules.Tables;
 using RasmReference = ObjFormats.RASM.Tables.ReferenceEntry;
 using RasmRelocation = ObjFormats.RASM.Tables.RelocationEntry;
 using RasmSymbol = ObjFormats.RASM.Tables.SymbolEntry;
 
-namespace  Zarem.ObjFormats.RASM;
+namespace ObjFormats.RASM;
 
 public partial class RasmModule
 {
@@ -160,16 +161,13 @@ public partial class RasmModule
     }
 
     /// <inheritdoc/>
-    public static RasmModule? Create(Module constructor, AssemblerConfig config)
+    public static RasmModule? Create(Module constructor, RasmConfig config)
     {
         // TODO: Flags and entry point properly
         // TODO: Construct string list.
 
-        if (config is not RasmConfig rasmConfig)
-            return null;
-
         // Create context
-        var context = new RasmBuildContext(constructor, rasmConfig);
+        var context = new RasmBuildContext(constructor, config);
 
         // Allocate space for header
         context.InitAndAllocHeader();

@@ -6,14 +6,14 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Documents;
 using Microsoft.UI.Xaml.Media;
-using Zarem.Assembler.MIPS.Helpers.Tables;
-using Zarem.Assembler.MIPS.Models.Instructions;
+using Zarem.Assembler.Helpers.Tables;
 using Zarem.Assembler.MIPS.Tokenization;
-using Zarem.Assembler.MIPS.Tokenization.Models;
-using Zarem.Assembler.MIPS.Tokenization.Models.Enums;
-using Zarem.MIPS.Models.Instructions.Enums;
+using Zarem.Assembler.Models.Instructions;
+using Zarem.Assembler.Tokenization.Models;
+using Zarem.Assembler.Tokenization.Models.Enums;
+using Zarem.Models.Instructions.Enums;
 using Zarem.Services;
-using Zarem.Windows.Helpers;
+using Zarem.Windows.Controls.CheatSheet.Palettes;
 
 namespace Zarem.Windows.Controls.CheatSheet;
 

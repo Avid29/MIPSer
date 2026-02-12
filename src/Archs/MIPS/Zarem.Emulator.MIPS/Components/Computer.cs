@@ -1,10 +1,10 @@
 ﻿// Avishai Dernis 2025
 
-using Zarem.Emulator.MIPS.Components.CPU;
-using Zarem.Emulator.MIPS.Components.Memory;
-using Zarem.Emulator.MIPS.Config;
+using Zarem.Emulator.Components.CPU;
+using Zarem.Emulator.Components.Memory;
+using Zarem.Emulator.Config;
 
-namespace Zarem.Emulator.MIPS.Components;
+namespace Zarem.Emulator.Components;
 
 /// <summary>
 /// A class representing a computer system in the MIPS interpreter.
@@ -14,7 +14,7 @@ public class Computer
     /// <summary>
     /// Initializes a new instance of the <see cref="Computer"/> class.
     /// </summary>
-    public Computer(EmulatorConfig config)
+    public Computer(MIPSEmulatorConfig config)
     {
         Config = config;
 
@@ -35,7 +35,7 @@ public class Computer
     /// <summary>
     /// Gets the emulation configuration to follow for computing.
     /// </summary>
-    public EmulatorConfig Config { get; }
+    public MIPSEmulatorConfig Config { get; }
 
     /// <summary>
     /// Advance one tick.

@@ -1,12 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <RootNamespace>Zarem.MIPS</RootNamespace>
+	  <RootNamespace>Zarem</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.2.0" />
-    <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.3.2" />
+    <ProjectReference Include="..\..\..\Zarem\Zarem.Base.csproj" />
   </ItemGroup>
 
 </Project>

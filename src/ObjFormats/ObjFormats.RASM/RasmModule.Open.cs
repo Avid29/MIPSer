@@ -1,8 +1,8 @@
 ﻿// Avishai Dernis 2025
 
-using ObjFormats.RASM;
+using System.IO;
 
-namespace  Zarem.ObjFormats.RASM;
+namespace ObjFormats.RASM;
 
 public partial class RasmModule
 {

@@ -7,7 +7,7 @@ using System.Globalization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Zarem.Assembler.MIPS.Logging;
+using Zarem.Assembler.Logging;
 using Zarem.Messages.Build;
 using Zarem.Models;
 using Zarem.Models.Enums;

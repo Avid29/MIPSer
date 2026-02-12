@@ -1,5 +1,7 @@
 ﻿// Adam Dernis 2024
 
+using System;
+
 namespace ObjFormats.RASM.Tables.Enums;
 
 /// <summary>

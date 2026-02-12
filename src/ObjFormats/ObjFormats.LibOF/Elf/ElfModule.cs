@@ -1,16 +1,17 @@
 ﻿// Avishai Dernis 2025
 
-using Zarem.Emulator.MIPS.Models.Modules;
 using LibObjectFile.Elf;
+using ObjectFiles.Elf.Config;
 using System.IO;
-using Zarem.Assembler.MIPS.Models.Modules.Interfaces;
+using Zarem.Assembler.Models.Modules;
+using Zarem.Emulator.Models.Modules;
 
 namespace ObjectFiles.Elf;
 
 /// <summary>
 /// An object module in ELF format.
 /// </summary>
-public partial class ElfModule : IBuildModule<ElfModule>, IExecutableModule
+public partial class ElfModule : IBuildModule<ElfModule, ElfConfig>, IExecutableModule
 {
     private readonly ElfFile _elfFile;
 

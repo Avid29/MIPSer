@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2025
 
-namespace Zarem.MIPS.Models.Instructions.Enums.Operations;
+namespace Zarem.Models.Instructions.Enums.Operations;
 
 /// <summary>
 /// An enum for pesudo-instruction types.

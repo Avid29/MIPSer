@@ -1,12 +1,13 @@
 ﻿// Avishai Dernis 2025
 
 using LibObjectFile.Elf;
-using ObjectFiles.Elf.Extensions;
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Models.Modules;
-using Zarem.MIPS.Models.Addressing;
-using Zarem.MIPS.Models.Modules.Tables;
-using Zarem.MIPS.Models.Modules.Tables.Enums;
+using ObjectFiles.Elf.Config;
+using ObjFormats.LibOF.Elf.Extensions;
+using Zarem.Assembler.Config;
+using Zarem.Models.Addressing;
+using Zarem.Models.Modules;
+using Zarem.Models.Modules.Tables;
+using Zarem.Models.Modules.Tables.Enums;
 
 namespace ObjectFiles.Elf;
 
@@ -74,7 +75,7 @@ public partial class ElfModule
     }
 
     /// <inheritdoc/>
-    public Module? Abstract(AssemblerConfig config)
+    public Module? Abstract(ElfConfig config)
     {
         var context = new ElfAbstractContext(_elfFile);
 

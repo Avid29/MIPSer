@@ -1,12 +1,12 @@
 ﻿// Avishai Dernis 2026
 
-using Zarem.Emulator.MIPS.Components;
-using Zarem.Emulator.MIPS.Components.CPU;
-using Zarem.Emulator.MIPS.Events;
-using Zarem.Emulator.MIPS.Executor.Enum;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
+using Zarem.Emulator.Components;
+using Zarem.Emulator.Components.CPU;
+using Zarem.Emulator.Events;
+using Zarem.Emulator.Executor.Enum;
+using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.Emulator.MIPS.Interpreter;
+namespace Zarem.Emulator.Interpreter;
 
 /// <summary>
 /// An interface for an interpreter, which handles traps as the host-layer

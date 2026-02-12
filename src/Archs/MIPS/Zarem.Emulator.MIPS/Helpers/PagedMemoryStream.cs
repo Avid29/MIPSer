@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Zarem.Emulator.MIPS.Helpers;
+namespace Zarem.Emulator.Helpers;
 
 /// <summary>
 /// A <see cref="MemoryStream"/> with a virtual paging TLB above it to allow sparse .

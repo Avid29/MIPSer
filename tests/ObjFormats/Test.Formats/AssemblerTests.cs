@@ -1,21 +1,18 @@
 ﻿// Avishai Dernis 2025
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Test.MIPS.Helpers;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Zarem.Assembler.MIPS;
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Logging.Enum;
-using Zarem.Assembler.MIPS.Models.Modules.Interfaces;
+using Test.MIPS.Helpers;
+using Zarem.Assembler;
+using Zarem.Assembler.Config;
+using Zarem.Assembler.Logging.Enum;
 
 namespace Test.ObjFormats;
 
-public class AssemblerTests<TModule, TConfig>
-    where TModule : IBuildModule<TModule>
-    where TConfig : AssemblerConfig, new()
+public class AssemblerTests
 {
     protected static async Task RunFileTest(string fileName, params (LogCode, long)[] expected)
     {
@@ -27,21 +24,21 @@ public class AssemblerTests<TModule, TConfig>
         await RunTest(stream, fileName, null, expected);
     }
 
-    protected static async Task RunStringTest(string str, TConfig? config = null, params LogCode[] expected)
+    protected static async Task RunStringTest(string str, MIPSAssemblerConfig? config = null, params LogCode[] expected)
     {
         // Wrap the test in a stream and run the test
         var stream = new MemoryStream(Encoding.Default.GetBytes(str));
         await RunTest(stream, null, config, [.. expected.Select((x) => (x, 1L))]);
     }
 
-    protected static async Task RunTest(Stream stream, string? filename = null, TConfig? config = null, params (LogCode, long)[] expected)
+    protected static async Task RunTest(Stream stream, string? filename = null, MIPSAssemblerConfig? config = null, params (LogCode, long)[] expected)
     {
         // Load output file
         //var output = TestFilePathing.GetMatchingObjectFilePath(filename);
         //Stream result = File.Open(output, FileMode.OpenOrCreate);
 
         // Run assembler
-        var result = await Assembler.AssembleAsync<TModule, TConfig>(stream, filename, config ?? new TConfig());
+        var result = await MIPSAssembler.AssembleAsync(stream, filename, config ?? new());
 
         // Find expected errors, warnings, and messages
         if (expected.Length == result.Logs.Count)
@@ -62,6 +59,7 @@ public class AssemblerTests<TModule, TConfig>
             return;
 
         // Write the module and assert validity
-        var constructor = result.ObjectModule?.Abstract(config ?? new TConfig());
+
+        // TODO:
     }
 }

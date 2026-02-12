@@ -1,12 +1,14 @@
 ﻿// Adam Dernis 2024
 
 using ObjFormats.RASM.Tables.Enums;
+using System.IO;
 using System.Runtime.InteropServices;
-using Zarem.Assembler.MIPS.Models.Modules.Interfaces.Tables;
-using Zarem.MIPS.Helpers;
-using Zarem.MIPS.Models.Addressing;
-using CommonEntry = Zarem.MIPS.Models.Modules.Tables.ReferenceEntry;
-using CommonType = Zarem.MIPS.Models.Modules.Tables.Enums.MipsReferenceType;
+using Zarem.Assembler.Models.Modules.Tables;
+using Zarem.Extensions.System.IO;
+using Zarem.Helpers;
+using Zarem.Models.Addressing;
+using CommonEntry = Zarem.Models.Modules.Tables.ReferenceEntry;
+using CommonType = Zarem.Models.Modules.Tables.Enums.MipsReferenceType;
 
 namespace ObjFormats.RASM.Tables;
 

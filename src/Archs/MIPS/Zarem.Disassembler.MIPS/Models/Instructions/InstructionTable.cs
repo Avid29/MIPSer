@@ -1,11 +1,11 @@
 ﻿// Adam Dernis 2025
 
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Models.Instructions;
-using Zarem.Assembler.MIPS.Models.Instructions.Abstract;
-using Zarem.MIPS.Models.Instructions.Enums;
+using Zarem.Assembler.Config;
+using Zarem.Assembler.Models.Instructions;
+using Zarem.Assembler.Models.Instructions.Abstract;
+using Zarem.Models.Instructions.Enums;
 
-namespace Zarem.Disassembler.MIPS.Models.Instructions;
+namespace Zarem.Disassembler.Models.Instructions;
 
 /// <summary>
 /// A class for managing instruction lookup by opcode and function code.
@@ -15,7 +15,7 @@ public class InstructionTable : InstructionTableBase<(byte op, byte func, bool)>
     /// <summary>
     /// Initializes a new instance of the <see cref="InstructionTable"/> class.
     /// </summary>
-    public InstructionTable(AssemblerConfig config) : base(config)
+    public InstructionTable(MIPSAssemblerConfig config) : base(config)
     {
     }
 

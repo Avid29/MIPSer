@@ -1,5 +1,7 @@
 // Avishai Dernis 2025
 
+using Zarem.Windows;
+
 namespace Zarem.Windows;
 
 /// <summary>

@@ -2,5 +2,5 @@
 
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Tests.Emulator.MIPS")]
+[assembly: InternalsVisibleTo("Test.Emulator.MIPS")]
 

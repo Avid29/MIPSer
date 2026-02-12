@@ -1,9 +1,9 @@
 ﻿// Adam Dernis 2024
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Zarem.Assembler.MIPS.Logging;
-using Zarem.Assembler.MIPS.Parsers;
-using Zarem.Assembler.MIPS.Tokenization.Models;
+using Zarem.Assembler.Logging;
+using Zarem.Assembler.Parsers;
+using Zarem.Assembler.Tokenization.Models;
 
 namespace Test.Assembler.MIPS.Parsers;
 

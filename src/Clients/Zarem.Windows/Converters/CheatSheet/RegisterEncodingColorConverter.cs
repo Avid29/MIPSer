@@ -2,8 +2,8 @@
 
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
 using System;
+using Zarem.Models.Instructions.Enums.Registers;
 
 namespace Zarem.Windows.Converters
 {

@@ -1,12 +1,12 @@
 ﻿// Adam Dernis 2025
 
-using Zarem.MIPS.Models.Instructions.Enums.Operations;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
 using System.Runtime.CompilerServices;
+using Zarem.Models.Instructions.Enums.Operations;
+using Zarem.Models.Instructions.Enums.SpecialFunctions.CoProc0;
+using Zarem.Models.Instructions.Enums.SpecialFunctions;
+using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.MIPS.Models.Instructions;
+namespace Zarem.Models.Instructions;
 
 //                     MIPS Co-Processor0 Instructions Layout
 // ----------------------------------------------------------------------------

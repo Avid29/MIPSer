@@ -7,9 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.Json;
-using Zarem.Assembler.MIPS.Models.Instructions;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
+using Zarem.Assembler.Models.Instructions;
 using Zarem.Models.CheatSheet;
+using Zarem.Models.Instructions.Enums.Registers;
 using Zarem.Services;
 using Zarem.ViewModels.Pages.Abstract;
 

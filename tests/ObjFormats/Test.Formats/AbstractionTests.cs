@@ -2,21 +2,22 @@
 
 using CommunityToolkit.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Test.MIPS.Helpers;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Zarem.Assembler.MIPS;
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Models.Modules.Interfaces;
+using Test.MIPS.Helpers;
+using Zarem.Assembler;
+using Zarem.Assembler.Config;
+using Zarem.Assembler.Models.Modules;
+using Zarem.Config;
 
 namespace Test.ObjFormats;
 
 public class AbstractionTests<TModule, TConfig>
-    where TModule : IBuildModule<TModule>
-    where TConfig : AssemblerConfig, new()
+    where TModule : IBuildModule<TModule, TConfig>
+    where TConfig : FormatConfig, new()
 {
-    protected static async Task RunFileTest(string fileName, TConfig? config = null)
+    protected static async Task RunFileTest(string fileName, MIPSAssemblerConfig? config = null)
     {
         // Load the file
         var path = TestFilePathing.GetAssemblyFilePath(fileName);
@@ -26,19 +27,24 @@ public class AbstractionTests<TModule, TConfig>
         await RunTest(stream, fileName, config);
     }
 
-    protected static async Task RunTest(Stream stream, string? filename = null, TConfig? config = null)
+    protected static async Task RunTest(Stream stream, string? filename = null, MIPSAssemblerConfig? assemblerConfig = null, TConfig? formatConfig = null)
     {
-        config ??= new TConfig();
+        assemblerConfig ??= new();
+        formatConfig ??= new();
 
-        var assemblyResult = await Assembler.AssembleAsync<TModule, TConfig>(stream, filename, config);
+        var assemblyResult = await MIPSAssembler.AssembleAsync(stream, filename, assemblerConfig);
         Guard.IsNotNull(assemblyResult.Module);
-        Guard.IsNotNull(assemblyResult.AbstractModule);
 
-        var reconvertedAbstractModule = assemblyResult.ObjectModule?.Abstract(config);
+        // Extract
+        var module = TModule.Create(assemblyResult.Module, formatConfig);
+        Guard.IsNotNull(module);
+
+        // 
+        var reconvertedAbstractModule = module.Abstract(formatConfig);
         Guard.IsNotNull(reconvertedAbstractModule);
 
         // Compare original and compare
-        var original = assemblyResult.AbstractModule;
+        var original = assemblyResult.Module;
         var compare = reconvertedAbstractModule;
 
         foreach (var (key, value) in original.Symbols)

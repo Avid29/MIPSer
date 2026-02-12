@@ -3,7 +3,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Zarem.Models.CheatSheet;
-using Zarem.Windows.Helpers;
+using Zarem.Windows.Controls.CheatSheet.Palettes;
 
 namespace Zarem.Windows.Controls.CheatSheet;
 

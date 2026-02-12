@@ -3,7 +3,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using System.Linq;
 using System.Threading.Tasks;
-using Zarem.Assembler.MIPS.Tokenization.Models;
+using Zarem.Assembler.Tokenization.Models;
 using Zarem.Bindables.Files;
 using Zarem.Messages.Editor;
 using Zarem.Messages.Editor.Enums;

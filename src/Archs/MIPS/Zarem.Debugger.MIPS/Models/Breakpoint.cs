@@ -1,8 +1,8 @@
 ﻿// Avishai Dernis 2026
 
-using Zarem.MIPS.Models.Instructions;
+using Zarem.Models.Instructions;
 
-namespace Zarem.Debugger.MIPS.Models;
+namespace Zarem.Debugger.Models;
 
 /// <summary>
 /// A breakpoint in the code.

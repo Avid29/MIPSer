@@ -1,7 +1,9 @@
 ﻿// Adam Dernis 2024
 
 using ObjFormats.RASM.Tables;
+using System.IO;
 using System.Runtime.CompilerServices;
+using Zarem.Extensions.System.IO;
 
 namespace ObjFormats.RASM;
 

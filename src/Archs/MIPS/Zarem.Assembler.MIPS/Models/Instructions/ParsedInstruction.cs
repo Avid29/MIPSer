@@ -1,11 +1,11 @@
 ﻿// Adam Dernis 2024
 
-using Zarem.MIPS.Models.Instructions;
-using Zarem.Assembler.MIPS.Parsers;
 using System.Diagnostics.CodeAnalysis;
-using Zarem.MIPS.Models.Modules.Tables;
+using Zarem.Assembler.Parsers;
+using Zarem.Models.Instructions;
+using Zarem.Models.Modules.Tables;
 
-namespace Zarem.Assembler.MIPS.Models.Instructions;
+namespace Zarem.Assembler.Models.Instructions;
 
 /// <summary>
 /// An instruction as parsed by the <see cref="InstructionParser"/>.

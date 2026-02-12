@@ -3,12 +3,12 @@
 using System.Collections.Generic;
 using System.IO;
 using WinUIEditor;
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Models.Instructions;
+using Zarem.Assembler.Config;
 using Zarem.Assembler.MIPS.Tokenization;
-using Zarem.Assembler.MIPS.Tokenization.Models;
-using Zarem.Assembler.MIPS.Tokenization.Models.Enums;
-using Zarem.MIPS.Models.Modules.Tables;
+using Zarem.Assembler.Models.Instructions;
+using Zarem.Assembler.Tokenization.Models;
+using Zarem.Assembler.Tokenization.Models.Enums;
+using Zarem.Models.Modules.Tables;
 
 namespace Zarem.Windows.Controls.CodeEditor;
 
@@ -64,7 +64,7 @@ public partial class AssemblyEditor
         Instructions = [];
 
         // Get the instruction table
-        var config = AssemblerConfig ?? new AssemblerConfig();
+        var config = AssemblerConfig ?? new MIPSAssemblerConfig();
         var table = new InstructionTable(config);
         var instructions = table.GetInstructions();
 

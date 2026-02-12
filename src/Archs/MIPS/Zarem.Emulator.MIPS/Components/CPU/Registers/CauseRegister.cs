@@ -1,10 +1,10 @@
 ﻿// Avishai Dernis 2025
 
-using Zarem.Emulator.MIPS.Executor.Enum;
 using System.Runtime.CompilerServices;
-using Zarem.MIPS.Helpers;
+using Zarem.Emulator.Executor.Enum;
+using Zarem.Helpers;
 
-namespace Zarem.Emulator.MIPS.Components.CPU.Registers;
+namespace Zarem.Emulator.Components.CPU.Registers;
 
 /// <summary>
 /// CoProcessor0 Cause register.

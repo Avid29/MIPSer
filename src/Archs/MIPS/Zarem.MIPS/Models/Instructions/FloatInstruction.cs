@@ -1,13 +1,13 @@
 ﻿// Adam Dernis 2024
 
-using Zarem.MIPS.Models.Instructions.Enums;
-using Zarem.MIPS.Models.Instructions.Enums.Operations;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 using System.Runtime.CompilerServices;
+using Zarem.Models.Instructions.Enums.Operations;
+using Zarem.Models.Instructions.Enums.Registers;
+using Zarem.Models.Instructions.Enums.SpecialFunctions.FloatProc;
+using Zarem.Models.Instructions.Enums;
+using Zarem.Models.Instructions.Enums.SpecialFunctions;
 
-namespace Zarem.MIPS.Models.Instructions;
+namespace Zarem.Models.Instructions;
 
 
 //                     MIPS Floating-Point Instructions Layout

@@ -1,10 +1,10 @@
 ﻿// Adam Dernis 2024
 
-using Zarem.Emulator.MIPS.Components.CPU.Registers;
-using Zarem.Emulator.MIPS.Components.Enums;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
+using Zarem.Emulator.Components.CPU.Registers;
+using Zarem.Emulator.Components.Enums;
+using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.Emulator.MIPS.Components.CPU.CoProcessors;
+namespace Zarem.Emulator.Components.CPU.CoProcessors;
 
 /// <summary>
 /// A class representing the 0th co-processor unit.

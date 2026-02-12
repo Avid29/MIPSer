@@ -1,15 +1,15 @@
 ﻿// Avishai Dernis 2025
 
-using Test.MIPS.Helpers;
 using ObjectFiles.Elf;
+using ObjectFiles.Elf.Config;
 using System.Threading.Tasks;
+using Test.MIPS.Helpers;
 using Test.ObjFormats;
-using Zarem.Assembler.MIPS.Config;
 
 namespace Test.Elf;
 
 [TestClass]
-public class AbstractionTests : AbstractionTests<ElfModule, AssemblerConfig>
+public class AbstractionTests : AbstractionTests<ElfModule, ElfConfig>
 {
     [TestMethod(TestFilePathing.BranchLiteralFile)]
     public async Task BranchLiteralFileTest() => await RunFileTest(TestFilePathing.BranchLiteralFile);

@@ -117,14 +117,16 @@ public class ProjectService : IProjectService
         var stream = await file.OpenStreamForReadAsync();
         if (stream is null)
             return;
+        
+        // TODO: Deserialize and open projects
 
-        // Attempt to deserialize
-        var config = await ProjectConfig.DeserializeAsync(path, stream);
-        if (config is null)
-            return;
+        //// Attempt to deserialize
+        //var config = await ProjectConfig.DeserializeAsync(path, stream);
+        //if (config is null)
+        //    return;
 
-        // Open the project
-        await OpenProjectAsync(config, cacheState);
+        //// Open the project
+        //await OpenProjectAsync(config, cacheState);
     }
 
     /// <inheritdoc/>

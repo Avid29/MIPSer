@@ -1,8 +1,8 @@
 ﻿// Adam Dernis 2025
 
-using Zarem.MIPS.Services.Interfaces;
+using Zarem.Services.Interfaces;
 
-namespace Zarem.MIPS.Services;
+namespace Zarem.Services;
 
 /// <summary>
 /// A collection of global services.

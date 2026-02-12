@@ -4,10 +4,10 @@ using CommunityToolkit.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Text;
-using Zarem.Assembler.MIPS.Models.Directives;
-using Zarem.Assembler.MIPS.Models.Directives.Abstract;
-using Zarem.Assembler.MIPS.Parsers;
 using Zarem.Assembler.MIPS.Tokenization;
+using Zarem.Assembler.Models.Directives;
+using Zarem.Assembler.Models.Directives.Abstract;
+using Zarem.Assembler.Parsers;
 
 namespace Test.Assembler.MIPS.Parsers;
 

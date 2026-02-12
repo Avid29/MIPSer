@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using WinUIEditor;
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Logging;
-using Zarem.Assembler.MIPS.Logging.Enum;
-using Zarem.MIPS.Models.Instructions.Enums;
+using Zarem.Assembler;
+using Zarem.Assembler.Config;
+using Zarem.Assembler.Logging;
+using Zarem.Assembler.Logging.Enum;
+using Zarem.Models.Instructions.Enums;
 
 namespace Zarem.Windows.Controls.CodeEditor;
 
@@ -108,8 +109,8 @@ public partial class AssemblyEditor
         // Run assembler and show errors
         try
         {
-            var config = AssemblerConfig ?? new AssemblerConfig(MipsVersion.MipsIII);
-            var result = await Assembler.MIPS.Assembler.AssembleAsync(Text, null, config);
+            var config = AssemblerConfig ?? new MIPSAssemblerConfig(MipsVersion.MipsIII);
+            var result = await MIPSAssembler.AssembleAsync(Text, null, config);
             ApplyLogHighlights(result.Logs);
             UpdateSymbols(result.Symbols);
         }

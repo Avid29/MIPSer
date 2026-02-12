@@ -3,7 +3,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
 using System;
-using Zarem.Assembler.MIPS.Config;
+using Zarem.Assembler.Config;
 using Zarem.Services.Settings.Enums;
 
 namespace Zarem.Windows.Controls.CodeEditor;
@@ -78,9 +78,9 @@ public partial class AssemblyEditor
     /// <summary>
     /// Gets or sets the assembler configuration to use for <see cref="RealTimeAssembly"/> checks.
     /// </summary>
-    public AssemblerConfig? AssemblerConfig
+    public MIPSAssemblerConfig? AssemblerConfig
     {
-        get => (AssemblerConfig)GetValue(AssemblerConfigProperty);
+        get => (MIPSAssemblerConfig)GetValue(AssemblerConfigProperty);
         set => SetValue(AssemblerConfigProperty, value);
     }
 

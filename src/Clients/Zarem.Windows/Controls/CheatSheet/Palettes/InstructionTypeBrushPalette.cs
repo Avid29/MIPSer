@@ -2,7 +2,7 @@
 
 using Microsoft.UI.Xaml.Media;
 
-namespace Zarem.Windows.Helpers;
+namespace Zarem.Windows.Controls.CheatSheet.Palettes;
 
 
 public record InstructionTypeBrushPalette

@@ -1,11 +1,11 @@
 ﻿// Avishai Dernis 2025
 
-using Test.MIPS.Helpers;
 using System.IO;
 using System.Threading.Tasks;
-using Zarem.Assembler.MIPS;
-using Zarem.ObjFormats.RASM;
-using ObjFormats.RASM.Config;
+using Test.MIPS.Helpers;
+using Zarem.Assembler;
+using Zarem.Assembler.Config;
+using Zarem.Linker;
 
 namespace Test.RASM;
 
@@ -21,16 +21,16 @@ public class LinkerTests
         Stream defStream = File.Open(defPath, FileMode.Open);
         Stream refStream = File.Open(refPath, FileMode.Open);
 
-        var config = new RasmConfig();
-        var defResult = await Assembler.AssembleAsync<RasmModule, RasmConfig>(defStream, "def.asm", config);
-        var refResult = await Assembler.AssembleAsync<RasmModule, RasmConfig>(refStream, "ref.asm", config);
+        var config = new MIPSAssemblerConfig();
+        var defResult = await MIPSAssembler.AssembleAsync(defStream, "def.asm", config);
+        var refResult = await MIPSAssembler.AssembleAsync(refStream, "ref.asm", config);
 
-        var defModule = defResult.AbstractModule;
-        var refModule = refResult.AbstractModule;
+        var defModule = defResult.Module;
+        var refModule = refResult.Module;
 
         Assert.IsNotNull(defModule);
         Assert.IsNotNull(refModule);
 
-        Zarem.Linker.MIPS.Linker<RasmModule, RasmConfig>.Link(config, defModule, refModule);
+        MIPSLinker.Link(defModule, refModule);
     }
 }

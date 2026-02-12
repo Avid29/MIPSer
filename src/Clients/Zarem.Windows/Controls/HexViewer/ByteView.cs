@@ -2,9 +2,9 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Zarem.Editors.HexViewer.Enums;
 using System;
 using System.Runtime.Intrinsics.Arm;
+using Zarem.Windows.Controls.HexViewer.Enums;
 
 namespace Zarem.Editors.HexViewer;
 

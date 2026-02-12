@@ -1,8 +1,8 @@
 ﻿// Avishai Dernis 2025
 
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
+using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.Emulator.MIPS.Components.CPU.Registers;
+namespace Zarem.Emulator.Components.CPU.Registers;
 
 /// <summary>
 /// A class representing a register file.

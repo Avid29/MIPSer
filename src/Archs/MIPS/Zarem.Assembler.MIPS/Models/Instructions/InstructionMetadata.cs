@@ -3,15 +3,15 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
-using Zarem.Assembler.MIPS.Helpers.Tables;
-using Zarem.MIPS.Helpers.Instructions;
-using Zarem.MIPS.Models.Instructions.Enums;
-using Zarem.MIPS.Models.Instructions.Enums.Operations;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
+using Zarem.Assembler.Helpers.Tables;
+using Zarem.Helpers.Instructions;
+using Zarem.Models.Instructions.Enums;
+using Zarem.Models.Instructions.Enums.Operations;
+using Zarem.Models.Instructions.Enums.SpecialFunctions;
+using Zarem.Models.Instructions.Enums.SpecialFunctions.CoProc0;
+using Zarem.Models.Instructions.Enums.SpecialFunctions.FloatProc;
 
-namespace Zarem.Assembler.MIPS.Models.Instructions;
+namespace Zarem.Assembler.Models.Instructions;
 
 /// <summary>
 /// A struct containing info on how an instruction is encoded.

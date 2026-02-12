@@ -3,8 +3,8 @@
 using CommunityToolkit.Mvvm.Messaging;
 using System;
 using System.ComponentModel;
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Tokenization.Models;
+using Zarem.Assembler.Config;
+using Zarem.Assembler.Tokenization.Models;
 using Zarem.Bindables.Files;
 using Zarem.Messages;
 using Zarem.Messages.Editor.Enums;
@@ -90,7 +90,7 @@ public partial class FilePageViewModel : PageViewModel
     /// <summary>
     /// Gets the config to use for assembler checking.
     /// </summary>
-    public AssemblerConfig? AssemblerConfig => _projectService.Project?.Config?.AssemblerConfig;
+    public MIPSAssemblerConfig? AssemblerConfig => _projectService.Project?.Config?.AssemblerConfig;
 
     /// <inheritdoc/>
     public override string Title => File?.Name ?? string.Empty;

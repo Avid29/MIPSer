@@ -6,22 +6,22 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Test.MIPS.Helpers;
-using Zarem.Assembler.MIPS.Config;
-using Zarem.Assembler.MIPS.Helpers.Tables;
-using Zarem.Assembler.MIPS.Logging;
-using Zarem.Assembler.MIPS.Logging.Enum;
-using Zarem.Assembler.MIPS.Models.Instructions;
-using Zarem.Assembler.MIPS.Parsers;
+using Zarem.Assembler.Config;
+using Zarem.Assembler.Helpers.Tables;
+using Zarem.Assembler.Logging;
+using Zarem.Assembler.Logging.Enum;
 using Zarem.Assembler.MIPS.Tokenization;
-using Zarem.Disassembler.MIPS.Services;
-using Zarem.MIPS.Models.Instructions;
-using Zarem.MIPS.Models.Instructions.Enums;
-using Zarem.MIPS.Models.Instructions.Enums.Operations;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions.CoProc0;
-using Zarem.MIPS.Models.Instructions.Enums.SpecialFunctions.FloatProc;
-using Zarem.MIPS.Services;
+using Zarem.Assembler.Models.Instructions;
+using Zarem.Assembler.Parsers;
+using Zarem.Disassembler.Services;
+using Zarem.Models.Instructions;
+using Zarem.Models.Instructions.Enums;
+using Zarem.Models.Instructions.Enums.Operations;
+using Zarem.Models.Instructions.Enums.Registers;
+using Zarem.Models.Instructions.Enums.SpecialFunctions;
+using Zarem.Models.Instructions.Enums.SpecialFunctions.CoProc0;
+using Zarem.Models.Instructions.Enums.SpecialFunctions.FloatProc;
+using Zarem.Services;
 
 namespace Test.Assembler.MIPS.Parsers;
 
@@ -174,9 +174,9 @@ public class InstructionParserTests
     [DynamicData(nameof(GeneratedTestList))]
     public void GeneratedTests(string input)
     {
-        var config = new AssemblerConfig();
+        var config = new MIPSAssemblerConfig();
 #if DEBUG
-        ServiceCollection.DisassemblerService = new DisassemblerService(config);
+        ServiceCollection.DisassemblerService = new MIPSDisassemblerService(config);
 #endif
 
         var table = new InstructionTable(config);

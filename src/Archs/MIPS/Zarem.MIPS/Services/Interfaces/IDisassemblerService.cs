@@ -1,8 +1,11 @@
 ﻿// Adam Dernis 2025
 
-using Zarem.MIPS.Models.Instructions;
 
-namespace Zarem.MIPS.Services.Interfaces;
+// Adam Dernis 2025
+
+using Zarem.Models.Instructions;
+
+namespace Zarem.Services.Interfaces;
 
 #if DEBUG
 

@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-namespace Zarem.Emulator.MIPS.Components.Memory;
+namespace Zarem.Emulator.Components.Memory;
 
 /// <summary>
 /// Represents the Translation Lookaside Buffer (TLB) in a MIPS interpreter.

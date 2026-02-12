@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-using Zarem.Assembler.MIPS.Tokenization.Models;
+using Zarem.Assembler.Tokenization.Models;
 
 namespace Zarem.Messages.Navigation;
 

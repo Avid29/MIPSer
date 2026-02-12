@@ -1,5 +1,7 @@
 // Adam Dernis 2024
 
+using Zarem.Windows;
+
 namespace Zarem.Windows;
 
 /// <summary>

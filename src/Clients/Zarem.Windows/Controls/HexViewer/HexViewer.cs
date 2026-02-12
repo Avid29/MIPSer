@@ -2,7 +2,6 @@
 
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Zarem.Editors.HexViewer.Enums;
 using System;
 using System.Text;
 

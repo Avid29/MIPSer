@@ -1,8 +1,11 @@
 ﻿// Adam Dernis 2024
 
-using Zarem.Assembler.MIPS.Models.Directives.Abstract;
 
-namespace Zarem.Assembler.MIPS.Models.Directives;
+// Adam Dernis 2024
+
+using Zarem.Assembler.Models.Directives.Abstract;
+
+namespace Zarem.Assembler.Models.Directives;
 
 /// <summary>
 /// A <see cref="Directive"/> for memory alignments.

@@ -3,10 +3,10 @@
 using Microsoft.UI;
 using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Media;
-using Zarem.MIPS.Models.Instructions.Enums;
 using Zarem.Models.CheatSheet.Enums;
-using Zarem.Windows.Helpers;
 using System;
+using Zarem.Windows.Controls.CheatSheet.Palettes;
+using Zarem.Models.Instructions.Enums;
 
 namespace Zarem.Windows.Converters;
 

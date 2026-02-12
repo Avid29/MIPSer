@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-namespace Zarem.Assembler.MIPS.Models.Directives.Abstract;
+namespace Zarem.Assembler.Models.Directives.Abstract;
 
 /// <summary>
 /// A base class for parsed directives.

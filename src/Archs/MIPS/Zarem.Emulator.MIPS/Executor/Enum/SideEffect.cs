@@ -3,9 +3,15 @@
 
 // Avishai Dernis 2025
 
-using Zarem.Emulator.MIPS.Executor;
 
-namespace Zarem.Emulator.MIPS.Executor.Enum;
+// Avishai Dernis 2025
+
+
+// Avishai Dernis 2025
+
+using Zarem.Emulator.Executor;
+
+namespace Zarem.Emulator.Executor.Enum;
 
 /// <summary>
 /// An enum describing the secondary effect of an <see cref="Execution"/>.

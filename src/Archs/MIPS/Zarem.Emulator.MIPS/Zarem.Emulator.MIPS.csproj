@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <RootNamespace>Zarem.Emulator.MIPS</RootNamespace>
+	  <RootNamespace>Zarem.Emulator</RootNamespace>
   </PropertyGroup>
 
 	<ItemGroup>
+    <ProjectReference Include="..\..\..\Zarem.Emulator\Zarem.Emulator.csproj" />
     <ProjectReference Include="..\Zarem.MIPS\Zarem.MIPS.csproj" />
   </ItemGroup>
 

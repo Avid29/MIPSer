@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-namespace Zarem.Editors.HexViewer.Enums;
+namespace Zarem.Windows.Controls.HexViewer.Enums;
 
 /// <summary>
 /// Gets the mode to use to display the byte data.

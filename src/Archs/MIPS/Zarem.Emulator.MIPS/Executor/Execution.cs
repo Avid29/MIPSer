@@ -1,10 +1,10 @@
 ﻿// Avishai Dernis 2025
 
-using Zarem.Emulator.MIPS.Executor.Enum;
-using Zarem.MIPS.Helpers;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
+using Zarem.Emulator.Executor.Enum;
+using Zarem.Helpers;
+using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.Emulator.MIPS.Executor;
+namespace Zarem.Emulator.Executor;
 
 /// <summary>
 /// A struct representing the results of an instruction's execution.

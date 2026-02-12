@@ -1,17 +1,19 @@
 ﻿// Adam Dernis 2024
 
-using ObjFormats.RASM;
 using ObjFormats.RASM.Config;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Text;
-using Zarem.Assembler.MIPS.Models.Modules.Interfaces;
-using Zarem.Emulator.MIPS.Models.Modules;
+using Zarem.Assembler.Models.Modules;
+using Zarem.Emulator.Models.Modules;
 
-namespace  Zarem.ObjFormats.RASM;
+namespace ObjFormats.RASM;
 
 /// <summary>
 /// A fully assembled object module in RASM format.
 /// </summary>
-public partial class RasmModule : IBuildModule<RasmModule>, IExecutableModule
+public partial class RasmModule : IBuildModule<RasmModule, RasmConfig>, IExecutableModule
 {
     private static readonly string[] SectionNames =
     {

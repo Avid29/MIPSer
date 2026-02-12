@@ -1,11 +1,12 @@
 ﻿// Adam Dernis 2024
 
-using Zarem.ObjFormats.RASM;
+using ObjFormats.RASM;
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using Zarem.Assembler.MIPS.Logging.Enum;
-using ObjFormats.RASM.Config;
+using Zarem.Assembler;
+using Zarem.Assembler.Config;
+using Zarem.Assembler.Logging.Enum;
 
 namespace Zarem;
 
@@ -55,8 +56,13 @@ public class Program
 
         var inFile = File.Open(filePath, FileMode.Open);
         var outFile = File.Open(resultFile, FileMode.Create);
-        var assembler = await Assembler.MIPS.Assembler.AssembleAsync<RasmModule, RasmConfig>(inFile, filePath, new RasmConfig());
-        assembler.Module?.Save(outFile);
+        
+        var assembler = await MIPSAssembler.AssembleAsync(inFile, filePath, new MIPSAssemblerConfig());
+        if (assembler.Module is not null)
+        {
+            var module = RasmModule.Create(assembler.Module, new());
+            module?.Save(outFile);
+        }
 
 
         Console.WriteLine(!assembler.Failed

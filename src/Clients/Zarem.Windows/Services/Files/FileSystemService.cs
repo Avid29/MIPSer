@@ -13,10 +13,10 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using WinRT.Interop;
 
-using File = Zarem.Windows.Services.FileSystem.Models.File;
-using Folder = Zarem.Windows.Services.FileSystem.Models.Folder;
+using File = Zarem.Windows.Services.Files.Models.File;
+using Folder = Zarem.Windows.Services.Files.Models.Folder;
 
-namespace Zarem.Windows.Services.FileSystem;
+namespace Zarem.Windows.Services.Files;
 
 /// <summary>
 /// An <see cref="IFileSystemService"/> implementation wrapping <see cref="StorageFile"/>.

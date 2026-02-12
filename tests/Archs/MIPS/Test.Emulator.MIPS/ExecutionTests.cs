@@ -2,13 +2,14 @@
 
 using System.Collections.Generic;
 using System.Numerics;
-using Zarem.Assembler.MIPS.Models.Instructions;
-using Zarem.Assembler.MIPS.Parsers;
 using Zarem.Assembler.MIPS.Tokenization;
-using Zarem.Emulator.MIPS.Components.CPU.Registers;
-using Zarem.Emulator.MIPS.Components.Enums;
-using Zarem.Emulator.MIPS.Executor.Enum;
-using Zarem.MIPS.Models.Instructions.Enums.Registers;
+using Zarem.Assembler.Models.Instructions;
+using Zarem.Assembler.Parsers;
+using Zarem.Emulator;
+using Zarem.Emulator.Components.CPU.Registers;
+using Zarem.Emulator.Components.Enums;
+using Zarem.Emulator.Executor.Enum;
+using Zarem.Models.Instructions.Enums.Registers;
 
 namespace Test.Emulator.MIPS;
 
@@ -395,7 +396,7 @@ public class ExecutionTests
         // TODO: Psuedo instruction support
         var instruction = parsed.Realize()[0];
 
-        var emulator = new Zarem.Emulator.MIPS.Emulator(new());
+        var emulator = new MIPSEmulator(new());
 
         // Initialize the status register
         emulator.Computer.Processor.CoProcessor0.StatusRegister = @case.Status;

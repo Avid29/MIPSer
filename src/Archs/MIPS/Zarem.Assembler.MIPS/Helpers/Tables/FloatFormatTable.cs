@@ -1,9 +1,9 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
-using Zarem.MIPS.Models.Instructions.Enums;
+using Zarem.Models.Instructions.Enums;
 
-namespace Zarem.Assembler.MIPS.Helpers.Tables;
+namespace Zarem.Assembler.Helpers.Tables;
 
 /// <summary>
 /// A class containing methods for floating-point formats lookups.
