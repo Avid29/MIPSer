@@ -13,7 +13,7 @@ using Zarem.Models.Files;
 namespace Zarem.Components;
 
 /// <summary>
-/// A component of the <see cref="Project"/> which handles assembling.
+/// A component of a <see cref="Project"/> class for assembling assembly code.
 /// </summary>
 /// <typeparam name="TAssembler"></typeparam>
 /// <typeparam name="TConfig"></typeparam>

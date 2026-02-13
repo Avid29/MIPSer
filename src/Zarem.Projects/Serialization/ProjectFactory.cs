@@ -11,6 +11,7 @@ using Zarem.Assembler.Config;
 using Zarem.Components;
 using Zarem.Components.Interfaces;
 using Zarem.Config;
+using Zarem.Emulator.Config;
 using Zarem.Serialization.Registry;
 
 namespace Zarem.Serialization;
@@ -28,6 +29,7 @@ public static class ProjectFactory
     public static IProject Create(IProjectConfig config)
     {
         Guard.IsNotNull(config.AssemblerConfig);
+        Guard.IsNotNull(config.EmulatorConfig);
         Guard.IsNotNull(config.FormatConfig);
 
         // Retrieve type info
@@ -38,9 +40,10 @@ public static class ProjectFactory
 
         // Create components
         var assemble = CreateComponent<IAssembleComponent, AssemblerConfig>(typeof(AssembleComponent<,>), typeInfo.ProjectType.AssemblerType, config.AssemblerConfig);
+        var emulate = CreateComponent<IEmulateComponent, EmulatorConfig>(typeof(EmulateComponent<,>), typeInfo.ProjectType.EmulatorType, config.EmulatorConfig);
         var format = CreateComponent<IFormatComponent, FormatConfig>(typeof(FormatComponent<,>), formatTypeInfo.FormatType, config.FormatConfig);
 
-        var project = new Project(config, assemble, format);
+        var project = new Project(config, assemble, emulate, format);
         Guard.IsNotNull(project);
         
         return project;

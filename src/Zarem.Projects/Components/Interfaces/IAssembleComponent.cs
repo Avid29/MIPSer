@@ -9,7 +9,7 @@ using Zarem.Models.Files;
 namespace Zarem.Components.Interfaces;
 
 /// <summary>
-/// A component of the <see cref="Project"/> which handles assembling.
+/// An interface for a component of a <see cref="Project"/> class for assembling assembly code.
 /// </summary>
 public interface IAssembleComponent : IProjectComponent
 {

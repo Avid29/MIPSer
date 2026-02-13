@@ -7,7 +7,7 @@ using Zarem.Models.Modules;
 namespace Zarem.Components.Interfaces;
 
 /// <summary>
-/// A component of a <see cref="Project"/> class.
+/// An interface for a component of a <see cref="Project"/> that exports formatted binaries.
 /// </summary>
 public interface IFormatComponent : IProjectComponent
 {

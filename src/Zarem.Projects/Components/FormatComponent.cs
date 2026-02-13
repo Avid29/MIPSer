@@ -10,7 +10,7 @@ using Zarem.Models.Modules;
 namespace Zarem.Components;
 
 /// <summary>
-/// A component of the <see cref="Project"/> which handles assembling.
+/// A component of a <see cref="Project"/> that exports formatted binaries.
 /// </summary>
 /// <typeparam name="TModule">The target module format's type.</typeparam>
 /// <typeparam name="TConfig">The type for the format's config.</typeparam>

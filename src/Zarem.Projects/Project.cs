@@ -16,12 +16,13 @@ public partial class Project : IProject
     /// <summary>
     /// Initialzes a new instance of the <see cref="ProjectConfig{TAsmConfig, TEmuConfig}"/> class.
     /// </summary>
-    internal Project(IProjectConfig config, IAssembleComponent assemble, IFormatComponent format)
+    internal Project(IProjectConfig config, IAssembleComponent assemble, IEmulateComponent emulate, IFormatComponent format)
     {
         Guard.IsNotNull(config.RootFolderPath);
 
         Config = config;
         Assemble = assemble;
+        Emulate = emulate;
         Format = format;
         SourceFiles = new SourceCollection(this, config.RootFolderPath);
     }
@@ -40,6 +41,11 @@ public partial class Project : IProject
     /// Gets the project's assemble component.
     /// </summary>
     public IAssembleComponent Assemble { get; }
+
+    /// <summary>
+    /// Gets the project's emulate component.
+    /// </summary>
+    public IEmulateComponent Emulate { get; }
 
     /// <summary>
     /// Gets the project's format component.
