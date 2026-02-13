@@ -2,7 +2,10 @@
 
 using CommunityToolkit.Diagnostics;
 using System;
+using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using Zarem.Config;
 using Zarem.Serialization.Registry;
 
@@ -36,6 +39,12 @@ public static class ProjectSerializer
 
                 prop.SetValue(obj, formatInstance);
             }
+            else if (prop.PropertyType.IsEnum)
+            {
+                var enumValue = ParseXmlEnum(prop.PropertyType, child.Value);
+                prop.SetValue(obj, enumValue);
+                continue;
+            }
             else if (IsSimple(prop.PropertyType))
             {
                 var value = Convert.ChangeType(
@@ -58,6 +67,12 @@ public static class ProjectSerializer
     {
         foreach (var prop in obj.GetType().GetProperties())
         {
+            if (!prop.CanRead)
+                continue;
+
+            if (Attribute.IsDefined(prop, typeof(XmlIgnoreAttribute)))
+                continue;
+
             var value = prop.GetValue(obj);
             if (value == null)
                 continue;
@@ -71,6 +86,16 @@ public static class ProjectSerializer
 
                 WriteObjectProperties(formatElement, format);
                 parent.Add(formatElement);
+            }
+            else if (prop.PropertyType.IsEnum)
+            {
+                var enumValue = value;
+                var enumType = prop.PropertyType;
+
+                var name = GetXmlEnumName(enumType, enumValue);
+
+                parent.Add(new XElement(prop.Name, name));
+                continue;
             }
             else if (IsSimple(prop.PropertyType))
             {
@@ -91,5 +116,37 @@ public static class ProjectSerializer
             || type == typeof(string)
             || type == typeof(decimal)
             || type == typeof(DateTime);
+    }
+
+    private static string GetXmlEnumName(Type enumType, object enumValue)
+    {
+        var member = enumType.GetMember(enumValue.ToString()!)[0];
+
+        var attr = member
+            .GetCustomAttributes(typeof(XmlEnumAttribute), false)
+            .Cast<XmlEnumAttribute>()
+            .FirstOrDefault();
+
+        return attr?.Name ?? enumValue.ToString()!;
+    }
+
+    private static object ParseXmlEnum(Type enumType, string xmlValue)
+    {
+        foreach (var field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static))
+        {
+            var attr = field
+                .GetCustomAttributes(typeof(XmlEnumAttribute), false)
+                .Cast<XmlEnumAttribute>()
+                .FirstOrDefault();
+
+            if (attr != null && attr.Name == xmlValue)
+                return field.GetValue(null)!;
+
+            if (field.Name == xmlValue)
+                return field.GetValue(null)!;
+        }
+
+        throw new InvalidOperationException(
+            $"Value '{xmlValue}' is not valid for enum {enumType.Name}");
     }
 }

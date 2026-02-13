@@ -16,6 +16,5 @@ public class EmulatorConfig
     /// If set to true, ALL traps will be handled by the host-layer, and not the emulated machine.
     /// This allows user-code programs to be interpreted by the emulator without loading and executing an OS.
     /// </remarks>
-    [XmlElement]
     public bool HostedTraps { get; set; }
 }

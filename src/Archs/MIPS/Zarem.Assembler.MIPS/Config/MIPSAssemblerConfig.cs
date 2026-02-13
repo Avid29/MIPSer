@@ -30,18 +30,15 @@ public class MIPSAssemblerConfig : AssemblerConfig
     /// <summary>
     /// Gets or sets the mips version to use.
     /// </summary>
-    [XmlElement]
     public MipsVersion MipsVersion { get; set; }
 
     /// <summary>
     /// Gets whether the <see cref="PseudoInstructionSet"/> is a blacklist or whitelist.
     /// </summary>
-    [XmlElement]
     public PseudoInstructionPermissibility? PseudoInstructionPermissibility { get; set; }
 
     /// <summary>
     /// Gets the set of pseudo instructions to use as either a black or white list.
     /// </summary>
-    [XmlElement]
-    public HashSet<string>? PseudoInstructionSet { get; set; } = [];
+    public HashSet<string>? PseudoInstructionSet { get; set; } = null;
 }

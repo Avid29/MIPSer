@@ -21,6 +21,5 @@ public class MIPSEmulatorConfig : EmulatorConfig
     /// <summary>
     /// Gets or sets the mips ISA version to emulate.
     /// </summary>
-    [XmlElement]
     public MipsVersion MipsVersion { get; set; }
 }
