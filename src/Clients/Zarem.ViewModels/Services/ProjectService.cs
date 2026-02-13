@@ -41,9 +41,9 @@ public class ProjectService : IProjectService
         _fileSystemService = fileSystemService;
 
         // Populate
-        ProjectTypeRegistry.RegisterProject(typeof(MIPSProject<,>));
-        ProjectTypeRegistry.RegisterFormat(typeof(ElfModule));
-        ProjectTypeRegistry.RegisterFormat(typeof(RasmModule));
+        ProjectTypeRegistry.RegisterProject<MIPSProjectConfig>();
+        ProjectTypeRegistry.RegisterFormat<ElfModule>();
+        ProjectTypeRegistry.RegisterFormat<RasmModule>();
     }
 
     /// <inheritdoc/>
@@ -103,7 +103,7 @@ public class ProjectService : IProjectService
     }
 
     /// <inheritdoc/>
-    public async Task OpenProjectAsync(ProjectConfig config, bool cacheState = true)
+    public async Task OpenProjectAsync(IProjectConfig config, bool cacheState = true)
     {
         Project = ProjectFactory.Create(config);
         if (Project?.Config?.RootFolderPath is null)

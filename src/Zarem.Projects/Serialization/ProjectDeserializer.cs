@@ -12,7 +12,7 @@ using Zarem.Serialization.Registry;
 namespace Zarem.Serialization;
 
 /// <summary>
-/// A class for serializing/deserialization <see cref="ProjectConfig"/> instances.
+/// A class for serializing/deserialization <see cref="IProjectConfig"/> instances.
 /// </summary>
 public static partial class ProjectSerializer
 {
@@ -23,7 +23,7 @@ public static partial class ProjectSerializer
     /// </summary>
     /// <param name="path">The path to the config file.</param>
     /// <returns>The loaded <see cref="IProject"/>.</returns>
-    public static ProjectConfig Deserialize(string path)
+    public static IProjectConfig Deserialize(string path)
     {
         var doc = XDocument.Load(path);
         var root = doc.Root!;
@@ -34,7 +34,7 @@ public static partial class ProjectSerializer
         var projectInfo = ProjectTypeRegistry.GetProjectType(typeName);
         Guard.IsNotNull(projectInfo);
 
-        var config = (ProjectConfig?)Activator.CreateInstance(projectInfo.ConfigType);
+        var config = (IProjectConfig?)Activator.CreateInstance(projectInfo.ConfigType);
         Guard.IsNotNull(config);
 
         ReadObjectProperties(root, config);

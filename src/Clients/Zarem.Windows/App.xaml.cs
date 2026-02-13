@@ -121,7 +121,7 @@ public partial class App : Application
         {
             case ".asm":
                 break;
-            case ".Zarem":
+            case ".zrmp":
                 var projectService = Service.Get<IProjectService>();
                 await projectService.OpenProjectAsync(file.Path);
                 break;

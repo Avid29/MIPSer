@@ -7,6 +7,9 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Zarem.Assembler.Config;
+using Zarem.Components;
+using Zarem.Components.Interfaces;
 using Zarem.Config;
 using Zarem.Serialization.Registry;
 
@@ -18,30 +21,26 @@ namespace Zarem.Serialization;
 public static class ProjectFactory
 {
     /// <summary>
-    /// Constructs an <see cref="IProject"/> from an <see cref="ProjectConfig"/>.
+    /// Constructs an <see cref="IProject"/> from an <see cref="IProjectConfig"/>.
     /// </summary>
     /// <param name="config"></param>
     /// <returns></returns>
-    public static IProject Create(ProjectConfig config)
+    public static IProject Create(IProjectConfig config)
     {
+        Guard.IsNotNull(config.AssemblerConfig);
         Guard.IsNotNull(config.FormatConfig);
 
+        // Retrieve type info
         var typeInfo = ProjectTypeRegistry.GetProjectType(config.GetType());
-        Guard.IsNotNull(typeInfo);
-
         var formatTypeInfo = ProjectTypeRegistry.GetFormatType(config.FormatConfig.GetType());
+        Guard.IsNotNull(typeInfo);
         Guard.IsNotNull(formatTypeInfo);
 
-        // Construct closed project type
-        var openProjectType = typeInfo.ProjectType;
-        var moduleType = formatTypeInfo.FormatType;
-        var modConfigType = formatTypeInfo.ConfigType;
-        var closedProjectType = openProjectType.MakeGenericType(moduleType, modConfigType);
+        // Create components
+        var assemble = CreateComponent<IAssembleComponent, AssemblerConfig>(typeof(AssembleComponent<,>), typeInfo.ProjectType.AssemblerType, config.AssemblerConfig);
+        var format = CreateComponent<IFormatComponent, FormatConfig>(typeof(FormatComponent<,>), formatTypeInfo.FormatType, config.FormatConfig);
 
-        // TODO: Get Module config to the module
-
-        // Construct project
-        var project = (IProject?)Activator.CreateInstance(closedProjectType, config);
+        var project = new Project(config, assemble, format);
         Guard.IsNotNull(project);
         
         return project;
@@ -55,7 +54,20 @@ public static class ProjectFactory
     public static IProject Load(string path)
     {
         var config = ProjectSerializer.Deserialize(path);
-
         return Create(config);
+    }
+
+    private static T CreateComponent<T, TConfig>(Type openType, Type primaryType, TConfig config)
+        where T : IProjectComponent
+        where TConfig : notnull
+    {
+        // Form a closed-type format component
+        var closedType = openType.MakeGenericType(primaryType, config.GetType());
+
+        // Instantializes
+        var compoent = (T?)Activator.CreateInstance(closedType, config);
+        Guard.IsNotNull(compoent);
+
+        return compoent;
     }
 }

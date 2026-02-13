@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using System.IO;
+using System.Threading.Tasks;
 using Zarem.Models.Modules.Interface;
 
 namespace Zarem.Assembler.Models.Modules;
@@ -18,5 +19,5 @@ public interface IBuildModule : IModule
     /// <summary>
     /// Save the module to a stream (likely as a file).
     /// </summary>
-    public void Save(Stream stream);
+    public Task SaveAsync(Stream stream);
 }

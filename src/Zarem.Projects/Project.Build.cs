@@ -1,31 +1,16 @@
 ﻿// Avishai Dernis 2025
 
-using CommunityToolkit.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Zarem.Assembler;
-using Zarem.Assembler.Config;
 using Zarem.Assembler.Logging;
 using Zarem.Assembler.Models;
-using Zarem.Assembler.Models.Modules;
-using Zarem.Config;
-using Zarem.Emulator;
-using Zarem.Emulator.Config;
-using Zarem.Emulator.Models.Modules;
 using Zarem.Models;
 using Zarem.Models.Files;
-using Zarem.Models.Modules.Interface;
 
 namespace Zarem;
 
-public abstract partial class Project<TAssembler, TEmulator, TModule, TAsmConfig, TEmuConfig, TModConfig>
-    where TAssembler : IAssembler<TAsmConfig>
-    where TEmulator : Emulator<TEmuConfig>
-    where TModule : IModule, IBuildModule<TModule, TModConfig>, IExecutableModule
-    where TAsmConfig : AssemblerConfig
-    where TEmuConfig : EmulatorConfig
-    where TModConfig : FormatConfig, new()
+public partial class Project
 {
     /// <inheritdoc/>
     public async Task<BuildResult?> BuildProjectAsync(bool rebuild = false, Logger? logger = null)
@@ -66,22 +51,21 @@ public abstract partial class Project<TAssembler, TEmulator, TModule, TAsmConfig
         if (!(file.IsDirty || !file.ObjectFile.Exists) && !rebuild)
             return null;
 
-        Guard.IsNotNull(Config?.AssemblerConfig);
-
         try
         {
+            // Assemble the file
             using var stream = File.OpenRead(file.FullPath);
+            var result = await Assemble.AssembleFileAsync(file, rebuild, logger);
 
-            var result = await TAssembler.AssembleAsync(stream, file.Name, Config.AssemblerConfig);
+            // Not dirty and not rebuilding
+            if (result is null)
+                return null;
 
-            // Write the object file if the build succeeded
+            // Write the object file if assembling succeeded
+            bool exported = false;
             if (!result.Failed && result.Module is not null)
             {
-                // TODO: Select module type by format
-                var module = TModule.Create(result.Module, new TModConfig());
-
-                using var outStream = File.Open(file.ObjectFile.FullPath, FileMode.OpenOrCreate);
-                //module?.Save(outStream);
+                exported = await Format.TryExportAsync(result.Module, file.ObjectFile.FullPath);
             }
 
             return result;

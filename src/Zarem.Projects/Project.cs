@@ -1,15 +1,9 @@
 ﻿// Avishai Dernis 2025
 
 using CommunityToolkit.Diagnostics;
-using Zarem.Assembler;
-using Zarem.Assembler.Config;
-using Zarem.Assembler.Models.Modules;
+using Zarem.Components.Interfaces;
 using Zarem.Config;
-using Zarem.Emulator;
-using Zarem.Emulator.Config;
-using Zarem.Emulator.Models.Modules;
 using Zarem.Models.Files;
-using Zarem.Models.Modules.Interface;
 using Zarem.Serialization;
 
 namespace Zarem;
@@ -17,38 +11,43 @@ namespace Zarem;
 /// <summary>
 /// A loaded mipser project.
 /// </summary>
-public abstract partial class Project<TAssembler, TEmulator, TModule, TAsmConfig, TEmuConfig, TModConfig> : IProject
-    where TAssembler : IAssembler<TAsmConfig>
-    where TEmulator : Emulator<TEmuConfig>
-    where TModule : IModule, IBuildModule<TModule, TModConfig>, IExecutableModule
-    where TAsmConfig : AssemblerConfig
-    where TEmuConfig : EmulatorConfig
-    where TModConfig : FormatConfig, new()
+public partial class Project : IProject
 {
     /// <summary>
     /// Initialzes a new instance of the <see cref="ProjectConfig{TAsmConfig, TEmuConfig}"/> class.
     /// </summary>
-    /// <param name="config"></param>
-    protected Project(ProjectConfig<TAsmConfig, TEmuConfig> config)
+    internal Project(IProjectConfig config, IAssembleComponent assemble, IFormatComponent format)
     {
         Guard.IsNotNull(config.RootFolderPath);
 
         Config = config;
+        Assemble = assemble;
+        Format = format;
         SourceFiles = new SourceCollection(this, config.RootFolderPath);
     }
 
     /// <summary>
     /// Gets the project's configuration.
     /// </summary>
-    public ProjectConfig<TAsmConfig, TEmuConfig> Config { get; internal set; }
+    public IProjectConfig Config { get; internal set; }
 
     /// <summary>
     /// Gets the collection of source files in the project.
     /// </summary>
     public SourceCollection SourceFiles { get; }
 
+    /// <summary>
+    /// Gets the project's assemble component.
+    /// </summary>
+    public IAssembleComponent Assemble { get; }
+
+    /// <summary>
+    /// Gets the project's format component.
+    /// </summary>
+    public IFormatComponent Format { get; }
+
     /// <inheritdoc/>
-    ProjectConfig IProject.Config => Config;
+    IProjectConfig IProject.Config => Config;
 
     /// <inheritdoc/>
     public void Save()

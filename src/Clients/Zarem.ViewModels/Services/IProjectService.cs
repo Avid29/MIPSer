@@ -47,7 +47,7 @@ public interface IProjectService
     /// <summary>
     /// Opens a project by config.
     /// </summary>
-    public Task OpenProjectAsync(ProjectConfig config, bool cacheState = true);
+    public Task OpenProjectAsync(IProjectConfig config, bool cacheState = true);
 
     /// <summary>
     /// Opens a project by config path.

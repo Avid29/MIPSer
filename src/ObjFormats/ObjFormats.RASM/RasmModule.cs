@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using Zarem.Assembler.Models.Modules;
 using Zarem.Attributes;
 using Zarem.Emulator.Models.Modules;
@@ -102,9 +103,9 @@ public partial class RasmModule : IBuildModule<RasmModule, RasmConfig>, IExecuta
     }
 
     /// <inheritdoc/>
-    public void Save(Stream stream)
+    public async Task SaveAsync(Stream stream)
     {
         _source.Position = 0;
-        _source.CopyTo(stream);
+        await _source.CopyToAsync(stream);
     }
 }

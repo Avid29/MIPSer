@@ -32,15 +32,13 @@ public static class ProjectTypeRegistry
     /// <summary>
     /// Registers a project type.
     /// </summary>
-    /// <param name="typeName">The name of the type.</param>
     /// <param name="projectType">The <see cref="Type"/> for the project class.</param>
-    /// <param name="configType">The <see cref="Type"/> for the project config class.</param>
-    public static void RegisterProject(string typeName, Type projectType, Type configType)
+    /// <param name="type">The <see cref="Type"/> for the project config class.</param>
+    public static void RegisterProject(Type type, ProjectTypeAttribute projectType)
     {
-        var typeInfo = new ProjectTypeInfo(typeName, projectType, configType);
-        _projectTypes[typeName] = typeInfo;
-        _projectTypesReverse[projectType] = typeInfo;
-        _projectTypesReverse[configType] = typeInfo;
+        var typeInfo = new ProjectTypeInfo(projectType.TypeName, type, projectType);
+        _projectTypes[projectType.TypeName] = typeInfo;
+        _projectTypesReverse[type] = typeInfo;
     }
 
     /// <summary>
@@ -48,7 +46,7 @@ public static class ProjectTypeRegistry
     /// </summary>
     /// <typeparam name="T">The type of project to register.</typeparam>
     public static void RegisterProject<T>()
-        where T : IProject
+        where T : IProjectConfig
         => RegisterProject(typeof(T));
 
     /// <summary>
@@ -61,11 +59,8 @@ public static class ProjectTypeRegistry
         if (attr is null)
             return;
 
-        var typeName = attr.TypeName;
-        var configType = attr.ConfigType;
-
         // Register the type
-        RegisterProject(typeName, projectType, configType);
+        RegisterProject(projectType, attr);
     }
 
     /// <summary>
@@ -152,7 +147,7 @@ public static class ProjectTypeRegistry
     }
 
     /// <summary>
-    /// Scan loaded assemblies to find all derived types for the <see cref="ProjectConfig"/> and <see cref="FormatConfig"/>.
+    /// Scan loaded assemblies to find all derived types for the <see cref="IProjectConfig"/> and <see cref="FormatConfig"/>.
     /// </summary>
     internal static void Populate()
     {
@@ -178,7 +173,7 @@ public static class ProjectTypeRegistry
                     continue;
 
                 // Register ProjectConfigs
-                if (typeof(Project<,,,,,>).IsAssignableFrom(type))
+                if (typeof(ProjectConfig<,>).IsAssignableFrom(type))
                     RegisterProject(type);
 
                 // Register FormatConfigs

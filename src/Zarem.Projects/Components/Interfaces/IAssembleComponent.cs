@@ -1,0 +1,29 @@
+﻿// Avishai Dernis 2026
+
+using System.Threading.Tasks;
+using Zarem.Assembler.Config;
+using Zarem.Assembler.Logging;
+using Zarem.Assembler.Models;
+using Zarem.Models.Files;
+
+namespace Zarem.Components.Interfaces;
+
+/// <summary>
+/// A component of the <see cref="Project"/> which handles assembling.
+/// </summary>
+public interface IAssembleComponent : IProjectComponent
+{
+    /// <summary>
+    /// Gets the assembler config settings.
+    /// </summary>
+    AssemblerConfig Config { get; }
+
+    /// <summary>
+    /// Assembles a file.
+    /// </summary>
+    /// <param name="file">The source file to assemble.</param>
+    /// <param name="rebuild">Whether or not to rebuild if clean.</param>
+    /// <param name="logger">The logger to log events.</param>
+    /// <returns>The assembler result.</returns>
+    Task<AssemblerResult?> AssembleFileAsync(SourceFile file, bool rebuild = true, Logger? logger = null);
+}

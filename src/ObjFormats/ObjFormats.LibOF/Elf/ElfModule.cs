@@ -3,6 +3,7 @@
 using LibObjectFile.Elf;
 using ObjectFiles.Elf.Config;
 using System.IO;
+using System.Threading.Tasks;
 using Zarem.Assembler.Models.Modules;
 using Zarem.Attributes;
 using Zarem.Emulator.Models.Modules;
@@ -37,7 +38,7 @@ public partial class ElfModule : IBuildModule<ElfModule, ElfConfig>, IExecutable
     }
 
     /// <inheritdoc/>
-    public void Save(Stream stream)
+    public async Task SaveAsync(Stream stream)
     {
         _elfFile.Write(stream);
     }

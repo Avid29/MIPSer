@@ -22,7 +22,7 @@ public interface IProject
     /// <summary>
     /// Gets the project's configuration.
     /// </summary>
-    public ProjectConfig Config { get; }
+    public IProjectConfig Config { get; }
 
     /// <summary>
     /// Builds the project.

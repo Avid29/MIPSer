@@ -61,7 +61,10 @@ public class Program
         if (assembler.Module is not null)
         {
             var module = RasmModule.Create(assembler.Module, new());
-            module?.Save(outFile);
+            if (module is not null)
+            {
+                await module.SaveAsync(outFile);
+            }
         }
 
 

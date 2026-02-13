@@ -13,18 +13,18 @@ using Zarem.Serialization.Registry;
 namespace Zarem.Serialization;
 
 /// <summary>
-/// A class for serializing/deserialization <see cref="ProjectConfig"/> instances.
+/// A class for serializing/deserialization <see cref="IProjectConfig"/> instances.
 /// </summary>
 public static partial class ProjectSerializer
 {
     delegate void SerializeDelegate(XElement parent, PropertyInfo prop, object value);
 
     /// <summary>
-    /// Serializes a <see cref="ProjectConfig"/>.
+    /// Serializes a <see cref="IProjectConfig"/>.
     /// </summary>
-    /// <param name="config">The <see cref="ProjectConfig"/> to serialize.</param>
+    /// <param name="config">The <see cref="IProjectConfig"/> to serialize.</param>
     /// <param name="path">The path to store the result in.</param>
-    public static void Serialize(ProjectConfig config, string path)
+    public static void Serialize(IProjectConfig config, string path)
     {
         var configType = config.GetType();
 

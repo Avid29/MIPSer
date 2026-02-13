@@ -13,10 +13,11 @@ public class ProjectTypeAttribute : Attribute
     /// <summary>
     /// Initializes a new instance of the <see cref="ProjectTypeAttribute"/> class.
     /// </summary>
-    public ProjectTypeAttribute(string typeName, Type configType)
+    public ProjectTypeAttribute(string typeName, Type assemblerType, Type emulatorType)
     {
         TypeName = typeName;
-        ConfigType = configType;
+        AssemblerType = assemblerType;
+        EmulatorType = emulatorType;
     }
 
     /// <summary>
@@ -25,7 +26,12 @@ public class ProjectTypeAttribute : Attribute
     public string TypeName { get; }
 
     /// <summary>
-    /// Gets the project's config <see cref="Type"/>.
+    /// Gets the project's assembler <see cref="Type"/>.
     /// </summary>
-    public Type ConfigType { get; }
+    public Type AssemblerType { get; }
+
+    /// <summary>
+    /// Gets the project's emulator <see cref="Type"/>.
+    /// </summary>
+    public Type EmulatorType { get; }
 }
