@@ -18,7 +18,7 @@ public class StatusViewModel : ObservableRecipient
     /// <summary>
     /// Initializes a new instance of the <see cref="StatusViewModel"/> class.
     /// </summary>
-    public StatusViewModel(IMessenger messenger, BuildService buildService)
+    public StatusViewModel(IMessenger messenger, IBuildService buildService)
     {
         _messenger = messenger;
 

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Zarem.Assembler.Models.Modules;
 using Zarem.Components.Interfaces;
 using Zarem.Config;
+using Zarem.Emulator.Models.Modules;
+using Zarem.Models.Files;
 using Zarem.Models.Modules;
 
 namespace Zarem.Components;
@@ -15,8 +17,8 @@ namespace Zarem.Components;
 /// <typeparam name="TModule">The target module format's type.</typeparam>
 /// <typeparam name="TConfig">The type for the format's config.</typeparam>
 public class FormatComponent<TModule, TConfig> : IFormatComponent
-    where TModule : IBuildModule<TModule, TConfig>
-    where TConfig : FormatConfig, new()
+    where TModule : IBuildModule<TModule, TConfig>, IExecutableModule
+    where TConfig : FormatConfig
 {
     /// <summary>
     /// Initialize a new instance of the <see cref="FormatComponent{TModule, TConfig}"/> class.
@@ -32,14 +34,21 @@ public class FormatComponent<TModule, TConfig> : IFormatComponent
     FormatConfig IFormatComponent.Config => Config;
 
     /// <inheritdoc/>
-    public async Task<bool> TryExportAsync(Module module, string path)
+    public async Task<bool> TryExportAsync(Module module, ObjectFile @object)
     {
         var export = TModule.Create(module, Config);
         if (export is null)
             return false;
 
-        using var outstream = File.Open(path, FileMode.OpenOrCreate);
+        using var outstream = File.Open(@object.FullPath, FileMode.OpenOrCreate);
         await export.SaveAsync(outstream);
         return true;
+    }
+
+    /// <inheritdoc/>
+    public async Task<IExecutableModule?> ImportAsync(ObjectFile @object)
+    {
+        using var instream = File.OpenRead(@object.FullPath);
+        return TModule.Open(@object.Name, instream);
     }
 }

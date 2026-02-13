@@ -8,45 +8,13 @@ namespace Zarem.ViewModels;
 
 public partial class WindowViewModel
 {
-    /// <summary>
-    /// Gets a command that builds the project.
-    /// </summary>
-    public AsyncRelayCommand BuildProjectCommand { get; }
-
-    /// <summary>
-    /// Gets a command that builds the project.
-    /// </summary>
-    public AsyncRelayCommand RebuildProjectCommand { get; }
-
-    /// <summary>
-    /// Gets a command that assembles the currently open files.
-    /// </summary>
-    public AsyncRelayCommand AssembleOpenFilesCommand { get; }
-
-    /// <summary>
-    /// Gets a command that assembles the current file.
-    /// </summary>
-    public AsyncRelayCommand AssembleFileCommand { get; }
-
-    /// <summary>
-    /// Gets a command that cleans the project.
-    /// </summary>
-    public RelayCommand CleanProjectCommand { get; }
-
-    /// <summary>
-    /// Gets a command that cleans the current open files.
-    /// </summary>
-    public RelayCommand CleanOpenFilesCommand { get; }
-
-    /// <summary>
-    /// Gets a command that cleans the current file.
-    /// </summary>
-    public RelayCommand CleanFileCommand { get; }
-
+    [RelayCommand]
     private async Task BuildProjectAsync() => await _buildService.BuildProjectAsync();
 
+    [RelayCommand]
     private async Task RebuildProjectAsync() => await _buildService.BuildProjectAsync(true);
 
+    [RelayCommand]
     private async Task AssembleOpenFilesAsync()
     {
         var openSourceFiles = OpenFiles
@@ -56,6 +24,7 @@ public partial class WindowViewModel
         await _buildService.AssembleFilesAsync(openSourceFiles);
     }
 
+    [RelayCommand]
     private async Task AssembleFileAsync()
     {
         // Check if the file is null
@@ -67,8 +36,10 @@ public partial class WindowViewModel
         await _buildService.AssembleFilesAsync([file]);
     }
 
+    [RelayCommand]
     private void CleanProject() => _buildService.CleanProject();
 
+    [RelayCommand]
     private void CleanOpenFiles()
     {
         var openSourceFiles = OpenFiles
@@ -78,6 +49,7 @@ public partial class WindowViewModel
         _buildService.CleanFiles(openSourceFiles);
     }
 
+    [RelayCommand]
     private void CleanFile()
     {
         // Check if the file is null

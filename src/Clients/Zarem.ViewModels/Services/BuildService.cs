@@ -20,7 +20,7 @@ namespace Zarem.Services;
 /// <summary>
 /// A service for managing the build status.
 /// </summary>
-public class BuildService
+public class BuildService : IBuildService
 {
     private readonly IMessenger _messenger;
     private readonly ILocalizationService _localizationService;
@@ -42,16 +42,12 @@ public class BuildService
         SetStatus(BuildStatus.Ready);
     }
 
-    /// <summary>
-    /// Gets the build status
-    /// </summary>
+    /// <inheritdoc/>
     public BuildStatus Status { get; private set; }
 
     private bool Ready => Status is BuildStatus.Ready or BuildStatus.Completed or BuildStatus.Failed;
 
-    /// <summary>
-    /// Builds the project.
-    /// </summary>
+    /// <inheritdoc/>
     public async Task<BuildResult?> BuildProjectAsync(bool rebuild = false)
     {
         // TODO: Report issue
@@ -66,10 +62,7 @@ public class BuildService
         return await BuildAsync(buildFunc, logger);
     }
 
-    /// <summary>
-    /// Assembles a set of files.
-    /// </summary>
-    /// <param name="files">The files to assemble.</param>
+    /// <inheritdoc/>
     public async Task<BuildResult?> AssembleFilesAsync(IEnumerable<SourceFile> files)
     {
         // TODO: Report issue
@@ -83,10 +76,8 @@ public class BuildService
         var buildFunc = async () => await _projectService.Project.AssembleFilesAsync(files, true, logger);
         return await BuildAsync(buildFunc, logger);
     }
-    
-    /// <summary>
-    /// Cleans a project.
-    /// </summary>
+
+    /// <inheritdoc/>
     public void CleanProject()
     {
         if (_projectService.Project is null)
@@ -94,11 +85,8 @@ public class BuildService
 
         _projectService.Project.CleanProject();
     }
-    
-    /// <summary>
-    /// Cleans a set of files.
-    /// </summary>
-    /// <param name="files">The files to clean.</param>
+
+    /// <inheritdoc/>
     public void CleanFiles(IEnumerable<SourceFile> files)
     {
         if (_projectService.Project is null)

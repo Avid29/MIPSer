@@ -289,7 +289,7 @@
                     </MenuFlyoutItem.Icon>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator/>
-                
+
                 <!--Step-->
                 <MenuFlyoutItem x:Uid="/TitleBar/StepOverMFI" Text="Step Over"
                                 IsEnabled="False">

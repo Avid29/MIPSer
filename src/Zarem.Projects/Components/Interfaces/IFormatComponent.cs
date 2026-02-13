@@ -2,6 +2,8 @@
 
 using System.Threading.Tasks;
 using Zarem.Config;
+using Zarem.Emulator.Models.Modules;
+using Zarem.Models.Files;
 using Zarem.Models.Modules;
 
 namespace Zarem.Components.Interfaces;
@@ -20,7 +22,14 @@ public interface IFormatComponent : IProjectComponent
     /// Attempts to export a module in the target format.
     /// </summary>
     /// <param name="module">The module to export.</param>
-    /// <param name="path">The file to save the export in.</param>
+    /// <param name="object">The object file to export to.</param>
     /// <returns><see langword="true"/> if successfully exported, <see langword="false"/> otherwise.</returns>
-    Task<bool> TryExportAsync(Module module, string path);
+    Task<bool> TryExportAsync(Module module, ObjectFile @object);
+
+    /// <summary>
+    /// Attempts to import a module in the target format.
+    /// </summary>
+    /// <param name="object">The object file to import.</param>
+    /// <returns>The file imported, or null if unsuccessful.</returns>
+    Task<IExecutableModule?> ImportAsync(ObjectFile @object);
 }

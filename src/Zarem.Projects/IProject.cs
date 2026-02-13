@@ -17,22 +17,27 @@ public interface IProject
     /// <summary>
     /// Gets the collection of source files in the project.
     /// </summary>
-    public abstract SourceCollection SourceFiles { get; }
+    SourceCollection SourceFiles { get; }
 
     /// <summary>
     /// Gets the project's configuration.
     /// </summary>
-    public IProjectConfig Config { get; }
+    IProjectConfig Config { get; }
+
+    /// <summary>
+    /// Runs a specific object file.
+    /// </summary>
+    Task RunAsync(ObjectFile objectFile);
 
     /// <summary>
     /// Builds the project.
     /// </summary>
-    public Task<BuildResult?> BuildProjectAsync(bool rebuild = false, Logger? logger = null);
+    Task<BuildResult?> BuildProjectAsync(bool rebuild = false, Logger? logger = null);
 
     /// <summary>
     /// Assembles a list of files.
     /// </summary>
-    public Task<BuildResult?> AssembleFilesAsync(IEnumerable<SourceFile> files, bool rebuild = true, Logger? logger = null);
+    Task<BuildResult?> AssembleFilesAsync(IEnumerable<SourceFile> files, bool rebuild = true, Logger? logger = null);
 
     /// <summary>
     /// Cleans all files in the project.

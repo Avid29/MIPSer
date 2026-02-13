@@ -23,7 +23,7 @@ public partial class WindowViewModel : ObservableRecipient
     private readonly IConsoleService _consoleService;
     private readonly IProjectService _projectService;
     private readonly IWindowingService _windowingService;
-    private readonly BuildService _buildService;
+    private readonly IBuildService _buildService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WindowViewModel"/> class.
@@ -33,7 +33,7 @@ public partial class WindowViewModel : ObservableRecipient
         IConsoleService consoleService,
         IProjectService projectService,
         IWindowingService windowingService,
-        BuildService buildService,
+        IBuildService buildService,
         MainViewModel mainViewModel,
         PanelViewModel panelViewModel)
     {
@@ -55,13 +55,7 @@ public partial class WindowViewModel : ObservableRecipient
         ClosePageCommand = new(ClosePageAsync);
         CloseProjectCommand = new(CloseProjectAsync);
 
-        BuildProjectCommand = new(BuildProjectAsync);
-        RebuildProjectCommand = new(RebuildProjectAsync);
-        AssembleOpenFilesCommand = new(AssembleOpenFilesAsync);
-        AssembleFileCommand = new(AssembleFileAsync);
-        CleanProjectCommand = new(CleanProject);
-        CleanOpenFilesCommand = new(CleanOpenFiles);
-        CleanFileCommand = new(CleanFile);
+        StartWithoutDebuggingCommand = new(StartWithoutDebugging);
 
         OpenAboutCommand = new(OpenAbout);
         OpenCheatSheetCommand = new(OpenCheatSheet);
@@ -70,7 +64,6 @@ public partial class WindowViewModel : ObservableRecipient
         OpenWelcomeCommand = new(OpenWelcome);
 
         ShowConsoleCommand = new(ShowConsole);
-
         ToggleFullScreenModeCommand = new(ToggleFullscrenMode);
 
         UndoCommand = new(Undo);

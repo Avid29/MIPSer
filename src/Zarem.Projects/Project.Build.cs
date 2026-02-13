@@ -65,7 +65,7 @@ public partial class Project
             bool exported = false;
             if (!result.Failed && result.Module is not null)
             {
-                exported = await Format.TryExportAsync(result.Module, file.ObjectFile.FullPath);
+                exported = await Format.TryExportAsync(result.Module, file.ObjectFile);
             }
 
             return result;
