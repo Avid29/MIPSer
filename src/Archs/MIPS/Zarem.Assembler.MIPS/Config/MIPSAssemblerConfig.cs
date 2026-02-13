@@ -28,8 +28,9 @@ public class MIPSAssemblerConfig : AssemblerConfig
     }
 
     /// <summary>
-    /// Gets or sets the mips version to use.
+    /// Gets or sets the mips version to assemble with.
     /// </summary>
+    [XmlIgnore]
     public MipsVersion MipsVersion { get; set; }
 
     /// <summary>

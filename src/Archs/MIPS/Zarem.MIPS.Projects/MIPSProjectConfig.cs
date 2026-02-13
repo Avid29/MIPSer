@@ -6,6 +6,7 @@ using Zarem.Attributes;
 using Zarem.Config;
 using Zarem.Emulator;
 using Zarem.Emulator.Config;
+using Zarem.Models.Instructions.Enums;
 
 namespace Zarem.MIPS.Projects;
 
@@ -15,4 +16,8 @@ namespace Zarem.MIPS.Projects;
 [ProjectType("MIPS", typeof(MIPSAssembler), typeof(MIPSEmulator))]
 public sealed class MIPSProjectConfig : ProjectConfig<MIPSAssemblerConfig, MIPSEmulatorConfig>
 {
+    /// <summary>
+    /// Gets the mips version 
+    /// </summary>
+    public MipsVersion MipsVersion { get; init; }
 }

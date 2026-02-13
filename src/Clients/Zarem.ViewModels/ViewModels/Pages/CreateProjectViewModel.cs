@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using Zarem.Assembler.Config;
+using Zarem.Emulator.Config;
 using Zarem.Messages.Navigation;
 using Zarem.MIPS.Projects;
 using Zarem.Models.Instructions.Enums;
@@ -138,7 +139,9 @@ public class CreateProjectViewModel : PageViewModel
         {
             Name = ProjectName,
             ConfigPath = projectFilePath,
+            MipsVersion = MipsVersion,
             AssemblerConfig = new MIPSAssemblerConfig(MipsVersion),
+            EmulatorConfig = new MIPSEmulatorConfig(MipsVersion),
             FormatConfig = new ElfConfig(),
         };
 

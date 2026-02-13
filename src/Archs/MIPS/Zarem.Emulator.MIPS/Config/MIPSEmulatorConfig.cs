@@ -13,13 +13,20 @@ public class MIPSEmulatorConfig : EmulatorConfig
     /// <summary>
     /// Initializes a new instance of the <see cref="MIPSEmulatorConfig"/> class.
     /// </summary>
-    public MIPSEmulatorConfig()
+    public MIPSEmulatorConfig() : this(MipsVersion.MipsIII)
     {
-        MipsVersion = MipsVersion.MipsIV;
+    }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MIPSEmulatorConfig"/> class.
+    /// </summary>
+    public MIPSEmulatorConfig(MipsVersion mipsVersion = MipsVersion.MipsIII)
+    {
+        MipsVersion = mipsVersion;
     }
 
     /// <summary>
     /// Gets or sets the mips ISA version to emulate.
     /// </summary>
-    public MipsVersion MipsVersion { get; set; }
+    [XmlIgnore]
+    public MipsVersion MipsVersion { get; }
 }

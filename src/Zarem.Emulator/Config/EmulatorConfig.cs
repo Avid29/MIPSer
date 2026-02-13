@@ -1,7 +1,5 @@
 ﻿// Avishai Dernis 2026
 
-using System.Xml.Serialization;
-
 namespace Zarem.Emulator.Config;
 
 /// <summary>
@@ -16,5 +14,5 @@ public class EmulatorConfig
     /// If set to true, ALL traps will be handled by the host-layer, and not the emulated machine.
     /// This allows user-code programs to be interpreted by the emulator without loading and executing an OS.
     /// </remarks>
-    public bool HostedTraps { get; set; }
+    public bool HostedTraps { get; init; }
 }
