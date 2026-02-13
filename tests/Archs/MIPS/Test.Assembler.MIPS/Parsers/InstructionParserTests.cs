@@ -31,13 +31,13 @@ public class InstructionParserTests
     public sealed record InstructionParsingTestCase(
         string Input,
         Instruction? Expected,
-        LogCode? Code)
+        LogId? Code)
     {
         public InstructionParsingTestCase(string input, Instruction expected) : this(input, expected, null)
         {
         }
 
-        public InstructionParsingTestCase(string input, LogCode code) : this(input, null, code)
+        public InstructionParsingTestCase(string input, LogId code) : this(input, null, code)
         {
         }
 
@@ -70,9 +70,9 @@ public class InstructionParserTests
     {
         get
         {
-            yield return [new InstructionParsingTestCase("xkcd $t0, $s0, $s1", LogCode.InvalidInstructionName)];
-            yield return [new InstructionParsingTestCase("add $t0, $s0", LogCode.InvalidInstructionArgCount)];
-            yield return [new InstructionParsingTestCase("add $t0, $s0, $s1, $s1", LogCode.InvalidInstructionArgCount)];
+            yield return [new InstructionParsingTestCase("xkcd $t0, $s0, $s1", Zarem.Assembler.Logging.Enum.LogId.InvalidInstructionName)];
+            yield return [new InstructionParsingTestCase("add $t0, $s0", Zarem.Assembler.Logging.Enum.LogId.InvalidInstructionArgCount)];
+            yield return [new InstructionParsingTestCase("add $t0, $s0, $s1, $s1", Zarem.Assembler.Logging.Enum.LogId.InvalidInstructionArgCount)];
         }
     }
 
@@ -80,9 +80,9 @@ public class InstructionParserTests
     {
         get
         {
-            yield return [new InstructionParsingTestCase("sll $t0, $s0, 33", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 1), LogCode.IntegerTruncated)];
-            yield return [new InstructionParsingTestCase("sll $t0, $s0, -1", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 31), LogCode.IntegerTruncated)];
-            yield return [new InstructionParsingTestCase("j 0x1", Instruction.Create(OperationCode.Jump, 0x1), LogCode.IntegerTruncated)];
+            yield return [new InstructionParsingTestCase("sll $t0, $s0, 33", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 1), Zarem.Assembler.Logging.Enum.LogId.IntegerTruncated)];
+            yield return [new InstructionParsingTestCase("sll $t0, $s0, -1", Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 31), Zarem.Assembler.Logging.Enum.LogId.IntegerTruncated)];
+            yield return [new InstructionParsingTestCase("j 0x1", Instruction.Create(OperationCode.Jump, 0x1), Zarem.Assembler.Logging.Enum.LogId.IntegerTruncated)];
         }
     }
 
@@ -196,7 +196,7 @@ public class InstructionParserTests
 #endif
     }
 
-    private static void RunTest(string input, ParsedInstruction? expected = null, LogCode? logCode = null, string? expectedSymbol = null)
+    private static void RunTest(string input, ParsedInstruction? expected = null, LogId? logCode = null, string? expectedSymbol = null)
     {
         bool succeeds = expected is not null;
 
@@ -226,7 +226,7 @@ public class InstructionParserTests
 
         if (logCode.HasValue)
         {
-            Assert.IsTrue(logger.CurrentLog[0].Code == logCode.Value);
+            Assert.IsTrue(logger.CurrentLog[0].Code.Id == (uint)logCode.Value);
         }
     }
 }

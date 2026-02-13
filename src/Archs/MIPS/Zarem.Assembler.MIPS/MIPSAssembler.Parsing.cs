@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using Zarem.Assembler.Models.Directives;
 using Zarem.Assembler.Tokenization.Models.Enums;
 using Zarem.Assembler.Tokenization.Models;
+using Zarem.Assembler.Extensions;
 using Zarem.Assembler.Extensions.System;
 using Zarem.Assembler.Models.Directives.Abstract;
 using Zarem.Assembler.Logging.Enum;
@@ -55,7 +56,7 @@ public partial class MIPSAssembler
         // random garbage is in the file.
         if (line.Type is LineType.None && line.Args.Count is not 0)
         {
-            _logger.Log(Severity.Error, LogCode.UnexpectedToken, line.Args[0].Tokens[0], "UnexpectedToken", line.Args[0].Tokens[0]);
+            _logger.Log(Severity.Error, LogId.UnexpectedToken, line.Args[0].Tokens[0], "UnexpectedToken", line.Args[0].Tokens[0]);
         }
     }
 
@@ -93,7 +94,7 @@ public partial class MIPSAssembler
 
         if (expression.IsEmpty)
         {
-            _logger.Log(Severity.Error, LogCode.MacroMissingValue, expression[0], "SymbolMissingValue", name);
+            _logger.Log(Severity.Error, LogId.MacroMissingValue, expression[0], "SymbolMissingValue", name);
             return;
         }
         
@@ -102,7 +103,7 @@ public partial class MIPSAssembler
         
         if (result.IsRelocatable)
         {
-            _logger.Log(Severity.Error, LogCode.MacroCannotBeRelocatable, expression[0], "NoRelocatableMacros");
+            _logger.Log(Severity.Error, LogId.MacroCannotBeRelocatable, expression[0], "NoRelocatableMacros");
             return;
         }
         
@@ -167,7 +168,7 @@ public partial class MIPSAssembler
         name = symbol.Source.TrimEnd(':');
         if (char.IsDigit(name[0]))
         {
-            _logger?.Log(Severity.Error, LogCode.IllegalSymbolName, symbol, "SymbolsCannotBeginWithDigits", name);
+            _logger?.Log(Severity.Error, LogId.IllegalSymbolName, symbol, "SymbolsCannotBeginWithDigits", name);
             return false;
         }
 
@@ -175,7 +176,7 @@ public partial class MIPSAssembler
         {
             if (!char.IsLetterOrDigit(c) && c is not '_')
             {
-                _logger?.Log(Severity.Error, LogCode.IllegalSymbolName, symbol, "SymbolCannotContain", name, c);
+                _logger?.Log(Severity.Error, LogId.IllegalSymbolName, symbol, "SymbolCannotContain", name, c);
                 return false;
             }
         }

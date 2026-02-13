@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using System.Numerics;
+using Zarem.Assembler.Extensions;
 using Zarem.Assembler.Logging.Enum;
 using Zarem.Assembler.Tokenization.Models;
 using Zarem.Models.Addressing;
@@ -70,7 +71,7 @@ public partial class MIPSAssembler
         //       and the address can only be updated if it's undeclared/external.
         if (!_module.TryDefineOrUpdateSymbol(name, type, address))
         {
-            _logger?.Log(Severity.Error, LogCode.DuplicateSymbolDefinition, label, "SymbolAlreadyDefined", name);
+            _logger?.Log(Severity.Error, LogId.DuplicateSymbolDefinition, label, "SymbolAlreadyDefined", name);
             return false;
         }
 

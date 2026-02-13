@@ -4,6 +4,7 @@ using CommunityToolkit.Diagnostics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Zarem.Assembler.Extensions;
 using Zarem.Assembler.Extensions.System;
 using Zarem.Assembler.Logging;
 using Zarem.Assembler.Logging.Enum;
@@ -56,7 +57,7 @@ public readonly ref struct ExpressionParser
 
         if (!expression.IsEmpty)
         {
-            logger?.Log(Severity.Error, LogCode.UnexpectedToken, expression, "UnexpectedToken", expression[0]);
+            logger?.Log(Severity.Error, LogId.UnexpectedToken, expression, "UnexpectedToken", expression[0]);
             return false;
         }
 
@@ -115,7 +116,7 @@ public readonly ref struct ExpressionParser
             TokenType.Operator when TryGetUnaryOperator(token.Source, out var op)
                 => TryParseUnaryOperator(ref tokens, token, op, out result),
 
-            _ => _logger?.Log(Severity.Error, LogCode.UnexpectedToken, token, "UnexpectedToken", token) ?? false,
+            _ => _logger?.Log(Severity.Error, LogId.UnexpectedToken, token, "UnexpectedToken", token) ?? false,
         };
 
         if (!success)
@@ -135,7 +136,7 @@ public readonly ref struct ExpressionParser
         {
             // Character literal
             if (!StringParser.TryParseChar(token, out char c, _logger))
-                return _logger?.Log(Severity.Error, LogCode.UnparsableExpression, token, "UnparsableImmediate", token) ?? false;
+                return _logger?.Log(Severity.Error, LogId.UnparsableExpression, token, "UnparsableImmediate", token) ?? false;
 
             value = c;
         }
@@ -157,12 +158,12 @@ public readonly ref struct ExpressionParser
             }
             catch
             {
-                return _logger?.Log(Severity.Error, LogCode.UnparsableExpression, token, "UnparsableImmediate", token) ?? false;
+                return _logger?.Log(Severity.Error, LogId.UnparsableExpression, token, "UnparsableImmediate", token) ?? false;
             }
         }
         else if (!long.TryParse(token.Source, out value))
         {
-            return _logger?.Log(Severity.Error, LogCode.UnparsableExpression, token, "UnparsableImmediate", token) ?? false;
+            return _logger?.Log(Severity.Error, LogId.UnparsableExpression, token, "UnparsableImmediate", token) ?? false;
         }
 
         result = new AddressNode(token, value);
@@ -174,7 +175,7 @@ public readonly ref struct ExpressionParser
         result = null;
 
         if (_context is null || !_context.TryGetSymbol(token.Source, out var symbol))
-            return _logger?.Log(Severity.Error, LogCode.UndeclaredSymbolReferenced, token, "UndeclaredSymbolReferenced", token) ?? false;
+            return _logger?.Log(Severity.Error, LogId.UndeclaredSymbolReferenced, token, "UndeclaredSymbolReferenced", token) ?? false;
 
         _references.Add(symbol);
         result = new SymbolNode(token, symbol);
@@ -195,7 +196,7 @@ public readonly ref struct ExpressionParser
         // Check for a closing parenthesis
         if (tokens.IsEmpty || tokens[0].Type != TokenType.CloseParenthesis)
         {
-            return _logger?.Log(Severity.Error, LogCode.UnparsableExpression, token, "ExpectedClosingParenthesis") ?? false;
+            return _logger?.Log(Severity.Error, LogId.UnparsableExpression, token, "ExpectedClosingParenthesis") ?? false;
         }
 
         // Consume the closing parenthesis
@@ -213,7 +214,7 @@ public readonly ref struct ExpressionParser
 
         if (tokens.IsEmpty)
         {
-            _logger?.Log(Severity.Error, LogCode.UnparsableExpression, opToken, "MissingOperand", opToken);
+            _logger?.Log(Severity.Error, LogId.UnparsableExpression, opToken, "MissingOperand", opToken);
             return false;
         }
 
@@ -232,7 +233,7 @@ public readonly ref struct ExpressionParser
     {
         if (tokens.IsEmpty)
         {
-            _logger?.Log(Severity.Error, LogCode.UnparsableExpression, opToken, "MissingOperand", opToken);
+            _logger?.Log(Severity.Error, LogId.UnparsableExpression, opToken, "MissingOperand", opToken);
             return null;
         }
 

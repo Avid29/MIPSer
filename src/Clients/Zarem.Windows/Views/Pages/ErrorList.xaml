@@ -42,17 +42,22 @@
                         DesiredWidth="24" />
 
                     <ctc:DataColumn
-                        x:Uid="MessageDC"
+                        x:Uid="/ErrorList/CodeDC"
+                        Content="Code"
+                        MinWidth="48"
+                        DesiredWidth="80" />
+                    <ctc:DataColumn
+                        x:Uid="/ErrorList/MessageDC"
                         MinWidth="200"
                         Content="Message"
                         DesiredWidth="*" />
                     <ctc:DataColumn
-                        x:Uid="FileDC"
+                        x:Uid="/ErrorList/FileDC"
                         MinWidth="80"
                         Content="File"
                         DesiredWidth="180" />
                     <ctc:DataColumn
-                        x:Uid="LineDC"
+                        x:Uid="/ErrorList/LineDC"
                         MinWidth="32"
                         Content="Line"
                         DesiredWidth="80" />
@@ -73,6 +78,10 @@
                             <ImageIcon Height="12" Source="{StaticResource MessageIcon}" />
                         </ctc:Case>
                     </ctc:SwitchPresenter>
+                    <TextBlock
+                        Margin="8,0"
+                        FontSize="12"
+                        Text="{x:Bind Code, Mode=OneWay}" />
                     <TextBlock
                         Margin="8,0"
                         FontSize="12"

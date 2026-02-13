@@ -5,7 +5,7 @@ namespace Zarem.Assembler.Logging.Enum;
 /// <summary>
 /// An id for types of logs.
 /// </summary>
-public enum LogCode
+public enum LogId : uint
 {
 #pragma warning disable CS1591
 

@@ -23,32 +23,32 @@ public class ElfTests : AssemblerTests
     private const string NotInVersion = "sync";
 
     [TestMethod(nameof(InvalidInstruction))]
-    public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, expected: LogCode.InvalidInstructionName);
+    public async Task InvalidInstructionTest() => await RunStringTest(InvalidInstruction, expected: LogId.InvalidInstructionName);
 
     [TestMethod(nameof(MissingInstruction))]
-    public async Task MissingInstructionTest() => await RunStringTest(MissingInstruction, expected: LogCode.UnexpectedToken);
+    public async Task MissingInstructionTest() => await RunStringTest(MissingInstruction, expected: LogId.UnexpectedToken);
 
     [TestMethod(nameof(InvalidLabelNum))]
-    public async Task InvalidLabelNumTest() => await RunStringTest(InvalidLabelNum, expected: LogCode.IllegalSymbolName);
+    public async Task InvalidLabelNumTest() => await RunStringTest(InvalidLabelNum, expected: LogId.IllegalSymbolName);
 
     [TestMethod(nameof(ExtraArgError))]
-    public async Task ExtraArgErrorTest() => await RunStringTest(ExtraArgError, expected: LogCode.InvalidInstructionArgCount);
+    public async Task ExtraArgErrorTest() => await RunStringTest(ExtraArgError, expected: LogId.InvalidInstructionArgCount);
 
     [TestMethod(nameof(MissingArgError))]
-    public async Task MissingArgErrorTest() => await RunStringTest(MissingArgError, expected: LogCode.InvalidInstructionArgCount);
+    public async Task MissingArgErrorTest() => await RunStringTest(MissingArgError, expected: LogId.InvalidInstructionArgCount);
 
     [TestMethod(nameof(NumericalRegister))]
     public async Task NumericalRegisterTest() => await RunStringTest(NumericalRegister);
 
     [TestMethod(nameof(NumericalRegisterError))]
-    public async Task NumericalRegisterErrorTest() => await RunStringTest(NumericalRegisterError, expected: LogCode.InvalidRegisterArgument);
+    public async Task NumericalRegisterErrorTest() => await RunStringTest(NumericalRegisterError, expected: LogId.InvalidRegisterArgument);
 
     [TestMethod(nameof(DisabledPseudoInstructions))]
     public async Task DisabledPseudoInstructionsErrorTest() =>
-        await RunStringTest(DisabledPseudoInstructions, new() { PseudoInstructionPermissibility = PseudoInstructionPermissibility.Blacklist }, LogCode.DisabledFeatureInUse);
+        await RunStringTest(DisabledPseudoInstructions, new() { PseudoInstructionPermissibility = PseudoInstructionPermissibility.Blacklist }, LogId.DisabledFeatureInUse);
 
     [TestMethod(nameof(NotInVersion))]
-    public async Task NotInVersionTest() => await RunStringTest(NotInVersion, new(MipsVersion.MipsI), LogCode.NotInVersion);
+    public async Task NotInVersionTest() => await RunStringTest(NotInVersion, new(MipsVersion.MipsI), LogId.NotInVersion);
 
     [TestMethod(TestFilePathing.BranchLiteralFile)]
     public async Task BranchLiteralFileTest() => await RunFileTest(TestFilePathing.BranchLiteralFile);
@@ -70,21 +70,21 @@ public class ElfTests : AssemblerTests
 
     [TestMethod(TestFilePathing.CompositeFailTestFile)]
     public async Task CompositeFailTest() => await RunFileTest(TestFilePathing.CompositeFailTestFile,
-        (LogCode.InvalidInstructionArgCount, 14),
-        (LogCode.InvalidInstructionName, 16),
-        (LogCode.UnparsableExpression, 19),
-        (LogCode.InvalidRegisterArgument, 24), // Debatably should be an InvalidAddressOffsetArgument error
-        (LogCode.ZeroRegWriteback, 29),
-        (LogCode.IntegerTruncated, 30),
-        (LogCode.InvalidInstructionArg, 31),
-        (LogCode.InvalidRegisterArgument, 32),
-        (LogCode.InvalidCharLiteral, 35));
+        (LogId.InvalidInstructionArgCount, 14),
+        (LogId.InvalidInstructionName, 16),
+        (LogId.UnparsableExpression, 19),
+        (LogId.InvalidRegisterArgument, 24), // Debatably should be an InvalidAddressOffsetArgument error
+        (LogId.ZeroRegWriteback, 29),
+        (LogId.IntegerTruncated, 30),
+        (LogId.InvalidInstructionArg, 31),
+        (LogId.InvalidRegisterArgument, 32),
+        (LogId.InvalidCharLiteral, 35));
 
     [TestMethod(TestFilePathing.DuplicateSymbolFile)]
     public async Task DuplicateSymbolTest() => await RunFileTest(TestFilePathing.DuplicateSymbolFile,
-        (LogCode.DuplicateSymbolDefinition, 15));
+        (LogId.DuplicateSymbolDefinition, 15));
 
     [TestMethod(TestFilePathing.SubtractAddressFile)]
     public async Task SubtractAddressTest() => await RunFileTest(TestFilePathing.SubtractAddressFile,
-        (LogCode.InvalidExpressionOperation, 14));
+        (LogId.InvalidExpressionOperation, 14));
 }

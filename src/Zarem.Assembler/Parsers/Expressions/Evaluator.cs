@@ -1,6 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
+using Zarem.Assembler.Extensions;
 using Zarem.Assembler.Logging;
 using Zarem.Assembler.Logging.Enum;
 using Zarem.Assembler.Models;
@@ -47,7 +48,7 @@ public struct Evaluator
         // If both address are relocatable
         if (!Address.TryAdd(left.Value, right.Value, out var value))
         {
-            _logger?.Log(Severity.Error, LogCode.InvalidExpressionOperation, node.ExpressionToken, "CantAddRelocatables");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, node.ExpressionToken, "CantAddRelocatables");
             return false;
         }
 
@@ -77,7 +78,7 @@ public struct Evaluator
         // If both address are relocatable
         if (!Address.TrySubtract(left.Value, right.Value, out var value))
         {
-            _logger?.Log(Severity.Error, LogCode.InvalidExpressionOperation, node.ExpressionToken, "CantSubtractRelocatable");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, node.ExpressionToken, "CantSubtractRelocatable");
             return false;
         }
 
@@ -269,7 +270,7 @@ public struct Evaluator
 
         if (value.IsRelocatable)
         {
-            _logger?.Log(Severity.Error, LogCode.InvalidExpressionOperation, node.ExpressionToken, $"Cant{operation}Relocatable");
+            _logger?.Log(Severity.Error, LogId.InvalidExpressionOperation, node.ExpressionToken, $"Cant{operation}Relocatable");
             return true;
         }
         return false;

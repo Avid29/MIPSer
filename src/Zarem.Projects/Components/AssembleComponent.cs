@@ -44,7 +44,7 @@ public class AssembleComponent<TAssembler, TConfig> : IAssembleComponent
         Guard.IsNotNull(Config);
 
         using var stream = File.OpenRead(file.FullPath);
-        var result = await TAssembler.AssembleAsync(stream, file.Name, Config);
+        var result = await TAssembler.AssembleAsync(stream, file.Name, Config, logger);
         return result;
     }
 }

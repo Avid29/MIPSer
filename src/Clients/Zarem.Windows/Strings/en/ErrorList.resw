@@ -117,103 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BuildStatus_NotReady" xml:space="preserve">
-    <value>Not Ready</value>
+  <data name="CodeDC.Content" xml:space="preserve">
+    <value>Code</value>
   </data>
-  <data name="BuildStatus_Ready" xml:space="preserve">
-    <value>Ready</value>
+  <data name="FileDC.Content" xml:space="preserve">
+    <value>File</value>
   </data>
-  <data name="BuildStatus_Preparing" xml:space="preserve">
-    <value>Preparing</value>
+  <data name="LineDC.Content" xml:space="preserve">
+    <value>Line</value>
   </data>
-  <data name="BuildStatus_Assembling" xml:space="preserve">
-    <value>Assembling</value>
-  </data>
-  <data name="BuildStatus_Linking" xml:space="preserve">
-    <value>Linking</value>
-  </data>
-  <data name="BuildStatus_Completed" xml:space="preserve">
-    <value>Build Complete</value>
-  </data>
-  <data name="BuildStatus_Failed" xml:space="preserve">
-    <value>Build Failed</value>
-  </data>
-  <data name="Theme_Default" xml:space="preserve">
-    <value>Default</value>
-  </data>
-  <data name="Theme_Dark" xml:space="preserve">
-    <value>Dark</value>
-  </data>
-  <data name="Theme_Light" xml:space="preserve">
-    <value>Light</value>
-  </data>
-  <data name="LocalizationSettingsHeaderTB.Text" xml:space="preserve">
-    <value>Language Settings</value>
-  </data>
-  <data name="SearchFilesASB.PlaceholderText" xml:space="preserve">
-    <value>Search Files</value>
-  </data>
-  <data name="WIPTitleTB.Text" xml:space="preserve">
-    <value>We're Not Ready Yet...</value>
-  </data>
-  <data name="WIPDescriptionTB.Text" xml:space="preserve">
-    <value>We're working on handling this file type, but it's not ready yet.</value>
-  </data>
-  <data name="AboutHeaderTB.Text" xml:space="preserve">
-    <value>About</value>
-  </data>
-  <data name="AnnotationThreshold_Never" xml:space="preserve">
-    <value>Never</value>
-  </data>
-  <data name="AnnotationThreshold_Errors" xml:space="preserve">
-    <value>Only Errors</value>
-  </data>
-  <data name="AnnotationThreshold_Warnings" xml:space="preserve">
-    <value>Warnings and Errors</value>
-  </data>
-  <data name="AnnotationThreshold_Always" xml:space="preserve">
-    <value>Always</value>
-  </data>
-  <data name="CreateBTN.Content" xml:space="preserve">
-    <value>Create</value>
-  </data>
-  <data name="CancelBTN.Content" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="MipsVersion_MipsI" xml:space="preserve">
-    <value>MIPS I</value>
-  </data>
-  <data name="MipsVersion_MipsII" xml:space="preserve">
-    <value>MIPS II</value>
-  </data>
-  <data name="MipsVersion_MipsIII" xml:space="preserve">
-    <value>MIPS III</value>
-  </data>
-  <data name="MipsVersion_MipsIV" xml:space="preserve">
-    <value>MIPS IV</value>
-  </data>
-  <data name="MipsVersion_MipsV" xml:space="preserve">
-    <value>MIPS V</value>
-  </data>
-  <data name="MipsVersion_MipsVI" xml:space="preserve">
-    <value>MIPS VI</value>
-  </data>
-  <data name="BuildStatus/Succeeded" xml:space="preserve">
-    <value>{0} Succeeded</value>
-  </data>
-  <data name="BuildStatus/Failed" xml:space="preserve">
-    <value>{0} Failed</value>
-  </data>
-  <data name="BuildStatus/Skipped" xml:space="preserve">
-    <value>{0} Skipped</value>
-  </data>
-  <data name="BuildStatus/OneSucceeded" xml:space="preserve">
-    <value>1 Succeeded</value>
-  </data>
-  <data name="BuildStatus/OneSkipped" xml:space="preserve">
-    <value>1 Skipped</value>
-  </data>
-  <data name="BuildStatus/OneFailed" xml:space="preserve">
-    <value>1 Failed</value>
+  <data name="MessageDC.Content" xml:space="preserve">
+    <value>Message</value>
   </data>
 </root>
