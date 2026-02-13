@@ -48,7 +48,7 @@ public partial class Project
     private async Task<AssemblerResult?> AssembleFileAsync(SourceFile file, bool rebuild = true, Logger? logger = null)
     {
         // Skip if not dirty and not rebuilding
-        if (!(file.IsDirty || !file.ObjectFile.Exists) && !rebuild)
+        if (!(file.IsDirty) && !rebuild)
             return null;
 
         try
@@ -56,8 +56,6 @@ public partial class Project
             // Assemble the file
             using var stream = File.OpenRead(file.FullPath);
             var result = await Assemble.AssembleFileAsync(file, rebuild, logger);
-
-            // Not dirty and not rebuilding
             if (result is null)
                 return null;
 

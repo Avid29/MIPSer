@@ -147,4 +147,16 @@
   <data name="UnsavedChangesDescription" xml:space="preserve">
     <value>Would you like to save the changes before closing the file?</value>
   </data>
+  <data name="FileRunOldAssemblyTitle" xml:space="preserve">
+    <value>{0} could not be assembled</value>
+  </data>
+  <data name="FileRunOldAssemblyDescription" xml:space="preserve">
+    <value>A previous binary is still cached. Would you like to run it?</value>
+  </data>
+  <data name="FileRunOldAssemblyPrimary" xml:space="preserve">
+    <value>Run Current</value>
+  </data>
+  <data name="Okay" xml:space="preserve">
+    <value>Okay</value>
+  </data>
 </root>

@@ -67,7 +67,7 @@ public static class ProjectFactory
         // Form a closed-type format component
         var closedType = openType.MakeGenericType(primaryType, config.GetType());
 
-        // Instantializes
+        // Instantialize
         var compoent = (T?)Activator.CreateInstance(closedType, config);
         Guard.IsNotNull(compoent);
 

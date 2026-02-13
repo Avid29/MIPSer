@@ -70,6 +70,7 @@ public class BuildService : IBuildService
             return null;
 
         // TODO: Consider making a popup asking about saving
+        // TODO: Save only assembling files
         await Service.Get<MainViewModel>().SaveAllFilesAsync();
 
         var logger = new Logger();

@@ -36,6 +36,10 @@ public class SourceFile : FileBase
     {
         get
         {
+            // If the binary doesn't exist, the source file is still considered dirty
+            if (!ObjectFile.Exists)
+                return true;
+
             var sourceWriteTime = File.GetLastWriteTime(FullPath);
             var objectWriteTime = File.GetLastWriteTime(ObjectFile.FullPath);
 

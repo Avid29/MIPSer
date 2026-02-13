@@ -38,7 +38,7 @@ public class AssembleComponent<TAssembler, TConfig> : IAssembleComponent
     public async Task<AssemblerResult?> AssembleFileAsync(SourceFile file, bool rebuild = true, Logger? logger = null)
     {
         // Skip if not dirty and not rebuilding
-        if (!(file.IsDirty || !file.ObjectFile.Exists) && !rebuild)
+        if (!file.IsDirty && !rebuild)
             return null;
 
         Guard.IsNotNull(Config);
