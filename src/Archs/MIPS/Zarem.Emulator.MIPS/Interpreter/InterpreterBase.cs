@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2026
 
-using Zarem.Emulator.Components;
-using Zarem.Emulator.Components.CPU;
+using Zarem.Emulator.Machine;
+using Zarem.Emulator.Machine.CPU;
 using Zarem.Emulator.Events;
 using Zarem.Emulator.Executor.Enum;
 using Zarem.Models.Instructions.Enums.Registers;
@@ -16,7 +16,7 @@ public abstract class InterpreterBase
     /// <summary>
     /// Initializes a new instance of the <see cref="InterpreterBase"/> class
     /// </summary>
-    public InterpreterBase(Computer computer)
+    public InterpreterBase(MIPSComputer computer)
     {
         Computer = computer;
 
@@ -36,7 +36,7 @@ public abstract class InterpreterBase
     /// <summary>
     /// Gets the computer the traps occur on.
     /// </summary>
-    protected Computer Computer { get; }
+    protected MIPSComputer Computer { get; }
 
     /// <summary>
     /// Gets the value of first argument register.

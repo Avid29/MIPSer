@@ -2,22 +2,22 @@
 
 using CommunityToolkit.Diagnostics;
 using System;
-using Zarem.Emulator.Components.CPU.CoProcessors;
-using Zarem.Emulator.Components.CPU.Registers;
+using Zarem.Emulator.Machine.CPU.CoProcessors;
+using Zarem.Emulator.Machine.CPU.Registers;
 using Zarem.Emulator.Events;
 using Zarem.Emulator.Executor;
 using Zarem.Emulator.Executor.Enum;
 using Zarem.Models.Instructions;
 using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.Emulator.Components.CPU;
+namespace Zarem.Emulator.Machine.CPU;
 
 /// <summary>
 /// A class representing a processor unit.
 /// </summary>
 public partial class Processor
 {
-    private readonly Computer _computer;
+    private readonly MIPSComputer _computer;
 
     /// <summary>
     /// An event that is invoked when a trap occures before it is handled.
@@ -27,7 +27,7 @@ public partial class Processor
     /// <summary>
     /// Initializes a new instance of the <see cref="Processor"/> class.
     /// </summary>
-    public Processor(Computer computer)
+    public Processor(MIPSComputer computer)
     {
         _computer = computer;
 

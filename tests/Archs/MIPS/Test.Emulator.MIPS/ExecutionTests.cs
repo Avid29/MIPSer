@@ -6,8 +6,8 @@ using Zarem.Assembler.MIPS.Tokenization;
 using Zarem.Assembler.Models.Instructions;
 using Zarem.Assembler.Parsers;
 using Zarem.Emulator;
-using Zarem.Emulator.Components.CPU.Registers;
-using Zarem.Emulator.Components.Enums;
+using Zarem.Emulator.Machine.CPU.Registers;
+using Zarem.Emulator.Machine.Enums;
 using Zarem.Emulator.Executor.Enum;
 using Zarem.Models.Instructions.Enums.Registers;
 

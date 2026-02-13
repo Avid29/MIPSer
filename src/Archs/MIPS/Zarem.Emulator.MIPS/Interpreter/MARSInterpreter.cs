@@ -2,7 +2,7 @@
 
 using System;
 using Zarem.Emulator.Executor.Enum;
-using Zarem.Emulator.Components;
+using Zarem.Emulator.Machine;
 
 namespace Zarem.Emulator.Interpreter;
 
@@ -15,7 +15,7 @@ public class MARSInterpreter : InterpreterBase
     /// Initializes a new instance of the <see cref="MARSInterpreter"/> class.
     /// </summary>
     /// <param name="computer"></param>
-    public MARSInterpreter(Computer computer) : base(computer)
+    public MARSInterpreter(MIPSComputer computer) : base(computer)
     {
     }
 

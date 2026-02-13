@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2026
 
 using System;
-using Zarem.Emulator.Components.Enums;
+using Zarem.Emulator.Machine.Enums;
 using Zarem.Emulator.Executor.Enum;
 using Zarem.Models.Instructions.Enums.Registers;
 using Zarem.Models.Instructions.Enums.SpecialFunctions.CoProc0;

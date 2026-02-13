@@ -1,8 +1,8 @@
 ﻿// Avishai Dernis 2026
 
 using System;
-using Zarem.Emulator.Components.CPU;
-using Zarem.Emulator.Components.CPU.Registers;
+using Zarem.Emulator.Machine.CPU;
+using Zarem.Emulator.Machine.CPU.Registers;
 using Zarem.Emulator.Executor.Enum;
 using Zarem.Models.Instructions;
 using Zarem.Models.Instructions.Enums.Operations;

@@ -2,7 +2,7 @@
 
 using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.Emulator.Components.CPU.Registers;
+namespace Zarem.Emulator.Machine.CPU.Registers;
 
 /// <summary>
 /// A class representing a register file.

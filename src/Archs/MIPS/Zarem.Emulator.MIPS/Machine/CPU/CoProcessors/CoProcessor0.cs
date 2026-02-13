@@ -1,10 +1,10 @@
 ﻿// Adam Dernis 2024
 
-using Zarem.Emulator.Components.CPU.Registers;
-using Zarem.Emulator.Components.Enums;
+using Zarem.Emulator.Machine.CPU.Registers;
+using Zarem.Emulator.Machine.Enums;
 using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.Emulator.Components.CPU.CoProcessors;
+namespace Zarem.Emulator.Machine.CPU.CoProcessors;
 
 /// <summary>
 /// A class representing the 0th co-processor unit.

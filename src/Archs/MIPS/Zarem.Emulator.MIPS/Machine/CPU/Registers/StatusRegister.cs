@@ -1,10 +1,10 @@
 ﻿// Avishai Dernis 2025
 
 using System.Runtime.CompilerServices;
-using Zarem.Emulator.Components.Enums;
+using Zarem.Emulator.Machine.Enums;
 using Zarem.Helpers;
 
-namespace Zarem.Emulator.Components.CPU.Registers;
+namespace Zarem.Emulator.Machine.CPU.Registers;
 
 /// <summary>
 /// CoProcessor0 Status register.

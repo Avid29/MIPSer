@@ -10,7 +10,7 @@ using System.Text;
 using Zarem.Emulator.Helpers;
 using Zarem.Extensions.System.IO;
 
-namespace Zarem.Emulator.Components.Memory;
+namespace Zarem.Emulator.Machine.Memory;
 
 /// <summary>
 /// Represents the RAM (Random Access Memory) in a MIPS emulator.

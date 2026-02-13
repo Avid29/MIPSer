@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 using Zarem.Emulator.Executor.Enum;
 using Zarem.Helpers;
 
-namespace Zarem.Emulator.Components.CPU.Registers;
+namespace Zarem.Emulator.Machine.CPU.Registers;
 
 /// <summary>
 /// CoProcessor0 Cause register.
