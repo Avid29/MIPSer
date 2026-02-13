@@ -22,9 +22,6 @@ public sealed partial class ErrorList : UserControl
     private static readonly DependencyProperty MessageFlowDirectionProperty =
         DependencyProperty.Register(nameof(MessageFlowDirection), typeof(FlowDirection), typeof(ErrorList), new(FlowDirection.LeftToRight));
 
-    private static readonly DependencyProperty MessageTextAlignmentProperty =
-        DependencyProperty.Register(nameof(MessageTextAlignment), typeof(TextAlignment), typeof(ErrorList), new(TextAlignment.Left));
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ErrorList"/> class.
     /// </summary>
@@ -70,12 +67,6 @@ public sealed partial class ErrorList : UserControl
         set => SetValue(MessageFlowDirectionProperty, value);
     }
 
-    public TextAlignment MessageTextAlignment
-    {
-        get => (TextAlignment)GetValue(MessageTextAlignmentProperty);
-        set => SetValue(MessageTextAlignmentProperty, value);
-    }
-
     private void UpdateAlignment()
     {
         var culture = CultureInfo.CurrentUICulture;
@@ -87,6 +78,5 @@ public sealed partial class ErrorList : UserControl
 
         var isRtl = culture.TextInfo.IsRightToLeft;
         MessageFlowDirection = isRtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
-        MessageTextAlignment = isRtl ? TextAlignment.Right : TextAlignment.Left;
     }
 }

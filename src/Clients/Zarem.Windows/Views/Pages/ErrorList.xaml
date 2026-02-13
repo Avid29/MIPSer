@@ -87,7 +87,6 @@
                         FontSize="12"
                         TextReadingOrder="UseFlowDirection"
                         FlowDirection="{Binding DataContext.MessageFlowDirection, ElementName=ListView, Mode=OneWay}"
-                        TextAlignment="{Binding DataContext.MessageTextAlignment, ElementName=ListView, Mode=OneWay}"
                         Text="{x:Bind Message, Mode=OneWay}" />
                     <TextBlock
                         Margin="8,0"

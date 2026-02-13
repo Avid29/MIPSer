@@ -19,5 +19,15 @@ public sealed class MIPSProjectConfig : ProjectConfig<MIPSAssemblerConfig, MIPSE
     /// <summary>
     /// Gets the mips version 
     /// </summary>
-    public MipsVersion MipsVersion { get; init; }
+    public MipsVersion MipsVersion
+    {
+        get => field;
+        set
+        {
+            field = value;
+
+            AssemblerConfig?.MipsVersion = value;
+            EmulatorConfig?.MipsVersion = value;
+        }
+    }
 }
