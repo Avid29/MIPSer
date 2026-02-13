@@ -143,7 +143,7 @@ public class CreateProjectViewModel : PageViewModel
         };
 
         // Write project config to the file 
-        ProjectFactory.Store(projectConfig, projectFilePath);
+        ProjectSerializer.Serialize(projectConfig, projectFilePath);
 
         // Open the project and close the page
         await _projectService.OpenProjectAsync(projectConfig);

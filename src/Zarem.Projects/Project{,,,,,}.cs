@@ -10,6 +10,7 @@ using Zarem.Emulator.Config;
 using Zarem.Emulator.Models.Modules;
 using Zarem.Models.Files;
 using Zarem.Models.Modules.Interface;
+using Zarem.Serialization;
 
 namespace Zarem;
 
@@ -48,4 +49,12 @@ public abstract partial class Project<TAssembler, TEmulator, TModule, TAsmConfig
 
     /// <inheritdoc/>
     ProjectConfig IProject.Config => Config;
+
+    /// <inheritdoc/>
+    public void Save()
+    {
+        Guard.IsNotNull(Config.ConfigPath);
+
+        ProjectSerializer.Serialize(Config, Config.ConfigPath);
+    }
 }

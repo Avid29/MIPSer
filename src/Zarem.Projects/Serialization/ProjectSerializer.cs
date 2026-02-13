@@ -2,6 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
@@ -14,56 +15,33 @@ namespace Zarem.Serialization;
 /// <summary>
 /// A class for serializing/deserialization <see cref="ProjectConfig"/> instances.
 /// </summary>
-public static class ProjectSerializer
+public static partial class ProjectSerializer
 {
-    internal static void ReadObjectProperties(XElement element, object obj)
+    delegate void SerializeDelegate(XElement parent, PropertyInfo prop, object value);
+
+    /// <summary>
+    /// Serializes a <see cref="ProjectConfig"/>.
+    /// </summary>
+    /// <param name="config">The <see cref="ProjectConfig"/> to serialize.</param>
+    /// <param name="path">The path to store the result in.</param>
+    public static void Serialize(ProjectConfig config, string path)
     {
-        foreach (var child in element.Elements())
-        {
-            var prop = obj.GetType().GetProperty(child.Name.LocalName);
-            if (prop == null)
-                continue;
+        var configType = config.GetType();
 
-            if (typeof(FormatConfig).IsAssignableFrom(prop.PropertyType))
-            {
-                var formatTypeName = child.Attribute("Type")?.Value;
-                Guard.IsNotNull(formatTypeName);
+        var typeInfo = ProjectTypeRegistry.GetProjectType(configType);
+        Guard.IsNotNull(typeInfo);
 
-                var typeInfo = ProjectTypeRegistry.GetFormatType(formatTypeName);
-                Guard.IsNotNull(typeInfo);
+        // Create the root node
+        var root = new XElement("Project", new XAttribute("Type", typeInfo.TypeName));
 
-                var formatInstance = (FormatConfig?)Activator.CreateInstance(typeInfo.ConfigType);
-                Guard.IsNotNull(formatInstance);
+        // Serialize ProjectConfig properties automatically
+        WriteObjectProperties(root, config);
 
-                ReadObjectProperties(child, formatInstance);
-
-                prop.SetValue(obj, formatInstance);
-            }
-            else if (prop.PropertyType.IsEnum)
-            {
-                var enumValue = ParseXmlEnum(prop.PropertyType, child.Value);
-                prop.SetValue(obj, enumValue);
-                continue;
-            }
-            else if (IsSimple(prop.PropertyType))
-            {
-                var value = Convert.ChangeType(
-                    child.Value,
-                    prop.PropertyType);
-
-                prop.SetValue(obj, value);
-            }
-            else
-            {
-                var nestedInstance = Activator.CreateInstance(prop.PropertyType)!;
-
-                ReadObjectProperties(child, nestedInstance);
-                prop.SetValue(obj, nestedInstance);
-            }
-        }
+        var doc = new XDocument(root);
+        doc.Save(path);
     }
 
-    internal static void WriteObjectProperties(XElement parent, object obj)
+    private static void WriteObjectProperties(XElement parent, object obj)
     {
         foreach (var prop in obj.GetType().GetProperties())
         {
@@ -77,37 +55,54 @@ public static class ProjectSerializer
             if (value == null)
                 continue;
 
-            if (value is FormatConfig format)
+            // Select serialization function
+            SerializeDelegate @delegate = prop switch
             {
-                var typeInfo = ProjectTypeRegistry.GetFormatType(format.GetType());
-                Guard.IsNotNull(typeInfo);
+                _ when value is FormatConfig => SerializeFormatConfig,
+                _ when prop.PropertyType.IsEnum => SerializeEnum,
+                _ when IsSimple(prop.PropertyType) => SerializeSimple,
+                _ => SerializeObject,
+            };
 
-                var formatElement = new XElement("FormatConfig", new XAttribute("Type", typeInfo.TypeName));
-
-                WriteObjectProperties(formatElement, format);
-                parent.Add(formatElement);
-            }
-            else if (prop.PropertyType.IsEnum)
-            {
-                var enumValue = value;
-                var enumType = prop.PropertyType;
-
-                var name = GetXmlEnumName(enumType, enumValue);
-
-                parent.Add(new XElement(prop.Name, name));
-                continue;
-            }
-            else if (IsSimple(prop.PropertyType))
-            {
-                parent.Add(new XElement(prop.Name, value));
-            }
-            else
-            {
-                var element = new XElement(prop.Name);
-                WriteObjectProperties(element, value);
-                parent.Add(element);
-            }
+            // Run serialization
+            @delegate(parent, prop, value);
         }
+    }
+
+    private static void SerializeFormatConfig(XElement parent, PropertyInfo prop, object value)
+    {
+        var typeInfo = ProjectTypeRegistry.GetFormatType(value.GetType());
+        Guard.IsNotNull(typeInfo);
+
+        var formatElement = new XElement("FormatConfig", new XAttribute("Type", typeInfo.TypeName));
+
+        WriteObjectProperties(formatElement, value);
+        parent.Add(formatElement);
+    }
+
+    private static void SerializeSimple(XElement parent, PropertyInfo prop, object value)
+    {
+        parent.Add(new XElement(prop.Name, value));
+    }
+
+    private static void SerializeEnum(XElement parent, PropertyInfo prop, object value)
+    {
+        var member = prop.PropertyType.GetMember(value.ToString()!)[0];
+
+        var attr = member
+            .GetCustomAttributes(typeof(XmlEnumAttribute), false)
+            .Cast<XmlEnumAttribute>()
+            .FirstOrDefault();
+
+        var name = attr?.Name ?? value.ToString()!;
+        parent.Add(new XElement(prop.Name, name));
+    }
+
+    private static void SerializeObject(XElement parent, PropertyInfo prop, object value)
+    {
+        var element = new XElement(prop.Name);
+        WriteObjectProperties(element, value);
+        parent.Add(element);
     }
 
     private static bool IsSimple(Type type)
@@ -116,37 +111,5 @@ public static class ProjectSerializer
             || type == typeof(string)
             || type == typeof(decimal)
             || type == typeof(DateTime);
-    }
-
-    private static string GetXmlEnumName(Type enumType, object enumValue)
-    {
-        var member = enumType.GetMember(enumValue.ToString()!)[0];
-
-        var attr = member
-            .GetCustomAttributes(typeof(XmlEnumAttribute), false)
-            .Cast<XmlEnumAttribute>()
-            .FirstOrDefault();
-
-        return attr?.Name ?? enumValue.ToString()!;
-    }
-
-    private static object ParseXmlEnum(Type enumType, string xmlValue)
-    {
-        foreach (var field in enumType.GetFields(BindingFlags.Public | BindingFlags.Static))
-        {
-            var attr = field
-                .GetCustomAttributes(typeof(XmlEnumAttribute), false)
-                .Cast<XmlEnumAttribute>()
-                .FirstOrDefault();
-
-            if (attr != null && attr.Name == xmlValue)
-                return field.GetValue(null)!;
-
-            if (field.Name == xmlValue)
-                return field.GetValue(null)!;
-        }
-
-        throw new InvalidOperationException(
-            $"Value '{xmlValue}' is not valid for enum {enumType.Name}");
     }
 }

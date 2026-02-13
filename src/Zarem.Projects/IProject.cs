@@ -44,4 +44,9 @@ public interface IProject
     /// </summary>
     /// <param name="files">The files to clean.</param>
     void CleanFiles(IEnumerable<SourceFile> files);
+
+    /// <summary>
+    /// Saves the project configuration.
+    /// </summary>
+    void Save();
 }
