@@ -20,7 +20,7 @@ namespace Zarem.ViewModels.Pages.App.Settings;
 /// <summary>
 /// A view model for the editor settings sub-page.
 /// </summary>
-public class EditorSettingsViewModel : SettingsSubPageViewModel
+public partial class EditorSettingsViewModel : SettingsSubPageViewModel
 {
     private readonly ILocalizationService _localizationService;
     private readonly ISettingsService _settingsService;
@@ -34,8 +34,6 @@ public class EditorSettingsViewModel : SettingsSubPageViewModel
         _localizationService = localizationService;
         _settingsService = settingsService;
         _fileSystemService = fileSystemService;
-
-        LoadSchemeFromFileCommand = new(LoadSchemeFromFile);
 
         EditorColorSchemeOptions = new(LoadEditorSchemes());
     }
@@ -98,11 +96,6 @@ public class EditorSettingsViewModel : SettingsSubPageViewModel
     /// </summary>
     public ObservableCollection<EditorColorScheme> EditorColorSchemeOptions { get; }
 
-    /// <summary>
-    /// A <see cref="RelayCommand"/> which opens a file picker to load an editor color scheme from file.
-    /// </summary>
-    public AsyncRelayCommand LoadSchemeFromFileCommand { get; }
-
     private List<EditorColorScheme> LoadEditorSchemes()
     {
         // Get resources
@@ -134,6 +127,7 @@ public class EditorSettingsViewModel : SettingsSubPageViewModel
         return editorSchemes;
     }
 
+    [RelayCommand]
     private async Task LoadSchemeFromFile()
     {
         // TODO: log errors

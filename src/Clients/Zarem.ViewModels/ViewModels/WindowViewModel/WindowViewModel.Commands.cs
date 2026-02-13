@@ -8,55 +8,27 @@ namespace Zarem.ViewModels;
 
 public partial class WindowViewModel
 {
-    /// <summary>
-    /// Gets a command that opens the about page.
-    /// </summary>
-    public RelayCommand OpenAboutCommand { get; }
-
-    /// <summary>
-    /// Gets a command that opens the cheat sheet.
-    /// </summary>
-    public RelayCommand OpenCheatSheetCommand { get; }
-
-    /// <summary>
-    /// Gets a command that opens the create project page.
-    /// </summary>
-    public RelayCommand OpenCreateProjectCommand { get; }
-
-    /// <summary>
-    /// Gets a command that opens the settings page.
-    /// </summary>
-    public RelayCommand OpenSettingsCommand { get; }
-
-    /// <summary>
-    /// Gets a command that opens the welcome page.
-    /// </summary>
-    public RelayCommand OpenWelcomeCommand { get; }
-
-    /// <summary>
-    /// Gets a command that toggles full screen mode.
-    /// </summary>
-    public RelayCommand ToggleFullScreenModeCommand { get; }
-
-    /// <summary>
-    /// Gets a command that shows the console.
-    /// </summary>
-    public RelayCommand ShowConsoleCommand { get; }
-
+    [RelayCommand]
     private void OpenAbout() => MainViewModel.GoToPageByType<AboutPageViewModel>();
 
+    [RelayCommand]
     private void OpenCheatSheet() => MainViewModel.GoToPageByType<CheatSheetViewModel>();
 
+    [RelayCommand]
     private void OpenCreateProject() => MainViewModel.GoToPageByType<CreateProjectViewModel>();
 
+    [RelayCommand]
     private void OpenSettings() => MainViewModel.GoToPageByType<SettingsPageViewModel>();
 
     /// <summary>
     /// Open the welcome page.
     /// </summary>
-    public void OpenWelcome() => MainViewModel.GoToPageByType<WelcomePageViewModel>();
+    [RelayCommand]
+    private void OpenWelcome() => MainViewModel.GoToPageByType<WelcomePageViewModel>();
 
+    [RelayCommand]
     private void ShowConsole() => _consoleService.ShowConsoleWindow();
 
+    [RelayCommand]
     private void ToggleFullscrenMode() => _windowingService.ToggleFullScreen();
 }

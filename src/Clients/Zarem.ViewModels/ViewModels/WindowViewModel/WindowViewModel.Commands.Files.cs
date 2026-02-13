@@ -9,58 +9,25 @@ namespace Zarem.ViewModels;
 
 public partial class WindowViewModel
 {
-    /// <summary>
-    /// Gets a command that creates and opens an anonymous file.
-    /// </summary>
-    public RelayCommand CreateNewFileCommand { get; }
-
-    /// <summary>
-    /// Gets the command that saves the current file.
-    /// </summary>
-    public AsyncRelayCommand SaveFileCommand { get; }
-
-    /// <summary>
-    /// Gets the command that saves the currently open files.
-    /// </summary>
-    public AsyncRelayCommand SaveAllFilesCommand { get; }
-
-    /// <summary>
-    /// Gets a command that picks and opens a file.
-    /// </summary>
-    public AsyncRelayCommand PickAndOpenFileCommand { get; }
-
-    /// <summary>
-    /// Gets a command that picks and opens a folder.
-    /// </summary>
-    public AsyncRelayCommand PickAndOpenFolderCommand { get; }
-
-    /// <summary>
-    /// Gets a command that picks and opens a project.
-    /// </summary>
-    public AsyncRelayCommand PickAndOpenProjectCommand { get; }
-
-    /// <summary>
-    /// Gets a command that closes the currently open page.
-    /// </summary>
-    public AsyncRelayCommand ClosePageCommand { get; }
-
-    /// <summary>
-    /// Gets a command that closes the currently open project.
-    /// </summary>
-    public AsyncRelayCommand CloseProjectCommand { get; }
-
+    [RelayCommand]
     private void CreateNewFile() => _messenger.Send(new FileCreateNewRequestMessage());
 
+    [RelayCommand]
     private async Task SaveFileAsync() => MainViewModel.FocusedPanel?.SaveFileAsync();
 
+    [RelayCommand]
     private async Task SaveAllFilesAsync() => await MainViewModel.SaveAllFilesAsync();
 
+    [RelayCommand]
     private async Task PickAndOpenFileAsync() => await MainViewModel.PickAndOpenFileAsync();
 
+    [RelayCommand]
     private async Task PickAndOpenFolderAsync() => await MainViewModel.PickAndOpenFolderAsync();
 
+    [RelayCommand]
     private async Task PickAndOpenProjectAsync() => await MainViewModel.PickAndOpenProjectAsync();
 
+    [RelayCommand]
     private async Task ClosePageAsync()
     {
         var panel = MainViewModel.FocusedPanel;
@@ -70,5 +37,6 @@ public partial class WindowViewModel
         await panel.ClosePageAsync(null);
     }
 
+    [RelayCommand]
     private async Task CloseProjectAsync() => await _projectService.CloseProjectAsync();
 }

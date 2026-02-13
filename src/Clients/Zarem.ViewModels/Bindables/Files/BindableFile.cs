@@ -19,8 +19,6 @@ public partial class BindableFile : BindableFileItem<IFile>
     {
         FileItem = file;
         Children = [];
-
-        OpenCommand = new(Open);
     }
 
     /// <inheritdoc/>

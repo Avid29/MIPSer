@@ -20,7 +20,7 @@ namespace Zarem.ViewModels.Pages;
 /// <summary>
 /// A view model for the explorer.
 /// </summary>
-public class ExplorerViewModel : PageViewModel
+public partial class ExplorerViewModel : PageViewModel
 {
     private const string RecentProjectsCacheKey = "RecentProjects";
 
@@ -38,8 +38,6 @@ public class ExplorerViewModel : PageViewModel
         _messenger = messenger;
 
         RecentProjects = [];
-
-        CreateNewProjectCommand = new(CreateNewProject);
 
         _ = LoadRecentCacheAsync();
 
@@ -72,11 +70,6 @@ public class ExplorerViewModel : PageViewModel
     /// </summary>
     public ObservableCollection<string> RecentProjects { get; private set; }
 
-    /// <summary>
-    /// Gets a command to open the create new project page.
-    /// </summary>
-    public RelayCommand CreateNewProjectCommand { get; }
-
     /// <inheritdoc/>
     protected override void OnActivated()
     {
@@ -106,6 +99,7 @@ public class ExplorerViewModel : PageViewModel
             RecentProjects.Add(item);
     }
 
+    [RelayCommand]
     private void CreateNewProject()
     {
         Service.Get<MainViewModel>().GoToPageByType<CreateProjectViewModel>();

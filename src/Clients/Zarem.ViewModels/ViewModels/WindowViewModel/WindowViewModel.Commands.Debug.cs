@@ -8,11 +8,7 @@ namespace Zarem.ViewModels;
 
 public partial class WindowViewModel
 {
-    /// <summary>
-    /// Gets a command that builds the project.
-    /// </summary>
-    public RelayCommand StartWithoutDebuggingCommand { get; }
-
+    [RelayCommand]
     private void StartWithoutDebugging()
     {
 

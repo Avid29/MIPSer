@@ -19,11 +19,6 @@ public abstract partial class BindableFileItem : ObservableObject, IDisposable
     protected BindableFileItem(FileService fileService)
     {
         FileService = fileService;
-
-        CopyFileNameCommand = new(CopyFileName);
-        CopyFilePathCommand = new(CopyFilePath);
-        CopyFileCommand = new(CopyFileAsync);
-        DeleteCommand = new(DeleteAsync);
     }
 
     /// <summary>

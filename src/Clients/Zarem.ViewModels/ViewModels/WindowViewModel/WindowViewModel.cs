@@ -46,43 +46,6 @@ public partial class WindowViewModel : ObservableRecipient
         MainViewModel = mainViewModel;
         PanelViewModel = panelViewModel;
 
-        CreateNewFileCommand = new(CreateNewFile);
-        SaveFileCommand = new(SaveFileAsync);
-        SaveAllFilesCommand = new(SaveAllFilesAsync);
-        PickAndOpenFileCommand = new(PickAndOpenFileAsync);
-        PickAndOpenFolderCommand = new(PickAndOpenFolderAsync);
-        PickAndOpenProjectCommand = new(PickAndOpenProjectAsync);
-        ClosePageCommand = new(ClosePageAsync);
-        CloseProjectCommand = new(CloseProjectAsync);
-
-        StartWithoutDebuggingCommand = new(StartWithoutDebugging);
-
-        OpenAboutCommand = new(OpenAbout);
-        OpenCheatSheetCommand = new(OpenCheatSheet);
-        OpenCreateProjectCommand = new(OpenCreateProject);
-        OpenSettingsCommand = new(OpenSettings);
-        OpenWelcomeCommand = new(OpenWelcome);
-
-        ShowConsoleCommand = new(ShowConsole);
-        ToggleFullScreenModeCommand = new(ToggleFullscrenMode);
-
-        UndoCommand = new(Undo);
-        RedoCommand = new(Redo);
-        CutCommand = new(Cut);
-        CopyCommand = new(Copy);
-        PasteCommand = new(Paste);
-        DuplicateCommand = new(Duplicate);
-        SelectAllCommand = new(SelectAll);
-
-        TransposeUpCommand = new(TransposeUp);
-        TransposeDownCommand = new(TransposeDown);
-        
-        ToggleOutliningCommand = new(ToggleOutlining);
-        ExpandCurrentCommand = new(ExpandChildren);
-        CollapseCurrentCommand = new(CollapseChildren);
-        ExpandAllCommand = new(ExpandAll);
-        CollapseAllCommand = new(CollapseAll);
-
         IsActive = true;
 
         // Focus the panel when the window is created.

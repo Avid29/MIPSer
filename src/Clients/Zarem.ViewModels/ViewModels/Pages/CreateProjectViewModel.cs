@@ -23,7 +23,7 @@ namespace Zarem.ViewModels.Pages;
 /// <summary>
 /// A view model for a page to create a new project.
 /// </summary>
-public class CreateProjectViewModel : PageViewModel
+public partial class CreateProjectViewModel : PageViewModel
 {
     private readonly IMessenger _messenger;
     private readonly ILocalizationService _localizationService;
@@ -41,10 +41,6 @@ public class CreateProjectViewModel : PageViewModel
         _localizationService = localizationService;
         _fileSystemService = fileSystemService;
         _projectService = projectService;
-
-        SelectFolderCommand = new(SelectFolderAsync);
-        CreateProjectCommand = new(CreateProjectAsync);
-        CancelCommand = new(ClosePage);
     }
 
     /// <inheritdoc/>
@@ -100,21 +96,7 @@ public class CreateProjectViewModel : PageViewModel
     [MemberNotNullWhen(true, nameof(ProjectName), nameof(FolderPath))]
     public bool ReadyToCreate => ProjectName is not null && FolderPath is not null;
 
-    /// <summary>
-    /// Gets a command that selects a folder for the folder path.
-    /// </summary>
-    public AsyncRelayCommand SelectFolderCommand { get; }
-
-    /// <summary>
-    /// Gets a command that creates the project
-    /// </summary>
-    public AsyncRelayCommand CreateProjectCommand { get; }
-
-    /// <summary>
-    /// Gets a command that cancels creating a new project
-    /// </summary>
-    public RelayCommand CancelCommand { get; }
-
+    [RelayCommand]
     private async Task CreateProjectAsync()
     {
         // TODO: Notify errors
@@ -155,6 +137,7 @@ public class CreateProjectViewModel : PageViewModel
         // TODO: Open the project in a new window?
     }
 
+    [RelayCommand]
     private async Task SelectFolderAsync()
     {
         var folder = await _fileSystemService.PickFolderAsync();
@@ -163,6 +146,9 @@ public class CreateProjectViewModel : PageViewModel
 
         FolderPath = folder.Path;
     }
+
+    [RelayCommand]
+    private void Cancel() => ClosePage();
 
     private void ClosePage() => _messenger.Send(new PageCloseRequestMessage(this));
 }

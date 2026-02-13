@@ -1,7 +1,5 @@
 // Adam Dernis 2024
 
-using Zarem.Windows;
-
 namespace Zarem.Windows;
 
 /// <summary>
@@ -18,6 +16,6 @@ public sealed partial class MainWindow : ZaremWindow
         SetupWindowStyle();
 
         // Open the welcome page on startup
-        ViewModel.OpenWelcome();
+        ViewModel.OpenWelcomeCommand.Execute(null);
     }
 }

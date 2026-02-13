@@ -33,9 +33,6 @@ public partial class BindableFolder : BindableFileItem<IFolder>
 
         Children = [];
         ChildrenNotLoaded = true;
-
-        OpenInExplorerCommand = new(OpenInExplorer);
-        OpenInWindowsTerminalCommand = new(OpenInWindowsTerminal);
     }
 
     /// <summary>

@@ -11,13 +11,9 @@ namespace Zarem.Bindables.Files;
 public partial class BindableFile
 {
     /// <summary>
-    /// Gets a command to open the file.
-    /// </summary>
-    public RelayCommand OpenCommand { get; }
-
-    /// <summary>
     /// Open the file.
     /// </summary>
+    [RelayCommand]
     public void Open() => Service.Get<IMessenger>().Send(new FileOpenRequestMessage(this));
 
     /// <inheritdoc/>

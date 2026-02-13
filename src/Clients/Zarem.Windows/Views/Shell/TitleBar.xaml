@@ -183,13 +183,13 @@
                                     IsEnabled="{x:Bind ViewModel.MainViewModel.FocusedPanel.CurrentPage.CanTextEdit, FallbackValue=False, Mode=OneWay}">
                     <!--<MenuFlyoutItem x:Uid="/TitleBar/ToggleOutliningMFI" Text="Toggle Outlining"/>-->
                     <MenuFlyoutItem x:Uid="/TitleBar/ExpandCurrentMFI" Text="Expand Current"
-                                    Command="{x:Bind ViewModel.ExpandCurrentCommand, Mode=OneWay}">
+                                    Command="{x:Bind ViewModel.ExpandChildrenCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Menu" Key="O"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
                     </MenuFlyoutItem>
                     <MenuFlyoutItem x:Uid="/TitleBar/CollapseCurrentMFI" Text="Collapse Current"
-                                    Command="{x:Bind ViewModel.CollapseCurrentCommand, Mode=OneWay}">
+                                    Command="{x:Bind ViewModel.CollapseChildrenCommand, Mode=OneWay}">
                         <MenuFlyoutItem.KeyboardAccelerators>
                             <KeyboardAccelerator Modifiers="Menu" Key="P"/>
                         </MenuFlyoutItem.KeyboardAccelerators>
