@@ -38,6 +38,11 @@ public partial class WindowViewModel
     /// </summary>
     public RelayCommand ToggleFullScreenModeCommand { get; }
 
+    /// <summary>
+    /// Gets a command that shows the console.
+    /// </summary>
+    public RelayCommand ShowConsoleCommand { get; }
+
     private void OpenAbout() => MainViewModel.GoToPageByType<AboutPageViewModel>();
 
     private void OpenCheatSheet() => MainViewModel.GoToPageByType<CheatSheetViewModel>();
@@ -50,6 +55,8 @@ public partial class WindowViewModel
     /// Open the welcome page.
     /// </summary>
     public void OpenWelcome() => MainViewModel.GoToPageByType<WelcomePageViewModel>();
+
+    private void ShowConsole() => _consoleService.ShowConsoleWindow();
 
     private void ToggleFullscrenMode() => _windowingService.ToggleFullScreen();
 }

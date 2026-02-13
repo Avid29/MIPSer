@@ -20,6 +20,7 @@ namespace Zarem.ViewModels;
 public partial class WindowViewModel : ObservableRecipient
 {
     private readonly IMessenger _messenger;
+    private readonly IConsoleService _consoleService;
     private readonly IProjectService _projectService;
     private readonly IWindowingService _windowingService;
     private readonly BuildService _buildService;
@@ -27,8 +28,16 @@ public partial class WindowViewModel : ObservableRecipient
     /// <summary>
     /// Initializes a new instance of the <see cref="WindowViewModel"/> class.
     /// </summary>
-    public WindowViewModel(IMessenger messenger, IProjectService projectService, IWindowingService windowingService, BuildService buildService, MainViewModel mainViewModel, PanelViewModel panelViewModel)
+    public WindowViewModel(
+        IMessenger messenger,
+        IConsoleService consoleService,
+        IProjectService projectService,
+        IWindowingService windowingService,
+        BuildService buildService,
+        MainViewModel mainViewModel,
+        PanelViewModel panelViewModel)
     {
+        _consoleService = consoleService;
         _messenger = messenger;
         _projectService = projectService;
         _windowingService = windowingService;
@@ -59,6 +68,8 @@ public partial class WindowViewModel : ObservableRecipient
         OpenCreateProjectCommand = new(OpenCreateProject);
         OpenSettingsCommand = new(OpenSettings);
         OpenWelcomeCommand = new(OpenWelcome);
+
+        ShowConsoleCommand = new(ShowConsole);
 
         ToggleFullScreenModeCommand = new(ToggleFullscrenMode);
 

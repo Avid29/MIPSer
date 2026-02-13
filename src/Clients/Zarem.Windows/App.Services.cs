@@ -32,6 +32,7 @@ public partial class App
             // Basic Services
             .AddSingleton<ICacheService, CacheService>()
             .AddSingleton<IClipboardService, ClipboardService>()
+            .AddSingleton<IConsoleService, ConsoleService>()
             .AddSingleton<IDispatcherService, DispatcherService>()
             .AddSingleton<ILocalizationService, LocalizationService>()
             .AddSingleton<IMessenger, WeakReferenceMessenger>()

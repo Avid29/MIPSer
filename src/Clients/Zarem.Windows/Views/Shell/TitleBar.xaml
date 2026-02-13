@@ -220,6 +220,9 @@
                         <KeyboardAccelerator Modifiers="Control,Shift" Key="F12"/>
                     </MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
+                <MenuFlyoutItem Text="Show Console" Command="{x:Bind ViewModel.ShowConsoleCommand, Mode=OneWay}">
+                    
+                </MenuFlyoutItem>
             </MenuBarItem>-->
 
             <!--  Build  -->
