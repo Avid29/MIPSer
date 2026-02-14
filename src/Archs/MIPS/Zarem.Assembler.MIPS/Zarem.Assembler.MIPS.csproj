@@ -23,7 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Zarem.Assembler\Zarem.Assembler.csproj" />
-    <ProjectReference Include="..\Zarem.MIPS\Zarem.MIPS.csproj" />
+    <ProjectReference Include="..\Zarem.MIPS.Base\Zarem.MIPS.Base.csproj" />
   </ItemGroup>
 
 </Project>

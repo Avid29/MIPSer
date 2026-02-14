@@ -12,8 +12,8 @@
     <Project Path="src/Archs/MIPS/Zarem.Disassembler.MIPS/Zarem.Disassembler.MIPS.csproj" />
     <Project Path="src/Archs/MIPS/Zarem.Emulator.MIPS/Zarem.Emulator.MIPS.csproj" />
     <Project Path="src/Archs/MIPS/Zarem.Linker.MIPS/Zarem.Linker.MIPS.csproj" />
-    <Project Path="src/Archs/MIPS/Zarem.MIPS.Projects/Zarem.MIPS.Projects.csproj" Id="c467e576-b207-4105-99cc-687db36a62a4" />
-    <Project Path="src/Archs/MIPS/Zarem.MIPS/Zarem.MIPS.csproj" />
+    <Project Path="src/Archs/MIPS/Zarem.MIPS.Base/Zarem.MIPS.Base.csproj" />
+    <Project Path="src/Archs/MIPS/Zarem.MIPS.Projects/Zarem.MIPS.csproj" Id="c467e576-b207-4105-99cc-687db36a62a4" />
   </Folder>
   <Folder Name="/Clients/">
     <Project Path="src/Clients/Zarem.Console/Zarem.Console.csproj" />

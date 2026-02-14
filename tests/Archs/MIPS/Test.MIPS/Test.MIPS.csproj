@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\src\Archs\MIPS\Zarem.MIPS\Zarem.MIPS.csproj" />
+	  <ProjectReference Include="..\..\..\..\src\Archs\MIPS\Zarem.MIPS.Base\Zarem.MIPS.Base.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
