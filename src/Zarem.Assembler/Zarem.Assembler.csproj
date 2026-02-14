@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Zarem\Zarem.Base.csproj" />
+    <ProjectReference Include="..\Zarem.Base\Zarem.Base.csproj" />
   </ItemGroup>
 
 </Project>

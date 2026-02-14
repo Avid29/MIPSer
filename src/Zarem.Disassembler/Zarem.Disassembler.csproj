@@ -4,4 +4,8 @@
 	  <RootNamespace>Zarem.Disassembler</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Zarem.Base\Zarem.Base.csproj" />
+  </ItemGroup>
+
 </Project>
