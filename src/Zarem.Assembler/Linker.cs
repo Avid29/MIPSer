@@ -13,7 +13,7 @@ using Zarem.Models.Modules.Tables.Enums;
 namespace Zarem.Assembler;
 
 /// <summary>
-/// A MIPS linker.
+/// A base class for a linker.
 /// </summary>
 public abstract class Linker<TLinker>
     where TLinker : Linker<TLinker>, new()

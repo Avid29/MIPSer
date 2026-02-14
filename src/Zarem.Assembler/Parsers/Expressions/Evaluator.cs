@@ -2,8 +2,8 @@
 
 using CommunityToolkit.Diagnostics;
 using Zarem.Assembler.Extensions;
-using Zarem.Assembler.Logging;
 using Zarem.Assembler.Logging.Enum;
+using Zarem.Assembler.Logging.Interfaces;
 using Zarem.Assembler.Models;
 using Zarem.Assembler.Parsers.Expressions.Abstract;
 using Zarem.Models.Addressing;

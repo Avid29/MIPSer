@@ -7,6 +7,7 @@ namespace Zarem.Assembler.Tokenization.Models.Enums;
 /// </summary>
 public enum TokenType
 {
+
 #pragma warning disable CS1591
     // First pass
     Unknown,
@@ -34,4 +35,5 @@ public enum TokenType
     Assign,
 
 #pragma warning restore CS1591
+
 }

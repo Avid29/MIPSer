@@ -1,7 +1,7 @@
 ﻿// Adam Dernis 2024
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Zarem.Assembler.Logging;
+using Zarem.Assembler.Logging.Interfaces;
 using Zarem.Assembler.Parsers;
 using Zarem.Assembler.Tokenization.Models;
 

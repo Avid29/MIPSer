@@ -22,7 +22,7 @@ public partial class AssemblyEditor
     /// <summary>
     /// Applies formatting based on a log messages.
     /// </summary>
-    public void ApplyLogHighlights(IReadOnlyList<AssemblerLogEntry> logs)
+    public void ApplyLogHighlights(IReadOnlyList<LogEntry> logs)
     {
         if (!TryGetEditor(out var editor))
             return;

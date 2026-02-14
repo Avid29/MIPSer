@@ -4,7 +4,6 @@ using ObjFormats.RASM.Config;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Zarem.Assembler.Config;
 using Zarem.Models.Modules;
 using Zarem.Models.Modules.Tables;
 using RasmReference = ObjFormats.RASM.Tables.ReferenceEntry;
@@ -17,8 +16,8 @@ public partial class RasmModule
 {
     private struct RasmBuildContext
     {
+        private readonly Stream _stringStream;
         private Dictionary<string, long> _stringDict;
-        private Stream _stringStream;
 
         public RasmBuildContext(Module source, RasmConfig rasmConfig)
         {

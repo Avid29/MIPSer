@@ -75,7 +75,7 @@ public partial class MIPSAssembler : IAssembler<MIPSAssemblerConfig>
     /// <summary>
     /// Gets the assembler's logs.
     /// </summary>
-    public IReadOnlyList<AssemblerLogEntry> Logs => [.._logger.CurrentLog.OfType<AssemblerLogEntry>()];
+    public IReadOnlyList<LogEntry> Logs => [.._logger.CurrentLog.OfType<LogEntry>()];
 
     /// <summary>
     /// Gets the symbols found by the assembler.

@@ -1,20 +1,21 @@
 ﻿// Adam Dernis 2024
 
 using System.IO;
-using Zarem.Assembler.Tokenization.Models;
 using Zarem.Assembler.Logging.Enum;
+using Zarem.Assembler.Logging.Interfaces;
+using Zarem.Assembler.Tokenization.Models;
 
 namespace Zarem.Assembler.Logging;
 
 /// <summary>
 /// An <see cref="ILog"/> that occurred in the assembler stage.
 /// </summary>
-public class AssemblerLogEntry : ILog
+public class LogEntry : ILog
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="AssemblerLogEntry"/> class.
+    /// Initializes a new instance of the <see cref="LogEntry"/> class.
     /// </summary>
-    internal AssemblerLogEntry(Severity severity, LogCode code, string message, Token[] tokens)
+    internal LogEntry(Severity severity, LogCode code, string message, Token[] tokens)
     {
         Code = code;
         Severity = severity;

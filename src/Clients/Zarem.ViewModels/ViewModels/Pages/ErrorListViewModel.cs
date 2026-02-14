@@ -3,6 +3,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using System.Collections.ObjectModel;
 using Zarem.Assembler.Logging;
+using Zarem.Assembler.Logging.Interfaces;
 using Zarem.Messages.Build;
 using Zarem.Services;
 using Zarem.ViewModels.Pages.Abstract;
@@ -63,7 +64,7 @@ public class ErrorListViewModel : PageViewModel
         _logger = null;
     }
 
-    private void OnEntryLogged(object? sender, AssemblerLogEntry e)
+    private void OnEntryLogged(object? sender, LogEntry e)
     {
         _dispatcherService.RunOnUIThread(() =>
         {

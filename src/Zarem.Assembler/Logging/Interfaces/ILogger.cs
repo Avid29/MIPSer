@@ -4,7 +4,7 @@ using System;
 using Zarem.Assembler.Tokenization.Models;
 using Zarem.Assembler.Logging.Enum;
 
-namespace Zarem.Assembler.Logging;
+namespace Zarem.Assembler.Logging.Interfaces;
 
 /// <summary>
 /// An interface for the <see cref="Logger"/> that only allows creating logs, not reading or managing logs.

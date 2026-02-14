@@ -3,6 +3,7 @@
 using System;
 using Zarem.Assembler.Logging;
 using Zarem.Assembler.Logging.Enum;
+using Zarem.Assembler.Logging.Interfaces;
 using Zarem.Assembler.Tokenization.Models;
 
 namespace Zarem.Assembler.Extensions;

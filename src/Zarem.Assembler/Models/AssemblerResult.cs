@@ -15,7 +15,7 @@ public class AssemblerResult
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblerResult"/> class.
     /// </summary>
-    public AssemblerResult(bool failed, IReadOnlyList<AssemblerLogEntry> logs, IReadOnlyList<SymbolEntry> symbols, Module? module = null)
+    public AssemblerResult(bool failed, IReadOnlyList<LogEntry> logs, IReadOnlyList<SymbolEntry> symbols, Module? module = null)
     {
         Failed = failed;
         Logs = logs;
@@ -31,7 +31,7 @@ public class AssemblerResult
     /// <summary>
     /// Gets the assmembly log.
     /// </summary>
-    public IReadOnlyList<AssemblerLogEntry> Logs { get; }
+    public IReadOnlyList<LogEntry> Logs { get; }
 
     /// <summary>
     /// Gets the list of symbols

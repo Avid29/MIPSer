@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Zarem.Assembler.Localization;
 using Zarem.Assembler.Logging.Enum;
+using Zarem.Assembler.Logging.Interfaces;
 using Zarem.Assembler.Tokenization.Models;
 
 namespace Zarem.Assembler.Logging;
@@ -15,15 +16,15 @@ namespace Zarem.Assembler.Logging;
 public class Logger : ILogger
 {
     private readonly CompositeLocalizer _localizer;
-    private readonly List<AssemblerLogEntry> _currentLogs;
-    private readonly List<AssemblerLogEntry> _flushedLogs;
+    private readonly List<LogEntry> _currentLogs;
+    private readonly List<LogEntry> _flushedLogs;
 
     private bool _currentFailed;
 
     /// <summary>
-    /// An event invoked when an <see cref="AssemblerLogEntry"/> is logged.
+    /// An event invoked when an <see cref="LogEntry"/> is logged.
     /// </summary>
-    public event EventHandler<AssemblerLogEntry>? EntryLogged;
+    public event EventHandler<LogEntry>? EntryLogged;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Logger"/> class.
@@ -79,7 +80,7 @@ public class Logger : ILogger
         var formattedMessage = _localizer.TryGet(messageKey, args);
         formattedMessage ??= messageKey;
 
-        var log = new AssemblerLogEntry(severity, code, formattedMessage, tokens.ToArray());
+        var log = new LogEntry(severity, code, formattedMessage, tokens.ToArray());
         _currentLogs.Add(log);
         EntryLogged?.Invoke(this, log);
 

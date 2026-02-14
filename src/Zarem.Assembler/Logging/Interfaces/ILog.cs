@@ -3,7 +3,7 @@
 using Zarem.Assembler.Logging.Enum;
 using Zarem.Assembler.Tokenization.Models;
 
-namespace Zarem.Assembler.Logging;
+namespace Zarem.Assembler.Logging.Interfaces;
 
 /// <summary>
 /// An <see langword="interface"/> for an entry in the <see cref="ILogger"/>.
