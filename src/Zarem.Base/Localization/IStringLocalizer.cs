@@ -1,6 +1,6 @@
 ﻿// Avishai Dernis 2025
 
-namespace Zarem.Assembler.Localization;
+namespace Zarem.Localization;
 
 /// <summary>
 /// An interface
@@ -10,5 +10,5 @@ public interface IStringLocalizer
     /// <summary>
     /// Gets the localized string for the given key.
     /// </summary>
-    public string? TryGet(string key, params object?[] args);
+    public string? this[string key, params object?[] args] { get; }
 }

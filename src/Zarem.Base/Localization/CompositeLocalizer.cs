@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Zarem.Assembler.Localization;
+namespace Zarem.Localization;
 
 /// <summary>
 /// An <see cref="IStringLocalizer"/> that searches through multiple <see cref="IStringLocalizer"/>s to find the appropriate key.
@@ -20,18 +20,21 @@ public class CompositeLocalizer : IStringLocalizer
     }
 
     /// <inheritdoc/>
-    public string? TryGet(string key, params object?[] args)
+    public string? this[string key, params object?[] args]
     {
-        foreach (var l in _localizers)
+        get
         {
-            var result = l.TryGet(key);
-            if (result is not null)
+            foreach (var l in _localizers)
             {
-                return string.Format(result, args);
+                var result = l[key];
+                if (result is not null)
+                {
+                    return string.Format(result, args);
+                }
             }
-        }
 
-        return null;
+            return null;
+        }
     }
 
     /// <summary>

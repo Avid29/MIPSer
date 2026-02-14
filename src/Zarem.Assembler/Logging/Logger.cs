@@ -3,10 +3,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Zarem.Assembler.Localization;
 using Zarem.Assembler.Logging.Enum;
 using Zarem.Assembler.Logging.Interfaces;
 using Zarem.Assembler.Tokenization.Models;
+using Zarem.Localization;
 
 namespace Zarem.Assembler.Logging;
 
@@ -77,7 +77,7 @@ public class Logger : ILogger
     /// <inheritdoc/>
     public bool Log(Severity severity, LogCode code, ReadOnlySpan<Token> tokens, string messageKey, params object?[] args)
     {
-        var formattedMessage = _localizer.TryGet(messageKey, args);
+        var formattedMessage = _localizer[messageKey, args];
         formattedMessage ??= messageKey;
 
         var log = new LogEntry(severity, code, formattedMessage, tokens.ToArray());

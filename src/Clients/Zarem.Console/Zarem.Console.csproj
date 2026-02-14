@@ -1,14 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-	  <RootNamespace>Zarem</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<RootNamespace>Zarem.Console</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Archs\MIPS\Zarem.Assembler.MIPS\Zarem.Assembler.MIPS.csproj" />
-    <ProjectReference Include="..\..\ObjFormats\ObjFormats.LibOF\ObjFormats.LibOF.csproj" />
-    <ProjectReference Include="..\..\ObjFormats\ObjFormats.RASM\ObjFormats.RASM.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Spectre.Console" Version="0.54.0" />
+		<PackageReference Include="System.CommandLine" Version="2.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Archs\MIPS\Zarem.Assembler.MIPS\Zarem.Assembler.MIPS.csproj" />
+		<ProjectReference Include="..\..\ObjFormats\ObjFormats.LibOF\ObjFormats.LibOF.csproj" />
+		<ProjectReference Include="..\..\ObjFormats\ObjFormats.RASM\ObjFormats.RASM.csproj" />
+	</ItemGroup>
 
 </Project>

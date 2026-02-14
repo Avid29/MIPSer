@@ -5,20 +5,20 @@ using System.Linq;
 using System.Reflection;
 using System.Resources;
 
-namespace Zarem.Assembler.Localization;
+namespace Zarem.Localization;
 
 /// <summary>
 /// A base class for a <see cref="IStringLocalizer"/> that uses a <see cref="ResourceManager"/> to load resources.
 /// </summary>
-public class SetLocalizer : IStringLocalizer
+public class Localizer : IStringLocalizer
 {
     private ResourceManager _resourceManager;
     private ResourceSet? _neutralSet;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SetLocalizer"/> class.
+    /// Initializes a new instance of the <see cref="Localizer"/> class.
     /// </summary>
-    public SetLocalizer(string @namespace, Assembly assembly)
+    public Localizer(string @namespace, Assembly assembly)
     {
         _resourceManager = new ResourceManager(@namespace, assembly);
 
@@ -33,19 +33,22 @@ public class SetLocalizer : IStringLocalizer
     /// <summary>
     /// Gets the localized string for the given key.
     /// </summary>
-    public string? TryGet(string key, params object?[] args)
+    public string? this[string key, params object?[] args]
     {
-        var localized = _resourceManager.GetString(key);
-        if (!string.IsNullOrEmpty(localized))
-            return localized;
-
-        if (_neutralSet is not null)
+        get
         {
-            var fallback = _neutralSet.GetString(key);
-            if (!string.IsNullOrEmpty(fallback))
-                return fallback;
-        }
+            var localized = _resourceManager.GetString(key);
+            if (!string.IsNullOrEmpty(localized))
+                return localized;
 
-        return null;
+            if (_neutralSet is not null)
+            {
+                var fallback = _neutralSet.GetString(key);
+                if (!string.IsNullOrEmpty(fallback))
+                    return fallback;
+            }
+
+            return null;
+        }
     }
 }
