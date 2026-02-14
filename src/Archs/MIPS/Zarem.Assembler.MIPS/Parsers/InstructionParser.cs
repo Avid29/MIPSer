@@ -566,7 +566,7 @@ public struct InstructionParser
 
             // Coprocessor0 instructions
             OperationCode.Coprocessor0 when _meta.Co0FuncCode.HasValue                      // C0
-                => CoProc0Instruction.Create(_meta.Co0FuncCode.Value),
+                => CoProc0Instruction.Create(_meta.Co0FuncCode.Value, _rd),
             OperationCode.Coprocessor0 when _meta.Mfmc0FuncCode.HasValue                    // MFMC0
                 => CoProc0Instruction.Create(_meta.Mfmc0FuncCode.Value, _rt, _meta.RD),
             OperationCode.Coprocessor0 => _meta.CoProc0RS.HasValue ?                        // Co0 RS

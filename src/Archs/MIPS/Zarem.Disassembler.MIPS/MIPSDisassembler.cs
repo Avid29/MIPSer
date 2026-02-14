@@ -84,7 +84,7 @@ public class MIPSDisassembler
             format = ((FloatInstruction)instruction).Format;
 
         bool hasFormat = instruction.Type is InstructionType.Float;
-        bool eretnc = funcCode2 is (byte)CoProc0RSCode.C0 && instruction.RD is (GPRegister)1;
+        bool eretnc = funcCode2 is (byte)Co0FuncCode.ExceptionReturn && instruction.RD is (GPRegister)1;
         var key = new DisassemblerLookup((byte)instruction.OpCode, funcCode, funcCode2, hasFormat || eretnc);
         if (!InstructionTable.TryGetInstruction(key, out var metas, out _, out _))
         {

@@ -89,7 +89,7 @@
     "co0_func_code": 24,
     "rd": 1,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ]
+    "versions": [ 5 ]
   },
   {
     "name": "deret",

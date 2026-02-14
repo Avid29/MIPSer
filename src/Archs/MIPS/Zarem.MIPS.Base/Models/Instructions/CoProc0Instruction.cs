@@ -158,12 +158,13 @@ public partial struct CoProc0Instruction
     /// <summary>
     /// Creates a new <see cref="CoProc0RSCode.C0"/> instruction.
     /// </summary>
-    public static CoProc0Instruction Create(Co0FuncCode code)
+    public static CoProc0Instruction Create(Co0FuncCode code, GPRegister rd)
     {
         CoProc0Instruction value = default;
         value.OpCode = OperationCode.Coprocessor0;
         value.Co0FuncCode = code;
         value.CoProc0RSCode = CoProc0RSCode.C0;
+        value.RD = rd;
 
         return value;
     }
