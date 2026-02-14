@@ -220,10 +220,6 @@ public class InstructionParserTests
             if (instruction.IsPseudoInstruction)
                 continue;
 
-            // TODO: Disassembling CoProc0 instructions
-            if (instruction.OpCode is OperationCode.Coprocessor0)
-                continue;
-
             // Apply format to instruction name, if applicable
             var name = instruction.Name;
             if (name.EndsWith(".fmt"))

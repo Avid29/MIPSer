@@ -93,8 +93,7 @@ public sealed partial class UsagePatternDisplay : UserControl
                 InstructionType.Special2R or
                 InstructionType.Special3R => InstructionBrushPalette?.R2Type,
 
-                InstructionType.Coproc0 or InstructionType.Coproc0C0 or
-                InstructionType.Coproc0MFMC0 => InstructionBrushPalette?.CoProcessor0,
+                InstructionType.Coproc0 => InstructionBrushPalette?.CoProcessor0,
 
                 InstructionType.Coproc1 or
                 InstructionType.Float => InstructionBrushPalette?.CoProcessor1,

@@ -33,8 +33,7 @@ public partial class InstructionTypeToColorConverter : IValueConverter
             InstructionType.Special2R or
             InstructionType.Special3R => SpecialInstructionColor,
 
-            InstructionType.Coproc0 or InstructionType.Coproc0C0 or
-            InstructionType.Coproc0MFMC0 => CoProc0InstructionColor,
+            InstructionType.Coproc0 => CoProc0InstructionColor,
 
             InstructionType.Float or
             InstructionType.Coproc1 => CoProc1InstructionColor,

@@ -8,7 +8,7 @@ namespace Zarem.Models.Instructions.Enums.SpecialFunctions.CoProc0;
 /// <summary>
 /// An enum for <see cref="OperationCode.Coprocessor0"/> instruction rs field function codes.
 /// </summary>
-public enum CoProc0RSCode
+public enum CoProc0RSCode : byte
 {
     /// <summary>
     /// Marks that there is no RS code.

@@ -43,13 +43,7 @@ public static class InstructionTypeHelper
             OperationCode.JumpAndLinkX => InstructionType.BasicJ,
             
             // CoProc0
-            OperationCode.Coprocessor0
-                => rsFuncCode switch
-                {
-                    CoProc0RSCode.MFMC0 => InstructionType.Coproc0MFMC0,
-                    CoProc0RSCode.C0 => InstructionType.Coproc0C0,
-                    _ => InstructionType.Coproc0,
-                },
+            OperationCode.Coprocessor0 => InstructionType.Coproc0,
 
             // CoProc1
             OperationCode.Coprocessor1

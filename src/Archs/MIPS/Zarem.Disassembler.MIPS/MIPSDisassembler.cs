@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using Zarem.Assembler.Config;
 using Zarem.Assembler.Helpers.Tables;
+using Zarem.Disassembler.Models;
 using Zarem.Disassembler.Models.Instructions;
 using Zarem.Models.Instructions;
 using Zarem.Models.Instructions.Enums;
 using Zarem.Models.Instructions.Enums.Registers;
+using Zarem.Models.Instructions.Enums.SpecialFunctions.CoProc0;
 
 namespace Zarem.Disassembler;
 
@@ -56,11 +58,23 @@ public class MIPSDisassembler
             InstructionType.RegisterImmediateBranch => (byte)instruction.RTFuncCode,
 
             // TODO: Disassembling CoProc0 instructions
-            //InstructionType.Coproc0 => (byte)((CoProc0Instruction)instruction).CoProc0RSCode,
+            InstructionType.Coproc0 => (byte)((CoProc0Instruction)instruction).CoProc0RSCode,
 
             InstructionType.Coproc1 => (byte)((FloatInstruction)instruction).CoProc1RSCode,
             InstructionType.Float => (byte)((FloatInstruction)instruction).FloatFuncCode,
 
+            _ => 255,
+        };
+
+
+        byte funcCode2 = instruction.Type switch
+        {
+            InstructionType.Coproc0 => funcCode switch
+            {
+                (byte)CoProc0RSCode.C0 => (byte)((CoProc0Instruction)instruction).Co0FuncCode,
+                (byte)CoProc0RSCode.MFMC0 => (byte)((CoProc0Instruction)instruction).MFMC0FuncCode,
+                _ => 255,
+            },
             _ => 255,
         };
 
@@ -69,7 +83,9 @@ public class MIPSDisassembler
         if (instruction.Type is InstructionType.Float)
             format = ((FloatInstruction)instruction).Format;
 
-        var key = ((byte)instruction.OpCode, funcCode, instruction.Type is InstructionType.Float);
+        bool hasFormat = instruction.Type is InstructionType.Float;
+        bool eretnc = funcCode2 is (byte)CoProc0RSCode.C0 && instruction.RD is (GPRegister)1;
+        var key = new DisassemblerLookup((byte)instruction.OpCode, funcCode, funcCode2, hasFormat || eretnc);
         if (!InstructionTable.TryGetInstruction(key, out var metas, out _, out _))
         {
             return "Unknown instruction";
@@ -105,6 +121,8 @@ public class MIPSDisassembler
                 Argument.FS => RegistersTable.GetRegisterString((GPRegister)((FloatInstruction)instruction).FS, RegisterSet.FloatingPoints),
                 Argument.FT => RegistersTable.GetRegisterString((GPRegister)((FloatInstruction)instruction).FT, RegisterSet.FloatingPoints),
                 Argument.FD => RegistersTable.GetRegisterString((GPRegister)((FloatInstruction)instruction).FD, RegisterSet.FloatingPoints),
+                Argument.RS_Numbered => RegistersTable.GetRegisterString(instruction.RS, RegisterSet.Numbered),
+                Argument.RT_Numbered => RegistersTable.GetRegisterString(instruction.RT, RegisterSet.Numbered),
                 _ => "unknown",
             });
 

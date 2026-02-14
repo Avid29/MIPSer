@@ -17,8 +17,6 @@ public enum InstructionType
     Special2R,
     Special3R,
     Coproc0,
-    Coproc0C0,
-    Coproc0MFMC0,
     Coproc1,
     Float,
     Pseudo,
