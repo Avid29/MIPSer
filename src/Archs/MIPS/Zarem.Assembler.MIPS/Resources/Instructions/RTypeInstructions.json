@@ -73,6 +73,22 @@
     "behavior": "$rd = ret_addr, $pc = $rs"
   },
   {
+    "name": "movz",
+    "op_code": 0,
+    "func_code": 10,
+    "args": [ 2, 1, 0 ],
+    "versions": [ 6 ],
+    "behavior": "if ($rt == 0) $rd = $rs"
+  },
+  {
+    "name": "movn",
+    "op_code": 0,
+    "func_code": 11,
+    "args": [ 2, 1, 0 ],
+    "versions": [ 6 ],
+    "behavior": "if ($rt != 0) $rd = $rs"
+  },
+  {
     "name": "syscall",
     "op_code": 0,
     "func_code": 12,
