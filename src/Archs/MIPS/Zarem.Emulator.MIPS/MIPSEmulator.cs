@@ -15,9 +15,9 @@ public class MIPSEmulator : Emulator<MIPSEmulatorConfig>
     /// <summary>
     /// Initializes a new instance of the <see cref="MIPSEmulator"/> class.
     /// </summary>
-    public MIPSEmulator(MIPSEmulatorConfig config)
+    public MIPSEmulator(MIPSEmulatorConfig config) : base(config)
     {
-        Computer = new Machine.MIPSComputer(config);
+        Computer = new MIPSComputer(config);
     }
 
     /// <summary>

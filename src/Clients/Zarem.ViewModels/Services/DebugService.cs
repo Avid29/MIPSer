@@ -9,7 +9,7 @@ using Zarem.Services.Popup.Models;
 namespace Zarem.Services;
 
 /// <summary>
-/// A service for handling execution.
+/// A service for handling emulation.
 /// </summary>
 public class DebugService : IDebugService
 {
@@ -38,6 +38,20 @@ public class DebugService : IDebugService
         if (_projectService.Project is null)
             return;
 
+        // Run checks to see if the file can/should run
+        bool shouldRun = await PreRunChecks(file);
+        if (!shouldRun)
+            return;
+
+        // Run the file
+    }
+
+    private async Task<bool> PreRunChecks(SourceFile file)
+    {
+        // Clean files can simply execute
+        if (!file.IsDirty)
+            return true;
+
         // Check if the file needs to be reassembled
         if (file.IsDirty)
         {
@@ -63,7 +77,7 @@ public class DebugService : IDebugService
                 // Cancel run if closed without primary button click
                 var request = await _popupService.ShowPopAsync(popup);
                 if (request is PopupResult.Closed)
-                    return;
+                    return false;
             }
             else
             {
@@ -73,13 +87,13 @@ public class DebugService : IDebugService
                 {
                     CloseButtonText = _localizationService["/Popups/Okay"],
                 };
-                
+
                 // Show the popup and return
                 await _popupService.ShowPopAsync(popup);
-                return;
+                return false;
             }
         }
 
-        // 
+        return true;
     }
 }

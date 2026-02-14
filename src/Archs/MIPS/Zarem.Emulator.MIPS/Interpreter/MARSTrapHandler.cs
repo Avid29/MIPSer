@@ -9,13 +9,13 @@ namespace Zarem.Emulator.Interpreter;
 /// <summary>
 /// An interpreter mimicking the MARS syscall pattern.
 /// </summary>
-public class MARSInterpreter : InterpreterBase
+public class MARSTrapHandler : MIPSTrapHandler
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="MARSInterpreter"/> class.
+    /// Initializes a new instance of the <see cref="MARSTrapHandler"/> class.
     /// </summary>
     /// <param name="computer"></param>
-    public MARSInterpreter(MIPSComputer computer) : base(computer)
+    public MARSTrapHandler(MIPSComputer computer) : base(computer)
     {
     }
 
@@ -47,7 +47,7 @@ public class MARSInterpreter : InterpreterBase
     }
 
     /// <inheritdoc/>
-    protected override void HandleTrap(TrapKind trap)
+    protected override void HandleTrap(MIPSTrap trap)
     {
         throw new NotImplementedException();
     }

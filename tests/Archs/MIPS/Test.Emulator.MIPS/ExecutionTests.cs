@@ -57,7 +57,7 @@ public class ExecutionTests
             }
         }
 
-        public ExecutionTestCase(string input, TrapKind trap) : this(input)
+        public ExecutionTestCase(string input, MIPSTrap trap) : this(input)
         {
             ExpectedTrap = trap;
         }
@@ -94,7 +94,7 @@ public class ExecutionTests
 
         public string Input { get; }
 
-        public TrapKind ExpectedTrap { get; init; } = TrapKind.None;
+        public MIPSTrap ExpectedTrap { get; init; } = MIPSTrap.None;
 
         public (GPRegister Regiter, uint? Value)? ExpectedWriteBack { get; init; } = null;
 
@@ -168,25 +168,25 @@ public class ExecutionTests
                 // In practice, we will just take the low 32 bits of the quotient and discard the high 32 bits, and write the remainder to the high register.
 
                 // Signed (without signs)
-                yield return [new ExecutionTestCase("add $v0, $a0, $s1", TrapKind.ArithmeticOverflow)];             // max + 1
-                yield return [new ExecutionTestCase("addi $v0, $a0, 1", TrapKind.ArithmeticOverflow)];              // max + 1
-                yield return [new ExecutionTestCase("sub $v0, $a1, $s1", TrapKind.ArithmeticOverflow)];             // min - 1
+                yield return [new ExecutionTestCase("add $v0, $a0, $s1", MIPSTrap.ArithmeticOverflow)];             // max + 1
+                yield return [new ExecutionTestCase("addi $v0, $a0, 1", MIPSTrap.ArithmeticOverflow)];              // max + 1
+                yield return [new ExecutionTestCase("sub $v0, $a1, $s1", MIPSTrap.ArithmeticOverflow)];             // min - 1
                 yield return [new ExecutionTestCase("mul $v0, $a0, $a0", int.MaxValue * int.MaxValue)];             // max * max
                 yield return [new ExecutionTestCase("mult $a0, $a0", (long)int.MaxValue * int.MaxValue)];           // max * max
                 yield return [new ExecutionTestCase("div $a0, $a0", ((uint)((long)int.MaxValue % int.MaxValue), (uint)((long)int.MaxValue / int.MaxValue)))];
 
                 // Signed (with signs)
-                yield return [new ExecutionTestCase("add $v0, $a1, $s5", TrapKind.ArithmeticOverflow)];             // min + (-1)
-                yield return [new ExecutionTestCase("addi $v0, $a1, -1", TrapKind.ArithmeticOverflow)];             // min + (-1)
-                yield return [new ExecutionTestCase("sub $v0, $a0, $s5", TrapKind.ArithmeticOverflow)];             // max - (-1)
+                yield return [new ExecutionTestCase("add $v0, $a1, $s5", MIPSTrap.ArithmeticOverflow)];             // min + (-1)
+                yield return [new ExecutionTestCase("addi $v0, $a1, -1", MIPSTrap.ArithmeticOverflow)];             // min + (-1)
+                yield return [new ExecutionTestCase("sub $v0, $a0, $s5", MIPSTrap.ArithmeticOverflow)];             // max - (-1)
                 yield return [new ExecutionTestCase("mul $v0, $a1, $a1", (uint)(int.MinValue * int.MinValue))];     // min * min
                 yield return [new ExecutionTestCase("mult $a1, $a1", (long)int.MinValue * int.MinValue)];           // min * min
                 yield return [new ExecutionTestCase("div $a1, $a1", ((uint)((long)int.MinValue % int.MinValue), (uint)((long)int.MinValue / int.MinValue)))];
             }
 
             // Division by zero. Undefined behavior, but NOT a trap! (Shouldn't crash the emulator either)
-            yield return [new ExecutionTestCase("divu $t3, $zero", TrapKind.None)];
-            yield return [new ExecutionTestCase("div $t3, $zero", TrapKind.None)];
+            yield return [new ExecutionTestCase("divu $t3, $zero", MIPSTrap.None)];
+            yield return [new ExecutionTestCase("div $t3, $zero", MIPSTrap.None)];
 
             // Multiply and Add/Subtract
             yield return [new ExecutionTestCase("maddu $t3, $t2", (0x1234, 0x5678 + (30 * 20)))];
@@ -252,36 +252,36 @@ public class ExecutionTests
         get
         {
             // Equality
-            yield return [new ExecutionTestCase("teq $t2, $t3", TrapKind.None)];
-            yield return [new ExecutionTestCase("teq $t1, $t1", TrapKind.Trap)];
-            yield return [new ExecutionTestCase("tne $t1, $t1", TrapKind.None)];
-            yield return [new ExecutionTestCase("tne $t3, $t2", TrapKind.Trap)];
+            yield return [new ExecutionTestCase("teq $t2, $t3", MIPSTrap.None)];
+            yield return [new ExecutionTestCase("teq $t1, $t1", MIPSTrap.Trap)];
+            yield return [new ExecutionTestCase("tne $t1, $t1", MIPSTrap.None)];
+            yield return [new ExecutionTestCase("tne $t3, $t2", MIPSTrap.Trap)];
 
             // Unsigned
-            yield return [new ExecutionTestCase("tltu $t3, $t2", TrapKind.None)];
-            yield return [new ExecutionTestCase("tltu $t2, $t3", TrapKind.Trap)];
-            yield return [new ExecutionTestCase("tltu $t1, $t1", TrapKind.None)];
-            yield return [new ExecutionTestCase("tgeu $t2, $t3", TrapKind.None)];
-            yield return [new ExecutionTestCase("tgeu $t3, $t2", TrapKind.Trap)];
-            yield return [new ExecutionTestCase("tgeu $t1, $t1", TrapKind.Trap)];
+            yield return [new ExecutionTestCase("tltu $t3, $t2", MIPSTrap.None)];
+            yield return [new ExecutionTestCase("tltu $t2, $t3", MIPSTrap.Trap)];
+            yield return [new ExecutionTestCase("tltu $t1, $t1", MIPSTrap.None)];
+            yield return [new ExecutionTestCase("tgeu $t2, $t3", MIPSTrap.None)];
+            yield return [new ExecutionTestCase("tgeu $t3, $t2", MIPSTrap.Trap)];
+            yield return [new ExecutionTestCase("tgeu $t1, $t1", MIPSTrap.Trap)];
 
             // Signed (without signs)
-            yield return [new ExecutionTestCase("tlt $t3, $t2", TrapKind.None)];
-            yield return [new ExecutionTestCase("tlt $t2, $t3", TrapKind.Trap)];
-            yield return [new ExecutionTestCase("tlt $t1, $t1", TrapKind.None)];
-            yield return [new ExecutionTestCase("tge $t2, $t3", TrapKind.None)];
-            yield return [new ExecutionTestCase("tge $t3, $t2", TrapKind.Trap)];
-            yield return [new ExecutionTestCase("tge $t1, $t1", TrapKind.Trap)];
+            yield return [new ExecutionTestCase("tlt $t3, $t2", MIPSTrap.None)];
+            yield return [new ExecutionTestCase("tlt $t2, $t3", MIPSTrap.Trap)];
+            yield return [new ExecutionTestCase("tlt $t1, $t1", MIPSTrap.None)];
+            yield return [new ExecutionTestCase("tge $t2, $t3", MIPSTrap.None)];
+            yield return [new ExecutionTestCase("tge $t3, $t2", MIPSTrap.Trap)];
+            yield return [new ExecutionTestCase("tge $t1, $t1", MIPSTrap.Trap)];
 
             // Signed (with signs)
             unchecked
             {
-                yield return [new ExecutionTestCase("tlt $t6, $t7", TrapKind.None)];
-                yield return [new ExecutionTestCase("tlt $t7, $t6", TrapKind.Trap)];
-                yield return [new ExecutionTestCase("tlt $t5, $t5", TrapKind.None)];
-                yield return [new ExecutionTestCase("tge $t7, $t6", TrapKind.None)];
-                yield return [new ExecutionTestCase("tge $t6, $t7", TrapKind.Trap)];
-                yield return [new ExecutionTestCase("tge $t5, $t5", TrapKind.Trap)];
+                yield return [new ExecutionTestCase("tlt $t6, $t7", MIPSTrap.None)];
+                yield return [new ExecutionTestCase("tlt $t7, $t6", MIPSTrap.Trap)];
+                yield return [new ExecutionTestCase("tlt $t5, $t5", MIPSTrap.None)];
+                yield return [new ExecutionTestCase("tge $t7, $t6", MIPSTrap.None)];
+                yield return [new ExecutionTestCase("tge $t6, $t7", MIPSTrap.Trap)];
+                yield return [new ExecutionTestCase("tge $t5, $t5", MIPSTrap.Trap)];
             }
         }
     }
@@ -326,16 +326,16 @@ public class ExecutionTests
     {
         get
         {
-            yield return [new ExecutionTestCase("syscall", TrapKind.Syscall)];
-            yield return [new ExecutionTestCase("break", TrapKind.Breakpoint)];
+            yield return [new ExecutionTestCase("syscall", MIPSTrap.Syscall)];
+            yield return [new ExecutionTestCase("break", MIPSTrap.Breakpoint)];
 
             // Exception Return
-            yield return [new ExecutionTestCase("eret", TrapKind.ReservedInstruction)];
+            yield return [new ExecutionTestCase("eret", MIPSTrap.ReservedInstruction)];
             yield return [new ExecutionTestCase("eret", SideEffect.WriteCoProc)
             { Status = new StatusRegister { ExceptionLevel = true } }];
 
             // Enable Interrupts
-            yield return [new ExecutionTestCase("ei", TrapKind.ReservedInstruction)];
+            yield return [new ExecutionTestCase("ei", MIPSTrap.ReservedInstruction)];
             yield return [new ExecutionTestCase("ei", SideEffect.WriteCoProc)
             { PrivilegeMode = PrivilegeMode.Kernel }];
             yield return [new ExecutionTestCase("ei $v0", GPRegister.ReturnValue0)
@@ -345,7 +345,7 @@ public class ExecutionTests
             }];
 
             // Disable Interrupts
-            yield return [new ExecutionTestCase("di", TrapKind.ReservedInstruction)];
+            yield return [new ExecutionTestCase("di", MIPSTrap.ReservedInstruction)];
             yield return [new ExecutionTestCase("di", SideEffect.WriteCoProc)
             { PrivilegeMode = PrivilegeMode.Kernel }];
             yield return [new ExecutionTestCase("di $v1", GPRegister.ReturnValue1)

@@ -46,7 +46,7 @@ public partial class InstructionExecutor
     private Execution TrapI(TrapIDelegate func)
     {
         if (func(RS, Instruction.ImmediateValue))
-            Trap = TrapKind.Trap;
+            Trap = MIPSTrap.Trap;
 
         return default;
     }

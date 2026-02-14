@@ -18,7 +18,7 @@ public partial class InstructionExecutor
         // Check if the current privilege mode allows executing coprocessor instructions
         // NOTE: Make mfc0 permissions in user mode configurable?
         if (Processor.CoProcessor0.PrivilegeMode is not PrivilegeMode.Kernel)
-            return CreateTrap(TrapKind.ReservedInstruction);
+            return CreateTrap(MIPSTrap.ReservedInstruction);
 
         return CoProc0Instruction.CoProc0RSCode switch
         {

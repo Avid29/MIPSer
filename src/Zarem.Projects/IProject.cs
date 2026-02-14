@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Zarem.Assembler.Logging;
 using Zarem.Config;
+using Zarem.DebugSessions;
 using Zarem.Models;
 using Zarem.Models.Files;
 
@@ -24,10 +25,10 @@ public interface IProject
     /// </summary>
     IProjectConfig Config { get; }
 
-    /// <summary>
-    /// Runs a specific object file.
-    /// </summary>
-    Task RunAsync(ObjectFile objectFile);
+    ///// <summary>
+    ///// Creates a debug session.
+    ///// </summary>
+    //DebugSession StartDebug();
 
     /// <summary>
     /// Builds the project.

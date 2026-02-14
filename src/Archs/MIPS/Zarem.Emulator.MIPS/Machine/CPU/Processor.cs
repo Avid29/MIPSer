@@ -22,7 +22,7 @@ public partial class Processor
     /// <summary>
     /// An event that is invoked when a trap occures before it is handled.
     /// </summary>
-    public event EventHandler<Processor, TrapOccurringEventArgs>? TrapOccurring;
+    public event EventHandler<Processor, TrapOccurringEventArgs<MIPSTrap>>? TrapOccurring;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Processor"/> class.
@@ -81,43 +81,43 @@ public partial class Processor
     /// <summary>
     /// Executes an instruction on the current state of the processor.
     /// </summary>
-    public void Insert(Instruction instruction, out Execution execution, out TrapKind trap)
+    public void Insert(Instruction instruction, out Execution execution, out MIPSTrap trap)
         => trap = ExecuteAndApply(instruction, out execution);
 
     /// <remarks>
     /// Immitates the fetch step in a MIPS cpu, reading an instruction from memory.
     /// </remarks>
-    private TrapKind Fetch(out Instruction instruction)
+    private MIPSTrap Fetch(out Instruction instruction)
     {
         instruction = default;
 
         if (ProgramCounter % 4 is not 0)
         {
-            return TrapKind.AddressErrorLoad;
+            return MIPSTrap.AddressErrorLoad;
         }
 
         instruction = (Instruction)_computer.Memory.Read<uint>(ProgramCounter);
-        return TrapKind.None;
+        return MIPSTrap.None;
     }
 
     /// <remarks>
     /// Wraps the last 3 stages of the instruction pipeline.
     /// This allows for executing instructions that were not fetched.
     /// </remarks>
-    private TrapKind ExecuteAndApply(Instruction instruction, out Execution execution, TrapKind proceedingTrap = TrapKind.None)
+    private MIPSTrap ExecuteAndApply(Instruction instruction, out Execution execution, MIPSTrap proceedingTrap = MIPSTrap.None)
     {
         // Pre-define everything to avoid unset variable accusations
-        TrapKind trap = proceedingTrap;
+        MIPSTrap trap = proceedingTrap;
         uint memRead = default;
         execution = default;
 
         // Perform the back-half of the MIPS pipeline
-        trap = trap is TrapKind.None ? Execute(instruction, out execution) : trap;
-        trap = trap is TrapKind.None ? MemAccess(execution, out memRead) : trap;
-        trap = trap is TrapKind.None ? WriteBack(execution, memRead) : trap;
+        trap = trap is MIPSTrap.None ? Execute(instruction, out execution) : trap;
+        trap = trap is MIPSTrap.None ? MemAccess(execution, out memRead) : trap;
+        trap = trap is MIPSTrap.None ? WriteBack(execution, memRead) : trap;
 
         // Handle trap, if any occurred
-        if (trap is not TrapKind.None)
+        if (trap is not MIPSTrap.None)
             HandleTrap(trap);
 
         return trap;
@@ -126,10 +126,10 @@ public partial class Processor
     /// <summary>
     /// Immitates the execute step in a MIPS cpu, constructing the modifications to apply in the following stages.
     /// </summary>
-    private TrapKind Execute(Instruction instruction, out Execution execution)
+    private MIPSTrap Execute(Instruction instruction, out Execution execution)
         => InstructionExecutor.Execute(instruction, this, out execution);
 
-    private TrapKind MemAccess(Execution execution, out uint read)
+    private MIPSTrap MemAccess(Execution execution, out uint read)
     {
         read = default;
 
@@ -175,10 +175,10 @@ public partial class Processor
             }
         }
 
-        return TrapKind.None;
+        return MIPSTrap.None;
     }
 
-    private TrapKind WriteBack(Execution execution, uint memRead)
+    private MIPSTrap WriteBack(Execution execution, uint memRead)
     {
         // Increment the program counter by default
         // (some instructions will override this)
@@ -219,18 +219,18 @@ public partial class Processor
         // Apply the program counter update
         ProgramCounter = programCounter;
 
-        return TrapKind.None;
+        return MIPSTrap.None;
     }
 
-    private void HandleTrap(TrapKind trap)
+    private void HandleTrap(MIPSTrap trap)
     {
-        if (trap is TrapKind.None)
+        if (trap is MIPSTrap.None)
             return;
 
         // Breakpoints are handled by the debugger upon the trap occurring event
         // The host also handles every kind of trap if that's what the config specifies
-        var hostTrap = trap is TrapKind.Breakpoint || _computer.Config.HostedTraps;
-        var args = new TrapOccurringEventArgs(trap, hostTrap);
+        var hostTrap = trap is MIPSTrap.Breakpoint || _computer.Config.HostedTraps;
+        var args = new TrapOccurringEventArgs<MIPSTrap>(trap, hostTrap);
         TrapOccurring?.Invoke(this, args);
 
         // The host handled the trap, do not emulate it

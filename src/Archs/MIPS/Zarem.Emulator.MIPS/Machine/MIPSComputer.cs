@@ -17,7 +17,6 @@ public class MIPSComputer : IComputer
     public MIPSComputer(MIPSEmulatorConfig config)
     {
         Config = config;
-
         Processor = new Processor(this);
         Memory = new SystemMemory();
     }

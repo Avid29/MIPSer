@@ -2,21 +2,21 @@
 
 using System;
 using System.Threading;
-using Zarem.Emulator.Executor.Enum;
 
 namespace Zarem.Emulator.Events;
 
 /// <summary>
 /// The event args for when a trap occurs in emulation.
 /// </summary>
-public class TrapOccurringEventArgs : EventArgs
+public class TrapOccurringEventArgs<TTrap> : EventArgs
+    where TTrap : Enum
 {
     private readonly ManualResetEventSlim? _resumeEvent;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TrapOccurringEventArgs"/> class.
+    /// Initializes a new instance of the <see cref="TrapOccurringEventArgs{TTrap}"/> class.
     /// </summary>
-    public TrapOccurringEventArgs(TrapKind trap, bool unhandled)
+    public TrapOccurringEventArgs(TTrap trap, bool unhandled)
     {
         Trap = trap;
         Unhandled = unhandled;
@@ -30,7 +30,7 @@ public class TrapOccurringEventArgs : EventArgs
     /// <summary>
     /// Gets the trap that occurred.
     /// </summary>
-    public TrapKind Trap { get; }
+    public TTrap Trap { get; }
 
     /// <summary>
     /// Gets whether or not the trap will be handled by the emulation.
@@ -42,5 +42,12 @@ public class TrapOccurringEventArgs : EventArgs
     /// </summary>
     public void Resume() => _resumeEvent?.Set();
 
-    internal void Wait() => _resumeEvent?.Wait();
+    /// <summary>
+    /// Waits the current thread until the resume method is called.
+    /// </summary>
+    /// <remarks>
+    /// TODO: Split this class an don't expose this API to the host.
+    /// Only call this in emulator implementations.
+    /// </remarks>
+    public void Wait() => _resumeEvent?.Wait();
 }

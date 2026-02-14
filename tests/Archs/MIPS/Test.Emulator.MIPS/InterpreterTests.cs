@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Test.MIPS.Helpers;
 using Zarem.Assembler;
 using Zarem.Emulator;
+using Zarem.Emulator.Config;
 using Zarem.Emulator.Interpreter;
 using Zarem.Linker;
 
@@ -33,7 +34,7 @@ public class InterpreterTests
         Assert.IsNotNull(elfModule);
 
         // Setup emulator
-        var emulatorConfig = new Zarem.Emulator.Config.MIPSEmulatorConfig()
+        var emulatorConfig = new MIPSEmulatorConfig()
         {
             HostedTraps = true
         };
@@ -42,7 +43,7 @@ public class InterpreterTests
         emulator.Load(elfModule);
 
         // Setup interpreter
-        var interpreter = new MARSInterpreter(emulator.Computer);
+        var interpreter = new MARSTrapHandler(emulator.Computer);
 
         // Start the emulator
         emulator.Start();

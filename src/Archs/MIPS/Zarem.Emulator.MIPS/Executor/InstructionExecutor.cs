@@ -35,7 +35,7 @@ public partial class InstructionExecutor
 
     private Processor Processor { get; }
 
-    private TrapKind Trap { get; set; }
+    private MIPSTrap Trap { get; set; }
 
     private uint RS => Processor[Instruction.RS];
 
@@ -56,7 +56,7 @@ public partial class InstructionExecutor
     /// <param name="processor"></param>
     /// <param name="execution"></param>
     /// <returns></returns>
-    public static TrapKind Execute(Instruction instruction, Processor processor, out Execution execution)
+    public static MIPSTrap Execute(Instruction instruction, Processor processor, out Execution execution)
     {
         var context = new InstructionExecutor(instruction, processor);
         execution = context.CreateExecution();
@@ -92,7 +92,7 @@ public partial class InstructionExecutor
             OperationCode.Coprocessor2 => throw new NotImplementedException(),
             OperationCode.Coprocessor3 => throw new NotImplementedException(),
 
-            OperationCode.Trap => CreateTrap(TrapKind.Trap),
+            OperationCode.Trap => CreateTrap(MIPSTrap.Trap),
             OperationCode.SIMD => throw new NotImplementedException(),
 
             >= OperationCode.LoadByte and <= OperationCode.StoreWordRight => CreateMemoryExecution(),
@@ -114,7 +114,7 @@ public partial class InstructionExecutor
         };
     }
 
-    private Execution CreateTrap(TrapKind trap)
+    private Execution CreateTrap(MIPSTrap trap)
     {
         Trap = trap;
         return default;

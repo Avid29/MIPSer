@@ -1,22 +1,11 @@
 ﻿// Avishai Dernis 2026
 
-
-// Avishai Dernis 2026
-
-
-// Avishai Dernis 2026
-
-
-// Avishai Dernis 2026
-
-using Zarem.Emulator.Executor;
-
 namespace Zarem.Emulator.Executor.Enum;
 
 /// <summary>
 /// An enum describing the kind of trap that occurred during an <see cref="Execution"/>.
 /// </summary>
-public enum TrapKind
+public enum MIPSTrap
 {
 
 #pragma warning disable CS1591

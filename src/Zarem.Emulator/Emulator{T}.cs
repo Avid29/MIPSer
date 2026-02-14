@@ -13,7 +13,7 @@ namespace Zarem.Emulator;
 /// A base class for an emulator.
 /// </summary>
 /// <typeparam name="TConfig">The emulator configuration info</typeparam>
-public abstract class Emulator<TConfig>
+public abstract class Emulator<TConfig> : IEmulator
     where TConfig : EmulatorConfig
 {
     private readonly ManualResetEventSlim _runGate = new(false);
@@ -25,8 +25,19 @@ public abstract class Emulator<TConfig>
     public EventHandler<EmulatorState>? StateChanged;
 
     /// <summary>
-    /// Gets the state of the emulator.
+    /// Initializes a new instance of the <see cref="Emulator{TConfig}"/> class.
     /// </summary>
+    public Emulator(TConfig config)
+    {
+        Config = config;
+    }
+
+    /// <summary>
+    /// Gets or sets the emulators configuration.
+    /// </summary>
+    public TConfig Config { get; }
+
+    /// <inheritdoc/>
     public EmulatorState State
     {
         get => field;
@@ -37,16 +48,11 @@ public abstract class Emulator<TConfig>
         }
     } = EmulatorState.Stopped;
 
-    /// <summary>
-    /// Loads an <see cref="IExecutableModule"/> to the interpreter's memory.
-    /// </summary>
-    /// <param name="module">The module to load.</param>
+    /// <inheritdoc/>
     public abstract void Load(IExecutableModule module);
 
-    /// <summary>
-    /// Starts the execution loop for the emulator.
-    /// </summary>
-    public void Start()
+    /// <inheritdoc/>
+    public virtual void Start()
     {
         // Nothing to be done
         if (State is EmulatorState.Running)
@@ -74,10 +80,8 @@ public abstract class Emulator<TConfig>
         _runGate.Set();
     }
 
-    /// <summary>
-    /// Resume the execution loop if paused.
-    /// </summary>
-    public void Resume()
+    /// <inheritdoc/>
+    public virtual void Resume()
     {
         // Nothing to be done
         if (State is EmulatorState.Running)
@@ -90,20 +94,16 @@ public abstract class Emulator<TConfig>
         _runGate.Set();
     }
 
-    /// <summary>
-    /// Stops execution
-    /// </summary>
-    public void Pause()
+    /// <inheritdoc/>
+    public virtual void Pause()
     {
         // Schedule pause
         State = EmulatorState.Pausing;
         _runGate.Reset();
     }
 
-    /// <summary>
-    /// Shuts down the emulation.
-    /// </summary>
-    public void ShutDown()
+    /// <inheritdoc/>
+    public virtual void ShutDown()
     {
         // Schedule the shutdown
         State = EmulatorState.Stopping;
@@ -119,7 +119,10 @@ public abstract class Emulator<TConfig>
     /// </summary>
     protected abstract void Tick();
 
-    private void ExecutionLoop()
+    /// <summary>
+    /// The loop that progresses the emulation while running.
+    /// </summary>
+    protected virtual void ExecutionLoop()
     {
         while (State is not EmulatorState.Stopping)
         {
