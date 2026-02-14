@@ -7,7 +7,7 @@ using Zarem.Emulator.Machine.CPU;
 using Zarem.Emulator.TrapHandler;
 using Zarem.Models.Instructions.Enums.Registers;
 
-namespace Zarem.Emulator.Interpreter;
+namespace Zarem.Emulator.TrapHandlers;
 
 /// <summary>
 /// An interface for an interpreter, which handles traps as the host-layer
@@ -65,7 +65,7 @@ public abstract class MIPSTrapHandler : TrapHandlerBase
     /// <param name="trap">The type of trap that occurred.</param>
     protected abstract void HandleTrap(MIPSTrap trap);
 
-    private void Processor_TrapOccurring(Processor sender, TrapOccurringEventArgs<MIPSTrap> e)
+    private void Processor_TrapOccurring(MIPSCpu sender, TrapOccurringEventArgs<MIPSTrap> e)
     {
         // The emulator is handling the trap
         // No need to interpret

@@ -12,13 +12,13 @@ namespace Zarem.Assembler.Models.Instructions;
 /// </summary>
 public class ParsedInstruction
 {
-    private readonly Instruction? _real;
+    private readonly MIPSInstruction? _real;
     private readonly PseudoInstruction? _pseudo;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParsedInstruction"/> class.
     /// </summary>
-    public ParsedInstruction(Instruction instruction, ReferenceEntry? reference = null)
+    public ParsedInstruction(MIPSInstruction instruction, ReferenceEntry? reference = null)
     {
         _real = instruction;
         Reference = reference;
@@ -48,7 +48,7 @@ public class ParsedInstruction
     /// <summary>
     /// Gets the parsed instruction implemented exlcusively in real instructions.
     /// </summary>
-    public Instruction[] Realize()
+    public MIPSInstruction[] Realize()
     {
         if (!IsPseduoInstruction)
             return [_real.Value];

@@ -539,7 +539,7 @@ public struct InstructionParser
         return changes;
     }
 
-    private readonly Instruction BuildInstruction()
+    private readonly MIPSInstruction BuildInstruction()
     {
         // If it's not a pseudo instruction, there should be an OpCode
         Guard.IsNotNull(_meta.OpCode);
@@ -549,18 +549,18 @@ public struct InstructionParser
         {
             // R Type
             OperationCode.Special => _meta.FuncCode.HasValue ?                              // Special
-                Instruction.Create(_meta.FuncCode.Value, _rs, _rt, _rd, _shift) :
-                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.FuncCode)} value."),
+                MIPSInstruction.Create(_meta.FuncCode.Value, _rs, _rt, _rd, _shift) :
+                _ = ThrowHelper.ThrowArgumentException<MIPSInstruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.FuncCode)} value."),
             OperationCode.Special2 => _meta.Function2Code.HasValue ?                        // Special 2
-                Instruction.Create(_meta.Function2Code.Value, _rs, _rt, _rd, _shift) :
-                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.Function2Code)} value."),
+                MIPSInstruction.Create(_meta.Function2Code.Value, _rs, _rt, _rd, _shift) :
+                _ = ThrowHelper.ThrowArgumentException<MIPSInstruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.Function2Code)} value."),
             OperationCode.Special3 => _meta.Function3Code.HasValue ?                        // Special 3
-                Instruction.Create(_meta.Function3Code.Value, _rs, _rt, _rd, _shift) :
-                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.Function3Code)} value."),
+                MIPSInstruction.Create(_meta.Function3Code.Value, _rs, _rt, _rd, _shift) :
+                _ = ThrowHelper.ThrowArgumentException<MIPSInstruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.Function3Code)} value."),
 
             // J Type
             OperationCode.Jump or OperationCode.JumpAndLink
-            or OperationCode.JumpAndLinkX => Instruction.Create(_meta.OpCode.Value, _address),
+            or OperationCode.JumpAndLinkX => MIPSInstruction.Create(_meta.OpCode.Value, _address),
 
             // Coprocessor0 instructions
             OperationCode.Coprocessor0 when _meta.Co0FuncCode.HasValue                      // C0
@@ -569,14 +569,14 @@ public struct InstructionParser
                 => CoProc0Instruction.Create(_meta.Mfmc0FuncCode.Value, _rt, _meta.RD),
             OperationCode.Coprocessor0 => _meta.CoProc0RS.HasValue ?                        // Co0 RS
                 CoProc0Instruction.Create(_meta.CoProc0RS.Value, _rt, _rd) :
-                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc0RS)}, {nameof(_meta.Co0FuncCode)}, or {nameof(_meta.Mfmc0FuncCode)} value."),
+                _ = ThrowHelper.ThrowArgumentException<MIPSInstruction>($"Instructions with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc0RS)}, {nameof(_meta.Co0FuncCode)}, or {nameof(_meta.Mfmc0FuncCode)} value."),
 
             // FloatingPoint instructions
             OperationCode.Coprocessor1 when _meta.FloatFuncCode.HasValue && _meta.FloatFormats is not null  // Floating-Point
                 => FloatInstruction.Create(_meta.FloatFuncCode.Value, _format, (FloatRegister)_rs, (FloatRegister)_rd, (FloatRegister)_rt),
             OperationCode.Coprocessor1 => _meta.CoProc1RS.HasValue ?                                    // CoProc1
                 FloatInstruction.Create(_meta.CoProc1RS.Value, _rt, (FloatRegister)_rs) :
-                _ = ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc1RS)} or {nameof(_meta.FloatFuncCode)} value."),
+                _ = ThrowHelper.ThrowArgumentException<MIPSInstruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.CoProc1RS)} or {nameof(_meta.FloatFuncCode)} value."),
 
             // Register Immediate
             OperationCode.RegisterImmediate => _meta.RegisterImmediateFuncCode switch
@@ -584,22 +584,22 @@ public struct InstructionParser
                 // Register Immediate Branching
                 (>= RegImmFuncCode.BranchOnLessThanZero and <= RegImmFuncCode.BranchOnGreaterThanOrEqualToZeroLikely) or
                 (>= RegImmFuncCode.BranchOnLessThanZeroAndLink and <= RegImmFuncCode.BranchOnGreaterThanOrEqualToZeroLikelyAndLink)
-                    => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, _immediate),
+                    => MIPSInstruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, _immediate),
 
                 // Throw exception if null
-                null => ThrowHelper.ThrowArgumentException<Instruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.RegisterImmediateFuncCode)} value."),
+                null => ThrowHelper.ThrowArgumentException<MIPSInstruction>($"Instruction with OpCode:{_meta.OpCode} must have a {nameof(_meta.RegisterImmediateFuncCode)} value."),
 
                 // Register Immediate
-                _ => Instruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, (short)_immediate)
+                _ => MIPSInstruction.Create(_meta.RegisterImmediateFuncCode.Value, _rs, (short)_immediate)
             },
 
             // I-Type Branch
             (>= OperationCode.BranchOnEquals and <= OperationCode.BranchOnGreaterThanZero) or
             (>= OperationCode.BranchOnEqualLikely and <= OperationCode.BranchOnGreaterThanZeroLikely)
-                    => Instruction.Create(_meta.OpCode.Value, _rs, _rt, _immediate),
+                    => MIPSInstruction.Create(_meta.OpCode.Value, _rs, _rt, _immediate),
 
             // Remaining I Type instructions
-            _ => Instruction.Create(_meta.OpCode.Value, _rs, _rt, (short)_immediate),
+            _ => MIPSInstruction.Create(_meta.OpCode.Value, _rs, _rt, (short)_immediate),
         };
     }
 }

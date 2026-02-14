@@ -54,53 +54,53 @@ public readonly struct PseudoInstruction
     /// <summary>
     /// Expands the pseudo-instruction into an array of real instructions.
     /// </summary>
-    public readonly Instruction[] Expand()
+    public readonly MIPSInstruction[] Expand()
     {
         return PseudoOp switch
         {
             PseudoOp.NoOperation =>
             [
-                Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Zero, GPRegister.Zero, 0),
+                MIPSInstruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Zero, GPRegister.Zero, 0),
             ],
             PseudoOp.SuperScalarNoOperation =>
             [
-                Instruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Zero, GPRegister.Zero, 1),
+                MIPSInstruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Zero, GPRegister.Zero, 1),
             ],
             PseudoOp.UnconditionalBranch =>
             [
-                Instruction.Create(OperationCode.BranchOnEquals, GPRegister.Zero, GPRegister.Zero, (short)Immediate),
+                MIPSInstruction.Create(OperationCode.BranchOnEquals, GPRegister.Zero, GPRegister.Zero, (short)Immediate),
             ],
             PseudoOp.BranchOnLessThan =>
             [
-                Instruction.Create(FunctionCode.SetLessThan, RS, RT, GPRegister.AssemblerTemporary),
-                Instruction.Create(OperationCode.BranchOnNotEquals, GPRegister.AssemblerTemporary, GPRegister.Zero, (short)Immediate)
+                MIPSInstruction.Create(FunctionCode.SetLessThan, RS, RT, GPRegister.AssemblerTemporary),
+                MIPSInstruction.Create(OperationCode.BranchOnNotEquals, GPRegister.AssemblerTemporary, GPRegister.Zero, (short)Immediate)
             ],
             PseudoOp.LoadImmediate =>
             [
-                Instruction.Create(OperationCode.LoadUpperImmediate, GPRegister.AssemblerTemporary, (short)(Immediate >> 16)),
-                Instruction.Create(OperationCode.OrImmediate, RT, GPRegister.AssemblerTemporary, (short)Immediate)
+                MIPSInstruction.Create(OperationCode.LoadUpperImmediate, GPRegister.AssemblerTemporary, (short)(Immediate >> 16)),
+                MIPSInstruction.Create(OperationCode.OrImmediate, RT, GPRegister.AssemblerTemporary, (short)Immediate)
             ],
             PseudoOp.AbsoluteValue =>
             [
-                Instruction.Create(FunctionCode.AddUnsigned, RS, GPRegister.Zero, RT),
-                Instruction.Create(RegImmFuncCode.BranchOnGreaterThanOrEqualToZero, RS, 8),
-                Instruction.Create(FunctionCode.Subtract, GPRegister.Zero, RS, RT),
+                MIPSInstruction.Create(FunctionCode.AddUnsigned, RS, GPRegister.Zero, RT),
+                MIPSInstruction.Create(RegImmFuncCode.BranchOnGreaterThanOrEqualToZero, RS, 8),
+                MIPSInstruction.Create(FunctionCode.Subtract, GPRegister.Zero, RS, RT),
             ],
             PseudoOp.Move =>
             [
-                Instruction.Create(FunctionCode.Add, RS, GPRegister.Zero, RT),
+                MIPSInstruction.Create(FunctionCode.Add, RS, GPRegister.Zero, RT),
             ],
             PseudoOp.LoadAddress =>
             [
-                Instruction.Create(OperationCode.LoadUpperImmediate, GPRegister.AssemblerTemporary, (short)(Address >> 16)),
-                Instruction.Create(OperationCode.OrImmediate, RT, GPRegister.AssemblerTemporary, (short)Address)
+                MIPSInstruction.Create(OperationCode.LoadUpperImmediate, GPRegister.AssemblerTemporary, (short)(Address >> 16)),
+                MIPSInstruction.Create(OperationCode.OrImmediate, RT, GPRegister.AssemblerTemporary, (short)Address)
             ],
             PseudoOp.SetGreaterThanOrEqual =>
             [
-                Instruction.Create(OperationCode.AddImmediateUnsigned, RT, RT, (short)-1),
-                Instruction.Create(FunctionCode.SetLessThan, RS, RT, RD),
+                MIPSInstruction.Create(OperationCode.AddImmediateUnsigned, RT, RT, (short)-1),
+                MIPSInstruction.Create(FunctionCode.SetLessThan, RS, RT, RD),
             ],
-            _ => ThrowHelper.ThrowArgumentOutOfRangeException<Instruction[]>(),
+            _ => ThrowHelper.ThrowArgumentOutOfRangeException<MIPSInstruction[]>(),
         };
     }
 

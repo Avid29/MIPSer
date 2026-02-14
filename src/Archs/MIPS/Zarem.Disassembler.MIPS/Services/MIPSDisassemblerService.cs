@@ -24,7 +24,7 @@ public class MIPSDisassemblerService : IDisassemblerService
     }
 
     /// <inheritdoc/>
-    public string Disassemble(Instruction instruction)
+    public string Disassemble(MIPSInstruction instruction)
         => _disassembler.Disassemble(instruction);
 }
 

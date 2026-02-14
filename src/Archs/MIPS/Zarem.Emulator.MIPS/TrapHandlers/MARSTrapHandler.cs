@@ -3,6 +3,7 @@
 using System;
 using Zarem.Emulator.Executor.Enum;
 using Zarem.Emulator.Machine;
+using Zarem.Emulator.TrapHandlers;
 
 namespace Zarem.Emulator.Interpreter;
 

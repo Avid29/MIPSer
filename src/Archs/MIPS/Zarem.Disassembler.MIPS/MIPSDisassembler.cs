@@ -40,7 +40,7 @@ public class MIPSDisassembler
     /// </summary>
     /// <param name="instruction">The instruction to disassemble.</param>
     /// <returns>The instruction as a string.</returns>
-    public string Disassemble(Instruction instruction)
+    public string Disassemble(MIPSInstruction instruction)
     {
         byte funcCode = instruction.Type switch
         {

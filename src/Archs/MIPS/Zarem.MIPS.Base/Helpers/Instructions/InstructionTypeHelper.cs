@@ -15,12 +15,12 @@ namespace Zarem.Helpers.Instructions;
 public static class InstructionTypeHelper
 {
     /// <summary>
-    /// Gets the <see cref="InstructionType"/> of an <see cref="Instruction"/>.
+    /// Gets the <see cref="InstructionType"/> of an <see cref="MIPSInstruction"/>.
     /// </summary>
     /// <param name="opCode">The instruction to get the type of.</param>
     /// <param name="rtFuncCode">The rtFunction of the instruction.</param>
     /// <param name="rsFuncCode">The rsFuncCode of the instruction.</param>
-    /// <returns>The <see cref="InstructionType"/> associated to an <see cref="Instruction"/>.</returns>
+    /// <returns>The <see cref="InstructionType"/> associated to an <see cref="MIPSInstruction"/>.</returns>
     public static InstructionType GetInstructionType(OperationCode? opCode, RegImmFuncCode? rtFuncCode = null, CoProc0RSCode? rsFuncCode = null)
     {
         if (!opCode.HasValue)
@@ -65,10 +65,10 @@ public static class InstructionTypeHelper
     }
 
     /// <summary>
-    /// Gets the <see cref="InstructionPattern"/> of an <see cref="Instruction"/>.
+    /// Gets the <see cref="InstructionPattern"/> of an <see cref="MIPSInstruction"/>.
     /// </summary>
     /// <param name="opCode">The instruction to get the type of.</param>
-    /// <returns>The <see cref="InstructionPattern"/> associated to an <see cref="Instruction"/>.</returns>
+    /// <returns>The <see cref="InstructionPattern"/> associated to an <see cref="MIPSInstruction"/>.</returns>
     public static InstructionPattern GetInstructionPattern(OperationCode? opCode)
     {
         if (!opCode.HasValue)

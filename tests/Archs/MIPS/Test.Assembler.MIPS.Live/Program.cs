@@ -85,7 +85,7 @@ public class Program()
             }
 
             Console.Write("\n\nDisassembly: ");
-            var disassembly = new MIPSDisassembler(new()).Disassemble((Instruction)inst);
+            var disassembly = new MIPSDisassembler(new()).Disassemble((MIPSInstruction)inst);
             Console.Write(disassembly);
         }
         else

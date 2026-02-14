@@ -17,14 +17,14 @@ public class MIPSComputer : IComputer
     public MIPSComputer(MIPSEmulatorConfig config)
     {
         Config = config;
-        Processor = new Processor(this);
+        Processor = new MIPSCpu(this);
         Memory = new SystemMemory();
     }
 
     /// <summary>
     /// Gets the processor of the computer system.
     /// </summary>
-    public Processor Processor { get; }
+    public MIPSCpu Processor { get; }
 
     /// <summary>
     /// Gets the memory of the computer system.

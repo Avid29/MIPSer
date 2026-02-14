@@ -43,7 +43,7 @@ public partial class MIPSAssembler
                realizedCount = meta.RealizedInstructionCount ?? 1;
 
             // Multiply by realized instruction count to handle pseudo instructions
-            Append(sizeof(Instruction) * realizedCount);
+            Append(sizeof(MIPSInstruction) * realizedCount);
         }
         
         // Make allocations if directive is present
@@ -118,7 +118,7 @@ public partial class MIPSAssembler
         if (!parser.TryParse(line, out var instruction))
         {
             // Append a NOP in place of the unparsable instruction
-            Append((uint)Instruction.NOP);
+            Append((uint)MIPSInstruction.NOP);
             return;
         }
 

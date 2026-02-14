@@ -42,8 +42,8 @@ public class MIPSLinker : Linker<MIPSLinker>
                 break;
             case MipsReferenceType.JumpTarget26:
                 // Kinda round about way to handle it, but this should work quite well
-                var instr = (Instruction)word;
-                word = (uint)Instruction.Create(instr.OpCode, instr.Address + (uint)offset);
+                var instr = (MIPSInstruction)word;
+                word = (uint)MIPSInstruction.Create(instr.OpCode, instr.Address + (uint)offset);
                 break;
             case MipsReferenceType.Low16:
                 uint mask = (1 << 16) - 1;

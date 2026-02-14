@@ -15,19 +15,17 @@ namespace Zarem.Emulator.Machine.CPU;
 /// <summary>
 /// A class representing a processor unit.
 /// </summary>
-public partial class Processor
+public partial class MIPSCpu : ICpu<MIPSCpu, MIPSInstruction, MIPSTrap>
 {
     private readonly MIPSComputer _computer;
 
-    /// <summary>
-    /// An event that is invoked when a trap occures before it is handled.
-    /// </summary>
-    public event EventHandler<Processor, TrapOccurringEventArgs<MIPSTrap>>? TrapOccurring;
+    /// <inheritdoc/>
+    public event EventHandler<MIPSCpu, TrapOccurringEventArgs<MIPSTrap>>? TrapOccurring;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Processor"/> class.
+    /// Initializes a new instance of the <see cref="MIPSCpu"/> class.
     /// </summary>
-    public Processor(MIPSComputer computer)
+    public MIPSCpu(MIPSComputer computer)
     {
         _computer = computer;
 
@@ -68,9 +66,7 @@ public partial class Processor
     /// </summary>
     public uint High { get; set; }
 
-    /// <summary>
-    /// Advances the state of the emulator by one step.
-    /// </summary>
+    /// <inheritdoc/>
     public void Step()
     {
         // Fetch, Execute, and Apply the instruction
@@ -78,16 +74,18 @@ public partial class Processor
         ExecuteAndApply(instruction, out _, trap);
     }
 
-    /// <summary>
-    /// Executes an instruction on the current state of the processor.
-    /// </summary>
-    public void Insert(Instruction instruction, out Execution execution, out MIPSTrap trap)
+    /// <inheritdoc/>
+    public void Insert(MIPSInstruction instruction, out MIPSTrap trap)
+        => Insert(instruction, out _, out trap);
+
+    /// <inheritdoc cref="Insert(MIPSInstruction, out MIPSTrap)"/>
+    public void Insert(MIPSInstruction instruction, out Execution execution, out MIPSTrap trap)
         => trap = ExecuteAndApply(instruction, out execution);
 
     /// <remarks>
     /// Immitates the fetch step in a MIPS cpu, reading an instruction from memory.
     /// </remarks>
-    private MIPSTrap Fetch(out Instruction instruction)
+    private MIPSTrap Fetch(out MIPSInstruction instruction)
     {
         instruction = default;
 
@@ -96,7 +94,7 @@ public partial class Processor
             return MIPSTrap.AddressErrorLoad;
         }
 
-        instruction = (Instruction)_computer.Memory.Read<uint>(ProgramCounter);
+        instruction = (MIPSInstruction)_computer.Memory.Read<uint>(ProgramCounter);
         return MIPSTrap.None;
     }
 
@@ -104,7 +102,7 @@ public partial class Processor
     /// Wraps the last 3 stages of the instruction pipeline.
     /// This allows for executing instructions that were not fetched.
     /// </remarks>
-    private MIPSTrap ExecuteAndApply(Instruction instruction, out Execution execution, MIPSTrap proceedingTrap = MIPSTrap.None)
+    private MIPSTrap ExecuteAndApply(MIPSInstruction instruction, out Execution execution, MIPSTrap proceedingTrap = MIPSTrap.None)
     {
         // Pre-define everything to avoid unset variable accusations
         MIPSTrap trap = proceedingTrap;
@@ -126,7 +124,7 @@ public partial class Processor
     /// <summary>
     /// Immitates the execute step in a MIPS cpu, constructing the modifications to apply in the following stages.
     /// </summary>
-    private MIPSTrap Execute(Instruction instruction, out Execution execution)
+    private MIPSTrap Execute(MIPSInstruction instruction, out Execution execution)
         => InstructionExecutor.Execute(instruction, this, out execution);
 
     private MIPSTrap MemAccess(Execution execution, out uint read)
