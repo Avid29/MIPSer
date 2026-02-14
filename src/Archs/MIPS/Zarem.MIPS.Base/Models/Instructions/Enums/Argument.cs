@@ -50,5 +50,10 @@ public enum Argument
     RS_Numbered,
     RT_Numbered,
 
-    #pragma warning restore CS1591
+    /// <summary>
+    /// A 26-bit branch offset.
+    /// </summary>
+    LargeOffset,
+
+#pragma warning restore CS1591
 }

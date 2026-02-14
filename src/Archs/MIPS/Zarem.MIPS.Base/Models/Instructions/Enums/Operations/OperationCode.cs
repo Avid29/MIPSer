@@ -80,6 +80,10 @@ public enum OperationCode : byte
 
     LoadLinkedWord = 0x30,
     LoadWordCoprocessor1 = 0x31,
+
+    /// <remarks>
+    /// MIPS I through MIPS V
+    /// </remarks>
     LoadWordCoprocessor2 = 0x32,
     LoadWordCoprocessor3 = 0x33,
     LoadDoubleWordCoprocessor1 = 0x35,
@@ -88,8 +92,22 @@ public enum OperationCode : byte
 
     StoreConditionalWord = 0x38,
     StoreWordCoprocessor1 = 0x39,
+
+    /// <remarks>
+    /// MIPS I through MIPS V
+    /// </remarks>
     StoreWordCoprocessor2 = 0x3a,
     StoreWordCoprocessor3 = 0x3b,
+
+    /// <remarks>
+    /// MIPS VI
+    /// </remarks>
+    BranchCompact = 0x32, 
+
+    /// <remarks>
+    /// MIPS VI
+    /// </remarks>
+    BranchAndLinkCompact = 0x3a, 
 
 #pragma warning restore CS1591
 }

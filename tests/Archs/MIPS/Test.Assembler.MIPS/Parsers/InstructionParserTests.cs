@@ -80,65 +80,18 @@ public class InstructionParserTests
     {
         get
         {
-            yield return [new InstructionParsingTestCase("sll $t0, $s0, 33", MIPSInstruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 1), Zarem.Assembler.Logging.Enum.LogId.IntegerTruncated)];
-            yield return [new InstructionParsingTestCase("sll $t0, $s0, -1", MIPSInstruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 31), Zarem.Assembler.Logging.Enum.LogId.IntegerTruncated)];
-            yield return [new InstructionParsingTestCase("j 0x1", MIPSInstruction.Create(OperationCode.Jump, 0x1), Zarem.Assembler.Logging.Enum.LogId.IntegerTruncated)];
+            yield return [new InstructionParsingTestCase("sll $t0, $s0, 33", MIPSInstruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 1), LogId.IntegerTruncated)];
+            yield return [new InstructionParsingTestCase("sll $t0, $s0, -1", MIPSInstruction.Create(FunctionCode.ShiftLeftLogical, GPRegister.Zero, GPRegister.Saved0, GPRegister.Temporary0, 31), LogId.IntegerTruncated)];
+            yield return [new InstructionParsingTestCase("j 0x1", MIPSInstruction.Create(OperationCode.Jump, 0x1), LogId.IntegerTruncated)];
         }
     }
 
-    public static IEnumerable<object[]> GeneratedTestList
-    {
-        get
-        {
-            var table = new InstructionTable(new());
-            foreach (var instruction in table.GetInstructions())
-            {
-                // TODO: Disassembling pseudo instructions
-                if (instruction.IsPseudoInstruction)
-                    continue;
-
-                // TODO: Disassembling CoProc0 instructions
-                if (instruction.OpCode is OperationCode.Coprocessor0)
-                    continue;
-
-                // Apply format to instruction name, if applicable
-                var name = instruction.Name;
-                if (name.EndsWith(".fmt"))
-                {
-                    name = FloatFormatTable.ApplyFormat(name, ArgGenerator.RandomFormat(instruction.FloatFormats));
-                }
-
-                // Generate instruction
-                StringBuilder line = new(name);
-                line.Append(' ');
-
-                foreach (var arg in instruction.ArgumentPattern)
-                {
-                    line.Append(arg switch
-                    {
-                        Argument.RS or Argument.RT or Argument.RD => RegistersTable.GetRegisterString(ArgGenerator.RandomRegister()),
-                        Argument.FS or Argument.FT or Argument.FD => RegistersTable.GetRegisterString(ArgGenerator.RandomRegister(), RegisterSet.FloatingPoints),
-                        Argument.Immediate => $"{ArgGenerator.RandomImmediate()}",
-                        Argument.Offset => $"{ArgGenerator.RandomOffset()}",
-                        Argument.Address => $"{ArgGenerator.RandomAddress()}",
-                        Argument.AddressBase => $"{ArgGenerator.RandomImmediate()}({RegistersTable.GetRegisterString(ArgGenerator.RandomRegister())})",
-                        Argument.Shift => $"{ArgGenerator.RandomShift()}",
-                        Argument.FullImmediate => Random.Shared.Next(),
-                        _ => throw new NotImplementedException(),
-                    });
-
-                    line.Append(", ");
-                }
-
-                // Remove final ", "
-                if (instruction.ArgumentPattern.Length > 0)
-                    line.Remove(line.Length - 2, 2);
-
-                // Return test case
-                yield return [$"{line}"];
-            }
-        }
-    }
+    public static IEnumerable<object[]> Generated_MIPS_I_List => GenerateTestList(MipsVersion.MipsI);
+    public static IEnumerable<object[]> Generated_MIPS_II_List => GenerateTestList(MipsVersion.MipsII);
+    public static IEnumerable<object[]> Generated_MIPS_III_List => GenerateTestList(MipsVersion.MipsIII);
+    public static IEnumerable<object[]> Generated_MIPS_IV_List => GenerateTestList(MipsVersion.MipsIV);
+    public static IEnumerable<object[]> Generated_MIPS_V_List => GenerateTestList(MipsVersion.MipsV);
+    public static IEnumerable<object[]> Generated_MIPS_VI_List => GenerateTestList(MipsVersion.MipsVI);
 
     [DataTestMethod]
     [DynamicData(nameof(RawInstructionSuccessTestsList),
@@ -170,11 +123,39 @@ public class InstructionParserTests
         RunTest(LoadImmediate, new ParsedInstruction(expected));
     }
 
-    [TestMethod("Generated Tests")]
-    [DynamicData(nameof(GeneratedTestList))]
-    public void GeneratedTests(string input)
+    [TestMethod("MIPS I")]
+    [DynamicData(nameof(Generated_MIPS_I_List))]
+    public void Generated_MIPS_I(string input)
+        => AssembleDisassembleTest(input, MipsVersion.MipsI);
+
+    [TestMethod("MIPS II")]
+    [DynamicData(nameof(Generated_MIPS_II_List))]
+    public void Generated_MIPS_II(string input)
+        => AssembleDisassembleTest(input, MipsVersion.MipsII);
+
+    [TestMethod("MIPS III")]
+    [DynamicData(nameof(Generated_MIPS_III_List))]
+    public void Generated_MIPS_III(string input)
+        => AssembleDisassembleTest(input, MipsVersion.MipsIII);
+
+    [TestMethod("MIPS IV")]
+    [DynamicData(nameof(Generated_MIPS_IV_List))]
+    public void Generated_MIPS_IV(string input)
+        => AssembleDisassembleTest(input, MipsVersion.MipsIV);
+
+    [TestMethod("MIPS V")]
+    [DynamicData(nameof(Generated_MIPS_V_List))]
+    public void Generated_MIPS_V(string input)
+        => AssembleDisassembleTest(input, MipsVersion.MipsV);
+
+    [TestMethod("MIPS VI")]
+    [DynamicData(nameof(Generated_MIPS_VI_List))]
+    public void Generated_MIPS_VI(string input)
+        => AssembleDisassembleTest(input, MipsVersion.MipsVI);
+
+    private void AssembleDisassembleTest(string input, MipsVersion version)
     {
-        var config = new MIPSAssemblerConfig();
+        var config = new MIPSAssemblerConfig(version);
 #if DEBUG
         ServiceCollection.DisassemblerService = new MIPSDisassemblerService(config);
 #endif
@@ -196,7 +177,7 @@ public class InstructionParserTests
 #endif
     }
 
-    private static void RunTest(string input, ParsedInstruction? expected = null, LogId? logCode = null, string? expectedSymbol = null)
+    private static void RunTest(string input, ParsedInstruction? expected = null, LogId? logCode = null)
     {
         bool succeeds = expected is not null;
 
@@ -227,6 +208,57 @@ public class InstructionParserTests
         if (logCode.HasValue)
         {
             Assert.IsTrue(logger.CurrentLog[0].Code.Id == (uint)logCode.Value);
+        }
+    }
+
+    private static IEnumerable<object[]> GenerateTestList(MipsVersion version)
+    {
+        var table = new InstructionTable(new(version));
+        foreach (var instruction in table.GetInstructions())
+        {
+            // TODO: Disassembling pseudo instructions
+            if (instruction.IsPseudoInstruction)
+                continue;
+
+            // TODO: Disassembling CoProc0 instructions
+            if (instruction.OpCode is OperationCode.Coprocessor0)
+                continue;
+
+            // Apply format to instruction name, if applicable
+            var name = instruction.Name;
+            if (name.EndsWith(".fmt"))
+            {
+                name = FloatFormatTable.ApplyFormat(name, ArgGenerator.RandomFormat(instruction.FloatFormats));
+            }
+
+            // Generate instruction
+            StringBuilder line = new(name);
+            line.Append(' ');
+
+            foreach (var arg in instruction.ArgumentPattern)
+            {
+                line.Append(arg switch
+                {
+                    Argument.RS or Argument.RT or Argument.RD => RegistersTable.GetRegisterString(ArgGenerator.RandomRegister()),
+                    Argument.FS or Argument.FT or Argument.FD => RegistersTable.GetRegisterString(ArgGenerator.RandomRegister(), RegisterSet.FloatingPoints),
+                    Argument.Immediate => $"{ArgGenerator.RandomImmediate()}",
+                    Argument.Offset => $"{ArgGenerator.RandomOffset()}",
+                    Argument.Address => $"{ArgGenerator.RandomAddress()}",
+                    Argument.AddressBase => $"{ArgGenerator.RandomImmediate()}({RegistersTable.GetRegisterString(ArgGenerator.RandomRegister())})",
+                    Argument.Shift => $"{ArgGenerator.RandomShift()}",
+                    Argument.FullImmediate => Random.Shared.Next(),
+                    _ => throw new NotImplementedException(),
+                });
+
+                line.Append(", ");
+            }
+
+            // Remove final ", "
+            if (instruction.ArgumentPattern.Length > 0)
+                line.Remove(line.Length - 2, 2);
+
+            // Return test case
+            yield return [$"{line}"];
         }
     }
 }

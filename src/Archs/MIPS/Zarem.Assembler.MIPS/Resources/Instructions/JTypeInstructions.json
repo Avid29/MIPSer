@@ -24,12 +24,12 @@
     "name": "bc",
     "op_code": 50,
     "args": [ 6 ],
-    "versions": [ 6 ]
+    "versions": [ 14 ]
   },
   {
     "name": "balc",
     "op_code": 58,
     "args": [ 6 ],
-    "versions": [ 6 ]
+    "versions": [ 14 ]
   }
 ]

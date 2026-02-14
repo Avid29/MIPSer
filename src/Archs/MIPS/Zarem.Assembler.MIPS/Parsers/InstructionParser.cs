@@ -164,7 +164,7 @@ public struct InstructionParser
         if (!_instructionTable.TryGetInstruction(name, out var metas, out var version, out var banned))
         {
             // Select error message
-            (Logging.Enum.LogId id, string message) = version switch
+            (LogId id, string message) = version switch
             {
                 not null when banned => 
                     (LogId.DisabledFeatureInUse, "InstructionDisabled"),
@@ -224,9 +224,8 @@ public struct InstructionParser
             Argument.RT_Numbered => TryParseRegisterArg(arg, type),
 
             // Expression arguments
-            Argument.Shift or Argument.Immediate or
-            Argument.FullImmediate or Argument.Offset
-            or Argument.Address => TryParseExpressionArg(arg, type, out reference),
+            Argument.Shift or Argument.Immediate or Argument.FullImmediate
+            or Argument.Offset or Argument.LargeOffset or Argument.Address => TryParseExpressionArg(arg, type, out reference),
 
             // Address offset arguments
             Argument.AddressBase => TryParseAddressOffsetArg(arg, out reference),
@@ -300,7 +299,8 @@ public struct InstructionParser
 
         // TODO: Can branches make external references?
 
-        if (expResult.Reference.HasValue && target is not Argument.Offset && _context is not null)
+        bool branch = target is Argument.Offset or Argument.LargeOffset;
+        if (expResult.Reference.HasValue && !branch && _context is not null)
         {
             var type = target switch
             {
@@ -340,6 +340,7 @@ public struct InstructionParser
                 _address = (uint)value;
                 return true;
             case Argument.Offset:
+            case Argument.LargeOffset:
                 if (expResult.IsRelocatable)
                 {
                     Guard.IsNotNull(_context);
@@ -354,7 +355,7 @@ public struct InstructionParser
                     // Adjust relative to current position
                     value -= @base.Value;
                 }
-
+                
                 _immediate = (int)value;
                 return true;
 
@@ -468,6 +469,7 @@ public struct InstructionParser
             Argument.Offset => (16, 2, false),
             Argument.Immediate => (16, 0, true),
             Argument.Address => (26, 2, false),
+            Argument.LargeOffset => (26, 2, true),
             Argument.FullImmediate => (32, 0, true),
             _ => ThrowHelper.ThrowArgumentOutOfRangeException<(byte, byte, bool)>($"Argument of type '{target}' attempted to parse as an expression."),
         };

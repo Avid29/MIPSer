@@ -61,9 +61,9 @@ public abstract class InstructionTableBase<T>
     /// Gets all instructions in the instruction table.
     /// </summary>
     /// <returns>An array of the instructions in the table.</returns>
-    public InstructionMetadata[] GetInstructions(bool max_args = true)
+    public InstructionMetadata[] GetInstructions(bool maxArgs = true)
     {
-        if (max_args)
+        if (maxArgs)
         {
             return [..LookupTable.Values
                 .Select(x => x

@@ -204,7 +204,7 @@
     "name": "lwc2",
     "op_code": 50,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "versions": [ 1, 2, 3, 4, 5 ],
     "behavior": ""
   },
   {
@@ -226,7 +226,7 @@
     "name": "swc2",
     "op_code": 58,
     "args": [],
-    "versions": [ 1, 2, 3, 4, 5, 6 ],
+    "versions": [ 1, 2, 3, 4, 5 ],
     "behavior": ""
   },
   {

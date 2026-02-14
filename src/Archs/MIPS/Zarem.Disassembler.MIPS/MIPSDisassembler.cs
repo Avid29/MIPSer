@@ -75,8 +75,10 @@ public class MIPSDisassembler
             return "Unknown instruction";
         }
 
-        // Take the metadata with the most arguments
-        var meta = metas.OrderByDescending(x => x.ArgumentPattern.Length).First();
+        // Take the metadata with the most arguments, prefer in-version instructions
+        var meta = metas
+            .OrderByDescending(x => x.ArgumentPattern.Length)
+            .FirstOrDefault();
 
         // Apply the format to the name if it exists
         var name = meta.Name;
@@ -96,6 +98,7 @@ public class MIPSDisassembler
                 Argument.Shift => instruction.ShiftAmount,
                 Argument.Immediate => instruction.ImmediateValue,
                 Argument.Offset => instruction.Offset,
+                Argument.LargeOffset => instruction.Address,
                 Argument.Address => instruction.Address,
                 Argument.AddressBase => $"{instruction.ImmediateValue}({RegistersTable.GetRegisterString(instruction.RS)})",
                 Argument.FullImmediate => 0, // Won't happen until pseudo-instruction disassembly

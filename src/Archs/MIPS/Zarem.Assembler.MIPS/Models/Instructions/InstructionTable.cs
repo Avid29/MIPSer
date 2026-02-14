@@ -65,9 +65,8 @@ public class InstructionTable : InstructionTableBase<string>
     public bool TryGetInstruction(string name, int argCount, out InstructionMetadata metadata, out MipsVersion? requiredVersion, out bool banned)
     {
         metadata = default;
-        requiredVersion = null;
 
-        if (base.TryGetInstruction(name, out var metadatas, out _, out banned))
+        if (TryGetInstruction(name, out var metadatas, out requiredVersion, out banned))
         {
             if (metadatas is null)
                 return false;
@@ -77,16 +76,6 @@ public class InstructionTable : InstructionTableBase<string>
 
             metadata = metadatas.FirstOrDefault(x => x.ArgumentPattern.Length == argCount);
             return true;
-        }
-        
-        if (_outOfVersion.TryGetValue(name, out var versions))
-        {
-            // Higher version instruction. Get the lowest version available.
-            if (Config.MipsVersion < versions.FirstOrDefault())
-                requiredVersion = versions.Min();
-            // Deprecated instruction. Get the highest version available.
-            else
-                requiredVersion = versions.Max();
         }
 
         return false;
