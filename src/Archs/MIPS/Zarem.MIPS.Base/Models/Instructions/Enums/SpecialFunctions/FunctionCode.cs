@@ -25,6 +25,9 @@ public enum FunctionCode : byte
     JumpRegister = 0x08,
     JumpAndLinkRegister = 0x09,
 
+    MoveOnZero = 0x0a,
+    MoveOnNotZero = 0x0b,
+
     SystemCall = 0x0c,
     Break = 0x0d,
 
@@ -58,7 +61,9 @@ public enum FunctionCode : byte
     TrapOnLessThan = 0x32,
     TrapOnLessThanUnsigned = 0x33,
     TrapOnEquals = 0x34,
+    SelectOnEquals = 0x35,
     TrapOnNotEquals = 0x36,
+    SelectOnNotEquals = 0x37,
 
 #pragma warning restore CS1591
 }

@@ -280,11 +280,27 @@
     "behavior": "if ($rs == $rt) Invoke Trap"
   },
   {
+    "name": "seleqz",
+    "op_code": 0,
+    "func_code": 53,
+    "args": [ 0, 1 ],
+    "versions": [ 6 ],
+    "behavior": "$rd = $rt ? 0 : $rs"
+  },
+  {
     "name": "tne",
     "op_code": 0,
     "func_code": 54,
     "args": [ 0, 1 ],
     "versions": [ 2, 3, 4, 5, 6 ],
     "behavior": "if ($rs != $rt) Invoke Trap"
+  },
+  {
+    "name": "selnez",
+    "op_code": 0,
+    "func_code": 55,
+    "args": [ 2, 1, 0 ],
+    "versions": [ 6 ],
+    "behavior": "$rd = $rt ? $rs : 0"
   }
 ]
