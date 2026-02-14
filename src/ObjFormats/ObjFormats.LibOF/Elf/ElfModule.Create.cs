@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Diagnostics;
 using LibObjectFile.Elf;
-using ObjectFiles.Elf.Config;
+using ObjFormats.LibOF.Elf.Config;
 using ObjFormats.LibOF.Elf.Extensions;
 using System.Collections.Generic;
 using System.Linq;

@@ -8,7 +8,7 @@ using Zarem.Emulator;
 using Zarem.Emulator.Config;
 using Zarem.Models.Instructions.Enums;
 
-namespace Zarem.MIPS.Projects;
+namespace Zarem.MIPS;
 
 /// <summary>
 /// An <see cref="ProjectConfig{TAsmConfig, TEmuConfig}"/> implementation for MIPS.

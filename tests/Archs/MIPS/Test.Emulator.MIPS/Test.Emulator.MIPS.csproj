@@ -16,7 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\src\Archs\MIPS\Zarem.Assembler.MIPS\Zarem.Assembler.MIPS.csproj" />
     <ProjectReference Include="..\..\..\..\src\Archs\MIPS\Zarem.Emulator.MIPS\Zarem.Emulator.MIPS.csproj" />
-    <ProjectReference Include="..\..\..\..\src\Archs\MIPS\Zarem.Linker.MIPS\Zarem.Linker.MIPS.csproj" />
     <ProjectReference Include="..\..\..\..\src\ObjFormats\ObjFormats.LibOF\ObjFormats.LibOF.csproj" />
     <ProjectReference Include="..\..\..\..\src\ObjFormats\ObjFormats.RASM\ObjFormats.RASM.csproj" />
     <ProjectReference Include="..\Test.MIPS\Test.MIPS.csproj" />

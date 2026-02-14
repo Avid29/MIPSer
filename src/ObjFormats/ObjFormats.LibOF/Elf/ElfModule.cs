@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using LibObjectFile.Elf;
-using ObjectFiles.Elf.Config;
+using ObjFormats.LibOF.Elf.Config;
 using System.IO;
 using System.Threading.Tasks;
 using Zarem.Assembler.Models.Modules;

@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using ObjectFiles.Elf;
-using ObjectFiles.Elf.Config;
+using ObjFormats.LibOF.Elf.Config;
 using System.IO;
 using System.Threading.Tasks;
 using Test.MIPS.Helpers;
@@ -9,7 +9,6 @@ using Zarem.Assembler;
 using Zarem.Emulator;
 using Zarem.Emulator.Config;
 using Zarem.Emulator.Interpreter;
-using Zarem.Linker;
 
 namespace Test.Emulator.MIPS;
 

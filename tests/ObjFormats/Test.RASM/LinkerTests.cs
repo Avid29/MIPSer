@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Test.MIPS.Helpers;
 using Zarem.Assembler;
 using Zarem.Assembler.Config;
-using Zarem.Linker;
 
 namespace Test.RASM;
 

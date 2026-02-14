@@ -1,7 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using ObjectFiles.Elf;
-using ObjectFiles.Elf.Config;
+using ObjFormats.LibOF.Elf.Config;
 using System.Threading.Tasks;
 using Test.MIPS.Helpers;
 using Test.ObjFormats;

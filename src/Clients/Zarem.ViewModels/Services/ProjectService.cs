@@ -2,14 +2,12 @@
 
 using CommunityToolkit.Mvvm.Messaging;
 using ObjectFiles.Elf;
-using ObjectFiles.Elf.Config;
 using ObjFormats.RASM;
-using ObjFormats.RASM.Config;
 using System.IO;
 using System.Threading.Tasks;
 using Zarem.Config;
 using Zarem.Messages.Files;
-using Zarem.MIPS.Projects;
+using Zarem.MIPS;
 using Zarem.Models;
 using Zarem.Models.Files;
 using Zarem.Serialization;

@@ -2,7 +2,7 @@
 
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using ObjectFiles.Elf.Config;
+using ObjFormats.LibOF.Elf.Config;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Zarem.Assembler.Config;
 using Zarem.Emulator.Config;
 using Zarem.Messages.Navigation;
-using Zarem.MIPS.Projects;
+using Zarem.MIPS;
 using Zarem.Models.Instructions.Enums;
 using Zarem.Serialization;
 using Zarem.Services;

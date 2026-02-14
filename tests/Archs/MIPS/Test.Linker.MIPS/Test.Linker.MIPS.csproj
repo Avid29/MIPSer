@@ -12,8 +12,4 @@
 		<PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="1.4.3" />
 		<PackageReference Include="MSTest" Version="3.6.4" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\src\Archs\MIPS\Zarem.Linker.MIPS\Zarem.Linker.MIPS.csproj" />
-	</ItemGroup>
 </Project>

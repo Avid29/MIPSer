@@ -10,7 +10,7 @@ using Zarem.Models.Modules;
 using Zarem.Models.Modules.Tables;
 using Zarem.Models.Modules.Tables.Enums;
 
-namespace Zarem.Linker;
+namespace Zarem.Assembler;
 
 /// <summary>
 /// A MIPS linker.

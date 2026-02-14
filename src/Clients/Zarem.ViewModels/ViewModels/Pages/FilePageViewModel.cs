@@ -8,7 +8,7 @@ using Zarem.Assembler.Tokenization.Models;
 using Zarem.Bindables.Files;
 using Zarem.Messages;
 using Zarem.Messages.Editor.Enums;
-using Zarem.MIPS.Projects;
+using Zarem.MIPS;
 using Zarem.Services;
 using Zarem.Services.Settings;
 using Zarem.Services.Settings.Enums;
