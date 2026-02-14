@@ -10,20 +10,19 @@ namespace Zarem.Console.Commands;
 /// </summary>
 public class Build : CommandBase<Build>, ICommand
 {
-    /// <inheritdoc/>
-    public static string NameKey => "Build";
-
-    /// <inheritdoc/>
-    public static void Action(ParseResult result)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Build"/> class.
+    /// </summary>
+    public Build()
     {
 
     }
 
     /// <inheritdoc/>
-    public static Command Register()
-    {
-        var command = Create();
+    public static string NameKey => "Build";
 
-        return command;
+    /// <inheritdoc/>
+    public override void Method(ParseResult result)
+    {
     }
 }

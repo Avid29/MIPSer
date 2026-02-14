@@ -10,20 +10,19 @@ namespace Zarem.Console.Commands;
 /// </summary>
 public class Assemble : CommandBase<Assemble>, ICommand
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Assemble"/> class.
+    /// </summary>
+    public Assemble()
+    {
+    }
+
     /// <inheritdoc/>
     public static string NameKey => "Assemble";
 
     /// <inheritdoc/>
-    public static void Action(ParseResult parseResult)
+    public override void Method(ParseResult result)
     {
-        throw new NotImplementedException();
-    }
 
-    /// <inheritdoc/>
-    public static Command Register()
-    {
-        var command = Create();
-
-        return command;
     }
 }

@@ -10,26 +10,25 @@ namespace Zarem.Console.Commands;
 /// </summary>
 public class Create : CommandBase<Create>, ICommand
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Create"/> class.
+    /// </summary>
+    public Create()
+    {
+        Options.Add(ArchOption);
+    }
+
     /// <inheritdoc/>
     public static string NameKey => "Create";
 
     /// <summary>
     /// Gets the architecture option for the create command.
     /// </summary>
-    public static Option<string> ArchOption { get; } = CreateArchOption();
+    public Option<string> ArchOption { get; } = CreateArchOption();
 
     /// <inheritdoc/>
-    public static void Action(ParseResult result)
+    public override void Method(ParseResult result)
     {
-
-    }
-
-    /// <inheritdoc/>
-    public static Command Register()
-    {
-        var command = Create();
-        command.Options.Add(ArchOption);
-        return command;
     }
 
     private static Option<string> CreateArchOption()

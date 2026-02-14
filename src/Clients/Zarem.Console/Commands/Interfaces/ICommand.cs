@@ -13,16 +13,4 @@ public interface ICommand
     /// Gets the name key of the command.
     /// </summary>
     static abstract string NameKey { get; }
-
-    /// <summary>
-    /// The action the command runs.
-    /// </summary>
-    /// <param name="parseResult">The parse command args.</param>
-    static abstract void Action(ParseResult parseResult);
-
-    /// <summary>
-    /// Creates the <see cref="Command"/> for the 
-    /// </summary>
-    /// <returns></returns>
-    static abstract Command Register();
 }

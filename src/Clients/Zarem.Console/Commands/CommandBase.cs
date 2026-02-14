@@ -10,22 +10,26 @@ namespace Zarem.Console.Commands;
 /// A base class for a console command.
 /// </summary>
 /// <typeparam name="TSelf">The concrete type of the command.</typeparam>
-public class CommandBase<TSelf>
+public abstract class CommandBase<TSelf>: Command
     where TSelf : ICommand
 {
-    /// <summary>
-    /// Creates a <see cref="Command"/> for the command, automatically grabbing localized name and description.
-    /// </summary>
-    protected static Command Create()
-    {
-        var name = Program.CommandLocalizer[$"{TSelf.NameKey}CommandName"];
-        var desc = Program.CommandLocalizer[$"{TSelf.NameKey}CommandDescription"];
-        Guard.IsNotNull(name);
+    private static string GetName() => Program.CommandLocalizer[$"{TSelf.NameKey}CommandName"]!;
 
-        var command =  new Command(name, desc);
-        command.SetAction(TSelf.Action);
-        return command;
+    private static string GetDescription() => Program.CommandLocalizer[$"{TSelf.NameKey}CommandDescription"]!;
+
+    /// <summary>
+    /// 
+    /// </summary>
+    protected CommandBase() : base(GetName(), GetDescription())
+    {
+        SetAction(Method);
     }
+
+    /// <summary>
+    /// The action the command runs.
+    /// </summary>
+    /// <param name="parseResult">The parse command args.</param>
+    public abstract void Method(ParseResult parseResult);
 
     /// <summary>
     /// Creates an option for the command.
