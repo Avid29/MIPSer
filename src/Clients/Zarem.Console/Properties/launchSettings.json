@@ -2,6 +2,7 @@
   "profiles": {
     "Zarem": {
       "commandName": "Project",
+      "commandLineArgs": "צור",
       "workingDirectory": "C:\\Users\\avid2\\Downloads"
     },
     "WSL": {

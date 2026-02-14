@@ -22,6 +22,20 @@ public class CommandBase<TSelf>
         var desc = Program.CommandLocalizer[$"{TSelf.NameKey}CommandDescription"];
         Guard.IsNotNull(name);
 
-        return new Command(name, desc);
+        var command =  new Command(name, desc);
+        command.SetAction(TSelf.Action);
+        return command;
+    }
+
+    /// <summary>
+    /// Creates an option for the command.
+    /// </summary>
+    protected static Option<T> CreateOption<T>(string nameKey, params string[] aliasKeys)
+    {
+        var name = $"--{Program.CommandLocalizer[$"{nameKey}OptionName"]}";
+        var aliases = aliasKeys.Select(x => $"-{Program.CommandLocalizer[$"{nameKey}OptionAlias{x}"]}"!).ToArray();
+        Guard.IsNotNull(name);
+
+        return new Option<T>(name, aliases);
     }
 }

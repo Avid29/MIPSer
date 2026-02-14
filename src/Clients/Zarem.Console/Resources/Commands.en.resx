@@ -117,10 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ArchOptionAlias1" xml:space="preserve">
+    <value>a</value>
+  </data>
+  <data name="ArchOptionName" xml:space="preserve">
+    <value>arch</value>
+  </data>
   <data name="AssembleCommandDescription" xml:space="preserve">
     <value>Assemble files</value>
   </data>
   <data name="AssembleCommandName" xml:space="preserve">
     <value>assemble</value>
+  </data>
+  <data name="BuildCommandDescription" xml:space="preserve">
+    <value>Build the project</value>
+  </data>
+  <data name="BuildCommandName" xml:space="preserve">
+    <value>build</value>
+  </data>
+  <data name="CreateCommandDescription" xml:space="preserve">
+    <value>Create a new project</value>
+  </data>
+  <data name="CreateCommandName" xml:space="preserve">
+    <value>create</value>
   </data>
 </root>

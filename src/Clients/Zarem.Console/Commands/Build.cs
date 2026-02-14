@@ -6,17 +6,17 @@ using Zarem.Console.Commands.Interfaces;
 namespace Zarem.Console.Commands;
 
 /// <summary>
-/// A class that handles the assemble command.
+/// A class that handles the build command.
 /// </summary>
-public class Assemble : CommandBase<Assemble>, ICommand
+public class Build : CommandBase<Build>, ICommand
 {
     /// <inheritdoc/>
-    public static string NameKey => "Assemble";
+    public static string NameKey => "Build";
 
     /// <inheritdoc/>
-    public static void Action(ParseResult parseResult)
+    public static void Action(ParseResult result)
     {
-        throw new NotImplementedException();
+
     }
 
     /// <inheritdoc/>

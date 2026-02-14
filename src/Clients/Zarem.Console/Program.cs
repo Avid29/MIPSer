@@ -15,6 +15,8 @@ internal class Program
         var rootCommand = new RootCommand
         {
             Assemble.Register(),
+            Build.Register(),
+            Create.Register(),
         };
 
         rootCommand.Parse(args).Invoke();
