@@ -30,18 +30,12 @@
       <Deploy />
     </Project>
   </Folder>
-  <Folder Name="/ObjFormats/">
-    <Project Path="src/ObjFormats/ObjFormats.LibOF/ObjFormats.LibOF.csproj">
-      <BuildType Solution="Alpha|ARM" Project="Debug" />
-      <BuildType Solution="Alpha|arm64" Project="Debug" />
-      <BuildType Solution="Alpha|x64" Project="Release" />
-      <BuildType Solution="Alpha|x86" Project="Debug" />
+  <Folder Name="/ModuleFormats/">
+    <Project Path="src/ModuleFormats/Zarem.ELF/Zarem.ELF.csproj">
+      <BuildType Solution="Alpha|*" Project="Debug" />
     </Project>
-    <Project Path="src/ObjFormats/ObjFormats.RASM/ObjFormats.RASM.csproj">
-      <BuildType Solution="Alpha|ARM" Project="Debug" />
-      <BuildType Solution="Alpha|arm64" Project="Debug" />
-      <BuildType Solution="Alpha|x64" Project="Release" />
-      <BuildType Solution="Alpha|x86" Project="Debug" />
+    <Project Path="src/ModuleFormats/Zarem.RASM/Zarem.RASM.csproj">
+      <BuildType Solution="Alpha|*" Project="Debug" />
     </Project>
   </Folder>
   <Folder Name="/SolutionItems/">
@@ -99,7 +93,7 @@
       <BuildType Solution="Alpha|x86" Project="Debug" />
     </Project>
   </Folder>
-  <Folder Name="/Tests/ObjFormats/">
+  <Folder Name="/Tests/ModuleFormats/">
     <Project Path="tests/ObjFormats/Test.ELF/Test.ELF.csproj">
       <BuildType Solution="Alpha|ARM" Project="Debug" />
       <BuildType Solution="Alpha|arm64" Project="Debug" />

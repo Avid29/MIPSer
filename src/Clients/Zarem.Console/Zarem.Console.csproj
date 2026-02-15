@@ -14,8 +14,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Archs\MIPS\Zarem.MIPS\Zarem.MIPS.csproj" />
-		<ProjectReference Include="..\..\ObjFormats\ObjFormats.LibOF\ObjFormats.LibOF.csproj" />
-		<ProjectReference Include="..\..\ObjFormats\ObjFormats.RASM\ObjFormats.RASM.csproj" />
+		<ProjectReference Include="..\..\ObjFormats\ObjFormats.LibOF\Zarem.ELF.csproj" />
+		<ProjectReference Include="..\..\ObjFormats\ObjFormats.RASM\Zarem.RASM.csproj" />
 	</ItemGroup>
 
 </Project>

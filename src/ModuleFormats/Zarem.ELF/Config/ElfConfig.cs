@@ -2,7 +2,7 @@
 
 using Zarem.Config;
 
-namespace ObjFormats.LibOF.Elf.Config;
+namespace ObjFormats.LibOF.Config;
 
 /// <summary>
 /// A class containing elf configuration info.

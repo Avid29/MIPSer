@@ -1,8 +1,8 @@
 ﻿// Avishai Dernis 2025
 
 using LibObjectFile.Elf;
-using ObjFormats.LibOF.Elf.Config;
-using ObjFormats.LibOF.Elf.Extensions;
+using ObjFormats.LibOF.Config;
+using ObjFormats.LibOF.Extensions;
 using Zarem.Assembler.Config;
 using Zarem.Models.Addressing;
 using Zarem.Models.Modules;

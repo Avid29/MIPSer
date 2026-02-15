@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\src\ObjFormats\ObjFormats.RASM\ObjFormats.RASM.csproj" />
+	  <ProjectReference Include="..\..\..\src\ModuleFormats\Zarem.RASM\Zarem.RASM.csproj" />
 	  <ProjectReference Include="..\..\Archs\MIPS\Test.Linker.MIPS\Test.Linker.MIPS.csproj" />
 	  <ProjectReference Include="..\Test.Formats\Test.ObjFormats.csproj" />
 	</ItemGroup>

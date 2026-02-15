@@ -2,8 +2,8 @@
 
 using CommunityToolkit.Diagnostics;
 using LibObjectFile.Elf;
-using ObjFormats.LibOF.Elf.Config;
-using ObjFormats.LibOF.Elf.Extensions;
+using ObjFormats.LibOF.Config;
+using ObjFormats.LibOF.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using Zarem.Assembler.Config;

@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\src\ObjFormats\ObjFormats.LibOF\ObjFormats.LibOF.csproj" />
+	  <ProjectReference Include="..\..\..\src\ModuleFormats\Zarem.ELF\Zarem.ELF.csproj" />
 	  <ProjectReference Include="..\Test.Formats\Test.ObjFormats.csproj" />
 	</ItemGroup>
 
