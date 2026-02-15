@@ -5,6 +5,6 @@ namespace Zarem.Config;
 /// <summary>
 /// A base class for a object format configuration class.
 /// </summary>
-public abstract class FormatConfig
+public abstract class FormatConfig : IConfig
 {
 }

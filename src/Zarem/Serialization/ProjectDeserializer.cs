@@ -6,8 +6,11 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Zarem.Assembler.Config;
 using Zarem.Config;
-using Zarem.Serialization.Registry;
+using Zarem.Emulator.Config;
+using Zarem.Registry;
+using Zarem.Registry.Descriptors;
 
 namespace Zarem.Serialization;
 
@@ -28,14 +31,7 @@ public static partial class ProjectSerializer
         var doc = XDocument.Load(path);
         var root = doc.Root!;
 
-        var typeName = root.Attribute("Type")?.Value;
-        Guard.IsNotNull(typeName);
-
-        var projectInfo = ProjectTypeRegistry.GetProjectType(typeName);
-        Guard.IsNotNull(projectInfo);
-
-        var config = (IProjectConfig?)Activator.CreateInstance(projectInfo.ConfigType);
-        Guard.IsNotNull(config);
+        var config = new ProjectConfig();
 
         ReadObjectProperties(root, config);
 
@@ -52,9 +48,13 @@ public static partial class ProjectSerializer
                 continue;
 
             // Select deserialization function
+            // TODO: Dynamically lookup config type
             DeserializeDelegate @delegate = prop switch
             {
-                _ when typeof(FormatConfig).IsAssignableFrom(prop.PropertyType) => DeserializeFormatConfig,
+                _ when typeof(IArchitectureConfig).IsAssignableFrom(prop.PropertyType) => (obj, child, prop) => DeserializeConfig(ZaremRegistry.Architectures, obj, child, prop),
+                _ when typeof(AssemblerConfig).IsAssignableFrom(prop.PropertyType) => (obj, child, prop) => DeserializeConfig(ZaremRegistry.Assemblers, obj, child, prop),
+                _ when typeof(EmulatorConfig).IsAssignableFrom(prop.PropertyType) => (obj, child, prop) => DeserializeConfig(ZaremRegistry.Emulators, obj, child, prop),
+                _ when typeof(FormatConfig).IsAssignableFrom(prop.PropertyType) => (obj, child, prop) => DeserializeConfig(ZaremRegistry.Formats, obj, child, prop),
                 _ when prop.PropertyType.IsEnum => DeserializeEnum,
                 _ when IsSimple(prop.PropertyType) => DeserializeSimple,
                 _ => DeserializeObject,
@@ -64,21 +64,21 @@ public static partial class ProjectSerializer
             @delegate(obj, child, prop);
         }
     }
-
-    private static void DeserializeFormatConfig(object obj, XElement child, PropertyInfo prop)
+    private static void DeserializeConfig<T>(DescriptorRegistry<T> registry, object obj, XElement child, PropertyInfo prop)
+        where T : class, IDescriptor
     {
-        var formatTypeName = child.Attribute("Type")?.Value;
-        Guard.IsNotNull(formatTypeName);
+        var identifier = child.Attribute("Type")?.Value;
+        Guard.IsNotNull(identifier);
 
-        var typeInfo = ProjectTypeRegistry.GetFormatType(formatTypeName);
-        Guard.IsNotNull(typeInfo);
+        var descriptor = registry.Get(identifier);
+        Guard.IsNotNull(descriptor);
 
-        var formatInstance = (FormatConfig?)Activator.CreateInstance(typeInfo.ConfigType);
-        Guard.IsNotNull(formatInstance);
+        var config = Activator.CreateInstance(descriptor.ConfigType);
+        Guard.IsNotNull(config);
 
-        ReadObjectProperties(child, formatInstance);
+        ReadObjectProperties(child, config);
 
-        prop.SetValue(obj, formatInstance);
+        prop.SetValue(obj, config);
     }
 
     private static void DeserializeSimple(object obj, XElement child, PropertyInfo prop)

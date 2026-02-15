@@ -1,11 +1,13 @@
 ﻿// Avishai Dernis 2026
 
+using Zarem.Config;
+
 namespace Zarem.Emulator.Config;
 
 /// <summary>
 /// A class containing emulator configurations.
 /// </summary>
-public class EmulatorConfig
+public class EmulatorConfig : IConfig
 {
     /// <summary>
     /// Gets or sets whether or not the host should handle traps.

@@ -8,6 +8,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using Zarem.Assembler.Config;
+using Zarem.Config;
 using Zarem.Elf.Config;
 using Zarem.Emulator.Config;
 using Zarem.Messages.Navigation;
@@ -117,13 +118,16 @@ public partial class CreateProjectViewModel : PageViewModel
             return;
 
         // Create the file config
-        var projectConfig = new MIPSProjectConfig
+        var projectConfig = new ProjectConfig
         {
             Name = ProjectName,
             ConfigPath = projectFilePath,
-            MipsVersion = MipsVersion,
-            AssemblerConfig = new MIPSAssemblerConfig(MipsVersion),
-            EmulatorConfig = new MIPSEmulatorConfig(MipsVersion),
+            ArchitectureConfig = new MIPSArchitectureConfig()
+            {
+                MipsVersion = MipsVersion,
+                AssemblerConfig = new MIPSAssemblerConfig(),
+                EmulatorConfig = new MIPSEmulatorConfig(),
+            },
             FormatConfig = new ElfConfig(),
         };
 

@@ -2,17 +2,12 @@
 
 using CommunityToolkit.Diagnostics;
 using System;
-using System.IO;
-using System.Linq;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
 using Zarem.Assembler.Config;
 using Zarem.Components;
 using Zarem.Components.Interfaces;
 using Zarem.Config;
 using Zarem.Emulator.Config;
-using Zarem.Serialization.Registry;
+using Zarem.Registry;
 
 namespace Zarem.Serialization;
 
@@ -28,20 +23,20 @@ public static class ProjectFactory
     /// <returns></returns>
     public static IProject Create(IProjectConfig config)
     {
-        Guard.IsNotNull(config.AssemblerConfig);
-        Guard.IsNotNull(config.EmulatorConfig);
+        Guard.IsNotNull(config.ArchitectureConfig?.AssemblerConfig);
+        Guard.IsNotNull(config.ArchitectureConfig?.EmulatorConfig);
         Guard.IsNotNull(config.FormatConfig);
 
         // Retrieve type info
-        var typeInfo = ProjectTypeRegistry.GetProjectType(config.GetType());
-        var formatTypeInfo = ProjectTypeRegistry.GetFormatType(config.FormatConfig.GetType());
-        Guard.IsNotNull(typeInfo);
-        Guard.IsNotNull(formatTypeInfo);
+        var archInfo = ZaremRegistry.Architectures.Get(config.ArchitectureConfig.GetType());
+        var formatInfo = ZaremRegistry.Formats.Get(config.FormatConfig.GetType());
+        Guard.IsNotNull(archInfo);
+        Guard.IsNotNull(formatInfo);
 
         // Create components
-        var assemble = CreateComponent<IAssembleComponent, AssemblerConfig>(typeof(AssembleComponent<,>), typeInfo.ProjectType.AssemblerType, config.AssemblerConfig);
-        var emulate = CreateComponent<IEmulateComponent, EmulatorConfig>(typeof(EmulateComponent<,>), typeInfo.ProjectType.EmulatorType, config.EmulatorConfig);
-        var format = CreateComponent<IFormatComponent, FormatConfig>(typeof(FormatComponent<,>), formatTypeInfo.FormatType, config.FormatConfig);
+        var assemble = CreateComponent<IAssembleComponent, AssemblerConfig>(typeof(AssembleComponent<,>), archInfo.Assembler.AssemblerType, config.ArchitectureConfig.AssemblerConfig);
+        var emulate = CreateComponent<IEmulateComponent, EmulatorConfig>(typeof(EmulateComponent<,>), archInfo.Emulator.EmulatorType, config.ArchitectureConfig.EmulatorConfig);
+        var format = CreateComponent<IFormatComponent, FormatConfig>(typeof(FormatComponent<,>), formatInfo.FormatType, config.FormatConfig);
 
         var project = new Project(config, assemble, emulate, format);
         Guard.IsNotNull(project);

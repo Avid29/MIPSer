@@ -1,8 +1,6 @@
 ﻿// Avishai Dernis 2025
 
 using System.IO;
-using Zarem.Assembler.Config;
-using Zarem.Emulator.Config;
 
 namespace Zarem.Config;
 
@@ -29,12 +27,7 @@ public interface IProjectConfig
     /// <summary>
     /// Gets the assembler configuration for the project.
     /// </summary>
-    AssemblerConfig? AssemblerConfig { get; }
-
-    /// <summary>
-    /// Gets the emulator configuration for the project.
-    /// </summary>
-    EmulatorConfig? EmulatorConfig { get; }
+    IArchitectureConfig? ArchitectureConfig { get; }
 
     /// <summary>
     /// Gets the format configuration for the project.

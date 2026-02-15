@@ -1,11 +1,13 @@
 ﻿// Adam Dernis 2024
 
+using Zarem.Config;
+
 namespace Zarem.Assembler.Config;
 
 /// <summary>
 /// A base class for an assembler configuration.
 /// </summary>
-public abstract class AssemblerConfig
+public abstract class AssemblerConfig : IConfig
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="AssemblerConfig"/> class.

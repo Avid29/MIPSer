@@ -2,13 +2,15 @@
 
 using CommunityToolkit.Diagnostics;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using Zarem.Assembler.Config;
 using Zarem.Config;
-using Zarem.Serialization.Registry;
+using Zarem.Emulator.Config;
+using Zarem.Registry;
+using Zarem.Registry.Descriptors;
 
 namespace Zarem.Serialization;
 
@@ -26,13 +28,8 @@ public static partial class ProjectSerializer
     /// <param name="path">The path to store the result in.</param>
     public static void Serialize(IProjectConfig config, string path)
     {
-        var configType = config.GetType();
-
-        var typeInfo = ProjectTypeRegistry.GetProjectType(configType);
-        Guard.IsNotNull(typeInfo);
-
         // Create the root node
-        var root = new XElement("Project", new XAttribute("Type", typeInfo.TypeName));
+        var root = new XElement("Project");
 
         // Serialize ProjectConfig properties automatically
         WriteObjectProperties(root, config);
@@ -58,7 +55,10 @@ public static partial class ProjectSerializer
             // Select serialization function
             SerializeDelegate @delegate = prop switch
             {
-                _ when value is FormatConfig => SerializeFormatConfig,
+                _ when value is IArchitectureConfig => (parent, prop, value) => SerializeConfig(ZaremRegistry.Architectures, parent, prop, value),
+                _ when value is AssemblerConfig => (parent, prop, value) => SerializeConfig(ZaremRegistry.Assemblers, parent, prop, value),
+                _ when value is EmulatorConfig => (parent, prop, value) => SerializeConfig(ZaremRegistry.Emulators, parent, prop, value),
+                _ when value is FormatConfig => (parent, prop, value) => SerializeConfig(ZaremRegistry.Formats, parent, prop, value),
                 _ when prop.PropertyType.IsEnum => SerializeEnum,
                 _ when IsSimple(prop.PropertyType) => SerializeSimple,
                 _ => SerializeObject,
@@ -69,15 +69,16 @@ public static partial class ProjectSerializer
         }
     }
 
-    private static void SerializeFormatConfig(XElement parent, PropertyInfo prop, object value)
+    private static void SerializeConfig<T>(DescriptorRegistry<T> registry, XElement parent, PropertyInfo prop, object value)
+        where T : class, IDescriptor
     {
-        var typeInfo = ProjectTypeRegistry.GetFormatType(value.GetType());
-        Guard.IsNotNull(typeInfo);
+        var descriptor = registry.Get(value.GetType());
+        Guard.IsNotNull(descriptor);
 
-        var formatElement = new XElement("FormatConfig", new XAttribute("Type", typeInfo.TypeName));
+        var element = new XElement(prop.Name, new XAttribute("Type", descriptor.Identifier));
 
-        WriteObjectProperties(formatElement, value);
-        parent.Add(formatElement);
+        WriteObjectProperties(element, value);
+        parent.Add(element);
     }
 
     private static void SerializeSimple(XElement parent, PropertyInfo prop, object value)

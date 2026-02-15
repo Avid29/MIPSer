@@ -11,9 +11,7 @@ namespace Zarem.Config;
 /// A model for project configurations.
 /// </summary>
 [XmlRoot("Project")]
-public abstract partial class ProjectConfig<TAsmConfig, TEmuConfig> : IProjectConfig
-    where TAsmConfig : AssemblerConfig
-    where TEmuConfig : EmulatorConfig
+public partial class ProjectConfig : IProjectConfig
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="IProjectConfig"/> class.
@@ -35,15 +33,8 @@ public abstract partial class ProjectConfig<TAsmConfig, TEmuConfig> : IProjectCo
     public string? RootFolderPath => Path.GetDirectoryName(ConfigPath);
 
     /// <inheritdoc/>
-    public TAsmConfig? AssemblerConfig { get; init; }
-
-    /// <inheritdoc/>
-    public TEmuConfig? EmulatorConfig { get; init; }
+    public IArchitectureConfig? ArchitectureConfig { get; init; }
 
     /// <inheritdoc/>
     public FormatConfig? FormatConfig { get; init; }
-
-    AssemblerConfig? IProjectConfig.AssemblerConfig => AssemblerConfig;
-
-    EmulatorConfig? IProjectConfig.EmulatorConfig => EmulatorConfig;
 }

@@ -14,7 +14,7 @@ namespace Zarem;
 public partial class Project : IProject
 {
     /// <summary>
-    /// Initialzes a new instance of the <see cref="ProjectConfig{TAsmConfig, TEmuConfig}"/> class.
+    /// Initialzes a new instance of the <see cref="Project"/> class.
     /// </summary>
     internal Project(IProjectConfig config, IAssembleComponent assemble, IEmulateComponent emulate, IFormatComponent format)
     {

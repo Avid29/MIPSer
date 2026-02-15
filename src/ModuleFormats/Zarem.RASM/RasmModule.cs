@@ -6,7 +6,6 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Zarem.Assembler.Models.Modules;
-using Zarem.Attributes;
 using Zarem.Emulator.Models.Modules;
 using Zarem.RASM;
 using Zarem.RASM.Config;
@@ -16,7 +15,6 @@ namespace ObjFormats.RASM;
 /// <summary>
 /// A fully assembled object module in RASM format.
 /// </summary>
-[FormatType("rasm", typeof(RasmConfig))]
 public partial class RasmModule : IBuildModule<RasmModule, RasmConfig>, IExecutableModule
 {
     private static readonly string[] SectionNames =
