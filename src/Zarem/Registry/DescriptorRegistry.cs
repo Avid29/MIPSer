@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Zarem.Registry.Descriptors;
 
 namespace Zarem.Registry;
@@ -55,4 +56,9 @@ public class DescriptorRegistry<T>
         _idTable.TryAdd(descriptor.Identifier, descriptor);
         _configTable.TryAdd(descriptor.ConfigType, descriptor);
     }
+
+    /// <summary>
+    /// Gets a <see cref="IEnumerable{T}"/> of the ids in the regsitry.
+    /// </summary>
+    public IEnumerable<string> GetIds() => _idTable.Keys;
 }

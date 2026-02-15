@@ -1,5 +1,6 @@
 ﻿// Avishai Dernis 2025
 
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using System;
@@ -14,6 +15,7 @@ using Zarem.Emulator.Config;
 using Zarem.Messages.Navigation;
 using Zarem.MIPS;
 using Zarem.Models.Instructions.Enums;
+using Zarem.Registry;
 using Zarem.Serialization;
 using Zarem.Services;
 using Zarem.Services.Files;
@@ -30,8 +32,6 @@ public partial class CreateProjectViewModel : PageViewModel
     private readonly ILocalizationService _localizationService;
     private readonly IFileSystemService _fileSystemService;
     private readonly IProjectService _projectService;
-
-    private MipsVersion _mipsVersion = MipsVersion.MipsIII;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CheatSheetViewModel"/> class.
@@ -78,13 +78,13 @@ public partial class CreateProjectViewModel : PageViewModel
     }
 
     /// <summary>
-    /// Gets or sets the mips version for the project to create.
+    /// Gets or sets the mips version for the project.
     /// </summary>
     public MipsVersion MipsVersion
     {
-        get => _mipsVersion;
-        set => SetProperty(ref _mipsVersion, value);
-    }
+        get => field;
+        set => SetProperty(ref field, value);
+    } = MipsVersion.MipsIII;
 
     /// <summary>
     /// Gets the list of available mips version options.
@@ -92,9 +92,23 @@ public partial class CreateProjectViewModel : PageViewModel
     public IEnumerable<MipsVersion> MipsVersionOptions => Enum.GetValues<MipsVersion>();
 
     /// <summary>
+    /// Gets or sets the selected module format for the project.
+    /// </summary>
+    public string? ModuleFormat
+    {
+        get => field;
+        set => SetProperty(ref field, value); 
+    }
+
+    /// <summary>
+    /// Gets a list of the avilable formats
+    /// </summary>
+    public IEnumerable<string> AvailableModuleFormats => ZaremRegistry.Formats.GetIds();
+
+    /// <summary>
     /// Gets whether or not the project can be created.
     /// </summary>
-    [MemberNotNullWhen(true, nameof(ProjectName), nameof(FolderPath))]
+    [MemberNotNullWhen(true, nameof(ProjectName), nameof(FolderPath), nameof(ModuleFormat))]
     public bool ReadyToCreate => ProjectName is not null && FolderPath is not null;
 
     [RelayCommand]
@@ -117,6 +131,16 @@ public partial class CreateProjectViewModel : PageViewModel
         if (projectFile is null)
             return;
 
+        // Attempt to retrieve the format descriptor
+        var formatDescriptor = ZaremRegistry.Formats.Get(ModuleFormat);
+        if (formatDescriptor is null)
+            return;
+
+        // Attempt to create the config
+        var formatConfig = (FormatConfig?)Activator.CreateInstance(formatDescriptor.ConfigType);
+        if (formatConfig is null)
+            return;
+
         // Create the file config
         var projectConfig = new ProjectConfig
         {
@@ -128,7 +152,7 @@ public partial class CreateProjectViewModel : PageViewModel
                 AssemblerConfig = new MIPSAssemblerConfig(),
                 EmulatorConfig = new MIPSEmulatorConfig(),
             },
-            FormatConfig = new ElfConfig(),
+            FormatConfig = formatConfig,
         };
 
         // Write project config to the file 
