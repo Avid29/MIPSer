@@ -1,5 +1,8 @@
 <Solution>
   <Configurations>
+    <BuildType Name="Alpha" />
+    <BuildType Name="Debug" />
+    <BuildType Name="Release" />
     <Platform Name="ARM" />
     <Platform Name="arm64" />
     <Platform Name="x64" />
@@ -17,6 +20,9 @@
     <Project Path="src/Clients/Zarem.Console/Zarem.Console.csproj" />
     <Project Path="src/Clients/Zarem.ViewModels/Zarem.ViewModels.csproj" />
     <Project Path="src/Clients/Zarem.Windows/Zarem.Windows.csproj">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
       <Platform Solution="*|ARM" Project="x64" />
       <Platform Solution="*|arm64" Project="ARM64" />
       <Platform Solution="*|x64" Project="x64" />
@@ -25,8 +31,18 @@
     </Project>
   </Folder>
   <Folder Name="/ObjFormats/">
-    <Project Path="src/ObjFormats/ObjFormats.LibOF/ObjFormats.LibOF.csproj" />
-    <Project Path="src/ObjFormats/ObjFormats.RASM/ObjFormats.RASM.csproj" />
+    <Project Path="src/ObjFormats/ObjFormats.LibOF/ObjFormats.LibOF.csproj">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x64" Project="Release" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
+    </Project>
+    <Project Path="src/ObjFormats/ObjFormats.RASM/ObjFormats.RASM.csproj">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x64" Project="Release" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
+    </Project>
   </Folder>
   <Folder Name="/SolutionItems/">
     <File Path=".editorconfig" />
@@ -41,22 +57,67 @@
   <Folder Name="/Submodules/">
     <File Path="submodules/Directory.Build.props" />
     <File Path="submodules/WinUIEdit/UseWinUI3.txt" />
-    <Project Path="submodules/WinUIEdit/WinUIEditor/WinUIEditor.vcxproj" Id="290647e3-d8cb-46b5-87ce-409f721e441a" />
+    <Project Path="submodules/WinUIEdit/WinUIEditor/WinUIEditor.vcxproj" Id="290647e3-d8cb-46b5-87ce-409f721e441a">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x64" Project="Release" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
+    </Project>
   </Folder>
   <Folder Name="/Tests/" />
   <Folder Name="/Tests/Archs/" />
   <Folder Name="/Tests/Archs/MIPS/">
-    <Project Path="tests/Archs/MIPS/Test.Assembler.MIPS.Live/Test.Assembler.MIPS.Live.csproj" />
-    <Project Path="tests/Archs/MIPS/Test.Assembler.MIPS/Test.Assembler.MIPS.csproj" />
-    <Project Path="tests/Archs/MIPS/Test.Emulator.MIPS/Test.Emulator.MIPS.csproj" />
-    <Project Path="tests/Archs/MIPS/Test.Linker.MIPS/Test.Linker.MIPS.csproj" />
+    <Project Path="tests/Archs/MIPS/Test.Assembler.MIPS.Live/Test.Assembler.MIPS.Live.csproj">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x64" Project="Release" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
+    </Project>
+    <Project Path="tests/Archs/MIPS/Test.Assembler.MIPS/Test.Assembler.MIPS.csproj">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x64" Project="Release" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
+    </Project>
+    <Project Path="tests/Archs/MIPS/Test.Emulator.MIPS/Test.Emulator.MIPS.csproj">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x64" Project="Release" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
+    </Project>
+    <Project Path="tests/Archs/MIPS/Test.Linker.MIPS/Test.Linker.MIPS.csproj">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x64" Project="Release" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
+    </Project>
     <Project Path="tests/Archs/MIPS/Test.MIPS.Asms/Test.MIPS.Asms.vcxitems" Id="f152d20e-aa8a-4d50-9852-0eb0b4a962c4" />
-    <Project Path="tests/Archs/MIPS/Test.MIPS/Test.MIPS.csproj" />
+    <Project Path="tests/Archs/MIPS/Test.MIPS/Test.MIPS.csproj">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x64" Project="Release" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
+    </Project>
   </Folder>
   <Folder Name="/Tests/ObjFormats/">
-    <Project Path="tests/ObjFormats/Test.ELF/Test.ELF.csproj" />
-    <Project Path="tests/ObjFormats/Test.Formats/Test.ObjFormats.csproj" />
-    <Project Path="tests/ObjFormats/Test.RASM/Test.RASM.csproj" />
+    <Project Path="tests/ObjFormats/Test.ELF/Test.ELF.csproj">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x64" Project="Release" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
+    </Project>
+    <Project Path="tests/ObjFormats/Test.Formats/Test.ObjFormats.csproj">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x64" Project="Release" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
+    </Project>
+    <Project Path="tests/ObjFormats/Test.RASM/Test.RASM.csproj">
+      <BuildType Solution="Alpha|ARM" Project="Debug" />
+      <BuildType Solution="Alpha|arm64" Project="Debug" />
+      <BuildType Solution="Alpha|x64" Project="Release" />
+      <BuildType Solution="Alpha|x86" Project="Debug" />
+    </Project>
   </Folder>
   <Project Path="src/Zarem.Assembler/Zarem.Assembler.csproj" Id="a4a13c0e-dc3b-4c0d-aa24-5e7e3c2f5500" />
   <Project Path="src/Zarem.Base/Zarem.Base.csproj" />

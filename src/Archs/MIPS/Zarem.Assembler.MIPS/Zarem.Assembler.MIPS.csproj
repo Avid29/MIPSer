@@ -3,6 +3,7 @@
   <PropertyGroup>
 	  <RootNamespace>Zarem.Assembler</RootNamespace>
 	  <DefaultLanguage>en</DefaultLanguage>
+	  <Configurations>Debug;Release;Alpha</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

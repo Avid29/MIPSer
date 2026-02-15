@@ -9,10 +9,13 @@ using Zarem.Assembler.Models.Instructions;
 using Zarem.Assembler.Parsers;
 using Zarem.Assembler.Tokenization.Models.Enums;
 using Zarem.Disassembler;
-using Zarem.Disassembler.Services;
 using Zarem.Models.Instructions;
 using Zarem.Models.Instructions.Enums;
+
+#if DEBUG
+using Zarem.Disassembler.Services;
 using Zarem.Services;
+#endif
 
 namespace Test.Assembler.MIPS.Live;
 
@@ -22,8 +25,9 @@ public class Program()
 
     static async Task Main()
     {
+#if DEBUG
         ServiceCollection.DisassemblerService = new MIPSDisassemblerService(new());
-
+#endif
         var program = new Program();
         while (true)
         {

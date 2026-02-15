@@ -4,6 +4,7 @@
 		<OutputType>Exe</OutputType>
 		<RootNamespace>Zarem.Console</RootNamespace>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<Configurations>Debug;Release;Alpha</Configurations>
 	</PropertyGroup>
 
 	<ItemGroup>

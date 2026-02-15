@@ -120,6 +120,12 @@
   <data name="AppDisplayName" xml:space="preserve">
     <value>Zarem</value>
   </data>
+  <data name="AppDisplayName-Alpha" xml:space="preserve">
+    <value>Zarem - Alpha</value>
+  </data>
+  <data name="AppDisplayName-Dev" xml:space="preserve">
+    <value>Zarem - Dev</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Zarem is an IDE, Assembler, and Interpreter for the MIPS assembly language and architecture.</value>
   </data>

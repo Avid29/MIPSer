@@ -2,6 +2,7 @@
 
   <PropertyGroup>
 	  <RootNamespace>Zarem</RootNamespace>
+	  <Configurations>Debug;Release;Alpha</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

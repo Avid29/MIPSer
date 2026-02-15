@@ -21,8 +21,8 @@
     </ResourceDictionary.ThemeDictionaries>
 
     <!--  App  -->
-    <ImageSource x:Key="AppIconSmall">ms-appx:///Assets/AppIconSources/Blank88x88.png</ImageSource>
-    <ImageSource x:Key="AppIconLarge">ms-appx:///Assets/AppIconSources/Blank.svg</ImageSource>
+    <ImageSource x:Key="AppIconSmall">ms-appx:///Assets/AppIcons/Store/StoreLogo.scale-100.png</ImageSource>
+    <ImageSource x:Key="AppIconLarge">ms-appx:///Assets/AppIcons/Store/Blank.svg</ImageSource>
 
     <!--  Logs  -->
     <ImageSource x:Key="ErrorIcon">ms-appx:///Assets/Icons/Severity/Error.svg</ImageSource>

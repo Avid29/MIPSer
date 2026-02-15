@@ -1,8 +1,5 @@
 ﻿// Adam Dernis 2025
 
-
-// Adam Dernis 2025
-
 using Zarem.Models.Instructions;
 
 namespace Zarem.Services.Interfaces;

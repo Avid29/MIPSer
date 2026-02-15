@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Nullable>enable</Nullable>
 	<RootNamespace>Zarem</RootNamespace>
+	<Configurations>Debug;Release;Alpha</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

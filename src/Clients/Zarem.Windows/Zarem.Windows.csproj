@@ -12,7 +12,19 @@
 		<UseWinUI>true</UseWinUI>
 		<EnablePreviewMsixTooling>true</EnablePreviewMsixTooling>
 		<WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+		<Configurations>Debug;Release;Alpha</Configurations>
 	</PropertyGroup>
+	<ItemGroup>
+	  <AppxManifest Include="Package.appxmanifest" Condition="'$(Configuration)' == 'Release'">
+	    <SubType>Designer</SubType>
+	  </AppxManifest>
+	  <AppxManifest Include="Package-Alpha.appxmanifest" Condition="'$(Configuration)' == 'Alpha'">
+	    <SubType>Designer</SubType>
+	  </AppxManifest>
+	  <AppxManifest Include="Package-Dev.appxmanifest" Condition="'$(Configuration)' == 'Debug'">
+	    <SubType>Designer</SubType>
+	  </AppxManifest>
+	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Labs.WinUI.ColorAnalyzer" Version="0.1.251101-build.2372" />
