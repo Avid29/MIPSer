@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Zarem.Projects\Zarem.Projects.csproj" />
+    <ProjectReference Include="..\..\..\Zarem\Zarem.csproj" />
     <ProjectReference Include="..\Zarem.Assembler.MIPS\Zarem.Assembler.MIPS.csproj" />
     <ProjectReference Include="..\Zarem.Emulator.MIPS\Zarem.Emulator.MIPS.csproj" />
   </ItemGroup>

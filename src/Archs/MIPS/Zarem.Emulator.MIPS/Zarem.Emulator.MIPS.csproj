@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-	  <RootNamespace>Zarem.Emulator</RootNamespace>
-	  <Configurations>Debug;Release;Alpha</Configurations>
-  </PropertyGroup>
+	<PropertyGroup>
+		<RootNamespace>Zarem.Emulator</RootNamespace>
+		<Configurations>Debug;Release;Alpha</Configurations>
+	</PropertyGroup>
 
 	<ItemGroup>
-    <ProjectReference Include="..\..\..\Zarem.Emulator\Zarem.Emulator.csproj" />
-    <ProjectReference Include="..\Zarem.MIPS.Base\Zarem.MIPS.Base.csproj" />
-  </ItemGroup>
+		<ProjectReference Include="..\..\..\Zarem.Emulator\Zarem.Emulator.csproj" />
+		<ProjectReference Include="..\Zarem.MIPS.Base\Zarem.MIPS.Base.csproj" />
+	</ItemGroup>
 
 </Project>

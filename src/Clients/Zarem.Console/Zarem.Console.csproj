@@ -13,7 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Archs\MIPS\Zarem.Assembler.MIPS\Zarem.Assembler.MIPS.csproj" />
+		<ProjectReference Include="..\..\Archs\MIPS\Zarem.MIPS\Zarem.MIPS.csproj" />
 		<ProjectReference Include="..\..\ObjFormats\ObjFormats.LibOF\ObjFormats.LibOF.csproj" />
 		<ProjectReference Include="..\..\ObjFormats\ObjFormats.RASM\ObjFormats.RASM.csproj" />
 	</ItemGroup>

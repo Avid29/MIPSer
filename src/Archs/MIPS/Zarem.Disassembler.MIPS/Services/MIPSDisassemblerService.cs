@@ -1,12 +1,12 @@
 ﻿// Adam Dernis 2025
 
+#if DEBUG
+
 using Zarem.Assembler.Config;
 using Zarem.Models.Instructions;
 using Zarem.Services.Interfaces;
 
 namespace Zarem.Disassembler.Services;
-
-#if DEBUG
 
 /// <summary>
 /// An implementation of the <see cref="IDisassemblerService"/>.
