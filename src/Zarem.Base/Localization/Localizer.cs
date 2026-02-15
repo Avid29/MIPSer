@@ -12,8 +12,7 @@ namespace Zarem.Localization;
 /// </summary>
 public class Localizer : IStringLocalizer
 {
-    private ResourceManager _resourceManager;
-    private ResourceSet? _neutralSet;
+    private readonly ResourceManager _resourceManager;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Localizer"/> class.
@@ -21,13 +20,6 @@ public class Localizer : IStringLocalizer
     public Localizer(string @namespace, Assembly assembly)
     {
         _resourceManager = new ResourceManager(@namespace, assembly);
-
-        // Create fallback using neutral set
-        var neutral = assembly.GetCustomAttributes<NeutralResourcesLanguageAttribute>().FirstOrDefault()?.CultureName;
-        if (neutral is null)
-            return;
-
-        _neutralSet = _resourceManager.GetResourceSet(CultureInfo.GetCultureInfo(neutral), true, true);
     }
 
     /// <summary>
@@ -40,13 +32,6 @@ public class Localizer : IStringLocalizer
             var localized = _resourceManager.GetString(key);
             if (!string.IsNullOrEmpty(localized))
                 return localized;
-
-            if (_neutralSet is not null)
-            {
-                var fallback = _neutralSet.GetString(key);
-                if (!string.IsNullOrEmpty(fallback))
-                    return fallback;
-            }
 
             return null;
         }
