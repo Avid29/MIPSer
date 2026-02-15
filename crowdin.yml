@@ -1,5 +1,7 @@
 files:
   - source: /src/Clients/Zarem.Windows/Strings/en/*.resw
     translation: /src/Clients/Zarem.Windows/Strings/%two_letters_code%/%original_file_name%
-  - source: /**/Logger.en.resx
-    translation: /%original_path%/Logger.%two_letters_code%.resx
+  - source: /**/*.resx
+    ignore:
+      - /**/*.*.resx
+    translation: /%original_path%/%original_file_name%.%two_letters_code%.resx
