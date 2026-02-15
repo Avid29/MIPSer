@@ -6,6 +6,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="using:Zarem.Windows.Views.Shell"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d">
 
     <!--Title Bar-->
@@ -23,7 +24,6 @@
         <MenuBar Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Left">
             <!--  File  -->
             <MenuBarItem x:Uid="/TitleBar/FileMBI" Title="File">
-
                 <!--  New  -->
                 <MenuFlyoutSubItem x:Uid="/TitleBar/NewMFSI" Text="New">
                     <MenuFlyoutItem x:Uid="/TitleBar/NewProjectMFI" Text="New Project"
@@ -313,9 +313,11 @@
             
             <!--  Help  -->
             <MenuBarItem x:Uid="/TitleBar/HelpMBI" Title="Help">
-                <MenuFlyoutItem x:Uid="/TitleBar/CheatSheetMFI"
-                                Text="Show Cheatsheet"
-                                Command="{x:Bind ViewModel.OpenCheatSheetCommand, Mode=OneWay}"/>
+                <MenuFlyoutItem x:Uid="/TitleBar/MIPSCheatSheetMFI"
+                                Text="Show MIPS Cheatsheet"
+                                Command="{x:Bind ViewModel.OpenMIPSCheatSheetCommand, Mode=OneWay}"/>
+                <MenuFlyoutItem x:Name="WikiMFI" x:Uid="/TitleBar/OpenWikiMFI" Text="Open Wiki"
+                                Click="WikiMFI_Click"/>
                 <MenuFlyoutSeparator/>
                 <MenuFlyoutItem x:Uid="/TitleBar/WelcomeMFI"
                                 Text="Open Welcome Page"

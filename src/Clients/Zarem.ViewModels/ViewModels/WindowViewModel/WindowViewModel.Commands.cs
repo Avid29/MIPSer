@@ -12,7 +12,7 @@ public partial class WindowViewModel
     private void OpenAbout() => MainViewModel.GoToPageByType<AboutPageViewModel>();
 
     [RelayCommand]
-    private void OpenCheatSheet() => MainViewModel.GoToPageByType<CheatSheetViewModel>();
+    private void OpenMIPSCheatSheet() => MainViewModel.GoToPageByType<CheatSheetViewModel>();
 
     [RelayCommand]
     private void OpenCreateProject() => MainViewModel.GoToPageByType<CreateProjectViewModel>();

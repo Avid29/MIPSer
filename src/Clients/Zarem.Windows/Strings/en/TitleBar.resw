@@ -135,7 +135,7 @@
   <data name="BuildProjectMFI.Text" xml:space="preserve">
     <value>Build Project</value>
   </data>
-  <data name="CheatSheetMFI.Text" xml:space="preserve">
+  <data name="MIPSCheatSheetMFI.Text" xml:space="preserve">
     <value>Show Cheat Sheet</value>
   </data>
   <data name="CleanFileMFI.Text" xml:space="preserve">
@@ -269,5 +269,8 @@
   </data>
   <data name="WelcomeMFI.Text" xml:space="preserve">
     <value>Open Welcome Page</value>
+  </data>
+  <data name="OpenWikiMFI.Text" xml:space="preserve">
+    <value>Open Wiki</value>
   </data>
 </root>

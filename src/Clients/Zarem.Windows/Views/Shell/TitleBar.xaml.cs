@@ -1,12 +1,12 @@
 // Adam Dernis 2024
 
 using CommunityToolkit.Diagnostics;
-using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Zarem.ViewModels;
-using Windows.Foundation;
+using System;
 using Windows.Graphics;
+using Windows.System;
+using Zarem.ViewModels;
 
 namespace Zarem.Windows.Views.Shell;
 
@@ -61,4 +61,7 @@ public sealed partial class TitleBar : UserControl
     }
 
     public static bool IsNotNull(object? obj) => obj is not null;
+
+    private async void WikiMFI_Click(object sender, RoutedEventArgs e)
+        => await Launcher.LaunchUriAsync(new("https://github.com/Avid29/Zarem/wiki"));
 }
