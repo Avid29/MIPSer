@@ -25,10 +25,10 @@ public interface IProject
     /// </summary>
     IProjectConfig Config { get; }
 
-    ///// <summary>
-    ///// Creates a debug session.
-    ///// </summary>
-    //DebugSession StartDebug();
+    /// <summary>
+    /// Creates a debug session.
+    /// </summary>
+    DebugSession? StartDebug();
 
     /// <summary>
     /// Builds the project.

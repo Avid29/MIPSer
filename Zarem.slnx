@@ -8,14 +8,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Folder Name="/Archs/" />
-  <Folder Name="/Archs/MIPS/">
-    <Project Path="src/Archs/MIPS/Zarem.Assembler.MIPS/Zarem.Assembler.MIPS.csproj" />
-    <Project Path="src/Archs/MIPS/Zarem.Disassembler.MIPS/Zarem.Disassembler.MIPS.csproj" />
-    <Project Path="src/Archs/MIPS/Zarem.Emulator.MIPS/Zarem.Emulator.MIPS.csproj" />
-    <Project Path="src/Archs/MIPS/Zarem.MIPS.Base/Zarem.MIPS.Base.csproj" />
-    <Project Path="src/Archs/MIPS/Zarem.MIPS/Zarem.MIPS.csproj" />
-  </Folder>
   <Folder Name="/Clients/">
     <Project Path="src/Clients/Zarem.Console/Zarem.Console.csproj" />
     <Project Path="src/Clients/Zarem.ViewModels/Zarem.ViewModels.csproj" />
@@ -30,7 +22,16 @@
       <Deploy />
     </Project>
   </Folder>
-  <Folder Name="/ModuleFormats/">
+  <Folder Name="/Plugins/" />
+  <Folder Name="/Plugins/Archs/" />
+  <Folder Name="/Plugins/Archs/MIPS/">
+    <Project Path="src/Archs/MIPS/Zarem.Assembler.MIPS/Zarem.Assembler.MIPS.csproj" />
+    <Project Path="src/Archs/MIPS/Zarem.Disassembler.MIPS/Zarem.Disassembler.MIPS.csproj" />
+    <Project Path="src/Archs/MIPS/Zarem.Emulator.MIPS/Zarem.Emulator.MIPS.csproj" />
+    <Project Path="src/Archs/MIPS/Zarem.MIPS.Base/Zarem.MIPS.Base.csproj" />
+    <Project Path="src/Archs/MIPS/Zarem.MIPS/Zarem.MIPS.csproj" />
+  </Folder>
+  <Folder Name="/Plugins/ModuleFormats/">
     <Project Path="src/ModuleFormats/Zarem.ELF/Zarem.ELF.csproj">
       <BuildType Solution="Alpha|*" Project="Debug" />
     </Project>

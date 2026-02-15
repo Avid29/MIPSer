@@ -16,6 +16,7 @@ using Zarem.Messages.Navigation;
 using Zarem.MIPS;
 using Zarem.Models.Instructions.Enums;
 using Zarem.Registry;
+using Zarem.Registry.Descriptors;
 using Zarem.Serialization;
 using Zarem.Services;
 using Zarem.Services.Files;
@@ -94,7 +95,7 @@ public partial class CreateProjectViewModel : PageViewModel
     /// <summary>
     /// Gets or sets the selected module format for the project.
     /// </summary>
-    public string? ModuleFormat
+    public IModuleFormatDescriptor? ModuleFormat
     {
         get => field;
         set => SetProperty(ref field, value); 
@@ -103,7 +104,7 @@ public partial class CreateProjectViewModel : PageViewModel
     /// <summary>
     /// Gets a list of the avilable formats
     /// </summary>
-    public IEnumerable<string> AvailableModuleFormats => ZaremRegistry.Formats.GetIds();
+    public IEnumerable<IModuleFormatDescriptor> AvailableModuleFormats => ZaremRegistry.Formats.GetDescriptors();
 
     /// <summary>
     /// Gets whether or not the project can be created.
@@ -131,13 +132,8 @@ public partial class CreateProjectViewModel : PageViewModel
         if (projectFile is null)
             return;
 
-        // Attempt to retrieve the format descriptor
-        var formatDescriptor = ZaremRegistry.Formats.Get(ModuleFormat);
-        if (formatDescriptor is null)
-            return;
-
         // Attempt to create the config
-        var formatConfig = (FormatConfig?)Activator.CreateInstance(formatDescriptor.ConfigType);
+        var formatConfig = (FormatConfig?)Activator.CreateInstance(ModuleFormat.ConfigType);
         if (formatConfig is null)
             return;
 

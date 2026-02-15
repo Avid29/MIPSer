@@ -10,13 +10,19 @@ namespace Zarem.MIPS;
 /// An <see cref="IArchitectureDescriptor"/> for the MIPS architecture.
 /// </summary>
 [ZaremPlugin]
-public class MIPSArchitectureDescriptor : IArchitectureDescriptor
+public class MIPSArchitectureDescriptor : LocalizedDescriptor<MIPSArchitectureDescriptor>, IArchitectureDescriptor
 {
     /// <inheritdoc/>
-    public string Identifier => "MIPS";
+    public override string Identifier => "MIPS";
 
     /// <inheritdoc/>
-    public Type ConfigType => typeof(MIPSArchitectureConfig);
+    protected override string ResourceNamespace => "Zarem.MIPS.Resources";
+
+    /// <inheritdoc/>
+    public string? DisplayName => Localizer["ArchitectureShortName"];
+
+    /// <inheritdoc/>
+    public override Type ConfigType => typeof(MIPSArchitectureConfig);
 
     /// <inheritdoc/>
     public IAssemblerDescriptor Assembler => new MIPSAssemblerDescriptor();

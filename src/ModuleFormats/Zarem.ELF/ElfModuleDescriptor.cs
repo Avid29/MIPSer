@@ -9,13 +9,19 @@ namespace Zarem.Elf;
 /// <summary>
 /// An <see cref="IModuleFormatDescriptor"/> for the elf format.
 /// </summary>
-public class ElfModuleDescriptor : IModuleFormatDescriptor
+public class ElfModuleDescriptor : LocalizedDescriptor<ElfModuleDescriptor>, IModuleFormatDescriptor
 {
     /// <inheritdoc/>
-    public string Identifier => "ELF";
+    public override string Identifier => "ELF";
 
     /// <inheritdoc/>
-    public Type ConfigType => typeof(ElfConfig);
+    protected override string ResourceNamespace => "Zarem.Elf.Resources";
+
+    /// <inheritdoc/>
+    public string? DisplayName => Localizer["ModuleFormatName"];
+
+    /// <inheritdoc/>
+    public override Type ConfigType => typeof(ElfConfig);
 
     /// <inheritdoc/>
     public Type FormatType => typeof(ElfModule);

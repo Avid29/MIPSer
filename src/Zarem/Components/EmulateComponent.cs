@@ -3,6 +3,7 @@
 using Zarem.Components.Interfaces;
 using Zarem.Emulator;
 using Zarem.Emulator.Config;
+using Zarem.Registry.Descriptors;
 
 namespace Zarem.Components;
 
@@ -18,13 +19,19 @@ public class EmulateComponent<TEmulator, TConfig> : IEmulateComponent
     /// <summary>
     /// Initializes a new instance of the <see cref="EmulateComponent{TEmulator, TConfig}"/> class.
     /// </summary>
-    public EmulateComponent(TConfig config)
+    public EmulateComponent(TConfig config, IEmulatorDescriptor descriptor)
     {
         Config = config;
+        Descriptor = descriptor;
     }
 
     /// <inheritdoc/>
     public TConfig Config { get; }
 
+    private IEmulatorDescriptor Descriptor { get; }
+
     EmulatorConfig IEmulateComponent.Config => Config;
+
+    /// <inheritdoc/>
+    public IEmulator? CreateEmulator() => Descriptor.Create(Config);
 }

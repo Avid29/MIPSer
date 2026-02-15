@@ -10,13 +10,19 @@ namespace Zarem.RASM;
 /// <summary>
 /// An <see cref="IModuleFormatDescriptor"/> for the elf format.
 /// </summary>
-public class RasmModuleDescriptor : IModuleFormatDescriptor
+public class RasmModuleDescriptor : LocalizedDescriptor<RasmModuleDescriptor>, IModuleFormatDescriptor
 {
     /// <inheritdoc/>
-    public string Identifier => "rasm";
+    public override string Identifier => "rasm";
 
     /// <inheritdoc/>
-    public Type ConfigType => typeof(RasmConfig);
+    protected override string ResourceNamespace => "Zarem.RASM.Resources";
+
+    /// <inheritdoc/>
+    public string? DisplayName => Localizer["ModuleFormatName"];
+
+    /// <inheritdoc/>
+    public override Type ConfigType => typeof(RasmConfig);
 
     /// <inheritdoc/>
     public Type FormatType => typeof(RasmModule);

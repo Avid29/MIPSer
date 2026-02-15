@@ -5,7 +5,7 @@ namespace Zarem.Registry.Descriptors;
 /// <summary>
 /// An interface for a class describing a supported architecture.
 /// </summary>
-public interface IArchitectureDescriptor : IDescriptor
+public interface IArchitectureDescriptor : IDisplayDescriptor
 {
     /// <summary>
     /// Gets the <see cref="IAssemblerDescriptor"/> for the architecture's assembler.

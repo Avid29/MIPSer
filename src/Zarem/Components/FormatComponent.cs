@@ -8,6 +8,7 @@ using Zarem.Config;
 using Zarem.Emulator.Models.Modules;
 using Zarem.Models.Files;
 using Zarem.Models.Modules;
+using Zarem.Registry.Descriptors;
 
 namespace Zarem.Components;
 
@@ -23,7 +24,7 @@ public class FormatComponent<TModule, TConfig> : IFormatComponent
     /// <summary>
     /// Initialize a new instance of the <see cref="FormatComponent{TModule, TConfig}"/> class.
     /// </summary>
-    public FormatComponent(TConfig config)
+    public FormatComponent(TConfig config, IModuleFormatDescriptor descriptor)
     {
         Config = config;
     }

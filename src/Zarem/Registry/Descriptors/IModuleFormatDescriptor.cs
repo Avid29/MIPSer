@@ -7,7 +7,7 @@ namespace Zarem.Registry.Descriptors;
 /// <summary>
 /// An interface for a class describing a supported architecture.
 /// </summary>
-public interface IModuleFormatDescriptor : IDescriptor
+public interface IModuleFormatDescriptor : IDisplayDescriptor
 {
     /// <summary>
     /// Gets the <see cref="Type"/> of the format.

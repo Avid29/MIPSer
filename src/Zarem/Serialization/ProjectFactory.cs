@@ -34,9 +34,9 @@ public static class ProjectFactory
         Guard.IsNotNull(formatInfo);
 
         // Create components
-        var assemble = CreateComponent<IAssembleComponent, AssemblerConfig>(typeof(AssembleComponent<,>), archInfo.Assembler.AssemblerType, config.ArchitectureConfig.AssemblerConfig);
-        var emulate = CreateComponent<IEmulateComponent, EmulatorConfig>(typeof(EmulateComponent<,>), archInfo.Emulator.EmulatorType, config.ArchitectureConfig.EmulatorConfig);
-        var format = CreateComponent<IFormatComponent, FormatConfig>(typeof(FormatComponent<,>), formatInfo.FormatType, config.FormatConfig);
+        var assemble = CreateComponent<IAssembleComponent, AssemblerConfig>(typeof(AssembleComponent<,>), archInfo.Assembler.AssemblerType, config.ArchitectureConfig.AssemblerConfig, archInfo.Assembler);
+        var emulate = CreateComponent<IEmulateComponent, EmulatorConfig>(typeof(EmulateComponent<,>), archInfo.Emulator.EmulatorType, config.ArchitectureConfig.EmulatorConfig, archInfo.Emulator);
+        var format = CreateComponent<IFormatComponent, FormatConfig>(typeof(FormatComponent<,>), formatInfo.FormatType, config.FormatConfig, formatInfo);
 
         var project = new Project(config, assemble, emulate, format);
         Guard.IsNotNull(project);
@@ -55,17 +55,17 @@ public static class ProjectFactory
         return Create(config);
     }
 
-    private static T CreateComponent<T, TConfig>(Type openType, Type primaryType, TConfig config)
+    private static T CreateComponent<T, TConfig>(Type openType, Type primaryType, TConfig config, object descripter)
         where T : IProjectComponent
         where TConfig : notnull
     {
         // Form a closed-type format component
         var closedType = openType.MakeGenericType(primaryType, config.GetType());
 
-        // Instantialize
-        var compoent = (T?)Activator.CreateInstance(closedType, config);
-        Guard.IsNotNull(compoent);
+        // Instantiate
+        var component = (T?)Activator.CreateInstance(closedType, config, descripter);
+        Guard.IsNotNull(component);
 
-        return compoent;
+        return component;
     }
 }

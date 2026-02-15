@@ -22,4 +22,15 @@ public class MIPSEmulatorDescriptor : IEmulatorDescriptor
 
     /// <inheritdoc/>
     public Type EmulatorType => typeof(MIPSEmulator);
+
+    /// <inheritdoc cref="IEmulatorDescriptor.Create(object)"/>
+    public MIPSEmulator Create(MIPSEmulatorConfig config) => new(config);
+
+    IEmulator? IEmulatorDescriptor.Create(object config)
+    {
+        if (config is not MIPSEmulatorConfig mipsConfig)
+            return null;
+
+        return Create(mipsConfig);
+    }
 }

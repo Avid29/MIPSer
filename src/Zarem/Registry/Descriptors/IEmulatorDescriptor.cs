@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2026
 
 using System;
+using Zarem.Emulator;
 
 namespace Zarem.Registry.Descriptors;
 
@@ -13,4 +14,11 @@ public interface IEmulatorDescriptor : IDescriptor
     /// Gets the <see cref="Type"/> of the emulator.
     /// </summary>
     Type EmulatorType { get; }
+
+    /// <summary>
+    /// Creates a new emulator using the provided config.
+    /// </summary>
+    /// <param name="config">The emulator config.</param>
+    /// <returns>A new emulator.</returns>
+    IEmulator? Create(object config);
 }

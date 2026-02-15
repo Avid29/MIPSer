@@ -58,7 +58,7 @@ public class DescriptorRegistry<T>
     }
 
     /// <summary>
-    /// Gets a <see cref="IEnumerable{T}"/> of the ids in the regsitry.
+    /// Gets a <see cref="IEnumerable{T}"/> of the descriptors in the regsitry.
     /// </summary>
-    public IEnumerable<string> GetIds() => _idTable.Keys;
+    public IEnumerable<T> GetDescriptors() => _idTable.Values;
 }

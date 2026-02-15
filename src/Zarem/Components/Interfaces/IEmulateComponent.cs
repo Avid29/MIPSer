@@ -1,6 +1,8 @@
 ﻿// Avishai Dernis 2026
 
+using Zarem.Emulator;
 using Zarem.Emulator.Config;
+using Zarem.Registry.Descriptors;
 
 namespace Zarem.Components.Interfaces;
 
@@ -12,5 +14,10 @@ public interface IEmulateComponent : IProjectComponent
     /// <summary>
     /// Gets the emulator config.
     /// </summary>
-    public EmulatorConfig Config { get; }
+    EmulatorConfig Config { get; }
+
+    /// <summary>
+    /// Creates a new emulator.
+    /// </summary>
+    IEmulator? CreateEmulator();
 }

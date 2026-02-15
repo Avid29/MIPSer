@@ -9,6 +9,7 @@ using Zarem.Assembler.Logging;
 using Zarem.Assembler.Models;
 using Zarem.Components.Interfaces;
 using Zarem.Models.Files;
+using Zarem.Registry.Descriptors;
 
 namespace Zarem.Components;
 
@@ -24,7 +25,7 @@ public class AssembleComponent<TAssembler, TConfig> : IAssembleComponent
     /// <summary>
     /// Initializes a new instance of the <see cref="AssembleComponent{TAssembler, TConfig}"/> class.
     /// </summary>
-    public AssembleComponent(TConfig config)
+    public AssembleComponent(TConfig config, IAssemblerDescriptor descriptor)
     {
         Config = config;
     }

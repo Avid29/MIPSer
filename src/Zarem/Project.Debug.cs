@@ -6,10 +6,13 @@ namespace Zarem;
 
 public partial class Project
 {
-    ///// <inheritdoc/>
-    //public DebugSession StartDebug()
-    //{
-    //    //var emulator = Emulate.CreateEmulator();
-    //    //return new DebugSession(emulator);
-    //}
+    /// <inheritdoc/>
+    public DebugSession? StartDebug()
+    {
+        var emulator = Emulate.CreateEmulator();
+        if (emulator is null)
+            return null;
+
+        return new DebugSession(emulator);
+    }
 }
