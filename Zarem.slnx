@@ -60,8 +60,9 @@
     </Project>
   </Folder>
   <Folder Name="/Tests/" />
-  <Folder Name="/Tests/Archs/" />
-  <Folder Name="/Tests/Archs/MIPS/">
+  <Folder Name="/Tests/Plugins/" />
+  <Folder Name="/Tests/Plugins/Archs/" />
+  <Folder Name="/Tests/Plugins/Archs/MIPS/">
     <Project Path="tests/Archs/MIPS/Test.Assembler.MIPS.Live/Test.Assembler.MIPS.Live.csproj">
       <BuildType Solution="Alpha|ARM" Project="Debug" />
       <BuildType Solution="Alpha|arm64" Project="Debug" />
@@ -80,12 +81,6 @@
       <BuildType Solution="Alpha|x64" Project="Release" />
       <BuildType Solution="Alpha|x86" Project="Debug" />
     </Project>
-    <Project Path="tests/Archs/MIPS/Test.Linker.MIPS/Test.Linker.MIPS.csproj">
-      <BuildType Solution="Alpha|ARM" Project="Debug" />
-      <BuildType Solution="Alpha|arm64" Project="Debug" />
-      <BuildType Solution="Alpha|x64" Project="Release" />
-      <BuildType Solution="Alpha|x86" Project="Debug" />
-    </Project>
     <Project Path="tests/Archs/MIPS/Test.MIPS.Asms/Test.MIPS.Asms.vcxitems" Id="f152d20e-aa8a-4d50-9852-0eb0b4a962c4" />
     <Project Path="tests/Archs/MIPS/Test.MIPS/Test.MIPS.csproj">
       <BuildType Solution="Alpha|ARM" Project="Debug" />
@@ -94,7 +89,7 @@
       <BuildType Solution="Alpha|x86" Project="Debug" />
     </Project>
   </Folder>
-  <Folder Name="/Tests/ModuleFormats/">
+  <Folder Name="/Tests/Plugins/ModuleFormats/">
     <Project Path="tests/ObjFormats/Test.ELF/Test.ELF.csproj">
       <BuildType Solution="Alpha|ARM" Project="Debug" />
       <BuildType Solution="Alpha|arm64" Project="Debug" />

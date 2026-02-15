@@ -283,7 +283,7 @@
                     </MenuFlyoutItem.Icon>
                 </MenuFlyoutItem>
                 <MenuFlyoutItem x:Uid="/TitleBar/StartWithoutDebuggingMFI" Text="Start Without Debugging"
-                                IsEnabled="False">
+                                Command="{x:Bind ViewModel.StartWithoutDebuggingCommand, Mode=OneWay}">
                     <MenuFlyoutItem.Icon>
                         <ImageIcon Source="{StaticResource StartWithoutDebuggingIcon}"/>
                     </MenuFlyoutItem.Icon>

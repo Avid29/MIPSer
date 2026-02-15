@@ -11,6 +11,7 @@ public partial class WindowViewModel
     [RelayCommand]
     private void StartWithoutDebugging()
     {
-
+        
+        
     }
 }
