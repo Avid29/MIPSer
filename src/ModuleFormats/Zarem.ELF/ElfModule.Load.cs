@@ -4,7 +4,7 @@ using LibObjectFile.Elf;
 using System.IO;
 using System.Linq;
 
-namespace ObjectFiles.Elf;
+namespace Zarem.Elf;
 
 public partial class ElfModule
 {

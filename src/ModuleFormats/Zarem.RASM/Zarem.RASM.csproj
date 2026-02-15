@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<RootNamespace>ObjFormats.RASM</RootNamespace>
+		<RootNamespace>Zarem.RASM</RootNamespace>
 	</PropertyGroup>
 
 	<ItemGroup>

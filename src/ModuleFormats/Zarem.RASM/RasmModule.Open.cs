@@ -1,6 +1,7 @@
 ﻿// Avishai Dernis 2025
 
 using System.IO;
+using Zarem.RASM;
 
 namespace ObjFormats.RASM;
 

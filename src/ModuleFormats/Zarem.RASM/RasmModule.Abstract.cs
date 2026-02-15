@@ -1,14 +1,14 @@
 ﻿// Avishai Dernis 2025
 
-using ObjFormats.RASM.Config;
 using System.Collections.Generic;
 using Zarem.Extensions.System.IO;
 using Zarem.Models.Modules;
 using Zarem.Models.Modules.Tables;
 using Zarem.Models.Modules.Tables.Enums;
-using RasmReference = ObjFormats.RASM.Tables.ReferenceEntry;
-using RasmRelocation = ObjFormats.RASM.Tables.RelocationEntry;
-using RasmSymbol = ObjFormats.RASM.Tables.SymbolEntry;
+using Zarem.RASM.Config;
+using RasmReference = Zarem.RASM.Tables.ReferenceEntry;
+using RasmRelocation = Zarem.RASM.Tables.RelocationEntry;
+using RasmSymbol = Zarem.RASM.Tables.SymbolEntry;
 using ReferenceEntry = Zarem.Models.Modules.Tables.ReferenceEntry;
 using SymbolEntry = Zarem.Models.Modules.Tables.SymbolEntry;
 

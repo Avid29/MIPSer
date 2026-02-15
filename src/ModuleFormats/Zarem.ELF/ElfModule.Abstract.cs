@@ -1,15 +1,14 @@
 ﻿// Avishai Dernis 2025
 
 using LibObjectFile.Elf;
-using ObjFormats.LibOF.Config;
 using ObjFormats.LibOF.Extensions;
-using Zarem.Assembler.Config;
+using Zarem.Elf.Config;
 using Zarem.Models.Addressing;
 using Zarem.Models.Modules;
 using Zarem.Models.Modules.Tables;
 using Zarem.Models.Modules.Tables.Enums;
 
-namespace ObjectFiles.Elf;
+namespace Zarem.Elf;
 
 public partial class ElfModule
 {

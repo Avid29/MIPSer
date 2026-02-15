@@ -1,14 +1,14 @@
 ﻿// Avishai Dernis 2025
 
 using LibObjectFile.Elf;
-using ObjFormats.LibOF.Config;
 using System.IO;
 using System.Threading.Tasks;
 using Zarem.Assembler.Models.Modules;
 using Zarem.Attributes;
+using Zarem.Elf.Config;
 using Zarem.Emulator.Models.Modules;
 
-namespace ObjectFiles.Elf;
+namespace Zarem.Elf;
 
 /// <summary>
 /// An object module in ELF format.

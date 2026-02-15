@@ -3,7 +3,7 @@
 using System.Xml.Serialization;
 using Zarem.Config;
 
-namespace ObjFormats.RASM.Config;
+namespace Zarem.RASM.Config;
 
 /// <summary>
 /// A class containing rasm configuration info.

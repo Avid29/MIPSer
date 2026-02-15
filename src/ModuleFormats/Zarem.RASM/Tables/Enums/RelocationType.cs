@@ -1,6 +1,6 @@
 ﻿// Adam Dernis 2024
 
-namespace ObjFormats.RASM.Tables.Enums;
+namespace Zarem.RASM.Tables.Enums;
 
 /// <summary>
 /// Gets how to preform the relocation.

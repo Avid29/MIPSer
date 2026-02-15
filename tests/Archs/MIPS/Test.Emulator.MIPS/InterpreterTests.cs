@@ -1,11 +1,11 @@
 ﻿// Avishai Dernis 2025
 
-using ObjectFiles.Elf;
-using ObjFormats.LibOF.Elf.Config;
 using System.IO;
 using System.Threading.Tasks;
 using Test.MIPS.Helpers;
 using Zarem.Assembler;
+using Zarem.Elf;
+using Zarem.Elf.Config;
 using Zarem.Emulator;
 using Zarem.Emulator.Config;
 using Zarem.Emulator.Interpreter;

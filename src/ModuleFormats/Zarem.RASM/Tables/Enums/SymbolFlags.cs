@@ -1,8 +1,11 @@
 ﻿// Adam Dernis 2024
 
+
+// Adam Dernis 2024
+
 using System;
 
-namespace ObjFormats.RASM.Tables.Enums;
+namespace Zarem.RASM.Tables.Enums;
 
 /// <summary>
 /// An enum for the symbol flags

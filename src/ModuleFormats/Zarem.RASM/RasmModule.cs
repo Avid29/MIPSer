@@ -1,6 +1,5 @@
 ﻿// Adam Dernis 2024
 
-using ObjFormats.RASM.Config;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,6 +8,8 @@ using System.Threading.Tasks;
 using Zarem.Assembler.Models.Modules;
 using Zarem.Attributes;
 using Zarem.Emulator.Models.Modules;
+using Zarem.RASM;
+using Zarem.RASM.Config;
 
 namespace ObjFormats.RASM;
 

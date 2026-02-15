@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<IsPackable>false</IsPackable>
@@ -16,8 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\src\Archs\MIPS\Zarem.Assembler.MIPS\Zarem.Assembler.MIPS.csproj" />
     <ProjectReference Include="..\..\..\..\src\Archs\MIPS\Zarem.Emulator.MIPS\Zarem.Emulator.MIPS.csproj" />
-    <ProjectReference Include="..\..\..\..\src\ObjFormats\ObjFormats.LibOF\Zarem.ELF.csproj" />
-    <ProjectReference Include="..\..\..\..\src\ObjFormats\ObjFormats.RASM\Zarem.RASM.csproj" />
+    <ProjectReference Include="..\..\..\..\src\ModuleFormats\Zarem.ELF\Zarem.ELF.csproj" />
+    <ProjectReference Include="..\..\..\..\src\ModuleFormats\Zarem.RASM\Zarem.RASM.csproj" />
     <ProjectReference Include="..\Test.MIPS\Test.MIPS.csproj" />
   </ItemGroup>
 

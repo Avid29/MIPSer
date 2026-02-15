@@ -2,15 +2,15 @@
 
 using CommunityToolkit.Diagnostics;
 using LibObjectFile.Elf;
-using ObjFormats.LibOF.Config;
 using ObjFormats.LibOF.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using Zarem.Assembler.Config;
+using Zarem.Elf.Config;
 using Zarem.Extensions.System.IO;
 using Zarem.Models.Modules;
 
-namespace ObjectFiles.Elf;
+namespace Zarem.Elf;
 
 /// <summary>
 /// An object module in ELF format.

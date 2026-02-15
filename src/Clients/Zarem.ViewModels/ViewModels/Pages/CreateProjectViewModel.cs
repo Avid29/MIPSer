@@ -2,13 +2,13 @@
 
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using ObjFormats.LibOF.Elf.Config;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Threading.Tasks;
 using Zarem.Assembler.Config;
+using Zarem.Elf.Config;
 using Zarem.Emulator.Config;
 using Zarem.Messages.Navigation;
 using Zarem.MIPS;
