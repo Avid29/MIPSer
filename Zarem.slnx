@@ -39,7 +39,7 @@
       <BuildType Solution="Alpha|*" Project="Debug" />
     </Project>
   </Folder>
-  <Folder Name="/SolutionItems/">
+  <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path=".gitattributes" />
     <File Path=".gitignore" />

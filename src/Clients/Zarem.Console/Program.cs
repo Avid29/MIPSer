@@ -1,17 +1,16 @@
 ﻿// Adam Dernis 2024
 
 using System.CommandLine;
+using System.Globalization;
 using Zarem.Console.Commands;
-using Zarem.Localization;
 
 namespace Zarem.Console;
 
 internal class Program
 {
-    public static Localizer CommandLocalizer { get; } = new("Zarem.Console.Resources.Commands", typeof(Program).Assembly);
-
     private static void Main(string[] args)
     {
+        CultureInfo.CurrentUICulture = new CultureInfo("en-US");
         var rootCommand = new RootCommand
         {
             new Assemble(),

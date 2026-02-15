@@ -3,6 +3,7 @@
 using CommunityToolkit.Diagnostics;
 using System.CommandLine;
 using Zarem.Console.Commands.Interfaces;
+using Zarem.Localization;
 
 namespace Zarem.Console.Commands;
 
@@ -13,9 +14,14 @@ namespace Zarem.Console.Commands;
 public abstract class CommandBase<TSelf>: Command
     where TSelf : ICommand
 {
-    private static string GetName() => Program.CommandLocalizer[$"{TSelf.NameKey}CommandName"]!;
+    /// <summary>
+    /// Gets a localizer for command construction
+    /// </summary>
+    protected static Localizer Localizer { get; } = new("Zarem.Console.Resources.Commands", typeof(Program).Assembly);
 
-    private static string GetDescription() => Program.CommandLocalizer[$"{TSelf.NameKey}CommandDescription"]!;
+    private static string GetName() => Localizer[$"{TSelf.NameKey}CommandName"]!;
+
+    private static string GetDescription() => Localizer[$"{TSelf.NameKey}CommandDescription"]!;
 
     /// <summary>
     /// 
@@ -36,8 +42,8 @@ public abstract class CommandBase<TSelf>: Command
     /// </summary>
     protected static Option<T> CreateOption<T>(string nameKey, params string[] aliasKeys)
     {
-        var name = $"--{Program.CommandLocalizer[$"{nameKey}OptionName"]}";
-        var aliases = aliasKeys.Select(x => $"-{Program.CommandLocalizer[$"{nameKey}OptionAlias{x}"]}"!).ToArray();
+        var name = $"--{Localizer[$"{nameKey}OptionName"]}";
+        var aliases = aliasKeys.Select(x => $"-{Localizer[$"{nameKey}OptionAlias{x}"]}"!).ToArray();
         Guard.IsNotNull(name);
 
         return new Option<T>(name, aliases);
